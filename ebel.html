@@ -61,20 +61,8 @@
         </div>
     </section>
 
-    <!-- SCRIPT I VOGËL QË NDRYSHON FOTON KRYESORE KUR KLIKON MINIATURAT -->
-    <script>
-        const mainImage = document.querySelector('.product-main-image');
-        const thumbs   = document.querySelectorAll('.product-gallery img');
-
-        thumbs.forEach(img => {
-            img.addEventListener('click', () => {
-                mainImage.src = img.src;
-                mainImage.alt = img.alt;
-            });
-        });
-    
-<script>
-    const mainImage = document.querySelector('.product-main-image');
+   <script>
+    const mainImage  = document.querySelector('.product-main-image');
     const thumbnails = document.querySelectorAll('.product-gallery img');
 
     thumbnails.forEach(thumb => {
@@ -87,6 +75,8 @@
             setTimeout(() => mainImage.style.transform = "scale(1)", 150);
         });
     });
+</script>
+    
 </script>
 </body>
 </html>

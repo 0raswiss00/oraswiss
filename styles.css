@@ -268,4 +268,20 @@ body {
     height: auto;
     border-radius: 5px;
 }
+.product-images {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+    padding: 10px 0;
+}
 
+.product-images img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: #fff;
+}

@@ -72,8 +72,22 @@
                 mainImage.alt = img.alt;
             });
         });
-    </script>
+    
+<script>
+    const mainImage = document.querySelector('.product-main-image');
+    const thumbnails = document.querySelectorAll('.product-gallery img');
 
+    thumbnails.forEach(thumb => {
+        thumb.addEventListener('click', () => {
+            mainImage.src = thumb.src;
+            mainImage.alt = thumb.alt;
+
+            // efekti i vogël zoom
+            mainImage.style.transform = "scale(1.03)";
+            setTimeout(() => mainImage.style.transform = "scale(1)", 150);
+        });
+    });
+</script>
 </body>
 </html>
 

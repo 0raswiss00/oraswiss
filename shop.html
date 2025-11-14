@@ -4,8 +4,265 @@
     <meta charset="UTF-8">
     <title>Ora Swiss – Shop</title>
 
-    <!-- LIDHJA ME CSS – shumë e rëndësishme -->
-    <link rel="stylesheet" href="styles.css">
+    <!-- STILIMI (CSS) KËTU – S'TË DUHET FILE MË VETE -->
+    <style>
+        /* =========================
+           RESET BAZË
+           ========================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-color: #f3f4f6;
+            color: #111827;
+        }
+
+        /* =========================
+           TRUPI I FAQES
+           ========================= */
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at top, #e5e7eb, #f9fafb 40%, #e5e7eb 100%);
+        }
+
+        /* =========================
+           HEADER (Koka e faqes)
+           ========================= */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(15, 23, 42, 0.96);   /* blu e errët elegante */
+            color: #f9fafb;
+            padding: 18px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            box-shadow: 0 14px 45px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(14px);
+        }
+
+        .site-header h1 {
+            font-size: 18px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        /* Butoni “Kthehu mbrapa” */
+        .back-button {
+            text-decoration: none;
+            font-size: 13px;
+            padding: 7px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(249, 250, 251, 0.4);
+            color: #e5e7eb;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            background: rgba(15, 23, 42, 0.3);
+        }
+
+        .back-button:hover {
+            background: #f9fafb;
+            color: #111827;
+            border-color: transparent;
+            transform: translateY(-1px);
+        }
+
+        /* =========================
+           SEKSIONI I PRODUKTEVE
+           ========================= */
+        .products-section {
+            max-width: 1100px;
+            margin: 32px auto 40px auto;
+            padding: 0 20px 24px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 26px;
+        }
+
+        /* =========================
+           KARTA E PRODUKTIT
+           ========================= */
+        .product {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 18px;
+            padding: 22px 22px 18px 22px;
+            box-shadow:
+                0 18px 45px rgba(15, 23, 42, 0.12),
+                0 0 0 1px rgba(148, 163, 184, 0.18);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            border: 1px solid rgba(229, 231, 235, 0.8);
+        }
+
+        /* Titulli i produktit */
+        .product h2 {
+            font-size: 16px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        /* Pjesa kryesore: imazhi + informacioni */
+        .product-main {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+            gap: 22px;
+            align-items: start;
+        }
+
+        /* Imazhi kryesor i orës */
+        .product-main-image {
+            width: 100%;
+            border-radius: 14px;
+            object-fit: cover;
+            background: #e5e7eb;
+            display: block;
+            box-shadow:
+                0 18px 30px rgba(15, 23, 42, 0.22),
+                0 0 0 1px rgba(148, 163, 184, 0.5);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        /* Efekti kur kalon maus mbi imazhin kryesor */
+        .product-main-image:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow:
+                0 24px 60px rgba(15, 23, 42, 0.3),
+                0 0 0 1px rgba(148, 163, 184, 0.7);
+        }
+
+        /* Informacioni i produktit */
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .product-info p {
+            line-height: 1.45;
+        }
+
+        .product-info strong {
+            color: #111827;
+        }
+
+        /* Çmimi */
+        .price {
+            margin-top: 8px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        /* =========================
+           BUTONI I BLERJES (WhatsApp)
+           ========================= */
+        .buy-button {
+            margin-top: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 9px 18px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #16a34a, #15803d); /* stil WhatsApp */
+            color: #f9fafb;
+            box-shadow: 0 14px 35px rgba(22, 163, 74, 0.45);
+            transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+        }
+
+        .buy-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 18px 45px rgba(22, 163, 74, 0.5);
+            opacity: 0.96;
+        }
+
+        /* =========================
+           GALERIA E FOTOVE (thumbnail)
+           ========================= */
+        .product-gallery {
+            margin-top: 14px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .product-gallery img {
+            width: 90px;
+            border-radius: 9px;
+            cursor: pointer;
+            object-fit: cover;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
+        }
+
+        .product-gallery img:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.25);
+            border-color: #111827;
+            opacity: 0.96;
+        }
+
+        /* =========================
+           RESPONSIVE (Tableta & Telefona)
+           ========================= */
+        @media (max-width: 900px) {
+            .site-header {
+                padding-inline: 18px;
+            }
+
+            .site-header h1 {
+                font-size: 15px;
+            }
+
+            .products-section {
+                margin-top: 24px;
+            }
+
+            .product-main {
+                grid-template-columns: 1fr;
+            }
+
+            .product {
+                padding: 18px 16px 16px 16px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .site-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .back-button {
+                align-self: flex-start;
+            }
+
+            .product-gallery img {
+                width: 80px;
+            }
+        }
+    </style>
 </head>
 <body>
     <header class="site-header">
@@ -31,7 +288,6 @@
                     <p><strong>Gjendja:</strong> Shumë e mirë, e servisuara plotësisht, funksionon perfekt.</p>
                     <p class="price"><strong>Çmimi:</strong> €4,200</p>
 
-                    <!-- Ndrysho numrin e tel sipas teje -->
                     <a href="https://wa.me/355XXXXXXXXX?text=Pershendetje%2C%20jam%20i%20interesuar%20per%20Rolex%20Datejust%2016013"
                        class="buy-button"
                        target="_blank"

@@ -35,8 +35,8 @@
 
                     <p class="price">👉 Contact us for price</p>
 
-                    <!-- VENDOS NUMRIN TËND NË WHATSAPP KËTU -->
-                    <a class="buy-button" href="https://wa.me/417xxxxxxx">
+                    <!-- WHATSAPP KONTAKTI -->
+                    <a class="buy-button" href="https://wa.me/355692408065" target="_blank">
                         Contact on WhatsApp
                     </a>
                 </div>
@@ -61,23 +61,22 @@
         </div>
     </section>
 
-   <script>
-    const mainImage  = document.querySelector('.product-main-image');
-    const thumbnails = document.querySelectorAll('.product-gallery img');
+    <!-- SCRIPT: KUR KLIKON FOTO TË VOGËL, NDRYSHON FOTO KRYESORE + ZOOM I LEHTË -->
+    <script>
+        const mainImage  = document.querySelector('.product-main-image');
+        const thumbnails = document.querySelectorAll('.product-gallery img');
 
-    thumbnails.forEach(thumb => {
-        thumb.addEventListener('click', () => {
-            mainImage.src = thumb.src;
-            mainImage.alt = thumb.alt;
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                mainImage.src = thumb.src;
+                mainImage.alt = thumb.alt;
 
-            // efekti i vogël zoom
-            mainImage.style.transform = "scale(1.03)";
-            setTimeout(() => mainImage.style.transform = "scale(1)", 150);
+                // efekti i vogël zoom
+                mainImage.style.transform = "scale(1.03)";
+                setTimeout(() => mainImage.style.transform = "scale(1)", 150);
+            });
         });
-    });
-</script>
-    
+    </script>
 
 </body>
 </html>
-

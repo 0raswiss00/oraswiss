@@ -320,17 +320,18 @@ product-main-image {
     border-radius: 6px;
 }
 
-/* HEQ HAPSIRAT E MËDHA SIPËR */
+/* FIKSIMI I HAPSIRAVE TE PRODUKTET */
+
+/* Heq hapsirën e madhe sipër listës së produkteve */
 .products-section {
     padding-top: 0 !important;
     margin-top: 0 !important;
 }
-/* Hapësirë midis dy produkteve */
+
+/* Karta e produktit të jetë më e ngushtë dhe e centruar */
 .product {
-    margin-bottom: 60px;
-}
-.product {
-    max-width: 100% !important;
+    max-width: 900px !important;
     width: 100% !important;
     margin: 0 auto 60px auto !important;
+    display: block !important;
 }

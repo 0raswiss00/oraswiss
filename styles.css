@@ -316,27 +316,23 @@ product-main-image {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* GALERIA E FOTOVE TË VOGLA */
-.product-gallery img {
-    width: 90px;
-    height: auto;
-    margin: 5px;
-    border-radius: 6px;
-}
-
-/* HEQ HAPSIRAT E MËDHA SIPËR */
-.products-section {
-    padding-top: 0 !important;
+/* KONFIGURIMI I GALERISË */
+.product-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
     margin-top: 0 !important;
 }
 
-/* Hapësirë midis dy produkteve */
-.product {
-    margin-bottom: 60px;
+/* Fotot e galerisë */
+.product-gallery img {
+    width: 90px;
+    height: auto;
+    border-radius: 6px;
+    display: block;
 }
 
-.product {
-    max-width: 100% !important;
-    width: 100% !important;
-    margin: 0 auto 60px auto !important;
-}
+
+
+
+

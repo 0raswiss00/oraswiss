@@ -201,8 +201,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+</script>   <!-- script-i i thumbnails mbyllet këtu -->
+
+<script>
+  document.querySelectorAll('.product-main-image').forEach(img => {
+    img.addEventListener('click', () => {
+      img.classList.toggle('zoomed');
+    });
+  });
 </script>
-</body>
-</html>
+
 </body>
 </html>

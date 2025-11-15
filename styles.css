@@ -116,13 +116,14 @@ body {
 /* Imazhi kryesor i orës */
 .product-main-image {
     width: 100%;
+    max-width: 500px;  
     border-radius: 14px;
     object-fit: cover;
     background: #e5e7eb;
     display: block;
     box-shadow:
         0 18px 30px rgba(15, 23, 42, 0.22),
-        0 0 0 1px rgba(148, 163, 184, 0.5);
+        0 0 1px rgba(148, 163, 184, 0.5);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 

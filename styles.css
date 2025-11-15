@@ -134,8 +134,9 @@ body {
     position: relative;
 }
 /* Efekti kur kalon maus mbi imazhin kryesor */
-.product-main-image:hover {
+.product-main-image:not(.zoomed):hover {
     transform: translateY(-4px) scale(1.01);
+}
     box-shadow:
         0 24px 60px rgba(15, 23, 42, 0.3),
         0 0 0 1px rgba(148, 163, 184, 0.7);

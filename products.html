@@ -192,11 +192,17 @@ ju<!DOCTYPE html>
   });
 </script>
 <script>
-    const mainImage = document.querySelector('.product-main-image');
-    mainImage.addEventListener('click', () => {
-        mainImage.classList.toggle('zoomed');
-    });
-</script>
+document.addEventListener('DOMContentLoaded', () => {
+    const mainImages = document.querySelectorAll('.product-main-image');
 
+    mainImages.forEach(img => {
+        img.addEventListener('click', () => {
+            img.classList.toggle('zoomed');
+        });
+    });
+});
+</script>
+</body>
+</html>
 </body>
 </html>

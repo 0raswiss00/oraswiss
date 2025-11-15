@@ -116,9 +116,9 @@ body {
 /* Imazhi kryesor i orës */
 .product-main-image {
     width: 100%;
-    max-width: 500px;  
+    max-width: 450px;     /* këtu e ul */
     border-radius: 14px;
-    object-fit: cover;
+    object-fit: contain;  /* këtu e ndreq */
     background: #e5e7eb;
     display: block;
     box-shadow:

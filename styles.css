@@ -207,13 +207,13 @@ body {
     border: 1px solid rgba(148, 163, 184, 0.7);
     transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
 }
-.product-main-image {
+product-main-image {
     width: 100%;
-    max-width: 450px;   /* sa e madhe del foto kryesore */
+    max-width: 450px;   /* Madhësia e fotos kryesore */
     height: auto;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
-    margin: 0 auto;
+    margin: 0 auto 20px;
     transition: transform 0.15s ease;
 }
 .product-gallery img:hover {

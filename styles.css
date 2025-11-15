@@ -116,17 +116,23 @@ body {
 /* Imazhi kryesor i orës */
 .product-main-image {
     width: 100%;
-    max-width: 450px;     /* këtu e ul */
+    max-width: 450px;
     border-radius: 14px;
-    object-fit: contain;  /* këtu e ndreq */
+    object-fit: contain;
     background: #e5e7eb;
     display: block;
     box-shadow:
         0 18px 30px rgba(15, 23, 42, 0.22),
         0 0 1px rgba(148, 163, 184, 0.5);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: zoom-in;   /* ← VENDOJE KËTU */
 }
-
+.product-main-image.zoomed {
+    transform: scale(2);
+    cursor: zoom-out;
+    z-index: 30;
+    position: relative;
+}
 /* Efekti kur kalon maus mbi imazhin kryesor */
 .product-main-image:hover {
     transform: translateY(-4px) scale(1.01);

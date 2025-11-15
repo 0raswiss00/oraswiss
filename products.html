@@ -167,7 +167,26 @@ ju<!DOCTYPE html>
       <img src="ebel-1119-12.jpg">
    </div>
 </article>
+</main>
 
+<script>
+  document.addEventListener('click', function (e) {
+    const thumb = e.target.closest('.product-gallery img');
+    if (!thumb) return;
+
+    const article = thumb.closest('.product');
+    const mainImage = article.querySelector('.product-main-image');
+    if (!mainImage) return;
+
+    mainImage.src = thumb.src;
+    if (thumb.alt) {
+      mainImage.alt = thumb.alt;
+    }
+  });
+</script>
+
+</body>
+</html>
 </main>
 </body>
 </html>

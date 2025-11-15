@@ -115,15 +115,17 @@ body {
 .product-main-image {
     width: 100%;
     max-width: 450px;
+    aspect-ratio: 3 / 4;       /* i bën të gjitha fotot të njëjtin raport */
+    object-fit: cover;         /* i pret pak që të mbushin formën njësoj */
     border-radius: 14px;
-    object-fit: contain;
     background: #e5e7eb;
     display: block;
+    margin: 0 auto 20px;
     box-shadow:
         0 18px 30px rgba(15, 23, 42, 0.22),
         0 0 1px rgba(148, 163, 184, 0.5);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
-    cursor: zoom-in;   /* ← VENDOJE KËTU */
+    cursor: zoom-in;
 }
 .product-main-image.zoomed {
     transform: scale(2);

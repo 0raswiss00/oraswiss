@@ -193,7 +193,8 @@ ju<!DOCTYPE html>
 </main>
 
 <script>
-  document.addEventListener('click', function (e) {
+// THUMBNAILS SCRIPT
+document.addEventListener('click', function (e) {
     const thumb = e.target.closest('.product-gallery img');
     if (!thumb) return;
 
@@ -202,12 +203,16 @@ ju<!DOCTYPE html>
     if (!mainImage) return;
 
     mainImage.src = thumb.src;
+
     if (thumb.alt) {
-      mainImage.alt = thumb.alt;
+        mainImage.alt = thumb.alt;
     }
-  });
+});
 </script>
+
+
 <script>
+// ZOOM SCRIPT
 document.addEventListener('DOMContentLoaded', () => {
     const mainImages = document.querySelectorAll('.product-main-image');
 
@@ -217,14 +222,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-</script>   <!-- script-i i thumbnails mbyllet këtu -->
-
-<script>
-  document.querySelectorAll('.product-main-image').forEach(img => {
-    img.addEventListener('click', () => {
-      img.classList.toggle('zoomed');
-    });
-  });
 </script>
 
 </body>

@@ -191,7 +191,12 @@ ju<!DOCTYPE html>
     }
   });
 </script>
-
+<script>
+    const mainImage = document.querySelector('.product-main-image');
+    mainImage.addEventListener('click', () => {
+        mainImage.classList.toggle('zoomed');
+    });
+</script>
 
 </body>
 </html>

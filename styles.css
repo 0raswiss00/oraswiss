@@ -205,14 +205,15 @@ body {
     flex-wrap: wrap;
 }
 
-.product-gallery img {
-    width: 90px;
-    border-radius: 9px;
+.product-gallery img,
+.product-gallery .thumb {
+    width: 85px;      /* madhësia e njëtrajtshme */
+    height: 110px;    /* lartësia e njëtrajtshme */
+    object-fit: cover; 
+    border-radius: 4px;
     cursor: pointer;
-    object-fit: cover;
-    border: 1px solid rgba(148, 163, 184, 0.7);
-    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
 }
+
 product-main-image {
     width: 100%;
     max-width: 450px;   /* Madhësia e fotos kryesore */

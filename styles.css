@@ -303,9 +303,10 @@ product-main-image {
 
 /* KONTAINERI I PRODUKTIT */
 .product {
-    max-width: 420px;
-    margin: 40px auto;
-    padding: 20px;
+    width: 100%;
+    max-width: 1100px;  /* e zgjeron kutinë e produktit si te Datejust */
+    margin: 40px auto; 
+    padding: 0 20px;
     background: white;
     border-radius: 12px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);

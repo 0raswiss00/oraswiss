@@ -351,12 +351,24 @@ product-main-image {
     list-style: none;
 }
 
-.menu a {
+.menu {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu li a {
     text-decoration: none;
-    color: white; 
+    color: white;
     font-weight: 600;
     font-size: 18px;
 }
+
 
 
 

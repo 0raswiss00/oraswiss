@@ -336,7 +336,19 @@ product-main-image {
 .product:first-of-type .product-gallery {
     margin-top: -25px !important;
 }
+.menu {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    padding: 15px 0;
+}
 
+.menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+}
 
 
 

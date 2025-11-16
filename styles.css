@@ -362,7 +362,22 @@ product-main-image {
     margin: 0;
 }
 
+.menu {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    margin: 20px 0;
+}
 
+.menu a {
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+}
 
 
 

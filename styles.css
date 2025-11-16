@@ -345,7 +345,11 @@ product-main-image {
 }
 
 body {
-    background-color: black;
+    background-color: .product-card img {
+    width: 200px; 
+    height: auto;
+    object-fit: cover;
+    border-radius: 5px;
 }
 
 

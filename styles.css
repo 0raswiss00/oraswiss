@@ -422,12 +422,12 @@ footer {
 }
 .submariner-image {
     width: 100%;
-    max-width: 420px;      /* foto më e madhe */
-    height: auto;          /* mos e shtyp */
-    border-radius: 12px;   /* qoshe më të buta */
+    max-width: 420px;
+    height: auto;
+    border-radius: 12px;
     display: block;
-    margin: 20px auto;     /* qendër në mes */
-    object-fit: contain;   /* mos e prej foton */
+    margin: 0 auto;      /* S’ka më hapësirë sipër/poshtë */
+    object-fit: contain;
 }
 .product {
     max-width: 900px;     /* kuti më e gjerë që fotoja të futet bukur */

@@ -460,3 +460,27 @@ footer {
         font-size: 14px;
     }
 }
+/* Menyja horizontale me scroll në telefon */
+@media (max-width: 600px) {
+    nav ul {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 20px;
+        padding: 10px 5px;
+        scrollbar-width: none; /* fsheh shiritin në Android */
+    }
+
+    nav ul::-webkit-scrollbar {
+        display: none; /* fsheh shiritin në iPhone */
+    }
+
+    nav li {
+        flex: 0 0 auto;
+        font-size: 16px;
+    }
+
+    nav a {
+        padding: 8px 4px;
+    }
+}

@@ -503,3 +503,30 @@ nav a {
         display: none; /* fsheh shiritin per iPhone */
     }
 }
+.arrow {
+    background: black;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    position: absolute;
+    top: 85px;
+    z-index: 100;
+}
+
+.arrow.left {
+    left: 5px;
+}
+
+.arrow.right {
+    right: 5px;
+}
+
+.menu {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+}

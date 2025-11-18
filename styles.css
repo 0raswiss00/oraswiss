@@ -301,17 +301,6 @@ product-main-image {
     border-radius: 6px;
     border: 1px solid #ccc;
     
-    /* FOTO KRYESORE E PRODUKTIT */
-.product-main-image {
-    width: 100%;
-    max-width: 450px;     /* të gjitha fotot një madhësi */
-    aspect-ratio: 3 / 4;   /* format i njëjtë vertikal */
-    object-fit: cover;     /* mbushen njësoj, pa deformim */
-    height: auto;
-    display: block;
-    margin: 0 auto 20px;
-    border-radius: 10px;
-}
 
 /* KONTAINERI I PRODUKTIT */
 .product {

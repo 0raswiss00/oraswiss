@@ -547,8 +547,19 @@ nav a {
 
 .menu {
     display: flex;
+    justify-content: center; /* e qendron menu-në horizontalisht */
+    align-items: center;
+    gap: 20px; /* hapësira mes elementeve të menusë */
 }
 
+/* Logo qendër horizontale */
 .logo {
+    display: block;        /* bllok element */
+    width: max-content;    /* sa gjerë është teksti */
+    margin: 0 auto;        /* e qendron horizontalisht */
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
     text-align: center;
 }
+

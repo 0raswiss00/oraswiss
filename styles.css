@@ -471,16 +471,20 @@ footer {
         scrollbar-width: none; /* fsheh shiritin në Android */
     }
 
-    nav ul::-webkit-scrollbar {
-        display: none; /* fsheh shiritin në iPhone */
-    }
+   nav ul {
+    display: flex;
+    flex-wrap: wrap;      /* lejon që menuja të zbresë poshtë, pa scroll */
+    justify-content: center;
+    gap: 15px;
+    padding: 10px;
+}
 
-    nav li {
-        flex: 0 0 auto;
-        font-size: 16px;
-    }
+nav li {
+    list-style: none;
+}
 
-    nav a {
-        padding: 8px 4px;
-    }
+nav a {
+    text-decoration: none;
+    font-size: 15px;
+    padding: 5px 8px;
 }

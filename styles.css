@@ -530,11 +530,24 @@ nav a {
     white-space: nowrap;
     scroll-behavior: smooth;
 }
-header {
-    text-align: center;
-    background-color: black;
-    color: white;
-    font-size: 28px;
-    font-weight: bold;
-    padding: 15px 0;
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.menu a {
+  margin: 0 15px;
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
 }

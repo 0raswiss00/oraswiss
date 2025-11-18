@@ -433,3 +433,12 @@ body {
 footer {
     margin-top: auto;
 }
+.submariner-image {
+    width: 100%;
+    max-width: 420px;      /* foto më e madhe */
+    height: auto;          /* mos e shtyp */
+    border-radius: 12px;   /* qoshe më të buta */
+    display: block;
+    margin: 20px auto;     /* qendër në mes */
+    object-fit: contain;   /* mos e prej foton */
+}

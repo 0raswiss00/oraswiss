@@ -488,3 +488,18 @@ nav a {
     font-size: 15px;
     padding: 5px 8px;
 }
+/* NAV HORIZONTAL SCROLL PER TELEFON */
+@media (max-width: 900px) {
+    nav ul {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 20px;
+        padding: 10px 5px;
+        scrollbar-width: none; /* fsheh shiritin per Android */
+    }
+
+    nav ul::-webkit-scrollbar {
+        display: none; /* fsheh shiritin per iPhone */
+    }
+}

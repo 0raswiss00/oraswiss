@@ -279,12 +279,7 @@ product-main-image {
         width: 80px;
     }
 }
-.product-main-image {
-    max-width: 350px;
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
-}
+
 .product-images {
     display: flex;
     flex-wrap: wrap;
@@ -305,7 +300,7 @@ product-main-image {
 /* KONTAINERI I PRODUKTIT */
 .product {
     width: 100%;
-    max-width: 1100px;  /* e zgjeron kutinë e produktit si te Datejust */
+    max-width: 1100px;  
     margin: 40px auto; 
     padding: 0 20px;
     background: white;

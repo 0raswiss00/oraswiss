@@ -697,7 +697,20 @@ nav a {
     background-color: black;
     padding: 10px 0;
 }
+
+
 .topbar {
+    width: 100%;
     background-color: black;
-    padding: 10px 0;
+    padding: 15px 0;
+    display: flex;
+    justify-content: center;   /* QENDËR HORIZONTALE */
+    align-items: center;       /* QENDËR VERTIKALE */
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;              /* E BARDHË */
+    text-align: center;
 }

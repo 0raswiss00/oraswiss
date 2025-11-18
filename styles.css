@@ -113,12 +113,11 @@ body {
 
 /* Imazhi kryesor i orës */
 .submariner-image {
-    width: auto;              /* mos e shtri sa gjithë dritarja */
-    max-width: 220px;         /* sa i vogël ta duash – provo 220, 200, 180 */
+    width: 200px;      /* madhësia fikse e fotos */
     height: auto;
-    border-radius: 12px;
     display: block;
-    margin: 20px auto;        /* qendër në mes */
+    margin: 10px auto; /* qendër dhe pak hapësirë sipër/poshtë */
+    border-radius: 12px;
     object-fit: contain;
 }
 .product-main-image.zoomed {

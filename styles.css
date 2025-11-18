@@ -737,3 +737,13 @@ footer.footer {
     color: white !important;
     text-align: center !important;
     width: 100% !important;
+/* Ul hapësirën poshtë kartës së Submariner-it */
+.product {
+    margin-bottom: 0 !important;
+    padding-bottom: 10px !important;  /* nëse prap është shumë, bëje 0 */
+}
+
+/* Afroje footer-in sa më pranë kartës */
+.footer {
+    margin-top: 10px !important;  /* provo 10, 5 ose 0 sipas qejfit */
+}

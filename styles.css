@@ -112,14 +112,14 @@ body {
 }
 
 /* Imazhi kryesor i orës */
-.product-main-image {
-    width: 100%;
-    max-width: 200px !important;  /* Rolex brenda bëhet i vogël */
-    aspect-ratio: 3 / 4;
-    object-fit: contain;
-    border-radius: 10px;
+.submariner-image {
+    width: auto;              /* mos e shtri sa gjithë dritarja */
+    max-width: 220px;         /* sa i vogël ta duash – provo 220, 200, 180 */
+    height: auto;
+    border-radius: 12px;
     display: block;
-    margin: 0 auto 20px;
+    margin: 20px auto;        /* qendër në mes */
+    object-fit: contain;
 }
 .product-main-image.zoomed {
     transform: scale(2);

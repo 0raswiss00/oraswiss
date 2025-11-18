@@ -562,4 +562,21 @@ nav a {
     color: white;
     text-align: center;
 }
+.submariner-image {
+    width: 280px;                     /* më e vogël se origjinali */
+    max-width: calc(420px + 3cm);     /* zgjat pak horizontalisht */
+    height: auto;                      /* ruan raportin origjinal */
+    border-radius: 12px;
+    display: block;
+    margin: 20px auto;                 /* qendër horizontale */
+    object-fit: cover;                 /* mbush kotainerin pa deformuar */
+}
 
+/* Për ekranet më të vogla (telefon) */
+@media (max-width: 600px) {
+    .submariner-image {
+        width: 180px;      /* zvogëlohet automatikisht */
+        max-width: 90%;    /* nuk del jashtë ekranit */
+        height: auto;
+    }
+}

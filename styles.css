@@ -628,20 +628,21 @@ nav a {
         justify-content: flex-start;
         padding: 0 10px;
     }
-}
+
 
 /* =========================
    SUBMARINER IMAGE
    ========================= */
 .submariner-image {
-    width: 280px;
-    height: 380px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto !important;
+    padding: 0 !important;
     display: block;
-    margin: 20px auto;
-    border-radius: 12px;
-    object-fit: cover;
+    border-radius: 10px;
 }
 
+   
 @media (max-width: 600px) {
     .submariner-image {
         width: 180px;
@@ -741,46 +742,4 @@ footer.footer {
 /* Afroje footer-in sa më pranë kartës */
 .footer {
     margin-top: 10px !important;  /* provo 10, 5 ose 0 sipas qejfit */
-}
-/* RREGULLIMI I SUBMARINER-IT DHE FOOTERIT */
-.products,
-.product,
-.submariner-image {
-    margin-bottom: 0 !important;
-    padding-bottom: 0 !important;
-}
-.submariner-image {
-    display: block;
-    margin: 0 auto !important;
-    padding: 0 !important;
-    margin-bottom: -20px !important;   /* ul foton më poshtë */
-}
-/* Rregullimi perfundimtar i fotos Submariner dhe footer-it */
-.submariner-image {
-    max-width: 100% !important;
-    border-radius: 10px !important;
-    display: block !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
-    margin-bottom: -30px !important; 
-}
-.products {
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-.product {
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-.submariner-image {
-    margin: 0 !important;
-    padding: 0 !important;
-    display: block !important;
-    max-width: 100% !important;
-}
-
-.footer {
-    margin-top: 0 !important;
 }

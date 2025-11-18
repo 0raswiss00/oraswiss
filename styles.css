@@ -439,3 +439,24 @@ footer {
     max-width: 900px;     /* kuti më e gjerë që fotoja të futet bukur */
     margin: 0 auto;       /* qendër */
 }
+/* Rregullim për telefonat */
+@media (max-width: 600px) {
+
+    .product {
+        max-width: 95%;
+        padding: 10px;
+    }
+
+    .submariner-image {
+        max-width: 100%;
+        border-radius: 10px;
+    }
+
+    .product h2 {
+        font-size: 18px;
+    }
+
+    .product p {
+        font-size: 14px;
+    }
+}

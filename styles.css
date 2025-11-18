@@ -263,19 +263,20 @@ body {
     .product-gallery img {
         width: 80px;
     }
+} /* KTU MBYLL MEDIA-N */
 
-/* KONTAINERI I PRODUKTIT */
+/* KONTAINERI I PRODUKTIT NË FAQEN KRYESORE */
 .product {
     width: 100%;
-    max-width: 700px;   /* dritarja më e ngushtë */
-    margin: 20px auto;  /* më afër footer, jo aq lart */
+    max-width: 700px;       /* sa e gjerë është dritarja e bardhë */
+    margin: 20px auto;      /* sa larg nga footer/fundi */
     padding: 0 20px;
-    background: white;
+    background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* KONFIGURIMI I GALERISË */
+/* GALERIA (për më vonë, nëse e përdor) */
 .product-gallery {
     display: flex;
     flex-wrap: wrap;
@@ -283,7 +284,6 @@ body {
     margin-top: 0;
 }
 
-/* THUMBNAILS */
 .product-gallery img {
     width: 90px;
     height: auto;
@@ -291,76 +291,45 @@ body {
     display: block;
 }
 
-/* RREGULLIMI I ROLEX DATEJUST QE TE JETE SI TE TJERET */
-.product:first-of-type .product-gallery {
-    margin-top: -25px !important;
-}
-
-.menu a {
-    text-decoration: none;
-    color: white;
-    font-weight: 600;
-    font-size: 18px;
-}
-
-
-body.luxury-page main {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 40px;
-    padding: 40px 20px;
-}
-
-/* Karta për secilën orë */
-body.luxury-page .product-card {
-    width: 220px;
-    text-align: center;
-    background-color: #111;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-}
-
-/* Foto kryesore në Luxury – mos i bëj gjigande */
-body.luxury-page .product-card img {
-    max-width: 100%;
+/* SUBMARINER IMAGE – vetë fotoja e Rolex-it */
+.submariner-image {
+    width: 200px;       /* UL ose RRIT – p.sh. 180, 220, etj. */
     height: auto;
     display: block;
-    margin: 0 auto 10px;
-    border-radius: 4px;
+    margin: 10px auto;  /* qendër, pak hapësirë sipër/poshtë */
+    border-radius: 12px;
+    object-fit: contain;
 }
 
-/* Tekstet nën fotot */
-body.luxury-page .product-card h3 {
-    margin: 8px 0 4px;
-    font-size: 18px;
+/* FOOTER – shiriti i zi poshtë */
+footer.footer,
+.footer {
+    background: #000000;
+    color: #ffffff;
+    text-align: center;
+    padding: 18px;
+    margin-top: 20px;
+    font-size: 16px;
+}
+} /* <- Mbyll media query nëse mungon */
+
+/* Fotoja e Submariner */
+.submariner-image {
+    width: 200px;      
+    height: auto;
+    display: block;
+    margin: 15px auto;
+    object-fit: contain;
+    border-radius: 12px;
 }
 
-body.luxury-page .product-card p {
-    margin: 0;
-    font-size: 14px;
-    color: #.product-card img {
-    width: 180px;
-    height: 180px;
-    object-fit: cover;
-    border-radius: 10px;
-
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    font-size: 40px;
-    font-weight: 600;
-    color: white;
-    text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+/* Footer poshtë */
+footer.footer,
+.footer {
+    background: #000;
+    color: #fff;
+    text-align: center;
+    padding: 18px;
+    margin-top: 30px;
+    font-size: 16px;
 }
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-
-

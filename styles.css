@@ -585,3 +585,72 @@ nav a {
     text-align: center;
     display: block;
 }
+/* =========================
+   HEADER + MENU
+   ========================= */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: black;
+    padding: 10px 20px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+
+.menu {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+}
+
+.menu::-webkit-scrollbar {
+    display: none;
+}
+
+.menu a {
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+    padding: 5px 8px;
+}
+
+@media (max-width: 600px) {
+    .topbar {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    .menu {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 0 10px;
+    }
+}
+
+/* =========================
+   SUBMARINER IMAGE
+   ========================= */
+.submariner-image {
+    width: 280px;
+    height: 380px;
+    display: block;
+    margin: 20px auto;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+@media (max-width: 600px) {
+    .submariner-image {
+        width: 180px;
+        height: 250px;
+    }
+}

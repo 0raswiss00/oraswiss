@@ -654,3 +654,22 @@ nav a {
         height: 250px;
     }
 }
+.topbar {
+    display: flex;
+    justify-content: space-between; /* Logo majtas, Service djathtas */
+    align-items: center;
+    padding: 10px 20px;
+    width: 100%;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.service {
+    font-size: 20px;
+    font-weight: 600;
+}

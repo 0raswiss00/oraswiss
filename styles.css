@@ -675,3 +675,31 @@ nav a {
     font-weight: 600;
     margin-top: 5px; /* pak hapësirë poshtë logos */
 }
+/* MENU – bëhet e zezë */
+.menu {
+    background-color: black;
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.menu a {
+    color: white;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+/* ORA SWISS – bëhet e bardhë */
+.logo {
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Shirit i zi lart – opsionale po e do */
+.topbar {
+    background-color: black;
+    padding: 10px 0;
+}

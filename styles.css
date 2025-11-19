@@ -325,8 +325,7 @@ footer.footer,
 /* Foto full-screen */
 .rolex-img {
     width: 100%;
-    height: auto;
+    height: 105vh;     /* FOTO MË E GJATË = MBYLL BOSHLLEKUN */
+    object-fit: cover;
     display: block;
-    margin-bottom: -15px;  /* Heq boshllëkun poshtë */
 }
-

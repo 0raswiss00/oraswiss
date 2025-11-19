@@ -41,17 +41,17 @@ Ora
     margin: 0;
 }
 
-/* Logo ORA SWISS në qendër */
-.logo {
-    font-size: 28px;
-    font-weight: bold;
-    color: white;
-    flex: 1;
-    text-align: center;
-    margin: 0;
-}
 /* ---------------- NAVBAR ---------------- */
-
+.top-nav {
+    background: #000;      /* shiriti i zi */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
 
 /* Menuja */
 .menu {

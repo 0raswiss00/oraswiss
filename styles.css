@@ -316,14 +316,17 @@ footer.footer,
     margin-top: 30px;
     font-size: 16px;
 }
+/* Bëje fotografinë sa gjithë ekrani */
 .featured-watch {
-    text-align: center;
-    margin: 40px 0;
+    margin: 0;
+    padding: 0;
 }
 
-.rolex-img {
+/* Foto full-screen */
+.featured-watch img {
     width: 100%;
-    max-width: 500px;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    height: auto;
+    max-width: 100%;
+    border-radius: 0;
+    box-shadow: none;
 }

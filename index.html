@@ -107,10 +107,54 @@
             padding: 18px;
             margin-top: 40px;
         }
-    </style>
-</head>
+
+/* Top Navigation Bar */
+.top-nav {
+    background: black;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 20px;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+}
+
+/* ORA SWISS logo */
+.logo {
+    font-size: 26px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 10px;
+}
+
+/* Menu – scroll horizontal */
+.menu {
+    display: flex;
+    gap: 25px;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 5px;
+}
+
+.menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 5px 10px;
+}
+
+.menu::-webkit-scrollbar {
+    display: none; /* Hide scrollbar */
+}
+    </style> 
+    </head>
+    
 <body> 
-         
+    
      <div class="top-nav">     
         <header class="logo">ORA SWISS</header>  
     <div class="menu">

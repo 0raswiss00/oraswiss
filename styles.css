@@ -344,8 +344,13 @@ body {
     border-radius: 6px;
     display: block;
 }
-
-
+/* Desktop fix për pozicionin e ORA SWISS */
+@media (min-width: 1024px) {
+    .top-nav {
+        justify-content: flex-start; /* logo dhe menuja të fillojnë nga majtas */
+        padding-left: 20px;          /* afroje sa të duash: 0 = skaj fare */
+    }
+}
 
 /* FOOTER – shiriti i zi poshtë */
 footer.footer,

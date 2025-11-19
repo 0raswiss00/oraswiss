@@ -20,7 +20,48 @@ body {
     min-height: 100vh;
     background: radial-gradient(circle at top, #e5e7eb, #f9fafb 40%, #e5e7eb 100%);
 }
-   
+/* ---------------- NAVBAR ---------------- */
+
+.top-nav {
+    background: #000;      /* shiriti i zi */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+/* Logo në qendër */
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    flex: 1;
+    text-align: center;
+    margin: 0;
+}
+
+/* Menuja */
+.menu {
+    display: flex;
+    gap: 12px;
+}
+
+/* Lidhjet e menusë */
+.menu a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/* Efekt hover */
+.menu a:hover {
+    color: #f0c040;
+}
+
 /* =========================
    HEADER (Koka e faqes)
    ========================= */

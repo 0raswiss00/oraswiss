@@ -42,6 +42,12 @@ Ora
     margin: 0;
 }
 
+@media (min-width: 1024px) {
+    .logo {
+        margin-left: -40px;   /* ose -30px sipas shijes */
+    }
+}
+
 /* ---------------- NAVBAR ---------------- */
 .top-nav {
     background: #000;      /* shiriti i zi */

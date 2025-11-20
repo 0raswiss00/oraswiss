@@ -41,3 +41,8 @@ Up for sale is an original *Omega pocket watch case* compatible with the *Omega 
 
 *Price: 350 €*  
 (Contact for shipping)
+<a href="https://wa.me/355692408065?text=Pershendetje,%20dua%20te%20porosis%20Omega%20Pocket%20980%20(350€).%20Jam%20dakord%20te%20paguaj%20depoziten%2035€%20dhe%20pjesen%20tjeter%20me%20COD."
+class="buy-button"
+style="display:inline-block;padding:12px 18px;background:#25D366;color:white;border-radius:6px;text-decoration:none;font-size:18px;font-weight:bold;">
+    Order on WhatsApp – 35€ Deposit
+</a>

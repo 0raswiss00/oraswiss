@@ -288,6 +288,17 @@ body {
     cursor: pointer;
 }
 
+.product-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.product-gallery .thumb {
+    width: 120px;
+    border-radius: 6px;
+}
 
 .product-gallery img:hover {
     transform: translateY(-2px) scale(1.03);

@@ -189,18 +189,18 @@ body {
 }
 .product-main-image {
     width: 100%;
-    max-width: 360px;      /* sa e madhe në kompjuter */
+    max-width: 500px;   /* njësoj si Rolex */
     margin: 10px auto;
     border-radius: 12px;
-    object-fit: contain;
+    object-fit: cover;
 }
 /* Telefona / ekrane të vegjël */
 @media (max-width: 768px) {
-
     .product-main-image {
-        max-width: 420px;     /* më e madhe në telefon */
+        max-width: 650px;
         margin-top: 10px;
     }
+}
 
   
 .product-main-image {

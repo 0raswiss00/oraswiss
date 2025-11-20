@@ -203,19 +203,21 @@ body {
     }
 
   
-.product-main-image.zoomed {
-    transform: scale(2);
-    cursor: zoom-out;
-    z-index: 30;
-    position: relative;
+.product-main-image {
+    width: 100%;
+    max-width: 360px;   /* madhësia e fotos në kompjuter */
+    margin: 10px auto;
+    border-radius: 12px;
+    object-fit: contain;
+   }
 }
 /* Telefona – e ngre edhe pak më shumë */
 @media (max-width: 768px) {
-    body.vintage-page main.product {
-        margin-top: 10px !important;
+    .product-main-image {
+        max-width: 420px;   /* më e madhe në telefon */
+        margin-top: 10px;
     }
 }
-
 /* Efekti kur kalon maus mbi imazhin kryesor */
 .product-main-image:not(.zoomed):hover {
     transform: translateY(-4px) scale(1.01);

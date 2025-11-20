@@ -441,15 +441,7 @@ footer.footer,
     display: block;
 }
 
-<script>
-document.querySelector('.description-toggle').addEventListener('click', function() {
-    document.querySelector('.description-panel').classList.toggle('open');
-    if (document.querySelector('.description-panel').classList.contains('open')) {
-        this.textContent = '❯';
-    } else {
-        this.textContent = '❮';
-    }
-});
+
 </script>
 body.vintage-page main.product {
     max-width: 700px;

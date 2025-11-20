@@ -202,14 +202,7 @@ body {
         margin-top: 10px;
     }
 
-    .product {
-        margin-top: -60px;    /* ngrije gjithë seksionin lart */
-    }
-}
-/* Ngjit kutinë e produktit më lart në PC */
-body.vintage-page main.product {
-    margin-top: 50px !important;
-}
+  
 .product-main-image.zoomed {
     transform: scale(2);
     cursor: zoom-out;
@@ -219,7 +212,7 @@ body.vintage-page main.product {
 /* Telefona – e ngre edhe pak më shumë */
 @media (max-width: 768px) {
     body.vintage-page main.product {
-        margin-top: -70px !important;
+        margin-top: 10px !important;
     }
 }
 

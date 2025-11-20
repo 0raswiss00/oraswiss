@@ -1,151 +1,57 @@
-ju<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ora Swiss - Shop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vintage – Ora Swiss</title>
     <link rel="stylesheet" href="styles.css">
+</head>
 
-    <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+<body class="vintage-page">
 
-      gtag('config', 'G-KD2ZZ3MJYY');
-    </script>
-    <style>
-        .products-section {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 16px;
-        }
-
-        .product {
-            background: #ffffff;
-            border-radius: 12px;
-            margin-bottom: 40px;
-            padding: 16px;
-            box-shadow: 0 0 12px rgba(0,0,0,0.08);
-        }
-
-        .product-main {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            align-items: flex-start;
-        }
-
-        .product-main-image {
-            width: 100%;
-            max-width: 380px;
-            height: auto;
-            border-radius: 8px;
-            display: block;
-        }
-
-        .product-info {
-            flex: 1 1 260px;
-        }
-
-       .product-gallery {
-    margin-top: 0 !important;
-}
-
-.product-gallery img {
-    margin-top: 0 !important;
-}
-        .price {
-            font-size: 1.1rem;
-            margin-top: 8px;
-        }
-    </style>
-
-    <h1>ORA SWISS – WATCH SHOP</h1>
+<header class="site-header">
+    <h1>Vintage</h1>
     <a href="index.html" class="back-button">← Back to Home</a>
 </header>
 
-<main class="products-section">  
-    
-<!-- OMEGA  1211740 -->
-<article class="product">
+<main class="product">
 
-    <h2>Omega  1211740</h2>
-
-    <div class="product-main">
-    <img id="omega-main"
-         class="product-main-image"
+    <!-- FOTO KRYESORE (identike si luxury) -->
+    <img class="product-main-image"
          src="omega-pocket-980-1.jpg"
-         alt="Omega 980 main image">
-   
+         alt="Omega vintage pocket watch">
+
     <div class="product-info">
 
-    <p><strong>Brand:</strong> Omega</p>
-    <p><strong>Model:</strong> Pocket Watch Case</p>
-    <p><strong>Reference:</strong> 1211740</p>
-    <p><strong>Size:</strong> 47mm</p>
+        <h2>Omega Pocket Watch Case – Cal 980</h2>
 
-    <p><strong>Highlights:</strong></p>
-    <ul>
-        <li>Original Omega vintage case</li>
-        <li>Original crystal & crown included</li>
-        <li>No dents or deep scratches</li>
-        <li>Beautifully preserved</li>
-        <li>Ideal for restoration or collection</li>
-    </ul>
+        <p><strong>Brand:</strong> Omega</p>
+        <p><strong>Model:</strong> Pocket Watch Case</p>
+        <p><strong>Reference:</strong> 1211740</p>
+        <p><strong>Size:</strong> 47mm</p>
 
-    <p><strong>Price:</strong> €270</p>
+        <p><strong>Description:</strong></p>
+        <ul>
+            <li>Original Omega vintage case</li>
+            <li>Original crystal & crown included</li>
+            <li>No dents or deep scratches</li>
+            <li>Beautiful condition</li>
+            <li>Perfect for restoration or collection</li>
+        </ul>
 
-</div>ç
-        
-<div class="product-buttons">
-      <a href="mailto:info@oraswiss.com" class="buy-button">Buy Now</a>
-      <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>
-      <a href="mailto:info@oraswiss.com" class="buy-button">Email</a>
+        <p class="price">€350</p>
     </div>
-    
-    <div class="product-gallery">       
-        <img class="thumb" src="omega-pocket-980-1.jpg" alt="omega 980 image 1">
-        <img class="thumb" src="omega-pocket-980-2.jpg" alt="omega 980 image 2">
-        <img class="thumb" src="omega-pocket-980-3.jpg" alt="omega 980 image 3">
-        <img class="thumb" src="omega-pocket-980-4.jpg" alt="omega 980 image 4">
-        <img class="thumb" src="omega-pocket-980-5.jpg" alt="omega 980 image 5">
+
+    <!-- GALERIA IDENTIKE SI LUXURY -->
+    <div class="product-gallery">
+        <img class="thumb" src="omega-pocket-980-1.jpg">
+        <img class="thumb" src="omega-pocket-980-2.jpg">
+        <img class="thumb" src="omega-pocket-980-3.jpg">
+        <img class="thumb" src="omega-pocket-980-4.jpg">
+        <img class="thumb" src="omega-pocket-980-5.jpg">
     </div>
-                 
 
- </article>  
+</main>
 
- </main>       
-
-
-<script>
-// THUMBNAILS SCRIPT
-document.addEventListener('click', function (e) {
-    const thumb = e.target.closest('.product-gallery img');
-    if (!thumb) return;
-
-    const article = thumb.closest('.product');
-    const mainImage = article.querySelector('.product-main-image');
-    if (!mainImage) return;
-
-    mainImage.src = thumb.src;
-
-    if (thumb.alt) {
-        mainImage.alt = thumb.alt;
-    }
-});
-</script>
-
-
-<script>
-// ZOOM SCRIPT
-document.addEventListener('DOMContentLoaded', () => {
-    const mainImages = document.querySelectorAll('.product-main-image');
-
-    mainImages.forEach(img => {
-        img.addEventListener('click', () => {
-            img.classList.toggle('zoomed');
-        });
-    });
-});
-</script>
+</body>
+</html>

@@ -196,13 +196,16 @@ body {
 }
 
 /* Telefona / ekrane të vegjël */
+/* Telefona / ekrane të vegjël */
 @media (max-width: 768px) {
+
     .product-main-image {
-        max-width: 420px;  /* pak më e madhe në telefon */
+        max-width: 420px;     /* më e madhe në telefon */
+        margin-top: 10px;
     }
 
-    body.vintage-page .product {
-        margin-top: -20px; /* e ngre gjithë kutinë lart në telefon */
+    .product {
+        margin-top: -40px;    /* ngrije gjithë seksionin lart */
     }
 }
    

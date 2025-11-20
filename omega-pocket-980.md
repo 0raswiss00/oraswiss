@@ -29,7 +29,6 @@ Up for sale is an original *Omega pocket watch case* compatible with the *Omega 
 - Collectors  
 - Replacement part for restoration  
 
----
 
 ## Photos:
 
@@ -39,7 +38,6 @@ Up for sale is an original *Omega pocket watch case* compatible with the *Omega 
 ![Photo 4](omega-pocket-980-4.jpg)  
 ![Photo 5](omega-pocket-980-5.jpg)  
 
----
 
 *Price: 350 €*  
 (Contact for shipping)

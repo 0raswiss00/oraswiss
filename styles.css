@@ -287,14 +287,7 @@ body {
     left: 50%; 
     transform: translate(-50%, -50%) scale(1.5);
 }
-/* Opsionale: nëse dëshiron foton të fluturojë mbi elementet e tjerë */
-.product-image:hover,
-.product-main-image:hover {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%) scale(1.5);
-}
+
 
 .product-main {
     overflow: visible;  /* lejon që foto të shfaqet e madhe jashtë grid-it */

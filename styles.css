@@ -89,7 +89,7 @@ ul {
 }
 
 /* =========================
-   MAIN IMAGE + GALLERY + INFO
+   MAIN IMAGE + INFO + DESCRIPTION
    ========================= */
 .product-main-wrapper {
     display: flex;
@@ -98,23 +98,30 @@ ul {
     align-items: flex-start;
 }
 
-/* Foto kryesore majtas */
 .product-main {
-    flex: 1 1 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .product-main-image {
     width: 100%;
+    max-width: 380px;
     border-radius: 12px;
     object-fit: contain;
     cursor: pointer;
+    position: relative;
+    z-index: 10;
+    transform-origin: center center;
     transition: transform 0.3s ease;
 }
 
+/* Hover minimal */
 .product-main-image:not(.zoomed):hover {
     transform: scale(1.03);
 }
 
+/* Zoom */
 .product-main-image.zoomed {
     position: fixed;
     top: 50%;
@@ -124,17 +131,51 @@ ul {
     box-shadow: 0 20px 60px rgba(0,0,0,0.4);
 }
 
-/* Gallery djathtas */
-.product-gallery {
-    flex: 0 0 180px; /* madhësia e kolonës së djathtë */
+/* Volga nuk zmadhon */
+.product-main-image.volga,
+.product-main-image.volga:hover,
+.product-main-image.volga.zoomed {
+    transform: none !important;
+    position: static !important;
+    cursor: default !important;
+}
+
+/* =========================
+   DESCRIPTION DJATHTAS
+   ========================= */
+.product-description-wrapper {
     display: flex;
-    flex-direction: column;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.product-description {
+    flex: 1;
+    min-width: 220px;
+}
+
+.product-description ul {
+    list-style: disc;
+    padding-left: 20px;
+}
+
+.product-description h3 {
+    margin-bottom: 8px;
+}
+
+/* =========================
+   THUMBNAILS
+   ========================= */
+.product-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     gap: 10px;
+    margin-top: 20px;
 }
 
 .product-gallery img.thumb {
     width: 100%;
-    height: 90px;
+    height: 120px;
     object-fit: cover;
     border-radius: 8px;
     cursor: pointer;
@@ -150,16 +191,12 @@ ul {
 /* =========================
    BUY BUTTONS
    ========================= */
-.product-buttons {
-    margin-top: 12px;
-}
-
 .buy-button {
     display: inline-block;
-    margin-top: 8px;
+    margin-top: 12px;
     margin-right: 8px;
     padding: 8px 16px;
-    background: linear-gradient(135deg, #2563eb, #1e40af); /* blu */
+    background: linear-gradient(135deg, #2563eb, #1e40af);
     color: #fff;
     text-decoration: none;
     font-size: 13px;
@@ -174,27 +211,23 @@ ul {
 }
 
 /* =========================
-   DESCRIPTION POSHT
-   ========================= */
-.product-description {
-    margin-top: 20px;
-}
-
-/* =========================
    RESPONSIVE
    ========================= */
+@media (max-width: 1024px) {
+    .product-description-wrapper {
+        flex-direction: column;
+    }
+}
+
 @media (max-width: 768px) {
     .product-main-wrapper {
         flex-direction: column;
+        align-items: center;
     }
-    .product-gallery {
-        flex: 1 1 100%;
-        flex-direction: row;
-        justify-content: center;
-        margin-top: 16px;
+    .product-main-image {
+        max-width: 100%;
     }
     .product-gallery img.thumb {
-        height: 60px;
+        height: 90px;
     }
 }
-

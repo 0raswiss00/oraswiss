@@ -274,14 +274,23 @@ body {
 }
 
 /* Hover ose klik për zmadhim */
-.product-main-image.zoomed,
-.product-main-image:hover {
-    transform: scale(1.5); 
-    /* Opsional për absolute positioning mbi grid */
-    position: absolute; 
-    top: 50%; 
-    left: 50%; 
+.product-main-image {
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+/* Hover minimal, vetëm kur nuk është zoomed */
+.product-main-image:not(.zoomed):hover {
+    transform: scale(1.03);  /* vetëm zmadhim i butë */
+}
+
+/* Zoom kur klikohet */
+.product-main-image.zoomed {
+    position: fixed;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%) scale(1.5);
+    z-index: 9999;
 }
 
 

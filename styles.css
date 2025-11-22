@@ -13,85 +13,25 @@ html {
     color: #111827;
 }
 
-/* =========================
-   TRUPI I FAQES
-   ========================= */
 body {
     min-height: 100vh;
     background: radial-gradient(circle at top, #e5e7eb, #f9fafb 40%, #e5e7eb 100%);
-}
-.top-nav {
-    background: #000;      /* shiriti i zi */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 15px;
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    border-bottom: 2px solid #333;     
-}
-Ora
-/* LOGO ORA SWISS MAJTAS NE FUND */
-.logo {
-    font-size: 28px;
-    font-weight: bold;
-    color: white;
-    flex: 1;
-    text-align: left;
-    margin: 0;
-}
-
-@media (min-width: 1024px) {
-    .logo {
-        margin-left: -40px;   /* ose -30px sipas shijes */
-    }
-}
-
-/* ---------------- NAVBAR ---------------- */
-.top-nav {
-    background: #000;      /* shiriti i zi */
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 10px 15px;
-    position: sticky;
-    top: 0;
-    z-index: 999;
-}
-
-/* Menuja */
-.menu {
-    display: flex;
-    gap: 12px;
-}
-
-/* Lidhjet e menusë */
-.menu a {
-    color: white;
-    padding: 10px 15px;
-    text-decoration: none;
-    display: inline-block;
-}
-
-/* Efekt hover */
-.menu a:hover {
-    color: #f0c040;
+    overflow-x: hidden;
 }
 
 /* =========================
-   HEADER (Koka e faqes)
+   HEADER
    ========================= */
 .site-header {
     position: sticky;
     top: 0;
     z-index: 20;
-    background: rgba(15, 23, 42, 0.96);   /* blu e errët elegante */
+    background: rgba(15, 23, 42, 0.96);
     color: #f9fafb;
     padding: 18px 32px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     gap: 10px;
     box-shadow: 0 14px 45px rgba(0, 0, 0, 0.25);
     backdrop-filter: blur(14px);
@@ -104,7 +44,6 @@ Ora
     font-weight: 500;
 }
 
-/* Butoni “Kthehu mbrapa” */
 .back-button {
     text-decoration: none;
     font-size: 13px;
@@ -130,38 +69,26 @@ Ora
    SEKSIONI I PRODUKTEVE
    ========================= */
 .products-section {
-    max-width: 550px;
-    margin: 0 auto;   /* heq 32px sipër dhe 40px poshtë */
-    padding: 0;       /* heq padding-un 0 200px 24px 20px */
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 0 16px;
     display: block;
-}
-
-main {
-    font-size: 16px;
-    line-height: 1.6;
-}
-
-body {
-    overflow-x: hidden;
 }
 
 /* =========================
    KARTA E PRODUKTIT
    ========================= */
 .product {
-    background: rgba(255, 255, 255, 0.97);
-    border-radius: 18px;
-    padding: 22px 22px 18px 22px;
-    box-shadow:
-        0 18px 45px rgba(15, 23, 42, 0.12),
-        0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: #fff;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 40px;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    border: 1px solid rgba(229, 231, 235, 0.8);
+    gap: 16px;
 }
 
-/* Titulli i produktit */
 .product h2 {
     font-size: 16px;
     letter-spacing: 0.08em;
@@ -170,89 +97,37 @@ body {
     color: #111827;
 }
 
-/* Pjesa kryesore: imazhi + informacioni */
+/* =========================
+   Pjesa kryesore: imazhi + info
+   ========================= */
 .product-main {
     display: grid;
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
     gap: 22px;
     align-items: start;
+    position: relative;
+    overflow: visible; /* lejon zmadhim jashtë grid */
 }
 
-/* Imazhi kryesor i orës */
-.submariner-image {
-    width: 200px;      /* madhësia fikse e fotos */
-    height: auto;
-    display: block;
-    margin: 10px auto; /* qendër dhe pak hapësirë sipër/poshtë */
-    border-radius: 12px;
-    object-fit: contain;
-}
+/* Imazhi kryesor */
 .product-main-image {
     width: 100%;
-    max-width: 500px;   /* njësoj si Rolex */
-    margin: 10px auto;
-    border-radius: 12px;
-    object-fit: cover;
-}
-/* Telefona / ekrane të vegjël */
-@media (max-width: 768px) {
-    .product-main-image {
-        max-width: 650px;
-        margin-top: 10px;
-    }
-}
-
-  
-.product-main-image {
-    width: 100%;
-    max-width: 360px;   /* madhësia e fotos në kompjuter */
-    margin: 10px auto;
+    max-width: 380px;
     border-radius: 12px;
     object-fit: contain;
-   }
-}
-/* Telefona – e ngre edhe pak më shumë */
-@media (max-width: 768px) {
-    .product-main-image {
-        max-width: 420px;   /* më e madhe në telefon */
-        margin-top: 10px;
-    }
+    cursor: pointer;
+    position: relative;
+    z-index: 10;
+    transform-origin: center center;
+    transition: transform 0.3s ease;
 }
 
-    box-shadow:
-        0 24px 60px rgba(15, 23, 42, 0.3),
-        0 0 0 1px rgba(148, 163, 184, 0.7);
+/* Hover minimal për produktet jo zoomed */
+.product-main-image:not(.zoomed):hover {
+    transform: scale(1.03);
 }
 
-/* Informacioni i produktit */
-.product-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    font-size: 14px;
-    color: #374151;
-}
-
-
-/* Fotot e të gjitha produkteve */
-.product-image,
-.product-main-image {
-    width: auto;          /* hiq width fikse */
-    max-width: none;      /* hiq kufizimin */
-    border-radius: 12px;  /* qoshet rrumbullakosura */
-    transition: transform 0.3s ease; /* efekt i butë */
-    cursor: pointer;      /* tregon që është klikueshme */
-    position: relative;   /* mund të vendosim z-index */
-}
-/* mos i prekim fotot Volga */
-.product-main-image.volga,
-.product-main-image.volga:hover,
-.product-main-image.volga.zoomed {
-  transform: none !important;
-  position: static !important;
-  cursor: default !important;
-}
-
+/* Zoom kur klikohet */
 .product-main-image.zoomed {
     position: fixed;
     top: 50%;
@@ -261,39 +136,30 @@ body {
     z-index: 9999;
 }
 
-.product-main {
-    position: relative;
-    overflow: visible; /* lejon fotot të dalin jashtë grid */
+/* -----------------------
+   Përjashtim Volga
+   ----------------------- */
+.product-main-image.volga,
+.product-main-image.volga:hover,
+.product-main-image.volga.zoomed {
+    transform: none !important;
+    position: static !important;
+    cursor: default !important;
 }
 
-
-
-.product-main-image {
-    width: auto;
-    max-width: 380px; 
-    border-radius: 12px;
-    transition: transform 0.3s ease, left 0.3s ease, top 0.3s ease;
-    cursor: pointer;
-    position: relative;  
-    z-index: 9999;
-    transform-origin: center center; /* rëndësi për zmadhim pa dridhje */
+/* Informacioni i produktit */
+.product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
+    color: #374151;
 }
 
-/* Hover ose klik për zmadhim */
-.product-main-image {
-    transition: transform 0.3s ease;
-    cursor: pointer;
-}
-
-
-.product-main {
-    overflow: visible;  /* lejon që foto të shfaqet e madhe jashtë grid-it */
-}
 .product-info strong {
     color: #111827;
 }
 
-/* Çmimi */
 .price {
     margin-top: 8px;
     font-size: 17px;
@@ -302,7 +168,7 @@ body {
 }
 
 /* =========================
-   BUTONI I BLERJES (WhatsApp)
+   BUTONI I BLERJES
    ========================= */
 .buy-button {
     margin-top: 12px;
@@ -323,80 +189,56 @@ body {
     box-shadow: 0 14px 35px rgba(22, 163, 74, 0.45);
     transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
 }
+
 .buy-button:hover {
     transform: translateY(-1px);
     box-shadow: 0 18px 45px rgba(22, 163, 74, 0.5);
     opacity: 0.96;
 }
-.footer {
-    background: #000;
-    color: #fff;
-    text-align: center;
-    padding: 18px;
-    margin-top: -5px;
-    font-size: 16px;
-}
+
 /* =========================
-   GALERIA E FOTOVE (thumbnail)
+   GALERIA E FOTOVE (thumbnails)
    ========================= */
 .product-gallery {
-    margin-top: 14px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;  
-}
-
-.product-gallery img,
-.product-gallery .thumb {
-    width: 90px;
-    height: 90px;
-    object-fit: cover;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.product-gallery {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     gap: 10px;
     margin-top: 20px;
 }
 
-.product-gallery .thumb {
-    width: 120px;
-    border-radius: 6px;
+.product-gallery img.thumb {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
 }
 
-.product-gallery img:hover {
-    transform: translateY(-2px) scale(1.03);
+.product-gallery img.thumb:hover {
+    transform: scale(1.05);
     box-shadow: 0 12px 28px rgba(15, 23, 42, 0.25);
-    border-color: #111827;
     opacity: 0.96;
 }
 
 /* =========================
-   RESPONSIVE (Tableta & Telefona)
+   RESPONSIVE
    ========================= */
-@media (max-width: 650px) {
-    .site-header {
-        padding-inline: 18px;
-    }
-
-    .site-header h1 {
-        font-size: 15px;
-    }
-
-    .products-section {
-        margin-top: 24px;
-    }
-
+@media (max-width: 768px) {
     .product-main {
         grid-template-columns: 1fr;
     }
+    .product-main-image {
+        max-width: 420px;
+    }
+}
 
-    .product {
-        padding: 18px 16px 16px 16px;
+@media (max-width: 650px) {
+    .site-header h1 {
+        font-size: 15px;
+    }
+    .products-section {
+        margin-top: 24px;
     }
 }
 
@@ -406,85 +248,18 @@ body {
         align-items: flex-start;
         gap: 8px;
     }
-
     .back-button {
         align-self: flex-start;
     }
-
-    .product-gallery img {
+    .product-gallery img.thumb {
         width: 80px;
+        height: 80px;
     }
-} /* KTU MBYLL MEDIA-N */
-
-/* KONTAINERI I PRODUKTIT NË FAQEN KRYESORE */
-.product {
-    width: 100%;
-    max-width: 700px;       /* sa e gjerë është dritarja e bardhë */
-    margin: 20px auto;      /* sa larg nga footer/fundi */
-    padding: 0 20px;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* GALERIA (për më vonë, nëse e përdor) */
-.product-gallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 0;
-}
-
-.product-gallery img {
-    width: 90px;
-    height: auto;
-    border-radius: 6px;
-    display: block;
-}
-/* Desktop fix për pozicionin e ORA SWISS */
-@media (min-width: 1024px) {
-    .top-nav {
-        justify-content: center; /* logo dhe menuja të fillojnë nga majtas */
-        padding-left: 0px;          /* afroje sa të duash: 0 = skaj fare */               
-   }   
-}
-
-</article>
-
-.product-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.product-gallery img.thumb {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.product-gallery img.thumb:hover {
-    transform: scale(1.05);
-}
-
-/* FOOTER – shiriti i zi poshtë */
-footer.footer,
-.footer {
-    background: #000000;
-    color: #ffffff;
-    text-align: center;
-    padding: 18px;
-    margin-top: 20px;
-    font-size: 16px;
-}
-} /* <- Mbyll media query nëse mungon */
-
-
-/* Footer poshtë */
+/* =========================
+   FOOTER
+   ========================= */
 footer.footer,
 .footer {
     background: #000;
@@ -494,102 +269,3 @@ footer.footer,
     margin-top: 30px;
     font-size: 16px;
 }
-/* Bëje fotografinë sa gjithë ekrani */
-.featured-watch {
-    margin: 0;
-    padding: 0;
-}
-
-/* Foto full-screen */
-.rolex-img {
-    width: 100%;
-    height: 90vh;     
-    object-fit: cover;
-    display: block;
-}
-
-
-</script>
-body.vintage-page main.product {
-    max-width: 700px;
-    margin: 20px auto;
-    padding: 20px 25px;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    font-size: 17px;
-    line-height: 1.6;
-}
-
-.product {
-    margin-top: -30px;
-}
-.description-panel {
-    position: fixed;
-    top: 140px;
-    right: -230px;
-    width: 210px;
-    background: #fff;
-    padding: 15px;
-    border-left: 1px solid #ddd;
-    box-shadow: -2px 0 8px rgba(0,0,0,0.1);
-    transition: right 0.25s ease;
-    border-radius: 12px 0 0 12px;
-    z-index: 9999;
-}
-
-.product {
-    margin-top: -30px;
-}
-.description-panel {
-    position: fixed;
-    top: 140px;
-    right: -230px;
-    width: 210px;
-    background: #fff;
-    padding: 15px;
-    border-left: 1px solid #ddd;
-    box-shadow: -2px 0 8px rgba(0,0,0,0.1);
-    transition: right 0.25s ease;
-    border-radius: 12px 0 0 12px;
-    z-index: 9999;
-}
-</article>
-
-.product-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.product-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.product-gallery img.thumb {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.product-gallery img.thumb:hover {
-    transform: scale(1.05);
-}
-.product__media-item img {
-    transform-origin: center center !important;
-}
-
-document.querySelectorAll('.product-main-image').forEach(img => {
-    img.addEventListener('click', () => {
-        img.classList.toggle('zoomed');
-    });
-});
-
-

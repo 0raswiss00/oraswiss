@@ -237,15 +237,21 @@ body {
 }
 
 .product-image {
-    width: 100%;      /* e bën sa kutia */
-    max-width: 350px; /* madhësia maksimale e fotos */
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.product-image {
+    width: 100%;
+    max-width: 350px;
     border-radius: 10px;
+    transition: transform 0.3s ease; /* efekt i butë */
+    cursor: pointer; /* tregon që është klikueshme */
 }
 
-.product-info p {
-    line-height: 1.45;
+.product-image:hover {
+    transform: scale(1.2); /* zmadhon 120% */
 }
-
 .product-info strong {
     color: #111827;
 }

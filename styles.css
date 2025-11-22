@@ -599,6 +599,10 @@ body.vintage-page main.product {
     transform-origin: center center !important;
 }
 
-
+document.querySelectorAll('.product-main-image').forEach(img => {
+    img.addEventListener('click', () => {
+        img.classList.toggle('zoomed');
+    });
+});
 
 

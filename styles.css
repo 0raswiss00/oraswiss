@@ -1,234 +1,90 @@
 /* =========================
-   RESET BAZË
+   VINTAGE ENHANCED
    ========================= */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #f3f4f6;
-    color: #111827;
-    overflow-x: hidden;
-}
-
-h1,h2,h3,p,li {
-    margin-bottom: 8px;
-}
-
-ul {
-    list-style: disc;
-    margin-left: 20px;
-}
-
-/* =========================
-   HEADER
-   ========================= */
-.site-header {
-    position: sticky;
-    top: 0;
-    background: #000;
-    color: #fff;
-    padding: 16px 24px;
+.product.vintage .product-images {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 999;
-}
-
-.back-button {
-    color: #fff;
-    text-decoration: none;
-    font-size: 14px;
-    padding: 6px 12px;
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 999px;
-    transition: all 0.2s ease;
-}
-
-.back-button:hover {
-    background: #fff;
-    color: #000;
-}
-
-/* =========================
-   PRODUCTS SECTION
-   ========================= */
-.products-section {
-    max-width: 1100px;
-    margin: 40px auto;
-    padding: 0 16px;
-}
-
-/* =========================
-   PRODUCT CARD
-   ========================= */
-.product {
-    background: #fff;
-    border-radius: 12px;
-    margin-bottom: 40px;
-    padding: 20px;
-    box-shadow: 0 0 12px rgba(0,0,0,0.08);
-}
-
-.product h2 {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.product-info p {
-    font-size: 14px;
-}
-
-.price {
-    font-size: 16px;
-    font-weight: 600;
-    margin-top: 8px;
-}
-
-/* =========================
-   MAIN IMAGE + INFO + DESCRIPTION
-   ========================= */
-.product-main-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
+    gap: 20px;
+    margin-bottom: 16px;
     align-items: flex-start;
+    flex-wrap: wrap;
 }
 
-.product-main {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.product-main-image {
-    width: 100%;
-    max-width: 380px;
+.product.vintage .product-main-image {
+    width: 60%;
+    max-width: 400px;
+    max-height: 500px;
     border-radius: 12px;
     object-fit: contain;
     cursor: pointer;
-    position: relative;
-    z-index: 10;
-    transform-origin: center center;
     transition: transform 0.3s ease;
 }
 
-/* Hover minimal */
-.product-main-image:not(.zoomed):hover {
+.product.vintage .product-main-image:hover:not(.zoomed) {
     transform: scale(1.03);
 }
 
-/* Zoom */
-.product-main-image.zoomed {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1.5);
-    z-index: 9999;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-}
-
-/* Volga nuk zmadhon */
-.product-main-image.volga,
-.product-main-image.volga:hover,
-.product-main-image.volga.zoomed {
-    transform: none !important;
-    position: static !important;
-    cursor: default !important;
-}
-
-/* =========================
-   DESCRIPTION DJATHTAS
-   ========================= */
-.product-description-wrapper {
+.product.vintage .product-gallery {
+    width: 35%;
     display: flex;
-    gap: 24px;
-    flex-wrap: wrap;
-}
-
-.product-description {
-    flex: 1;
-    min-width: 220px;
-}
-
-.product-description ul {
-    list-style: disc;
-    padding-left: 20px;
-}
-
-.product-description h3 {
-    margin-bottom: 8px;
-}
-
-/* =========================
-   THUMBNAILS
-   ========================= */
-.product-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    flex-direction: column;
     gap: 10px;
-    margin-top: 20px;
 }
 
-.product-gallery img.thumb {
+.product.vintage .product-gallery img.thumb {
     width: 100%;
-    height: 120px;
+    aspect-ratio: 1/1;
     object-fit: cover;
     border-radius: 8px;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.product-gallery img.thumb:hover {
+.product.vintage .product-gallery img.thumb:hover {
     transform: scale(1.05);
-    box-shadow: 0 12px 28px rgba(15,23,42,0.25);
-    opacity: 0.95;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.25);
 }
 
 /* =========================
-   BUY BUTTONS
+   ZOOM MAIN IMAGE
    ========================= */
-.buy-button {
-    display: inline-block;
-    margin-top: 12px;
-    margin-right: 8px;
-    padding: 8px 16px;
-    background: linear-gradient(135deg, #2563eb, #1e40af);
-    color: #fff;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 600;
-    border-radius: 999px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.buy-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(37,99,235,0.4);
+.product-main-image.zoomed {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.5);
+    z-index: 9999;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.2);
 }
 
 /* =========================
    RESPONSIVE
    ========================= */
 @media (max-width: 1024px) {
-    .product-description-wrapper {
+    .product.vintage .product-images {
         flex-direction: column;
+        align-items: center;
+    }
+    .product.vintage .product-main-image {
+        width: 100%;
+    }
+    .product.vintage .product-gallery {
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .product.vintage .product-gallery img.thumb {
+        width: 80px;
+        height: 80px;
     }
 }
 
 @media (max-width: 768px) {
-    .product-main-wrapper {
-        flex-direction: column;
-        align-items: center;
-    }
-    .product-main-image {
-        max-width: 100%;
-    }
-    .product-gallery img.thumb {
-        height: 90px;
+    .product.vintage .product-gallery img.thumb {
+        width: 60px;
+        height: 60px;
     }
 }
 Ora
@@ -296,172 +152,4 @@ ul {
     padding: 0 16px;
 }
 
-/* =========================
-   PRODUCT CARD
-   ========================= */
-.product {
-    background: #fff;
-    border-radius: 12px;
-    margin-bottom: 40px;
-    padding: 20px;
-    box-shadow: 0 0 12px rgba(0,0,0,0.08);
-}
-
-.product h2 {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.product-info p {
-    font-size: 14px;
-}
-
-.price {
-    font-size: 16px;
-    font-weight: 600;
-    margin-top: 8px;
-}
-
-/* =========================
-   MAIN IMAGE + INFO + DESCRIPTION
-   ========================= */
-.product-main-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    align-items: flex-start;
-}
-
-.product-main {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.product-main-image {
-    width: 100%;
-    max-width: 380px;
-    border-radius: 12px;
-    object-fit: contain;
-    cursor: pointer;
-    position: relative;
-    z-index: 10;
-    transform-origin: center center;
-    transition: transform 0.3s ease;
-}
-
-/* Hover minimal */
-.product-main-image:not(.zoomed):hover {
-    transform: scale(1.03);
-}
-
-/* Zoom */
-.product-main-image.zoomed {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1.5);
-    z-index: 9999;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-}
-
-/* Volga nuk zmadhon */
-.product-main-image.volga,
-.product-main-image.volga:hover,
-.product-main-image.volga.zoomed {
-    transform: none !important;
-    position: static !important;
-    cursor: default !important;
-}
-
-/* =========================
-   DESCRIPTION DJATHTAS
-   ========================= */
-.product-description-wrapper {
-    display: flex;
-    gap: 24px;
-    flex-wrap: wrap;
-}
-
-.product-description {
-    flex: 1;
-    min-width: 220px;
-}
-
-.product-description ul {
-    list-style: disc;
-    padding-left: 20px;
-}
-
-.product-description h3 {
-    margin-bottom: 8px;
-}
-
-/* =========================
-   THUMBNAILS
-   ========================= */
-.product-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.product-gallery img.thumb {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.product-gallery img.thumb:hover {
-    transform: scale(1.05);
-    box-shadow: 0 12px 28px rgba(15,23,42,0.25);
-    opacity: 0.95;
-}
-
-/* =========================
-   BUY BUTTONS
-   ========================= */
-.buy-button {
-    display: inline-block;
-    margin-top: 12px;
-    margin-right: 8px;
-    padding: 8px 16px;
-    background: linear-gradient(135deg, #2563eb, #1e40af);
-    color: #fff;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 600;
-    border-radius: 999px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.buy-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(37,99,235,0.4);
-}
-
-/* =========================
-   RESPONSIVE
-   ========================= */
-@media (max-width: 1024px) {
-    .product-description-wrapper {
-        flex-direction: column;
-    }
-}
-
-@media (max-width: 768px) {
-    .product-main-wrapper {
-        flex-direction: column;
-        align-items: center;
-    }
-    .product-main-image {
-        max-width: 100%;
-    }
-    .product-gallery img.thumb {
-        height: 90px;
-    }
-}
+/

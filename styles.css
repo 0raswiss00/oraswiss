@@ -2,184 +2,199 @@
    RESET BAZË
    ========================= */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f3f4f6;
-  color: #111827;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f3f4f6;
+    color: #111827;
+    overflow-x: hidden;
 }
 
 h1,h2,h3,p,li {
-  margin-bottom: 8px;
+    margin-bottom: 8px;
 }
 
 ul {
-  list-style: disc;
-  margin-left: 20px;
+    list-style: disc;
+    margin-left: 20px;
 }
 
 /* =========================
    HEADER
    ========================= */
 .site-header {
-  position: sticky;
-  top: 0;
-  background: #000;
-  color: #fff;
-  padding: 16px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 999;
+    position: sticky;
+    top: 0;
+    background: #000;
+    color: #fff;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 999;
 }
 
 .back-button {
-  color: #fff;
-  text-decoration: none;
-  font-size: 14px;
-  padding: 6px 12px;
-  border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 999px;
-  transition: all 0.2s ease;
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 6px 12px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 999px;
+    transition: all 0.2s ease;
 }
 
 .back-button:hover {
-  background: #fff;
-  color: #000;
+    background: #fff;
+    color: #000;
 }
 
 /* =========================
    PRODUCTS SECTION
    ========================= */
 .products-section {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 0 16px;
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 16px;
 }
 
 /* =========================
    PRODUCT CARD
    ========================= */
 .product {
-  background: #fff;
-  border-radius: 12px;
-  margin-bottom: 40px;
-  padding: 20px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.08);
+    background: #fff;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    padding: 20px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.08);
 }
 
 .product h2 {
-  font-size: 20px;
-  margin-bottom: 16px;
+    font-size: 18px;
+    margin-bottom: 10px;
 }
 
 .product-info p {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 .price {
-  font-size: 16px;
-  font-weight: 600;
-  margin-top: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 8px;
 }
 
 /* =========================
-   MAIN IMAGE + THUMBNAILS + DESCRIPTION
+   MAIN IMAGE + GALLERY + INFO
    ========================= */
 .product-main-wrapper {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+/* Foto kryesore majtas */
+.product-main {
+    flex: 1 1 380px;
 }
 
 .product-main-image {
-  width: 100%;
-  max-width: 500px;
-  border-radius: 12px;
-  object-fit: contain;
+    width: 100%;
+    border-radius: 12px;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.3s ease;
 }
 
+.product-main-image:not(.zoomed):hover {
+    transform: scale(1.03);
+}
+
+.product-main-image.zoomed {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.5);
+    z-index: 9999;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+/* Gallery djathtas */
 .product-gallery {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex: 0 0 100px;
+    flex: 0 0 180px; /* madhësia e kolonës së djathtë */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .product-gallery img.thumb {
-  width: 100%;
-  aspect-ratio: 1 / 1; /* katror */
-  object-fit: cover;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .product-gallery img.thumb:hover {
-  transform: scale(1.05);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
-}
-
-.product-description {
-  flex: 1;
+    transform: scale(1.05);
+    box-shadow: 0 12px 28px rgba(15,23,42,0.25);
+    opacity: 0.95;
 }
 
 /* =========================
    BUY BUTTONS
    ========================= */
+.product-buttons {
+    margin-top: 12px;
+}
+
 .buy-button {
-  display: inline-block;
-  margin-top: 12px;
-  margin-right: 8px;
-  padding: 8px 16px;
-  background: linear-gradient(135deg, #2563eb, #1e40af);
-  color: #fff;
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  border-radius: 999px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: inline-block;
+    margin-top: 8px;
+    margin-right: 8px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #2563eb, #1e40af); /* blu */
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 999px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .buy-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(37,99,235,0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(37,99,235,0.4);
+}
+
+/* =========================
+   DESCRIPTION POSHT
+   ========================= */
+.product-description {
+    margin-top: 20px;
 }
 
 /* =========================
    RESPONSIVE
    ========================= */
-@media (max-width: 1024px) {
-  .product-main-wrapper {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .product-gallery {
-    flex-direction: row;
-    width: 100%;
-    justify-content: center;
-    margin-top: 10px;
-  }
-
-  .product-gallery img.thumb {
-    width: 80px;
-    height: 80px;
-  }
-}
-
 @media (max-width: 768px) {
-  .product-main-image {
-    max-width: 100%;
-  }
-
-  .product-gallery img.thumb {
-    width: 60px;
-    height: 60px;
-  }
+    .product-main-wrapper {
+        flex-direction: column;
+    }
+    .product-gallery {
+        flex: 1 1 100%;
+        flex-direction: row;
+        justify-content: center;
+        margin-top: 16px;
+    }
+    .product-gallery img.thumb {
+        height: 60px;
+    }
 }
 

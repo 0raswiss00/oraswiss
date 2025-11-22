@@ -62,6 +62,14 @@ ul {
     margin: 40px auto;
     padding: 0 16px;
 }
+.product.vintage .product-main-image {
+    width: 75%;       /* ishte 60% → bëje më të gjerë */
+    max-height: 520px; /* opsionale, që të mos bëhet shumë e gjatë */
+    object-fit: contain;
+}
+.product.vintage .product-gallery {
+    width: 23%;   /* ishte 35% → zvogëlohet */
+}
 
 /* =========================
    PRODUCT CARD

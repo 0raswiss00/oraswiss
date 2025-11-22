@@ -243,7 +243,14 @@ body {
     transition: transform 0.3s ease; /* efekt i butë */
     cursor: pointer;      /* tregon që është klikueshme */
     position: relative;   /* mund të vendosim z-index */
-    z-index: 9999;          /* mbi çdo element tjetër */
+}
+   
+.product-main-image.zoomed {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.5);
+    z-index: 9999;
 }
 
 .product-main {
@@ -260,7 +267,7 @@ body {
     transition: transform 0.3s ease, left 0.3s ease, top 0.3s ease;
     cursor: pointer;
     position: relative;  
-    z-index: 10;
+    z-index: 9999;
     transform-origin: center center; /* rëndësi për zmadhim pa dridhje */
 }
 

@@ -250,9 +250,37 @@ body {
     cursor: pointer;
 }
 
+/* Kontenieri kryesor i produktit */
+.product-main {
+    position: relative;   /* bën referencë për foton absolute */
+    overflow: visible;    /* lejon fotot të dalin jashtë grid */
+}
+
+/* Fotot e të gjitha produkteve */
+.product-image,
+.product-main-image {
+    width: auto;          /* hiq width fikse */
+    max-width: none;      /* hiq kufizimin */
+    border-radius: 12px;  /* qoshet rrumbullakosura */
+    transition: transform 0.3s ease; /* efekt i butë */
+    cursor: pointer;      /* tregon që është klikueshme */
+    position: relative;   /* mund të vendosim z-index */
+    z-index: 10;          /* mbi çdo element tjetër */
+}
+
+/* Hover efekt – uniform për të gjitha produktet */
 .product-image:hover,
 .product-main-image:hover {
-    transform: scale(1.15);  /* zmadhim 15% */
+    transform: scale(1.5);  /* zmadhim 150% */
+}
+
+/* Opsionale: nëse dëshiron foton të fluturojë mbi elementet e tjerë */
+.product-image:hover,
+.product-main-image:hover {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) scale(1.5);
 }
 
 .product-main {

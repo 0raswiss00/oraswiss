@@ -81,12 +81,8 @@ ul {
 }
 
 .product h2 {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.product-info p {
-    font-size: 14px;
+    font-size: 20px;
+    margin-bottom: 16px;
 }
 
 .price {
@@ -96,13 +92,13 @@ ul {
 }
 
 /* =========================
-   MAIN IMAGE + INFO
+   IMAGES + INFO + BUTTONS
    ========================= */
-.product-main {
+.product-images {
     display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
 .product-main-image {
@@ -111,18 +107,13 @@ ul {
     border-radius: 12px;
     object-fit: contain;
     cursor: pointer;
-    position: relative;
-    z-index: 10;
-    transform-origin: center center;
     transition: transform 0.3s ease;
 }
 
-/* Hover minimal */
-.product-main-image:not(.zoomed):hover {
+.product-main-image:hover:not(.zoomed) {
     transform: scale(1.03);
 }
 
-/* Zoom */
 .product-main-image.zoomed {
     position: fixed;
     top: 50%;
@@ -132,28 +123,15 @@ ul {
     box-shadow: 0 20px 60px rgba(0,0,0,0.4);
 }
 
-/* Volga nuk zmadhon */
-.product-main-image.volga,
-.product-main-image.volga:hover,
-.product-main-image.volga.zoomed {
-    transform: none !important;
-    position: static !important;
-    cursor: default !important;
-}
-
-/* =========================
-   THUMBNAILS
-   ========================= */
 .product-gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 10px;
-    margin-top: 20px;
 }
 
 .product-gallery img.thumb {
     width: 100%;
-    height: 120px;
+    height: 100px;
     object-fit: cover;
     border-radius: 8px;
     cursor: pointer;
@@ -162,19 +140,19 @@ ul {
 
 .product-gallery img.thumb:hover {
     transform: scale(1.05);
-    box-shadow: 0 12px 28px rgba(15,23,42,0.25);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.25);
     opacity: 0.95;
 }
 
-/* =========================
-   BUY BUTTONS
-   ========================= */
+.product-buttons {
+    margin: 16px 0;
+}
+
 .buy-button {
     display: inline-block;
-    margin-top: 12px;
     margin-right: 8px;
     padding: 8px 16px;
-    background: linear-gradient(135deg, #16a34a, #15803d);
+    background: linear-gradient(135deg, #2563eb, #3b82f6); /* blu */
     color: #fff;
     text-decoration: none;
     font-size: 13px;
@@ -185,14 +163,23 @@ ul {
 
 .buy-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(22,163,74,0.4);
+    box-shadow: 0 10px 25px rgba(59,130,246,0.4);
+}
+
+/* =========================
+   INFO + DESCRIPTION POSHT
+   ========================= */
+.product-info {
+    background: #f9fafb;
+    padding: 16px;
+    border-radius: 12px;
 }
 
 /* =========================
    RESPONSIVE
    ========================= */
 @media (max-width: 768px) {
-    .product-main {
+    .product-images, .product-main {
         flex-direction: column;
         align-items: center;
     }
@@ -214,19 +201,15 @@ ul {
 
 <main class="products-section">
 
-<!-- ========== OMEGA POCKET ========== -->
+<!-- ================== OMEGA POCKET ================== -->
 <article class="product">
     <h2>Omega Pocket 1211740</h2>
-    <div class="product-main">
-        <img class="product-main-image" src="omega-pocket-980-1.jpg" alt="omega 980 image">
-        <div class="product-info">
-            <p><strong>Brand:</strong> Omega</p>
-            <p><strong>Model:</strong> Pocket Vintage</p>
-            <p><strong>Reference:</strong> 1211740</p>
-            <p><strong>Year:</strong> 1990 (approx.)</p>
-            <p><strong>Case:</strong> Steel 47mm</p>
-            <p><strong>Movement:</strong> Manual</p>
-            <p class="price"><strong>Price:</strong> €270</p>
+    <div class="product-images">
+        <img class="product-main-image" src="omega-pocket-980-1.jpg" alt="omega 980">
+        <div class="product-gallery">
+            <img class="thumb" src="omega-pocket-980-1.jpg" alt="omega 980 image 1">
+            <img class="thumb" src="omega-pocket-980-2.jpg" alt="omega 980 image 2">
+            <img class="thumb" src="omega-pocket-980-3.jpg" alt="omega 980 image 3">
         </div>
     </div>
     <div class="product-buttons">
@@ -234,37 +217,34 @@ ul {
         <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>
         <a href="mailto:info@oraswiss.com" class="buy-button">Email</a>
     </div>
-    <h3>Description</h3>
-    <ul>
-        <li>Original Omega vintage case</li>
-        <li>Original crystal & crown included</li>
-        <li>No dents or deep scratches</li>
-        <li>Beautiful condition</li>
-        <li>Perfect for restoration or collection</li>
-    </ul>
-    <div class="product-gallery">
-        <img class="thumb" src="omega-pocket-980-1.jpg" alt="omega 980 image 1">
-        <img class="thumb" src="omega-pocket-980-2.jpg" alt="omega 980 image 2">
-        <img class="thumb" src="omega-pocket-980-3.jpg" alt="omega 980 image 3">
-        <img class="thumb" src="omega-pocket-980-4.jpg" alt="omega 980 image 4">
-        <img class="thumb" src="omega-pocket-980-5.jpg" alt="omega 980 image 5">
+    <div class="product-info">
+        <p><strong>Brand:</strong> Omega</p>
+        <p><strong>Model:</strong> Pocket Vintage</p>
+        <p><strong>Reference:</strong> 1211740</p>
+        <p><strong>Year:</strong> 1990 (approx.)</p>
+        <p><strong>Case:</strong> Steel 47mm</p>
+        <p><strong>Movement:</strong> Manual</p>
+        <p class="price"><strong>Price:</strong> €270</p>
+        <h3>Description</h3>
+        <ul>
+            <li>Original Omega vintage case</li>
+            <li>Original crystal & crown included</li>
+            <li>No dents or deep scratches</li>
+            <li>Beautiful condition</li>
+            <li>Perfect for restoration or collection</li>
+        </ul>
     </div>
 </article>
 
-<!-- ========== DOYLE VALJOUX 23 ========== -->
+<!-- ================== DOYLE VALJOUX 23 ================== -->
 <article class="product">
     <h2>Doyle Valjoux 23</h2>
-    <div class="product-main">
-        <img class="product-main-image" src="doyle-23-1.jpg" alt="doyle valjoux 23 image">
-        <div class="product-info">
-            <p><strong>Brand:</strong> Doyle</p>
-            <p><strong>Model:</strong> Valjoux 23</p>
-            <p><strong>Reference:</strong> 451-23</p>
-            <p><strong>Year:</strong> 1950 (approx.)</p>
-            <p><strong>Case:</strong> Steel 40mm</p>
-            <p><strong>Leather:</strong> Handmade leather strap</p>
-            <p><strong>Movement:</strong> Manual Work — Perfect movement, fully serviced</p>
-            <p class="price"><strong>Price:</strong> €1,000</p>
+    <div class="product-images">
+        <img class="product-main-image" src="doyle-23-1.jpg" alt="doyle valjoux 23">
+        <div class="product-gallery">
+            <img class="thumb" src="doyle-valjoux-23-1.jpg" alt="image 1">
+            <img class="thumb" src="doyle-valjoux-23-2.jpg" alt="image 2">
+            <img class="thumb" src="doyle-valjoux-23-3.jpg" alt="image 3">
         </div>
     </div>
     <div class="product-buttons">
@@ -272,31 +252,34 @@ ul {
         <a href="https://wa.me/355692400865" target="_blank" class="buy-button">WhatsApp</a>
         <a href="mailto:info@oraswiss.com" class="buy-button">Email</a>
     </div>
-    <div class="product-gallery">
-        <img class="thumb" src="doyle-valjoux-23-1.jpg" alt="image 1">
-        <img class="thumb" src="doyle-valjoux-23-2.jpg" alt="image 2">
-        <img class="thumb" src="doyle-valjoux-23-3.jpg" alt="image 3">
-        <img class="thumb" src="doyle-valjoux-23-4.jpg" alt="image 4">
-        <img class="thumb" src="doyle-valjoux-23-5.jpg" alt="image 5">
-        <img class="thumb" src="doyle-valjoux-23-6.jpg" alt="image 6">
+    <div class="product-info">
+        <p><strong>Brand:</strong> Doyle</p>
+        <p><strong>Model:</strong> Valjoux 23</p>
+        <p><strong>Reference:</strong> 451-23</p>
+        <p><strong>Year:</strong> 1950 (approx.)</p>
+        <p><strong>Case:</strong> Steel 40mm</p>
+        <p><strong>Leather:</strong> Handmade leather strap</p>
+        <p><strong>Movement:</strong> Manual Work — Perfect movement, fully serviced</p>
+        <p class="price"><strong>Price:</strong> €1,000</p>
+        <h3>Description</h3>
+        <ul>
+            <li>Original Doyle case</li>
+            <li>Handmade leather strap</li>
+            <li>No defects, fully serviced</li>
+            <li>Perfect for collectors</li>
+        </ul>
     </div>
 </article>
 
-<!-- ========== DOXA SUB 300T ========== -->
+<!-- ================== DOXA SUB 300T ================== -->
 <article class="product">
     <h2>DOXA SUB 300T</h2>
-    <div class="product-main">
-        <img class="product-main-image" src="doxa-sub-1.jpg" alt="doxa sub image">
-        <div class="product-info">
-            <p><strong>Brand:</strong> DOXA</p>
-            <p><strong>Model:</strong> DIVER 300mm</p>
-            <p><strong>Reference:</strong> SUB 300T</p>
-            <p><strong>Year:</strong> 1962 (approx.)</p>
-            <p><strong>Case:</strong> Steel 36mm</p>
-            <p><strong>Bracelet:</strong> None</p>
-            <p><strong>Movement:</strong> CALIBER DOXA AUTOMATIC</p>
-            <p><strong>Functions:</strong> Date</p>
-            <p class="price"><strong>Price:</strong> €1,500</p>
+    <div class="product-images">
+        <img class="product-main-image" src="doxa-sub-1.jpg" alt="doxa sub">
+        <div class="product-gallery">
+            <img class="thumb" src="doxa-sub-1.jpg" alt="doxa sub image 1">
+            <img class="thumb" src="doxa-sub-2.jpg" alt="doxa sub image 2">
+            <img class="thumb" src="doxa-sub-3.jpg" alt="doxa sub image 3">
         </div>
     </div>
     <div class="product-buttons">
@@ -304,40 +287,42 @@ ul {
         <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>
         <a href="mailto:info@oraswiss.com" class="buy-button">Email</a>
     </div>
-    <h3>Description</h3>
-    <ul>
-        <li>Original DOXA vintage case</li>
-        <li>Original crystal & movement & dial</li>
-        <li>No defects, works perfectly</li>
-        <li>No bracelet</li>
-        <li>Collector’s watch</li>
-    </ul>
-    <div class="product-gallery">
-        <img class="thumb" src="doxa-sub-1.jpg" alt="doxa sub image 1">
-        <img class="thumb" src="doxa-sub-2.jpg" alt="doxa sub image 2">
-        <img class="thumb" src="doxa-sub-3.jpg" alt="doxa sub image 3">
-        <img class="thumb" src="doxa-sub-4.jpg" alt="doxa sub image 4">
-        <img class="thumb" src="doxa-sub-5.jpg" alt="doxa sub image 5">
+    <div class="product-info">
+        <p><strong>Brand:</strong> DOXA</p>
+        <p><strong>Model:</strong> DIVER 300mm</p>
+        <p><strong>Reference:</strong> SUB 300T</p>
+        <p><strong>Year:</strong> 1962 (approx.)</p>
+        <p><strong>Case:</strong> Steel 36mm</p>
+        <p><strong>Bracelet:</strong> None</p>
+        <p><strong>Movement:</strong> CALIBER DOXA AUTOMATIC</p>
+        <p><strong>Functions:</strong> Date</p>
+        <p class="price"><strong>Price:</strong> €1,500</p>
+        <h3>Description</h3>
+        <ul>
+            <li>Original DOXA vintage case</li>
+            <li>Original crystal & movement & dial</li>
+            <li>No defects, works perfectly</li>
+            <li>No bracelet</li>
+            <li>Collector’s watch</li>
+        </ul>
     </div>
 </article>
 
 </main>
 
 <script>
-// ========== ZOOM MAIN IMAGE ==========
+// ZOOM MAIN IMAGE
 document.querySelectorAll('.product-main-image').forEach(img => {
     img.addEventListener('click', () => {
-        if(img.classList.contains('volga')) return;
         img.classList.toggle('zoomed');
     });
 });
 
-// ========== THUMBNAILS ==========
+// THUMBNAILS
 document.querySelectorAll('.product-gallery img.thumb').forEach(thumb => {
     thumb.addEventListener('click', () => {
         const article = thumb.closest('.product');
         const mainImg = article.querySelector('.product-main-image');
-        if (!mainImg) return;
         mainImg.src = thumb.src;
         if(thumb.alt) mainImg.alt = thumb.alt;
     });
@@ -346,5 +331,3 @@ document.querySelectorAll('.product-gallery img.thumb').forEach(thumb => {
 
 </body>
 </html>
-
-Share o

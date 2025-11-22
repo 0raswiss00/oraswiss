@@ -1,74 +1,427 @@
+/* =========================
+   RESET BAZË
+   ========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f3f4f6;
+    color: #111827;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, p, li {
+    margin-bottom: 8px;
+}
+
+ul {
+    list-style: disc;
+    margin-left: 20px;
+}
+
+/* =========================
+   HEADER
+   ========================= */
+.site-header {
+    position: sticky;
+    top: 0;
+    background: #000;
+    color: #fff;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 999;
+}
+
+.back-button {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 6px 12px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 999px;
+    transition: all 0.2s ease;
+}
+
+.back-button:hover {
+    background: #fff;
+    color: #000;
+}
+
+/* =========================
+   PRODUCTS SECTION
+   ========================= */
+.products-section {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 16px;
+}
+
+/* =========================
+   PRODUCT CARD
+   ========================= */
+.product {
+    background: #fff;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    padding: 20px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.08);
+}
+
+.product h2 {
+    font-size: 20px;
+    margin-bottom: 16px;
+}
+
+.price {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* =========================
+   LAYOUT – VINTAGE
+   ========================= */
+.product.vintage .product-images {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+}
+
+/* Foto kryesore majtas */
+.product.vintage .product-main-image {
+    flex: 0 0 60%;
+    max-width: 60%;
+    border-radius: 12px;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+/* Hover elegant */
+.product.vintage .product-main-image:hover:not(.zoomed) {
+    transform: scale(1.03);
+}
+
+/* Thumbnail djathtas, vertikale */
+.product.vintage .product-gallery {
+    flex: 0 0 140px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.product.vintage .product-gallery img.thumb {
+    width: 100%;
+    aspect-ratio: 1 / 1;    /* katrore */
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.product.vintage .product-gallery img.thumb:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+}
+
+/* =========================
+   INFO
+   ========================= */
+.product-info {
+    background: #f9fafb;
+    padding: 16px;
+    border-radius: 12px;
+}
+
+/* =========================
+   BUTONAT
+   ========================= */
+.product-buttons {
+    margin: 16px 0;
+}
+
+.buy-button {
+    display: inline-block;
+    margin-right: 8px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 999px;
+    transition: 0.2s;
+}
+
+.buy-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(59,130,246,0.4);
+}
+
+/* =========================
+   ZOOM
+   ========================= */
+.product-main-image.zoomed {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.5);
+    background: #fff;
+    z-index: 9999;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+@media (max-width: 900px) {
+    .product.vintage .product-images {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .product.vintage .product-main-image {
+        max-width: 100%;
+    }
+
+    .product.vintage .product-gallery {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .product.vintage .product-gallery img.thumb {
+        width: 28%;
+    }
+}
+7:19 MD
+Ora
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Ora Swiss - Shop</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ora Swiss - Vintage</title>
 
-    <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-KD2ZZ3MJYY');
-    </script>
-    <style>
-        .products-section {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 16px;
-        }
-
-        .product {
-            background: #ffffff;
-            border-radius: 12px;
-            margin-bottom: 40px;
-            padding: 16px;
-            box-shadow: 0 0 12px rgba(0,0,0,0.08);
-        }
-
-        .product-main {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            align-items: flex-start;
-        }
-
-        .product-main-image {
-            width: 100%;
-            max-width: 380px;
-            height: auto;
-            border-radius: 8px;
-            display: block;
-        }
-
-        .product-info {
-            flex: 1 1 260px;
-        }
-
-       .product-gallery {
-    margin-top: 0 !important;
+<style>
+/* =========================
+   RESET BAZË
+   ========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.product-gallery img {
-    margin-top: 0 !important;
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f3f4f6;
+    color: #111827;
+    overflow-x: hidden;
 }
-        .price {
-            font-size: 1.1rem;
-            margin-top: 8px;
-        }
-    </style>
 
+h1, h2, h3, p, li {
+    margin-bottom: 8px;
+}
+
+ul {
+    list-style: disc;
+    margin-left: 20px;
+}
+
+/* =========================
+   HEADER
+   ========================= */
+.site-header {
+    position: sticky;
+    top: 0;
+    background: #000;
+    color: #fff;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 999;
+}
+
+.back-button {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 6px 12px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 999px;
+    transition: all 0.2s ease;
+}
+
+.back-button:hover {
+    background: #fff;
+    color: #000;
+}
+
+/* =========================
+   PRODUCTS SECTION
+   ========================= */
+.products-section {
+    max-width: 1000px;      /* pak më e vogël se 1100 */
+    margin: 40px auto;
+    padding: 0 16px;
+}
+
+/* =========================
+   PRODUCT CARD
+   ========================= */
+.product {
+    background: #fff;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    padding: 20px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.08);
+}
+
+.product h2 {
+    font-size: 20px;
+    margin-bottom: 16px;
+}
+
+.price {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+/* =========================
+   LAYOUT VINTAGE
+   ========================= */
+.product.vintage .product-images {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+}
+
+/* Foto kryesore majtas */
+.product.vintage .product-main-image {
+    flex: 0 0 60%;
+    max-width: 60%;
+    border-radius: 12px;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+/* Hover i lehtë */
+.product.vintage .product-main-image:hover:not(.zoomed) {
+    transform: scale(1.03);
+}
+
+/* Thumbnails djathtas, vertikal, të vogla KATROR */
+.product.vintage .product-gallery {
+    flex: 0 0 140px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.product.vintage .product-gallery img.thumb {
+    width: 100%;
+    aspect-ratio: 1 / 1;      /* katrore */
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product.vintage .product-gallery img.thumb:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+    opacity: 0.95;
+}
+
+/* INFO + DESCRIPTION poshtë, si te luxury */
+.product-info {
+    background: #f9fafb;
+    padding: 16px;
+    border-radius: 12px;
+}
+
+/* =========================
+   BUY BUTTONS
+   ========================= */
+.product-buttons {
+    margin: 16px 0;
+}
+
+.buy-button {
+    display: inline-block;
+    margin-right: 8px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6); /* blu si luxury */
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 999px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.buy-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(59,130,246,0.4);
+}
+
+/* =========================
+   IMAGE ZOOM
+   ========================= */
+.product-main-image.zoomed {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.5);
+    z-index: 9999;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    background: #fff;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+@media (max-width: 900px) {
+    .product.vintage .product-images {
+        flex-direction: column;
+        align-items: center;
+    }
+    .product.vintage .product-main-image {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+    .product.vintage .product-gallery {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+        margin-top: 10px;
+    }
+    .product.vintage .product-gallery img.thumb {
+        width: 28%;
+    }
+}
+</style>
 </head>
 <body>
+
 <header class="site-header">
-    <h1>ORA SWISS – WATCH SHOP</h1>
+    <h1>ORA SWISS – VINTAGE</h1>
     <a href="index.html" class="back-button">← Back to Home</a>
 </header>
-
-
 
 <main class="products-section">
 
@@ -231,3 +584,4 @@ document.querySelectorAll('.product-gallery img.thumb').forEach(thumb => {
 
 </body>
 </html>
+

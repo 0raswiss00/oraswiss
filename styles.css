@@ -1,10 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ora Swiss - Shop</title>
-<style>
 /* =========================
    RESET BAZË
    ========================= */
@@ -13,14 +6,17 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: #f3f4f6;
   color: #111827;
 }
+
 h1,h2,h3,p,li {
   margin-bottom: 8px;
 }
+
 ul {
   list-style: disc;
   margin-left: 20px;
@@ -40,6 +36,7 @@ ul {
   align-items: center;
   z-index: 999;
 }
+
 .back-button {
   color: #fff;
   text-decoration: none;
@@ -49,6 +46,7 @@ ul {
   border-radius: 999px;
   transition: all 0.2s ease;
 }
+
 .back-button:hover {
   background: #fff;
   color: #000;
@@ -62,6 +60,10 @@ ul {
   margin: 40px auto;
   padding: 0 16px;
 }
+
+/* =========================
+   PRODUCT CARD
+   ========================= */
 .product {
   background: #fff;
   border-radius: 12px;
@@ -69,13 +71,16 @@ ul {
   padding: 20px;
   box-shadow: 0 0 12px rgba(0,0,0,0.08);
 }
+
 .product h2 {
   font-size: 20px;
   margin-bottom: 16px;
 }
+
 .product-info p {
   font-size: 14px;
 }
+
 .price {
   font-size: 16px;
   font-weight: 600;
@@ -83,65 +88,44 @@ ul {
 }
 
 /* =========================
-   VINTAGE LAYOUT
+   MAIN IMAGE + THUMBNAILS + DESCRIPTION
    ========================= */
-.product.vintage .product-main-wrapper {
+.product-main-wrapper {
   display: flex;
   gap: 20px;
   align-items: flex-start;
 }
-.product.vintage .main-image-container {
-  flex: 0 0 60%;
-  position: relative;
-}
-.product.vintage .main-image-container img.main-image {
+
+.product-main-image {
   width: 100%;
+  max-width: 500px;
   border-radius: 12px;
   object-fit: contain;
 }
-.product.vintage .main-image-container button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.3);
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-radius: 50%;
-  font-size: 18px;
-  z-index: 10;
-}
-.product.vintage .main-image-container .prev { left: 5px; }
-.product.vintage .main-image-container .next { right: 5px; }
 
-/* Thumbnails vertical */
-.product.vintage .product-gallery {
+.product-gallery {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  flex: 0 0 120px;
+  flex: 0 0 100px;
 }
-.product.vintage .product-gallery img.thumb {
+
+.product-gallery img.thumb {
   width: 100%;
-  aspect-ratio: 1 / 1; /* katrore */
+  aspect-ratio: 1 / 1; /* katror */
   object-fit: cover;
   border-radius: 8px;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.product.vintage .product-gallery img.thumb:hover {
+
+.product-gallery img.thumb:hover {
   transform: scale(1.05);
   box-shadow: 0 10px 20px rgba(0,0,0,0.25);
 }
 
-/* =========================
-   DESCRIPTION
-   ========================= */
-.product.vintage .product-description {
-  flex: 1 1 auto;
-  min-width: 220px;
-  max-width: calc(100% - 60% - 140px);
+.product-description {
+  flex: 1;
 }
 
 /* =========================
@@ -160,6 +144,7 @@ ul {
   border-radius: 999px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
 .buy-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 25px rgba(37,99,235,0.4);
@@ -169,188 +154,32 @@ ul {
    RESPONSIVE
    ========================= */
 @media (max-width: 1024px) {
-  .product.vintage .product-main-wrapper {
+  .product-main-wrapper {
     flex-direction: column;
     align-items: center;
   }
-  .product.vintage .main-image-container,
-  .product.vintage .product-gallery,
-  .product.vintage .product-description {
-    max-width: 100%;
-    flex: 1 1 100%;
-  }
-  .product.vintage .product-gallery {
+
+  .product-gallery {
     flex-direction: row;
+    width: 100%;
     justify-content: center;
     margin-top: 10px;
   }
-  .product.vintage .product-gallery img.thumb {
+
+  .product-gallery img.thumb {
     width: 80px;
     height: 80px;
   }
 }
+
 @media (max-width: 768px) {
-  .product.vintage .main-image-container img.main-image {
+  .product-main-image {
     max-width: 100%;
   }
-  .product.vintage .product-gallery img.thumb {
+
+  .product-gallery img.thumb {
     width: 60px;
     height: 60px;
   }
 }
-</style>
-</head>
-<body>
 
-<header class="site-header">
-  <h1>ORA SWISS – WATCH SHOP</h1>
-  <a href="index.html" class="back-button">← Back to Home</a>
-</header>
-
-<main class="products-section">
-
-<!-- ================== OMEGA POCKET ================== -->
-<article class="product vintage">
-  <h2>Omega Pocket 1211740</h2>
-  <div class="product-main-wrapper">
-    <div class="main-image-container">
-      <button class="prev">&#10094;</button>
-      <img src="omega-pocket-980-1.jpg" class="main-image" alt="Omega Pocket">
-      <button class="next">&#10095;</button>
-    </div>
-    <div class="product-gallery">
-      <img src="omega-pocket-980-1.jpg" class="thumb" alt="">
-      <img src="omega-pocket-980-2.jpg" class="thumb" alt="">
-      <img src="omega-pocket-980-3.jpg" class="thumb" alt="">
-    </div>
-    <div class="product-description">
-      <p><strong>Brand:</strong> Omega</p>
-      <p><strong>Model:</strong> Pocket Vintage</p>
-      <p><strong>Reference:</strong> 1211740</p>
-      <p><strong>Year:</strong> 1990</p>
-      <p><strong>Case:</strong> Steel 47mm</p>
-      <p><strong>Movement:</strong> Manual</p>
-      <p class="price"><strong>Price:</strong> €270</p>
-      <h3>Description</h3>
-      <ul>
-        <li>Original Omega vintage case</li>
-        <li>Original crystal & crown included</li>
-        <li>No dents or deep scratches</li>
-        <li>Beautiful condition</li>
-        <li>Perfect for restoration or collection</li>
-      </ul>
-      <a href="mailto:info@oraswiss.com" class="buy-button">Buy Now</a>
-      <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>
-      <a href="mailto:info@oraswiss.com" class="buy-button">Email</a>
-    </div>
-  </div>
-</article>
-
-<!-- ================== DOYLE VALJOUX 23 ================== -->
-<article class="product vintage">
-  <h2>Doyle Valjoux 23</h2>
-  <div class="product-main-wrapper">
-    <div class="main-image-container">
-      <button class="prev">&#10094;</button>
-      <img src="doyle-23-1.jpg" class="main-image" alt="Doyle Valjoux">
-      <button class="next">&#10095;</button>
-    </div>
-    <div class="product-gallery">
-      <img src="doyle-valjoux-23-1.jpg" class="thumb" alt="">
-      <img src="doyle-valjoux-23-2.jpg" class="thumb" alt="">
-      <img src="doyle-valjoux-23-3.jpg" class="thumb" alt="">
-    </div>
-    <div class="product-description">
-      <p><strong>Brand:</strong> Doyle</p>
-      <p><strong>Model:</strong> Valjoux 23</p>
-      <p><strong>Reference:</strong> 451-23</p>
-      <p><strong>Year:</strong> 1950</p>
-      <p><strong>Case:</strong> Steel 40mm</p>
-      <p><strong>Leather:</strong> Handmade leather strap</p>
-      <p><strong>Movement:</strong> Manual Work — Fully serviced</p>
-      <p class="price"><strong>Price:</strong> €1,000</p>
-      <h3>Description</h3>
-      <ul>
-        <li>Original Doyle case</li>
-        <li>Handmade leather strap</li>
-        <li>No defects, fully serviced</li>
-        <li>Perfect for collectors</li>
-      </ul>
-      <a href="mailto:info@oraswiss.com" class="buy-button">Buy Now</a>
-      <a href="https://wa.me/355692400865" target="_blank" class="buy-button">WhatsApp</a>
-      <a href="mailto:info@oraswiss.com" class="buy-button">Email</a>
-    </div>
-  </div>
-</article>
-
-<!-- ================== DOXA SUB 300T ================== -->
-<article class="product vintage">
-  <h2>DOXA SUB 300T</h2>
-  <div class="product-main-wrapper">
-    <div class="main-image-container">
-      <button class="prev">&#10094;</button>
-      <img src="doxa-sub-1.jpg" class="main-image" alt="DOXA Sub">
-      <button class="next">&#10095;</button>
-    </div>
-    <div class="product-gallery">
-      <img src="doxa-sub-1.jpg" class="thumb" alt="">
-      <img src="doxa-sub-2.jpg" class="thumb" alt="">
-      <img src="doxa-sub-3.jpg" class="thumb" alt="">
-    </div>
-    <div class="product-description">
-      <p><strong>Brand:</strong> DOXA</p>
-      <p><strong>Model:</strong> DIVER 300mm</p>
-      <p><strong>Reference:</strong> SUB 300T</p>
-      <p><strong>Year:</strong> 1962</p>
-      <p><strong>Case:</strong> Steel 36mm</p>
-      <p><strong>Bracelet:</strong> None</p>
-      <p><strong>Movement:</strong> CALIBER DOXA AUTOMATIC</p>
-      <p><strong>Functions:</strong> Date</p>
-      <p class="price"><strong>Price:</strong> €1,500</p>
-      <h3>Description</h3>
-      <ul>
-        <li>Original DOXA vintage case</li>
-        <li>Original crystal & movement & dial</li>
-        <li>No defects, works perfectly</li>
-        <li>No bracelet</li>
-        <li>Collector’s watch</li>
-      </ul>
-      <a href="mailto:info@oraswiss.com" class="buy-button">Buy Now</a>
-      <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>
-      <a href="mailto:info@oraswiss.com" class="buy-button">Email</a>
-    </div>
-  </div>
-</article>
-
-</main>
-
-<script>
-// Thumbnails click
-document.querySelectorAll('.product').forEach(product => {
-  const mainImage = product.querySelector('.main-image');
-  const thumbs = product.querySelectorAll('.thumb');
-  let currentIndex = 0;
-
-  thumbs.forEach((thumb, i) => {
-    thumb.addEventListener('click', () => {
-      mainImage.src = thumb.src;
-      currentIndex = i;
-    });
-  });
-
-  // Arrow navigation
-  const prevBtn = product.querySelector('.prev');
-  const nextBtn = product.querySelector('.next');
-  prevBtn.addEventListener('click', () => {
-    currentIndex = (currentIndex - 1 + thumbs.length) % thumbs.length;
-    mainImage.src = thumbs[currentIndex].src;
-  });
-  nextBtn.addEventListener('click', () => {
-    currentIndex = (currentIndex + 1) % thumbs.length;
-    mainImage.src = thumbs[currentIndex].src;
-  });
-});
-</script>
-
-</body>
-</html>

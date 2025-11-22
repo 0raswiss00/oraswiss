@@ -241,16 +241,22 @@ body {
     pointer-events: auto;
 }
 
-.product-image {
+.product-image,
+.product-main-image {
     width: 100%;
-    max-width: 350px;
-    border-radius: 10px;
-    transition: transform 0.3s ease; /* efekt i butë */
-    cursor: pointer; /* tregon që është klikueshme */
+    max-width: 500px;  /* rritet për efekt më të madh */
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+    cursor: pointer;
 }
 
-.product-image:hover {
-    transform: scale(1.2); /* zmadhon 120% */
+.product-image:hover,
+.product-main-image:hover {
+    transform: scale(1.15);  /* zmadhim 15% */
+}
+
+.product-main {
+    overflow: visible;  /* lejon që foto të shfaqet e madhe jashtë grid-it */
 }
 .product-info strong {
     color: #111827;

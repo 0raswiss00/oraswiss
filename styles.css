@@ -236,25 +236,6 @@ body {
     color: #374151;
 }
 
-.product-image {
-    cursor: pointer;
-    pointer-events: auto;
-}
-
-.product-image,
-.product-main-image {
-    width: 100%;
-    max-width: 500px;  /* rritet për efekt më të madh */
-    border-radius: 12px;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-}
-
-/* Kontenieri kryesor i produktit */
-.product-main {
-    position: relative;   /* bën referencë për foton absolute */
-    overflow: visible;    /* lejon fotot të dalin jashtë grid */
-}
 
 /* Fotot e të gjitha produkteve */
 .product-image,

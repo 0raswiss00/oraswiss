@@ -314,14 +314,25 @@ document.addEventListener('click', function (e) {
 
 
 <script>
-// ZOOM SCRIPT
-document.addEventListener('DOMContentLoaded', () => {
-    const mainImages = document.querySelectorAll('.product-main-image');
+<!-- Fundi i faqes, pas gjithë përmbajtjes -->
+<script>
+  // Kliko kryesoren për zoom
+  document.querySelectorAll('.product-main-image').forEach(img => {
+      img.addEventListener('click', () => {
+          if(img.classList.contains('volga')) return; // Volga nuk zmadhon
+          img.classList.toggle('zoomed');
+      });
+  });
 
-    mainImages.forEach(img => {
-        img.addEventListener('click', () => {
-            img.classList.toggle('zoomed');
-        });
-    });
-});
+  // Kliko thumbnail për të ndryshuar kryesoren
+  document.querySelectorAll('.product-gallery img.thumb').forEach(thumb => {
+      thumb.addEventListener('click', () => {
+          const article = thumb.closest('.product');
+          const mainImg = article.querySelector('.product-main-image');
+          mainImg.src = thumb.src;
+          if(thumb.alt) mainImg.alt = thumb.alt;
+      });
+  });
 </script>
+</body>
+</html>

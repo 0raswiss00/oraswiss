@@ -1,29 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Doyle Valjoux 23</title>
-    <link rel="stylesheet" href="styles.css">
-<!-- Google tag (gtag.js) -->
+<meta charset="UTF-8">
+<title>Doyle Valjoux 23</title>
+<link rel="stylesheet" href="styles.css">
+
+<!-- Google Tag -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-KD2ZZ3MJYY');
 </script>
 
-    
+<style>
+/* =========================
+   BAZA E STILIT
+   ========================= */
+body {
+    font-family: system-ui, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f3f4f6;
+    color: #111827;
+}
+
+.site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: #000;
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.back-button {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+}
+.back-button:hover {
+    color: #f0c040;
+}
+
+.products-section {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 16px;
+}
+
+.product {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.product-main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.product-main-image {
+    width: 100%;
+    max-width: 380px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    object-fit: cover;
+}
+
+.product-main-image:hover:not(.zoomed) {
+    transform: scale(1.03);
+}
+
+.product-main-image.zoomed {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.5);
+    z-index: 9999;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.product-info {
+    flex: 1 1 260px;
+}
+
+.price {
+    font-size: 1.1rem;
+    margin-top: 8px;
+}
+
+.product-buttons {
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.buy-button {
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+.buy-button:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+}
+
+.product-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.product-gallery img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.product-gallery img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+    .product-main {
+        flex-direction: column;
+        align-items: center;
+    }
+    .product-main-image {
+        max-width: 90%;
+    }
+}
+</style>
+
 </head>
 <body>
-    
+
 <header class="site-header">
     <a href="index.html" class="back-button">← Kthehu mbrapa</a>
     <h1>Doyle Valjoux 23</h1>
 </header>
 
-<section class="products-section">
+<main class="products-section">
     <div class="product">
 
         <h2>Doyle Valjoux 23</h2>
@@ -32,37 +172,54 @@
             <img class="product-main-image" src="doyle-valjoux-23-1.jpg" alt="doyle valjoux 23">
 
             <div class="product-info">
-    <p><strong>Brand:</strong> Doyle</p>
-    <p><strong>Model:</strong> Valjoux 23</p>
-    <p><strong>Reference:</strong> 451-23</p>
-    <p><strong>Year:</strong> 1950 (approx.)</p>
-    <p><strong>Case:</strong> Steel 40mm</p>
-    <p><strong>Leather:</strong> Handmade leather strap</p>
-    <p><strong>Movement:</strong> Manual Work Perfect Movement fully serviced</p>
-    <p><strong>Functions:</strong> No Date</p>
-    <p class="price"><strong>Price:</strong> €1,000</p> 
-  </div>
- 
+                <p><strong>Brand:</strong> Doyle</p>
+                <p><strong>Model:</strong> Valjoux 23</p>
+                <p><strong>Reference:</strong> 451-23</p>
+                <p><strong>Year:</strong> 1950 (approx.)</p>
+                <p><strong>Case:</strong> Steel 40mm</p>
+                <p><strong>Leather:</strong> Handmade leather strap</p>
+                <p><strong>Movement:</strong> Manual Work — Perfect movement, fully serviced</p>
+                <p><strong>Functions:</strong> No Date</p>
+                <p class="price"><strong>Price:</strong> €1,000</p> 
+            </div>
+        </div>
 
-<div class="product-buttons">    
-    <a href="mailto:info@oraswiss.com" class="buy-button">Buy Now</a>
-    <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>
-    <a href="mailto:info@oraswiss.com" class="buy-button">Email</a>
-  </div>
-            
+        <div class="product-buttons">
+            <a href="mailto:info@oraswiss.com" class="buy-button">Buy Now</a>
+            <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>
+            <a href="mailto:info@oraswiss.com" class="buy-button">Email</a>
+        </div>
 
-    <div class="product-gallery">
-        <img src="doyle-valjoux-23-1.jpg"> alt="doyle valjoux 23 image 1">
-        <img src="doyle-valjoux-23-2.jpg"> alt="doyle valjoux 23 image 2">
-        <img src="doyle-valjoux-23-3.jpg"> alt="doyle valjoux 23 image 3"> 
-        <img src="doyle-valjoux-23-4.jpg"> alt="doyle valjoux 23 image 4">
-        <img src="doyle-valjoux-23-5.jpg"> alt="doyle valjoux 23 image 5">
-        <img src="doyle-valjoux-23-6.jpg"> alt="doyle valjoux 23 image 6">          
+        <div class="product-gallery">
+            <img class="thumb" src="doyle-valjoux-23-1.jpg" alt="image 1">
+            <img class="thumb" src="doyle-valjoux-23-2.jpg" alt="image 2">
+            <img class="thumb" src="doyle-valjoux-23-3.jpg" alt="image 3">
+            <img class="thumb" src="doyle-valjoux-23-4.jpg" alt="image 4">
+            <img class="thumb" src="doyle-valjoux-23-5.jpg" alt="image 5">
+            <img class="thumb" src="doyle-valjoux-23-6.jpg" alt="image 6">
+        </div>
+
     </div>
+</main>
 
-    </div>
-</section>
+<script>
+// Kliko kryesoren për zoom
+document.querySelectorAll('.product-main-image').forEach(img => {
+    img.addEventListener('click', () => {
+        img.classList.toggle('zoomed');
+    });
+});
 
+// Kliko thumbnail për të ndryshuar kryesoren
+document.querySelectorAll('.product-gallery img.thumb').forEach(thumb => {
+    thumb.addEventListener('click', () => {
+        const article = thumb.closest('.product');
+        const mainImg = article.querySelector('.product-main-image');
+        mainImg.src = thumb.src;
+        if(thumb.alt) mainImg.alt = thumb.alt;
+    });
+});
+</script>
 
 </body>
 </html>

@@ -270,12 +270,6 @@ body {
     cursor: pointer;
 }
 
-/* Hover minimal, vetëm kur nuk është zoomed */
-.product-main-image:not(.zoomed):hover {
-    transform: scale(1.03);  /* vetëm zmadhim i butë */
-}
-
-
 
 .product-main {
     overflow: visible;  /* lejon që foto të shfaqet e madhe jashtë grid-it */

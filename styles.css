@@ -63,14 +63,20 @@ ul {
     padding: 0 16px;
 }
 .product.vintage .product-main-image {
-    width: 140%;       /* ishte 60% → bëje më të gjerë */
-    max-height: 300px; /* opsionale, që të mos bëhet shumë e gjatë */
+    width: 110%;       /* ishte 60% → bëje më të gjerë */
+    max-height: 400px; /* opsionale, që të mos bëhet shumë e gjatë */
     object-fit: contain;
 }
 .product.vintage .product-gallery {
     width: 23%;   /* ishte 35% → zvogëlohet */
 }
 
+.product.vintage .product-main-image {
+    width: 60%;
+    height: 380px; /* ZGJEDHJA JOTE A-B-C-D */
+    border-radius: 12px;
+    object-fit: contain;
+}
 /* =========================
    PRODUCT CARD
    ========================= */

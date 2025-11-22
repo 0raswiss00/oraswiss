@@ -268,12 +268,32 @@ body {
     z-index: 10;          /* mbi çdo element tjetër */
 }
 
-/* Hover efekt – uniform për të gjitha produktet */
-.product-image:hover,
-.product-main-image:hover {
-    transform: scale(1.5);  /* zmadhim 150% */
+.product-main {
+    position: relative;
+    overflow: visible; /* lejon fotot të dalin jashtë grid */
 }
 
+.product-main-image {
+    width: auto;
+    max-width: 380px; 
+    border-radius: 12px;
+    transition: transform 0.3s ease, left 0.3s ease, top 0.3s ease;
+    cursor: pointer;
+    position: relative;  
+    z-index: 10;
+    transform-origin: center center; /* rëndësi për zmadhim pa dridhje */
+}
+
+/* Hover ose klik për zmadhim */
+.product-main-image.zoomed,
+.product-main-image:hover {
+    transform: scale(1.5); 
+    /* Opsional për absolute positioning mbi grid */
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%) scale(1.5);
+}
 /* Opsionale: nëse dëshiron foton të fluturojë mbi elementet e tjerë */
 .product-image:hover,
 .product-main-image:hover {

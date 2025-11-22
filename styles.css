@@ -244,7 +244,15 @@ body {
     cursor: pointer;      /* tregon që është klikueshme */
     position: relative;   /* mund të vendosim z-index */
 }
-   
+/* mos i prekim fotot Volga */
+.product-main-image.volga,
+.product-main-image.volga:hover,
+.product-main-image.volga.zoomed {
+  transform: none !important;
+  position: static !important;
+  cursor: default !important;
+}
+
 .product-main-image.zoomed {
     position: fixed;
     top: 50%;

@@ -153,7 +153,7 @@ ul {
 /* Gallery thumbnails */
 .product-gallery {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 10px;
 }
 
@@ -212,7 +212,6 @@ ul {
 }
 
 
-
 .container img {
     display: inline-block;
     margin-right: 10px;
@@ -226,13 +225,6 @@ ul {
     display: flex;
     flex-direction: row; /* i vendos horizontalisht */
     gap: 10px; /* opsionale, hapësirë mes fotove */
-}
-
-
-
-.container img {
-    display: inline-block;
-    margin-right: 10px;
 }
 
 .product-main-image:hover:not(.zoomed) {

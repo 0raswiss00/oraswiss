@@ -137,6 +137,17 @@ ul {
     transition: 0.3s;
 }
 
+.luxury-photos {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;   /* që të mos dalin jashtë ekranit */
+    gap: 15px;
+}
+.luxury-photos img {
+    width: auto;      /* ose vendos gjerësinë që do */
+    height: 200px;    /* shembull */
+}
+
 .product-main-image:hover:not(.zoomed) {
     transform: scale(1.03);
 }

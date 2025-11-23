@@ -137,20 +137,7 @@ ul {
     transition: 0.3s;
 }
 
-.luxury-photos {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;   /* që të mos dalin jashtë ekranit */
-    gap: 15px;
-}
-.luxury-photos img {
-    width: auto;      /* ose vendos gjerësinë që do */
-    height: 200px;    /* shembull */
-}
 
-.product-main-image:hover:not(.zoomed) {
-    transform: scale(1.03);
-}
 
 /* Zoom image */
 .product-main-image.zoomed {
@@ -179,24 +166,7 @@ ul {
     transition: 0.2s;
 }
 
-.container img {
-    display: inline-block;
-    margin-right: 10px;
-}
-.container img {
-    display: inline-block;
-    margin-right: 10px;
-}
 
-.container img {
-    float: left;
-    margin-right: 10px;
-}
-
-.container img {
-    display: inline-block;
-    margin-right: 10px;
-}
 .product-gallery img.thumb:hover {
     transform: scale(1.05);
     box-shadow: 0 10px 20px rgba(0,0,0,0.25);
@@ -219,6 +189,40 @@ ul {
 /* Parts */
 .product.part h2 {
     color: #333;
+}
+
+.luxury-vinage-parts-photos {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;   /* që të mos dalin jashtë ekranit */
+    gap: 15px;
+}
+.luxury-vintage-parts-photos img {
+    width: auto;      /* ose vendos gjerësinë që do */
+    height: 200px;    /* shembull */
+}
+
+.container img {
+    display: inline-block;
+    margin-right: 10px;
+}
+.container img {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.container img {
+    float: left;
+    margin-right: 10px;
+}
+
+.container img {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.product-main-image:hover:not(.zoomed) {
+    transform: scale(1.03);
 }
 
 /* =========================

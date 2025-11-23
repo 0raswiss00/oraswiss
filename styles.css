@@ -257,7 +257,7 @@ ul {
     object-position: 00% center !important;
 }
 .sfondi {
-    margin-left: 50px;   /* shty foto nga e majta drejt djathtas */
+    margin-left: 100px;   /* shty foto nga e majta drejt djathtas */
 }
 
 .sfondi {
@@ -268,4 +268,10 @@ ul {
 .sfondi {
     position: relative;
     top: 50px;   /* ngrije dritaren lart */
+}
+.sfondi {
+    background-image: url("sfond.jpg");
+    background-size: cover;     /* mbulon gjithë zonën */
+    background-position: center; 
+    background-repeat: no-repeat;
 }

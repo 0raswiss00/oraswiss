@@ -270,3 +270,38 @@ ul {
     height: 200px;
     width: auto;
 }
+/* KUTIA KU VENDOS FOTON NË SFOND */
+.foto-bg {
+  width: 400px;
+  height: 300px;
+  background-image: url('foto.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* OPSIONET E LËVIZJES SË SFONDIT */
+
+/* LART */
+.foto-bg.up {
+  background-position: center top;
+}
+
+/* POSHTË */
+.foto-bg.down {
+  background-position: center bottom;
+}
+
+/* MAJTAS */
+.foto-bg.left {
+  background-position: left center;
+}
+
+/* DJATHTAS */
+.foto-bg.right {
+  background-position: right center;
+}
+
+/* POZICION I PERSONALIZUAR (opsional) */
+.foto-bg.custom {
+  background-position: 30% 60%;
+}

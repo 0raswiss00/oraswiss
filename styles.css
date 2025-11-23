@@ -1,6 +1,6 @@
 /* =========================
-         RESET BAZË
-   ========================= */
+      GLOBAL RESET
+========================= */
 * {
     margin: 0;
     padding: 0;
@@ -24,8 +24,8 @@ ul {
 }
 
 /* =========================
-            HEADER
-   ========================= */
+           HEADER
+========================= */
 .site-header {
     position: sticky;
     top: 0;
@@ -54,8 +54,8 @@ ul {
 }
 
 /* =========================
-       PRODUCTS SECTION
-   ========================= */
+      PRODUCTS SECTION
+========================= */
 .products-section {
     max-width: 700px;
     margin: 40px auto;
@@ -64,12 +64,12 @@ ul {
 
 /* =========================
         PRODUCT CARD
-   ========================= */
+========================= */
 .product {
     background: #fff;
     border-radius: 12px;
-    margin-bottom: 15px;   /* më pak hapësirë poshtë */
-    padding: 16px 16px;    /* ulja e padding e ngre vizualisht lart */
+    margin-bottom: 18px;
+    padding: 16px 16px;
     box-shadow: 0 0 12px rgba(0,0,0,0.08);
 }
 
@@ -83,10 +83,9 @@ ul {
     font-weight: 600;
 }
 
-
 /* =========================
-            INFO
-   ========================= */
+           INFO BOX
+========================= */
 .product-info {
     background: #f9fafb;
     padding: 16px;
@@ -94,8 +93,8 @@ ul {
 }
 
 /* =========================
-          BUTONAT
-   ========================= */
+          BUTTONS
+========================= */
 .product-buttons {
     margin: 16px 0;
 }
@@ -119,167 +118,95 @@ ul {
 }
 
 /* =========================
-             ZOOM
-   ========================= */
+      IMAGE LAYOUT (ALL)
+========================= */
+.product-images {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+/* Foto kryesore */
+.product-main-image {
+    width: 100%;
+    max-width: 380px;
+    border-radius: 12px;
+    object-fit: contain;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.product-main-image:hover:not(.zoomed) {
+    transform: scale(1.03);
+}
+
+/* Zoom image */
 .product-main-image.zoomed {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(1.5);
-    background: #fff;
     z-index: 9999;
     box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    background: white;
 }
 
-.container {
-    display: flex;
-    gap: 25px;
-    align-items: flex-start;
-    margin-bottom: 40px;
-}
-
-.product-images img {
-    width: 200px; 
-    display: block;
-    margin-bottom: 10px;
-}
-
-.product-description {
-    max-width: 450px;
-}
-
-.title-vintage {
-    color: #8B5E3C;
-    margin-bottom: 10px;
-}
-
-.title-parts {
-    color: #333;
-    margin-bottom: 10px;
-}
-/* =========================
-   LAYOUT – VINTAGE + PART
-   ========================= */
-.product.vintage .product-images,
-.product.part .product-images {
-    display: flex;
-    gap: 18px;
-    margin-bottom: 16px;
-    align-items: flex-start;
-}
-
-.container {
-    display: flex;
-    gap: 25px;
-    align-items: flex-start;
-    margin-bottom: 40px;
-}
-
-.product-images img {
-    width: 200px; 
-    display: block;
-    margin-bottom: 10px;
-}
-
-.product-description {
-    max-width: 450px;
-}
-
-.title-vintage {
-    color: #8B5E3C;
-    margin-bottom: 10px;
-}
-
-.title-parts {
-    color: #333;
-    margin-bottom: 10px;
-}
-Ora
-.container {
-    display: flex;
-    gap: 25px;
-    align-items: flex-start;
-    margin-bottom: 40px;
-}
-
-.product-images img {
-    width: 200px;
-    display: block;
-    margin-bottom: 10px;
-}
-
-.product-description {
-    max-width: 450px;
-}
-
-.title-vintage {
-    color: #8B5E3C;
-    margin-bottom: 10px;
-}
-
-.title-parts {
-    color: #333;
-    margin-bottom: 10px;
-}
-
-/* Foto kryesore */
-.product.vintage .product-main-image,
-.product.part .product-main-image {
-    flex: 0 0 60%;
-    max-width: 40%;
-    border-radius: 12px;
-    object-fit: contain;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-/* Hover efekt */
-.product.vintage .product-main-image:hover:not(.zoomed),
-.product.part .product-main-image:hover:not(.zoomed) {
-    transform: scale(1.03);
-}
-
-/* Gallery */
-.product.vintage .product-gallery,
-.product.part .product-gallery {
-    flex: 0 0 140px;
+/* Gallery thumbnails */
+.product-gallery {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-/* Thumbnail */
-.product.vintage .product-gallery img.thumb,
-.product.part .product-gallery img.thumb {
-    width: 90%;
-    aspect-ratio: 1 / 1;
+.product-gallery img.thumb {
+    width: 90px;
+    height: 90px;
     object-fit: cover;
     border-radius: 8px;
     cursor: pointer;
-    transition: .2s;
+    transition: 0.2s;
 }
 
-.product.vintage .product-gallery img.thumb:hover,
-.product.part .product-gallery img.thumb:hover {
+.product-gallery img.thumb:hover {
     transform: scale(1.05);
     box-shadow: 0 10px 20px rgba(0,0,0,0.25);
 }
 
-/* Responsive */
+/* =========================
+     CATEGORY COLORS
+========================= */
+
+/* Luxury – default */
+.product.luxury h2 {
+    color: #1f2937;
+}
+
+/* Vintage */
+.product.vintage h2 {
+    color: #8B5E3C;
+}
+
+/* Parts */
+.product.part h2 {
+    color: #333;
+}
+
+/* =========================
+          RESPONSIVE
+========================= */
 @media (max-width: 900px) {
-    .product.vintage .product-images,
-    .product.part .product-images {
+
+    .product-images {
         flex-direction: column;
         align-items: center;
     }
 
-    .product.vintage .product-main-image,
-    .product.part .product-main-image {
+    .product-main-image {
         max-width: 90%;
     }
 
-    .product.vintage .product-gallery,
-    .product.part .product-gallery {
+    .product-gallery {
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
@@ -287,64 +214,8 @@ Ora
         margin-top: 10px;
     }
 
-    .product.vintage .product-gallery img.thumb,
-    .product.part .product-gallery img.thumb {
+    .product-gallery img.thumb {
         width: 28%;
+        height: auto;
     }
-}
-/* Thumbnails – për të gjitha faqet (luxury, parts, vintage) */
-.product-gallery img.thumb {
-    width: 90px !important;
-    height: 90px !important;
-    object-fit: cover;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.product-gallery img.thumb:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.25);
-    opacity: 0.95;
-}
-
-*/  =========================== 
-            SFOND
-  =========================== */
-.hero__image, 
-.banner__media,  
-.slideshow__image {
-    object-position: 00% center !important;
-}
-.your-class-here {   
-    object-position: 00% center !important; 
-}
-.hero__image {       
-    object-position: 00% center !important;
-}
-.sfondi {
-    margin-left: 100px;   /* shty foto nga e majta drejt djathtas */
-}
-
-.sfondi {
-    width: 200px;   /* zvogëlo foto sa të duash */
-    /* ose */
-    /* height: 100px; */
-}
-.sfondi {
-    position: relative;
-    top: 50px;   /* ngrije dritaren lart */
-}
-
-.sfondi {
-    background-image: url("sfond.jpg");
-    background-size: cover;     /* mbulon gjithë zonën */
-    background-position: center; 
-    background-repeat: no-repeat;
-}
-.container {
-    display: flex;
-    gap: 25px;
-    align-items: flex-start;
-    margin-bottom: 40px;
 }

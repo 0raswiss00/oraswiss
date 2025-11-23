@@ -52,7 +52,20 @@ ul {
     background: #fff;
     color: #000;
 }
+.black-bar {
+    background: black;
+    color: white;
+    width: 100%;
+    padding: 20px;
+    text-align: center;     /* E mban shiritin në qendër */
+    position: sticky;       /* Ky e bën të rrijë në vend */
+    top: 0;                 /* Vendoset lart ose ku të duash */
+    z-index: 10;            /* Që të mos ngjitet me sfondin */
+}
 
+.black-bar span {
+    display: inline-block;
+}
 /* =========================
       PRODUCTS SECTION
 ========================= */
@@ -286,5 +299,10 @@ background-repeat: no-repeat;
 background-size: 100px auto;    /* zvogëloje si të duash */
 background-position: 150% 150%;   /* lëvizja djathtas me përqindje */
 
-
+body {
+    background-image: url("rolex.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
 

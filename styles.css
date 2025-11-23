@@ -266,3 +266,15 @@ ul {
         height: auto;
     }
 }
+/* FIX I FOTOVE – BËJI HORIZONTAL NË TË GJITHA: LUXURY / VINTAGE / PARTS */
+.product-images {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.product-images img {
+    height: 200px;
+    width: auto;
+}

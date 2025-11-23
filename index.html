@@ -16,136 +16,84 @@
       gtag('config', 'G-KD2ZZ3MJYY');
     </script>
 
+    <style>
+
+    /* Top Navigation Bar */
+    .top-nav {
+        background: black;
+        color: white;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 15px 20px;
+        position: sticky;
+        top: 0;
+        width: 100%;
+        z-index: 9999;
+    }
+
+    /* ORA SWISS logo */
+    .logo {
+        font-size: 26px;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 10px;
+    }
+
+    /* Menu – scroll horizontal */
+    .menu {
+        background: #111;
+        padding: 12px;
+        display: flex;
+        justify-content: center;
+        gap: 35px;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 5px;
+    }
+
+    .menu a {
+        text-decoration: none;
+        color: white;
+        font-size: 18px;
+        padding: 5px 10px;
+        transition: 0.3s;
+    }
+
+    .menu a:hover {
+        color: gold;
+    }
+
+    .menu::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Background Rolex image */
+    .featured-watch img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    /* Footer */
+    .footer {
+        background: black;
+        color: white;
+        text-align: center;
+        padding: 18px;
+        margin-top: 40px;
+    }
+
+    </style>
+
 </head>
+
 <body>
-<style>
 
-    
-        /* Menu */
-        .menu {
-            background: #111;
-            padding: 12px;
-            display: flex;
-            justify-content: center;
-            gap: 35px;
-        }
+<div class="top-nav">
+    <header class="logo">ORA SWISS</header>
 
-        .menu a {
-            text-decoration: none;
-            color: white;
-            font-size: 18px;
-            transition: 0.3s;
-        }
-
-        .menu a:hover {
-            color: gold;
-        }
-
-       
-
-        /* Product Grid */
-        .products {
-            max-width: 1200px;
-            margin: 40px auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 25px;
-            padding: 20px;
-        }
-
-        .product {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 0 12px rgba(0,0,0,0.15);
-            transition: 0.3s;
-        }
-
-        .product:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-        }
-
-        .product img {
-            width: 100%;
-            height: 260px;
-            border-radius: 10px;
-            object-fit: cover;
-        }
-
-        .product h3 {
-            margin: 15px 0 5px;
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .product p {
-            font-size: 16px;
-            color: #444;
-        }
-
-        .price {
-            font-size: 18px;
-            font-weight: bold;
-            color: #d4a017;
-        }
-
-        /* Footer */
-        .footer {
-            background: black;
-            color: white;
-            text-align: center;
-            padding: 18px;
-            margin-top: 40px;
-        }
-
-/* Top Navigation Bar */
-.top-nav {
-    background: black;
-    color: white;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 15px 20px;
-    position: sticky;
-    top: 0;
-    width: 100%;
-    z-index: 9999;
-}
-
-/* ORA SWISS logo */
-.logo {
-    font-size: 26px;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 10px;
-}
-
-/* Menu – scroll horizontal */
-.menu {
-    display: flex;
-    gap: 25px;
-    overflow-x: auto;
-    white-space: nowrap;
-    padding-bottom: 5px;
-}
-
-.menu a {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    padding: 5px 10px;
-}
-
-.menu::-webkit-scrollbar {
-    display: none; /* Hide scrollbar */
-}
-    </style> 
-    
-<div class="top-nav">     
-        <header class="logo">ORA SWISS</header>
-            
     <div class="menu">
         <a href="home.html">Home</a>
         <a href="luxury.html">Luxury</a>
@@ -159,19 +107,10 @@
         <a href="policy.html">Policy</a>
         <a href="sell.html">Sell</a>
     </div>
-    
 </div>
+
 <section class="featured-watch">
     <img src="sfond-rolex.png" class="rolex-img" alt="">
-</section>
-   
-<footer class="footer">
-    <p>© 2025 Ora Swiss – All Rights Reserved</p>
-</footer>
-
-</body>
-</html>
-
-
+</section
 
 

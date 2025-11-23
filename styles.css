@@ -211,6 +211,12 @@ ul {
     margin-right: 10px;
 }
 
+.container {
+    display: flex;
+    flex-direction: row; /* i vendos horizontalisht */
+    gap: 10px; /* opsionale, hapësirë mes fotove */
+}
+
 .container img {
     float: left;
     margin-right: 10px;

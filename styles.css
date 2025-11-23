@@ -168,6 +168,60 @@ ul {
     align-items: flex-start;
 }
 
+.container {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+    margin-bottom: 40px;
+}
+
+.product-images img {
+    width: 200px; 
+    display: block;
+    margin-bottom: 10px;
+}
+
+.product-description {
+    max-width: 450px;
+}
+
+.title-vintage {
+    color: #8B5E3C;
+    margin-bottom: 10px;
+}
+
+.title-parts {
+    color: #333;
+    margin-bottom: 10px;
+}
+Ora
+.container {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+    margin-bottom: 40px;
+}
+
+.product-images img {
+    width: 200px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.product-description {
+    max-width: 450px;
+}
+
+.title-vintage {
+    color: #8B5E3C;
+    margin-bottom: 10px;
+}
+
+.title-parts {
+    color: #333;
+    margin-bottom: 10px;
+}
+
 /* Foto kryesore */
 .product.vintage .product-main-image,
 .product.part .product-main-image {
@@ -287,4 +341,10 @@ ul {
     background-size: cover;     /* mbulon gjithë zonën */
     background-position: center; 
     background-repeat: no-repeat;
+}
+.container {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+    margin-bottom: 40px;
 }

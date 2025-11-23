@@ -291,24 +291,14 @@ ul {
   background-position: center bottom;
 }
 
-/* MAJTAS */
-.foto-bg.left {
-  background-position: left center;
-}
 
-/* DJATHTAS */
-.foto-bg.right {
-  background-position: right center;
-}
+background-image: url("rolex-sfond.jpg");
+background-repeat: no-repeat;
+background-size: 200px auto;    /* zvogëloje si të duash */
+background-position: 90% 90%;   /* lëvizja djathtas me përqindje */
 
 /* POZICION I PERSONALIZUAR (opsional) */
 .foto-bg.custom {
   background-position: 30% 60%;
 }
-background-position: 100% 50%;
 
-    background-image: url("fotoja-rolexsfond.jpg");
-    background-repeat: no-repeat;
-    background-position: right center; /* e çon djathtas */
-    background-size: 200px auto; /* e zvogëlon (gjerësia 200px) */
-}

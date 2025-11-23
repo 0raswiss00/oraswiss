@@ -62,30 +62,7 @@ ul {
     margin: 40px auto;
     padding: 0 16px;
 }
-.product.vintage .product-main-image {
-    width: 220%;       /* ishte 60% → bëje më të gjerë */
-    max-height: 700px; /* opsionale, që të mos bëhet shumë e gjatë */
-    object-fit: contain;
-}
-.product.vintage .product-gallery {
-    width: 23%;   /* ishte 35% → zvogëlohet */
-}
-.product.vintage .product-main-image {
-    margin-bottom: -10px;   /* E NGRE FOTON LART */
-}
-.product.vintage .product-main-image {
-    width: 60%;
-    max-height: 380px;   /* KUFIZON DRITAREN */
-    height: auto;
-    object-fit: contain;
-    border-radius: 12px;
-}
-.product.vintage .product-main-image {
-    width: 100%;
-    height: 480px; /* ZGJEDHJA JOTE A-B-C-D */
-    border-radius: 12px;
-    object-fit: contain;
-}
+
 /* =========================
    PRODUCT CARD
    ========================= */
@@ -107,52 +84,6 @@ ul {
     font-weight: 600;
 }
 
-/* =========================
-   LAYOUT – VINTAGE
-   ========================= */
-.product.vintage .product-images {
-    display: flex;
-    gap: 18px;
-    margin-bottom: 16px;
-    align-items: flex-start;
-}
-
-/* Foto kryesore majtas */
-.product.vintage .product-main-image {
-    flex: 0 0 60%;
-    max-width: 40%;
-    border-radius: 12px;
-    object-fit: contain;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-/* Hover elegant */
-.product.vintage .product-main-image:hover:not(.zoomed) {
-    transform: scale(1.03);
-}
-
-/* Thumbnail posht, horizontal */
-.product.vintage .product-gallery {
-    flex: 0 0 140px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.product.vintage .product-gallery img.thumb {
-    width: 100%;
-    aspect-ratio: 1 / 1;    /* katrore */
-    object-fit: cover;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: .2s;
-}
-
-.product.vintage .product-gallery img.thumb:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.25);
-}
 
 /* =========================
    INFO
@@ -204,17 +135,76 @@ ul {
 /* =========================
    RESPONSIVE
    ========================= */
+
+/* =========================
+   LAYOUT – VINTAGE + PART
+   ========================= */
+.product.vintage .product-images,
+.product.part .product-images {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+}
+
+/* Foto kryesore */
+.product.vintage .product-main-image,
+.product.part .product-main-image {
+    flex: 0 0 60%;
+    max-width: 40%;
+    border-radius: 12px;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+/* Hover efekt */
+.product.vintage .product-main-image:hover:not(.zoomed),
+.product.part .product-main-image:hover:not(.zoomed) {
+    transform: scale(1.03);
+}
+
+/* Gallery */
+.product.vintage .product-gallery,
+.product.part .product-gallery {
+    flex: 0 0 140px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Thumbnail */
+.product.vintage .product-gallery img.thumb,
+.product.part .product-gallery img.thumb {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.product.vintage .product-gallery img.thumb:hover,
+.product.part .product-gallery img.thumb:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+}
+
+/* Responsive */
 @media (max-width: 900px) {
-    .product.vintage .product-images {
+    .product.vintage .product-images,
+    .product.part .product-images {
         flex-direction: column;
         align-items: center;
     }
 
-    .product.vintage .product-main-image {
+    .product.vintage .product-main-image,
+    .product.part .product-main-image {
         max-width: 100%;
     }
 
-    .product.vintage .product-gallery {
+    .product.vintage .product-gallery,
+    .product.part .product-gallery {
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
@@ -222,7 +212,8 @@ ul {
         margin-top: 10px;
     }
 
-    .product.vintage .product-gallery img.thumb {
+    .product.vintage .product-gallery img.thumb,
+    .product.part .product-gallery img.thumb {
         width: 28%;
     }
 }

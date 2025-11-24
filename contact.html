@@ -1,20 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="sq">
+
 <head>
     <meta charset="UTF-8">
-    
-    <h2>Kontakt për Service</h2>
-    <p>📍 Adresa: (<iframe
-  src="https://www.google.com/maps?q=Rruga+Engjell+Agalliu,+Dimal,+Berat,+Albania&output=embed"
-  width="100%"
-  height="300"
-  style="border:0;"
-  allowfullscreen=""
-  loading="lazy">
-</iframe>)</p>
-    <p>📞 Tel: (355692408065)</p>
-    <p>✉ Email: mailto:info@oraswiss.com" class="buy-button">Email</p>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontakt</title>
 
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -23,9 +15,43 @@
     <a href="index.html" class="back-button">Kthehu</a>
 </header>
 
-<div class="contact-container">
-    <h1>Kontakt</h1>
-    <p>Shkruani mesazhin tuaj...</p>
+<div class="products-section">
+
+    <h2>Kontakt për Service</h2>
+
+    <p>📍 Adresa:</p>
+    <iframe
+        src="https://www.google.com/maps?q=Rruga+Engjell+Agalliu,+Dimal,+Berat,+Albania&output=embed"
+        width="100%"
+        height="300"
+        style="border:0;"
+        allowfullscreen=""
+        loading="lazy">
+    </iframe>
+
+    <p>📞 Tel: <a href="tel:355692408065">355 692 408 065</a></p>
+
+    <p>📧 Email:
+        <a href="mailto:info@oraswiss.com" class="buy-button">info@oraswiss.com</a>
+    </p>
+
+    <h3>Na shkruani:</h3>
+
+    <form action="mailto:info@oraswiss.com" method="post" enctype="text/plain" class="contact-form">
+
+        <label>Emri juaj:</label>
+        <input type="text" name="name" placeholder="Shkruani emrin tuaj" required>
+
+        <label>Email-i juaj:</label>
+        <input type="email" name="email" placeholder="Shkruani email-in" required>
+
+        <label>Mesazhi:</label>
+        <textarea name="message" rows="5" placeholder="Shkruani mesazhin tuaj..." required></textarea>
+
+        <button type="submit" class="buy-button">Dërgo Mesazhin</button>
+
+    </form>
+
 </div>
 
 </body>

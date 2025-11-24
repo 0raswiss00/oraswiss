@@ -1,1 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rolex-part-html</title>
+    <link rel="stylesheet" href="styles.css">
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KD2ZZ3MJYY');
+    </script>
+
+    <style>
+    .container {
+        display: flex;
+        gap: 25px;
+        align-items: flex-start;
+        margin-bottom: 40px;
+    }
+
+    .product-images img {
+        width: 200px; 
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .product-description {
+        max-width: 450px;
+    }
+
+    .title-vintage {
+        color: #8B5E3C; /* ngjyrë vintage */
+        margin-bottom: 10px;
+    }
+
+    .title-parts {
+        color: #333; /* ngjyrë neutrale për parts */
+        margin-bottom: 10px;
+    }
+
+    .product {
+        margin: 40px auto;
+        max-width: 1000px;
+    }
+
+    .product-main {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 20px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .product-main-image {
+        max-width: 320px;
+        height: auto;
+        display: block;
+    }
+
+    .product-info p {
+        margin: 4px 0;
+    }
+
+    .price {
+        margin-top: 10px;
+        font-size: 1.1rem;
+    }
+
+    .product-buttons {
+        margin: 15px 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .buy-button {
+        padding: 10px 18px;
+        border-radius: 4px;
+        text-decoration: none;
+        background: #000;
+        color: #fff;
+        font-size: 0.9rem;
+    }
+
+    .product-gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .product-gallery .thumb {
+        width: 110px;
+        height: auto;
+        cursor: pointer;
+        object-fit: cover;
+    }
+    </style>
+</head>
+<body>
+
+    <!-- ====================== -->
+    <!--     ROLEX FOR PARTS    -->
+    <!-- ====================== -->
+    <article class="product">
+        <h2 class="title-parts">Rolex Oyster Perpetual Date – For Parts</h2>
+
+        <div class="product-main">
+            <img class="product-main-image"
+                 src="Rolex-part-html-1.jpg"
+                 alt="Rolex Oyster Perpetual Date for parts – foto 1">
+
+            <div class="product-info">
+                <p><strong>Brand:</strong> Rolex</p>
+                <p><strong>Model:</strong> Oyster Perpetual Date</p>
+                <p><strong>Reference:</strong> 1500 (shembull, ndrysho nëse duhet)</p>
+                <p><strong>Year:</strong> rreth viteve 1970 (approx.)</p>
+                <p><strong>Case:</strong> Stainless steel, 34mm</p>
+                <p><strong>Bracelet:</strong> Pa byzylyk / vetëm koka</p>
+                <p><strong>Movement:</strong> Automatic – <em>jo funksional</em> (për pjesë)</p>
+                <p><strong>Functions:</strong> Ora, data – për t’u përdorur për pjesë këmbimi</p>
+                <p><strong>Condition:</strong> Për pjesë (non-working). Ideal për pjesë këmbimi:
+                    kornizë, kurorë, levë, akrepa, dial, mekanizëm, etj.</p>
+                <p class="price"><strong>Price:</strong> €1,250</p>
+            </div>
+        </div>
+
+        <div class="product-buttons">
+            <a href="mailto:info@oraswiss.com" class="buy-button">Buy Now</a>
+            <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>
+            <a href="mailto:info@oraswiss.com" class="buy-button">Email</a>
+        </div>
+
+        <div class="product-gallery">
+            <img class="thumb" src="Rolex-part-html-1.jpg" alt="Rolex for parts – foto 1">
+            <img class="thumb" src="Rolex-part-html-2.jpg" alt="Rolex for parts – foto 2">
+            <img class="thumb" src="Rolex-part-html-3.jpg" alt="Rolex for parts – foto 3">
+            <img class="thumb" src="Rolex-part-html-4.jpg" alt="Rolex for parts – foto 4">
+            <img class="thumb" src="Rolex-part-html-5.jpg" alt="Rolex for parts – foto 5">
+            <img class="thumb" src="Rolex-part-html-6.jpg" alt="Rolex for parts – foto 6">
+            <img class="thumb" src="Rolex-part-html-7.jpg" alt="Rolex for parts – foto 7">
+            <img class="thumb" src="Rolex-part-html-8.jpg" alt="Rolex for parts – foto 8">
+        </div>
+    </article>
+
+</body>
+</html>

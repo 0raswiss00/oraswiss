@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell Your Watch - OraSwiss</title>
+
+    <!-- Lidhja me stilin ekzistues -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="site-title">ORA SWISS</div>
+    <nav>
+        <a href="index.html" class="back-button">Home</a>
+        <a href="luxury.html" class="back-button">Luxury</a>
+        <a href="vintage.html" class="back-button">Vintage</a>
+        <a href="parts.html" class="back-button">Parts</a>
+        <a href="service.html" class="back-button">Service</a>
+        <a href="gallery.html" class="back-button">Gallery</a>
+        <a href="about.html" class="back-button">About</a>
+        <a href="contact.html" class="back-button">Contact</a>
+        <a href="sell.html" class="back-button">Sell</a>
+    </nav>
+</header>
+
+<div class="products-section">
+
+    <h2>Sell Your Watch</h2>
+    <p>
+        If you want to sell your watch, please fill in the form below.
+        We will contact you by email with our offer.
+    </p>
+    <p>
+        <strong>Important:</strong> Please include clear photos of the dial,
+        case, bracelet and (if possible) movement.
+    </p>
+
+    <form action="mailto:info@oraswiss.com,cela9317@gmail.com"
+          method="post"
+          enctype="text/plain"
+          class="contact-form">
+
+        <h3>Your Details</h3>
+
+        <label>First name:</label>
+        <input type="text" name="first_name" placeholder="Your first name" required>
+
+        <label>Last name:</label>
+        <input type="text" name="last_name" placeholder="Your last name" required>
+
+        <label>Email:</label>
+        <input type="email" name="email" placeholder="Your email address" required>
+
+        <label>Phone (with country code):</label>
+        <input type="text" name="phone" placeholder="+355..., +30..., etc.">
+
+        <h3>Watch Details</h3>
+
+        <label>Brand:</label>
+        <input type="text" name="brand" placeholder="Rolex, Omega, etc." required>
+
+        <label>Model / Reference:</label>
+        <input type="text" name="model" placeholder="Model / Reference" required>
+
+        <label>Movement type:</label>
+        <select name="movement">
+            <option value="Automatic">Automatic</option>
+            <option value="Manual">Manual</option>
+            <option value="Quartz">Quartz</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label>Year (approx.):</label>
+        <input type="text" name="year" placeholder="Approximate year">
+
+        <label>Condition / notes:</label>
+        <textarea name="notes" rows="4"
+                  placeholder="Condition, box & papers, service history..."></textarea>
+
+        <label>Links to photos:</label>
+        <textarea name="photo_links" rows="3"
+                  placeholder="Paste links to photos (WhatsApp Web, Facebook, Instagram, Google Photos, etc.)"></textarea>
+
+        <button type="submit" class="buy-button">Send Offer</button>
+    </form>
+
+</div>
+
+</body>
+</html>

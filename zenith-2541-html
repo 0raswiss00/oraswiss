@@ -2,54 +2,100 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>OMEGA MOVIMENT JUMBO AUTOMSIC</title>
+    <title>ZENITH 2541 – MANUAL WIND 27 JEWELS</title>
     <link rel="stylesheet" href="styles.css">
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-KD2ZZ3MJYY');
-    
-<!-- ====================== -->
-<!--     ZENITH 2541        -->
-<!-- ====================== -->
-<article class="product">
-    <h2>Zenith Caliber 2541 – Manual Wind, 27 Jewels</h2>
+    </script>
 
-    <div class="product-main">
+    <style>
+        .container {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+            margin-bottom: 40px;
+        }
+
+        .product-images img {
+            width: 200px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .product-description {
+            max-width: 450px;
+        }
+
+        .title-parts {
+            color: #333;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ZENITH 2541 -->
+    <article class="product">
+      <h2>Zenith Caliber 2541 – Manual Wind, 27 Jewels</h2>
+
+      <div class="product-main">
         <img class="product-main-image"
-             src="IMG_51BDF638-4797-4A51-99A4-E8897690DCF6.jpeg"
-             alt="Zenith Caliber 2541">
+             src="zenith-2541-1.jpg"
+             alt="Zenith Caliber 2541 manual wind">
 
         <div class="product-info">
-            <p><strong>Brand:</strong> Zenith</p>
-            <p><strong>Caliber:</strong> 2541</p>
-            <p><strong>Movement:</strong> Manual wind</p>
-            <p><strong>Jewels:</strong> 27 jewels</p>
-            <p><strong>Dial:</strong> Cream/beige dial with blue hour indicator ring</p>
-            <p><strong>Hands:</strong> Gold-tone hands</p>
-            <p><strong>Crown:</strong> Missing (no crown)</p>
-            <p><strong>Condition:</strong> Excellent condition — works perfectly</p>
-            <p class="price"><strong>Price:</strong> €----</p>
+          <p><strong>Brand:</strong> Zenith</p>
+          <p><strong>Caliber:</strong> 2541</p>
+          <p><strong>Movement:</strong> Manual Wind</p>
+          <p><strong>Jewels:</strong> 27 Jewels</p>
+          <p><strong>Dial:</strong> Cream / beige dial with blue hour indicator ring</p>
+          <p><strong>Hands:</strong> Gold-tone hands</p>
+          <p><strong>Crown:</strong> Missing (no crown)</p>
+          <p><strong>Condition:</strong> Excellent condition, works perfectly</p>
+          <p class="price"><strong>Price:</strong> On request</p>
         </div>
-    </div>
 
-    <div class="product-buttons">
+        <div class="product-description">
+          <h2 class="title-parts">Zenith 2541 – Manual Wind</h2>
+          <p>
+             Zenith Caliber 2541 manual movement with 27 jewels.<br>
+             Cream/beige dial with blue-accented hour ring and gold hands.<br>
+             Running perfectly and in excellent condition. Crown is missing.<br>
+             Ideal for vintage restoration or collectors of Zenith movements.
+          </p>
+        </div>
+      </div>
+
+      <div class="product-buttons">
         <a href="mailto:info@oraswiss.com" class="buy-button">Buy Now</a>
         <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>
         <a href="mailto:info@oraswiss.com" class="buy-button">Email</a>
-    </div>
+      </div>
 
-    <div class="product-gallery">
+      <div class="product-gallery">
         <img class="thumb"
-             src="IMG_51BDF638-4797-4A51-99A4-E8897690DCF6.jpeg"
-             alt="Zenith 2541 dial">
+             src="zenith-2541-1.jpg"
+             alt="Zenith 2541 image 1">
 
         <img class="thumb"
-             src="IMG_5B5F29B5-6321-4288-ADA6-715BE04EF6E2.jpeg"
-             alt="Zenith 2541 movement">
-    </div>
-</article>
+             src="zenith-2541-2.jpg"
+             alt="Zenith 2541 image 2">
+
+        <img class="thumb"
+             src="zenith-2541-3.jpg"
+             alt="Zenith 2541 image 3 (add file)">
+
+        <img class="thumb"
+             src="zenith-2541-4.jpg"
+             alt="Zenith 2541 image 4 (add file)">
+      </div>
+    </article>
+
+</body>
+</html>

@@ -2,86 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ebel chronograph 1911</title>
-
-    <!-- e njëjta CSS si faqet e tjera -->
+    <title>Ebel 1911 Automatic Chronograph</title>
     <link rel="stylesheet" href="styles.css">
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-KD2ZZ3MJYY');
     </script>
 </head>
+
 <body>
     
-    <!-- HEADER ME BUTON KTHEHU -->
-    <header class="site-header">
-        <a href="products.html" class="back-button">← Kthehu te produktet</a>
-        <h1>Ebel El Primero 1119</h1>
-    </header>
+<header class="site-header">
+    <a href="index.html" class="back-button">← Back</a>
+    <h1>Ebel 1911 Automatic Chronograph</h1>
+</header>
 
-    <!-- KONTAINERI KRYESOR -->
-    <section class="products-section">
-        <div class="product">
+<section class="products-section">
+    <div class="product">
 
-            <h2>Ebel El Primero 1119</h2>
+        <h2>Ebel 1911 Automatic Chronograph</h2>
 
-            <div class="product-main">
-                <img class="product-main-image" src="ebel-1911-1.jpg" alt="ebel 1911 Chronograph">
+        <div class="product-main">
+            <img class="product-main-image" src="Ebel-1911-1.jpg" alt="Ebel 1911 Chronograph">
 
-                <div class="product-info">
-                    <p><strong>Brand:</strong> Ebel</p>
-                    <p><strong>Model:</strong> 1911 Automatic Chronograph</p>
-                    <p><strong>Movement:</strong> Automatic – Certified Chronometer</p>
-                    <p><strong>Functions:</strong> Chronograph, date, tachymeter</p>
-                    <p><strong>Case Material:</strong> Stainless steel with 18k gold bezel</p>
-                    <p><strong>Bracelet:</strong> Steel & 18k gold accents</p>
-                    <p><strong>Bracelet size:</strong> 15 cm (small fit)</p>
-                    <p><strong>Condition:</strong> Excellent – fully serviced, all functions working perfectly.</p>
-
-                    <p class="price">👉 Contact us for price</p>
-
-                    <a class="buy-button" href="https://wa.me/355692408065" target="_blank">
-                        Contact on WhatsApp
-                    </a>
-                </div>
+            <div class="product-info">
+                <p><strong>Brand:</strong> Ebel</p>
+                <p><strong>Model:</strong> 1911 Automatic Chronograph</p>
+                <p><strong>Reference:</strong> 1911 Series</p>
+                <p><strong>Movement:</strong> Automatic, Certified Chronometer</p>
+                <p><strong>Functions:</strong> Chronograph, Date, Tachymeter</p>
+                <p><strong>Case:</strong> Stainless steel with 18k gold bezel</p>
+                <p><strong>Bracelet:</strong> Stainless steel & 18k gold accents</p>
+                <p><strong>Bracelet Size:</strong> 15 cm</p>
+                <p><strong>Condition:</strong> Excellent – fully serviced, all functions working perfectly</p>
+                <p class="price"><strong>Price:</strong> Contact us</p>
             </div>
-
-            <div class="product-gallery">
-                <img src="ebel-1911-1.jpg"  alt="ebel 1911 image 1">
-                <img src="ebel-1911-2.jpg"  alt="ebel 1911 image 2">
-                <img src="ebel-1911-3.jpg"  alt="ebel 1911 image 3">
-                <img src="ebel-1911-4.jpg"  alt="ebel 1911 image 4">
-                <img src="ebel-1911-5.jpg"  alt="ebel 1911 image 5">
-                <img src="ebel-1911-6.jpg"  alt="ebel 1911 image 6">
-                <img src="ebel-1911-7.jpg"  alt="ebel 1911 image 7">
-                <img src="ebel-1911-8.jpg"  alt="ebel 1911 image 8">
-                <img src="ebel-1911-9.jpg"  alt="ebel 1911 image 9">
-                <img src="ebel-1911-10.jpg" alt="ebel 1911 image 10">
-            </div>
-
         </div>
-    </section>
 
-    <script>
-        const mainImage  = document.querySelector('.product-main-image');
-        const thumbnails = document.querySelectorAll('.product-gallery img');
+        <div class="product-buttons">
+            <a href="mailto:info@oraswiss.com" class="buy-button">Buy Now</a>
+            <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>
+            <a href="mailto:info@oraswiss.com" class="buy-button">Email</a>
+        </div>
 
-        thumbnails.forEach(thumb => {
-            thumb.addEventListener('click', () => {
-                mainImage.src = thumb.src;
-                mainImage.alt = thumb.alt;
+        <div class="product-gallery">
+            <img src="ebel-1911-1.jpg" alt="">
+            <img src="ebel-1911-2.jpg" alt="">
+            <img src="ebel-1911-3.jpg" alt="">
+            <img src="ebel-1911-4.jpg" alt="">
+            <img src="ebel-1911-5.jpg" alt="">
+            <img src="ebel-1911-6.jpg" alt="">
+            <img src="ebel-1911-7.jpg" alt="">
+            <img src="ebel-1911-8.jpg" alt="">
+            <img src="ebel-1911-9.jpg" alt="">
+            <img src="ebel-1911-10.jpg" alt="">
+            <img src="ebel-1911-11.jpg" alt="">
+            <img src="ebel-1911-12.jpg" alt="">
+        </div>
 
-                mainImage.style.transform = "scale(1.03)";
-                setTimeout(() => mainImage.style.transform = "scale(1)", 150);
-            });
-        });
-    </script>
+    </div>
+</section>
 
 </body>
 </html>

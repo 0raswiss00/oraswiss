@@ -293,5 +293,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
+// ZOOM SCRIPT
+document.addEventListener('DOMContentLoaded', () => {
+    const mainImages = document.querySelectorAll('.product-main-image');
 
+    mainImages.forEach(img => {
+        img.addEventListener('click', () => {
+            img.classList.toggle('zoomed');
+        });
+    });
+});
+</script>
+<script>
+function searchProducts() {
+    const input = document.getElementById("searchBar").value.toLowerCase();
+    const products = document.querySelectorAll(".product");
+
+    products.forEach(product => {
+        const text = product.innerText.toLowerCase();
+        product.style.display = text.includes(input) ? "block" : "none";
+    });
+}
+</script>
 

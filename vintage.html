@@ -358,7 +358,8 @@
   </div>   
 <script>
 
- <script>   
+ 
+<script>
 // THUMBNAILS SCRIPT
 document.addEventListener('click', function (e) {
     const thumb = e.target.closest('.product-gallery img');
@@ -378,17 +379,25 @@ document.addEventListener('click', function (e) {
 
 
 <script>
-// ZOOM SCRIPT
-document.addEventListener('DOMContentLoaded', () => {
-    const mainImages = document.querySelectorAll('.product-main-image');
+// THUMBNAILS SCRIPT
+document.addEventListener('click', function (e) {
+    const thumb = e.target.closest('.product-gallery img');
+    if (!thumb) return;
 
-    mainImages.forEach(img => {
-        img.addEventListener('click', () => {
-            img.classList.toggle('zoomed');
-        });
-    });
+    const article = thumb.closest('.product');
+    const mainImage = article.querySelector('.product-main-image');
+    if (!mainImage) return;
+
+    mainImage.src = thumb.src;
+
+    if (thumb.alt) {
+        mainImage.alt = thumb.alt;
+    }
 });
 </script>
+
+
+<script>
 // ZOOM SCRIPT
 document.addEventListener('DOMContentLoaded', () => {
     const mainImages = document.querySelectorAll('.product-main-image');

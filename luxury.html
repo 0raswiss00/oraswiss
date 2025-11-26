@@ -333,6 +333,25 @@ document.addEventListener('click', function (e) {
 
 
 <script>
+// THUMBNAILS SCRIPT
+document.addEventListener('click', function (e) {
+    const thumb = e.target.closest('.product-gallery img');
+    if (!thumb) return;
+
+    const article = thumb.closest('.product');
+    const mainImage = article.querySelector('.product-main-image');
+    if (!mainImage) return;
+
+    mainImage.src = thumb.src;
+
+    if (thumb.alt) {
+        mainImage.alt = thumb.alt;
+    }
+});
+</script>
+
+
+<script>
 // ZOOM SCRIPT
 document.addEventListener('DOMContentLoaded', () => {
     const mainImages = document.querySelectorAll('.product-main-image');
@@ -343,15 +362,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-</script>
-<script>
-function searchProducts() {
-    const input = document.getElementById("searchBar").value.toLowerCase();
-    const products = document.querySelectorAll(".product");
-
-    products.forEach(product => {
-        const text = product.innerText.toLowerCase();
-        product.style.display = text.includes(input) ? "block" : "none";
-    });
-}
 </script>

@@ -366,3 +366,19 @@ body {
     text-transform: uppercase;
     letter-spacing: 2px;
 }
+/* Kuti përshkrimi me scroll për Ora Swiss */
+.description-scroll {
+  max-height: 160px;    /* sa shumë tekst të duket pa scroll */
+  overflow-y: auto;     /* aktivizon scroll vertikal */
+  padding-right: 10px;
+}
+
+/* Scroll bar i hollë dhe i pastër (opsionale) */
+.description-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.description-scroll::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 10px;
+}

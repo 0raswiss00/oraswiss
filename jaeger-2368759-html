@@ -1,1 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jaeger-2368759-html</title>
+    <link rel="stylesheet" href="styles.css">
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KD2ZZ3MJYY');
+    </script>
+
+    <style>
+    .container {
+        display: flex;
+        gap: 25px;
+        align-items: flex-start;
+        margin-bottom: 40px;
+    }
+
+    .product-images img {
+        width: 200px; 
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .product-description {
+        max-width: 450px;
+    }
+
+    .title-vintage {
+        color: #8B5E3C; /* ngjyrë vintage */
+        margin-bottom: 10px;
+    }
+
+    .title-parts {
+        color: #333; /* ngjyrë neutrale për parts */
+        margin-bottom: 10px;
+    }
+
+    .product {
+        margin: 40px auto;
+        max-width: 1000px;
+    }
+
+    .product-main {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 20px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .product-main-image {
+        max-width: 320px;
+        height: auto;
+        display: block;
+    }
+
+    .product-info p {
+        margin: 4px 0;
+    }
+
+    .price {
+        margin-top: 10px;
+        font-size: 1.1rem;
+    }
+
+    .product-buttons {
+        margin: 15px 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .buy-button {
+        padding: 10px 18px;
+        border-radius: 4px;
+        text-decoration: none;
+        background: #000;
+        color: #fff;
+        font-size: 0.9rem;
+    }
+
+    .product-gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .product-gallery .thumb {
+        width: 110px;
+        height: auto;
+        cursor: pointer;
+        object-fit: cover;
+    }
+    </style>
+</head>
+<body>
+
+
+<!-- =============================== -->
+<!--   JAEGER-LECOULTRE MOVEMENT    -->
+<!-- =============================== -->
+<article class="product">
+    <h2 class="title-parts">Jaeger-LeCoultre Electric Movement – Ref. 2368759</h2>
+
+    <div class="product-main">
+        <img class="product-main-image"
+             src="jaeger-2368759-1.jpg"
+             alt="Jaeger-LeCoultre 2368759 – main">
+
+        <div class="product-info">
+
+            <!-- Përshkrimi i shkurtër (xhapi) -->
+            <p>Jaeger-LeCoultre Electric movement, fully original.</p>
+            <p>Correct rectangular JLC Electric caliber.</p>
+            <p>Original dial and hands.</p>
+            <p>Original 18k JLC crown.</p>
+            <p>Original crystal and gasket.</p>
+            <p>Original base with 4 screws.</p>
+            <p>Movement fully serviced.</p>
+            <p>Base approx. 21.6 mm.</p>
+            <p>Crystal approx. 17.0 × 20.9 mm.</p>
+
+        </div>  
+        <!-- fundi i xhepit -->
+
+        <p class="price"><strong>Price:</strong> €2000.00</p>
+    </div>
+
+    <div class="product-buttons">
+        <a href="mailto:info@oraswiss.com" class="buy-button">Buy Now</a>
+        <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>
+        <a href="mailto:info@oraswiss.com" class="buy-button">Email</a>
+    </div>
+
+    <div class="product-gallery">
+        <img class="thumb" src="jaeger-2368759-1.jpg" alt="Jaeger-LeCoultre 2368759 photo 1">
+        <img class="thumb" src="jaeger-2368759-2.jpg" alt="Jaeger-LeCoultre 2368759 photo 2">
+        <img class="thumb" src="jaeger-2368759-3.jpg" alt="Jaeger-LeCoultre 2368759 photo 3">
+        <img class="thumb" src="jaeger-2368759-4.jpg" alt="Jaeger-LeCoultre 2368759 photo 4">
+        <img class="thumb" src="jaeger-2368759-5.jpg" alt="Jaeger-LeCoultre 2368759 photo 5">
+        <img class="thumb" src="jaeger-2368759-6.jpg" alt="Jaeger-LeCoultre 2368759 photo 6">
+        <img class="thumb" src="jaeger-2368759-7.jpg" alt="Jaeger-LeCoultre 2368759 photo 7">
+        <img class="thumb" src="jaeger-2368759-8.jpg" alt="Jaeger-LeCoultre 2368759 photo 8">
+        <img class="thumb" src="jaeger-2368759-9.jpg" alt="Jaeger-LeCoultre 2368759 photo 9">
+    </div>
+</article>

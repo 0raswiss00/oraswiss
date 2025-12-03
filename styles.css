@@ -427,15 +427,32 @@ body {
     color: black;
 }
 
-/* Move Register / Login button to the right */
-.menu {
+/* Header i rregulluar në 3 pjesë: majtas – qendër – djathtas */
+.site-header {
     display: flex;
-    gap: 25px;
+    justify-content: space-between;
     align-items: center;
+    padding: 10px 20px;
 }
 
+/* Logo majtas */
+.site-title {
+    font-size: 26px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Menu në qendër */
+.menu {
+    display: flex;
+    gap: 20px;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+/* Register/Login djathtas */
 .register-btn {
-    margin-left: auto;
+    margin-left: 0;
     color: white;
     font-weight: bold;
     padding: 8px 14px;

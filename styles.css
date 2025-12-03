@@ -450,9 +450,15 @@ body {
     justify-content: center;
 }
 
-/* Register/Login djathtas */
+/* Move Register / Login button to the right */
+.menu {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
 .register-btn {
-    margin-left: 0;
+    margin-left: auto;
     color: white;
     font-weight: bold;
     padding: 8px 14px;

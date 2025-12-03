@@ -105,6 +105,28 @@ ul {
     border-radius: 12px;
 }
 
+.menu {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.register-btn {
+    margin-left: auto;
+    color: white;
+    font-weight: bold;
+    padding: 8px 14px;
+    border: 1px solid white;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.register-btn:hover {
+    background: white;
+    color: black;
+}
+
+
 /* =========================
           BUTTONS
 ========================= */
@@ -381,4 +403,26 @@ body {
 .description-scroll::-webkit-scrollbar-thumb {
   background: #aaa;
   border-radius: 10px;
+}
+
+/* Move Register / Login button to the right */
+.menu {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.register-btn {
+    margin-left: auto;
+    color: white;
+    font-weight: bold;
+    padding: 8px 14px;
+    border: 1px solid white;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.register-btn:hover {
+    background: white;
+    color: black;
 }

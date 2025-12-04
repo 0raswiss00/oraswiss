@@ -83,11 +83,24 @@
 
     <hr style="margin:25px 0; border-color:#333;">
 
-    <h2>Login</h2>
-    <input type="email" placeholder="Email">
-    <input type="password" placeholder="Password">
-    <button class="btn">Login</button>
+<h2>Login</h2>
 
+<form action="https://formspree.io/f/xldqnqyd" method="POST">
+
+  <label>Email:</label><br>
+  <input type="email" name="email" required
+         style="width:100%; padding:8px; margin-bottom:10px;"><br>
+
+  <label>Message:</label><br>
+  <textarea name="message" required
+            style="width:100%; height:100px; padding:8px; margin-bottom:10px;"></textarea><br>
+
+  <button type="submit" class="btn">Send</button>
+
+</form>
+
+
+</form>
     <p style="margin-top: 20px;">
         <a href="home.html">← Back to Home</a>
     </p>

@@ -519,3 +519,21 @@ body {
 .register-form button:hover {
   background-color: #f2b91e;
 }
+
+.product-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.product-main img {
+    max-width: 380px;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    .product-row {
+        flex-direction: column;
+    }
+}

@@ -633,6 +633,12 @@ body {
     font-size: 15px;
 }
 
+/* vetëm për kutinë e mesazhit */
+.contact-form-container textarea {
+    min-height: 180px;   /* rrit lartësinë – mund ta bësh 200, 220, sa të duash */
+    resize: vertical;    /* lejon ta zgjerojnë me maus vetëm lart-poshtë */
+}
+
 .contact-form-container button {
     padding: 12px;
     background: black;

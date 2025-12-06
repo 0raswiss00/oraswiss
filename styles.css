@@ -652,6 +652,38 @@ body {
 
 /* ===== €400 + BUY NOW + WHATSAPP + EMAIL POSHTË FORMËS ===== */
 
+/* --- BUTONAT LIKE + SHARE --- */
+
+.icon-btn {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+/* Butoni Like */
+.like-btn {
+  background: #ff4d6d;
+  color: #fff;
+}
+.like-btn.active {
+  background: #c9184a;
+  transform: scale(1.15);
+}
+
+/* Butoni Share */
+.share-btn {
+  background: #6c5ce7;
+  color: #fff;
+}
+.share-btn:hover {
+  background: #4834d4;
+}
+
+
 .buy-row {
   margin-top: 16px;
   display: flex;

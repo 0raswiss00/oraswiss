@@ -142,33 +142,34 @@
     <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>
     <a href="mailto:cela9317@gmail.com" class="buy-button">cela9317@gmail.com</a>
 </div>
-<!-- FORMULARI I KONTAKTIT POSHT BUTONAVE -->
-<form action="https://api.web3forms.com/submit" method="POST" class="product-form">
+<!-- CONTACT FORM -->
+<div class="contact-box">
+    <h3>Contact for this product</h3>
 
-    <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
+    <form action="https://api.web3forms.com/submit" method="POST">
 
-    <h3>Request this part</h3>
+        <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
+        
+        <label>Full Name *</label>
+        <input type="text" name="name" required>
 
-    <label>Full Name *</label>
-    <input type="text" name="name" required>
+        <label>Email *</label>
+        <input type="email" name="email" required>
 
-    <label>Email *</label>
-    <input type="email" name="email" required>
+        <label>Phone / WhatsApp</label>
+        <input type="text" name="phone">
 
-    <label>Phone / WhatsApp</label>
-    <input type="text" name="phone">
+        <label>Country</label>
+        <input type="text" name="country">
 
-    <label>Country</label>
-    <input type="text" name="country">
+        <label>Message *</label>
+        <textarea name="message" rows="4" required>
+Hello, I am interested in this product. Please send me availability and price.
+        </textarea>
 
-    <label>Message *</label>
-    <textarea name="message" rows="4" required>
-Hello, I am interested in the Rolex Case Bracelet 1003. Please send me availability, shipping options and payment details.
-    </textarea>
-
-    <button type="submit" class="send-btn">Send Request</button>
-</form>
-
+        <button type="submit">Send Request</button>
+    </form>
+</div>
 
         
        <div class="product-gallery">

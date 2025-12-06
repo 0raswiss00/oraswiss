@@ -538,3 +538,51 @@ body {
     }
 }
 
+/* ===========================
+   FORM STYLE – ORA SWISS
+   =========================== */
+
+.product-form {
+    max-width: 420px;       /* e ngushtë dhe e rregullt */
+    margin: 30px auto;      /* qendër */
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.product-form label {
+    display: block;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.product-form input,
+.product-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.product-form textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.product-form button {
+    width: 100%;
+    margin-top: 18px;
+    padding: 12px;
+    background: #000;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}

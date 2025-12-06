@@ -634,6 +634,20 @@ body {
     font-size: 15px;
 }
 
+U .product-section {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+}
+
+.product-main-image {
+    width: 50%;
+}
+
+.contact-form-container {
+    width: 50%;
+}
+
 /* vetëm për kutinë e mesazhit */
 .contact-form-container textarea {
     min-height: 170px;   /* rrit lartësinë – mund ta bësh 200, 220, sa të duash */

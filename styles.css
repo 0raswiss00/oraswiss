@@ -576,40 +576,147 @@ body {
   font-size: 16px;
 }
 
-/* Forma djathtas */
+/* ===== PRODUKTI – OMEGA BOX ===== */
+
+.product {
+  margin: 40px auto;
+  max-width: 1100px;
+}
+
+/* Kutia e madhe rreth fotës + formës + përshkrimit */
+.product-box {
+  background: #f5f7fb;          /* sfond i lehtë blu/gri */
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  display: flex;
+  flex-wrap: wrap;              /* që përshkrimi të dalë rresht poshtë */
+  gap: 20px;
+}
+
+/* Kolona majtas + djathtas */
+.product-left,
+.product-right {
+  flex: 1 1 340px;              /* madhësi të ngjashme */
+}
+
+/* FOTO E MADHE MAJTAS */
+.product-left img {
+  width: 100%;
+  display: block;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+/* FORMULARI DJATHTAS */
+.product-right {
+  display: flex;
+  flex-direction: column;
+}
+
 .product-right h3 {
   text-align: center;
   font-size: 22px;
-  margin-bottom: 15px;
+  margin: 0 0 12px;
 }
 
 .product-right form {
   background: #ffffff;
-  padding: 15px;
-  border-radius: 12px;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.06);
 }
 
 .product-right input,
 .product-right textarea {
   width: 100%;
-  margin-bottom: 10px;
   padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid #d0d0d0;
   font-size: 14px;
   box-sizing: border-box;
 }
 
-.product-right button {
+.product-right button[type="submit"] {
   width: 100%;
   padding: 12px;
-  border: none;
   border-radius: 8px;
-  background: #000;
-  color: #fff;
-  font-size: 15px;
+  border: none;
+  background: #000000;
+  color: #ffffff;
   font-weight: 600;
+  font-size: 15px;
   cursor: pointer;
+}
+
+/* ===== €400 + BUY NOW + WHATSAPP + EMAIL POSHTË FORMËS ===== */
+
+.buy-row {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.buy-row .price {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* Butonat me ngjyra moderne */
+.buy-btn,
+.whatsapp-btn,
+.email-btn {
+  padding: 8px 14px;
+  border-radius: 999px;      /* forma “pill” */
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #ffffff;
+  display: inline-block;
+}
+
+/* Ngjyrat */
+.buy-btn {
+  background: #111111;       /* e zezë */
+}
+
+.whatsapp-btn {
+  background: #25d366;       /* jeshile WhatsApp */
+}
+
+.email-btn {
+  background: #007bff;       /* blu e qetë */
+}
+
+/* ===== PËRSHKRIMI POSHTË – KUTI E GJERË ===== */
+
+.product-info {
+  flex-basis: 100%;          /* zë gjithë rreshtin poshtë */
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 16px 18px;
+  font-size: 14px;
+}
+
+.product-info h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+/* ===== RESPONSIVE – NË TELEFON ===== */
+
+@media (max-width: 900px) {
+  .product-box {
+    flex-direction: column;
+  }
+
+  .product-left,
+  .product-right {
+    flex-basis: 100%;
+  }
 }
 
 /* Mobile – kur ekrani është i vogël */

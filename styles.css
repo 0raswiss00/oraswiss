@@ -538,157 +538,72 @@ body {
     }
 }
 
-/* ===========================
-   FORM STYLE – ORA SWISS
-   =========================== */
+/* =======================
+   CONTACT FORM (MODERN)
+   ======================= */
 
-.product-form {
-    max-width: 420px;       /* e ngushtë dhe e rregullt */
-    margin: 30px auto;      /* qendër */
-    padding: 20px;
-    background: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-}
-
-.product-form label {
-    display: block;
-    font-weight: bold;
-    margin-top: 15px;
-    margin-bottom: 5px;
-    color: #333;
-}
-
-.product-form input,
-.product-form textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 15px;
-    box-sizing: border-box;
-}
-
-.product-form textarea {
-    resize: vertical;
-    min-height: 90px;
-}
-
-.product-form button {
-    width: 100%;
-    margin-top: 18px;
-    padding: 12px;
-    background: #000;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-/* CONTACT FORM */
 .contact-form-container {
-    max-width: 420px;
-    background: #fff;
-    padding: 20px;
-    margin: 30px auto;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-}
-
-.contact-form-container h3 {
-    margin-bottom: 15px;
-}
-
-.contact-form-container form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.contact-form-container input,
-.contact-form-container textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 15px;
-}
-
-.contact-form-container button {
-    padding: 12px;
-    background: black;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 5px;
-}
-
-.contact-form-container button:hover {
-    background: #333;
-}
-
-/* FORM DESIGN — ORASWISS STYLE */
-.contact-form-container {
-    max-width: 420px;
+    max-width: 450px;
     background: #ffffff;
-    padding: 22px;
-    margin: 25px auto;
+    padding: 25px;
+    margin: 40px auto;
     border-radius: 12px;
+
+    /* XHEPA – e bën kutinë të duket e ngritur */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+
     border: 1px solid #e5e5e5;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 
 .contact-form-container h3 {
     margin-bottom: 15px;
-    font-size: 18px;
-    font-weight: 600;
-    color: #111;
+    font-size: 20px;
+    font-weight: bold;
+    color: #222;
     text-align: center;
 }
 
 .contact-form-container form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 15px;
 }
 
 .contact-form-container input,
 .contact-form-container textarea {
     width: 100%;
-    padding: 10px 12px;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 15px;
-    transition: all 0.2s ease-in-out;
-    background: #fafafa;
+
+    /* pak ngjyrë kur prek fushën */
+    transition: border 0.2s;
 }
 
 .contact-form-container input:focus,
 .contact-form-container textarea:focus {
-    border-color: #000;
-    background: #fff;
-    box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+    border-color: black;
+    outline: none;
 }
 
 .contact-form-container button {
-    padding: 12px;
+    padding: 14px;
     background: black;
     color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
-    font-weight: 600;
-    transition: background 0.2s ease;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+
+    transition: 0.2s;
 }
 
 .contact-form-container button:hover {
     background: #333;
 }
-
 /* CONTACT FORM */
 .contact-form-container {
     max-width: 420px;

@@ -921,3 +921,26 @@ function searchProducts() {
     });
 }
 </script>
+
+<script>
+document.querySelectorAll(".like-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+        alert("Faleminderit! You liked this item ❤️");
+    });
+});
+
+document.querySelectorAll(".share-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+        if (navigator.share) {
+            navigator.share({
+                title: document.title,
+                text: "Shiko këtë produkt nga ORA SWISS",
+                url: window.location.href
+            });
+        } else {
+            alert("Share nuk përkrahet në këtë pajisje.");
+        }
+    });
+});
+</script>
+    

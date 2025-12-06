@@ -664,3 +664,38 @@ product-buttons {
 .product-gallery {
     margin-top: 40px !important;
 }
+
+.buy-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 15px 0 20px;
+}
+
+.price {
+    font-size: 20px;
+    font-weight: 700;
+    margin-right: 15px;
+}
+
+.buy-btn,
+.whatsapp-btn,
+.email-btn {
+    padding: 8px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    color: #fff;
+}
+
+.buy-btn {
+    background: #000;
+}
+
+.whatsapp-btn {
+    background: #25D366;
+}
+
+.email-btn {
+    background: #0072ff;
+}

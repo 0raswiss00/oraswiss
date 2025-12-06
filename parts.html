@@ -1,160 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Ora Swiss - Shop</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>ORA SWISS – Parts</title>
 
-    <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+  <!-- stylesheet-i yt ekzistues -->
+  <link rel="stylesheet" href="styles.css">
 
-      gtag('config', 'G-KD2ZZ3MJYY');
-    </script>
-    <style>
-        .products-section {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 16px;
-        }
+  <!-- STYLE SHTESË VETËM PËR KËTË FAQE -->
+  <style>
+    .products-section {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 15px;
+    }
 
-        .product {
-            background: #ffffff;
-            border-radius: 12px;
-            margin-bottom: 40px;
-            padding: 16px;
-            box-shadow: 0 0 12px rgba(0,0,0,0.08);
-        }
+    .product {
+      margin-bottom: 60px;
+    }
 
-        .product-main {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            align-items: flex-start;
-        }
+    .product-main-image {
+      width: 100%;
+      max-width: 550px;
+      display: block;
+      margin: 10px auto 25px auto;
+      border-radius: 8px;
+    }
 
-        .product-main-image {
-            width: 100%;
-            max-width: 380px;
-            height: auto;
-            border-radius: 8px;
-            display: block;
-        }
+    .product-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 25px;
+    }
 
-        .product-info {
-            flex: 1 1 260px;
-        }
+    .product-gallery img.thumb {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
 
-       .product-gallery {
-    margin-top: 0 !important;
-}
+    .product h2 {
+      margin: 10px 0 5px 0;
+      font-size: 1.6rem;
+    }
 
-.product-gallery img {
-    margin-top: 0 !important;
-}
-        .price {
-            font-size: 1.1rem;
-            margin-top: 8px;
-        }
-    </style>
+    .product p.description {
+      margin-bottom: 15px;
+      font-size: 0.95rem;
+      max-width: 800px;
+    }
 
+    .product-form {
+      max-width: 420px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fff;
+    }
 
-<header class="site-header">
+    .product-form h3 {
+      margin-bottom: 10px;
+    }
+
+    .product-form label {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+
+    .product-form input[type="text"],
+    .product-form input[type="email"],
+    .product-form textarea {
+      width: 100%;
+      padding: 6px 8px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      font-size: 0.95rem;
+    }
+
+    .product-form textarea {
+      resize: vertical;
+    }
+
+    .product-form button[type="submit"] {
+      padding: 10px 20px;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      width: 100%;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .product-form button[type="submit"]:hover {
+      opacity: 0.9;
+    }
+
+    /* Pak hapësirë poshtë search bar-it */
+    #searchBar {
+      width: 90%;
+      max-width: 600px;
+      padding: 12px;
+      margin: 20px auto;
+      display: block;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HEADER EKZISTUES I FAQES -->
+  <header class="site-header">
     <h1>ORA SWISS – WATCH SHOP</h1>
     <a href="index.html" class="back-button">← Back to Home</a>
-</header>
+  </header>
 
-<input
+  <!-- SEARCH BAR EKZISTUES -->
+  <input
     type="text"
     id="searchBar"
     placeholder="Search by brand or model..."
-    onkeyup="searchProducts()">
+    onkeyup="searchProducts()"
+  >
 
-<style>
-#searchBar {
-    width: 90%;
-    max-width: 600px;
-    padding: 12px;
-    margin: 20px auto;
-    display: block;
-    font-size: 16px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-}
+  <main class="products-section">
 
+    <!-- =========================================================
+         1) ROLEX CASE BRACELET 1003
+        ========================================================= -->
+    <article class="product" id="rolex-case-1003">
 
-    </style>
-</head>
-<body>
+      <!-- FOTO E MADHE -->
+      <img
+        src="rx-case-1003-main.jpg"
+        alt="Rolex Case Bracelet 1003 main image"
+        class="product-main-image"
+      >
 
-<!-- ROLEX CASE BRACELET HANDS 1003 -->
-<article class="product">
-    <h2>Rolex Case Bracelet 1003</h2>
+      <!-- TITULL + PËRSHKRIM -->
+      <h2>Rolex Case Bracelet 1003</h2>
+      <p class="description">
+        High-quality vintage Rolex case with bracelet, reference 1003.
+        Original part, perfect for restoration projects.
+      </p>
 
-    <div class="product-main">
-        <img class="product-main-image"
-             src="rx-case-1003-1.jpg"
-             alt="Rolex Case Bracelet 1003">
-        
-<div class="product-info">
+      <!-- GALERIA E IMAZHEVE TË VOGLA -->
+      <div class="product-gallery">
+        <img class="thumb" src="rx-case-1003-1.jpg" alt="Rolex Case Bracelet - image 1">
+        <img class="thumb" src="rx-case-1003-2.jpg" alt="Rolex Case Bracelet - image 2">
+        <img class="thumb" src="rx-case-1003-3.jpg" alt="Rolex Case Bracelet - image 3">
+        <img class="thumb" src="rx-case-1003-4.jpg" alt="Rolex Case Bracelet - image 4">
+        <img class="thumb" src="rx-case-1003-5.jpg" alt="Rolex Case Bracelet - image 5">
+        <img class="thumb" src="rx-case-1003-6.jpg" alt="Rolex Case Bracelet - image 6">
+        <img class="thumb" src="rx-case-1003-7.jpg" alt="Rolex Case Bracelet - image 7">
+        <img class="thumb" src="rx-case-1003-8.jpg" alt="Rolex Case Bracelet - image 8">
+        <img class="thumb" src="rx-case-1003-9.jpg" alt="Rolex Case Bracelet - image 9">
+      </div>
 
-<!-- Këtu fillon "xhepi" me scroll -->
-<div class="description-scroll">
- <div style="
-    width: 390px;
-    height: 280px;
-    overflow-y: scroll;
-    padding: 10px;
-    border: 1px solid #ccc;
-    line-height: 1.5;
-">
-   <p><strong>Brand:</strong> Rolex Case </p>
-   <p><strong>Model:</strong> Vintage Oyster No Date</p>
-   <p><strong>Year:</strong> Approx. 1970s</p>
-   <p><strong>Case:</strong> Stainless Steel, 34mm</p>
-   <p><strong>Movement:</strong>there isn't</p>
-   <p><strong>HANDES:</strong> Rolrx Original, CAL 1570</p>
-   <p><strong>Dial</strong>there isn't.</p>
-   <p><strong>crystal</strong>Original ROLEX No damage .</p>
-   <p><strong>crown</strong> Original crown, works perfect.</p>
-  <!-- Përshkrim shtesë (shto sa të duash) --> 
-   <p><strong>Bracelet</strong> with light wear, functional.</p>
-   <p><strong>Condition:</strong>No movement or dia Sold as <em>for parts</em>. 
-   <p><strong>there isn't</strong> No movement or dial</p>
-   <p><strong>hands</strong> Original for cal.1570.100% authentic.</p>
-   <p><strong>vintage</strong>This  Rolex Oyster Perpetual Date 
-    is offered strictly for parts.
-   <p><strong>Rolex components </strong>Perfect for watchmakers and </p> 
-    collectors looking for original     
-   <p><strong>Rolex components </strong>Perfect for watchmakers and </p> 
-    collectors looking for original
-    for restoration projects.</p>
-</div>
-</div>
-  <!-- Këtu mbaron “xhepi” -->
-  <p class="price"><strong>Price:</strong> €650</p>
-</div>
-<div class="product-buttons">
-    <a href="https://www.paypal.com/ncp/payment/Q5L8N57DP9YAG" class="buy-button" target="_blank">Buy Now</a>
-    <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>
-    <a href="mailto:cela9317@gmail.com" class="buy-button">cela9317@gmail.com</a>
-</div>
+      <!-- FORMA WEB3FORMS -->
+      <form
+        class="product-form"
+        action="https://api.web3forms.com/submit"
+        method="POST"
+      >
+        <!-- ACCESS KEY NGA WEB3FORMS -->
+        <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
 
+        <!-- INFO E PRODUKTIT -->
+        <input type="hidden" name="product_name" value="Rolex Case Bracelet 1003">
+        <input type="hidden" name="product_reference" value="1003">
+        <input type="hidden" name="product_price" value="€650">
+        <input type="hidden" name="product_url" value="https://oraswiss.com/parts.html">
 
-       <div class="product-gallery">
-           <img class="thumb" src="rx-case-1003-1.jpg" alt="Rolex Case Bracelet - image 1">
-           <img class="thumb" src="rx-case-1003-2.jpg" alt="Rolex Case Bracelet - image 2">
-           <img class="thumb" src="rx-case-1003-3.jpg" alt="Rolex Case Bracelet - image 3">
-           <img class="thumb" src="rx-case-1003-4.jpg" alt="Rolex Case Bracelet - image 4">
-           <img class="thumb" src="rx-case-1003-5.jpg" alt="Rolex Case Bracelet - image 5">
-           <img class="thumb" src="rx-case-1003-6.jpg" alt="Rolex Case Bracelet - image 6">
-           <img class="thumb" src="rx-case-1003-7.jpg" alt="Rolex Case Bracelet - image 7">
-           <img class="thumb" src="rx-case-1003-8.jpg" alt="Rolex Case Bracelet - image 8">
-           <img class="thumb" src="rx-case-1003-9.jpg" alt="Rolex Case Bracelet - image 9">
-       </div>
+        <h3>Request this part</h3>
+
+        <label>
+          Full Name *
+          <input type="text" name="name" required>
+        </label>
+
+        <label>
+          Email *
+          <input type="email" name="email" required>
+        </label>
+
+        <label>
+          Phone / WhatsApp
+          <input type="text" name="phone">
+        </label>
+
+        <label>
+          Country
+          <input type="text" name="country">
+        </label>
+
+        <label>
+          Message *
+          <textarea name="message" rows="4" required>
+Hello, I am interested in the Rolex Case Bracelet 1003. Please send me availability, shipping options and payment details.
+          </textarea>
+        </label>
+
+        <button type="submit">Send Request</button>
+      </form>
+    </article>
+
+  </main>
+
+  <!-- nëse ke script për searchProducts(), lëre file-in JS ekzistues -->
+  <script src="scripts.js"></script>
+</body>
+</html>
 
 
 

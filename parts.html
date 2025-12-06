@@ -193,22 +193,38 @@
     <a href="mailto:cela9317@gmail.com" class="buy-button">cela9317@gmail.com</a>
 </div>
        
+<!-- CONTACT FORM -->
 <div class="contact-form-container">
-
     <h3>Request this part</h3>
 
-    <!-- PERSHKRIMI I ORËS BRENDA FORMËS -->
-    <div class="product-details-box">
-        <p><strong>Brand:</strong> OMEGA</p>
-        <p><strong>Model:</strong> AUTOMATIC JAMBO</p>
-        <p><strong>Reference:</strong> 141713787</p>
-        <p><strong>Year:</strong> 1960 (approx.)</p>
-        <p><strong>Dial:</strong> Bronze Honeycomb 30mm</p>
-        <p><strong>Movement:</strong> Automatic</p>
-        <p><strong>Functions:</strong> No Date</p>
-        <p><strong>Condition:</strong> Very good, fully serviced, works perfectly.</p>
-        <p><strong>Price:</strong> €400</p>
-    </div>
+    <form action="https://api.web3forms.com/submit" method="POST">
+
+        <input type="hidden" name="access_key" value="4ecbdce6-0462-4e39-b39d-8c11e0095f46">
+        <input type="hidden" name="product_name" value="Omega Automatic Jambo">
+        <input type="hidden" name="product_price" value="€400">
+
+        <input type="text" name="name" placeholder="Full Name *" required>
+        <input type="email" name="email" placeholder="Email *" required>
+        <input type="text" name="phone" placeholder="Phone / WhatsApp">
+        <input type="text" name="country" placeholder="Country">
+
+        <textarea name="message" rows="6" required>
+Brand: OMEGA
+Model: AUTOMATIC JAMBO
+Reference: 141713787
+Year: 1960 (approx.)
+Dial: Bronze Honeycomb 30mm
+Movement: Automatic
+Functions: No Date
+Condition: Very good, fully serviced, works perfectly.
+Price: €400
+
+Please send me more details about this item.
+        </textarea>
+
+        <button type="submit">Send Request</button>
+    </form>
+</div>
          
  <div class="product-gallery">
     <img class="thumb" src="o-m-jambo-1.jpg" alt="Omega Moviment Jambo image 1">

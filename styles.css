@@ -538,178 +538,84 @@ body {
     }
 }
 
-/* =======================
-   CONTACT FORM (MODERN)
-   ======================= */
-
-.contact-form-container {
-    max-width: 450px;
-    background: #ffffff;
-    padding: 25px;
-    margin: 40px auto;
-    border-radius: 12px;
-
-    /* XHEPA – e bën kutinë të duket e ngritur */
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-
-    border: 1px solid #e5e5e5;
+/* Kutia kryesore me dy kolona */
+.product-box {
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #f7f7f7;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  display: flex;
+  gap: 20px;
 }
 
-.contact-form-container h3 {
-    margin-bottom: 15px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #222;
-    text-align: center;
+/* Kolonat majtas + djathtas */
+.product-left,
+.product-right {
+  flex: 1;
 }
 
-.contact-form-container form {
-    display: flex;
+/* Fotoja */
+.product-left img {
+  width: 100%;
+  border-radius: 12px;
+  display: block;
+  margin-bottom: 15px;
+}
+
+/* Teksti i informacionit */
+.product-info p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.product-info .price {
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Forma djathtas */
+.product-right h3 {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+.product-right form {
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.product-right input,
+.product-right textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.product-right button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #000;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Mobile – kur ekrani është i vogël */
+@media (max-width: 800px) {
+  .product-box {
     flex-direction: column;
-    gap: 15px;
+  }
 }
 
-.contact-form-container input,
-.contact-form-container textarea {
-    width: 150%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 15px;
-
-    /* pak ngjyrë kur prek fushën */
-    transition: border 0.2s;
-}
-
-.contact-form-container input:focus,
-.contact-form-container textarea:focus {
-    border-color: black;
-    outline: none;
-}
-
-.contact-form-container button {
-    padding: 14px;
-    background: black;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-
-    transition: 0.2s;
-}
-
-.contact-form-container button:hover {
-    background: #333;
-}
-/* CONTACT FORM */
-.contact-form-container {
-    max-width: 530px; /* ose 600px */
-}
-    background: #fff;
-    padding: 20px;
-    margin: 30px auto;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-}
-
-.contact-form-container h3 {
-    margin-bottom: 15px;
-}
-
-.contact-form-container form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.contact-form-container input,
-.contact-form-container textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 15px;
-}
-
-U .product-section {
-    display: flex;
-    align-items: flex-start;
-    gap: 40px;
-}
-
-.product-main-image {
-    width: 50%;
-}
-
-.contact-form-container {
-    width: 50%;
-}
-
-/* vetëm për kutinë e mesazhit */
-.contact-form-container textarea {
-    min-height: 170px;   /* rrit lartësinë – mund ta bësh 200, 220, sa të duash */
-    resize: vertical;    /* lejon ta zgjerojnë me maus vetëm lart-poshtë */
-}
-
-.contact-form-container button {
-    padding: 12px;
-    background: black;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 5px;
-}
-
-.contact-form-container button:hover {
-    background: #333;
-}
-
-product-buttons {
-    margin-top: 45px;
-    display: flex;
-    gap: 25px;
-    justify-content: center;
-}
-
-.product-gallery {
-    margin-top: 40px !important;
-}
-
-.buy-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 15px 0 20px;
-}
-
-.price {
-    font-size: 20px;
-    font-weight: 700;
-    margin-right: 15px;
-}
-
-.buy-btn,
-.whatsapp-btn,
-.email-btn {
-    padding: 8px 14px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 14px;
-    color: #fff;
-}
-
-.buy-btn {
-    background: #000;
-}
-
-.whatsapp-btn {
-    background: #25D366;
-}
-
-.email-btn {
-    background: #0072ff;
-}

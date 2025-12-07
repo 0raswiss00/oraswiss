@@ -799,3 +799,58 @@ body {
   color: white;
   font-weight: bold;
 }
+/* ===== FORM SELL YOUR WATCH ===== */
+
+.sell-form-container {
+    background: #111;
+    padding: 25px;
+    max-width: 600px;
+    margin: 30px auto;
+    border-radius: 12px;
+    color: white;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+.sell-form-container h2 {
+    text-align: center;
+    color: #4da6ff;
+    margin-bottom: 20px;
+}
+
+.sell-form label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+    color: #ddd;
+}
+
+.sell-form input,
+.sell-form textarea,
+.sell-form select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 15px;
+    font-size: 15px;
+}
+
+.sell-form textarea {
+    height: 120px;
+}
+
+.sell-form button {
+    width: 100%;
+    background: #4da6ff;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #fff;
+}
+
+.sell-form button:hover {
+    background: #3399ff;
+}

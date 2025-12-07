@@ -108,27 +108,20 @@
       <h3>Request this part</h3>
 
 <form action="https://api.web3forms.com/submit" method="POST">
-    <!-- VENDOS KËTU ACCESS KEY-N TËND NGA WEB3FORMS -->
-    <input type="hidden" name="access_key" value="PUT-YOUR-ACCESS-KEY-HERE">
 
-    <!-- OPSIONALE, POR E MIRA TA KESH -->
-    <input type="hidden" name="subject" value="New product request from Oraswiss">
+    <!-- ACCESS KEY NGA WEB3FORMS -->
+    <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
+
+    <!-- OPSIONALE, POR TË DOBISHME -->
+    <input type="hidden" name="subject" value="New Request from Oraswiss Product Page">
     <input type="hidden" name="from_name" value="Oraswiss Website">
 
-    <label>Full Name *</label>
-    <input type="text" name="name" required>
+    <input type="text"  name="Full Name" placeholder="Full Name" required>
+    <input type="email" name="Email"      placeholder="Email" required>
+    <input type="text"  name="Phone"      placeholder="Phone / WhatsApp" required>
+    <input type="text"  name="Country"    placeholder="Country" required>
 
-    <label>Email *</label>
-    <input type="email" name="email" required>
-
-    <label>Phone / WhatsApp *</label>
-    <input type="text" name="phone" required>
-
-    <label>Country *</label>
-    <input type="text" name="country" required>
-
-    <label>Message *</label>
-    <textarea name="message" rows="4" required></textarea>
+    <textarea name="Message" rows="5" placeholder="Message" required></textarea>
 
     <button type="submit">Send Request</button>
 </form>

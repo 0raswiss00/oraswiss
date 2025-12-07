@@ -69,18 +69,23 @@
     </p>
 
     <!-- FORM FORMSPREE -->
-    <form action="https://formspree.io/f/xldqnqyd" method="POST" class="register-form">
+<form action="https://api.web3forms.com/submit" method="POST">
 
-        <input type="text" name="full_name" placeholder="Full Name" required>
+    <!-- ACCESS KEY -->
+    <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
 
-        <input type="email" name="email" placeholder="Email" required>
+    <!-- SUBJECT që të shfaqet në email -->
+    <input type="hidden" name="subject" value="New Message from Register/Login Page">
 
-        <input type="password" name="password" placeholder="Password" required>
+    <!-- Opsionale, por të dobishme për organizim -->
+    <input type="hidden" name="Form" value="Register/Login">
 
-        <button class="btn" type="submit">Create Account</button>
+    <input type="email" name="Email" placeholder="Email" required>
 
-    </form>
+    <textarea name="Message" placeholder="Message" rows="5" required></textarea>
 
+    <button type="submit">Send</button>
+</form>
     <hr style="margin:25px 0; border-color:#333;">
 
 <h2>Login</h2>

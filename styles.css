@@ -911,3 +911,61 @@ body {
 .nav-scroll::-webkit-scrollbar {
     display: none;
 }
+
+/* FORM STYLING */
+form input,
+form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 15px;
+    background: #f9f9f9;
+}
+
+form input:focus,
+form textarea:focus {
+    border-color: #888;
+    outline: none;
+    background: #fff;
+}
+
+form button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+form button[type="submit"]:hover {
+    background: #333;
+}
+
+/* LIKE BUTTON */
+.like-btn {
+    cursor: pointer;
+    font-size: 20px;
+    transition: 0.2s;
+}
+
+.like-btn.active {
+    color: red;
+    transform: scale(1.2);
+}
+
+/* SHARE BUTTON */
+.share-btn {
+    cursor: pointer;
+    font-size: 20px;
+    transition: 0.2s;
+}
+
+.share-btn:hover {
+    transform: scale(1.1);
+}

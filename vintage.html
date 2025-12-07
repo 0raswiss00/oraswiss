@@ -520,6 +520,32 @@ document.addEventListener('click', function (e) {
 });
 </script>
 
+   
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.email-btn').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      // gjej kolonën e djathtë të këtij produkti
+      const productRight = this.closest('.product-right');
+      if (!productRight) return;
+
+      // gjej formularin brenda kësaj kolone
+      const form = productRight.querySelector('form');
+      if (!form) return;
+
+      // skrollo te formulari
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // fokuso fushën "Full Name"
+      const nameInput = form.querySelector('input[name="Full Name"]');
+      if (nameInput) {
+        nameInput.focus();
+      }
+    });
+  });
+});
+</script>
 
 <script>
 // THUMBNAILS SCRIPT

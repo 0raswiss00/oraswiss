@@ -107,16 +107,31 @@
     <div class="product-right">
       <h3>Request this part</h3>
 
-       <form action="mailto:cela9317@gmail.com" method="POST" enctype="text/plain">
-         <input type="text" name="Full Name" placeholder="Full Name *" required>
-         <input type="email" name="Email" placeholder="Email *" required>
-         <input type="text" name="Phone" placeholder="Phone / WhatsApp">
-         <input type="text" name="Country" placeholder="Country">
+<form action="https://api.web3forms.com/submit" method="POST">
+    <!-- VENDOS KËTU ACCESS KEY-N TËND NGA WEB3FORMS -->
+    <input type="hidden" name="access_key" value="PUT-YOUR-ACCESS-KEY-HERE">
 
-         <textarea name="Message" rows="5" placeholder="Please send me more details about this item."></textarea>
+    <!-- OPSIONALE, POR E MIRA TA KESH -->
+    <input type="hidden" name="subject" value="New product request from Oraswiss">
+    <input type="hidden" name="from_name" value="Oraswiss Website">
 
-         <button type="submit">Send Request</button>
-       </form>
+    <label>Full Name *</label>
+    <input type="text" name="name" required>
+
+    <label>Email *</label>
+    <input type="email" name="email" required>
+
+    <label>Phone / WhatsApp *</label>
+    <input type="text" name="phone" required>
+
+    <label>Country *</label>
+    <input type="text" name="country" required>
+
+    <label>Message *</label>
+    <textarea name="message" rows="4" required></textarea>
+
+    <button type="submit">Send Request</button>
+</form>
 
       <div class="buy-row">
          <a href="https://www.paypal.com/ncp/payment/PHW35ENYFH6UY" class="buy-button" target="_blank">Buy Now</a>

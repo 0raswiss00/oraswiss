@@ -891,3 +891,23 @@ body {
 .sell-form button[type="submit"]:active {
     transform: translateY(0);
 }
+
+/* ====== NAV SCROLL – REGISTER / LOGIN ====== */
+.nav-scroll {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    gap: 25px;
+    padding: 10px 15px;
+    scroll-behavior: smooth;
+}
+
+.nav-scroll a {
+    color: white;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.nav-scroll::-webkit-scrollbar {
+    display: none;
+}

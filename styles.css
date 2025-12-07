@@ -669,55 +669,43 @@ body {
 
 /* ===== €400 + BUY NOW + WHATSAPP + EMAIL POSHTË FORMËS ===== */
 
-.like-btn, .share-btn {
-    padding: 8px 16px;
-    border-radius: 20px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.like-btn {
-    background: #ff4d6d;
-    color: white;
-}
-
-.share-btn {
-    background: #4da3ff;
-    color: white;
-}
-
-/* --- BUTONAT LIKE + SHARE --- */
-
-.icon-btn {
-  border: none;
-  padding: 8px 14px;
-  border-radius: 999px;
-  font-size: 16px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.3s ease;
-}
-
 /* Butoni Like */
 .like-btn {
-  background: #ff4d6d;
-  color: #fff;
+    background: #ff4d6d;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s ease;
 }
+
 .like-btn.active {
-  background: #c9184a;
-  transform: scale(1.15);
+    background: #c9184a;
+    transform: scale(1.15);
 }
 
 /* Butoni Share */
 .share-btn {
-  background: #6c5ce7;
-  color: #fff;
+    background: #6c5ce7;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s ease;
 }
-.share-btn:hover {
-  background: #4834d4;
-}
+
+
+
+
+
+
+
 
 
 .buy-row {
@@ -794,29 +782,7 @@ body {
   }
 }
 
-/* Butoni i zemrës */
-.like-btn {
-  background: #ff4d6d;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 999px;
-  font-size: 16px;
-  cursor: pointer;
-  color: white;
-  font-weight: bold;
-}
 
-/* Butoni i share */
-.share-btn {
-  background: #6c5ce7;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 999px;
-  font-size: 16px;
-  cursor: pointer;
-  color: white;
-  font-weight: bold;
-}
 
 /* SELL YOUR WATCH FORM STYLING */
 .sell-form {

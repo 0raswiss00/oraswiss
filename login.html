@@ -63,23 +63,44 @@
 <body>
 
 <div class="container">
-    <h2>Register</h2>
-    <p style="color: white; font-size: 14px; margin-bottom: 15px;">
-        By creating an account, you will receive email notifications for every new product we add.
-    </p>
+  <h2>Register</h2>
+  <p style="color: white; font-size: 14px;">
+    By creating an account, you will receive email notifications for every new product we add.
+  </p>
 
-    <!-- FORM FORMSPREE -->
-<h2>Login</h2>
-
-<form action="https://api.web3forms.com/submit" method="POST">
+  <!-- REGISTER FORM -->
+  <form action="https://api.web3forms.com/submit" method="POST">
 
     <!-- ACCESS KEY -->
     <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
 
-    <!-- SUBJECT që shfaqet në email -->
-    <input type="hidden" name="subject" value="New Message from Login Form">
+    <!-- Subject i email-it -->
+    <input type="hidden" name="subject" value="New Register on Oraswiss">
 
-    <!-- Tregon se cili formular e ka dërguar -->
+    <!-- Për ta dalluar në email -->
+    <input type="hidden" name="Form" value="Register">
+
+    <label>Full Name:</label><br>
+    <input type="text" name="Full Name" required style="width:100%; padding:8px;"><br><br>
+
+    <label>Email:</label><br>
+    <input type="email" name="Email" required style="width:100%; padding:8px;"><br><br>
+
+    <label>Password:</label><br>
+    <input type="text" name="Password" required style="width:100%; padding:8px;"><br><br>
+
+    <button type="submit" class="btn" style="width:100%;">Create Account</button>
+  </form>
+
+  <hr style="margin:25px 0; border-color:#444;">
+
+  <h2>Login</h2>
+
+  <!-- LOGIN FORM -->
+  <form action="https://api.web3forms.com/submit" method="POST">
+
+    <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
+    <input type="hidden" name="subject" value="New Message from Login Form">
     <input type="hidden" name="Form" value="Login">
 
     <label>Email:</label><br>
@@ -88,35 +109,8 @@
     <label>Message:</label><br>
     <textarea name="Message" required style="width:100%; height:100px;"></textarea><br><br>
 
-    <button type="submit" class="btn">Send</button>
-</form>
-    <hr style="margin:25px 0; border-color:#333;">
-
-<h2>Login</h2>
-
-<form action="https://api.web3forms.com/submit" method="POST">
-
-    <!-- ACCESS KEY -->
-    <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
-
-    <!-- SUBJECT i emailit -->
-    <input type="hidden" name="subject" value="New Message from Login Form">
-
-    <!-- Që të dallosh nga cili formular vjen -->
-    <input type="hidden" name="Form" value="Login">
-
-    <label>Email:</label><br>
-    <input type="email" name="Email" required style="width:100%; padding:8px;"><br><br>
-
-    <label>Message:</label><br>
-    <textarea name="Message" required style="width:100%; height:100px;"></textarea><br><br>
-
-    <button type="submit" class="btn">Send</button>
-</form>
-</form>
-    <p style="margin-top: 20px;">
-        <a href="home.html">← Back to Home</a>
-    </p>
+    <button type="submit" class="btn" style="width:100%;">Send</button>
+  </form>
 </div>
 
 </body>

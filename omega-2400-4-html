@@ -72,3 +72,54 @@ www.googletagmanager.com
     <img class="thumb" src="omega-2400-4-5.jpg" alt="Omega 2400-4 Suvenir image 7">
     <img class="thumb" src="omega-2400-4-6.jpg" alt="Omega 2400-4 Suvenir image 8">
 </div>
+</article>
+<style>
+.container {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+    margin-bottom: 40px;
+}
+
+.product-images img {
+    width: 200px; 
+    display: block;
+    margin-bottom: 10px;
+}
+
+.product-description {
+    max-width: 450px;
+}
+
+.title-vintage {
+    color: #8B5E3C; /* ngjyrë vintage */
+    margin-bottom: 10px;
+}
+
+.title-parts {
+    color: #333; /* ngjyrë neutrale për parts */
+    margin-bottom: 10px;
+}
+</style>
+
+<!-- ====================== -->
+<!--        VINTAGE         -->
+<!-- ====================== -->
+<div class="container">
+
+    <div class="product-images">
+        <img src="omega-pocket-980-1.jpg"
+             alt="Vintage - Foto 1">
+        <img src="omega-pocket-980-2.jpg"
+             alt="Vintage - Foto 2">
+    </div>
+
+    <div class="product-description">
+        <h2 class="title-vintage">Vintage Collection</h2>
+        <p>
+            Përshkrim i produkteve vintage…  
+            Mund të shkruash detaje rreth modelit, historisë, gjendjes, vitit të prodhimit, etj.
+        </p>
+    </div>
+
+</div>

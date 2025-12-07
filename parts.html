@@ -895,23 +895,25 @@
 
     
 <script>
-// THUMBNAILS SCRIPT
-document.addEventListener('click', function (e) {
-    const thumb = e.target.closest('.product-gallery img');
-    if (!thumb) return;
+document.addEventListener('DOMContentLoaded', function () {
+  // për çdo produkt në faqe
+  document.querySelectorAll('.product').forEach(function (product) {
+    const mainImage = product.querySelector('.product-main-image');
+    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
 
-    const article = thumb.closest('.product');
-    const mainImage = article.querySelector('.product-main-image');
-    if (!mainImage) return;
+    if (!mainImage || !thumbs.length) return;
 
-    mainImage.src = thumb.src;
-
-    if (thumb.alt) {
-        mainImage.alt = thumb.alt;
-    }
+    thumbs.forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        mainImage.src = thumb.src;
+        if (thumb.alt) {
+          mainImage.alt = thumb.alt;
+        }
+      });
+    });
+  });
 });
 </script>
-
     
 <script>
 // ZOOM SCRIPT
@@ -1021,4 +1023,3 @@ document.querySelectorAll(".share-btn").forEach(function (btn) {
     });
 });
 </script>
-    

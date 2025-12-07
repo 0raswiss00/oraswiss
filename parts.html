@@ -107,14 +107,29 @@
     <div class="product-right">
       <h3>Request this part</h3>
 
-<form action="https://api.web3forms.com/submit" method="POST">
+<form action="https://api.web3forms.com/submit" method="POST" onsubmit="document.getElementById('product_subject').value = document.getElementById('product_title').value;">
 
-    <!-- ACCESS KEY NGA WEB3FORMS -->
+    <!-- ACCESS KEY -->
     <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
 
-    <!-- OPSIONALE, POR TË DOBISHME -->
-    <input type="hidden" name="subject" value="New Request from Oraswiss Product Page">
-    <input type="hidden" name="from_name" value="Oraswiss Website">
+    <!-- SUBJECT AUTOMATIK -->
+    <input type="hidden" id="product_subject" name="subject" value="">
+
+    <!-- Ky input merr automatikisht titullin e produktit -->
+    <input type="hidden" id="product_title" value="">
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Kap titullin që ke te produkti (h3)
+            const titleElement =
+                document.querySelector('.product-info h3') ||
+                document.querySelector('.product-right h3') ||
+                document.querySelector('h3');
+
+            const title = titleElement ? titleElement.innerText : "Product Request";
+            document.getElementById('product_title').value = title;
+        });
+    </script>
 
     <input type="text"  name="Full Name" placeholder="Full Name" required>
     <input type="email" name="Email"      placeholder="Email" required>
@@ -125,7 +140,6 @@
 
     <button type="submit">Send Request</button>
 </form>
-
       <div class="buy-row">
          <a href="https://www.paypal.com/ncp/payment/PHW35ENYFH6UY" class="buy-button" target="_blank">Buy Now</a>
          <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>

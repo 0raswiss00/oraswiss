@@ -107,29 +107,12 @@
     <div class="product-right">
       <h3>Request this part</h3>
 
-<form action="https://api.web3forms.com/submit" method="POST" onsubmit="document.getElementById('product_subject').value = document.getElementById('product_title').value;">
+<form action="https://api.web3forms.com/submit" method="POST">
 
-    <!-- ACCESS KEY -->
     <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
 
-    <!-- SUBJECT AUTOMATIK -->
-    <input type="hidden" id="product_subject" name="subject" value="">
-
-    <!-- Ky input merr automatikisht titullin e produktit -->
-    <input type="hidden" id="product_title" value="">
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Kap titullin që ke te produkti (h3)
-            const titleElement =
-                document.querySelector('.product-info h3') ||
-                document.querySelector('.product-right h3') ||
-                document.querySelector('h3');
-
-            const title = titleElement ? titleElement.innerText : "Product Request";
-            document.getElementById('product_title').value = title;
-        });
-    </script>
+    <input type="hidden" name="subject" value="New Request: Rolex Case Bracelet 1003">
+    <input type="hidden" name="Product" value="Rolex Case Bracelet 1003">
 
     <input type="text"  name="Full Name" placeholder="Full Name" required>
     <input type="email" name="Email"      placeholder="Email" required>

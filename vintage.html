@@ -468,7 +468,7 @@
             <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>
             <a href="mailto:cela9317@gmail.com" class="email-btn">Email</a>
            
-            <button class="like-btn">❤️</button>
+            <button class="like-btn" data-id="vintage-omega-2400-cal-30t2">❤️</button>
             <button class="share-btn">🔗</button>
         </div>
     </div>
@@ -517,6 +517,44 @@ document.addEventListener('click', function (e) {
     if (thumb.alt) {
         mainImage.alt = thumb.alt;
     }
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  // LIKE
+  document.querySelectorAll('.like-btn').forEach(function (btn) {
+    const id = btn.getAttribute('data-id') || 'default-vintage';
+    const key = 'liked_' + id;
+
+    if (localStorage.getItem(key) === 'true') {
+      btn.classList.add('active');
+    }
+
+    btn.addEventListener('click', function () {
+      btn.classList.toggle('active');
+      const isLiked = btn.classList.contains('active');
+      localStorage.setItem(key, isLiked);
+    });
+  });
+
+  // SHARE
+  document.querySelectorAll('.share-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          url: window.location.href
+        }).catch(() => {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(window.location.href)
+          .then(() => alert('Link copied!'))
+          .catch(() => alert('Copy the link manually.'));
+      }
+    });
+  });
+
 });
 </script>
 

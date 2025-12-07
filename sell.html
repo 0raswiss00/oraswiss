@@ -25,22 +25,25 @@
     </nav>
 </header>
 
-<div class="products-section">
-
+<div class="sell-form-container">
     <h2>Sell Your Watch</h2>
+
     <p>
         If you want to sell your watch, please fill in the form below.
         We will contact you by email with our offer.
     </p>
+
     <p>
         <strong>Important:</strong> Please include clear photos of the dial,
         case, bracelet and (if possible) movement.
     </p>
 
-    <form action="mailto:oraswiss00@gmail.com" method="POST" enctype="multipart/form-data">
-          method="post"
-          enctype="text/plain"
-          class="contact-form">
+    <form action="https://api.web3forms.com/submit" method="POST" class="sell-form">
+
+        <!-- WEB3FORMS -->
+        <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
+        <input type="hidden" name="subject" value="New Sell Your Watch Request">
+        <input type="hidden" name="Form" value="Sell Your Watch">
 
         <h3>Your Details</h3>
 
@@ -62,7 +65,7 @@
         <input type="text" name="brand" placeholder="Rolex, Omega, etc." required>
 
         <label>Model / Reference:</label>
-        <input type="text" name="model" placeholder="Model / Reference" required>
+        <input type="text" name="model" placeholder="Model / Reference">
 
         <label>Movement type:</label>
         <select name="movement">
@@ -77,16 +80,16 @@
 
         <label>Condition / notes:</label>
         <textarea name="notes" rows="4"
-                  placeholder="Condition, box & papers, service history..."></textarea>
+            placeholder="Condition, box &amp; papers, service history..."></textarea>
 
         <label>Links to photos:</label>
         <textarea name="photo_links" rows="3"
-                  placeholder="Paste links to photos (WhatsApp Web, Facebook, Instagram, Google Photos, etc.)"></textarea>
+            placeholder="Paste links to photos (WhatsApp Web, Facebook, Instagram, etc.)"></textarea>
 
-        <button type="submit" class="buy-button">Send Offer</button>
+        <button type="submit">Send Offer</button>
     </form>
 
+    <p style="text-align:center; margin-top:15px;">
+        <a href="home.html" style="color:#4da6ff; text-decoration:none;">← Back to Home</a>
+    </p>
 </div>
-
-</body>
-</html>

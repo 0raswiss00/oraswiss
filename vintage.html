@@ -520,78 +520,7 @@ document.addEventListener('click', function (e) {
 });
 </script>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-  // LIKE BTN — ruajtje ne localStorage + tekst i personalizuar
-  document.querySelectorAll('.like-btn').forEach(function (btn) {
-
-    const id = btn.getAttribute('data-id') || 'vintage-default';
-    const key = 'liked_' + id;
-
-    // nëse produkti është pëlqyer më parë
-    if (localStorage.getItem(key) === 'true') {
-      btn.classList.add('active');
-      btn.innerText = "✔ Liked";
-    }
-
-    btn.addEventListener('click', function () {
-      const wasLiked = btn.classList.toggle('active');
-      localStorage.setItem(key, wasLiked);
-
-      if (wasLiked) {
-        btn.innerText = "✔ Liked";
-      } else {
-        btn.innerText = "♥";
-        alert("U hoq nga Favorites.");
-      }
-    });
-  });
-
-  // SHARE — i njejte si te parts
-  document.querySelectorAll('.share-btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      if (navigator.share) {
-        navigator.share({
-          title: document.title,
-          url: window.location.href
-        }).catch(() => {});
-      } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(window.location.href)
-          .then(() => alert('Link copied!'))
-          .catch(() => alert('Copy manually.'));
-      }
-    });
-  });
-
-});
-</script>
-
-
-
-
-<script>
-// THUMBNAILS SCRIPT
-document.addEventListener('click', function (e) {
-    const thumb = e.target.closest('.product-gallery img');
-    if (!thumb) return;
-
-    const article = thumb.closest('.product');
-    const mainImage = article.querySelector('.product-main-image');
-    if (!mainImage) return;
-
-    mainImage.src = thumb.src;
-
-    if (thumb.alt) {
-        mainImage.alt = thumb.alt;
-    }
-});
-</script>
-
-
+    
 <script>
 // ZOOM SCRIPT
 document.addEventListener('DOMContentLoaded', () => {
@@ -616,3 +545,87 @@ function searchProducts() {
 }
 </script>
 
+<script>
+// LIKE për çdo part veç e veç
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.like-btn').forEach(function (btn) {
+    const partId = btn.getAttribute('data-part-id') || 'default-part';
+
+    // nëse ky part është pëlqyer më parë
+    if (localStorage.getItem('liked_' + partId) === 'true') {
+      btn.classList.add('active');
+    }
+
+    btn.addEventListener('click', function () {
+      btn.classList.toggle('active');
+      const isLiked = btn.classList.contains('active');
+      localStorage.setItem('liked_' + partId, isLiked);
+    });
+  });
+
+  // SHARE – thjesht kopjon linkun ose hap share API
+  document.querySelectorAll('.share-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          url: window.location.href
+        }).catch(() => {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Link copied! Paste it anywhere to share.');
+      } else {
+        alert('Sharing not supported. Copy the link from the address bar.');
+      }
+    });
+  });
+});
+</script>
+    
+<script>
+document.querySelectorAll(".like-btn").forEach(function (btn) {
+
+    // ID unike e produktit (vjen nga data-id)
+    let id = btn.getAttribute("data-id");
+
+    // Nëse produkti është pëlqyer më parë → ndrysho butonin
+    if (localStorage.getItem("liked_" + id) === "true") {
+        btn.innerText = "✓ Liked";
+        btn.style.background = "#ff1a4d";
+    }
+
+    // Kur klikon butonin
+    btn.addEventListener("click", function () {
+
+        // Nëse nuk është pëlqyer → pëlqeje
+        if (localStorage.getItem("liked_" + id) !== "true") {
+            localStorage.setItem("liked_" + id, "true");
+            btn.innerText = "✓ Liked";
+            btn.style.background = "#ff1a4d";
+            alert("U ruajt te Favorites ❤️");
+        } 
+        else {
+            // Nëse është pëlqyer → hiqe
+            localStorage.removeItem("liked_" + id);
+            btn.innerText = "❤️ Like";
+            btn.style.background = "#ff4d6d";
+            alert("U hoq nga Favorites.");
+        }
+    });
+
+});
+
+document.querySelectorAll(".share-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+        if (navigator.share) {
+            navigator.share({
+                title: document.title,
+                text: "Shiko këtë produkt nga ORA SWISS",
+                url: window.location.href
+            });
+        } else {
+            alert("Share nuk përkrahet në këtë pajisje.");
+        }
+    });
+});
+</script>

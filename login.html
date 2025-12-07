@@ -69,22 +69,26 @@
     </p>
 
     <!-- FORM FORMSPREE -->
+<h2>Login</h2>
+
 <form action="https://api.web3forms.com/submit" method="POST">
 
     <!-- ACCESS KEY -->
     <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
 
-    <!-- SUBJECT që të shfaqet në email -->
-    <input type="hidden" name="subject" value="New Message from Register/Login Page">
+    <!-- SUBJECT që shfaqet në email -->
+    <input type="hidden" name="subject" value="New Message from Login Form">
 
-    <!-- Opsionale, por të dobishme për organizim -->
-    <input type="hidden" name="Form" value="Register/Login">
+    <!-- Tregon se cili formular e ka dërguar -->
+    <input type="hidden" name="Form" value="Login">
 
-    <input type="email" name="Email" placeholder="Email" required>
+    <label>Email:</label><br>
+    <input type="email" name="Email" required style="width:100%; padding:8px;"><br><br>
 
-    <textarea name="Message" placeholder="Message" rows="5" required></textarea>
+    <label>Message:</label><br>
+    <textarea name="Message" required style="width:100%; height:100px;"></textarea><br><br>
 
-    <button type="submit">Send</button>
+    <button type="submit" class="btn">Send</button>
 </form>
     <hr style="margin:25px 0; border-color:#333;">
 

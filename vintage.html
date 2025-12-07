@@ -468,7 +468,7 @@
             <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>
             <a href="mailto:cela9317@gmail.com" class="email-btn">Email</a>
            
-            <button class="like-btn" data-id="vintage-omega-2400-cal-30t2">❤️</button>
+            <button class="like-btn" data-id="vintage-omega-2400-4">♥</button>
             <button class="share-btn">🔗</button>
         </div>
     </div>
@@ -523,23 +523,35 @@ document.addEventListener('click', function (e) {
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-  // LIKE
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  // LIKE BTN — ruajtje ne localStorage + tekst i personalizuar
   document.querySelectorAll('.like-btn').forEach(function (btn) {
-    const id = btn.getAttribute('data-id') || 'default-vintage';
+
+    const id = btn.getAttribute('data-id') || 'vintage-default';
     const key = 'liked_' + id;
 
+    // nëse produkti është pëlqyer më parë
     if (localStorage.getItem(key) === 'true') {
       btn.classList.add('active');
+      btn.innerText = "✔ Liked";
     }
 
     btn.addEventListener('click', function () {
-      btn.classList.toggle('active');
-      const isLiked = btn.classList.contains('active');
-      localStorage.setItem(key, isLiked);
+      const wasLiked = btn.classList.toggle('active');
+      localStorage.setItem(key, wasLiked);
+
+      if (wasLiked) {
+        btn.innerText = "✔ Liked";
+      } else {
+        btn.innerText = "♥";
+        alert("U hoq nga Favorites.");
+      }
     });
   });
 
-  // SHARE
+  // SHARE — i njejte si te parts
   document.querySelectorAll('.share-btn').forEach(function (btn) {
     btn.addEventListener('click', function () {
       if (navigator.share) {
@@ -550,13 +562,14 @@ document.addEventListener('DOMContentLoaded', function () {
       } else if (navigator.clipboard) {
         navigator.clipboard.writeText(window.location.href)
           .then(() => alert('Link copied!'))
-          .catch(() => alert('Copy the link manually.'));
+          .catch(() => alert('Copy manually.'));
       }
     });
   });
 
 });
 </script>
+
 
 
 

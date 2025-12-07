@@ -938,6 +938,43 @@ function searchProducts() {
 </script>
 
 <script>
+// LIKE për çdo part veç e veç
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.like-btn').forEach(function (btn) {
+    const partId = btn.getAttribute('data-part-id') || 'default-part';
+
+    // nëse ky part është pëlqyer më parë
+    if (localStorage.getItem('liked_' + partId) === 'true') {
+      btn.classList.add('active');
+    }
+
+    btn.addEventListener('click', function () {
+      btn.classList.toggle('active');
+      const isLiked = btn.classList.contains('active');
+      localStorage.setItem('liked_' + partId, isLiked);
+    });
+  });
+
+  // SHARE – thjesht kopjon linkun ose hap share API
+  document.querySelectorAll('.share-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          url: window.location.href
+        }).catch(() => {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Link copied! Paste it anywhere to share.');
+      } else {
+        alert('Sharing not supported. Copy the link from the address bar.');
+      }
+    });
+  });
+});
+</script>
+    
+<script>
 document.querySelectorAll(".like-btn").forEach(function (btn) {
 
     // ID unike e produktit (vjen nga data-id)

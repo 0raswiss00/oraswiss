@@ -892,22 +892,30 @@ body {
     transform: translateY(0);
 }
 
-/* ====== NAV SCROLL – REGISTER / LOGIN ====== */
+/* --- MENU SCROLL ONLY FOR THE LINKS --- */
+
 .nav-scroll {
     display: flex;
-    overflow-x: auto;
+    overflow-x: auto;            /* aktivizon scroll majtas-djathtas */
     white-space: nowrap;
-    gap: 25px;
-    padding: 10px 15px;
-    scroll-behavior: smooth;
+    gap: 35px;                   /* hapësira mes linkave */
+    padding: 12px 10px;
+    scrollbar-width: none;
+}
+
+.nav-scroll::-webkit-scrollbar {
+    display: none;               /* fsheh vijën e scroll-it */
 }
 
 .nav-scroll a {
     color: white;
-    font-size: 18px;
     text-decoration: none;
+    font-size: 20px;
+    font-weight: 400;
 }
 
-.nav-scroll::-webkit-scrollbar {
-    display: none;
+.register-btn {
+    border: 2px solid white;
+    padding: 4px 12px;
+    border-radius: 6px;
 }

@@ -215,7 +215,7 @@ ul {
       GALLERY PAGE FIX
 ========================= */
 
-.gallery img {
+.gallery-grid img {
     width: 250px;
     height: auto;
     border-radius: 12px;
@@ -223,12 +223,11 @@ ul {
     object-fit: cover;
 }
 
-.gallery {
+.gallery-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
-
 
 /* =========================
      CATEGORY COLORS

@@ -873,13 +873,12 @@ body {
 .product-gallery {
   display: flex;
   flex-wrap: nowrap;
-  gap: 6px;               /* HAPËSIRA midis fotove */
+  gap: 6px;              /* hapësira midis fotove */
 }
 
 .product-gallery img.thumb {
   width: 70px;
   height: 70px;
-  object-fit: cover;
+  object-fit: cover;     /* pret foton bukur brenda kornizës */
   border-radius: 6px;
 }
-

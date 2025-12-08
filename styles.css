@@ -295,7 +295,18 @@ ul {
         height: auto;
     }
 }
+/* FIX I FOTOVE – BËJI HORIZONTAL NË TË GJITHA: LUXURY / VINTAGE / PARTS */
+.product-images {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 15px;
+}
 
+.product-images img {
+    height: 200px;
+    width: auto;
+}
 /* KUTIA KU VENDOS FOTON NË SFOND */
 .foto-bg {
   width: 400px;
@@ -308,7 +319,12 @@ ul {
 /* OPSIONET E LËVIZJES SË SFONDIT */
 
 
-
+body {
+    background-image: url("rolex.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
 
 /* Dropdown container */
 .dropdown {
@@ -352,7 +368,20 @@ ul {
 }
 
 
-
+.site-title {
+    font-size: 28px;
+    font-weight: 200;   /* më e hollë */
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.site-title {
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
 /* Kuti përshkrimi me scroll për Ora Swiss */
 .description-scroll {
   max-height: 400px;    /* sa shumë tekst të duket pa scroll */
@@ -392,7 +421,13 @@ ul {
     color: black;
 }
 
-
+/* Header i rregulluar në 3 pjesë: majtas – qendër – djathtas */
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
 
 /* Logo majtas */
 .site-title {
@@ -726,7 +761,8 @@ ul {
  
 /* Fix background for Sell Your Watch page */
 body {
- 
+    background: #000 !important;
+}
 .sell-form h3 {
     margin-top: 0;
     margin-bottom: 15px;
@@ -842,4 +878,3 @@ body {
 .product-gallery img.thumb:last-child {
   margin-right: 0;     /* pa hapësirë pas fotos së fundit */
 }
-

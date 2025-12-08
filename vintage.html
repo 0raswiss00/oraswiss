@@ -480,7 +480,7 @@
              <button class="like-btn" data-id="vintage-omega-2400-4">❤️ Like</button>
 
             <!-- SHARE (Saktë) -->
-            <button class="share-btn" data-url="https://bit.ly/Omega2400-4">📎 Share</button>
+            <button class="share-btn" data-url="https://bit.ly/Omega2400-4">📎 Share</button
         </div>
 
       </div>
@@ -622,24 +622,30 @@ function searchProducts() {
 }
 </script>
 
- <script>
+<script>
 document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.share-btn').forEach(function (btn) {
+
     btn.addEventListener('click', function () {
 
-      const url  = btn.getAttribute('data-url') || window.location.href;
-      const text = 'Shiko këtë produkt nga ORA SWISS!';
+      // LINKU I SAKTE NGA data-url
+      const url = btn.getAttribute('data-url');
+      const text = "Shiko këtë produkt unik nga ORA SWISS! " + url;
 
       if (navigator.share) {
         navigator.share({
-          title: document.title,
+          title: "Ora Swiss - Produkt",
           text: text,
           url: url
-        }).catch(err => console.log('Share u anulua:', err));
+        }).catch(() => {});
       } else {
-        window.open(url, '_blank');
+        // Desktop fallback → hap linkun
+        window.open(url, "_blank");
       }
+
     });
+
   });
 });
-</script>      
+</script>
+

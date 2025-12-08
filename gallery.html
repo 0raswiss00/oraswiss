@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeBtn = document.querySelector(".close");
 
   // TANI përdorim .thumb
-  document.querySelectorAll(".thumb").forEach(function (img) {
+  document.querySelectorAll(".gallery-grid img").forEach(function (img) {
     img.addEventListener("click", function () {
       modal.style.display = "block";
       modalImg.src = this.src;

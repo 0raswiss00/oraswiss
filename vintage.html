@@ -469,16 +469,21 @@
 
         <button type="submit">Send Request</button>
       </form>
+        <div class="product">
 
-      <div class="buy-row">
-        <a href="https://www.paypal.com/ncp/payment/4E7LWTY66ESN8" class="buy-btn" target="_blank">Buy Now</a>
-        <a href="https://wa.me/355692408065" class="whatsapp-btn" target="_blank">WhatsApp</a>
-        <a href="mailto:cela9317@gmail.com" class="email-btn">Email</a>
-        <a href="https://bit.ly/Omega2400-4" class="buy-btn" target="_blank">Open Omega 2400-4</a>
-        <button class="like-btn"  data-id="vintage-omega-2400-4">♥️</button>
-        <button class="share-btn" data-url="https://bit.ly/Omega2400-4">🔗</button>
+         <div class="buy-row">
+             <a href="https://www.paypal.com/ncp/payment/4E7LIVTY66ESN8" class="buy-btn" target="_blank">Buy Now</a>
+             <a href="https://wa.me/355692408065" class="whatsapp-btn" target="_blank">WhatsApp</a>
+             <a href="mailto:cela9317@gmail.com" class="email-btn">Email</a>
+
+             <!-- LIKE -->
+             <button class="like-btn" data-id="vintage-omega-2400-4">❤️ Like</button>
+
+            <!-- SHARE (Saktë) -->
+            <button class="share-btn" data-url="https://bit.ly/Omega2400-4">📎 Share</button>
+        </div>
+
       </div>
-    </div>
 
     <!-- PERSHKRIMI POSHTE TE DYJA KOLUMNAVE -->
     <div class="product-info">
@@ -509,8 +514,11 @@
        
     
 <script>
+// Gjithçka pasi faqja të jetë ngarkuar
 document.addEventListener('DOMContentLoaded', function () {
-  // për çdo produkt në faqe
+  // ==========================
+  // 1. GALERIA E FOTOVE
+  // ==========================
   document.querySelectorAll('.product').forEach(function (product) {
     const mainImage = product.querySelector('.product-main-image');
     const thumbs = product.querySelectorAll('.product-gallery img.thumb');
@@ -526,139 +534,90 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   });
-});
-</script>
-    
-<script>
-// ZOOM SCRIPT
-document.addEventListener('DOMContentLoaded', () => {
-    const mainImages = document.querySelectorAll('.product-main-image');
 
-    mainImages.forEach(img => {
-        img.addEventListener('click', () => {
-            img.classList.toggle('zoomed');
-        });
-    });
-});
-</script>
-<script>
-function searchProducts() {
-    const input = document.getElementById("searchBar").value.toLowerCase();
-    const products = document.querySelectorAll(".product");
-
-    products.forEach(product => {
-        const text = product.innerText.toLowerCase();
-        product.style.display = text.includes(input) ? "block" : "none";
-    });
-}
-</script>
-
-<script>
-// LIKE për çdo part veç e veç
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('.like-btn').forEach(function (btn) {
-    const partId = btn.getAttribute('data-part-id') || 'default-part';
-
-    // nëse ky part është pëlqyer më parë
-    if (localStorage.getItem('liked_' + partId) === 'true') {
-      btn.classList.add('active');
-    }
-
-    btn.addEventListener('click', function () {
-      btn.classList.toggle('active');
-      const isLiked = btn.classList.contains('active');
-      localStorage.setItem('liked_' + partId, isLiked);
+  // ==========================
+  // 2. ZOOM NE FOTON KRYESORE
+  // ==========================
+  document.querySelectorAll('.product-main-image').forEach(function (img) {
+    img.addEventListener('click', function () {
+      img.classList.toggle('zoomed');
     });
   });
 
-  // SHARE – thjesht kopjon linkun ose hap share API
+  // ==========================
+  // 3. LIKE PER CDO PRODUKT
+  // ==========================
+  document.querySelectorAll('.like-btn').forEach(function (btn) {
+    const id = btn.getAttribute('data-id'); // p.sh. data-id="omega-2400-4"
+    if (!id) return;
+
+    const storageKey = 'liked_' + id;
+
+    // Nëse është pëlqyer më parë
+    if (localStorage.getItem(storageKey) === 'true') {
+      btn.classList.add('active');
+      btn.innerText = '✓ Liked';
+    }
+
+    btn.addEventListener('click', function () {
+      const isLiked = localStorage.getItem(storageKey) === 'true';
+
+      if (!isLiked) {
+        localStorage.setItem(storageKey, 'true');
+        btn.classList.add('active');
+        btn.innerText = '✓ Liked';
+        alert('U ruajt te Favorites ❤️');
+      } else {
+        localStorage.removeItem(storageKey);
+        btn.classList.remove('active');
+        btn.innerText = '❤️ Like';
+        alert('U hoq nga Favorites.');
+      }
+    });
+  });
+
+  // ==========================
+  // 4. SHARE PER CDO PRODUKT
+  // ==========================
   document.querySelectorAll('.share-btn').forEach(function (btn) {
     btn.addEventListener('click', function () {
+      // Merr URL-në nga data-url ose përdor URL-në e faqes
+      const url  = btn.getAttribute('data-url') || window.location.href;
+      const text = btn.getAttribute('data-share-text') || 'Shiko këtë produkt nga ORA SWISS!';
+
       if (navigator.share) {
+        // 📱 Celular / browser që e mbështet Web Share API
         navigator.share({
           title: document.title,
-          url: window.location.href
-        }).catch(() => {});
+          text: text,
+          url:  url
+        }).catch(function (err) {
+          console.log('Share u anulua:', err);
+        });
       } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(window.location.href);
-        alert('Link copied! Paste it anywhere to share.');
+        // 💻 Desktop: kopjon linkun në clipboard
+        navigator.clipboard.writeText(url);
+        alert('Linku u kopjua! Mund ta ngjitësh kudo për ta shpërndarë.');
       } else {
-        alert('Sharing not supported. Copy the link from the address bar.');
+        alert('Kopjo këtë link:\n' + url);
       }
     });
   });
 });
 </script>
-    
-<script>
-document.querySelectorAll(".like-btn").forEach(function (btn) {
-
-    // ID unike e produktit (vjen nga data-id)
-    let id = btn.getAttribute("data-id");
-
-    // Nëse produkti është pëlqyer më parë → ndrysho butonin
-    if (localStorage.getItem("liked_" + id) === "true") {
-        btn.innerText = "✓ Liked";
-        btn.style.background = "#ff1a4d";
-    }
-
-    // Kur klikon butonin
-    btn.addEventListener("click", function () {
-
-        // Nëse nuk është pëlqyer → pëlqeje
-        if (localStorage.getItem("liked_" + id) !== "true") {
-            localStorage.setItem("liked_" + id, "true");
-            btn.innerText = "✓ Liked";
-            btn.style.background = "#ff1a4d";
-            alert("U ruajt te Favorites ❤️");
-        } 
-        else {
-            // Nëse është pëlqyer → hiqe
-            localStorage.removeItem("liked_" + id);
-            btn.innerText = "❤️ Like";
-            btn.style.background = "#ff4d6d";
-            alert("U hoq nga Favorites.");
-        }
-    });
-
-});
 
 <script>
-document.querySelectorAll('.share-btn').forEach(function (btn) {
-    btn.addEventListener("click", function () {
+// 5. KERKIMI I PRODUKTEVE
+function searchProducts() {
+  const input = document.getElementById('searchBar');
+  if (!input) return;
 
-        // Merr URL-në nga data-url e produktit
-        const url = btn.getAttribute("data-url") || window.location.href;
-        const text = "Shiko këtë produkt nga ORA SWISS";
+  const value = input.value.toLowerCase();
+  const products = document.querySelectorAll('.product');
 
-        if (navigator.share) {
-            navigator.share({
-                title: document.title,
-                text: text,
-                url: url
-            }).catch(function(err) {
-                console.log("Share u anulua:", err);
-            });
-        } else {
-            alert("Share nuk përkrahet në këtë pajisje.\nKopjo linkun:\n" + url);
-        }
-
-    });
-});
-</script>
-
-<script>
-document.querySelectorAll('.share-btn').forEach(function (btn) {
-    btn.addEventListener("click", function () {
-        if (navigator.share) {
-            navigator.share({
-                title: "Omega 2400-4",
-                text: "Shiko këtë produkt unik nga ORA SWISS!",
-                url: "https://bit.ly/Omega2400-4"
-            });
-        } else {
-            alert("Share nuk përkrahet në këtë pajisje.\nKopjo linkun: https://bit.ly/Omega2400-4");
-        }
-    });
-});
+  products.forEach(function (product) {
+    const text = product.innerText.toLowerCase();
+    product.style.display = text.includes(value) ? '' : 'none';
+  });
+}
 </script>

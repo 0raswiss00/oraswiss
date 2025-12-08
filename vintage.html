@@ -616,30 +616,4 @@ function searchProducts() {
 }
 </script>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('.share-btn').forEach(function (btn) {
-
-    btn.addEventListener('click', function () {
-
-      // LINKU I SAKTE NGA data-url
-      const url = btn.getAttribute('data-url');
-      const text = "Shiko këtë produkt unik nga ORA SWISS! " + url;
-
-      if (navigator.share) {
-        navigator.share({
-          title: "Ora Swiss - Produkt",
-          text: text,
-          url: url
-        }).catch(() => {});
-      } else {
-        // Desktop fallback → hap linkun
-        window.open(url, "_blank");
-      }
-
-    });
-
-  });
-});
-</script>
 

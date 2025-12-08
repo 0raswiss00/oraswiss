@@ -528,26 +528,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
        
 <script>
-// Gjithçka pasi faqja të jetë ngarkuar
-document.addEventListener('DOMContentLoaded', function () {
-  // ==========================
-  // 1. GALERIA E FOTOVE
-  // ==========================
-  document.querySelectorAll('.product').forEach(function (product) {
-    const mainImage = product.querySelector('.product-main-image');
-    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
 
-    if (!mainImage || !thumbs.length) return;
-
-    thumbs.forEach(function (thumb) {
-      thumb.addEventListener('click', function () {
-        mainImage.src = thumb.src;
-        if (thumb.alt) {
-          mainImage.alt = thumb.alt;
-        }
-      });
-    });
-  });
 
   // ==========================
   // 2. ZOOM NE FOTON KRYESORE

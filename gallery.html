@@ -110,39 +110,39 @@
 
     </main>
 
-<!-- Modal për zmadhimin e fotos -->
+<!-- Modal HTML -->
 <div id="imgModal" class="modal">
   <span class="close">&times;</span>
-  <img class="modal-content" id="modalImg">
+  <img id="modalImg" class="modal-content">
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  const modal    = document.getElementById("imgModal");
+
+  const modal = document.getElementById("imgModal");
   const modalImg = document.getElementById("modalImg");
   const closeBtn = document.querySelector(".close");
 
-  // të gjitha fotot që do të zmadhohen
-  document.querySelectorAll(".gallery-img").forEach(function (img) {
+  // TANI përdorim .thumb
+  document.querySelectorAll(".thumb").forEach(function (img) {
     img.addEventListener("click", function () {
       modal.style.display = "block";
       modalImg.src = this.src;
     });
   });
 
-  // mbyll me X
   closeBtn.onclick = function () {
     modal.style.display = "none";
   };
 
-  // mbyll kur klikon jashtë fotos
   modal.onclick = function (e) {
     if (e.target === modal) {
       modal.style.display = "none";
     }
   };
+
 });
 </script>
-    
+
 </body>
 </html>

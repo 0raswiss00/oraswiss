@@ -474,9 +474,9 @@
         <a href="https://www.paypal.com/ncp/payment/4E7LWTY66ESN8" class="buy-btn" target="_blank">Buy Now</a>
         <a href="https://wa.me/355692408065" class="whatsapp-btn" target="_blank">WhatsApp</a>
         <a href="mailto:cela9317@gmail.com" class="email-btn">Email</a>
-
+        <a href="https://bit.ly/Omega2400-4" class="buy-btn" target="_blank">Open Omega 2400-4</a>
         <button class="like-btn"  data-id="vintage-omega-2400-4">♥️</button>
-        <button class="share-btn">🔗</button>
+        <button class="share-btn" data-url="https://bit.ly/Omega2400-4">🔗</button>
       </div>
     </div>
 
@@ -623,16 +623,41 @@ document.querySelectorAll(".like-btn").forEach(function (btn) {
 
 });
 
-document.querySelectorAll(".share-btn").forEach(function (btn) {
+<script>
+document.querySelectorAll('.share-btn').forEach(function (btn) {
     btn.addEventListener("click", function () {
+
+        // Merr URL-në nga data-url e produktit
+        const url = btn.getAttribute("data-url") || window.location.href;
+        const text = "Shiko këtë produkt nga ORA SWISS";
+
         if (navigator.share) {
             navigator.share({
                 title: document.title,
-                text: "Shiko këtë produkt nga ORA SWISS",
-                url: window.location.href
+                text: text,
+                url: url
+            }).catch(function(err) {
+                console.log("Share u anulua:", err);
             });
         } else {
-            alert("Share nuk përkrahet në këtë pajisje.");
+            alert("Share nuk përkrahet në këtë pajisje.\nKopjo linkun:\n" + url);
+        }
+
+    });
+});
+</script>
+
+<script>
+document.querySelectorAll('.share-btn').forEach(function (btn) {
+    btn.addEventListener("click", function () {
+        if (navigator.share) {
+            navigator.share({
+                title: "Omega 2400-4",
+                text: "Shiko këtë produkt unik nga ORA SWISS!",
+                url: "https://bit.ly/Omega2400-4"
+            });
+        } else {
+            alert("Share nuk përkrahet në këtë pajisje.\nKopjo linkun: https://bit.ly/Omega2400-4");
         }
     });
 });

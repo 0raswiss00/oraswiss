@@ -869,4 +869,13 @@ body {
   cursor: pointer;
 }
 
+/* Thumbnails poshte produktit Omega */
+.product-gallery img.thumb {
+  margin-right: 6px;   /* hapësira midis fotove */
+  border-radius: 6px;  /* thjesht i bën pak më të buta qoshet */
+}
+
+.product-gallery img.thumb:last-child {
+  margin-right: 0;     /* pa hapësirë pas fotos së fundit */
+}
 

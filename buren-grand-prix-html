@@ -28,8 +28,8 @@
   <!-- Nese ke foto te dyta, mund t’i shtosh -->
   <div class="product-left">
       <img class="product-main-image"
-           src="buren-grand-prix-2.jpg"
-           alt="Buren Grand Prix Super Slender image 2">
+           <img class="thumb" src="guren-grand-prix-1.jpg" 
+            alt="Buren-Grand-Prix  image 1">
   </div>
 
   <!-- Kolona djathtas: form + butonat -->
@@ -84,19 +84,121 @@ design, and smooth performance after service. A perfect collectible
 for lovers of mid-century Swiss watches.
 </p>
 
-</div>
-
-</div>
   </div><!-- /product-box -->
 
   <!-- GALERIA POSHTE -->
   <div class="product-gallery">
-    <img class="thumb" src="omega-2400-4-1.jpg" alt="Omega 2400-4 Suvenir image 1">
-    <img class="thumb" src="omega-2400-4-2.jpg" alt="Omega 2400-4 Suvenir image 2">
-    <img class="thumb" src="omega-2400-4-3.jpg" alt="Omega 2400-4 Suvenir image 3">
-    <img class="thumb" src="omega-2400-4-4.jpg" alt="Omega 2400-4 Suvenir image 4">
-    <img class="thumb" src="omega-2400-4-5.jpg" alt="Omega 2400-4 Suvenir image 5">
-    <img class="thumb" src="omega-2400-4-6.jpg" alt="Omega 2400-4 Suvenir image 6">
+    <img class="thumb" src="guren-grand-prix-1.jpg" alt="Buren-Grand-Prix  image 1">
+    <img class="thumb" src="guren-grand-prix-2.jpg" alt="Buren-Grand-Prix  image 2">
+    <img class="thumb" src="guren-grand-prix-3.jpg" alt="Buren-Grand-Prix  image 3">
+    <img class="thumb" src="guren-grand-prix-4.jpg" alt="Buren-Grand-Prix  image 4">
+    <img class="thumb" src="guren-grand-prix-5.jpg" alt="Buren-Grand-Prix  image 5">
+    <img class="thumb" src="guren-grand-prix-6.jpg" alt="Buren-Grand-Prix  image 6">
+    <img class="thumb" src="guren-grand-prix-7.jpg" alt="Buren-Grand-Prix  image 7">
+    <img class="thumb" src="guren-grand-prix-8.jpg" alt="Buren-Grand-Prix  image 8">
   </div>
 </article>
 
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // 1. GALERIA – THUMB → FOTO KRYESORE
+  document.querySelectorAll('.product').forEach(function (product) {
+    const mainImage = product.querySelector('.product-main-image');
+    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
+
+    if (!mainImage || !thumbs.length) return;
+
+    thumbs.forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        mainImage.src = thumb.src;
+        if (thumb.alt) {
+          mainImage.alt = thumb.alt;
+        }
+      });
+    });
+  });
+
+  // 2. ZOOM – KUR KLIKON FOTON KRYESORE
+  document.querySelectorAll('.product-main-image').forEach(function (img) {
+    img.addEventListener('click', function () {
+      img.classList.toggle('zoomed');
+    });
+  });
+
+  // 3. LIKE PER CDO PRODUKT
+  document.querySelectorAll('.like-btn').forEach(function (btn) {
+    const id = btn.getAttribute('data-id');
+    if (!id) return;
+
+    const storageKey = 'liked_' + id;
+
+    // Nëse është pëlqyer më parë
+    if (localStorage.getItem(storageKey) === 'true') {
+      btn.classList.add('active');
+      btn.innerText = '✓ Liked';
+    }
+
+    btn.addEventListener('click', function () {
+      const isLiked = localStorage.getItem(storageKey) === 'true';
+
+      if (!isLiked) {
+        localStorage.setItem(storageKey, 'true');
+        btn.classList.add('active');
+        btn.innerText = '✓ Liked';
+        alert('U ruajt te Favorites ❤️');
+      } else {
+        localStorage.removeItem(storageKey);
+        btn.classList.remove('active');
+        btn.innerText = '❤️ Like';
+        alert('U hoq nga Favorites.');
+      }
+    });
+  });
+
+  // 4. SHARE PER CDO PRODUKT
+  document.querySelectorAll('.share-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const url  = btn.getAttribute('data-url') || window.location.href;
+      const text = btn.getAttribute('data-share-text') || 'Shiko këtë produkt nga ORA SWISS!';
+
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          text: text,
+          url:  url
+        }).catch(function (err) {
+          console.log('Share u anulua:', err);
+        });
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(url);
+        alert('Linku u kopjua! Mund ta ngjitësh kudo për ta shpërndarë.');
+      } else {
+        alert('Kopjo këtë link:\n' + url);
+      }
+    });
+  });
+});
+
+// 5. KERKIMI I PRODUKTEVE
+function searchProducts() {
+  const input = document.getElementById('searchBar');
+  if (!input) return;
+
+  const value = input.value.toLowerCase();
+  const products = document.querySelectorAll('.product');
+
+  products.forEach(function (product) {
+    const text = product.innerText.toLowerCase();
+    product.style.display = text.includes(value) ? '' : 'none';
+  });
+}
+</script>
+Shkruaj te Ora Swiss
+
+
+
+
+    
+</body>  
+</html>

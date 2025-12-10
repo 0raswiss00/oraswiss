@@ -1,14 +1,19 @@
+<button type="submit">Send Offer</button>
+
+<a href="index.html" class="back-button"
+   style="
+       display:block;
+       margin-top:12px;
+       text-align:center;
+   ">
+   ← Back to Home
+</a>
+Ora
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Sell Your Watch</title>
-
-<!-- UPLOADCARE SCRIPT -->
-<script>
-  UPLOADCARE_PUBLIC_KEY = "demopublickey"; 
-</script>
-<script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
 
 <style>
 body {
@@ -61,6 +66,10 @@ body {
     margin-bottom: 10px;
 }
 
+.sell-form textarea {
+    resize: vertical;
+}
+
 .sell-form button {
     width: 100%;
     padding: 12px;
@@ -82,37 +91,36 @@ body {
 
 <body>
 
-<form action="https://api.web3forms.com/submit" 
-      method="POST" 
+<form action="https://api.web3forms.com/submit"
+      method="POST"
+      enctype="multipart/form-data"
       class="sell-form">
 
+    <!-- VENDOS ACCESS_KEY TËND KËTU NËSE ËSHTË TJETËR -->
     <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
-    <input type="hidden" name="subject" value="New Sell Request">
-
-    <!-- Këtu futet linku i fotove -->
-    <input type="hidden" name="photos" id="photosField">
+    <input type="hidden" name="subject" value="New Sell Your Watch Request">
 
     <h3>Your Details</h3>
 
     <label>First name:</label>
-    <input type="text" name="first_name" required>
+    <input type="text" name="first_name" placeholder="Your first name" required>
 
     <label>Last name:</label>
-    <input type="text" name="last_name" required>
+    <input type="text" name="last_name" placeholder="Your last name" required>
 
     <label>Email:</label>
-    <input type="email" name="email" required>
+    <input type="email" name="email" placeholder="Your email address" required>
 
     <label>Phone:</label>
-    <input type="text" name="phone" placeholder="+355..." required>
+    <input type="text" name="phone" placeholder="+355..., +30..." required>
 
     <h3>Watch Details</h3>
 
     <label>Brand:</label>
-    <input type="text" name="brand" required>
+    <input type="text" name="brand" placeholder="Rolex, Omega, etc." required>
 
     <label>Model / Reference:</label>
-    <input type="text" name="model">
+    <input type="text" name="model" placeholder="Model / Reference">
 
     <label>Movement type:</label>
     <select name="movement">
@@ -123,36 +131,23 @@ body {
     </select>
 
     <label>Year (approx.):</label>
-    <input type="text" name="year">
+    <input type="text" name="year" placeholder="Approximate year">
 
     <label>Condition / Notes:</label>
-    <textarea name="notes" rows="4"></textarea>
+    <textarea name="notes" rows="4" placeholder="Condition, box & papers, service history..."></textarea>
 
-    <!-- UPLOADCARE PHOTO UPLOADER -->
-    <label>Upload Photos:</label>
-    <input 
-      type="hidden"
-      role="uploadcare-uploader"
-      data-multiple="true"
-      data-clearable="true"
-      id="uploader"
-    />
+    <label>Upload photos:</label>
+    <input type="file" name="photos[]" multiple accept="image/*">
 
     <button type="submit">Send Offer</button>
 
-    <a href="index.html" style="color:#ccc; text-align:center; display:block; margin-top:10px;">
+    <a href="index.html"
+       style="color:#ccc; text-align:center; display:block; margin-top:10px;">
        ← Back to Home
     </a>
 
 </form>
 
-<!-- SCRIPT QË FUT LINKUN E FOTOS NË HIDDEN FIELD -->
-<script>
-  const widget = uploadcare.Widget('#uploader');
-  widget.onUploadComplete(function(info) {
-      document.getElementById("photosField").value = info.cdnUrl;
-  });
-</script>
-
 </body>
 </html>
+Shkruaj te Ora Swiss

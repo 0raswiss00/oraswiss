@@ -93,7 +93,11 @@
 <article id="omega-hands-1260" class="product-box">
 
   <div class="product-images">
-    <img id="main-omega-hands-1260" src="omega-hands-1260-1.jpg" class="main-img">
+    <img
+      id="main-omega-hands-1260"
+      src="omega-hands-1260-1.jpg"
+      class="main-img"
+      alt="Omega hands 1260 image 1">
 
     <div class="thumb-row">
       <img src="omega-hands-1260-1.jpg" class="thumb" onclick="document.getElementById('main-omega-hands-1260').src=this.src">
@@ -154,7 +158,16 @@
     </ul>
   </div>
 
+  <!-- GALERIA -->
+  <div class="product-gallery">
+    <img class="thumb" src="omega-hands-1260-1.jpg" alt="Omega hands 1260 image 1">
+    <img class="thumb" src="omega-hands-1260-2.jpg" alt="Omega hands 1260 image 2">
+    <img class="thumb" src="omega-hands-1260-3.jpg" alt="Omega hands 1260 image 3">
+  </div>
+
 </article>
+
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {

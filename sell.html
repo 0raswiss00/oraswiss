@@ -1,17 +1,21 @@
-<a href="index.html" class="back-button"
-   style="
-       display:block;
-       margin-top:12px;
-       text-align:center;
-   ">
-   ← Back to Home
-</a>
-
+<script>
+  const widget = uploadcare.Widget('#uploader');
+  widget.onUploadComplete(function(info) {
+      document.getElementById('photosField').value = info.cdnUrl;
+  });
+</script>
+Ora
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Sell Your Watch</title>
+
+<!-- UPLOADCARE SCRIPT -->
+<script>
+  UPLOADCARE_PUBLIC_KEY = "demopublickey"; /* kur të hapësh llogari tënde, e zëvendëson */
+</script>
+<script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
 
 <style>
 body {
@@ -91,12 +95,14 @@ body {
 
 <form action="https://api.web3forms.com/submit"
       method="POST"
-      enctype="multipart/form-data"
       class="sell-form">
 
-    <!-- VENDOS ACCESS_KEY TËND KËTU NËSE ËSHTË TJETËR -->
+    <!-- VENDOS ACCESS_KEY TËND NËSE ËSHTË TJETËR -->
     <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
     <input type="hidden" name="subject" value="New Sell Your Watch Request">
+
+    <!-- KËTU DO FUTET LINKU I FOTOS NGA UPLOADCARE -->
+    <input type="hidden" name="photos" id="photosField">
 
     <h3>Your Details</h3>
 
@@ -128,17 +134,21 @@ body {
         <option>Other</option>
     </select>
 
-    <label>Upload Photos:</label>
-<input 
-  type="hidden"
-  role="uploadcare-uploader"
-  data-multiple="true"
-  data-clearable="true"
-  id="uploader"
-/>
+    <label>Year (approx.):</label>
+    <input type="text" name="year" placeholder="Approximate year">
 
     <label>Condition / Notes:</label>
-    <textarea name="notes" rows="4" placeholder="Condition, box & papers, service history..."></textarea>
+    <textarea name="notes" rows="4"
+              placeholder="Condition, box & papers, service history..."></textarea>
+
+    <label>Upload Photos:</label>
+    <input
+      type="hidden"
+      role="uploadcare-uploader"
+      data-multiple="true"
+      data-clearable="true"
+      id="uploader"
+    />
 
     <button type="submit">Send Offer</button>
 
@@ -149,13 +159,14 @@ body {
 
 </form>
 
+<!-- SCRIPT QË KOPJON LINKUN E FOTOS TE photosField -->
 <script>
-  const widget = uploadcare.Widget('#uploader');
-  widget.onUploadComplete(function(info) {
-      document.getElementById('photosField').value = info.cdnUrl;
-  });
+const widget = uploadcare.Widget('#uploader');
+widget.onUploadComplete(function(info) {
+    document.getElementById('photosField').value = info.cdnUrl;
+});
 </script>
-   
+
 </body>
 </html>
 

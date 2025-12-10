@@ -1,10 +1,3 @@
-<script>
-  const widget = uploadcare.Widget('#uploader');
-  widget.onUploadComplete(function(info) {
-      document.getElementById('photosField').value = info.cdnUrl;
-  });
-</script>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -97,16 +90,14 @@ body {
       method="POST"
       class="sell-form">
 
-    <!-- VENDOS ACCESS_KEY TËND NËSE ËSHTË TJETËR -->
+    <!-- Web3Forms settings -->
     <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
     <input type="hidden" name="subject" value="New Sell Your Watch Request">
-    <!-- Email settings -->
     <input type="hidden" name="from_name" value="OraSwiss Website">
     <input type="hidden" name="botcheck">
     <input type="hidden" name="redirect" value="https://oraswiss.com/success.html">
 
-  
-    <!-- KËTU DO FUTET LINKU I FOTOS NGA UPLOADCARE -->
+    <!-- këtu do futet linku i fotos nga Uploadcare -->
     <input type="hidden" name="photos" id="photosField">
 
     <h3>Your Details</h3>
@@ -164,15 +155,13 @@ body {
 
 </form>
 
-<!-- SCRIPT QË KOPJON LINKUN E FOTOS TE photosField -->
+<!-- SCRIPT që kopjon linkun e fotos te photosField -->
 <script>
-const widget = uploadcare.Widget('#uploader');
-widget.onUploadComplete(function(info) {
-    document.getElementById('photosField').value = info.cdnUrl;
-});
+  const widget = uploadcare.Widget('#uploader');
+  widget.onUploadComplete(function(info) {
+      document.getElementById('photosField').value = info.cdnUrl;
+  });
 </script>
 
 </body>
 </html>
-
-

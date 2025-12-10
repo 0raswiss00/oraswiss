@@ -6,12 +6,11 @@
 
 <!-- UPLOADCARE SCRIPT -->
 <script>
-  UPLOADCARE_PUBLIC_KEY = "demopublickey";
+  UPLOADCARE_PUBLIC_KEY = "demopublickey"; 
 </script>
 <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
 
 <style>
-/* Background total i zi */
 body {
     margin: 0;
     padding: 0;
@@ -24,8 +23,6 @@ body {
     min-height: 100vh;
 }
 
-
-/* Kuti e formës */
 .sell-form {
     background: #111;
     padding: 30px 25px;
@@ -36,7 +33,6 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.7);
 }
 
-/* Tituj të seksioneve */
 .sell-form h3 {
     margin-top: 0;
     margin-bottom: 15px;
@@ -45,7 +41,6 @@ body {
     padding-bottom: 5px;
 }
 
-/* Etiketat */
 .sell-form label {
     display: block;
     font-size: 14px;
@@ -53,7 +48,6 @@ body {
     margin-bottom: 5px;
 }
 
-/* Inputet, textarea dhe select */
 .sell-form input,
 .sell-form textarea,
 .sell-form select {
@@ -67,17 +61,6 @@ body {
     margin-bottom: 10px;
 }
 
-.sell-form textarea {
-    resize: vertical;
-}
-
-/* Placeholder */
-.sell-form input::placeholder,
-.sell-form textarea::placeholder {
-    color: #777;
-}
-
-/* Butoni */
 .sell-form button {
     width: 100%;
     padding: 12px;
@@ -89,13 +72,11 @@ body {
     font-weight: 600;
     cursor: pointer;
     margin-top: 15px;
-    transition: 0.2s ease;
 }
 
 .sell-form button:hover {
     background: #0077cc;
 }
-
 </style>
 </head>
 
@@ -103,42 +84,35 @@ body {
 
 <form action="https://api.web3forms.com/submit" 
       method="POST" 
-      enctype="multipart/form-data" 
       class="sell-form">
+
     <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
-    <input type="hidden" name="subject" value="New Sell Your Watch Request">
+    <input type="hidden" name="subject" value="New Sell Request">
+
+    <!-- Këtu futet linku i fotove -->
+    <input type="hidden" name="photos" id="photosField">
 
     <h3>Your Details</h3>
 
     <label>First name:</label>
-    <input type="text" name="first_name" placeholder="Your first name" required>
+    <input type="text" name="first_name" required>
 
     <label>Last name:</label>
-    <input type="text" name="last_name" placeholder="Your last name" required>
+    <input type="text" name="last_name" required>
 
     <label>Email:</label>
-    <input type="email" name="email" placeholder="Your email address" required>
-
-    <!-- NGARKIMI I FOTOVE -->
-    <label>Upload Photos:</label>
-    <input 
-      type="hidden"
-      role="uploadcare-uploader"
-      data-multiple="true"
-      name="photos"
-      data-clearable="true"
-    />
+    <input type="email" name="email" required>
 
     <label>Phone:</label>
-    <input type="text" name="phone" placeholder="+355..., +30..." required>
+    <input type="text" name="phone" placeholder="+355..." required>
 
     <h3>Watch Details</h3>
 
     <label>Brand:</label>
-    <input type="text" name="brand" placeholder="Rolex, Omega, etc." required>
+    <input type="text" name="brand" required>
 
     <label>Model / Reference:</label>
-    <input type="text" name="model" placeholder="Model / Reference">
+    <input type="text" name="model">
 
     <label>Movement type:</label>
     <select name="movement">
@@ -149,26 +123,36 @@ body {
     </select>
 
     <label>Year (approx.):</label>
-    <input type="text" name="year" placeholder="Approximate year">
+    <input type="text" name="year">
 
     <label>Condition / Notes:</label>
-    <textarea name="notes" rows="4" placeholder="Condition, box & papers, service history..."></textarea>
+    <textarea name="notes" rows="4"></textarea>
 
- <label>Upload photos:</label>
-<input type="file" name="photos[]" multiple accept="image/*">
- <button type="submit">Send Offer</button>
+    <!-- UPLOADCARE PHOTO UPLOADER -->
+    <label>Upload Photos:</label>
+    <input 
+      type="hidden"
+      role="uploadcare-uploader"
+      data-multiple="true"
+      data-clearable="true"
+      id="uploader"
+    />
 
-<a href="index.html" class="back-button"
-   style="
-       display:block;
-       margin-top:12px;
-       text-align:center;
-   ">
-   ← Back to Home
-</a>
+    <button type="submit">Send Offer</button>
+
+    <a href="index.html" style="color:#ccc; text-align:center; display:block; margin-top:10px;">
+       ← Back to Home
+    </a>
 
 </form>
 
+<!-- SCRIPT QË FUT LINKUN E FOTOS NË HIDDEN FIELD -->
+<script>
+  const widget = uploadcare.Widget('#uploader');
+  widget.onUploadComplete(function(info) {
+      document.getElementById("photosField").value = info.cdnUrl;
+  });
+</script>
 
 </body>
 </html>

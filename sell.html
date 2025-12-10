@@ -128,14 +128,17 @@ body {
         <option>Other</option>
     </select>
 
-    <label>Year (approx.):</label>
-    <input type="text" name="year" placeholder="Approximate year">
+    <label>Upload Photos:</label>
+<input 
+  type="hidden"
+  role="uploadcare-uploader"
+  data-multiple="true"
+  data-clearable="true"
+  id="uploader"
+/>
 
     <label>Condition / Notes:</label>
     <textarea name="notes" rows="4" placeholder="Condition, box & papers, service history..."></textarea>
-
-    <label>Upload photos:</label>
-    <input type="file" name="photos[]" multiple accept="image/*">
 
     <button type="submit">Send Offer</button>
 
@@ -146,6 +149,13 @@ body {
 
 </form>
 
+<script>
+  const widget = uploadcare.Widget('#uploader');
+  widget.onUploadComplete(function(info) {
+      document.getElementById('photosField').value = info.cdnUrl;
+  });
+</script>
+   
 </body>
 </html>
 

@@ -1,158 +1,166 @@
 <!doctype html>
-<html lang="sq">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Ora Swiss — Spare Parts — Zenith El Primero Cal. 400</title>
+<title>Ora Swiss — Separate Parts</title>
 
 <style>
-  :root{
-    --bg:#f6f3ea;
-    --card:#ffffff;
-    --ink:#111827;
-    --muted:#6b7280;
-    --line:#e5e7eb;
-    --gold:#b7922a;
-    --gold2:#8a6b14;
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:#f6f3ea;
+    color:#111;
   }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
-  .topbar{
+  header{
     background:#111;
     color:#fff;
-    border-bottom:4px solid var(--gold);
+    padding:16px;
+    border-bottom:4px solid #b7922a;
   }
-  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;max-width:1100px;margin:0 auto}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.3px}
-  .pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);padding:6px 10px;border-radius:999px;font-size:12px}
-  .wrap{max-width:1100px;margin:0 auto;padding:16px}
-  .crumbs{font-size:13px;color:var(--muted);margin:10px 0 14px}
-  .crumbs b{color:var(--ink)}
-  h1{margin:0 0 12px;font-size:28px}
-  .grid{display:grid;grid-template-columns:380px 1fr;gap:14px}
-  @media (max-width:980px){.grid{grid-template-columns:1fr}}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.06)}
-  .row{display:flex;gap:10px;align-items:center;margin:10px 0;flex-wrap:wrap}
-  input{
-    flex:1;min-width:240px;padding:12px 12px;border-radius:12px;border:1px solid var(--line);
-    background:#fff;color:var(--ink);outline:none
+  header h1{margin:0;font-size:24px}
+  .container{max-width:1100px;margin:0 auto;padding:20px}
+  .search{
+    width:100%;
+    padding:14px;
+    font-size:16px;
+    border-radius:12px;
+    border:1px solid #ccc;
+    margin-bottom:16px;
   }
-  input:focus{border-color:var(--gold)}
-  .btn{
-    display:inline-block;padding:11px 14px;border-radius:12px;border:1px solid var(--gold2);
-    background:linear-gradient(180deg,var(--gold),var(--gold2));
-    color:#fff;text-decoration:none;font-weight:700
-  }
-  .btn.disabled{opacity:.45;pointer-events:none}
-  .result{min-height:72px;padding:12px;border-radius:12px;border:1px dashed var(--line);color:var(--muted)}
-  .result strong{color:var(--ink)}
-  .stage{
-    position:relative;width:100%;aspect-ratio:3/4;border-radius:14px;overflow:hidden;border:1px solid var(--line);
+  .list{
+    max-height:520px;
+    overflow-y:auto;
     background:#fff;
+    border:1px solid #ddd;
+    border-radius:14px;
+    padding:10px;
   }
-  .stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff}
-  .watermark{
-    position:absolute;left:14px;top:14px;
-    background:rgba(183,146,42,.14);
-    border:1px solid rgba(183,146,42,.35);
-    color:var(--gold2);
-    padding:8px 10px;border-radius:12px;font-weight:800
+  .item{
+    padding:14px;
+    border-bottom:1px solid #eee;
+    cursor:pointer;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
   }
-  .footer{color:var(--muted);font-size:12px;margin-top:12px}
+  .item:last-child{border-bottom:none}
+  .item:hover{background:#f2efe6}
+  .brand{font-weight:700}
+  .cal{color:#666;font-size:14px}
+  .arrow{color:#b7922a;font-weight:700}
 </style>
 </head>
 
 <body>
 
-<div class="topbar">
-  <div class="wrap">
-    <div class="brand">ORA SWISS <span style="opacity:.7;font-weight:600">Spare Parts</span></div>
-    <div class="pill">Zenith • El Primero • <b style="color:#fff">Cal. 400</b></div>
+<header>
+  <h1>Separate Spare Parts</h1>
+</header>
+
+<div class="container">
+  <input class="search" type="search" placeholder="Search by brand or caliber…">
+
+  <div class="list">
+    <div class="item" onclick="location.href='el-primero-cal400.html'">
+      <div>
+        <div class="brand">Zenith</div>
+        <div class="cal">El Primero – Caliber 400</div>
+      </div>
+      <div class="arrow">→</div>
+    </div>
+
+    <!-- më vonë shton këtu -->
+    <!--
+    <div class="item">
+      <div>
+        <div class="brand">Rolex</div>
+        <div class="cal">Caliber 3135</div>
+      </div>
+      <div class="arrow">→</div>
+    </div>
+    -->
   </div>
 </div>
 
-<div class="wrap">
-  <div class="crumbs">Ora Swiss <span style="opacity:.6">›</span> Spare Parts <span style="opacity:.6">›</span> <b>Zenith Cal. 400</b></div>
-  <h1>Zenith El Primero Caliber 400</h1>
+</body>
+</html>
+Ora
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ora Swiss — Parts</title>
 
-<div class="crumbs">Ora Swiss …</div>
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#f5f5f5;
+}
+.header{
+  background:#111;
+  color:#fff;
+  padding:15px;
+  font-weight:bold;
+}
+.container{
+  max-width:1000px;
+  margin:20px auto;
+  padding:20px;
+  background:#fff;
+}
+.search{
+  width:100%;
+  padding:12px;
+  font-size:16px;
+  margin-bottom:15px;
+}
+.list{
+  max-height:400px;
+  overflow-y:auto;
+  border:1px solid #ddd;
+}
+.item{
+  padding:12px;
+  border-bottom:1px solid #eee;
+}
+.item a{
+  text-decoration:none;
+  color:#000;
+  font-weight:bold;
+}
+.item:hover{
+  background:#f0f0f0;
+}
+.brand{
+  background:#eee;
+  padding:10px;
+  font-weight:bold;
+}
+</style>
+</head>
 
-<h1>Zenith El Primero Caliber 400</h1>
+<body>
 
-<!-- KËTU E FUT KODIN -->
-<div class="parts-layout">
+<div class="header">ORA SWISS — PARTS</div>
 
-  <div class="parts-list">
-    <h3>Cal. 400 Parts</h3>
-    <div class="part-item">400-100 · Main Plate</div>
-    <div class="part-item">400-110 · Barrel</div>
-    <div class="part-item">400-120 · Gear Train</div>
+<div class="container">
+  <input class="search" placeholder="Search by brand or caliber…">
+
+  <div class="list">
+    <div class="brand">Zenith</div>
+
+    <div class="item">
+      <a href="el-primero-cal400.html">
+        El Primero Caliber 400
+      </a>
+    </div>
+
+    <!-- më vonë shtojmë të tjera -->
   </div>
-
-  <div class="parts-content">
-    <a href="separate-parts.html" class="back-btn">← Back to Parts</a>
-
-    <img
-      src="assets/cal400-diagram.jpg"
-      alt="Zenith El Primero Cal. 400 parts diagram"
-      style="width:100%; border-radius:10px;"
-    >
-
-    <input
-      id="q"
-      type="search"
-      placeholder="Enter Part No. e.g. 2557/1"
-    >
-  </div>
-
 </div>
-
-  
-
-  
-
-<script>
-  // 1) Ndrysho PayPal-in tënd:
-  const PAYPAL_BASE = "https://paypal.me/EMRIYT"; // <-- ndryshoje
-
-  // 2) Ndrysho link-un e fotos së diagramës (pasi ta ngarkosh te repo ose te GitHub “assets”):
-  const DIAGRAM_URL = "assets/cal400-diagram.jpg"; // <-- ndryshoje
-
-  // 3) Pjesët (tani janë shembull; pastaj i fusim të gjitha)
-  const PARTS = {
-    "2557/1": {name:"Date ring", price:120, currency:"CHF"},
-    "1143/1": {name:"Oscillating weight (rotor)", price:350, currency:"CHF"},
-    "1488": {name:"Wheel", price:55, currency:"CHF"}
-  };
-
-  function money(n){ return Number(n).toFixed(2); }
-  function paypalLink(amount){ return PAYPAL_BASE.replace(/\/$/,"") + "/" + money(amount); }
-
-  const img = document.getElementById("diagram");
-  img.src = DIAGRAM_URL;
-
-  const q = document.getElementById("q");
-  const info = document.getElementById("info");
-  const payBtn = document.getElementById("payBtn");
-
-  q.addEventListener("input", () => {
-    const key = (q.value || "").trim();
-    const p = PARTS[key];
-    if(!p){
-      info.innerHTML = "Part not found. Enter a Part No. e.g. <strong>2557/1</strong>";
-      info.style.color = "#6b7280";
-      payBtn.classList.add("disabled");
-      payBtn.href = "#";
-      return;
-    }
-    info.style.color = "#111827";
-    info.innerHTML = `<div><strong>Part No.</strong>: ${key}</div>
-                      <div><strong>Përshkrimi</strong>: ${p.name}</div>
-                      <div><strong>Çmimi</strong>: ${money(p.price)} ${p.currency||""}</div>`;
-    payBtn.classList.remove("disabled");
-    payBtn.href = paypalLink(p.price);
-  });
-</script>
 
 </body>
 </html>

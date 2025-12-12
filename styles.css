@@ -944,20 +944,19 @@ body {
    ONLY Separate Parts pages
    =============================== */
 
-.separate-parts .parts-images{
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 20px 0;
+.parts-images{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  margin:20px 0;
 }
 
-.separate-parts .parts-diagram{
-  max-width: 520px;   /* zvogëloje / rrite këtu */
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 10px;
+.parts-images img{
+  width:100%;
+  max-width:500px;
+  height:auto;
+  border-radius:10px;
+  border:1px solid #e5e7eb;
 }
 
 

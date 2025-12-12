@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="sq">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Ora Swiss — El Primero Cal. 400</title>
+
+<style>
+body{font-family:Arial;background:#0b0f14;color:#e5e7eb;margin:0}
+.wrap{max-width:1100px;margin:auto;padding:20px}
+.card{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:15px}
+input{padding:10px;width:100%;margin-bottom:10px;border-radius:8px;border:1px solid #333}
+.btn{display:inline-block;padding:10px 15px;background:#000;color:#fff;text-decoration:none;border-radius:8px}
+.btn.disabled{opacity:.5;pointer-events:none}
+img{max-width:100%;background:#fff;border-radius:10px}
+</style>
+
+</head>
+<body>
+
+<div class="wrap">
+  <h1>Zenith El Primero Cal. 400</h1>
+
+  <input id="search" placeholder="Shkruaj Part No. p.sh. 2557/1">
+
+  <div id="info" class="card">Zgjidh një pjesë</div>
+
+  <br>
+  <a id="pay" class="btn disabled" target="_blank">Buy with PayPal</a>
+
+  <br><br>
+
+  <img src="https://via.placeholder.com/800x1000?text=Cal+400+Diagram">
+</div>
+
+<script>
+const paypal = "https://paypal.me/EMRIYT"; // NDRYSHO EMRIN
+
+const parts = {
+  "2557/1": {name:"Date Ring", price:120},
+  "1143/1": {name:"Rotor", price:350},
+  "1488": {name:"Wheel", price:55}
+};
+
+document.getElementById("search").addEventListener("input", e=>{
+  const p = parts[e.target.value];
+  const info = document.getElementById("info");
+  const btn = document.getElementById("pay");
+
+  if(!p){
+    info.innerHTML = "Nuk u gjet pjesa";
+    btn.classList.add("disabled");
+    return;
+  }
+
+  info.innerHTML = "<b>"+e.target.value+"</b><br>"+p.name+"<br>CHF "+p.price;
+  btn.href = paypal+"/"+p.price;
+  btn.classList.remove("disabled");
+});
+</script>
+
+</body>
+</html>

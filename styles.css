@@ -976,3 +976,8 @@ body {
 }
 
 .register-btn{ border: 5px solid red !important; }
+.register-btn:focus,
+.register-btn:active {
+  outline: none;
+  box-shadow: none;
+}

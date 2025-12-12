@@ -1,71 +1,144 @@
 <!doctype html>
 <html lang="sq">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Ora Swiss — Spare Parts — Zgjidh Kategorinë</title>
-  <style>
-    :root{
-      --bg:#f6f3ea; --card:#fff; --ink:#111827; --muted:#6b7280;
-      --line:#e5e7eb; --gold:#b7922a; --gold2:#8a6b14;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
-    .topbar{background:#111;color:#fff;border-bottom:4px solid var(--gold);}
-    .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;max-width:1100px;margin:0 auto}
-    .brand{font-weight:700;letter-spacing:.3px}
-    .wrap{max-width:1100px;margin:0 auto;padding:16px}
-    .crumbs{font-size:13px;color:var(--muted);margin:10px 0 14px}
-    h1{margin:0 0 12px;font-size:28px}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    @media (max-width:980px){.grid{grid-template-columns:1fr}}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.06)}
-    .btn{display:inline-block;padding:11px 14px;border-radius:12px;border:1px solid var(--gold2);
-      background:linear-gradient(180deg,var(--gold),var(--gold2));
-      color:#fff;text-decoration:none;font-weight:700
-    }
-    .muted{color:var(--muted);font-size:13px;margin-top:6px}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Ora Swiss – Spare Parts</title>
+
+<style>
+:root{
+  --gold:#b7922a;
+  --gold2:#8a6b14;
+  --bg:#f6f3ea;
+  --card:#fff;
+  --ink:#111;
+  --muted:#6b7280;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+}
+
+/* TOPBAR */
+.topbar{
+  background:#111;
+  color:#fff;
+  border-bottom:4px solid var(--gold);
+}
+.topbar .wrap{
+  max-width:1100px;
+  margin:auto;
+  padding:14px;
+  font-weight:700;
+}
+
+/* LAYOUT */
+.wrap{
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+}
+
+h1{
+  margin:10px 0 20px;
+  font-size:30px;
+}
+
+/* BUTTON */
+.btn{
+  display:inline-block;
+  padding:12px 16px;
+  border-radius:12px;
+  background:linear-gradient(180deg,var(--gold),var(--gold2));
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+}
+
+/* SEARCH */
+.search{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid #ccc;
+  margin-bottom:20px;
+  font-size:16px;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:16px;
+}
+
+.card{
+  background:var(--card);
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.muted{color:var(--muted);font-size:14px;margin:6px 0 14px}
+</style>
 </head>
+
 <body>
 
+<!-- TOP -->
 <div class="topbar">
-  <div class="wrap">
-    <div class="brand">ORA SWISS <span style="opacity:.7;font-weight:600">Spare Parts</span></div>
-  </div>
+  <div class="wrap">ORA SWISS – Spare Parts</div>
 </div>
 
 <div class="wrap">
-  <div class="crumbs">Ora Swiss <span style="opacity:.6">›</span> Spare Parts</div>
-  <h1>Zgjidh kategorinë</h1>
 
-  <div class="grid">
-    <div class="card">
-      <h3 style="margin:0">Zenith • El Primero • Cal. 400</h3>
+  <!-- BACK -->
+  <a href="javascript:history.back()" class="btn">← Kthehu mbrapa</a>
+
+  <!-- TITLE -->
+  <h1>Zgjidh pjesën</h1>
+
+  <!-- SEARCH -->
+  <input
+    id="search"
+    class="search"
+    placeholder="Kërko: Zenith, Rolex, Cal. 400, 2030…">
+
+  <!-- CATEGORIES -->
+  <div id="grid" class="grid">
+
+    <div class="card" data-search="zenith el primero 400">
+      <h3>Zenith • El Primero • Cal. 400</h3>
       <div class="muted">Pjesë këmbimi + diagram</div>
-      <div style="margin-top:12px">
-        <a class="btn" href="el-primero-cal400.html">Hap</a>
-      </div>
+      <a class="btn" href="el-primero-cal400.html">Hap</a>
     </div>
 
-    <div class="card">
-      <h3 style="margin:0">Rolex • Cal. 2030</h3>
+    <div class="card" data-search="rolex 2030">
+      <h3>Rolex • Cal. 2030</h3>
       <div class="muted">Pjesë këmbimi + diagram</div>
-      <div style="margin-top:12px">
-        <a class="btn" href="rolex-2030.html">Hap</a>
-      </div>
+      <a class="btn" href="rolex-2030.html">Hap</a>
     </div>
 
-    <div class="card">
-      <h3 style="margin:0">Shto kategori të re</h3>
-      <div class="muted">Kopjo një faqe ekzistuese dhe ndrysho emrin/fotot</div>
-      <div style="margin-top:12px">
-        <a class="btn" href="#">Coming soon</a>
-      </div>
-    </div>
   </div>
 </div>
 
+<script>
+const search = document.getElementById("search");
+const cards = document.querySelectorAll(".card");
+
+search.addEventListener("input", () => {
+  const q = search.value.toLowerCase();
+  cards.forEach(card => {
+    card.style.display =
+      card.dataset.search.includes(q) ? "block" : "none";
+  });
+});
+</script>
+
 </body>
 </html>
-

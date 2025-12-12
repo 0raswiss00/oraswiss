@@ -115,51 +115,7 @@ body{
 
 <!-- më vonë shtojmë të tjera -->
   
-<script>
-  // CHANGE THIS to your PayPal.me (no trailing slash needed)
-  const PAYPAL_BASE = "https://paypal.me/EMRIYT";
 
-  // CHANGE THIS if your image name is different
-  const DIAGRAM_URL = "assets/cal400-diagram.jpg";
-
-  // Example parts (replace with your real list)
-  const PARTS = {
-    "2557/1": {name:"Date ring", price:120, currency:"CHF"},
-    "1143/1": {name:"Oscillating weight (rotor)", price:350, currency:"CHF"},
-    "1488":   {name:"Wheel", price:55,  currency:"CHF"}
-  };
-
-  function money(n){ return Number(n).toFixed(2); }
-  function paypalLink(amount){ return PAYPAL_BASE.replace(/\/$/,"") + "/" + money(amount); }
-
-  document.getElementById("diagram").src = DIAGRAM_URL;
-
-  const q = document.getElementById("q");
-  const info = document.getElementById("info");
-  const payBtn = document.getElementById("payBtn");
-
-  q.addEventListener("input", () => {
-    const key = (q.value || "").trim();
-    const p = PARTS[key];
-
-    if(!p){
-      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>2557/1</strong>';
-      info.style.color = "#6b7280";
-      payBtn.classList.add("disabled");
-      payBtn.href = "#";
-      return;
-    }
-
-    info.style.color = "#111827";
-    info.innerHTML =
-      `<div><strong>Part No.</strong>: ${key}</div>
-       <div><strong>Description</strong>: ${p.name}</div>
-       <div><strong>Price</strong>: ${money(p.price)} ${p.currency||""}</div>`;
-
-    payBtn.classList.remove("disabled");
-    payBtn.href = paypalLink(p.price);
-  });
-</script>
 
 </body>
 </html>

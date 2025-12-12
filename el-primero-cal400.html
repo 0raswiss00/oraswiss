@@ -1,95 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ora Swiss — Parts</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#f5f5f5;
+}
+.header{
+  background:#111;
+  color:#fff;
+  padding:15px;
+  font-weight:bold;
+}
+.container{
+  max-width:1000px;
+  margin:20px auto;
+  padding:20px;
+  background:#fff;
+}
+.search{
+  width:100%;
+  padding:12px;
+  font-size:16px;
+  margin-bottom:15px;
+}
+.list{
+  max-height:400px;
+  overflow-y:auto;
+  border:1px solid #ddd;
+}
+.item{
+  padding:12px;
+  border-bottom:1px solid #eee;
+}
+.item a{
+  text-decoration:none;
+  color:#000;
+  font-weight:bold;
+}
+.item:hover{
+  background:#f0f0f0;
+}
+.brand{
+  background:#eee;
+  padding:10px;
+  font-weight:bold;
+}
+</style>
+</head>
+
 <body>
 
-<div class="topbar">
-  <div class="wrap">
-    <div class="brand">ORA SWISS <span>Spare Parts</span></div>
-    <div class="pill">Zenith · El Primero · <b>Cal. 400</b></div>
-  </div>
-</div>
+<div class="header">ORA SWISS — PARTS</div>
 
-<div class="wrap">
+<div class="container">
+  <input class="search" placeholder="Search by brand or caliber…">
 
-  <div class="crumbs">
-    Ora Swiss <span>›</span> Spare Parts <span>›</span> Zenith Cal. 400
-  </div>
+  <div class="list">
+    <div class="brand">Zenith</div>
 
-  <h1>Zenith El Primero Caliber 400</h1>
-
-  <div class="parts-layout">
-
-    <!-- MAJTAS: LISTA -->
-    <div class="parts-list">
-      <h3>Cal. 400 Parts</h3>
-
-      <div class="part-item">400-100 · Main Plate</div>
-      <div class="part-item">400-110 · Barrel</div>
-      <div class="part-item">400-120 · Gear Train</div>
-      <div class="part-item">400-130 · Escapement</div>
-      <div class="part-item">400-140 · Balance</div>
-    </div>
-
-    <!-- DJATHTAS: FOTO + SEARCH -->
-    <div class="parts-content">
-
-      <a href="separate-parts.html" class="back-btn">← Back to Parts</a>
-
-      <img
-        src="assets/cal400-diagram.jpg"
-        alt="Zenith El Primero Cal. 400 parts diagram"
-        class="diagram"
-      >
-
-      <input
-        id="q"
-        type="search"
-        placeholder="Enter Part No. e.g. 2557/1"
-      >
-
-      <div id="info" class="result">
-        Select a part by entering the Part Number.
-      </div>
-
-      <a id="payBtn" class="pay-btn disabled" href="#">
-        Buy with PayPal
+    <div class="item">
+      <a href="el-primero-cal400.html">
+        El Primero Caliber 400
       </a>
-
     </div>
+
+    <!-- më vonë shtojmë të tjera -->
   </div>
 </div>
-
-<script>
-const PARTS = {
-  "400-100": { name: "Main Plate", price: 120 },
-  "400-110": { name: "Barrel", price: 95 },
-  "400-120": { name: "Gear Train", price: 80 }
-};
-
-const PAYPAL_BASE = "https://paypal.me/EMRIYT/";
-
-const q = document.getElementById("q");
-const info = document.getElementById("info");
-const payBtn = document.getElementById("payBtn");
-
-q.addEventListener("input", () => {
-  const key = q.value.trim();
-  const p = PARTS[key];
-
-  if (!p) {
-    info.textContent = "Part not found.";
-    payBtn.classList.add("disabled");
-    payBtn.href = "#";
-    return;
-  }
-
-  info.innerHTML = `
-    <div><b>Part:</b> ${key}</div>
-    <div><b>Description:</b> ${p.name}</div>
-    <div><b>Price:</b> €${p.price}</div>
-  `;
-
-  payBtn.classList.remove("disabled");
-  payBtn.href = PAYPAL_BASE + p.price;
-});
-</script>
 
 </body>
+</html>
+Ora

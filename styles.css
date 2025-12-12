@@ -924,12 +924,20 @@ body {
   opacity: .9;
 }
 
-/* ONLY Separate Parts page */
-.separate-parts .parts-diagram{
-  max-width: 600px;   /* ndrysho sa të duash */
-  width: 80%;
-  height: auto;
-  display: block;
-  margin: 20px auto;
-  border-radius: 10px;
+/* === Separate Parts – images === */
+.parts-images{
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 16px 0;
 }
+
+.parts-images img{
+  width: 100%;
+  max-width: 500px;   /* ndrysho 400–600 sipas qejfit */
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+

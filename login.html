@@ -88,7 +88,8 @@ a{
     <h2>Register</h2>
     <p>Regjistrohu me email për oferta dhe produkte të reja.</p>
 
-    <form action="https://formspree.io/f/XXXXXXX" method="POST">
+    <form action="https://api.web3forms.com/submit" method="POST"> 
+      <input type="hidden" name="access_key" value="KETU_VENDOS_ACCESS_KEY_TEND">
       <input type="text" name="name" placeholder="Full name" required>
       <input type="email" name="email" placeholder="Email address" required>
       <button type="submit">Register</button>
@@ -100,10 +101,13 @@ a{
     <h2>Login</h2>
     <p>Nëse je regjistruar më parë, fut email-in.</p>
 
-    <form action="https://formspree.io/f/XXXXXXX" method="POST">
-      <input type="email" name="email" placeholder="Email address" required>
-      <button type="submit">Login</button>
-    </form>
+<form action="https://api.web3forms.com/submit" method="POST">
+
+  <!-- ACCESS KEY -->
+  <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-XXXXXXXX">
+
+  <input type="email" name="email" placeholder="Email address" required>
+
 
     <p style="margin-top:15px;">
       <a href="index.html">← Back to Home</a>

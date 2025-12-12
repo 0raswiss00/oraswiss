@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Ora Swiss — Separate Parts</title>
+
+<style>
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:#f6f3ea;
+    color:#111;
+  }
+  header{
+    background:#111;
+    color:#fff;
+    padding:16px;
+    border-bottom:4px solid #b7922a;
+  }
+  header h1{margin:0;font-size:24px}
+  .container{max-width:1100px;margin:0 auto;padding:20px}
+  .search{
+    width:100%;
+    padding:14px;
+    font-size:16px;
+    border-radius:12px;
+    border:1px solid #ccc;
+    margin-bottom:16px;
+  }
+  .list{
+    max-height:520px;
+    overflow-y:auto;
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:14px;
+    padding:10px;
+  }
+  .item{
+    padding:14px;
+    border-bottom:1px solid #eee;
+    cursor:pointer;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .item:last-child{border-bottom:none}
+  .item:hover{background:#f2efe6}
+  .brand{font-weight:700}
+  .cal{color:#666;font-size:14px}
+  .arrow{color:#b7922a;font-weight:700}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Separate Spare Parts</h1>
+</header>
+
+<div class="container">
+  <input class="search" type="search" placeholder="Search by brand or caliber…">
+
+  <div class="list">
+    <div class="item" onclick="location.href='el-primero-cal400.html'">
+      <div>
+        <div class="brand">Zenith</div>
+        <div class="cal">El Primero – Caliber 400</div>
+      </div>
+      <div class="arrow">→</div>
+    </div>
+
+    <!-- më vonë shton këtu -->
+    <!--
+    <div class="item">
+      <div>
+        <div class="brand">Rolex</div>
+        <div class="cal">Caliber 3135</div>
+      </div>
+      <div class="arrow">→</div>
+    </div>
+    -->
+  </div>
+</div>
+
+</body>
+</html>
+Shkruaj te Ora Swiss

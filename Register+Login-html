@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="sq">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Register / Login</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  background:#0b0b0b;
+  color:#fff;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.wrapper{
+  width:100%;
+  max-width:900px;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:40px;
+  padding:40px;
+}
+
+.box{
+  background:#121212;
+  border:1px solid #222;
+  border-radius:16px;
+  padding:30px;
+}
+
+h2{
+  margin-top:0;
+  font-size:28px;
+}
+
+p{
+  color:#aaa;
+  font-size:14px;
+}
+
+input, button{
+  width:100%;
+  padding:14px;
+  margin:10px 0;
+  border-radius:12px;
+  border:1px solid #2a2a2a;
+  background:#0f0f0f;
+  color:#fff;
+  font-size:15px;
+}
+
+button{
+  background:#2f81f7;
+  border:none;
+  font-weight:700;
+  cursor:pointer;
+}
+
+button:hover{
+  opacity:.9;
+}
+
+a{
+  color:#9bbcff;
+  text-decoration:none;
+}
+
+@media(max-width:900px){
+  .wrapper{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+  <!-- REGISTER -->
+  <div class="box">
+    <h2>Register</h2>
+    <p>Regjistrohu me email për oferta dhe produkte të reja.</p>
+
+    <form action="https://formspree.io/f/XXXXXXX" method="POST">
+      <input type="text" name="name" placeholder="Full name" required>
+      <input type="email" name="email" placeholder="Email address" required>
+      <button type="submit">Register</button>
+    </form>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="box">
+    <h2>Login</h2>
+    <p>Nëse je regjistruar më parë, fut email-in.</p>
+
+    <form action="https://formspree.io/f/XXXXXXX" method="POST">
+      <input type="email" name="email" placeholder="Email address" required>
+      <button type="submit">Login</button>
+    </form>
+
+    <p style="margin-top:15px;">
+      <a href="index.html">← Back to Home</a>
+    </p>
+  </div>
+
+</div>
+
+</body>
+</html>
+Shkruaj te Ora Swiss

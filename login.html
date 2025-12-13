@@ -48,8 +48,8 @@
 <script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-  const SUPABASE_URL = "https://XXXX.supabase.co";
-  const SUPABASE_ANON_KEY = "PASTE_ANON_KEY";
+  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+  const SUPABASE_ANON_KEY = "PASTE_ANON_KEY_E_PLOTË_KËTU";
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -61,7 +61,7 @@
     const { data, error } = await supabase.auth.signUp({ email, password });
 
     document.getElementById("reg-msg").innerText =
-      error ? error.message : "✅ U regjistrua! Kontrollo email për konfirmim (nëse është ON).";
+      error ? error.message : "✅ U regjistrua! Kontrollo email.";
 
     console.log("SIGNUP:", { data, error });
   });
@@ -71,10 +71,10 @@
     const email = document.getElementById("login-email").value.trim();
     const password = document.getElementById("login-password").value;
 
-    const { data, error } = await supabase.auth.signUp({
-  email,
-  password,
-});
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
     document.getElementById("login-msg").innerText =
       error ? error.message : "✅ Login OK";

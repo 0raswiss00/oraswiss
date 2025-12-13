@@ -136,7 +136,8 @@
     const SUPABASE_ANON_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+    document.getElementById("reg-msg").innerText = "JS LOADED ✅";
+    
    document.getElementById("btn-register").addEventListener("click", async () => {
   const btn = document.getElementById("btn-register");
   const msg = document.getElementById("reg-msg");
@@ -166,10 +167,11 @@
     btn.innerText = "Register";
   }
 });
-Ti dërgove
- document.getElementById("btn-register").addEventListener("click", async () => {
-      const email = document.getElementById("reg-email").value.trim();
-      const password = document.getElementById("reg-password").value;
+// Ti dergove
+document.getElementById("btn-register").addEventListener("click", () => {
+  document.getElementById("reg-msg").innerText = "CLICK OK ✅";
+});
+
 
       const { error } = await supabase.auth.signUp({ email, password });
 

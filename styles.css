@@ -998,9 +998,9 @@ body {
   display: none !important;
 }
 
-/* siguro që input-et të jenë mbi gjithçka */
-#reg-email, #reg-password, #login-email, #login-password,
-#btn-register, #btn-login{
-  position: relative;
-  z-index: 99999 !important;
+.modal, .dropdown-content, .nav-scroll, header, .site-header {
+  pointer-events: none;
+}
+.register-form, .register-form *{
+  pointer-events: auto;
 }

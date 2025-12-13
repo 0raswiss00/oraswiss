@@ -137,7 +137,37 @@
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    document.getElementById("btn-register").addEventListener("click", async () => {
+   document.getElementById("btn-register").addEventListener("click", async () => {
+  const btn = document.getElementById("btn-register");
+  const msg = document.getElementById("reg-msg");
+
+  const email = document.getElementById("reg-email").value.trim();
+  const password = document.getElementById("reg-password").value;
+
+  msg.innerText = "";
+  btn.disabled = true;
+  btn.innerText = "Please wait...";
+
+  try {
+    const { data, error } = await supabase.auth.signUp({ email, password });
+
+    if (error) {
+      msg.innerText = "❌ " + error.message;
+    } else {
+      msg.innerText = "✅ U regjistrua! Kontrollo email (edhe Spam).";
+    }
+
+    console.log("SIGNUP:", { data, error });
+  } catch (e) {
+    msg.innerText = "❌ Network/JS error.";
+    console.log("CATCH ERROR:", e);
+  } finally {
+    btn.disabled = false;
+    btn.innerText = "Register";
+  }
+});
+Ti dërgove
+ document.getElementById("btn-register").addEventListener("click", async () => {
       const email = document.getElementById("reg-email").value.trim();
       const password = document.getElementById("reg-password").value;
 
@@ -147,6 +177,8 @@
         error ? error.message : "✅ Account created! Check your email.";
     });
   </script>
+
+
 
 </body>
 </html>

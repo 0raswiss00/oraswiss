@@ -990,20 +990,3 @@ body {
   color: #000;
 }
 
-/* ===== FIX LOGIN CLICK (password) ===== */
-
-/* mbyll çdo overlay që të bllokon klikimin */
-.modal,
-.product-main-image.zoomed{
-  display: none !important;
-}
-
-.modal, .dropdown-content, .nav-scroll, header, .site-header {
-  pointer-events: none;
-}
-.register-form, .register-form *{
-  pointer-events: auto;
-}
-* { -webkit-tap-highlight-color: transparent; }
-body { pointer-events: auto; }
-input, textarea, button { pointer-events: auto; }

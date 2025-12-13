@@ -1,69 +1,128 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="sq">
 <head>
-  <meta charset="UTF-8">
-  <title>Login / Register</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Register / Login</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  background:#0b0b0b;
+  color:#fff;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.wrapper{
+  width:100%;
+  max-width:900px;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:40px;
+  padding:40px;
+}
+
+.box{
+  background:#121212;
+  border:1px solid #222;
+  border-radius:16px;
+  padding:30px;
+}
+
+h2{
+  margin-top:0;
+  font-size:28px;
+}
+
+p{
+  color:#aaa;
+  font-size:14px;
+}
+
+input, button{
+  width:100%;
+  padding:14px;
+  margin:10px 0;
+  border-radius:12px;
+  border:1px solid #2a2a2a;
+  background:#0f0f0f;
+  color:#fff;
+  font-size:15px;
+}
+
+button{
+  background:#2f81f7;
+  border:none;
+  font-weight:700;
+  cursor:pointer;
+}
+
+button:hover{
+  opacity:.9;
+}
+
+a{
+  color:#9bbcff;
+  text-decoration:none;
+}
+
+@media(max-width:900px){
+  .wrapper{
+    grid-template-columns:1fr;
+  }
+}
+</style>
 </head>
+
 <body>
 
-<h2>Register</h2>
-<input id="reg-email" type="email" placeholder="Email">
-<input id="reg-password" type="password" placeholder="Password">
-<button id="registerBtn">Register</button>
+<div class="wrapper">
 
-<hr>
+  <!-- REGISTER -->
+  <div class="box">
+     <h2>Register</h2>
+         <p>Register with your email to receive offers and new products.</p>
+    
+    <form action="https://api.web3forms.com/submit" method="POST"> 
+      <input type="hidden" name="access_key" value="PASTE_YOUR_ACCESS_KEY_HERE">
+      <input type="text" name="name" placeholder="Full name" required>
+      <input type="email" name="email" placeholder="Email address" required>
+      <button type="submit">Register</button>
+    </form>
+  </div>
 
-<h2>Login</h2>
-<input id="login-email" type="email" placeholder="Email">
-<input id="login-password" type="password" placeholder="Password">
-<button id="loginBtn">Login</button>
+  <form action="https://api.web3forms.com/submit" method="POST">
 
-<script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+  <!-- ACCESS KEY -->
+  <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-XXXXXXXX">
 
-  // 🔴 VENDOS KËTU TË TUAT
-  const SUPABASE_URL = "PASTE_SUPABASE_URL";
-  const SUPABASE_ANON_KEY = "PASTE_ANON_KEY";
+  <input type="email" name="email" placeholder="Email address" required>
 
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  <button type="submit">Login</button>
+</form>
 
-  // REGISTER
-  document.getElementById("registerBtn").addEventListener("click", async () => {
-    const email = document.getElementById("reg-email").value;
-    const password = document.getElementById("reg-password").value;
+<form action="https://api.web3forms.com/submit" method="POST">
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+  <input type="hidden" name="access_key" value="UUID_NGA_WEB3FORMS">
 
-    if (error) {
-      alert(error.message);
-    } else {
-      alert("U regjistrua! Kontrollo email për verifikim.");
-    }
-  });
+  <!-- fushat e tjera -->
+  <input type="email" name="email" required>
+  <button type="submit">Submit</button>
 
-  // LOGIN
-  document.getElementById("loginBtn").addEventListener("click", async () => {
-    const email = document.getElementById("login-email").value;
-    const password = document.getElementById("login-password").value;
+</form>
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
 
-    if (error) {
-      alert(error.message);
-    } else {
-      alert("U fut me sukses!");
-      console.log(data.user);
-      // window.location.href = "index.html"; // nëse do redirect
-    }
-  });
-</script>
+    <p style="margin-top:15px;">
+      <a href="index.html">← Back to Home</a>
+    </p>
+  </div>
+
+</div>
 
 </body>
 </html>
-

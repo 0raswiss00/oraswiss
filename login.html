@@ -45,44 +45,37 @@
 </div>
 
 <script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-  // VENDOS VLERAT E SAKTA NGA Supabase → Project Settings → API
-  const SUPABASE_URL = "https://YOUR_PROJECT_REF.supabase.co";
-  const SUPABASE_ANON_KEY = "YOUR_ANON_PUBLIC_KEY";
+const SUPABASE_URL = "URL-JOTE-KËTU";
+const SUPABASE_ANON_KEY = "ANON-KEY-JOTE-KËTU";
 
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const regMsg = document.getElementById("reg-msg");
-  const loginMsg = document.getElementById("login-msg");
+// REGISTER
+document.getElementById("btn-register").onclick = async () => {
+  const email = document.getElementById("reg-email").value;
+  const password = document.getElementById("reg-password").value;
 
-  document.getElementById("btn-register").addEventListener("click", async () => {
-    const email = document.getElementById("reg-email").value.trim();
-    const password = document.getElementById("reg-password").value;
+  const { data, error } = await supabase.auth.signUp({ email, password });
 
-    if (!email || !password) { regMsg.textContent = "Plotëso email & password"; return; }
+  document.getElementById("reg-msg").innerText =
+    error ? error.message : "REGJISTRIM OK – kontrollo email";
+};
 
-    const { data, error } = await supabase.auth.signUp({ email, password });
+// LOGIN
+document.getElementById("btn-login").onclick = async () => {
+  const email = document.getElementById("login-email").value;
+  const password = document.getElementById("login-password").value;
 
-    if (error) { regMsg.textContent = error.message; return; }
-
-    // Shumë projekte kanë Email confirmation ON → prandaj s’bën “login” menjëherë
-    regMsg.textContent = data?.user
-      ? "✅ U regjistrua. Kontrollo email-in për konfirmim (nëse kërkohet)."
-      : "✅ Kërkesë u dërgua. Kontrollo email-in.";
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
   });
 
-  document.getElementById("btn-login").addEventListener("click", async () => {
-    const email = document.getElementById("login-email").value.trim();
-    const password = document.getElementById("login-password").value;
-
-    if (!email || !password) { loginMsg.textContent = "Plotëso email & password"; return; }
-
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-    loginMsg.textContent = error ? error.message : "✅ Login OK";
-    if (!error) window.location.href = "index.html";
-  });
+  document.getElementById("login-msg").innerText =
+    error ? error.message : "LOGIN OK";
+};
 </script>
 
 </body>

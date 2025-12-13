@@ -68,42 +68,46 @@ Ora
 <script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-  const SUPABASE_URL = "https://XXXXXXXX.supabase.co";
-  const SUPABASE_ANON_KEY = "PASTE_ANON_KEY_KETU";
+  const SUPABASE_URL = "https://XXXX.supabase.co";
+  const SUPABASE_ANON_KEY = "XXXX";
+
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const regMsg = document.getElementById("reg-msg");
   const loginMsg = document.getElementById("login-msg");
 
   document.getElementById("btn-register").addEventListener("click", async () => {
-    regMsg.textContent = "Duke regjistruar...";
+    regMsg.innerText = "Duke u regjistruar...";
     const email = document.getElementById("reg-email").value.trim();
     const password = document.getElementById("reg-password").value;
 
+    if (!email || !password) { regMsg.innerText = "Plotëso email & password"; return; }
+
     const { data, error } = await supabase.auth.signUp({ email, password });
 
-    if (error) regMsg.textContent = "❌ " + error.message;
-    else {
-      // shumicën e rasteve Supabase kërkon confirmim me email
-      regMsg.textContent = "✅ U bë signUp. Kontrollo email për konfirmim (spam/junk).";
-      console.log("signUp data:", data);
-    }
+    if (error) { regMsg.innerText = "❌ " + error.message; return; }
+
+    // Nëse konfirmimi me email është ON, data.user mund të jetë null, kjo është normale
+    regMsg.innerText = "✅ U dërgua. Kontrollo email (edhe Spam) për konfirmim.";
+    console.log("SIGNUP:", data);
   });
 
   document.getElementById("btn-login").addEventListener("click", async () => {
-    loginMsg.textContent = "Duke hyrë...";
+    loginMsg.innerText = "Duke hyrë...";
     const email = document.getElementById("login-email").value.trim();
     const password = document.getElementById("login-password").value;
 
+    if (!email || !password) { loginMsg.innerText = "Plotëso email & password"; return; }
+
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-    if (error) loginMsg.textContent = "❌ " + error.message;
-    else {
-      loginMsg.textContent = "✅ Login OK";
-      console.log("login data:", data);
-    }
+    if (error) { loginMsg.innerText = "❌ " + error.message; return; }
+
+    loginMsg.innerText = "✅ Login OK";
+    console.log("LOGIN:", data);
   });
 </script>
+
 
 </body>
 </html>

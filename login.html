@@ -105,6 +105,24 @@
     <a href="index.html">← Back to Home</a>
   </div>
 
+</div>  <!-- mbyllet Back to Home -->
+
+  
+<script>
+document.getElementById("btn-login").addEventListener("click", function () {
+  const email = document.getElementById("login-email").value;
+  const password = document.getElementById("login-password").value;
+
+  if (!email || !password) {
+    document.getElementById("login-msg").innerText = "Plotëso email & password";
+    return;
+  }
+
+  document.getElementById("login-msg").innerText = "Login OK (test)";
+});
+</script>
+
+  
 </div>
 
 <!-- SUPABASE -->

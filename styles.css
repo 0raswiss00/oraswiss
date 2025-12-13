@@ -1003,16 +1003,3 @@ input, button {
   pointer-events: auto;
 }
 
-.box, .wrapper {
-  position: relative;
-  z-index: 1;
-}
-
-/* nëse ke overlay/pseudo-element */
-.wrapper::before,
-.wrapper::after,
-.box::before,
-.box::after {
-  pointer-events: none;
-}
-

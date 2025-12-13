@@ -103,5 +103,39 @@
 
   <!-- SUPABASE (VETËM KY SCRIPT) -->
 
+
+  <script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+  const SUPABASE_URL = "https://XXXX.supabase.co";
+  const SUPABASE_ANON_KEY = "XXXX";
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // REGISTER
+  document.getElementById("btn-register").addEventListener("click", async () => {
+    const email = document.getElementById("reg-email").value.trim();
+    const password = document.getElementById("reg-password").value;
+
+    const { error } = await supabase.auth.signUp({ email, password });
+
+    document.getElementById("reg-msg").innerText =
+      error ? error.message : "✅ U regjistrua! Kontrollo email për konfirmim.";
+  });
+
+  // LOGIN
+  document.getElementById("btn-login").addEventListener("click", async () => {
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value;
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+    document.getElementById("login-msg").innerText =
+      error ? error.message : "✅ Login OK";
+  });
+</script>
+
+
+  
 </body>
 </html>

@@ -36,28 +36,19 @@
 
 <body>
 
-<!-- REGISTER -->
 <div class="box">
   <h2>Register</h2>
-
   <input id="reg-email" type="email" placeholder="Email">
   <input id="reg-password" type="password" placeholder="Password">
-
   <button type="button" onclick="register()">Register</button>
 </div>
 
-<hr>
-
-<!-- LOGIN -->
 <div class="box">
   <h2>Login</h2>
-
   <input id="login-email" type="email" placeholder="Email">
   <input id="login-password" type="password" placeholder="Password">
-
   <button type="button" onclick="login()">Login</button>
 </div>
-
 
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";

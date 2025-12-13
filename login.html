@@ -1,128 +1,104 @@
-<!doctype html>
-<html lang="sq">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Register / Login</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login / Register</title>
 
-<style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-  background:#0b0b0b;
-  color:#fff;
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.wrapper{
-  width:100%;
-  max-width:900px;
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:40px;
-  padding:40px;
-}
-
-.box{
-  background:#121212;
-  border:1px solid #222;
-  border-radius:16px;
-  padding:30px;
-}
-
-h2{
-  margin-top:0;
-  font-size:28px;
-}
-
-p{
-  color:#aaa;
-  font-size:14px;
-}
-
-input, button{
-  width:100%;
-  padding:14px;
-  margin:10px 0;
-  border-radius:12px;
-  border:1px solid #2a2a2a;
-  background:#0f0f0f;
-  color:#fff;
-  font-size:15px;
-}
-
-button{
-  background:#2f81f7;
-  border:none;
-  font-weight:700;
-  cursor:pointer;
-}
-
-button:hover{
-  opacity:.9;
-}
-
-a{
-  color:#9bbcff;
-  text-decoration:none;
-}
-
-@media(max-width:900px){
-  .wrapper{
-    grid-template-columns:1fr;
-  }
-}
-</style>
+  <style>
+    body { background:#0b0b0b; color:#fff; font-family:Arial, sans-serif; }
+    .wrapper { max-width:900px; margin:40px auto; display:flex; gap:30px; padding:0 16px; }
+    .box { flex:1; background:#121212; border:1px solid #2a2a2a; border-radius:14px; padding:18px; }
+    h2 { margin:0 0 10px; }
+    input, button { width:100%; padding:14px; margin:10px 0; border-radius:12px; border:1px solid #2a2a2a; background:#0f0f0f; color:#fff; font-size:15px; }
+    button { background:#2f81f7; border:none; font-weight:700; cursor:pointer; }
+    .msg { margin-top:10px; font-size:14px; opacity:0.9; }
+    a { color:#9cc3ff; text-decoration:none; }
+    .bottom { text-align:center; margin-top:20px; }
+  </style>
 </head>
 
 <body>
+  <div class="wrapper">
 
-<div class="wrapper">
+    <!-- REGISTER -->
+    <div class="box">
+      <h2>Register</h2>
 
-  <!-- REGISTER -->
-  <div class="box">
-     <h2>Register</h2>
-         <p>Register with your email to receive offers and new products.</p>
-    
-    <form action="https://api.web3forms.com/submit" method="POST"> 
-      <input type="hidden" name="access_key" value="PASTE_YOUR_ACCESS_KEY_HERE">
-      <input type="text" name="name" placeholder="Full name" required>
-      <input type="email" name="email" placeholder="Email address" required>
-      <button type="submit">Register</button>
-    </form>
+      <input id="reg-email" type="email" placeholder="Email" />
+      <input id="reg-password" type="password" placeholder="Password" />
+      <button type="button" onclick="register()">Register</button>
+
+      <div class="msg" id="reg-msg"></div>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="box">
+      <h2>Login</h2>
+
+      <input id="login-email" type="email" placeholder="Email" />
+      <input id="login-password" type="password" placeholder="Password" />
+      <button type="button" onclick="login()">Login</button>
+
+      <div class="msg" id="login-msg"></div>
+    </div>
+
   </div>
 
-  <form action="https://api.web3forms.com/submit" method="POST">
-
-  <!-- ACCESS KEY -->
-  <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-XXXXXXXX">
-
-  <input type="email" name="email" placeholder="Email address" required>
-
-  <button type="submit">Login</button>
-</form>
-
-<form action="https://api.web3forms.com/submit" method="POST">
-
-  <input type="hidden" name="access_key" value="UUID_NGA_WEB3FORMS">
-
-  <!-- fushat e tjera -->
-  <input type="email" name="email" required>
-  <button type="submit">Submit</button>
-
-</form>
-
-
-    <p style="margin-top:15px;">
-      <a href="index.html">← Back to Home</a>
-    </p>
+  <div class="bottom">
+    <a href="index.html">← Back to Home</a>
   </div>
 
-</div>
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
+    // ✅ VENDOS KËTO 2 NGA SUPABASE (Settings -> API)
+    const SUPABASE_URL = "PASTE_SUPABASE_URL_KETU";
+    const SUPABASE_ANON_KEY = "PASTE_SUPABASE_ANON_KEY_KETU";
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const regMsg = document.getElementById("reg-msg");
+    const loginMsg = document.getElementById("login-msg");
+
+    window.register = async function () {
+      regMsg.textContent = "";
+
+      const email = document.getElementById("reg-email").value.trim();
+      const password = document.getElementById("reg-password").value;
+
+      const { data, error } = await supabase.auth.signUp({ email, password });
+
+      if (error) {
+        regMsg.textContent = "Error: " + error.message;
+        return;
+      }
+
+      regMsg.textContent = "U regjistrua! Kontrollo email për konfirmim (nëse e ke ON).";
+      console.log("signUp:", data);
+    };
+
+    window.login = async function () {
+      loginMsg.textContent = "";
+
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value;
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        loginMsg.textContent = "Error: " + error.message;
+        return;
+      }
+
+      loginMsg.textContent = "Logged in! ✅";
+      console.log("login:", data);
+
+      // nëse do e çosh diku pas login:
+      // window.location.href = "index.html";
+    };
+  </script>
 </body>
 </html>
+
+

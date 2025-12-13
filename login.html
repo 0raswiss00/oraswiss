@@ -3,180 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <title>Login / Register</title>
-
-  <!-- Supabase CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-  <h2>Register</h2>
-  <input id="reg-email" type="email" placeholder="Email">
-  <input id="reg-password" type="password" placeholder="Password">
-  <button onclick="register()">Register</button>
+<h2>Register</h2>
+<input id="reg-email" type="email" placeholder="Email">
+<input id="reg-password" type="password" placeholder="Password">
+<button id="registerBtn">Register</button>
 
-  <hr>
+<hr>
 
-  <h2>Login</h2>
-  <input id="login-email" type="email" placeholder="Email">
-  <input id="login-password" type="password" placeholder="Password">
-  <button onclick="login()">Login</button>
-
-  <script>
-    // 🔴 KËTU VENDOS KEY-T E TUA
-    const supabaseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-    const supabaseKey = "PASTE_KETU_ANON_KEY";
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-    async function register() {
-      const email = document.getElementById("reg-email").value;
-      const password = document.getElementById("reg-password").value;
-
-      const { error } = await supabase.auth.signUp({
-        email,
-        password
-      });
-
-      if (error) {
-        alert(error.message);
-      } else {
-        alert("Register OK – kontrollo email");
-      }
-    }
-
-    async function login() {
-      const email = document.getElementById("login-email").value;
-      const password = document.getElementById("login-password").value;
-
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
-
-      if (error) {
-        alert(error.message);
-      } else {
-        alert("Login OK");
-        window.location.href = "index.html";
-      }
-    }
-  </script>
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Login / Register</title>
-
-  <!-- Supabase CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-</head>
-<body>
-
-  <h2>Register</h2>
-  <input id="reg-email" type="email" placeholder="Email">
-  <input id="reg-password" type="password" placeholder="Password">
-  <button onclick="register()">Register</button>
-
-  <hr>
-
-  <h2>Login</h2>
-  <input id="login-email" type="email" placeholder="Email">
-  <input id="login-password" type="password" placeholder="Password">
-  <button onclick="login()">Login</button>
-
-  <script>
-    // 🔴 KËTU VENDOS KEY-T E TUA
-    const supabaseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-    const supabaseKey = "PASTE_KETU_ANON_KEY";
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-    async function register() {
-      const email = document.getElementById("reg-email").value;
-      const password = document.getElementById("reg-password").value;
-
-      const { error } = await supabase.auth.signUp({
-        email,
-        password
-      });
-
-      if (error) {
-        alert(error.message);
-      } else {
-        alert("Register OK – kontrollo email");
-      }
-    }
-
-    async function login() {
-      const email = document.getElementById("login-email").value;
-      const password = document.getElementById("login-password").value;
-
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
-
-      if (error) {
-        alert(error.message);
-      } else {
-        alert("Login OK");
-        window.location.href = "index.html";
-      }
-    }
-  </script>
+<h2>Login</h2>
+<input id="login-email" type="email" placeholder="Email">
+<input id="login-password" type="password" placeholder="Password">
+<button id="loginBtn">Login</button>
 
 <script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-  // 🔹 Këto i merr nga Supabase → Settings → API
-  const SUPABASE_URL = "PASTE_SUPABASE_URL_KETU";
-  const SUPABASE_ANON_KEY = "PASTE_SUPABASE_ANON_KEY_KETU";
+  // 🔴 VENDOS KËTU TË TUAT
+  const SUPABASE_URL = "PASTE_SUPABASE_URL";
+  const SUPABASE_ANON_KEY = "PASTE_ANON_KEY";
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // 🔹 Input-et (duhet t’i kesh në HTML)
-  const emailEl = document.getElementById("email");
-  const passEl  = document.getElementById("password");
-
-  // 🔹 Butonat
-  const registerBtn = document.getElementById("registerBtn");
-  const loginBtn    = document.getElementById("loginBtn");
-
   // REGISTER
-  registerBtn?.addEventListener("click", async (e) => {
-    e.preventDefault();
-
-    const email = emailEl.value.trim();
-    const password = passEl.value;
+  document.getElementById("registerBtn").addEventListener("click", async () => {
+    const email = document.getElementById("reg-email").value;
+    const password = document.getElementById("reg-password").value;
 
     const { error } = await supabase.auth.signUp({
       email,
       password,
     });
 
-    if (error) return alert(error.message);
-    alert("U regjistrua! Kontrollo email-in.");
+    if (error) {
+      alert(error.message);
+    } else {
+      alert("U regjistrua! Kontrollo email për verifikim.");
+    }
   });
 
   // LOGIN
-  loginBtn?.addEventListener("click", async (e) => {
-    e.preventDefault();
+  document.getElementById("loginBtn").addEventListener("click", async () => {
+    const email = document.getElementById("login-email").value;
+    const password = document.getElementById("login-password").value;
 
-    const email = emailEl.value.trim();
-    const password = passEl.value;
-
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (error) return alert(error.message);
-
-    alert("Login OK");
-    window.location.href = "index.html";
+    if (error) {
+      alert(error.message);
+    } else {
+      alert("U fut me sukses!");
+      console.log(data.user);
+      // window.location.href = "index.html"; // nëse do redirect
+    }
   });
 </script>
 
-  
 </body>
 </html>
+

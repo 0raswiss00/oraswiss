@@ -1,142 +1,152 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login / Register</title>
 
   <style>
-    body { background:#0b0b0b; color:#fff; font-family: Arial, sans-serif; margin:0; }
-    .wrap { max-width: 420px; margin: 60px auto; padding: 20px; }
-    .card { background:#141414; border:1px solid #2a2a2a; border-radius:16px; padding:20px; margin-bottom:18px; }
-    h2 { margin:0 0 12px; }
-    label { display:block; margin:10px 0 6px; opacity:.9; }
+    body {
+      background:#0f0f0f;
+      font-family: Arial, sans-serif;
+      color:#fff;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
+    }
+
+    .container {
+      width:360px;
+    }
+
+    .card {
+      background:#141414;
+      padding:24px;
+      border-radius:14px;
+      margin-bottom:20px;
+    }
+
+    label {
+      display:block;
+      margin-top:12px;
+      font-size:14px;
+    }
+
     input {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 14px;
-      border-radius: 12px;
-      border: 1px solid #2a2a2a;
-      background: #0f0f0f;
-      color: #fff;
-      outline: none;
-      position: relative;
-      z-index: 2;
-      pointer-events: auto;
+      width:100%;
+      padding:12px;
+      margin-top:6px;
+      border-radius:10px;
+      border:1px solid #333;
+      background:#0f0f0f;
+      color:#fff;
+      font-size:15px;
     }
+
     button {
-      width: 100%;
-      padding: 14px;
-      border-radius: 12px;
-      border: 0;
-      background: #2f81f7;
-      color: #fff;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 12px;
-      position: relative;
-      z-index: 2;
+      width:100%;
+      margin-top:18px;
+      padding:14px;
+      border:none;
+      border-radius:12px;
+      background:#3b82f6;
+      color:#fff;
+      font-size:16px;
+      font-weight:700;
+      cursor:pointer;
     }
-    .msg { margin-top: 10px; font-size: 14px; opacity:.9; }
-    .err { color: #ff6b6b; }
-    .ok  { color: #51cf66; }
-    a { color:#9ec5ff; text-decoration:none; }
+
+    .msg {
+      margin-top:12px;
+      font-size:14px;
+    }
+
+    a {
+      color:#3b82f6;
+      text-decoration:none;
+      font-size:14px;
+    }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="card">
-      <h2>Register</h2>
 
-      <label>Email</label>
-      <input id="reg-email" type="email" autocomplete="email" placeholder="Email" />
+<div class="container">
 
-      <label>Password</label>
-      <input id="reg-password" type="password" autocomplete="new-password" placeholder="Password" />
+  <!-- REGISTER -->
+  <div class="card">
+    <h2>Register</h2>
 
-      <!-- IMPORTANT: type="button" (jo submit) -->
-      <button id="btn-register" type="button">Register</button>
+    <label>Email</label>
+    <input id="reg-email" type="email" autocomplete="email">
 
-      <div id="reg-msg" class="msg"></div>
-    </div>
+    <label>Password</label>
+    <input id="reg-password" type="password" autocomplete="new-password">
 
-    <div class="card">
-      <h2>Login</h2>
-
-      <label>Email</label>
-      <input id="login-email" type="email" autocomplete="email" placeholder="Email" />
-
-      <label>Password</label>
-      <input id="login-password" type="password" autocomplete="current-password" placeholder="Password" />
-
-      <!-- IMPORTANT: type="button" (jo submit) -->
-      <button id="btn-login" type="button">Login</button>
-
-      <div id="login-msg" class="msg"></div>
-    </div>
-
-    <div class="msg">
-      <a href="index.html">← Back to Home</a>
-    </div>
+    <button id="btn-register" type="button">Register</button>
+    <div id="reg-msg" class="msg"></div>
   </div>
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+  <!-- LOGIN -->
+  <div class="card">
+    <h2>Login</h2>
 
-    // 2 RRESHTAT I VENDOS KETU (Settings -> API)
-    const SUPABASE_URL = "PASTE_SUPABASE_URL_KETU";
-    const SUPABASE_ANON_KEY = "PASTE_PUBLIC_ANON_KEY_KETU";
+    <label>Email</label>
+    <input id="login-email" type="email" autocomplete="email">
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <label>Password</label>
+    <input id="login-password" type="password" autocomplete="current-password">
 
-    const regEmail = document.getElementById("reg-email");
-    const regPass  = document.getElementById("reg-password");
-    const logEmail = document.getElementById("login-email");
-    const logPass  = document.getElementById("login-password");
+    <button id="btn-login" type="button">Login</button>
+    <div id="login-msg" class="msg"></div>
+  </div>
 
-    const regMsg = document.getElementById("reg-msg");
-    const loginMsg = document.getElementById("login-msg");
+  <div class="msg">
+    <a href="index.html">← Back to Home</a>
+  </div>
 
-    const btnRegister = document.getElementById("btn-register");
-    const btnLogin = document.getElementById("btn-login");
+</div>
 
-    function setMsg(el, text, ok=false){
-      el.className = "msg " + (ok ? "ok" : "err");
-      el.textContent = text;
-    }
+<!-- SUPABASE -->
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-    btnRegister.addEventListener("click", async () => {
-      regMsg.textContent = "";
-      const email = regEmail.value.trim();
-      const password = regPass.value;
+  // 🔴 NDËRRO KËTO 2
+  const SUPABASE_URL = "https://XXXXXXXX.supabase.co";
+  const SUPABASE_ANON_KEY = "PUBLIC_ANON_KEY_KËTU";
 
-      if (!email || !password) return setMsg(regMsg, "Mbush email + password.");
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      const { data, error } = await supabase.auth.signUp({ email, password });
+  // REGISTER
+  document.getElementById("btn-register").onclick = async () => {
+    const email = document.getElementById("reg-email").value.trim();
+    const password = document.getElementById("reg-password").value;
 
-      if (error) return setMsg(regMsg, error.message);
-      // Nëse ke Email Confirm ON, do kërkojë konfirmim nga emaili
-      setMsg(regMsg, "U regjistrua! Kontrollo email për konfirmim nëse kërkohet.", true);
+    const { error } = await supabase.auth.signUp({
+      email,
+      password
     });
 
-    btnLogin.addEventListener("click", async () => {
-      loginMsg.textContent = "";
-      const email = logEmail.value.trim();
-      const password = logPass.value;
+    document.getElementById("reg-msg").innerText =
+      error ? error.message : "✅ Kontrollo email për konfirmim";
+  };
 
-      if (!email || !password) return setMsg(loginMsg, "Mbush email + password.");
+  // LOGIN
+  document.getElementById("btn-login").onclick = async () => {
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value;
 
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-      if (error) return setMsg(loginMsg, error.message);
-
-      setMsg(loginMsg, "Login OK!", true);
-
-      // p.sh. ktheje te home
-      window.location.href = "index.html";
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password
     });
-  </script>
+
+    document.getElementById("login-msg").innerText =
+      error ? error.message : "✅ Login OK";
+  };
+</script>
+
 </body>
 </html>
+
 

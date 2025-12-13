@@ -102,32 +102,6 @@
   </div>
 
   <!-- SUPABASE (VETËM KY SCRIPT) -->
-<script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-const supabase = createClient(
-  "https://URL-JOTE.supabase.co",
-  "ANON_KEY_JOTE"
-);
-
-document.getElementById("btn-login").onclick = async () => {
-  const email = document.getElementById("login-email").value.trim();
-  const password = document.getElementById("login-password").value;
-
-  if (!email || !password) {
-    document.getElementById("login-msg").innerText = "Plotëso fushat";
-    return;
-  }
-
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  document.getElementById("login-msg").innerText =
-    error ? error.message : "✅ Login OK";
-};
-</script>
 
 </body>
 </html>

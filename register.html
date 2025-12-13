@@ -106,36 +106,46 @@ Ora
     <div id="reg-msg" class="msg"></div>
   </div>
 
-  <!-- SCRIPT NË FUND = PUNON -->
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-    const SUPABASE_URL = "https://gnwsrmelmeqduhmfmoa.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+  const SUPABASE_URL = "https://gnwsrmelmeqduhmfmoa.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    document.getElementById("btn-register").addEventListener("click", async () => {
-      const btn = document.getElementById("btn-register");
-      const msg = document.getElementById("reg-msg");
+  const btn = document.getElementById("btn-register");
+  const msg = document.getElementById("reg-msg");
 
-      const email = document.getElementById("reg-email").value.trim();
-      const password = document.getElementById("reg-password").value;
+  btn.addEventListener("click", async () => {
+    const email = document.getElementById("reg-email").value.trim();
+    const password = document.getElementById("reg-password").value;
 
-      btn.disabled = true;
-      btn.innerText = "Please wait...";
-      msg.innerText = "";
+    msg.innerText = "";
+    btn.disabled = true;
+    btn.innerText = "Please wait...";
 
-      const { error } = await supabase.auth.signUp({ email, password });
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password
+      });
 
-      msg.innerText = error
-        ? "❌ " + error.message
-        : "✅ Account created! Check your email.";
-
+      if (error) {
+        msg.innerText = "❌ " + error.message;
+      } else {
+        msg.innerText = "✅ Account created! Check your email.";
+      }
+    } catch (e) {
+      msg.innerText = "❌ JS / Network error";
+      console.error(e);
+    } finally {
       btn.disabled = false;
       btn.innerText = "Register";
-    });
-  </script>
+    }
+  });
+</script>
+
 
 </body>
 </html>

@@ -102,51 +102,32 @@
   </div>
 
   <!-- SUPABASE (VETËM KY SCRIPT) -->
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-    // ✅ VENDOSI KËTU (nga Supabase -> Project Settings -> API)
-    const SUPABASE_URL = "https://XXXXXXXX.supabase.co";
-    const SUPABASE_ANON_KEY = "PASTE_YOUR_ANON_PUBLIC_KEY_HERE";
+const supabase = createClient(
+  "https://URL-JOTE.supabase.co",
+  "ANON_KEY_JOTE"
+);
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+document.getElementById("btn-login").onclick = async () => {
+  const email = document.getElementById("login-email").value.trim();
+  const password = document.getElementById("login-password").value;
 
-    const regEmail = document.getElementById("reg-email");
-    const regPass  = document.getElementById("reg-password");
-    const logEmail = document.getElementById("login-email");
-    const logPass  = document.getElementById("login-password");
+  if (!email || !password) {
+    document.getElementById("login-msg").innerText = "Plotëso fushat";
+    return;
+  }
 
-    const regMsg = document.getElementById("reg-msg");
-    const logMsg = document.getElementById("login-msg");
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
 
-    document.getElementById("btn-register").addEventListener("click", async () => {
-      regMsg.textContent = "";
-      const email = regEmail.value.trim();
-      const password = regPass.value;
+  document.getElementById("login-msg").innerText =
+    error ? error.message : "✅ Login OK";
+};
+</script>
 
-      if (!email || !password) {
-        regMsg.textContent = "Plotëso email & password";
-        return;
-      }
-
-      const { error } = await supabase.auth.signUp({ email, password });
-      regMsg.textContent = error ? error.message : "✅ Register OK (kontrollo email nëse kërkon verifikim)";
-    });
-
-    document.getElementById("btn-login").addEventListener("click", async () => {
-      logMsg.textContent = "";
-      const email = logEmail.value.trim();
-      const password = logPass.value;
-
-      if (!email || !password) {
-        logMsg.textContent = "Plotëso email & password";
-        return;
-      }
-
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      logMsg.textContent = error ? error.message : "✅ Login OK";
-      if (!error) window.location.href = "index.html";
-    });
-  </script>
 </body>
 </html>

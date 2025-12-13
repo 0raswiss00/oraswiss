@@ -1004,3 +1004,10 @@ body {
 .register-form, .register-form *{
   pointer-events: auto;
 }
+
+.modal, .dropdown-content, .nav-scroll, header, .site-header {
+  pointer-events: none;
+}
+.register-form, .register-form *{
+  pointer-events: auto;
+}

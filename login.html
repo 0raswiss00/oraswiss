@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login / Register</title>
 
   <style>
@@ -13,11 +14,12 @@
       justify-content:center;
       align-items:center;
       min-height:100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
-    .container {
-      width:360px;
-    }
+    .container { width:360px; }
 
     .card {
       background:#141414;
@@ -41,6 +43,7 @@
       background:#0f0f0f;
       color:#fff;
       font-size:15px;
+      box-sizing: border-box;
     }
 
     button {
@@ -56,134 +59,94 @@
       cursor:pointer;
     }
 
-    .msg {
-      margin-top:12px;
-      font-size:14px;
-    }
-
-    a {
-      color:#3b82f6;
-      text-decoration:none;
-      font-size:14px;
-    }
+    .msg { margin-top:12px; font-size:14px; min-height: 18px; }
+    a { color:#3b82f6; text-decoration:none; font-size:14px; }
   </style>
 </head>
 
 <body>
+  <div class="container">
 
-<div class="container">
+    <!-- REGISTER -->
+    <div class="card">
+      <h2>Register</h2>
 
-  <!-- REGISTER -->
-  <div class="card">
-    <h2>Register</h2>
+      <label>Email</label>
+      <input id="reg-email" type="email" autocomplete="email" required>
 
-    <label>Email</label>
-    <input id="reg-email" type="email" autocomplete="email">
+      <label>Password</label>
+      <input id="reg-password" type="password" autocomplete="new-password" required>
 
-    <label>Password</label>
-    <input id="reg-password" type="password" autocomplete="new-password">
+      <button id="btn-register" type="button">Register</button>
+      <div id="reg-msg" class="msg"></div>
+    </div>
 
-    <button id="btn-register" type="button">Register</button>
-    <div id="reg-msg" class="msg"></div>
+    <!-- LOGIN -->
+    <div class="card">
+      <h2>Login</h2>
+
+      <label>Email</label>
+      <input id="login-email" type="email" autocomplete="email" required>
+
+      <label>Password</label>
+      <input id="login-password" type="password" autocomplete="current-password" required>
+
+      <button id="btn-login" type="button">Login</button>
+      <div id="login-msg" class="msg"></div>
+    </div>
+
+    <div class="msg">
+      <a href="index.html">← Back to Home</a>
+    </div>
+
   </div>
 
-  <!-- LOGIN -->
-  <div class="card">
-    <h2>Login</h2>
+  <!-- SUPABASE (VETËM KY SCRIPT) -->
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-    <label>Email</label>
-    <input id="login-email" type="email" autocomplete="email">
+    // ✅ VENDOSI KËTU (nga Supabase -> Project Settings -> API)
+    const SUPABASE_URL = "https://XXXXXXXX.supabase.co";
+    const SUPABASE_ANON_KEY = "PASTE_YOUR_ANON_PUBLIC_KEY_HERE";
 
-    <label>Password</label>
-    <input id="login-password" type="password" autocomplete="current-password">
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    <button id="btn-login" type="button">Login</button>
-    <div id="login-msg" class="msg"></div>
-  </div>
+    const regEmail = document.getElementById("reg-email");
+    const regPass  = document.getElementById("reg-password");
+    const logEmail = document.getElementById("login-email");
+    const logPass  = document.getElementById("login-password");
 
-  <div class="msg">
-    <a href="index.html">← Back to Home</a>
-  </div>
+    const regMsg = document.getElementById("reg-msg");
+    const logMsg = document.getElementById("login-msg");
 
-</div>  <!-- mbyllet Back to Home -->
+    document.getElementById("btn-register").addEventListener("click", async () => {
+      regMsg.textContent = "";
+      const email = regEmail.value.trim();
+      const password = regPass.value;
 
-  
-<script>
-document.getElementById("btn-login").addEventListener("click", function () {
-  const email = document.getElementById("login-email").value;
-  const password = document.getElementById("login-password").value;
+      if (!email || !password) {
+        regMsg.textContent = "Plotëso email & password";
+        return;
+      }
 
-  if (!email || !password) {
-    document.getElementById("login-msg").innerText = "Plotëso email & password";
-    return;
-  }
-
-  document.getElementById("login-msg").innerText = "Login OK (test)";
-});
-</script>
-
-  
-</div>
-
-<!-- SUPABASE -->
-<script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-  // 🔴 NDËRRO KËTO 2
-  const SUPABASE_URL = "https://XXXXXXXX.supabase.co";
-  const SUPABASE_ANON_KEY = "PUBLIC_ANON_KEY_KËTU";
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  // REGISTER
-  document.getElementById("btn-register").onclick = async () => {
-    const email = document.getElementById("reg-email").value.trim();
-    const password = document.getElementById("reg-password").value;
-
-    const { error } = await supabase.auth.signUp({
-      email,
-      password
+      const { error } = await supabase.auth.signUp({ email, password });
+      regMsg.textContent = error ? error.message : "✅ Register OK (kontrollo email nëse kërkon verifikim)";
     });
 
-    document.getElementById("reg-msg").innerText =
-      error ? error.message : "✅ Kontrollo email për konfirmim";
-  };
+    document.getElementById("btn-login").addEventListener("click", async () => {
+      logMsg.textContent = "";
+      const email = logEmail.value.trim();
+      const password = logPass.value;
 
-  // LOGIN
-  document.getElementById("btn-login").onclick = async () => {
-    const email = document.getElementById("login-email").value.trim();
-    const password = document.getElementById("login-password").value;
+      if (!email || !password) {
+        logMsg.textContent = "Plotëso email & password";
+        return;
+      }
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      logMsg.textContent = error ? error.message : "✅ Login OK";
+      if (!error) window.location.href = "index.html";
     });
-
-    document.getElementById("login-msg").innerText =
-      error ? error.message : "✅ Login OK";
-  };
-</script>
-
-<script>
-document.getElementById("btn-login").addEventListener("click", function () {
-  const email = document.getElementById("login-email").value;
-  const password = document.getElementById("login-password").value;
-
-  if (!email || !password) {
-    document.getElementById("login-msg").innerText = "Email dhe password janë të detyrueshme";
-    return;
-  }
-
-  document.getElementById("login-msg").innerText = "OK (login u klikua)";
-});
-</script>
-
-
-
-  
-<script src="login.js"></script>
+  </script>
 </body>
 </html>
-
-  
-

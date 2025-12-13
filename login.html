@@ -1,20 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="sq">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login / Register</title>
 
   <style>
-    body { background:#0b0b0b; color:#fff; font-family:Arial, sans-serif; }
-    .wrapper { max-width:900px; margin:40px auto; display:flex; gap:30px; padding:0 16px; }
-    .box { flex:1; background:#121212; border:1px solid #2a2a2a; border-radius:14px; padding:18px; }
-    h2 { margin:0 0 10px; }
-    input, button { width:100%; padding:14px; margin:10px 0; border-radius:12px; border:1px solid #2a2a2a; background:#0f0f0f; color:#fff; font-size:15px; }
+    body { background:#0f0f0f; color:#fff; font-family:Arial; }
+    .wrapper { max-width:520px; margin:40px auto; padding:20px; }
+    .box { border:1px solid #2a2a2a; border-radius:14px; padding:16px; margin-bottom:16px; }
+    input, button { width:100%; padding:14px; margin:10px 0; border-radius:12px; border:1px solid #2a2a2a; background:#0f0f0f; color:#fff; }
     button { background:#2f81f7; border:none; font-weight:700; cursor:pointer; }
-    .msg { margin-top:10px; font-size:14px; opacity:0.9; }
-    a { color:#9cc3ff; text-decoration:none; }
-    .bottom { text-align:center; margin-top:20px; }
+    a { color:#9bc3ff; text-decoration:none; }
+    .msg { margin-top:10px; color:#9bc3ff; }
   </style>
 </head>
 
@@ -24,81 +22,74 @@
     <!-- REGISTER -->
     <div class="box">
       <h2>Register</h2>
-
       <input id="reg-email" type="email" placeholder="Email" />
       <input id="reg-password" type="password" placeholder="Password" />
-      <button type="button" onclick="register()">Register</button>
-
-      <div class="msg" id="reg-msg"></div>
+      <button id="registerBtn" type="button">Register</button>
+      <div id="regMsg" class="msg"></div>
     </div>
 
     <!-- LOGIN -->
     <div class="box">
       <h2>Login</h2>
-
       <input id="login-email" type="email" placeholder="Email" />
       <input id="login-password" type="password" placeholder="Password" />
-      <button type="button" onclick="login()">Login</button>
-
-      <div class="msg" id="login-msg"></div>
+      <button id="loginBtn" type="button">Login</button>
+      <div id="loginMsg" class="msg"></div>
     </div>
 
+    <p><a href="index.html">← Back to Home</a></p>
   </div>
 
-  <div class="bottom">
-    <a href="index.html">← Back to Home</a>
-  </div>
-
+  <!-- ✅ KËTU POSHTË ËSHTË SCRIPT-I -->
   <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-    // ✅ VENDOS KËTO 2 NGA SUPABASE (Settings -> API)
-    const SUPABASE_URL = "PASTE_SUPABASE_URL_KETU";
-    const SUPABASE_ANON_KEY = "PASTE_SUPABASE_ANON_KEY_KETU";
+    // 1) VENDOS KËTO 2 NGA SUPABASE → Settings → API
+    const SUPABASE_URL = "PASTE_PROJECT_URL_KETU";
+    const SUPABASE_ANON_KEY = "PASTE_ANON_PUBLIC_KEY_KETU";
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const regMsg = document.getElementById("reg-msg");
-    const loginMsg = document.getElementById("login-msg");
+    const regEmail = document.getElementById("reg-email");
+    const regPass = document.getElementById("reg-password");
+    const loginEmail = document.getElementById("login-email");
+    const loginPass = document.getElementById("login-password");
 
-    window.register = async function () {
+    const regMsg = document.getElementById("regMsg");
+    const loginMsg = document.getElementById("loginMsg");
+
+    document.getElementById("registerBtn").addEventListener("click", async () => {
       regMsg.textContent = "";
-
-      const email = document.getElementById("reg-email").value.trim();
-      const password = document.getElementById("reg-password").value;
+      const email = regEmail.value.trim();
+      const password = regPass.value;
 
       const { data, error } = await supabase.auth.signUp({ email, password });
 
       if (error) {
-        regMsg.textContent = "Error: " + error.message;
+        regMsg.textContent = "ERROR: " + error.message;
         return;
       }
-
-      regMsg.textContent = "U regjistrua! Kontrollo email për konfirmim (nëse e ke ON).";
+      regMsg.textContent = "U regjistrua! Kontrollo email-in (nëse kërkon konfirmim).";
       console.log("signUp:", data);
-    };
+    });
 
-    window.login = async function () {
+    document.getElementById("loginBtn").addEventListener("click", async () => {
       loginMsg.textContent = "";
-
-      const email = document.getElementById("login-email").value.trim();
-      const password = document.getElementById("login-password").value;
+      const email = loginEmail.value.trim();
+      const password = loginPass.value;
 
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
       if (error) {
-        loginMsg.textContent = "Error: " + error.message;
+        loginMsg.textContent = "ERROR: " + error.message;
         return;
       }
-
-      loginMsg.textContent = "Logged in! ✅";
+      loginMsg.textContent = "Login OK!";
       console.log("login:", data);
 
-      // nëse do e çosh diku pas login:
+      // Nese do ta çosh diku pasi bën login:
       // window.location.href = "index.html";
-    };
+    });
   </script>
 </body>
 </html>
-
-

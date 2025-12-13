@@ -71,7 +71,10 @@
     const email = document.getElementById("login-email").value.trim();
     const password = document.getElementById("login-password").value;
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signUp({
+  email,
+  password,
+});
 
     document.getElementById("login-msg").innerText =
       error ? error.message : "✅ Login OK";

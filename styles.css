@@ -990,4 +990,17 @@ body {
   color: #000;
 }
 
+/* ===== FIX LOGIN CLICK (password) ===== */
 
+/* mbyll çdo overlay që të bllokon klikimin */
+.modal,
+.product-main-image.zoomed{
+  display: none !important;
+}
+
+/* siguro që input-et të jenë mbi gjithçka */
+#reg-email, #reg-password, #login-email, #login-password,
+#btn-register, #btn-login{
+  position: relative;
+  z-index: 99999 !important;
+}

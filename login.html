@@ -1,129 +1,65 @@
-<!doctype html>
-<html lang="sq">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Register / Login</title>
+  <meta charset="UTF-8">
+  <title>Login / Register</title>
 
-<style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-  background:#0b0b0b;
-  color:#fff;
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.wrapper{
-  width:100%;
-  max-width:900px;
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:40px;
-  padding:40px;
-}
-
-.box{
-  background:#121212;
-  border:1px solid #222;
-  border-radius:16px;
-  padding:30px;
-}
-
-h2{
-  margin-top:0;
-  font-size:28px;
-}
-
-p{
-  color:#aaa;
-  font-size:14px;
-}
-
-input, button{
-  width:100%;
-  padding:14px;
-  margin:10px 0;
-  border-radius:12px;
-  border:1px solid #2a2a2a;
-  background:#0f0f0f;
-  color:#fff;
-  font-size:15px;
-}
-
-button{
-  background:#2f81f7;
-  border:none;
-  font-weight:700;
-  cursor:pointer;
-}
-
-button:hover{
-  opacity:.9;
-}
-
-a{
-  color:#9bbcff;
-  text-decoration:none;
-}
-
-@media(max-width:900px){
-  .wrapper{
-    grid-template-columns:1fr;
-  }
-}
-</style>
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-
 <body>
 
-<div class="wrapper">
+  <h2>Register</h2>
+  <input id="reg-email" type="email" placeholder="Email">
+  <input id="reg-password" type="password" placeholder="Password">
+  <button onclick="register()">Register</button>
 
-  <!-- REGISTER -->
-  <div class="box">
-     <h2>Register</h2>
-         <p>Register with your email to receive offers and new products.</p>
-    
-    <form action="https://api.web3forms.com/submit" method="POST"> 
-      <input type="hidden" name="access_key" value="PASTE_YOUR_ACCESS_KEY_HERE">
-      <input type="text" name="name" placeholder="Full name" required>
-      <input type="email" name="email" placeholder="Email address" required>
-      <button type="submit">Register</button>
-    </form>
-  </div>
+  <hr>
 
-  <form action="https://api.web3forms.com/submit" method="POST">
+  <h2>Login</h2>
+  <input id="login-email" type="email" placeholder="Email">
+  <input id="login-password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
 
-  <!-- ACCESS KEY -->
-  <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-XXXXXXXX">
+  <script>
+    // 🔴 KËTU VENDOS KEY-T E TUA
+    const supabaseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+    const supabaseKey = "PASTE_KETU_ANON_KEY";
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-  <input type="email" name="email" placeholder="Email address" required>
+    async function register() {
+      const email = document.getElementById("reg-email").value;
+      const password = document.getElementById("reg-password").value;
 
-  <button type="submit">Login</button>
-</form>
+      const { error } = await supabase.auth.signUp({
+        email,
+        password
+      });
 
-<form action="https://api.web3forms.com/submit" method="POST">
+      if (error) {
+        alert(error.message);
+      } else {
+        alert("Register OK – kontrollo email");
+      }
+    }
 
-  <input type="hidden" name="access_key" value="UUID_NGA_WEB3FORMS">
+    async function login() {
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
 
-  <!-- fushat e tjera -->
-  <input type="email" name="email" required>
-  <button type="submit">Submit</button>
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
 
-</form>
-
-
-    <p style="margin-top:15px;">
-      <a href="index.html">← Back to Home</a>
-    </p>
-  </div>
-
-</div>
+      if (error) {
+        alert(error.message);
+      } else {
+        alert("Login OK");
+        window.location.href = "index.html";
+      }
+    }
+  </script>
 
 </body>
 </html>
-

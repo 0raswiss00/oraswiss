@@ -54,7 +54,8 @@
   
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+  document.getElementById("reg-msg").innerText = "JS OK ✅";
+  
   // REGISTER
   document.getElementById("btn-register").addEventListener("click", async () => {
     const email = document.getElementById("reg-email").value.trim();

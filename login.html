@@ -44,39 +44,47 @@
 
 </div>
 
-<script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
 const SUPABASE_URL = "https://.....supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJ....";
+6:26 MD
+Ora
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const SUPABASE_URL = "https://XXXX.supabase.co";
+  const SUPABASE_ANON_KEY = "PUBLIC_ANON_KEY";
 
-// REGISTER
-document.getElementById("btn-register").onclick = async () => {
-  const email = document.getElementById("reg-email").value;
-  const password = document.getElementById("reg-password").value;
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const { data, error } = await supabase.auth.signUp({ email, password });
+  // REGISTER
+  document.getElementById("btn-register").onclick = async () => {
+    const email = document.getElementById("reg-email").value;
+    const password = document.getElementById("reg-password").value;
 
-  document.getElementById("reg-msg").innerText =
-    error ? error.message : "REGJISTRIM OK – kontrollo email";
-};
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
 
-// LOGIN
-document.getElementById("btn-login").onclick = async () => {
-  const email = document.getElementById("login-email").value;
-  const password = document.getElementById("login-password").value;
+    document.getElementById("reg-msg").innerText =
+      error ? error.message : "REGJISTRIM OK – kontrollo email";
+  };
 
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  });
+  // LOGIN
+  document.getElementById("btn-login").onclick = async () => {
+    const email = document.getElementById("login-email").value;
+    const password = document.getElementById("login-password").value;
 
-  document.getElementById("login-msg").innerText =
-    error ? error.message : "LOGIN OK";
-};
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    document.getElementById("login-msg").innerText =
+      error ? error.message : "LOGIN OK";
+  };
 </script>
+
 
 </body>
 </html>

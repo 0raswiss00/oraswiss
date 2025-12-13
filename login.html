@@ -1,63 +1,101 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Login</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Register</title>
+
+  <style>
+    body { background:#0b0b0b; color:#fff; font-family:Arial; }
+    .card { max-width:420px; margin:40px auto; padding:20px; border:1px solid #222; border-radius:14px; }
+    label { display:block; margin-top:12px; opacity:.9; }
+    input { width:100%; padding:12px; margin-top:6px; border-radius:12px; border:1px solid #2a2a2a; background:#0f0f0f; color:#fff; position:relative; z-index:5; }
+    button { width:100%; padding:12px; margin-top:14px; border-radius:12px; border:none; cursor:pointer; font-weight:700; }
+    .btn { background:#2f81f7; color:#fff; }
+    .msg { margin-top:10px; font-size:14px; opacity:.9; }
+    .ok { color:#6ee7b7; }
+    .err { color:#fb7185; }
+  </style>
 </head>
+
 <body>
+  <div class="card">
+    <h2>Register</h2>
 
-<h2>Register</h2>
-<input id="reg-email" type="email" placeholder="Email">
-<input id="reg-password" type="password" placeholder="Password">
-<button id="btn-register" type="button">Register</button>
-<div id="reg-msg"></div>
+    <label>Email</label>
+    <input id="reg-email" type="email" autocomplete="email" placeholder="Email" />
 
-<hr>
+    <label>Password</label>
+    <input id="reg-password" type="password" autocomplete="new-password" placeholder="Password" />
 
-<h2>Login</h2>
-<input id="login-email" type="email" placeholder="Email">
-<input id="login-password" type="password" placeholder="Password">
-<button id="btn-login" type="button">Login</button>
-<div id="login-msg"></div>
+    <button id="btn-register" type="button" class="btn">Register</button>
+    <div id="reg-msg" class="msg"></div>
+  </div>
 
-<script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+  <div class="card">
+    <h2>Login</h2>
 
-// 🔴 KËTO DY I MERR NGA SUPABASE → Settings → API
-const SUPABASE_URL = "https://XXXXXXXX.supabase.co";
-const SUPABASE_ANON_KEY = "PUBLIC_ANON_KEY_KËTU";
+    <label>Email</label>
+    <input id="login-email" type="email" autocomplete="email" placeholder="Email" />
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <label>Password</label>
+    <input id="login-password" type="password" autocomplete="current-password" placeholder="Password" />
 
-// REGISTER
-document.getElementById("btn-register").onclick = async () => {
-  const email = document.getElementById("reg-email").value;
-  const password = document.getElementById("reg-password").value;
+    <button id="btn-login" type="button" class="btn">Login</button>
+    <div id="login-msg" class="msg"></div>
+  </div>
 
-  const { error } = await supabase.auth.signUp({
-    email,
-    password
-  });
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-  document.getElementById("reg-msg").innerText =
-    error ? error.message : "OK – kontrollo email-in";
-};
+    // 1) VENDOS KETO 2 NGA SUPABASE -> Settings -> API
+    const SUPABASE_URL = "PASTE_SUPABASE_URL";
+    const SUPABASE_ANON_KEY = "PASTE_SUPABASE_ANON_KEY";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// LOGIN
-document.getElementById("btn-login").onclick = async () => {
-  const email = document.getElementById("login-email").value;
-  const password = document.getElementById("login-password").value;
+    const regMsg = document.getElementById("reg-msg");
+    const loginMsg = document.getElementById("login-msg");
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  });
+    function show(el, text, ok=false){
+      el.className = "msg " + (ok ? "ok" : "err");
+      el.textContent = text;
+    }
 
-  document.getElementById("login-msg").innerText =
-    error ? error.message : "LOGIN OK";
-};
-</script>
+    document.getElementById("btn-register").addEventListener("click", async () => {
+      regMsg.textContent = "";
 
+      const email = document.getElementById("reg-email").value.trim();
+      const password = document.getElementById("reg-password").value;
+
+      if (!email || !password) return show(regMsg, "Fut email dhe password.");
+
+      const { data, error } = await supabase.auth.signUp({ email, password });
+
+      if (error) return show(regMsg, error.message);
+      // Nëse email confirmation është ON, do të të thotë kontrollo emailin.
+      show(regMsg, "U regjistrua! Nëse kërkon konfirmim, kontrollo emailin.", true);
+      console.log("signUp:", data);
+    });
+
+    document.getElementById("btn-login").addEventListener("click", async () => {
+      loginMsg.textContent = "";
+
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value;
+
+      if (!email || !password) return show(loginMsg, "Fut email dhe password.");
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) return show(loginMsg, error.message);
+
+      show(loginMsg, "Login OK ✅", true);
+      console.log("login:", data);
+
+      // p.sh. redirect
+      // window.location.href = "index.html";
+    });
+  </script>
 </body>
 </html>
 

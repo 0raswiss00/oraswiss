@@ -1,110 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Login / Register</title>
-
-  <style>
-    body {
-      background:#0f0f0f;
-      font-family: Arial, sans-serif;
-      color:#fff;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      min-height:100vh;
-      margin: 0;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
-    .container { width:360px; }
-
-    .card {
-      background:#141414;
-      padding:24px;
-      border-radius:14px;
-      margin-bottom:20px;
-    }
-
-    label {
-      display:block;
-      margin-top:12px;
-      font-size:14px;
-    }
-
-    input {
-      width:100%;
-      padding:12px;
-      margin-top:6px;
-      border-radius:10px;
-      border:1px solid #333;
-      background:#0f0f0f;
-      color:#fff;
-      font-size:15px;
-      box-sizing: border-box;
-    }
-
-    button {
-      width:100%;
-      margin-top:18px;
-      padding:14px;
-      border:none;
-      border-radius:12px;
-      background:#3b82f6;
-      color:#fff;
-      font-size:16px;
-      font-weight:700;
-      cursor:pointer;
-    }
-
-    .msg { margin-top:12px; font-size:14px; min-height: 18px; }
-    a { color:#3b82f6; text-decoration:none; font-size:14px; }
-  </style>
-</head>
-
-<body>
-  <div class="container">
-
-    <!-- REGISTER -->
-    <div class="card">
-      <h2>Register</h2>
-
-      <label>Email</label>
-      <input id="reg-email" type="email" autocomplete="email" required>
-
-      <label>Password</label>
-      <input id="reg-password" type="password" autocomplete="new-password" required>
-
-      <button id="btn-register" type="button">Register</button>
-      <div id="reg-msg" class="msg"></div>
-    </div>
-
-    <!-- LOGIN -->
-    <div class="card">
-      <h2>Login</h2>
-
-      <label>Email</label>
-      <input id="login-email" type="email" autocomplete="email" required>
-
-      <label>Password</label>
-      <input id="login-password" type="password" autocomplete="current-password" required>
-
-      <button id="btn-login" type="button">Login</button>
-      <div id="login-msg" class="msg"></div>
-    </div>
-
-    <div class="msg">
-      <a href="index.html">← Back to Home</a>
-    </div>
-
-  </div>
-
-  <!-- SUPABASE (VETËM KY SCRIPT) -->
-
-
-  <script type="module">
+<script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
   const SUPABASE_URL = "https://XXXX.supabase.co";
@@ -134,8 +28,82 @@
       error ? error.message : "✅ Login OK";
   });
 </script>
+</body>
+Ora
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login / Register</title>
+</head>
+<body>
 
+<div class="container">
 
-  
+  <div class="card">
+    <h2>Register</h2>
+    <label>Email</label>
+    <input id="reg-email" type="email" autocomplete="email" required>
+    <label>Password</label>
+    <input id="reg-password" type="password" autocomplete="new-password" required>
+    <button id="btn-register" type="button">Register</button>
+    <div id="reg-msg"></div>
+  </div>
+
+  <div class="card">
+    <h2>Login</h2>
+    <label>Email</label>
+    <input id="login-email" type="email" autocomplete="email" required>
+    <label>Password</label>
+    <input id="login-password" type="password" autocomplete="current-password" required>
+    <button id="btn-login" type="button">Login</button>
+    <div id="login-msg"></div>
+  </div>
+
+  <a href="index.html">← Back to Home</a>
+
+</div>
+
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+  const SUPABASE_URL = "https://XXXXXXXX.supabase.co";
+  const SUPABASE_ANON_KEY = "PASTE_ANON_KEY_KETU";
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const regMsg = document.getElementById("reg-msg");
+  const loginMsg = document.getElementById("login-msg");
+
+  document.getElementById("btn-register").addEventListener("click", async () => {
+    regMsg.textContent = "Duke regjistruar...";
+    const email = document.getElementById("reg-email").value.trim();
+    const password = document.getElementById("reg-password").value;
+
+    const { data, error } = await supabase.auth.signUp({ email, password });
+
+    if (error) regMsg.textContent = "❌ " + error.message;
+    else {
+      // shumicën e rasteve Supabase kërkon confirmim me email
+      regMsg.textContent = "✅ U bë signUp. Kontrollo email për konfirmim (spam/junk).";
+      console.log("signUp data:", data);
+    }
+  });
+
+  document.getElementById("btn-login").addEventListener("click", async () => {
+    loginMsg.textContent = "Duke hyrë...";
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value;
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) loginMsg.textContent = "❌ " + error.message;
+    else {
+      loginMsg.textContent = "✅ Login OK";
+      console.log("login data:", data);
+    }
+  });
+</script>
+
 </body>
 </html>

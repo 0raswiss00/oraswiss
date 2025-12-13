@@ -49,39 +49,48 @@
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
   const SUPABASE_URL = "https://XXXX.supabase.co";
-  const SUPABASE_ANON_KEY = "PUBLIC_ANON_KEY";
+  const SUPABASE_ANON_KEY = "XXXX";
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // REGISTER
-  document.getElementById("btn-register").onclick = async () => {
-    const email = document.getElementById("reg-email").value;
+  // TEST: a klikohet butoni?
+  const btnReg = document.getElementById("btn-register");
+  const btnLog = document.getElementById("btn-login");
+
+  btnReg.addEventListener("click", async () => {
+    document.getElementById("reg-msg").innerText = "Po provoj register...";
+    const email = document.getElementById("reg-email").value.trim();
     const password = document.getElementById("reg-password").value;
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    try {
+      const { data, error } = await supabase.auth.signUp({ email, password });
+      console.log("SIGNUP:", { data, error });
 
-    document.getElementById("reg-msg").innerText =
-      error ? error.message : "REGJISTRIM OK – kontrollo email";
-  };
+      document.getElementById("reg-msg").innerText =
+        error ? ("❌ " + error.message) : "✅ U dergua. Shiko email-in për konfirmim (ose çaktivizo confirm).";
+    } catch (e) {
+      console.log("SIGNUP EX:", e);
+      document.getElementById("reg-msg").innerText = "❌ Error (shiko Console)";
+    }
+  });
 
-  // LOGIN
-  document.getElementById("btn-login").onclick = async () => {
-    const email = document.getElementById("login-email").value;
+  btnLog.addEventListener("click", async () => {
+    document.getElementById("login-msg").innerText = "Po provoj login...";
+    const email = document.getElementById("login-email").value.trim();
     const password = document.getElementById("login-password").value;
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      console.log("LOGIN:", { data, error });
 
-    document.getElementById("login-msg").innerText =
-      error ? error.message : "LOGIN OK";
-  };
+      document.getElementById("login-msg").innerText =
+        error ? ("❌ " + error.message) : "✅ Login OK";
+    } catch (e) {
+      console.log("LOGIN EX:", e);
+      document.getElementById("login-msg").innerText = "❌ Error (shiko Console)";
+    }
+  });
 </script>
-
 
 </body>
 </html>

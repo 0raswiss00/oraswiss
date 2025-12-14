@@ -128,11 +128,26 @@
 
   // Example parts (replace with your real list)
 const PARTS = {
-  "2557/1": { name: "Date ring", price: 120, currency: "EUR" },
-  "1143/1": { name: "Oscillating weight (rotor)", price: 350, currency: "EUR" },
+  "2557/1": {
+    name: "Date ring",
+    price: 120,
+    currency: "EUR",
+    qty: 1
+  },
 
-  "3035-001": { name: "Main plate", price: 45, currency: "EUR" },
-  "3035-002": { name: "Balance complete", price: 110, currency: "EUR" }
+  "1143/1": {
+    name: "Oscillating weight (rotor)",
+    price: 350,
+    currency: "EUR",
+    qty: 1
+  },
+
+  "1488": {
+    name: "Wheel",
+    price: 55,
+    currency: "EUR",
+    qty: 1
+  }
 };
 
   function money(n){ return Number(n).toFixed(2); }

@@ -173,13 +173,10 @@
 </div>
 
 <script>
-  // PayPal.me (pa slash në fund)
-  const PAYPAL_BASE = "https://paypal.me/EMRIYT";
+  const PAYPAL_BASE = "https://paypal.me/EMRIYT"; // vetëm 1 herë
 
-  // ✅ VETËM NJË HERË PARTS (mos e shkruaj dy herë!)
-  // price: vendos çmimet kur të duash (tani i kam 0)
+  // vetëm 1 herë PARTS (pa e përsëritur më poshtë)
   const PARTS = {
-    // PLATE & BRIDGES
     "2030-100": { name:"Main Plate", price:0, currency:"EUR", qty:1, img:"images/parts/2030-100.jpg" },
     "2030-110": { name:"Train Wheel Bridge", price:0, currency:"EUR", qty:1, img:"images/parts/2030-110.jpg" },
     "2030-121": { name:"Barrel Bridge", price:0, currency:"EUR", qty:1, img:"images/parts/2030-121.jpg" },
@@ -187,21 +184,18 @@
     "2030-150": { name:"Pallet Bridge", price:0, currency:"EUR", qty:1, img:"images/parts/2030-150.jpg" },
     "2030-180": { name:"Automatic Device Bridge", price:0, currency:"EUR", qty:1, img:"images/parts/2030-180.jpg" },
 
-    // GOING TRAIN
     "2030-210": { name:"Barrel (Complete)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-210.jpg" },
     "2030-220": { name:"Centre Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-220.jpg" },
     "2030-230": { name:"Third Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-230.jpg" },
     "2030-240": { name:"Fourth Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-240.jpg" },
     "2030-250": { name:"Escape Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-250.jpg" },
 
-    // ESCAPEMENT
     "2030-300": { name:"Pallet Fork", price:0, currency:"EUR", qty:1, img:"images/parts/2030-300.jpg" },
     "2030-305": { name:"Pallet Staff", price:0, currency:"EUR", qty:1, img:"images/parts/2030-305.jpg" },
     "2030-310": { name:"Balance Complete", price:0, currency:"EUR", qty:1, img:"images/parts/2030-310.jpg" },
     "2030-315": { name:"Balance Staff", price:0, currency:"EUR", qty:1, img:"images/parts/2030-315.jpg" },
     "2030-320": { name:"Hairspring", price:0, currency:"EUR", qty:1, img:"images/parts/2030-320.jpg" },
 
-    // AUTOMATIC MODULE
     "2030-400": { name:"Oscillating Weight (Rotor)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-400.jpg" },
     "2030-410": { name:"Automatic Driving Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-410.jpg" },
     "2030-420": { name:"Reduction Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-420.jpg" },
@@ -209,14 +203,12 @@
     "2030-430B": { name:"Reversing Wheel (2)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-430B.jpg" },
     "2030-440": { name:"Rotor Axle", price:0, currency:"EUR", qty:1, img:"images/parts/2030-440.jpg" },
 
-    // DATE MECHANISM
     "2030-500": { name:"Date Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-500.jpg" },
     "2030-510": { name:"Date Jumper", price:0, currency:"EUR", qty:1, img:"images/parts/2030-510.jpg" },
     "2030-520": { name:"Date Driving Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-520.jpg" },
     "2030-530": { name:"Date Indicator Guard", price:0, currency:"EUR", qty:1, img:"images/parts/2030-530.jpg" },
     "2030-540": { name:"Date Corrector Lever (non-quickset)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-540.jpg" },
 
-    // KEYLESS WORKS
     "2030-600": { name:"Winding Stem", price:0, currency:"EUR", qty:1, img:"images/parts/2030-600.jpg" },
     "2030-610": { name:"Sliding Pinion", price:0, currency:"EUR", qty:1, img:"images/parts/2030-610.jpg" },
     "2030-620": { name:"Winding Pinion", price:0, currency:"EUR", qty:1, img:"images/parts/2030-620.jpg" },
@@ -224,13 +216,11 @@
     "2030-640": { name:"Yoke", price:0, currency:"EUR", qty:1, img:"images/parts/2030-640.jpg" },
     "2030-650": { name:"Setting Lever Spring", price:0, currency:"EUR", qty:1, img:"images/parts/2030-650.jpg" },
 
-    // SCREWS & SMALL PARTS
     "2030-700": { name:"Balance Cock Screw", price:0, currency:"EUR", qty:1, img:"images/parts/2030-700.jpg" },
     "2030-710": { name:"Bridge Screws (various)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-710.jpg" },
     "2030-720": { name:"Rotor Screw", price:0, currency:"EUR", qty:1, img:"images/parts/2030-720.jpg" },
     "2030-730": { name:"Date Guard Screws", price:0, currency:"EUR", qty:1, img:"images/parts/2030-730.jpg" },
 
-    // BARREL & POWER
     "2030-800": { name:"Mainspring Barrel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-800.jpg" },
     "2030-810": { name:"Mainspring", price:0, currency:"EUR", qty:1, img:"images/parts/2030-810.jpg" },
     "2030-820": { name:"Barrel Arbor", price:0, currency:"EUR", qty:1, img:"images/parts/2030-820.jpg" }
@@ -256,7 +246,7 @@
       info.style.color = "#6b7280";
       payBtn.classList.add("disabled");
       payBtn.href = "#";
-      preview.style.display = "none";
+      if(preview) preview.style.display = "none";
       return;
     }
 
@@ -268,12 +258,12 @@
        <div><strong>Quantity</strong>: ${Number(p.qty) === 1 ? "1 available" : (Number(p.qty) + " available")}</div>
        <div><strong>Price</strong>: ${money(p.price)} ${p.currency || ""}</div>`;
 
-    if(p.img){
+    if(preview && p.img){
       pvImg.src = p.img;
       pvNo.textContent = key;
       pvName.textContent = p.name;
       preview.style.display = "flex";
-    } else {
+    }else if(preview){
       preview.style.display = "none";
     }
 
@@ -288,19 +278,41 @@
   }
 
   // input search
-  q.addEventListener("input", () => {
-    showPart((q.value || "").trim());
+  q.addEventListener("input", () => showPart((q.value||"").trim()));
+
+  // DOT click (delegation: punon gjithmonë)
+  document.addEventListener("click", (e) => {
+    const dot = e.target.closest(".dot");
+    if(!dot) return;
+    const partNo = dot.dataset.part;
+    q.value = partNo;
+    showPart(partNo);
   });
 
-  // ✅ dot click (punon gjithmonë)
-  document.querySelectorAll(".dot").forEach(dot => {
-    dot.addEventListener("click", () => {
-      const partNo = dot.dataset.part;
-      q.value = partNo;
-      showPart(partNo);
-    });
-  });
+  // LISTA poshtë fotos (Front/Back)
+  function fillDiagramList(diagramId, listId){
+    const list = document.getElementById(listId);
+    const diagram = document.getElementById(diagramId);
+    if(!list || !diagram) return;
+
+    const dots = Array.from(diagram.querySelectorAll(".dot"))
+      .sort((a,b)=> Number(a.dataset.n||0) - Number(b.dataset.n||0));
+
+    list.innerHTML = dots.map(d => {
+      const n = d.dataset.n || d.textContent.trim();
+      const code = d.dataset.part;
+      const name = (PARTS[code] && PARTS[code].name) ? PARTS[code].name : "—";
+      return `<div class="item">
+                <div class="n">${n}</div>
+                <div><span class="code">${code}</span> <span class="name">— ${name}</span></div>
+              </div>`;
+    }).join("");
+  }
+
+  fillDiagramList("diagramFront", "frontList");
+  fillDiagramList("diagramBack", "backList");
 </script>
+
 
 </body>
 </html>

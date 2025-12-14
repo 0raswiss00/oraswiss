@@ -1005,3 +1005,46 @@ body {
   cursor:pointer;
   z-index:5;
 }
+
+.parts-images{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.diagram{
+  position:relative;          /* KY ËSHTË KRITIK */
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:12px;
+  padding:8px;
+}
+
+.diagram img{
+  width:100%;
+  height:auto;
+  display:block;              /* KRITIK */
+}
+
+.dot{
+  position:absolute;          /* KRITIK */
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:#b7922a;
+  color:#fff;
+  font-weight:700;
+  font-size:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:10;                 /* KRITIK */
+  box-shadow:0 4px 12px rgba(0,0,0,.35);
+}
+
+.dot:hover{
+  transform:scale(1.15);
+  background:#8a6b14;
+}
+

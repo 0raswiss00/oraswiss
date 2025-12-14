@@ -192,7 +192,7 @@
   <div>2030-730 – Date Guard Screws <span class="price">€6</span></div>
 
 
-   const PAYPAL_BASE = "https://paypal.me/EMRIYT"; // vetëm 1 herë
+  
   <br><div><strong>BARREL & POWER</strong></div>
   <div>2030-800 – Mainspring Barrel <span class="price">€70</span></div>
   <div>2030-810 – Mainspring <span class="price">€15</span></div>
@@ -202,10 +202,18 @@
 
   
 <script>
-  const PAYPAL_BASE = "https://paypal.me/EMRIYT"; // vetëm 1 herë
+  const PAYPAL_BASE = "https://paypal.me/EMRIYT"; // ndryshoje me linkun tënd
 
-  function money(n){ return Number(n).toFixed(2); }
-  function paypalLink(amount){ return PAYPAL_BASE.replace(/\/$/,"") + "/" + money(amount); }
+  // Këtu fut pjesët e tua (shembull me disa)
+  const PARTS = {
+    "2030-100": { name:"Main Plate", price:120, currency:"EUR", img:"images/parts/2030-100.jpg" },
+    "2030-110": { name:"Train Wheel Bridge", price:85, currency:"EUR", img:"images/parts/2030-110.jpg" },
+    "2030-121": { name:"Barrel Bridge", price:95, currency:"EUR", img:"images/parts/2030-121.jpg" },
+
+    "2030-400": { name:"Oscillating Weight (Rotor)", price:85, currency:"EUR", img:"images/parts/2030-400.jpg" },
+    "2030-500": { name:"Date Wheel", price:20, currency:"EUR", img:"images/parts/2030-500.jpg" },
+    "2030-210": { name:"Barrel (Complete)", price:20, currency:"EUR", img:"images/parts/2030-210.jpg" },
+  };
 
   const q = document.getElementById("q");
   const info = document.getElementById("info");
@@ -216,82 +224,66 @@
   const pvNo = document.getElementById("pvNo");
   const pvName = document.getElementById("pvName");
 
-  function showPart(key){
-    const p = PARTS[key];
-
-    if(!p){
-      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>2030-400</strong>';
-      info.style.color = "#6b7280";
-      payBtn.classList.add("disabled");
-      payBtn.href = "#";
-      if(preview) preview.style.display = "none";
-      return;
-    }
-
-    info.style.color = "#111827";
-    info.innerHTML =
-      `<div><strong>Part No.</strong>: ${key}</div>
-       <div><strong>Description</strong>: ${p.name}</div>
-       <div><strong>Condition</strong>: Original vintage Rolex part</div>
-       <div><strong>Quantity</strong>: ${Number(p.qty) === 1 ? "1 available" : (Number(p.qty) + " available")}</div>
-       <div><strong>Price</strong>: ${money(p.price)} ${p.currency || ""}</div>`;
-
-    if(preview && p.img){
-      pvImg.src = p.img;
-      pvNo.textContent = key;
-      pvName.textContent = p.name;
-      preview.style.display = "flex";
-    }else if(preview){
-      preview.style.display = "none";
-    }
-
-    if(Number(p.qty) <= 0){
-      payBtn.classList.add("disabled");
-      payBtn.href = "#";
-      return;
-    }
-
-    payBtn.classList.remove("disabled");
-    payBtn.href = paypalLink(p.price);
+  function normalizePartNo(v){
+    return (v || "").trim().toUpperCase().replace(/\s+/g,'');
   }
 
-  // input search
-  q.addEventListener("input", () => showPart((q.value||"").trim()));
+  function setDisabled(){
+    payBtn.classList.add("disabled");   // CSS e bën display:none
+    payBtn.removeAttribute("href");
+    info.textContent = "Select a part by entering the Part Number.";
+    preview.classList.remove("show");
+    pvImg.src = "";
+    pvNo.textContent = "";
+    pvName.textContent = "";
+  }
 
-  // DOT click (delegation: punon gjithmonë)
-  document.addEventListener("click", (e) => {
-    const dot = e.target.closest(".dot");
-    if(!dot) return;
-    const partNo = dot.dataset.part;
-    q.value = partNo;
-    showPart(partNo);
+  function setPart(partNo){
+    const key = normalizePartNo(partNo);
+    q.value = key;
+
+    const p = PARTS[key];
+    if(!p){
+      info.textContent = "Nuk u gjet pjesa. Provo p.sh. 2030-400 ose kliko në diagram.";
+      setDisabled();
+      return;
+    }
+
+    // info text
+    info.innerHTML = <b>${key}</b> — ${p.name} — <b>${p.price} ${p.currency === "EUR" ? "€" : p.currency}</b>;
+
+    // preview
+    pvImg.src = p.img || "";
+    pvNo.textContent = key;
+    pvName.textContent = ${p.name} — ${p.price}€;
+    preview.classList.add("show");
+
+    // PayPal ON
+    payBtn.classList.remove("disabled"); // shfaqet
+    // mund ta bësh si pagesë fikse, ose ta kalosh në query sipas mënyrës që përdor PayPal
+    payBtn.href = ${PAYPAL_BASE}/${p.price};
+    payBtn.target = "_blank";
+    payBtn.rel = "noopener";
+  }
+
+  // Input search
+  q.addEventListener("input", (e) => {
+    const v = normalizePartNo(e.target.value);
+    if(v.length < 6){ // mos e lodh kur është bosh
+      setDisabled();
+      return;
+    }
+    setPart(v);
   });
 
-  // LISTA poshtë fotos (Front/Back)
-  function fillDiagramList(diagramId, listId){
-    const list = document.getElementById(listId);
-    const diagram = document.getElementById(diagramId);
-    if(!list || !diagram) return;
+  // Click dots
+  document.querySelectorAll(".dot").forEach(dot => {
+    dot.addEventListener("click", () => {
+      setPart(dot.dataset.part);
+    });
+  });
 
-    const dots = Array.from(diagram.querySelectorAll(".dot"))
-      .sort((a,b)=> Number(a.dataset.n||0) - Number(b.dataset.n||0));
-
-    list.innerHTML = dots.map(d => {
-      const n = d.dataset.n || d.textContent.trim();
-      const code = d.dataset.part;
-      const name = (PARTS[code] && PARTS[code].name) ? PARTS[code].name : "—";
-      return `<div class="item">
-                <div class="n">${n}</div>
-                <div><span class="code">${code}</span> <span class="name">— ${name}</span></div>
-              </div>`;
-    }).join("");
-  }
-
-  fillDiagramList("diagramFront", "frontList");
-  fillDiagramList("diagramBack", "backList");
+  // start state
+  setDisabled();
 </script>
-
-
-</body>
-</html>
 

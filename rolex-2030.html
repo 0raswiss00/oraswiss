@@ -7,8 +7,8 @@
 
 <style>
   :root{
-    --bg:#f6f3ea; --card:#fff; --ink:#111827; --muted:#6b7280;
-    --line:#e5e7eb; --gold:#b7922a; --gold2:#8a6b14;
+    --bg:#f6f3ea; --card:#fff; --ink:#111827; --muted:#6b7280; --line:#e5e7eb;
+    --gold:#b7922a; --gold2:#8a6b14;
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
@@ -21,92 +21,62 @@
   .crumbs{font-size:13px;color:var(--muted);margin:10px 0 14px}
   .crumbs b{color:var(--ink)}
   h1{margin:0 0 8px;font-size:28px}
-  .back-btn{display:inline-block;margin:6px 0 14px;padding:10px 12px;border-radius:12px;background:linear-gradient(180deg,var(--gold),var(--gold2));color:#fff;text-decoration:none;font-weight:800;font-size:13px}
+  .back-btn{
+    display:inline-block;margin:6px 0 14px;padding:10px 12px;border-radius:12px;
+    background:linear-gradient(180deg,var(--gold),var(--gold2));
+    color:#fff;text-decoration:none;font-weight:800;font-size:13px;
+  }
   .grid{display:grid;grid-template-columns:380px 1fr;gap:14px}
   @media (max-width:980px){.grid{grid-template-columns:1fr}}
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.06)}
-  .card-title{margin:0 0 12px;font-size:18px;font-weight:800}
+  .card-title{margin:0 0 12px;font-size:18px;font-weight:800;color:var(--ink)}
   .row{display:flex;gap:10px;align-items:center;margin:10px 0;flex-wrap:wrap}
-  input{flex:1;min-width:240px;padding:12px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--ink);outline:none}
+  input{
+    flex:1;min-width:240px;padding:12px 12px;border-radius:12px;border:1px solid var(--line);
+    background:#fff;color:var(--ink);outline:none
+  }
   input:focus{border-color:var(--gold)}
-  .btn{display:inline-block;padding:11px 14px;border-radius:12px;border:1px solid var(--gold2);background:linear-gradient(180deg,var(--gold),var(--gold2));color:#fff;text-decoration:none;font-weight:800}
+  .btn{
+    display:inline-block;padding:11px 14px;border-radius:12px;border:1px solid var(--gold2);
+    background:linear-gradient(180deg,var(--gold),var(--gold2));
+    color:#fff;text-decoration:none;font-weight:800
+  }
   .btn.disabled{opacity:.45;pointer-events:none}
   .result{min-height:86px;padding:12px;border-radius:12px;border:1px dashed var(--line);color:var(--muted)}
   .result strong{color:var(--ink)}
   .tip{color:var(--muted);font-size:12px;margin-top:10px}
 
-  /* diagrams */
+  /* preview */
+  .preview{
+    display:none; gap:10px; align-items:center;
+    margin-top:10px; padding:10px; border:1px solid var(--line);
+    border-radius:12px; background:#fff;
+  }
+  .preview img{width:64px;height:64px;object-fit:contain;border:1px solid var(--line);border-radius:10px;background:#fff}
+
+  /* diagrams layout */
   .parts-images{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   @media (max-width:980px){.parts-images{grid-template-columns:1fr}}
-  .diagram{
-    position:relative;
-    width:100%;
-    height:420px;
-    border:1px solid var(--line);
-    border-radius:12px;
-    overflow:hidden;
-    background:#fff;
-  }
+  .diagram{position:relative}
   .diagram img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
+    width:100%;height:420px;object-fit:contain;
+    border:1px solid var(--line);border-radius:12px;background:#fff;
     display:block;
-    background:#fff;
   }
 
   /* dots */
   .dot{
     position:absolute;
-    width:26px;height:26px;
-    border-radius:999px;
-    background:rgba(183,146,42,.95);
-    color:#111;
-    font-weight:900;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border:2px solid #fff;
+    width:28px;height:28px;border-radius:999px;
+    display:flex;align-items:center;justify-content:center;
     cursor:pointer;
+    background:rgba(183,146,42,.95);
+    color:#111;font-weight:900;
+    border:2px solid #fff;
+    box-shadow:0 6px 16px rgba(0,0,0,.25);
     user-select:none;
-    box-shadow:0 8px 18px rgba(0,0,0,.25);
   }
-  .dot:hover{transform:scale(1.05)}
-  .dot::after{
-    content:attr(data-part);
-    position:absolute;
-    top:-34px;
-    left:50%;
-    transform:translateX(-50%);
-    background:#111;
-    color:#fff;
-    font-size:12px;
-    padding:4px 8px;
-    border-radius:8px;
-    white-space:nowrap;
-    opacity:0;
-    pointer-events:none;
-    transition:.15s;
-  }
-  .dot:hover::after{opacity:1}
-
-  /* optional preview */
-  .preview{
-    margin-top:12px;
-    border:1px solid var(--line);
-    border-radius:12px;
-    padding:10px;
-    display:none;
-    gap:10px;
-    align-items:center;
-  }
-  .preview img{
-    width:90px;height:90px;
-    object-fit:contain;
-    border:1px solid var(--line);
-    border-radius:10px;
-    background:#fff;
-  }
+  .dot:hover{transform:scale(1.06)}
 </style>
 </head>
 
@@ -121,7 +91,6 @@
 <div class="wrap">
   <div class="crumbs">Ora Swiss <span style="opacity:.6">›</span> Spare Parts <span style="opacity:.6">›</span> <b>Rolex – Separate Parts – Cal. 2030</b></div>
   <h1>Rolex – Separate Parts – Cal. 2030</h1>
-
   <a class="back-btn" href="separate-parts.html">← Back to Spare Parts</a>
 
   <div class="grid">
@@ -130,7 +99,7 @@
       <h3 class="card-title">Rolex – Separate Parts – Cal. 2030</h3>
 
       <div class="row">
-        <input id="q" type="search" placeholder="Enter Part No. e.g. 2557/1" />
+        <input id="q" type="search" placeholder="Enter Part No. e.g. 2030-400" />
       </div>
 
       <div id="info" class="result">Select a part by entering the Part Number.</div>
@@ -147,7 +116,7 @@
         <a id="payBtn" class="btn disabled" href="#" target="_blank" rel="noopener">Buy with PayPal</a>
       </div>
 
-      <div class="tip">Tip: enter e.g. <b>2557/1</b> or <b>1143/1</b></div>
+      <div class="tip">Tip: enter e.g. <b>2030-400</b> or click a number on the diagram.</div>
     </div>
 
     <!-- RIGHT -->
@@ -160,20 +129,20 @@
           <a href="images/rolex-2030-front.jpg" target="_blank" rel="noopener">
             <img src="images/rolex-2030-front.jpg" alt="Cal. 2030 parts diagram front">
           </a>
-          <div class="dot" style="top:32%;left:48%;" data-part="2030-400">1</div>
-          <div class="dot" style="top:18%;left:60%;" data-part="2030-500">2</div>
-          <!-- DOTS (ndrysho top/left) -->
-          <div class="dot" style="top:32%;left:48%;" data-part="2557/1">1</div>
-          <div class="dot" style="top:18%;left:60%;" data-part="1143/1">2</div>
-          <div class="dot" style="top:55%;left:35%;" data-part="1488">3</div>
-       </div>
+
+          <!-- DOTS: këtu vendos pika (ndrysho top/left sipas fotos) -->
+          <div class="dot" style="top:32%;left:48%;" data-part="2030-400" title="2030-400">1</div>
+          <div class="dot" style="top:18%;left:60%;" data-part="2030-500" title="2030-500">2</div>
+          <div class="dot" style="top:55%;left:35%;" data-part="2030-220" title="2030-220">3</div>
+        </div>
+
         <!-- BACK -->
         <div class="diagram" id="diagramBack">
           <a href="images/rolex-2030-back.jpg" target="_blank" rel="noopener">
             <img src="images/rolex-2030-back.jpg" alt="Cal. 2030 parts diagram back">
           </a>
 
-          <!-- nëse do pika edhe këtu, shtoji njësoj -->
+          <!-- nëse do pika edhe këtu, kopjo një dot dhe ndrysho top/left + data-part -->
           <!-- <div class="dot" style="top:40%;left:50%;" data-part="2030-xxx">1</div> -->
         </div>
       </div>
@@ -182,72 +151,68 @@
 </div>
 
 <script>
-  
+  // PayPal.me (pa slash në fund)
+  const PAYPAL_BASE = "https://paypal.me/EMRIYT";
 
+  // ✅ VETËM NJË HERË PARTS (mos e shkruaj dy herë!)
+  // price: vendos çmimet kur të duash (tani i kam 0)
+  const PARTS = {
+    // PLATE & BRIDGES
+    "2030-100": { name:"Main Plate", price:0, currency:"EUR", qty:1, img:"images/parts/2030-100.jpg" },
+    "2030-110": { name:"Train Wheel Bridge", price:0, currency:"EUR", qty:1, img:"images/parts/2030-110.jpg" },
+    "2030-121": { name:"Barrel Bridge", price:0, currency:"EUR", qty:1, img:"images/parts/2030-121.jpg" },
+    "2030-140": { name:"Balance Cock", price:0, currency:"EUR", qty:1, img:"images/parts/2030-140.jpg" },
+    "2030-150": { name:"Pallet Bridge", price:0, currency:"EUR", qty:1, img:"images/parts/2030-150.jpg" },
+    "2030-180": { name:"Automatic Device Bridge", price:0, currency:"EUR", qty:1, img:"images/parts/2030-180.jpg" },
 
-  // ✅ Këtu fut listën TËNDE. (unë po lë 3 shembujt që ke përdorur)
-  // Shto sa të duash, një rresht për çdo pjesë.
-  
-const PAYPAL_BASE = "https://paypal.me/EMRIYT";
-const PARTS = {
-  // PLATE & BRIDGES
-  "2030-100": { name:"Main Plate", price:0, currency:"EUR", qty:1, img:"images/parts/2030-100.jpg" },
-  "2030-110": { name:"Train Wheel Bridge", price:0, currency:"EUR", qty:1, img:"images/parts/2030-110.jpg" },
-  "2030-121": { name:"Barrel Bridge", price:0, currency:"EUR", qty:1, img:"images/parts/2030-121.jpg" },
-  "2030-140": { name:"Balance Cock", price:0, currency:"EUR", qty:1, img:"images/parts/2030-140.jpg" },
-  "2030-150": { name:"Pallet Bridge", price:0, currency:"EUR", qty:1, img:"images/parts/2030-150.jpg" },
-  "2030-180": { name:"Automatic Device Bridge", price:0, currency:"EUR", qty:1, img:"images/parts/2030-180.jpg" },
+    // GOING TRAIN
+    "2030-210": { name:"Barrel (Complete)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-210.jpg" },
+    "2030-220": { name:"Centre Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-220.jpg" },
+    "2030-230": { name:"Third Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-230.jpg" },
+    "2030-240": { name:"Fourth Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-240.jpg" },
+    "2030-250": { name:"Escape Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-250.jpg" },
 
-  // GOING TRAIN
-  "2030-210": { name:"Barrel (Complete)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-210.jpg" },
-  "2030-220": { name:"Centre Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-220.jpg" },
-  "2030-230": { name:"Third Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-230.jpg" },
-  "2030-240": { name:"Fourth Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-240.jpg" },
-  "2030-250": { name:"Escape Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-250.jpg" },
+    // ESCAPEMENT
+    "2030-300": { name:"Pallet Fork", price:0, currency:"EUR", qty:1, img:"images/parts/2030-300.jpg" },
+    "2030-305": { name:"Pallet Staff", price:0, currency:"EUR", qty:1, img:"images/parts/2030-305.jpg" },
+    "2030-310": { name:"Balance Complete", price:0, currency:"EUR", qty:1, img:"images/parts/2030-310.jpg" },
+    "2030-315": { name:"Balance Staff", price:0, currency:"EUR", qty:1, img:"images/parts/2030-315.jpg" },
+    "2030-320": { name:"Hairspring", price:0, currency:"EUR", qty:1, img:"images/parts/2030-320.jpg" },
 
-  // ESCAPEMENT
-  "2030-300": { name:"Pallet Fork", price:0, currency:"EUR", qty:1, img:"images/parts/2030-300.jpg" },
-  "2030-305": { name:"Pallet Staff", price:0, currency:"EUR", qty:1, img:"images/parts/2030-305.jpg" },
-  "2030-310": { name:"Balance Complete", price:0, currency:"EUR", qty:1, img:"images/parts/2030-310.jpg" },
-  "2030-315": { name:"Balance Staff", price:0, currency:"EUR", qty:1, img:"images/parts/2030-315.jpg" },
-  "2030-320": { name:"Hairspring", price:0, currency:"EUR", qty:1, img:"images/parts/2030-320.jpg" },
+    // AUTOMATIC MODULE
+    "2030-400": { name:"Oscillating Weight (Rotor)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-400.jpg" },
+    "2030-410": { name:"Automatic Driving Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-410.jpg" },
+    "2030-420": { name:"Reduction Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-420.jpg" },
+    "2030-430A": { name:"Reversing Wheel (1)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-430A.jpg" },
+    "2030-430B": { name:"Reversing Wheel (2)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-430B.jpg" },
+    "2030-440": { name:"Rotor Axle", price:0, currency:"EUR", qty:1, img:"images/parts/2030-440.jpg" },
 
-  // AUTOMATIC MODULE
-  "2030-400": { name:"Oscillating Weight (Rotor)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-400.jpg" },
-  "2030-410": { name:"Automatic Driving Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-410.jpg" },
-  "2030-420": { name:"Reduction Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-420.jpg" },
-  "2030-430A": { name:"Reversing Wheel (1)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-430A.jpg" },
-  "2030-430B": { name:"Reversing Wheel (2)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-430B.jpg" },
-  "2030-440": { name:"Rotor Axle", price:0, currency:"EUR", qty:1, img:"images/parts/2030-440.jpg" },
+    // DATE MECHANISM
+    "2030-500": { name:"Date Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-500.jpg" },
+    "2030-510": { name:"Date Jumper", price:0, currency:"EUR", qty:1, img:"images/parts/2030-510.jpg" },
+    "2030-520": { name:"Date Driving Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-520.jpg" },
+    "2030-530": { name:"Date Indicator Guard", price:0, currency:"EUR", qty:1, img:"images/parts/2030-530.jpg" },
+    "2030-540": { name:"Date Corrector Lever (non-quickset)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-540.jpg" },
 
-  // DATE MECHANISM
-  "2030-500": { name:"Date Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-500.jpg" },
-  "2030-510": { name:"Date Jumper", price:0, currency:"EUR", qty:1, img:"images/parts/2030-510.jpg" },
-  "2030-520": { name:"Date Driving Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-520.jpg" },
-  "2030-530": { name:"Date Indicator Guard", price:0, currency:"EUR", qty:1, img:"images/parts/2030-530.jpg" },
-  "2030-540": { name:"Date Corrector Lever (non-quickset)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-540.jpg" },
+    // KEYLESS WORKS
+    "2030-600": { name:"Winding Stem", price:0, currency:"EUR", qty:1, img:"images/parts/2030-600.jpg" },
+    "2030-610": { name:"Sliding Pinion", price:0, currency:"EUR", qty:1, img:"images/parts/2030-610.jpg" },
+    "2030-620": { name:"Winding Pinion", price:0, currency:"EUR", qty:1, img:"images/parts/2030-620.jpg" },
+    "2030-630": { name:"Setting Lever", price:0, currency:"EUR", qty:1, img:"images/parts/2030-630.jpg" },
+    "2030-640": { name:"Yoke", price:0, currency:"EUR", qty:1, img:"images/parts/2030-640.jpg" },
+    "2030-650": { name:"Setting Lever Spring", price:0, currency:"EUR", qty:1, img:"images/parts/2030-650.jpg" },
 
-  // KEYLESS WORKS
-  "2030-600": { name:"Winding Stem", price:0, currency:"EUR", qty:1, img:"images/parts/2030-600.jpg" },
-  "2030-610": { name:"Sliding Pinion", price:0, currency:"EUR", qty:1, img:"images/parts/2030-610.jpg" },
-  "2030-620": { name:"Winding Pinion", price:0, currency:"EUR", qty:1, img:"images/parts/2030-620.jpg" },
-  "2030-630": { name:"Setting Lever", price:0, currency:"EUR", qty:1, img:"images/parts/2030-630.jpg" },
-  "2030-640": { name:"Yoke", price:0, currency:"EUR", qty:1, img:"images/parts/2030-640.jpg" },
-  "2030-650": { name:"Setting Lever Spring", price:0, currency:"EUR", qty:1, img:"images/parts/2030-650.jpg" },
+    // SCREWS & SMALL PARTS
+    "2030-700": { name:"Balance Cock Screw", price:0, currency:"EUR", qty:1, img:"images/parts/2030-700.jpg" },
+    "2030-710": { name:"Bridge Screws (various)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-710.jpg" },
+    "2030-720": { name:"Rotor Screw", price:0, currency:"EUR", qty:1, img:"images/parts/2030-720.jpg" },
+    "2030-730": { name:"Date Guard Screws", price:0, currency:"EUR", qty:1, img:"images/parts/2030-730.jpg" },
 
-  // SCREWS & SMALL PARTS
-  "2030-700": { name:"Balance Cock Screw", price:0, currency:"EUR", qty:1, img:"images/parts/2030-700.jpg" },
-  "2030-710": { name:"Bridge Screws (various)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-710.jpg" },
-  "2030-720": { name:"Rotor Screw", price:0, currency:"EUR", qty:1, img:"images/parts/2030-720.jpg" },
-  "2030-730": { name:"Date Guard Screws", price:0, currency:"EUR", qty:1, img:"images/parts/2030-730.jpg" },
-
-  // BARREL & POWER
-  "2030-800": { name:"Mainspring Barrel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-800.jpg" },
-  "2030-810": { name:"Mainspring", price:0, currency:"EUR", qty:1, img:"images/parts/2030-810.jpg" },
-  "2030-820": { name:"Barrel Arbor", price:0, currency:"EUR", qty:1, img:"images/parts/2030-820.jpg" }
-};
-
-
+    // BARREL & POWER
+    "2030-800": { name:"Mainspring Barrel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-800.jpg" },
+    "2030-810": { name:"Mainspring", price:0, currency:"EUR", qty:1, img:"images/parts/2030-810.jpg" },
+    "2030-820": { name:"Barrel Arbor", price:0, currency:"EUR", qty:1, img:"images/parts/2030-820.jpg" }
+  };
 
   function money(n){ return Number(n).toFixed(2); }
   function paypalLink(amount){ return PAYPAL_BASE.replace(/\/$/,"") + "/" + money(amount); }
@@ -265,7 +230,7 @@ const PARTS = {
     const p = PARTS[key];
 
     if(!p){
-      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>2557/1</strong>';
+      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>2030-400</strong>';
       info.style.color = "#6b7280";
       payBtn.classList.add("disabled");
       payBtn.href = "#";
@@ -281,17 +246,15 @@ const PARTS = {
        <div><strong>Quantity</strong>: ${Number(p.qty) === 1 ? "1 available" : (Number(p.qty) + " available")}</div>
        <div><strong>Price</strong>: ${money(p.price)} ${p.currency || ""}</div>`;
 
-    // preview image (opsionale)
     if(p.img){
       pvImg.src = p.img;
       pvNo.textContent = key;
       pvName.textContent = p.name;
       preview.style.display = "flex";
-    }else{
+    } else {
       preview.style.display = "none";
     }
 
-    // blloko nëse qty=0
     if(Number(p.qty) <= 0){
       payBtn.classList.add("disabled");
       payBtn.href = "#";
@@ -302,14 +265,14 @@ const PARTS = {
     payBtn.href = paypalLink(p.price);
   }
 
+  // input search
   q.addEventListener("input", () => {
-    const key = (q.value || "").trim();
-    showPart(key);
+    showPart((q.value || "").trim());
   });
 
-  // ✅ DOT CLICK = plotëson inputin dhe e aktivizon kërkimin
-  document.querySelectorAll('.dot').forEach(dot => {
-    dot.addEventListener('click', () => {
+  // ✅ dot click (punon gjithmonë)
+  document.querySelectorAll(".dot").forEach(dot => {
+    dot.addEventListener("click", () => {
       const partNo = dot.dataset.part;
       q.value = partNo;
       showPart(partNo);
@@ -319,3 +282,4 @@ const PARTS = {
 
 </body>
 </html>
+

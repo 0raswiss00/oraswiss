@@ -990,3 +990,16 @@ body {
   color: #000;
 }
 
+.diagram{position:relative}
+.dot{
+  position:absolute;
+  width:28px;height:28px;
+  border-radius:999px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  background:rgba(183,146,42,.95);
+  color:#111;
+  font-weight:900;
+  border:2px solid #fff;
+  box-shadow:0 6px 16px rgba(0,0,0,.25);
+}

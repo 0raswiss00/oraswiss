@@ -198,33 +198,81 @@
   <div>2030-810 – Mainspring <span class="price">€15</span></div>
   <div>2030-820 – Barrel Arbor <span class="price">€40</span></div>
 </div>
-
 <script>
-q.addEventListener("input", () => {
-  const code = q.value.trim();
-  const part = PARTS[code];
+  // vendos këtu paypal.me/USERNAME (pa slash në fund)
+  const PAYPAL_BASE = "https://paypal.me/EMRIYT";
 
-  if (!part) {
-    info.textContent = "Pjesa nuk u gjet.";
-    payBtn.classList.add("disabled");
-    payBtn.removeAttribute("href");
-    preview.style.display = "none";
-    return;
+  // pjesët (shto të gjitha këtu)
+  const PARTS = {
+    "2030-100": { name:"Main Plate", price:120, currency:"EUR", img:"images/parts/2030-100.jpg" },
+    "2030-110": { name:"Train Wheel Bridge", price:85,  currency:"EUR", img:"images/parts/2030-110.jpg" },
+    "2030-121": { name:"Barrel Bridge", price:95,  currency:"EUR", img:"images/parts/2030-121.jpg" },
+    "2030-400": { name:"Oscillating Weight (Rotor)", price:85, currency:"EUR", img:"images/parts/2030-400.jpg" },
+    "2030-500": { name:"Date Wheel", price:20, currency:"EUR", img:"images/parts/2030-500.jpg" },
+    "2030-210": { name:"Barrel (Complete)", price:20, currency:"EUR", img:"images/parts/2030-210.jpg" },
+  };
+
+  const q = document.getElementById("q");
+  const info = document.getElementById("info");
+  const payBtn = document.getElementById("payBtn");
+
+  const preview = document.getElementById("preview");
+  const pvImg = document.getElementById("pvImg");
+  const pvNo = document.getElementById("pvNo");
+  const pvName = document.getElementById("pvName");
+
+  function normalizeCode(v) {
+    return (v || "")
+      .trim()
+      .replace(/\./g, "-")     // nëse shkruan 2030.100 -> 2030-100
+      .replace(/\s+/g, "");   // heq hapësira
   }
 
-  info.textContent = part.name + " – " + part.price + " €";
+  function disablePay() {
+    payBtn.classList.add("disabled");
+    payBtn.removeAttribute("href");
+    payBtn.setAttribute("aria-disabled", "true");
+  }
 
-  pvImg.src = part.img;
-  pvNo.textContent = code;
-  pvName.textContent = part.name;
-  preview.style.display = "flex";
+  function enablePay(url) {
+    payBtn.classList.remove("disabled");
+    payBtn.href = url;
+    payBtn.setAttribute("aria-disabled", "false");
+  }
 
-  payBtn.href = ${PAYPAL_BASE}/${part.price}${part.currency};
-  payBtn.classList.remove("disabled");
-});
+  disablePay();
+  preview.style.display = "none";
+
+  q.addEventListener("input", () => {
+    const code = normalizeCode(q.value);
+    const part = PARTS[code];
+
+    if (!part) {
+      info.textContent = "Pjesa nuk u gjet.";
+      disablePay();
+      preview.style.display = "none";
+      return;
+    }
+
+    info.textContent = ${part.name} - ${part.price}€;
+
+    pvImg.src = part.img || "";
+    pvNo.textContent = code;
+    pvName.textContent = part.name;
+    preview.style.display = "flex";
+
+    // PayPal link (më i sigurt me currencyCode)
+    const url = ${PAYPAL_BASE}/${part.price}?currencyCode=${part.currency};
+    enablePay(url);
+  });
+
+  // nëse ke “dot” në diagram:
+  document.querySelectorAll(".dot[data-part]").forEach(dot => {
+    dot.addEventListener("click", () => {
+      q.value = dot.dataset.part;
+      q.dispatchEvent(new Event("input"));
+    });
+  });
 </script>
-
-
-  
 
 

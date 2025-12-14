@@ -302,9 +302,9 @@
     }
 
     payBtn.classList.remove("disabled");
-    payBtn.href = "https://www.paypal.com/ncp/payment/VPDH9HEN7Y4RN";
+    payBtn.href = paypalLink(p.price);
   }
-
+ 
   // input search
   q.addEventListener("input", () => showPart((q.value||"").trim()));
 

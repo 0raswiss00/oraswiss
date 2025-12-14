@@ -254,10 +254,9 @@
     "2030-820": { name:"Barrel Arbor", price:0, currency:"EUR", qty:1, img:"images/parts/2030-820.jpg" }
   };
 
-    function paypallink(amount){
-    return PAYPAL_BASE.replace(/\/$/, "") + "/" + parseInt(amount, 10);
-  }
-    
+ function money(n){ return Number(n).toFixed(2); }
+  function paypalLink(amount){ return PAYPAL_BASE.replace(/\/$/,"") + "/" + money(amount); }
+   
   const q = document.getElementById("q");
   const info = document.getElementById("info");
   const payBtn = document.getElementById("payBtn");

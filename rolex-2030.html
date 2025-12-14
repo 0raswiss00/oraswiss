@@ -199,91 +199,32 @@
   <div>2030-820 – Barrel Arbor <span class="price">€40</span></div>
 </div>
 
+<script>
+q.addEventListener("input", () => {
+  const code = q.value.trim();
+  const part = PARTS[code];
+
+  if (!part) {
+    info.textContent = "Pjesa nuk u gjet.";
+    payBtn.classList.add("disabled");
+    payBtn.removeAttribute("href");
+    preview.style.display = "none";
+    return;
+  }
+
+  info.textContent = part.name + " – " + part.price + " €";
+
+  pvImg.src = part.img;
+  pvNo.textContent = code;
+  pvName.textContent = part.name;
+  preview.style.display = "flex";
+
+  payBtn.href = ${PAYPAL_BASE}/${part.price}${part.currency};
+  payBtn.classList.remove("disabled");
+});
+</script>
+
 
   
-<script>
-  const PAYPAL_BASE = "https://paypal.me/EMRIYT"; // ndryshoje me linkun tënd
 
-  // Këtu fut pjesët e tua (shembull me disa)
-  const PARTS = {
-    "2030-100": { name:"Main Plate", price:120, currency:"EUR", img:"images/parts/2030-100.jpg" },
-    "2030-110": { name:"Train Wheel Bridge", price:85, currency:"EUR", img:"images/parts/2030-110.jpg" },
-    "2030-121": { name:"Barrel Bridge", price:95, currency:"EUR", img:"images/parts/2030-121.jpg" },
-
-    "2030-400": { name:"Oscillating Weight (Rotor)", price:85, currency:"EUR", img:"images/parts/2030-400.jpg" },
-    "2030-500": { name:"Date Wheel", price:20, currency:"EUR", img:"images/parts/2030-500.jpg" },
-    "2030-210": { name:"Barrel (Complete)", price:20, currency:"EUR", img:"images/parts/2030-210.jpg" },
-  };
-
-  const q = document.getElementById("q");
-  const info = document.getElementById("info");
-  const payBtn = document.getElementById("payBtn");
-
-  const preview = document.getElementById("preview");
-  const pvImg = document.getElementById("pvImg");
-  const pvNo = document.getElementById("pvNo");
-  const pvName = document.getElementById("pvName");
-
-  function normalizePartNo(v){
-    return (v || "").trim().toUpperCase().replace(/\s+/g,'');
-  }
-
-  function setDisabled(){
-    payBtn.classList.add("disabled");   // CSS e bën display:none
-    payBtn.removeAttribute("href");
-    info.textContent = "Select a part by entering the Part Number.";
-    preview.classList.remove("show");
-    pvImg.src = "";
-    pvNo.textContent = "";
-    pvName.textContent = "";
-  }
-
-  function setPart(partNo){
-    const key = normalizePartNo(partNo);
-    q.value = key;
-
-    const p = PARTS[key];
-    if(!p){
-      info.textContent = "Nuk u gjet pjesa. Provo p.sh. 2030-400 ose kliko në diagram.";
-      setDisabled();
-      return;
-    }
-
-    // info text
-    info.innerHTML = <b>${key}</b> — ${p.name} — <b>${p.price} ${p.currency === "EUR" ? "€" : p.currency}</b>;
-
-    // preview
-    pvImg.src = p.img || "";
-    pvNo.textContent = key;
-    pvName.textContent = ${p.name} — ${p.price}€;
-    preview.classList.add("show");
-
-    // PayPal ON
-    payBtn.classList.remove("disabled"); // shfaqet
-    // mund ta bësh si pagesë fikse, ose ta kalosh në query sipas mënyrës që përdor PayPal
-    payBtn.href = ${PAYPAL_BASE}/${p.price};
-    payBtn.target = "_blank";
-    payBtn.rel = "noopener";
-  }
-
-  // Input search
-  q.addEventListener("input", (e) => {
-    const v = normalizePartNo(e.target.value);
-    if(v.length < 6){ // mos e lodh kur është bosh
-      setDisabled();
-      return;
-    }
-    setPart(v);
-  });
-
-  // Click dots
-  document.querySelectorAll(".dot").forEach(dot => {
-    dot.addEventListener("click", () => {
-      setPart(dot.dataset.part);
-    });
-  });
-
-  // start state
-  setDisabled();
-</script>
 

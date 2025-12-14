@@ -990,61 +990,66 @@ body {
   color: #000;
 }
 
-.diagram{ position:relative; }
-.diagram a, .diagram img{ display:block; width:100%; }
-.diagram img{ height:420px; object-fit:contain; }
+<div class="diagram-block">
 
-.dot{
-  position:absolute;
-  width:34px;height:34px;border-radius:999px;
-  display:flex;align-items:center;justify-content:center;
-  font-weight:900;
-  background:#b7922a;color:#111;
-  border:2px solid #fff;
-  box-shadow:0 10px 20px rgba(0,0,0,.25);
-  cursor:pointer;
-  z-index:5;
+  <!-- FOTO -->
+  <div class="diagram">
+    <img src="images/rolex-2030-front.jpg" alt="Cal. 2030 parts diagram front">
+
+    <!-- DOTS -->
+    <div class="dot" style="top:32%;left:48%;" data-part="2030-400">1</div>
+    <div class="dot" style="top:18%;left:60%;" data-part="2030-500">2</div>
+    <div class="dot" style="top:55%;left:35%;" data-part="2030-210">3</div>
+  </div>
+
+  <!-- LISTA POSHTË FOTOS -->
+  <div class="diagram-list">
+    <div><strong>1.</strong> 2030-400 — Oscillating Weight (Rotor)</div>
+    <div><strong>2.</strong> 2030-500 — Date Wheel</div>
+    <div><strong>3.</strong> 2030-210 — Barrel (Complete)</div>
+  </div>
+
+</div>
+Ora
+.diagram-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.parts-images{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
+.diagram {
+  position: relative;
+  width: 100%;
 }
 
-.diagram{
-  position:relative;          /* KY ËSHTË KRITIK */
-  background:#fff;
-  border:1px solid #e5e7eb;
-  border-radius:12px;
-  padding:8px;
+.diagram img {
+  width: 100%;
+  display: block;
+  border-radius: 8px;
 }
 
-.diagram img{
-  width:100%;
-  height:auto;
-  display:block;              /* KRITIK */
+.dot {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  background: #b8942e;
+  color: #fff;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 26px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
 }
 
-.dot{
-  position:absolute;          /* KRITIK */
-  width:28px;
-  height:28px;
-  border-radius:50%;
-  background:#b7922a;
-  color:#fff;
-  font-weight:700;
-  font-size:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  z-index:10;                 /* KRITIK */
-  box-shadow:0 4px 12px rgba(0,0,0,.35);
+.diagram-list {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
 }
 
-.dot:hover{
-  transform:scale(1.15);
-  background:#8a6b14;
+.diagram-list div {
+  padding: 4px 0;
 }
-

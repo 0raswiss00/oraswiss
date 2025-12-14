@@ -1,158 +1,232 @@
 <!doctype html>
 <html lang="sq">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Ora Swiss — Spare Parts — Zenith El Primero Cal. 400</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Zenith – Spare Parts – El Primero Cal. 400Z</title>
 
-<style>
-  :root{
-    --bg:#f6f3ea;
-    --card:#ffffff;
-    --ink:#111827;
-    --muted:#6b7280;
-    --line:#e5e7eb;
-    --gold:#b7922a;
-    --gold2:#8a6b14;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
-  .topbar{
-    background:#111;
-    color:#fff;
-    border-bottom:4px solid var(--gold);
-  }
-  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;max-width:1100px;margin:0 auto}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.3px}
-  .pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);padding:6px 10px;border-radius:999px;font-size:12px}
-  .wrap{max-width:1100px;margin:0 auto;padding:16px}
-  .crumbs{font-size:13px;color:var(--muted);margin:10px 0 14px}
-  .crumbs b{color:var(--ink)}
-  h1{margin:0 0 12px;font-size:28px}
-  .grid{display:grid;grid-template-columns:380px 1fr;gap:14px}
-  @media (max-width:980px){.grid{grid-template-columns:1fr}}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.06)}
-  .row{display:flex;gap:10px;align-items:center;margin:10px 0;flex-wrap:wrap}
-  input{
-    flex:1;min-width:240px;padding:12px 12px;border-radius:12px;border:1px solid var(--line);
-    background:#fff;color:var(--ink);outline:none
-  }
-  input:focus{border-color:var(--gold)}
-  .btn{
-    display:inline-block;padding:11px 14px;border-radius:12px;border:1px solid var(--gold2);
-    background:linear-gradient(180deg,var(--gold),var(--gold2));
-    color:#fff;text-decoration:none;font-weight:700
-  }
-  .btn.disabled{opacity:.45;pointer-events:none}
-  .result{min-height:72px;padding:12px;border-radius:12px;border:1px dashed var(--line);color:var(--muted)}
-  .result strong{color:var(--ink)}
-  .stage{
-    position:relative;width:100%;aspect-ratio:3/4;border-radius:14px;overflow:hidden;border:1px solid var(--line);
-    background:#fff;
-  }
-  .stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff}
-  .watermark{
-    position:absolute;left:14px;top:14px;
-    background:rgba(183,146,42,.14);
-    border:1px solid rgba(183,146,42,.35);
-    color:var(--gold2);
-    padding:8px 10px;border-radius:12px;font-weight:800
-  }
-  .footer{color:var(--muted);font-size:12px;margin-top:12px}
-</style>
+  <style>
+    :root{
+      --bg:#f4f1ea; --card:#fff; --text:#1b1b1b; --muted:#6b6b6b;
+      --brand:#3b2e21; --pill:#8b6b3b; --line:#e8e1d6;
+      --dot:#c6a24a; --dotText:#111;
+    }
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .topbar{background:var(--brand);color:#fff}
+    .wrap{max-width:1100px;margin:0 auto;padding:14px 16px}
+    .brand{font-weight:800;letter-spacing:.6px}
+    .brand span{opacity:.8;font-weight:600}
+    .pill{display:inline-block;margin-top:8px;background:var(--pill);color:#fff;padding:7px 10px;border-radius:999px;font-size:13px}
+    .crumbs{display:flex;gap:10px;align-items:center;flex-wrap:wrap;color:var(--muted);margin:10px 0 14px}
+    .back-btn{background:#0000001a;color:#1b1b1b;text-decoration:none;padding:7px 10px;border-radius:10px}
+    .grid{display:grid;grid-template-columns:360px 1fr;gap:16px}
+    @media (max-width: 900px){ .grid{grid-template-columns:1fr} }
+
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 0 #00000008}
+    .card-title{margin:0;padding:14px 14px;border-bottom:1px solid var(--line);font-size:16px}
+    .pad{padding:14px}
+    .row{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+    input[type="search"]{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px}
+    .result{background:#f7f5f0;border:1px dashed var(--line);padding:10px;border-radius:10px;color:var(--muted);font-size:13px}
+
+    .preview{display:none;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px;margin:10px 0}
+    .preview img{width:70px;height:70px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+    .btn{display:inline-block;width:100%;text-align:center;padding:10px 12px;border-radius:12px;text-decoration:none;background:#0a7cff;color:#fff;font-weight:700}
+    .btn.disabled{pointer-events:none;opacity:.45}
+    .tip{font-size:12px;color:var(--muted);margin-top:8px}
+
+    /* Diagram */
+    .diagram-block{padding:14px}
+    .diagram{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+    .diagram img{display:block;width:100%;height:auto}
+    .dot{
+      position:absolute;transform:translate(-50%,-50%);
+      background:var(--dot);color:var(--dotText);
+      border-radius:999px;padding:6px 9px;font-weight:800;font-size:12px;
+      box-shadow:0 6px 20px #00000022;cursor:pointer;user-select:none;
+      border:2px solid #ffffffcc;
+    }
+    .dot:hover{filter:brightness(1.05)}
+    .diagram-list{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+    .section{margin:10px 0 6px;font-weight:900;letter-spacing:.3px}
+    .item{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;margin:6px 0}
+    .item b{font-weight:800}
+    .price{font-weight:900}
+    .item.active{outline:2px solid #00000020;background:#fbfaf7}
+  </style>
 </head>
 
 <body>
-
-<div class="topbar">
-  <div class="wrap">
-    <div class="brand">ORA SWISS <span style="opacity:.7;font-weight:600">Spare Parts</span></div>
-    <div class="pill">Zenith • El Primero • <b style="color:#fff">Cal. 400</b></div>
+  <div class="topbar">
+    <div class="wrap">
+      <div class="brand">ORA SWISS <span>Spare Parts</span></div>
+      <div class="pill">Zenith • El Primero • <b style="color:#fff">Cal. 400Z</b></div>
+    </div>
   </div>
-</div>
 
- <div class="row">
-  <a href="javascript:history.back()" class="btn back-btn">
-    ← Spare to Parts
-  </a>
-</div>
-
-
-<div class="wrap">
-  <div class="crumbs">Ora Swiss <span style="opacity:.6">›</span> Spare Parts <span style="opacity:.6">›</span> <b>Zenith Cal. 400</b></div>
-  <h1>Zenith El Primero Caliber 400</h1>
-
-  <div class="grid">
-    <div class="card">
-      <div class="row">
-        <input id="q" type="search" placeholder="Shkruaj Part No. p.sh. 2557/1" />
-      </div>
-
-      <div id="info" class="result">select the part by typing the part number.</div>
-
-      <div class="row">
-        <a id="payBtn" class="btn disabled" href="#" target="_blank" rel="noopener">Buy with PayPal</a>
-      </div>
-
-      <div class="footer">
-        Tip: enter for example <b>2557/1</b> or <b>1143/1</b> when entering all parts.
-      </div>
+  <div class="wrap">
+    <div class="crumbs">
+      Ora Swiss <span style="opacity:.6">›</span> Spare Parts <span style="opacity:.6">›</span>
+      <a class="back-btn" href="separate-parts.html">← Back to Spare Parts</a>
     </div>
 
+    <div class="grid">
+      <!-- LEFT -->
+      <div class="card">
+        <h3 class="card-title">Zenith – Spare Parts – El Primero Cal. 400Z</h3>
+        <div class="pad">
+          <div class="row">
+            <input id="q" type="search" placeholder="Shkruaj Part No. p.sh. 400Z-120" />
+          </div>
 
-  <div class="card">
-  <div class="stage">
-    <div class="watermark">Ora Swiss • El Primero Cal. 400</div>
+          <div id="info" class="result">Zgjidh një pjesë duke shkruar Part Number ose duke klikuar në diagram.</div>
 
-<img
-  id="diagram"
-  src="el-primero-cal400-1.jpg"
-  alt="Zenith El Primero Cal. 400 parts diagram"> 
-    
+          <div id="preview" class="preview">
+            <img id="pvImg" src="" alt="">
+            <div>
+              <div><strong id="pvNo"></strong></div>
+              <div id="pvName" style="opacity:.85;margin-top:4px"></div>
+              <div id="pvPrice" style="margin-top:4px;font-weight:900"></div>
+            </div>
+          </div>
 
+          <div class="row">
+            <!-- Këtu vendos linkun e PayPal kur ta kesh -->
+            <a id="payBtn" class="btn disabled" href="#" target="_blank" rel="noopener">Buy with PayPal</a>
+          </div>
 
-    
-<script>
-  // 1) Ndrysho PayPal-in tënd:
-  const PAYPAL_BASE = "https://paypal.me/EMRIYT"; // <-- ndryshoje
+          <div class="tip">Tip: shkruaj p.sh. <b>400Z-120</b> ose kliko numrin në diagram.</div>
+        </div>
+      </div>
 
- 
+      <!-- RIGHT -->
+      <div class="card">
+        <h3 class="card-title">Zenith – El Primero Cal. 400Z – Diagrams</h3>
 
-  // 3) Pjesët (tani janë shembull; pastaj i fusim të gjitha)
-  const PARTS = {
-    "2557/1": {name:"Date ring", price:120, currency:"CHF"},
-    "1143/1": {name:"Oscillating weight (rotor)", price:350, currency:"CHF"},
-    "1488": {name:"Wheel", price:55, currency:"CHF"}
-  };
+        <div class="diagram-block">
 
-  function money(n){ return Number(n).toFixed(2); }
-  function paypalLink(amount){ return PAYPAL_BASE.replace(/\/$/,"") + "/" + money(amount); }
+          <!-- FOTO 1 (FRONT) -->
+          <div class="diagram" id="diagFront">
+            <img src="images/zenith-400z-1.jpg" alt="El Primero Cal. 400Z parts diagram front">
 
-  const img = document.getElementById("diagram");
-  img.src = DIAGRAM_URL;
+            <!-- DOTS (ndërro top/left + data-part sipas pjesëve të tua) -->
+            <div class="dot" style="top:30%;left:52%;" data-part="400Z-120">400Z-120</div>
+            <div class="dot" style="top:18%;left:64%;" data-part="400Z-210">400Z-210</div>
+            <div class="dot" style="top:58%;left:38%;" data-part="400Z-500">400Z-500</div>
+          </div>
 
-  const q = document.getElementById("q");
-  const info = document.getElementById("info");
-  const payBtn = document.getElementById("payBtn");
+          <!-- FOTO 2 (BACK) -->
+          <div class="diagram" style="margin-top:14px;">
+            <img src="images/zenith-400z-2.jpg" alt="El Primero Cal. 400Z parts diagram back">
+            <!-- Mund të shtosh DOTS edhe këtu -->
+          </div>
 
-  q.addEventListener("input", () => {
-    const key = (q.value || "").trim();
-    const p = PARTS[key];
-    if(!p){
-      info.innerHTML = "Nuk u gjet pjesa. Shkruaj Part No. p.sh. <strong>2557/1</strong>";
-      info.style.color = "#6b7280";
-      payBtn.classList.add("disabled");
-      payBtn.href = "#";
-      return;
+          <!-- LISTA POSHTË -->
+          <div class="diagram-list" id="partsList">
+
+            <div class="section">PLATE & BRIDGES</div>
+            <div class="item" data-part="400Z-120" data-name="Main Plate" data-price="€120">
+              <span><b>400Z-120</b> – Main Plate</span> <span class="price">€120</span>
+            </div>
+            <div class="item" data-part="400Z-210" data-name="Train Wheel Bridge" data-price="€95">
+              <span><b>400Z-210</b> – Train Wheel Bridge</span> <span class="price">€95</span>
+            </div>
+
+            <div class="section" style="margin-top:14px;">DATE / CHRONO (shembull)</div>
+            <div class="item" data-part="400Z-500" data-name="Date Wheel" data-price="€35">
+              <span><b>400Z-500</b> – Date Wheel</span> <span class="price">€35</span>
+            </div>
+
+            <!-- Shto pjesët e tjera këtu njësoj -->
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const q = document.getElementById('q');
+    const info = document.getElementById('info');
+    const preview = document.getElementById('preview');
+    const pvImg = document.getElementById('pvImg');
+    const pvNo = document.getElementById('pvNo');
+    const pvName = document.getElementById('pvName');
+    const pvPrice = document.getElementById('pvPrice');
+    const payBtn = document.getElementById('payBtn');
+    const items = Array.from(document.querySelectorAll('.item'));
+    const dots = Array.from(document.querySelectorAll('.dot'));
+
+    // Vendos foto preview sipas part number (opsionale)
+    function guessPreviewImage(partNo){
+      // p.sh. images/parts/400Z-120.jpg
+      return images/parts/${partNo}.jpg;
     }
-    info.style.color = "#111827";
-    info.innerHTML = `<div><strong>Part No.</strong>: ${key}</div>
-                      <div><strong>Përshkrimi</strong>: ${p.name}</div>
-                      <div><strong>Çmimi</strong>: ${money(p.price)} ${p.currency||""}</div>`;
-    payBtn.classList.remove("disabled");
-    payBtn.href = paypalLink(p.price);
-  });
-</script>
 
+    function clearActive(){
+      items.forEach(i => i.classList.remove('active'));
+    }
+
+    function selectPart(partNo){
+      partNo = (partNo || '').trim();
+      if(!partNo){
+        info.textContent = 'Zgjidh një pjesë duke shkruar Part Number ose duke klikuar në diagram.';
+        preview.style.display = 'none';
+        clearActive();
+        payBtn.classList.add('disabled');
+        payBtn.href = '#';
+        return;
+      }
+
+      const el = items.find(i => i.dataset.part.toLowerCase() === partNo.toLowerCase());
+      if(!el){
+        info.textContent = Nuk u gjet pjesa: ${partNo};
+        preview.style.display = 'none';
+        clearActive();
+        payBtn.classList.add('disabled');
+        payBtn.href = '#';
+        return;
+      }
+
+      clearActive();
+      el.classList.add('active');
+      el.scrollIntoView({behavior:'smooth', block:'center'});
+
+      const name = el.dataset.name || '';
+      const price = el.dataset.price || el.querySelector('.price')?.textContent || '';
+
+      info.textContent = Zgjedhur: ${el.dataset.part} – ${name};
+      pvNo.textContent = el.dataset.part;
+      pvName.textContent = name;
+      pvPrice.textContent = price;
+
+      pvImg.src = guessPreviewImage(el.dataset.part);
+      pvImg.alt = ${el.dataset.part} ${name};
+
+      preview.style.display = 'flex';
+
+      // PayPal link (vendose logjikën tënde këtu)
+      // p.sh. payBtn.href = https://paypal.me/ORA_SWISS/${encodeURIComponent(el.dataset.part)};
+      payBtn.classList.remove('disabled');
+      payBtn.href = '#';
+    }
+
+    q.addEventListener('input', (e)=> selectPart(e.target.value));
+
+    items.forEach(el=>{
+      el.addEventListener('click', ()=> selectPart(el.dataset.part));
+    });
+
+    dots.forEach(d=>{
+      d.addEventListener('click', ()=> {
+        selectPart(d.dataset.part);
+        q.value = d.dataset.part;
+      });
+    });
+
+    // Start clean
+    selectPart('');
+  </script>
 </body>
 </html>
+

@@ -171,13 +171,17 @@ const PARTS = {
       return;
     }
 
-    info.style.color = "#111827";
-    info.innerHTML =
+   info.style.color = "#111827";
+info.innerHTML =
   `<div><strong>Part No.</strong>: ${key}</div>
    <div><strong>Description</strong>: ${p.name}</div>
    <div><strong>Condition</strong>: Original vintage Rolex part</div>
-   <div><strong>Quantity</strong>: ${p.qty === 1 ? "1 available" : "Out of stock"}</div>
-   <div><strong>Price</strong>: ${money(p.price)} ${p.currency}</div>`;
+   <div><strong>Quantity</strong>: 1 available</div>
+   <div><strong>Price</strong>: ${money(p.price)} ${p.currency||""}</div>`;
+
+payBtn.classList.remove("disabled");
+payBtn.href = paypalLink(p.price);
+Shkruaj te Ora Swiss
 
     payBtn.classList.remove("disabled");
     payBtn.href = paypalLink(p.price);

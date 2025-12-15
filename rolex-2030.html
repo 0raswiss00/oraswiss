@@ -134,9 +134,11 @@
   <img src="rolex-2030.2.jpg" alt="Cal. 2030 parts diagram back">
 </div>
 
- <div class="diagram-info">
-  <div><strong>PLATE & BRIDGES</strong></div>
-  <div>2030-100 – Main Plate <span class="price">€250</span></div>
+<div>
+  <button class="part" data-part="2030-100">2030-100</button>
+  – Main Plate <span class="price">€250</span>
+</div>
+
   <div>2030-110 – Train Wheel Bridge <span class="price">€75</span></div>
   <div>2030-121 – Barrel Bridge <span class="price">€65</span></div>
   <div>2030-140 – Balance bllok <span class="price">€280</span></div>
@@ -341,6 +343,17 @@
   fillDiagramList("diagramBack", "backList");
 </script>
 
+<script>
+  const input = document.getElementById("q");
 
+  document.querySelectorAll(".part").forEach(btn => {
+    btn.addEventListener("click", () => {
+      input.value = btn.dataset.part;
+      input.dispatchEvent(new Event("input"));
+    });
+  });
+</script>
+
+       
   </body>
 </html>

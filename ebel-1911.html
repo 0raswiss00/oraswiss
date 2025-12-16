@@ -1,363 +1,308 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ebel Chronograph 1911 – Full Details</title>
+  <title>Ebel 1911 Chronograph – Full Details</title>
 
   <style>
-    body{
-      font-family:Arial, sans-serif;
-      background:#f5f5f5;
-      margin:0;
-      color:#111;
+    :root { --bg:#0b0b0c; --card:#121214; --text:#f2f2f2; --muted:#b9b9b9; --line:#222; }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#070708,#0c0c0f);color:var(--text)}
+    .wrap{max-width:960px;margin:0 auto;padding:28px 16px 56px}
+    .top{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted);background:rgba(255,255,255,.03);font-size:13px}
+    h1{margin:10px 0 8px;font-size:34px;line-height:1.15}
+    .sub{color:var(--muted);line-height:1.55;margin:0 0 18px}
+    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+    @media(max-width:860px){.grid{grid-template-columns:1fr}}
+    .card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:16px;padding:18px}
+    .card h2{margin:0 0 12px;font-size:18px;letter-spacing:.2px}
+    .lux-desc{color:var(--muted);line-height:1.65}
+    .form{display:grid;gap:10px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media(max-width:520px){.row{grid-template-columns:1fr}}
+    input, textarea{
+      width:100%; padding:12px 12px; border-radius:12px;
+      border:1px solid var(--line); background:#0e0e10; color:var(--text);
+      outline:none; font-size:14px
     }
-    .wrap{ max-width:1200px; margin:auto; padding:20px; }
-    .card{
-      background:#fff;
-      border-radius:12px;
-      padding:20px;
-      box-shadow:0 6px 18px rgba(0,0,0,.06);
+    textarea{min-height:140px;resize:vertical}
+    input:focus, textarea:focus{border-color:#3a3a3a}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+    button, a.btn{
+      border:1px solid var(--line); border-radius:999px; padding:12px 16px;
+      background:#121214; color:var(--text); text-decoration:none; cursor:pointer;
+      font-weight:600; letter-spacing:.2px
     }
+    button.primary{background:#f1f1f1;color:#0b0b0c;border-color:transparent}
+    button.green{background:#25D366;color:#0b0b0c;border-color:transparent}
+    button.blue{background:#2f6fed;color:#fff;border-color:transparent}
+    .small{font-size:12px;color:var(--muted);margin-top:10px}
+    .divider{height:1px;background:var(--line);margin:14px 0}
+    .note{font-size:12px;color:var(--muted);line-height:1.6}
 
-    .badges{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:18px;
-      align-items:center;
+    /* Luxury Modal */
+    .lux-modal{
+      position:fixed; inset:0; display:none; place-items:center;
+      background:rgba(0,0,0,.55); padding:20px; z-index:9999;
     }
-    .badge{
-      background:#f1f1f1;
-      padding:8px 14px;
-      border-radius:999px;
-      font-size:14px;
-      display:flex;
-      gap:8px;
-      align-items:center;
-      line-height:1;
+    .lux-box{
+      width:min(520px,100%); background:#0f0f12; border:1px solid #2a2a2f;
+      border-radius:18px; padding:22px 18px; text-align:center;
+      box-shadow:0 18px 60px rgba(0,0,0,.55);
     }
-    .back-badge{
-      background:#e4e4e4;
-      text-decoration:none;
-      color:#000;
-      font-weight:700;
+    .lux-icon{
+      width:54px;height:54px;border-radius:999px;margin:0 auto 10px;
+      display:grid;place-items:center;background:rgba(37,211,102,.12);
+      border:1px solid rgba(37,211,102,.35); color:#25D366; font-size:26px; font-weight:800;
     }
-
-    .grid{
-      display:grid;
-      grid-template-columns:1.05fr .95fr;
-      gap:28px;
-      align-items:start;
-    }
-    @media(max-width:900px){ .grid{ grid-template-columns:1fr; } }
-
-    .mainimg{
-      width:100%;
-      border-radius:12px;
-      margin-bottom:14px;
-      border:1px solid #eee;
-      background:#fafafa;
-      object-fit:cover;
-      display:block;
-    }
-    .thumbs{
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(72px,1fr));
-      gap:10px;
-    }
-    .thumbs img{
-      width:100%;
-      border-radius:10px;
-      cursor:pointer;
-      border:2px solid transparent;
-      background:#fafafa;
-      aspect-ratio:1/1;
-      object-fit:cover;
-    }
-    .thumbs img:hover{ border-color:#111; }
-
-    h1{ margin:0 0 8px 0; font-size:26px; }
-    .sub{ margin:0 0 14px 0; color:#444; }
-
-    .panel{
-      background:#fafafa;
-      border:1px solid #eee;
-      border-radius:12px;
-      padding:16px;
-      margin-bottom:16px;
-    }
-    .panel h2{ margin:0 0 12px 0; font-size:18px; }
-
-    .form{ display:grid; gap:10px; margin-bottom:14px; }
-    .form input,.form textarea{
-      width:100%;
-      padding:12px;
-      border-radius:10px;
-      border:1px solid #ddd;
-      outline:none;
-      font-size:14px;
-      background:#fff;
-    }
-    .form textarea{ min-height:110px; resize:vertical; }
-
-    .send-btn{
-      width:100%;
-      padding:12px 14px;
-      border-radius:12px;
-      border:0;
-      cursor:pointer;
-      background:#111;
-      color:#fff;
-      font-weight:700;
-      font-size:15px;
-    }
-    .send-btn:hover{ opacity:.92; }
-
-    .cta{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      align-items:center;
-    }
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      padding:11px 14px;
-      border-radius:999px;
-      border:0;
-      cursor:pointer;
-      text-decoration:none;
-      font-weight:700;
-      font-size:14px;
-      user-select:none;
-    }
-    .buy-btn{ background:#111; color:#fff; }
-    .wa-btn{ background:#25D366; color:#fff; }
-    .email-btn{ background:#2b6cff; color:#fff; }
-    .like-btn{ background:#ffd6e7; }
-    .share-btn{ background:#e9e9e9; }
-    .btn:hover{ opacity:.92; }
-
-    .specs{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-      font-size:14.5px;
-    }
-    .specs div{
-      background:#fff;
-      border:1px solid #eee;
-      border-radius:10px;
-      padding:10px 12px;
-    }
-
-    h3{ margin:18px 0 10px 0; }
-    ul{ margin:0 0 0 18px; color:#333; }
-
-    .note{ margin-top:10px; font-size:12.5px; color:#666; }
+    .lux-box h3{margin:6px 0 8px;font-size:20px}
+    .lux-box p{margin:0;color:var(--muted);line-height:1.6}
+    .lux-actions{display:flex;justify-content:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+    .lux-actions button{min-width:130px}
+    .hide{display:none}
   </style>
-
-  <script>
-    function setMain(src){ document.getElementById("mainPhoto").src = src; }
-
-    function sharePage(url){
-      if(navigator.share){
-        navigator.share({ title: document.title, url }).catch(()=>{});
-      }else{
-        navigator.clipboard.writeText(url).then(()=>{
-          alert("Link copied: " + url);
-        }).catch(()=>{
-          prompt("Copy this link:", url);
-        });
-      }
-    }
-
-    function toggleLike(btn){
-      const liked = btn.getAttribute("data-liked") === "1";
-      btn.setAttribute("data-liked", liked ? "0" : "1");
-      btn.textContent = liked ? "♥️" : "💖";
-    }
-
-    function sendRequest(e){
-      e.preventDefault();
-      alert("Request sent! We will contact you soon.");
-      e.target.reset();
-    }
-  </script>
 </head>
 
 <body>
   <div class="wrap">
-    <div class="card">
+    <div class="top">
+      <div class="pill">🌍 Worldwide Shipping</div>
+      <div class="pill">📍 Tracking Available</div>
+    </div>
 
-      <!-- BADGES -->
-      <div class="badges">
-        <a href="luxury.html" class="badge back-badge">← Back</a>
-        <div class="badge">⌚ Authentic Watch</div>
-        <div class="badge">✅ Fully Serviced</div>
-        <div class="badge">📦 Secure Packaging</div>
-        <div class="badge">🚚 Worldwide Shipping</div>
-        <div class="badge">📍 Tracking Available</div>
-      </div>
+    <h1 id="pageTitle">Ebel 1911 Chronograph – Full Details</h1>
+    <p class="sub" id="pageSub">
+      Swiss chronograph crafted in stainless steel and 18K yellow gold. 40mm case. Recently serviced. Chronograph & date working.
+    </p>
 
-      <div class="grid">
-        <!-- LEFT: GALLERY -->
-        <div>
-          <img id="mainPhoto" class="mainimg" src="ebel-1911.1.jpg" alt="Ebel 1911" />
-
-          <div class="thumbs">
-            <img src="ebel-1911.1.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.2.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.3.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.5.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.6.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.7.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.8.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.9.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.10.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.11.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.12.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.13.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.14.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.15.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.16.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.17.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.18.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.19.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.20.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.21.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.22.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.23.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.24.jpg" alt="" onclick="setMain(this.src)">
-          </div>
+    <div class="grid">
+      <!-- LEFT: DESCRIPTION -->
+      <div class="card">
+        <h2>Overview</h2>
+        <div class="lux-desc" id="luxDescription">
+          <strong>Ebel 1911 Chronograph</strong> — a refined Swiss timepiece combining stainless steel and 18K yellow gold.
+          The 40mm case offers a classic, well-balanced presence on the wrist. The watch is in very good / near-mint condition,
+          runs perfectly, and has been recently serviced. Chronograph and date functions are fully operational.
+          Original bracelet fits wrists up to 16 cm. No box, no papers.
         </div>
 
-        <!-- RIGHT: INFO + FORM -->
-        <div>
-          <h1>Ebel 1911 Chronograph – Full Details</h1>
-          <p class="sub">
-            Ebel 1911 Chronograph – Stainless Steel & 18K Gold
-          <div class="specs">
-            <div><b>Brand:</b>Ebele</div>
-            <div><b>Model:</b> Chonograph</div>
-            <div><b>Reference:</b> 1911</div>
-            <div><b>Case Size:</b> 40mm</div>
-            <div><b>Material:</b> Stainless Steel &amp; 18k Yellow Gold</div>
-            <div><b>Bezel:</b> 18k Yellow Gold, Fluted</div>
-            <div><b>Bracelet:</b>measure 16.  (Steel &amp; 18k Yellow Gold)</div>
-            <div><b>Dial:</b>white </div>
-            <div><b>Movement:</b> Automatic</div>
-            <div><b>Caliber:</b> 1911</div>
-            <div><b>Functions:</b>Chronograph & Time, Date</div>
-            <div><b>Condition:</b> Excellent – fully serviced, works perfectly</div>
-            <div><b>Price:</b> €2,400</div>
-            <div><b>Shipping:</b> Insured + Tracking</div>
+        <div class="divider"></div>
+
+        <div class="note">
+          Tip: Use <b>Buy Now</b> to submit your details first (including address), then you’ll be redirected to secure PayPal checkout.
+        </div>
+      </div>
+
+      <!-- RIGHT: REQUEST / BUY -->
+      <div class="card">
+        <h2>Request this watch</h2>
+
+        <form class="form" onsubmit="return false;">
+          <!-- IMPORTANT: watch name + paypal link -->
+          <input type="hidden" name="watch" id="watchField" value="Ebel 1911 Chronograph – Ref. 1911" />
+          <input type="hidden" id="paypalLink" value="https://www.paypal.com/ncp/payment/2G6DFL5DHVUS" />
+
+          <div class="row">
+            <input type="text" name="name" placeholder="Full Name" required />
+            <input type="email" name="email" placeholder="Email" required />
           </div>
-		 
-			<h1>Ebel 1911 Chronograph – Full Details</h1>  
-                Ebel 1911 Chronograph, featuring a refined combination of stainless steel and 18K gold.
-                40 mm case, classic and well-balanced size on the wrist.
 
-                The watch is in very good / near-mint condition:
-	•	Runs perfectly
-	•	Chronograph fully functional
-	•	Date function working
-	•	Recently serviced
-	•	Original bracelet, fits wrists up to 16 cm
-	•	No damage, no deep scratches or dents
-	•	Clean case and bracelet
-	•	No box, no papers
+          <div class="row">
+            <input type="text" name="phone" placeholder="Phone / WhatsApp" />
+            <input type="text" name="country" placeholder="Country" />
+          </div>
 
-                A high-quality Swiss chronograph, elegant and versatile — ideal for both daily wear and collectors.
-	       </p>
-          <h3>Shipping &amp; Delivery</h3>
-          <ul>
-            <li>📦 Secure packaging for maximum protection</li>
-            <li>🚚 Insured worldwide shipping</li>
-            <li>📮 Tracking number provided after dispatch</li>
-		  </ul>
-       <div>
-		           
-          <div class="panel">
-            <h2>Request this watch</h2>
+          <input type="text" name="address" placeholder="Full Address (Street, City, ZIP)" required />
 
-            <form action="https://api.web3forms.com/submit" method="POST">
-              <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
-              <input type="hidden" name="subject" value="New Request: Ebel 1911 Automatic Chronograph">
-              <input type=""hidden" name="Product" value="Ebel 1911 Automatic Chronograph">
+          <!-- AUTO MESSAGE (luxury + full details) -->
+          <textarea name="message" id="messageField" placeholder="Message"></textarea>
 
-              <input type="text" name="Full Name" placeholder="Full Name" required>
-              <input type="text"  name="Phone"      placeholder="Phone / WhatsApp" required>
-              <input type="text"  name="Phone"      placeholder="Phone / WhatsApp" required>
-              <input type="text"  name="Country"    placeholder="Country" required>
-              <button type="submit">Send Request</button>	
-            </form>
-           
-            <div class="cta">
-              <!-- PAYPAL: vendos linkun tënd të pagesës -->
-              <a class="btn buy-btn"
-                <a href="https://www.paypal.com/ncp/payment/2G6DFL5DHVVUS"_blank">Buy Now</a> 
-                 
-              <!-- WHATSAPP -->
-              <a class="btn wa-btn"
-                 <a href="https://www.paypal.com/ncp/payment/ECCX9XEYV9MWA" target="_blank">WhatsApp</a>
-                 
-               <!-- EMAIL -->
-              <a class="btn email-btn"
-               href="mailto:tele9317@gmail.com?subject=Order%20Ebel%201911%20Chronograph&body=Hello,%0A%0AI%20am%20interested%20in%20the%20Ebel%201911%20Chronograph.%0A%0APlease%20contact%20me%20with%20more%20details.%0A%0AThank%20you.">
-               Email
-              </a>
+          <div class="btns">
+            <button class="primary" type="button" onclick="submitRequestOnly()">Send Request</button>
+            <button class="blue" type="button" onclick="buyNow()">Buy Now</button>
+            <button class="green" type="button" onclick="openWhatsApp()">WhatsApp</button>
+            <a class="btn" href="#" onclick="openEmail();return false;">Email</a>
+          </div>
 
-              <button class="btn like-btn" type="button" data-id="ebel-chronograph-1911" data-liked="0" onclick="toggleLike(this)">♥️</button>
-              <button class="btn share-btn" type="button" onclick="sharePage('https://oraswiss.com/ebel-1911.html')">📎 Share</button>
-			</div>
-         </div>
-       </div>
-     </div>
+          <div class="small">
+            By sending a request you agree to be contacted regarding this timepiece.
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
-<script>
-  function sharePage(url){
-    if(navigator.share){
-      navigator.share({ title: document.title, url: url }).catch(()=>{});
-    } else {
-      navigator.clipboard.writeText(url).then(()=>{
-        alert("Link copied: " + url);
-      }).catch(()=>{
-        prompt("Copy this link:", url);
-      });
+
+  <!-- LUXURY MODAL -->
+  <div id="luxModal" class="lux-modal" onclick="closeModalIfBackdrop(event)">
+    <div class="lux-box">
+      <div class="lux-icon">✓</div>
+      <h3 id="luxTitle">Thank You</h3>
+      <p id="luxText">Your request has been received. Our team will contact you shortly.</p>
+
+      <div class="lux-actions">
+        <button class="primary" type="button" onclick="hideModal()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ========= SETTINGS =========
+    const WATCH_NAME = "Ebel 1911 Chronograph – Ref. 1911"; // change if needed
+    const WHATSAPP_NUMBER = ""; // optional: e.g. "35569xxxxxxx" (no +). leave empty to only open whatsapp without number
+    // ============================
+
+    // Build luxury message automatically
+    function buildAutoMessage() {
+      return (
+`Ebel 1911 Chronograph
+
+Brand: Ebel
+Model: 1911 Chronograph
+Case Size: 40mm
+Material: Stainless Steel & 18K Yellow Gold
+Bezel: 18K Yellow Gold, Fluted
+Dial: White
+Bracelet: Original steel & 18K gold (fits up to 16 cm wrist)
+
+Condition: Very good / near-mint
+Movement: Automatic chronograph
+Functions: Chronograph and date working
+Recently serviced
+No box, no papers
+
+Request submitted via oraswiss.com`
+      );
     }
-  }
 
-  function toggleLike(btn){
-    const liked = btn.getAttribute("data-liked") === "1";
-    btn.setAttribute("data-liked", liked ? "0" : "1");
-    btn.textContent = liked ? "♥️" : "💖";
-  }
-</script>
+    // Fill fields on load
+    (function init() {
+      document.getElementById("watchField").value = WATCH_NAME;
+      document.getElementById("messageField").value = buildAutoMessage();
+    })();
 
-<script>
-function sendRequest(event) {
-  event.preventDefault();
+    function getForm() {
+      return document.querySelector("form.form");
+    }
 
-  const form = event.target;
-  const data = new FormData(form);
+    function showModal(text) {
+      document.getElementById("luxText").innerText = text;
+      document.getElementById("luxModal").style.display = "grid";
+    }
 
-  fetch("/send-request.php", {
-    method: "POST",
-    body: data
-  })
-  .then(() => {
-    alert("Request sent! We will contact you soon.");
-    form.reset();
-  });
-}
-</script>
+    function hideModal() {
+      document.getElementById("luxModal").style.display = "none";
+    }
 
-	  
+    function closeModalIfBackdrop(e) {
+      if (e.target && e.target.id === "luxModal") hideModal();
+    }
+
+    async function postRequest() {
+      const form = getForm();
+
+      // simple required validation (browser handles required for inputs, but we ensure anyway)
+      const name = form.querySelector('[name="name"]').value.trim();
+      const email = form.querySelector('[name="email"]').value.trim();
+      const address = form.querySelector('[name="address"]').value.trim();
+      if (!name || !email || !address) {
+        showModal("Please fill Full Name, Email, and Address.");
+        return false;
+      }
+
+      const data = new FormData(form);
+
+      try {
+        const res = await fetch("/send-request.php", { method: "POST", body: data });
+        // Even if server returns empty, we treat as ok if no error thrown
+        return true;
+      } catch (err) {
+        showModal("Something went wrong. Please try again.");
+        return false;
+      }
+    }
+
+    // SEND REQUEST ONLY (no redirect)
+    async function submitRequestOnly() {
+      const ok = await postRequest();
+      if (ok) {
+        showModal("Thank you. Your request has been received. Our team will contact you shortly.");
+        getForm().reset();
+        // restore auto message + watch after reset
+        document.getElementById("watchField").value = WATCH_NAME;
+        document.getElementById("messageField").value = buildAutoMessage();
+      }
+    }
+
+    // BUY NOW: send request, then redirect to PayPal
+    async function buyNow() {
+      const ok = await postRequest();
+      if (!ok) return;
+
+      const paypalUrl = document.getElementById("paypalLink").value;
+      showModal("Thank you. Redirecting you to secure checkout…");
+      setTimeout(() => { window.location.href = paypalUrl; }, 800);
+    }
+
+    // WhatsApp with auto text
+    function openWhatsApp() {
+      const form = getForm();
+      const watch = WATCH_NAME;
+
+      const name = form.querySelector('[name="name"]').value.trim() || "";
+      const phone = form.querySelector('[name="phone"]').value.trim() || "";
+      const country = form.querySelector('[name="country"]').value.trim() || "";
+      const address = form.querySelector('[name="address"]').value.trim() || "";
+      const msg = form.querySelector('[name="message"]').value.trim() || "";
+
+      const text =
+`Hello, I’m interested in: ${watch}
+
+Name: ${name}
+Phone: ${phone}
+Country: ${country}
+Address: ${address}
+
+Message:
+${msg}`;
+
+      const encoded = encodeURIComponent(text);
+      const base = WHATSAPP_NUMBER ? https://wa.me/${WHATSAPP_NUMBER}?text= : https://wa.me/?text=;
+      window.open(base + encoded, "_blank");
+    }
+
+    // Email mailto with watch + details
+    function openEmail() {
+      const form = getForm();
+      const watch = WATCH_NAME;
+
+      const name = form.querySelector('[name="name"]').value.trim() || "";
+      const phone = form.querySelector('[name="phone"]').value.trim() || "";
+      const country = form.querySelector('[name="country"]').value.trim() || "";
+      const address = form.querySelector('[name="address"]').value.trim() || "";
+      const msg = form.querySelector('[name="message"]').value.trim() || "";
+
+      const subject = encodeURIComponent(Order / Request: ${watch});
+      const body = encodeURIComponent(
+`Hello,
+
+I am interested in: ${watch}
+
+Name: ${name}
+Phone: ${phone}
+Country: ${country}
+Address: ${address}
+
+Message:
+${msg}
+
+Thank you.`
+      );
+
+      // CHANGE TO YOUR EMAIL:
+      window.location.href = mailto:tele9317@gmail.com?subject=${subject}&body=${body};
+    }
+  </script>
 </body>
 </html>
-   
-    

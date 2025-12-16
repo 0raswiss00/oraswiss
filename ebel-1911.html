@@ -72,9 +72,16 @@
       <div class="pill">📍 Tracking Available</div>
     </div>
 
-<button class="lux-back" onclick="goBack()">
-  ← Back
-</button>
+<script>
+function goBack() {
+  if (document.referrer && document.referrer.includes(window.location.hostname)) {
+    window.history.back();
+  } else {
+    window.location.href = "/"; // ose /watches.html
+  }
+}
+</script>
+
    
     <h1 id="pageTitle">Ebel 1911 Chronograph – Full Details</h1>
     <p class="sub" id="pageSub">

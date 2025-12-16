@@ -237,10 +237,20 @@
             </form>
 
             <div class="cta">
-              <!-- Ndrysho linkun e PayPal nëse do -->
-              <a class="btn buy-btn" href="https://www.paypal.com/" target="_blank" rel="noopener">Buy Now</a>
-              <a class="btn wa-btn" href="https://wa.me/355692408065" target="_blank" shows="noopener">WhatsApp</a>
-              <a class="btn email-btn" href="mailto:cela9317@gmail.com">Email</a>
+              <!-- PAYPAL: vendos linkun tënd të pagesës -->
+              <a class="btn buy-btn"
+                 href="https://www.paypal.com/ncp/payment/SHKRUJ-KETU-KODIN-TEND"
+                 target="_blank" rel="noopener">Buy Now</a>
+
+              <!-- WHATSAPP -->
+              <a class="btn wa-btn"
+                 href="https://wa.me/355692408065"
+                 target="_blank" rel="noopener">WhatsApp</a>
+
+               <!-- EMAIL -->
+              <a class="btn email-btn"
+                 href="mailto:cela9317@gmail.com?subject=Order%20Rolex%2015010&body=Hi%2C%20I%20want%20to%20buy%20Rolex%2015010.%0AName%3A%0ACountry%3A%0APhone%3A%0A"
+                 >Email</a>
 
               <button class="btn like-btn" type="button" data-id="rolex-oyster-15010" data-liked="0" onclick="toggleLike(this)">♥️</button>
               <button class="btn share-btn" type="button" onclick="sharePage('https://oraswiss.com/datejust-15010.html')">📎 Share</button>
@@ -275,8 +285,28 @@
 
         </div>
       </div>
-
     </div>
   </div>
+<script>
+  function sharePage(url){
+    if(navigator.share){
+      navigator.share({ title: document.title, url: url }).catch(()=>{});
+    } else {
+      navigator.clipboard.writeText(url).then(()=>{
+        alert("Link copied: " + url);
+      }).catch(()=>{
+        prompt("Copy this link:", url);
+      });
+    }
+  }
+
+  function toggleLike(btn){
+    const liked = btn.getAttribute("data-liked") === "1";
+    btn.setAttribute("data-liked", liked ? "0" : "1");
+    btn.textContent = liked ? "♥️" : "💖";
+  }
+</script>
+
+  
 </body>
 </html>

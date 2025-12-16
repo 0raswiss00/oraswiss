@@ -267,12 +267,21 @@
             </form>
 
             <div class="cta">
-              <a class="btn buy-btn" href="https://www.paypal.com/ncp/payment/QC7YAG7UNPY7A" target="_blank" rel="noopener">Buy Now</a>
-              <a class="btn wa-btn" href="https://wa.me/355692408065" target="_blank" rel="noopener">WhatsApp</a>
-              <a class="btn email-btn" href="mailto:cela9317@gmail.com">Email</a>
+              <a href="https://www.paypal.com/ncp/payment/2G6DFL5DHVVUS" class="buy-btn" target="_blank">Buy Now</a>
+              <a href="https://wa.me/355692408065" class="whatsapp-btn" target="_blank">WhatsApp</a>
+              <a href="mailto:cela9317@gmail.com" class="email-btn">Email</a>
 
-              <button class="btn like-btn" type="button" data-id="rolex-datejust-16233" data-liked="0" onclick="toggleLike(this)">♥️</button>
-              <button class="btn share-btn" type="button" onclick="sharePage('https://oraswiss.com/datejust-16233.html')">📎 Share</button>
+             <button class="btn like-btn"
+                     type="button"
+                     data-id="rolex-datejust-16233"
+                     data-liked="0"
+                     onclick="toggleLike(this)">♥️</button>
+
+             <button class="btn share-btn"
+                     type="button"
+                     onclick="sharePage('https://oraswiss.com/datejust-16233.html')">📎 Share</button>
+
+
             </div>
 
             <div class="note">Tip: Keep photos named like <b>datejust-16233.1.jpg</b>, <b>.2</b>, <b>.3</b>…</div>
@@ -303,8 +312,26 @@
           </ul>
         </div>
       </div>
-
     </div>
   </div>
+
+<script>
+function sharePage(url){
+  if(navigator.share){
+    navigator.share({ title: document.title, url: url }).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(url);
+    alert("Link copied: " + url);
+  }
+}
+
+function toggleLike(btn){
+  const liked = btn.getAttribute("data-liked") === "1";
+  btn.setAttribute("data-liked", liked ? "0" : "1");
+  btn.textContent = liked ? "♥️" : "💖";
+}
+</script>
+
+  
 </body>
 </html>

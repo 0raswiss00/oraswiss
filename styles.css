@@ -1119,3 +1119,26 @@ Ora
   border-radius:8px;
   border:1px solid rgba(0,0,0,.08);
 }
+
+.cta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:15px;
+}
+
+.cta .btn{
+  padding:10px 14px;
+  border-radius:12px;
+  font-weight:600;
+  text-decoration:none;
+  border:none;
+  cursor:pointer;
+}
+
+.buy-btn{background:#000;color:#fff;}
+.wa-btn{background:#25D366;color:#fff;}
+.email-btn{background:#3b82f6;color:#fff;}
+.like-btn{background:#fde2e2;}
+.share-btn{background:#e5e7eb;}
+

@@ -938,6 +938,48 @@ body {
   border: 1px solid #e5e7eb;
 }
 
+
+/* Luxury form – placeholder version */
+.request-form .rf-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.request-form input,
+.request-form textarea{
+  width:100%;
+  padding:14px 16px;
+  border-radius:12px;
+  border:1px solid #d6d6d6;
+  font-size:16px;
+  background:#fff;
+}
+
+.request-form textarea.rf-msg{
+  grid-column:1 / -1;
+  min-height:130px;
+}
+
+.request-form .rf-btn{
+  grid-column:1 / -1;
+  margin-top:6px;
+  padding:15px;
+  border-radius:14px;
+  background:#000;
+  color:#fff;
+  font-size:16px;
+  font-weight:600;
+  border:none;
+}
+
+@media(max-width:700px){
+  .request-form .rf-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+
 /* ===============================
    ONLY Separate Parts pages
    =============================== */

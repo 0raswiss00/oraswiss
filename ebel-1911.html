@@ -71,6 +71,7 @@
       <div class="pill">🌍 Worldwide Shipping</div>
       <div class="pill">📍 Tracking Available</div>
     </div>
+<a href="javascript:void(0)" class="back-btn" onclick="goBack()">← Back</a>
 
 <script>
 function goBack() {
@@ -329,6 +330,16 @@ Thank you.`
 <script>
 function changeImage(src) {
   document.getElementById("mainImage").src = src;
+}
+</script>
+
+<script>
+function goBack() {
+  if (document.referrer && document.referrer.includes(window.location.hostname)) {
+    window.history.back();
+  } else {
+    window.location.href = "/"; // ose /watches.html
+  }
 }
 </script>
   

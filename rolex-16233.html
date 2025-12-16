@@ -306,6 +306,24 @@
   }
 </script>
 
+<script>
+function sendRequest(event) {
+  event.preventDefault();
+
+  const form = event.target;
+  const data = new FormData(form);
+
+  fetch("/send-request.php", {
+    method: "POST",
+    body: data
+  })
+  .then(() => {
+    alert("Request sent! We will contact you soon.");
+    form.reset();
+  });
+}
+</script>
+
   
 </body>
 </html>

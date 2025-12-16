@@ -266,9 +266,11 @@ A high-quality Swiss chronograph, elegant and versatile — ideal for both daily
               <input type="email" name="email" placeholder="Email" required>
               <input type="text" name="phone" placeholder="Phone / WhatsApp">
               <input type="text" name="country" placeholder="Country">
-              <textarea name="message" placeholder="Message"></textarea>
+              <input type="hidden" name="watch" value="Ebel 1911 Chronograph – Ref. 1911">
+	          <textarea name="message" placeholder="Message"></textarea>
               <button class="send-btn" type="submit">Send Request</button>
             </form>
+				
             <div class="cta">
               <!-- PAYPAL: vendos linkun tënd të pagesës -->
               <a class="btn buy-btn"
@@ -284,14 +286,9 @@ A high-quality Swiss chronograph, elegant and versatile — ideal for both daily
                Email
               </a>
 
-
               <button class="btn like-btn" type="button" data-id="ebel-chronograph-1911" data-liked="0" onclick="toggleLike(this)">♥️</button>
               <button class="btn share-btn" type="button" onclick="sharePage('https://oraswiss.com/ebel-1911.html')">📎 Share</button>
             </div>
-
-            <div class="note">Photos: <b>roex-16233.1.jpg</b>, <b>.2</b>, <b>.3</b>…</div>
-          </div>
-
 
           <div class="specs">
             <div><b>Brand:</b>Ebele</div>
@@ -341,7 +338,25 @@ A high-quality Swiss chronograph, elegant and versatile — ideal for both daily
   }
 </script>
 
-  
+<script>
+function sendRequest(event) {
+  event.preventDefault();
+
+  const form = event.target;
+  const data = new FormData(form);
+
+  fetch("/send-request.php", {
+    method: "POST",
+    body: data
+  })
+  .then(() => {
+    alert("Request sent! We will contact you soon.");
+    form.reset();
+  });
+}
+</script>
+
+	  
 </body>
 </html>
    

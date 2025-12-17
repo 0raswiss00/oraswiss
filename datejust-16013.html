@@ -1,216 +1,220 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Rolex Datejust – Ref. 16013</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rolex Datejust – Ref. 16013</title>
 
-  <style>
-    :root{
-      --card: rgba(255,255,255,.05);
-      --line: rgba(255,255,255,.10);
-      --text:#f2f2f2;
-      --muted: rgba(255,255,255,.70);
-      --gold:#c9a44c;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-      background:
-        radial-gradient(1200px 600px at 15% 0%, rgba(201,164,76,.14), transparent 60%),
-        radial-gradient(900px 500px at 85% 20%, rgba(79,140,255,.10), transparent 60%),
-        linear-gradient(180deg,#050506,#0b0b10);
-      color:var(--text);
-    }
-    .wrap{max-width:1100px;margin:0 auto;padding:26px 16px 64px;}
-    .topbar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;margin-bottom:14px}
-    .pill{
-      padding:8px 12px;border:1px solid var(--line);border-radius:999px;
-      background:rgba(0,0,0,.25);color:var(--muted);font-size:13px
-    }
-    .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
-    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+<style>
+:root{
+  --bg:#0b0b0c;
+  --card:#141417;
+  --line:#2a2a2e;
+  --text:#f3f3f3;
+  --muted:#bdbdbd;
+  --gold:#c9a44c;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:linear-gradient(180deg,#050506,#0c0c10);
+  color:var(--text);
+}
+.wrap{max-width:1100px;margin:0 auto;padding:26px 16px 60px}
+h1{margin:0 0 6px;font-size:34px}
+.sub{color:var(--muted);margin-bottom:18px}
 
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:18px;
-      backdrop-filter: blur(10px);
-    }
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
 
-    h1{margin:10px 0 6px;font-size:34px}
-    .sub{margin:0 0 14px;color:var(--muted)}
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+}
 
-    /* Gallery */
-    #mainPhoto{
-      width:100%;max-height:70vh;object-fit:contain;
-      border-radius:18px;border:1px solid var(--line);
-      background:rgba(0,0,0,.25);cursor:zoom-in
-    }
-    .thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    .thumbs img{
-      width:86px;height:66px;object-fit:cover;border-radius:14px;
-      border:1px solid var(--line);cursor:pointer;opacity:.65
-    }
-    .thumbs img.active,.thumbs img:hover{
-      opacity:1;border-color:rgba(201,164,76,.😎
-    }
-    .extra{display:none}
-    .showmore{
-      margin-top:10px;padding:10px 14px;border-radius:999px;
-      border:1px solid var(--line);background:rgba(0,0,0,.25);
-      color:#fff;font-weight:700;cursor:pointer
-    }
+/* GALLERY */
+#mainPhoto{
+  width:100%;
+  max-height:70vh;
+  object-fit:contain;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:#0e0e10;
+  cursor:zoom-in;
+}
+.thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.thumbs img{
+  width:88px;height:66px;object-fit:cover;
+  border-radius:12px;
+  border:1px solid var(--line);
+  cursor:pointer;
+  opacity:.65;
+}
+.thumbs img.active{opacity:1;border-color:var(--gold)}
+.extra{display:none}
 
-    /* Specs */
-    .specs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    @media(max-width:900px){.specs{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:520px){.specs{grid-template-columns:1fr}}
-    .spec{
-      padding:14px;border-radius:16px;border:1px solid var(--line);
-      background:rgba(0,0,0,.20)
-    }
-    .k{font-size:12px;color:var(--muted);text-transform:uppercase}
-    .v{margin-top:6px;font-size:15px;font-weight:700}
+.showmore{
+  margin-top:12px;
+  border:1px solid var(--line);
+  background:#0e0e10;
+  color:#fff;
+  padding:10px 14px;
+  border-radius:999px;
+  cursor:pointer;
+  font-weight:600;
+}
 
-    .desc{margin-top:14px;color:var(--muted);line-height:1.75}
+/* SPECS */
+.specs{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.spec{
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#0e0e10;
+}
+.spec .k{font-size:12px;color:var(--muted);text-transform:uppercase}
+.spec .v{margin-top:6px;font-size:15px;font-weight:700}
 
-    /* Buttons */
-    .cta{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
-    .btn{
-      padding:12px 18px;border-radius:999px;border:1px solid var(--line);
-      background:rgba(0,0,0,.25);color:#fff;text-decoration:none;
-      font-weight:750;min-width:160px;text-align:center
-    }
-    .btn.pay{
-      background:linear-gradient(135deg,#c9a44c,#ffe1a0);
-      color:#0b0b0c;border:none
-    }
+/* DESCRIPTION */
+.desc{margin-top:18px;color:var(--muted);line-height:1.7}
+.desc strong{color:#fff}
 
-    /* Modal */
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;place-items:center}
-    .modal.open{display:grid}
-    #modalImg{max-width:92vw;max-height:92vh}
-  </style>
+/* BUTTONS */
+.cta{display:flex;gap:12px;margin-top:18px}
+.btn{
+  padding:12px 18px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#0e0e10;
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+}
+.btn.pay{
+  background:linear-gradient(135deg,#c9a44c,#ffe1a0);
+  color:#0b0b0c;
+  border:none;
+}
+.btn.back{color:var(--muted)}
+
+/* MODAL */
+.modal{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.9);
+  display:none;
+  place-items:center;
+  z-index:9999;
+}
+.modal.open{display:grid}
+.modal img{
+  max-width:90vw;
+  max-height:90vh;
+  border-radius:16px;
+}
+</style>
 </head>
 
 <body>
 <div class="wrap">
-  <div class="topbar">
-    <div class="pill">✨ Luxury Details</div>
-    <div class="pill">DHL Express • Fast & Secure</div>
+
+<h1>Rolex Datejust</h1>
+<p class="sub">Reference 16013 • Year 1980 • 36mm</p>
+
+<div class="grid">
+
+<!-- LEFT -->
+<div class="card">
+  <img id="mainPhoto" src="rolex-16013.1.jpg">
+
+  <div class="thumbs" id="thumbs">
+    <!-- 5 visible -->
+    <img src="rolex-16013.1.jpg" class="active" onclick="setMain(0)">
+    <img src="rolex-16013.2.jpg" onclick="setMain(1)">
+    <img src="rolex-16013.3.jpg" onclick="setMain(2)">
+    <img src="rolex-16013.4.jpg" onclick="setMain(3)">
+    <img src="rolex-16013.5.jpg" onclick="setMain(4)">
+
+    <!-- up to 25 -->
+    <img src="rolex-16013.6.jpg" class="extra" onclick="setMain(5)">
+    <img src="rolex-16013.7.jpg" class="extra" onclick="setMain(6)">
+    <img src="rolex-16013.8.jpg" class="extra" onclick="setMain(7)">
+    <img src="rolex-16013.9.jpg" class="extra" onclick="setMain(😎">
+    <img src="rolex-16013.10.jpg" class="extra" onclick="setMain(9)">
   </div>
 
-  <h1>Rolex Datejust</h1>
-  <p class="sub">Ref. 16013 • Year 1980 • 36mm • Steel & 18K Gold</p>
-
-  <div class="grid">
-    <!-- GALLERY -->
-    <div class="card">
-      <img id="mainPhoto" src="rolex-16013.1.jpg" alt="">
-      <div class="thumbs" id="thumbs">
-        <!-- 4 visible -->
-        <img src="rolex-16013.1.jpg" class="active" onclick="setMain(0)">
-        <img src="rolex-16013.2.jpg" onclick="setMain(1)">
-        <img src="rolex-16013.3.jpg" onclick="setMain(2)">
-        <img src="rolex-16013.4.jpg" onclick="setMain(3)">
-        <!-- extra -->
-        <!-- deri në 25 -->
-        <img src="rolex-16013.5.jpg" class="extra" onclick="setMain(4)">
-        <img src="rolex-16013.6.jpg" class="extra" onclick="setMain(5)">
-        <img src="rolex-16013.7.jpg" class="extra" onclick="setMain(6)">
-        <img src="rolex-16013.8.jpg" class="extra" onclick="setMain(7)">
-        <img src="rolex-16013.9.jpg" class="extra" onclick="setMain(😎">
-        <img src="rolex-16013.10.jpg" class="extra" onclick="setMain(9)">
-        <img src="rolex-16013.11.jpg" class="extra" onclick="setMain(10)">
-        <img src="rolex-16013.12.jpg" class="extra" onclick="setMain(11)">
-        <img src="rolex-16013.13.jpg" class="extra" onclick="setMain(12)">
-        <img src="rolex-16013.14.jpg" class="extra" onclick="setMain(13)">
-        <img src="rolex-16013.15.jpg" class="extra" onclick="setMain(14)">
-        <img src="rolex-16013.16.jpg" class="extra" onclick="setMain(15)">
-        <img src="rolex-16013.17.jpg" class="extra" onclick="setMain(16)">
-        <img src="rolex-16013.18.jpg" class="extra" onclick="setMain(17)">
-        <img src="rolex-16013.19.jpg" class="extra" onclick="setMain(18)">
-        <img src="rolex-16013.20.jpg" class="extra" onclick="setMain(19)">
-        <img src="rolex-16013.21.jpg" class="extra" onclick="setMain(20)">
-        <img src="rolex-16013.22.jpg" class="extra" onclick="setMain(21)">
-        <img src="rolex-16013.23.jpg" class="extra" onclick="setMain(22)">
-        <img src="rolex-16013.24.jpg" class="extra" onclick="setMain(23)">
-        <img src="rolex-16013.25.jpg" class="extra" onclick="setMain(24)">
-      </div>
-      <button class="showmore" id="toggle">Show more photos</button>
-    </div>
-
-    <!-- INFO -->
-    <div class="card">
-      <div class="specs">
-        <div class="spec"><div class="k">Brand</div><div class="v">Rolex</div></div>
-        <div class="spec"><div class="k">Model</div><div class="v">Datejust</div></div>
-        <div class="spec"><div class="k">Reference</div><div class="v">16013</div></div>
-
-        <div class="spec"><div class="k">Movement</div><div class="v">Automatic</div></div>
-        <div class="spec"><div class="k">Caliber</div><div class="v">3035</div></div>
-        <div class="spec"><div class="k">Functions</div><div class="v">Date</div></div>
-
-        <div class="spec"><div class="k">Material</div><div class="v">Steel & 18K Gold</div></div>
-        <div class="spec"><div class="k">Case size</div><div class="v">36mm</div></div>
-        <div class="spec"><div class="k">Dial</div><div class="v">White</div></div>
-
-        <div class="spec"><div class="k">Bracelet</div><div class="v">Jubilee</div></div>
-        <div class="spec"><div class="k">Box / Papers</div><div class="v">Certificates</div></div>
-      </div>
-
-      <div class="desc">
-        <strong>Rolex Datejust Ref. 16013</strong> from <strong>1980</strong>, crafted in
-        <strong>stainless steel and 18K gold</strong> with a classic <strong>white dial</strong>
-        and elegant <strong>Jubilee bracelet</strong>.
-        <br><br>
-        The watch is in <strong>very good condition</strong>, extremely clean and
-        <strong>works perfectly</strong>. The date function operates correctly.
-        It has been <strong>serviced</strong>. The <strong>crown is not original</strong>
-        (please see photos).
-        <br><br>
-        Comes with certificates from <strong>The Watch Register</strong> and
-        <strong>Enquirus</strong>. <strong>DHL Express shipping</strong>, fast and fully secure.
-        <br><br>
-        <strong>Price: 4,200 €</strong> — customs taxes to be considered by the buyer.
-      </div>
-
-      <div class="cta">
-        <a class="btn" href="javascript:void(0)" onclick="history.back()">← Back</a>
-        <a class="btn pay" href="#" id="payBtn" target="_blank">Pay Now</a>
-      </div>
-    </div>
-  </div>
+  <button class="showmore" id="toggle">Show more photos</button>
 </div>
 
-<div class="modal" id="imgModal">
+<!-- RIGHT -->
+<div class="card">
+
+<div class="specs">
+  <div class="spec"><div class="k">Brand</div><div class="v">Rolex</div></div>
+  <div class="spec"><div class="k">Model</div><div class="v">Datejust</div></div>
+  <div class="spec"><div class="k">Reference</div><div class="v">16013</div></div>
+  <div class="spec"><div class="k">Year</div><div class="v">1980</div></div>
+  <div class="spec"><div class="k">Movement</div><div class="v">Automatic</div></div>
+  <div class="spec"><div class="k">Caliber</div><div class="v">3035</div></div>
+  <div class="spec"><div class="k">Functions</div><div class="v">Date</div></div>
+  <div class="spec"><div class="k">Material</div><div class="v">Steel & 18K Gold</div></div>
+  <div class="spec"><div class="k">Case size</div><div class="v">36mm</div></div>
+  <div class="spec"><div class="k">Dial</div><div class="v">White</div></div>
+  <div class="spec"><div class="k">Bracelet</div><div class="v">Jubilee</div></div>
+  <div class="spec"><div class="k">Box / Papers</div><div class="v">Certificates</div></div>
+</div>
+
+<div class="desc">
+<strong>Rolex Datejust Ref. 16013</strong> from <strong>1980</strong>, crafted in stainless steel and
+<strong>18K yellow gold</strong>, featuring a classic <strong>white dial</strong> and Jubilee bracelet.
+
+<br><br>
+The watch is in <strong>very good condition</strong>, runs perfectly, and the <strong>date function works correctly</strong>.
+It has been <strong>fully serviced</strong>. The crown is <strong>not original</strong> — please refer to photos.
+
+<br><br>
+Comes with <strong>certificates from The Watch Register and Enquirus</strong>.
+Shipping via <strong>DHL Express</strong>, fast and fully insured.
+Price: <strong>€4,200</strong> (customs taxes to be considered).
+</div>
+
+<div class="cta">
+  <a class="btn back" href="javascript:history.back()">← Back</a>
+  <a class="btn pay" href="PASTE_PAYPAL_LINK_HERE" target="_blank">Pay Now</a>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal" onclick="this.classList.remove('open')">
   <img id="modalImg">
 </div>
 
 <script>
-  const PAYPAL_URL = "PASTE_PAYPAL_LINK_HERE";
-  document.getElementById("payBtn").href = PAYPAL_URL;
+const photos=[...document.querySelectorAll("#thumbs img")].map(i=>i.src);
+let current=0;
+const main=document.getElementById("mainPhoto");
+const modal=document.getElementById("modal");
+const modalImg=document.getElementById("modalImg");
 
-  const thumbs=[...document.querySelectorAll("#thumbs img")];
-  const photos=thumbs.map(t=>t.src);
-  let current=0;
+function setMain(i){
+  current=i;
+  main.src=photos[i];
+  document.querySelectorAll("#thumbs img").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll("#thumbs img")[i].classList.add("active");
+}
 
-  function setMain(i){
-    current=i;
-    document.getElementById("mainPhoto").src=photos[i];
-    thumbs.forEach(t=>t.classList.remove("active"));
-    thumbs[i].classList.add("active");
-  }
+main.onclick=()=>{modalImg.src=photos[current];modal.classList.add("open");}
 
-  document.getElementById("toggle").onclick=()=>{
-    const extras=document.querySelectorAll(".extra");
-    const open=extras[0].style.display==="block";
-    extras.forEach(e=>e.style.display=open?"none":"block");
-    toggle.textContent=open?"Show more photos":"Show less photos";
-  };
+document.getElementById("toggle").onclick=()=>{
+  document.querySelectorAll(".extra").forEach(e=>{
+    e.style.display=e.style.display==="block"?"none":"block";
+  });
+}
 </script>
 </body>
 </html>

@@ -1261,3 +1261,10 @@ html, body{
   overflow-y: auto !important;
   overflow-x: hidden;
 }
+
+.mainimg{
+  width: 100%;
+  max-height: 70vh;     /* mos e lër të hajë gjithë faqen */
+  object-fit: cover;
+  display: block;
+}

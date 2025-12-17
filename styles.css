@@ -1321,3 +1321,29 @@ html, body{
   display: block;
 }
 
+.btns{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.btns button, .btns a.btn{
+  padding:12px 18px;
+  border-radius:999px;
+  font-weight:700;
+}
+
+/* Buy Now më i madh */
+#btnBuy{
+  padding:14px 22px;
+  font-size:15px;
+}
+
+/* Mobile: dy butonat kryesorë full */
+@media(max-width:520px){
+  #btnBuy, #btnSend, #btnWa, #btnEmail{
+    width:100%;
+    justify-content:center;
+  }
+}

@@ -286,8 +286,10 @@ ${msg}`;
     }
 
     // Email mailto with watch + details
-function openEmail() {
-  const form = document.querySelector("form"); // ose getForm()
+function openEmail(e) {
+  if (e) e.preventDefault();
+
+  const form = document.querySelector("form");
 
   const name    = form.querySelector('[name="Full Name"]').value.trim();
   const email   = form.querySelector('[name="Email"]').value.trim();
@@ -296,8 +298,29 @@ function openEmail() {
   const address = form.querySelector('[name="Address"]').value.trim();
   const msg     = form.querySelector('[name="Message"]').value.trim();
 
-  const subject = encodeURIComponent(Order / Request: ${WATCH_NAME});
+  const subject = encodeURIComponent("Order / Request: " + WATCH_NAME);
+
   const body = encodeURIComponent(
+`Hello,
+
+I am interested in: ${WATCH_NAME}
+
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+Country: ${country}
+Address: ${address}
+
+Message:
+${msg}
+
+Thank you.`
+  );
+
+  window.location.href =
+    "mailto:cele9317@gmail.com?subject=" + subject + "&body=" + body;
+}
+
 `Hello,
 
 I am interested in: ${WATCH_NAME}
@@ -316,7 +339,7 @@ Thank you.`
 
   const gmailUrl =
     "https://mail.google.com/mail/?view=cm&fs=1" +
-    "&to=tele9317@gmail.com" +
+    "&to=cele9317@gmail.com" +
     "&su=" + subject +
     "&body=" + body;
 
@@ -358,7 +381,7 @@ Thank you.`
       );
 
       // CHANGE TO YOUR EMAIL:
-      window.location.href = mailto:tele9317@gmail.com?subject=${subject}&body=${body};
+      window.location.href = mailto:cele9317@gmail.com?subject=${subject}&body=${body};
     }
   </script>
 
@@ -369,6 +392,20 @@ function changeImage(src) {
 </script>
 
 <script>
+// ===== SETTINGS =====
+const WATCH_NAME = "Ebel 1911 Chronograph - Ref. 1911";
+const WHATSAPP_NUMBER = "355692408065"; // NUMRI YT
+
+function goBack() {
+  if (document.referrer && document.referrer.includes(window.location.hostname)) {
+    window.history.back();
+  } else {
+    window.location.href = "/";
+  }
+}
+</script>
+  
+<script>
 function goBack() {
   if (document.referrer && document.referrer.includes(window.location.hostname)) {
     window.history.back();
@@ -377,6 +414,8 @@ function goBack() {
   }
 }
 </script>
+
+
   
 </body>
 </html>

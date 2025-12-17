@@ -331,15 +331,12 @@ Thank you.`
     });
   </script>
 
-const btn = document.getElementById("btnSendMail");
-
-btn.addEventListener("click", (e) => {
-  e.preventDefault();
-
+document.getElementById("btnSend").addEventListener("click", () => {
   const name = form.name.value.trim();
   const email = form.email.value.trim();
   const phone = form.phone.value.trim();
   const country = form.country.value.trim();
+  const address = form.address.value.trim();
   const message = form.message.value.trim();
 
   if (!name || !email) {
@@ -347,18 +344,25 @@ btn.addEventListener("click", (e) => {
     return;
   }
 
-  const subject = encodeURIComponent("Watch Request – Ebel 1911");
+  const subject = encodeURIComponent("Watch Request – " + WATCH_NAME);
   const body = encodeURIComponent(
 `Name: ${name}
 Email: ${email}
 Phone: ${phone}
 Country: ${country}
+Address: ${address}
 
 Message:
 ${message}`
   );
 
-  window.location.href = mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body};
+  const gmail =
+    "https://mail.google.com/mail/?view=cm&fs=1" +
+    "&to=" + encodeURIComponent(CONTACT_EMAIL) +
+    "&su=" + subject +
+    "&body=" + body;
+
+  window.open(gmail, "_blank");
 });
 
 

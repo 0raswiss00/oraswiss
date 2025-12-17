@@ -359,7 +359,7 @@ Thank you.`
       img.classList.remove("active");
     });
 
-    const activeThumb = [...document.querySelectorAll(".thumbs img")]
+  const activeThumb = [...document.querySelectorAll(".thumbs img")]
       .find(img => img.src.includes(src));
 
     if (activeThumb) {
@@ -367,7 +367,10 @@ Thank you.`
     }
   }
 </script>
-
+<div id="imgModal" class="modal">
+  <span class="close">&times;</span>
+  <img class="modal-content" id="modalImg">
+</div>
     
 </body>
 </html>

@@ -1261,10 +1261,31 @@ html, body{
   overflow-y: auto !important;
   overflow-x: hidden;
 }
-
-.mainimg{
-  width: 100%;
-  max-height: 70vh;     /* mos e lër të hajë gjithë faqen */
+.thumbs img{
+  width: 70px;
+  height: 70px;
   object-fit: cover;
-  display: block;
+  cursor: pointer;
+  border-radius: 6px;
+
+  opacity: 0.6;
+  transition: 0.3s;
 }
+.thumbs img:hover,
+.thumbs img.active{
+  opacity: 1;
+  border: 2px solid #c9a44c;
+}
+
+.thumbs img{
+  width: 70px;
+  height: 70px;
+  flex-shrink: 0;       /* mos u ngushto */
+  object-fit: cover;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+
+
+

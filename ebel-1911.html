@@ -159,9 +159,12 @@
 
         <div class="cta">
           <a class="btn back" href="javascript:void(0)" onclick="history.back()">← Back</a>
-          <a class="btn pay" id="payBtn" href="#" target="_blank" rel="noopener">Pay Now</a>
+          <a id="payBtn" class="lux-pay-btn" target="_blank">
+            Pay Now
+          </a>
+          <a class="btn" href="ebel-1911-details.html">Details</a>
         </div>
-
+          
         <div class="footnote">
           * Payment button opens PayPal in a new tab.
         </div>
@@ -184,9 +187,9 @@
       if(active) active.classList.add("active");
     }
   </script>
-</body>
-</html>
 
+const PAYPAL_URL = "LINKU_YT_PAYPAL";
+document.getElementById("payBtn").href = PAYPAL_URL;
 
-
-  
+ </body>
+</html> 

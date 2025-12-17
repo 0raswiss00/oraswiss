@@ -2,38 +2,41 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rolex Explorer II – Ref. 16570</title>
 
 <style>
 :root{
   --bg:#0b0b0c;
-  --card:#141417;
-  --line:#2a2a2e;
-  --text:#f3f3f3;
-  --muted:#bdbdbd;
+  --card:rgba(255,255,255,.05);
+  --line:rgba(255,255,255,.12);
+  --text:#f2f2f2;
+  --muted:rgba(255,255,255,.7);
   --gold:#c9a44c;
 }
 *{box-sizing:border-box}
 body{
   margin:0;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-  background:linear-gradient(180deg,#050506,#0c0c10);
+  background:linear-gradient(180deg,#050506,#0b0b10);
   color:var(--text);
 }
-.wrap{max-width:1100px;margin:0 auto;padding:26px 16px 60px}
-h1{margin:0 0 6px;font-size:34px}
-.sub{color:var(--muted);margin-bottom:18px}
-
-.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}
-
+.wrap{max-width:1100px;margin:auto;padding:26px 16px 60px}
 .card{
   background:var(--card);
   border:1px solid var(--line);
   border-radius:18px;
   padding:18px;
 }
+.grid{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:18px;
+}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+h1{margin:0 0 6px;font-size:34px}
+.sub{color:var(--muted);margin-bottom:16px}
 
 /* GALLERY */
 #mainPhoto{
@@ -42,80 +45,71 @@ h1{margin:0 0 6px;font-size:34px}
   object-fit:contain;
   border-radius:16px;
   border:1px solid var(--line);
-  background:#0e0e10;
   cursor:zoom-in;
 }
-.thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
 .thumbs img{
-  width:88px;height:66px;object-fit:cover;
-  border-radius:12px;
-  border:1px solid var(--line);
-  cursor:pointer;
-  opacity:.65;
+  width:86px;height:66px;object-fit:cover;
+  border-radius:12px;border:1px solid var(--line);
+  opacity:.6;cursor:pointer;transition:.2s;
 }
-.thumbs img.active{opacity:1;border-color:var(--gold)}
+.thumbs img.active,.thumbs img:hover{
+  opacity:1;border-color:var(--gold)
+}
 .extra{display:none}
-
 .showmore{
-  margin-top:12px;
-  border:1px solid var(--line);
-  background:#0e0e10;
-  color:#fff;
+  margin-top:10px;
   padding:10px 14px;
   border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(0,0,0,.3);
+  color:#fff;
   cursor:pointer;
-  font-weight:600;
 }
 
 /* SPECS */
-.specs{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.specs{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+@media(max-width:900px){.specs{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.specs{grid-template-columns:1fr}}
 .spec{
   padding:14px;
-  border:1px solid var(--line);
   border-radius:14px;
-  background:#0e0e10;
+  border:1px solid var(--line);
+  background:rgba(0,0,0,.25);
 }
-.spec .k{font-size:12px;color:var(--muted);text-transform:uppercase}
-.spec .v{margin-top:6px;font-size:15px;font-weight:700}
+.spec span{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.spec strong{font-size:15px;margin-top:6px;display:block}
+.spec.wide{grid-column:span 3}
+@media(max-width:900px){.spec.wide{grid-column:span 2}}
+@media(max-width:520px){.spec.wide{grid-column:span 1}}
 
-/* DESCRIPTION */
-.desc{margin-top:18px;color:var(--muted);line-height:1.7}
+.desc{margin-top:16px;line-height:1.7;color:var(--muted)}
 .desc strong{color:#fff}
 
-/* BUTTONS */
-.cta{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+/* BUTTON */
+.cta{margin-top:18px}
 .btn{
-  padding:12px 18px;
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  padding:14px 22px;
   border-radius:999px;
-  border:1px solid var(--line);
-  background:#0e0e10;
-  color:#fff;
-  text-decoration:none;
   font-weight:700;
+  text-decoration:none;
 }
 .btn.pay{
   background:linear-gradient(135deg,#c9a44c,#ffe1a0);
   color:#0b0b0c;
-  border:none;
-}
-.btn.back{color:var(--muted)}
-
-/* MODAL */
-.modal{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.9);
-  display:none;
-  place-items:center;
-  z-index:9999;
-  padding:16px;
-}
-.modal.open{display:grid}
-.modal img{
-  max-width:90vw;
-  max-height:90vh;
-  border-radius:16px;
-  border:1px solid rgba(255,255,255,.12);
-  background:#0e0e10;
 }
 </style>
 </head>
@@ -124,115 +118,100 @@ h1{margin:0 0 6px;font-size:34px}
 <div class="wrap">
 
 <h1>Rolex Explorer II</h1>
-<p class="sub">Reference 16570 • Year 2002 • 40mm • Polar Dial</p>
+<div class="sub">Reference 16570 • Year 2002 • 40mm • Steel</div>
 
 <div class="grid">
 
-<!-- LEFT -->
+<!-- LEFT: PHOTOS -->
 <div class="card">
-  <img id="mainPhoto" src="rolex-16570.1.jpg" alt="Rolex Explorer II 16570">
+  <img id="mainPhoto" src="explorer-16570.1.jpg" alt="Rolex Explorer II">
 
   <div class="thumbs" id="thumbs">
-    <!-- 5 visible -->
-    <img src="rolex-16570.1.jpg" class="active" onclick="setMain(0)" alt="">
-    <img src="rolex-16570.2.jpg" onclick="setMain(1)" alt="">
-    <img src="rolex-16570.3.jpg" onclick="setMain(2)" alt="">
-    <img src="rolex-16570.4.jpg" onclick="setMain(3)" alt="">
-    <img src="rolex-16570.5.jpg" onclick="setMain(4)" alt="">
+    <img src="explorer-16570.1.jpg" class="active" onclick="setMain(0)">
+    <img src="explorer-16570.2.jpg" onclick="setMain(1)">
+    <img src="explorer-16570.3.jpg" onclick="setMain(2)">
+    <img src="explorer-16570.4.jpg" onclick="setMain(3)">
 
-    <!-- hidden (shto deri 25) -->
-    <img src="rolex-16570.6.jpg"  class="extra" onclick="setMain(5)"  alt="">
-    <img src="rolex-16570.7.jpg"  class="extra" onclick="setMain(6)"  alt="">
-    <img src="rolex-16570.8.jpg"  class="extra" onclick="setMain(7)"  alt="">
-    <img src="rolex-16570.9.jpg"  class="extra" onclick="setMain(😎"  alt="">
-    <img src="rolex-16570.10.jpg" class="extra" onclick="setMain(9)"  alt="">
-    <!-- vazhdo .11 ... .25 sipas fotove -->
+    <!-- hidden -->
+    <img src="explorer-16570.5.jpg" class="extra" onclick="setMain(4)">
+    <img src="explorer-16570.6.jpg" class="extra" onclick="setMain(5)">
   </div>
 
-  <button class="showmore" id="toggle" type="button">Show more photos</button>
+  <button class="showmore" onclick="toggleThumbs()">Show more photos</button>
 </div>
 
-<!-- RIGHT -->
+<!-- RIGHT: INFO -->
 <div class="card">
 
 <div class="specs">
-  <div class="spec"><div class="k">Brand</div><div class="v">Rolex</div></div>
-  <div class="spec"><div class="k">Model</div><div class="v">Explorer II</div></div>
+  <div class="spec"><span>Brand</span><strong>Rolex</strong></div>
+  <div class="spec"><span>Model</span><strong>Explorer II</strong></div>
+  <div class="spec"><span>Reference</span><strong>16570</strong></div>
 
-  <div class="spec"><div class="k">Reference</div><div class="v">16570</div></div>
-  <div class="spec"><div class="k">Year</div><div class="v">2002</div></div>
+  <div class="spec"><span>Movement</span><strong>Automatic</strong></div>
+  <div class="spec"><span>Caliber</span><strong>3185</strong></div>
+  <div class="spec"><span>Functions</span><strong>GMT & Date</strong></div>
 
-  <div class="spec"><div class="k">Material</div><div class="v">Stainless Steel</div></div>
-  <div class="spec"><div class="k">Case size</div><div class="v">40mm</div></div>
+  <div class="spec"><span>Material</span><strong>Stainless Steel</strong></div>
+  <div class="spec"><span>Case Size</span><strong>40mm</strong></div>
+  <div class="spec"><span>Dial</span><strong>Polar White</strong></div>
 
-  <div class="spec"><div class="k">Movement</div><div class="v">Automatic</div></div>
-  <div class="spec"><div class="k">Caliber</div><div class="v">3185</div></div>
+  <div class="spec"><span>Bracelet</span><strong>Jubilee</strong></div>
+  <div class="spec"><span>Box / Papers</span><strong>No</strong></div>
 
-  <div class="spec"><div class="k">Functions</div><div class="v">GMT & Date</div></div>
-  <div class="spec"><div class="k">Dial</div><div class="v">Polar (White)</div></div>
+  <div class="spec wide">
+    <span>Certificates</span>
+    <strong>The Watch Register & Enquirus</strong>
+  </div>
 
-  <div class="spec"><div class="k">Bracelet</div><div class="v">Jubilee</div></div>
-  <div class="spec"><div class="k">Box / Papers</div><div class="v">No</div></div>
-
-  <div class="spec"><div class="k">Certificates</div><div class="v">The Watch Register • Enquirus</div></div>
+  <div class="spec wide">
+    <span>Shipping</span>
+    <strong>DHL Express – Fast & Secure</strong>
+  </div>
 </div>
 
 <div class="desc">
-  <strong>Rolex Explorer II Ref. 16570</strong> from <strong>2002</strong> with the desirable
-  <strong>Polar dial</strong>, housed in a <strong>40mm</strong> stainless steel case and powered by the
-  <strong>Caliber 3185</strong> automatic movement with <strong>GMT & date</strong> functions.
+<strong>Rolex Explorer II Ref. 16570</strong> from <strong>2002</strong>,
+featuring the iconic <strong>polar white dial</strong> and robust
+<strong>Caliber 3185 automatic movement</strong> with GMT and date function.
 
-  <br><br>
-  The watch is in <strong>very good condition</strong>, runs <strong>perfectly</strong>, and has been <strong>serviced</strong>.
-  <strong>No dents or damage</strong>. The case has <strong>not been polished</strong> (never “luciduar”), keeping the original lines intact.
+<br><br>
+The watch is in <strong>very good condition</strong>, runs <strong>perfectly</strong>,
+and has been <strong>professionally serviced</strong>.
+The case shows <strong>no dents or damage</strong> and has <strong>never been polished</strong>.
 
-  <br><br>
-  Includes certification from <strong>The Watch Register</strong> and <strong>Enquirus</strong>.
-  Shipping via <strong>DHL</strong>, fast and secure.
+<br><br>
+Authenticated by <strong>The Watch Register</strong> and <strong>Enquirus</strong>.
+Shipped via <strong>DHL Express</strong>, fully insured and secure.
 </div>
 
 <div class="cta">
-  <a class="btn back" href="javascript:history.back()">← Back</a>
-  <a class="btn pay" href="PASTE_PAYPAL_LINK_HERE" target="_blank" rel="noopener">Pay Now</a>
+  <a class="btn pay"
+     href="https://www.paypal.com/ncp/payment/UZZ584GKSA7A2"
+     target="_blank" rel="noopener">
+     Pay Now
+  </a>
 </div>
 
 </div>
 </div>
-</div>
-
-<!-- MODAL -->
-<div class="modal" id="modal" onclick="this.classList.remove('open')">
-  <img id="modalImg" alt="">
 </div>
 
 <script>
-const thumbsEls = Array.from(document.querySelectorAll("#thumbs img"));
-const photos = thumbsEls.map(i => i.getAttribute("src"));
-let current = 0;
-
-const main = document.getElementById("mainPhoto");
-const modal = document.getElementById("modal");
-const modalImg = document.getElementById("modalImg");
-
+const photos=[...document.querySelectorAll("#thumbs img")].map(i=>i.src);
+let current=0;
 function setMain(i){
-  current = i;
-  main.src = photos[i];
-  thumbsEls.forEach(t => t.classList.remove("active"));
-  thumbsEls[i].classList.add("active");
+  current=i;
+  document.getElementById("mainPhoto").src=photos[i];
+  document.querySelectorAll("#thumbs img").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll("#thumbs img")[i].classList.add("active");
 }
-
-main.addEventListener("click", () => {
-  modalImg.src = photos[current];
-  modal.classList.add("open");
-});
-
-document.getElementById("toggle").addEventListener("click", () => {
-  document.querySelectorAll(".extra").forEach(e => {
-    e.style.display = (e.style.display === "block") ? "none" : "block";
+function toggleThumbs(){
+  document.querySelectorAll(".extra").forEach(e=>{
+    e.style.display=e.style.display==="block"?"none":"block";
   });
-});
+}
 </script>
 
 </body>
 </html>
-

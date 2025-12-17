@@ -469,6 +469,35 @@ ${d.msg}`;
   window.open(url, "_blank");
 }
 
+<script>
+function openWhatsApp() {
+  const form = document.querySelector("form");
+
+  const name    = form.querySelector('[name="name"]').value || "";
+  const email   = form.querySelector('[name="email"]').value || "";
+  const phone   = form.querySelector('[name="phone"]').value || "";
+  const country = form.querySelector('[name="country"]').value || "";
+  const address = form.querySelector('[name="address"]').value || "";
+  const msg     = form.querySelector('[name="message"]').value || "";
+
+  const text = 
+`Hello, I am interested in: ${WATCH_NAME}
+
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+Country: ${country}
+Address: ${address}
+
+Message:
+${msg}`;
+
+  const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text);
+  window.open(url, "_blank");
+}
+</script>
+
+  
 /* ===== EMAIL (GMAIL + FALLBACK MAILTO) ===== */
 function openEmail(e) {
   if (e) e.preventDefault();

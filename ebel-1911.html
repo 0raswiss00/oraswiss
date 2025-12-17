@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ebel 1911 Chronograph</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#0b0b0c;
+  color:#f2f2f2;
+}
+.wrap{max-width:900px;margin:auto;padding:20px}
+h1{font-size:32px}
+.card{
+  background:#121214;
+  border:1px solid #222;
+  border-radius:14px;
+  padding:20px;
+  margin-top:20px;
+}
+input,textarea{
+  width:100%;
+  padding:12px;
+  margin-bottom:10px;
+  border-radius:10px;
+  border:1px solid #333;
+  background:#0e0e10;
+  color:#fff;
+}
+textarea{min-height:120px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+button{
+  padding:12px 18px;
+  border-radius:999px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+}
+.primary{background:#f1f1f1;color:#000}
+.green{background:#25D366;color:#000}
+.blue{background:#2f6fed;color:#fff}
+.note{color:#aaa;font-size:13px}
+img{width:100%;border-radius:14px}
+.thumbs img{
+  width:80px;
+  margin:6px;
+  cursor:pointer;
+  border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<h1>Ebel 1911 Chronograph</h1>
+<p>Swiss automatic chronograph · Stainless steel & 18K yellow gold · 40mm</p>
+
+<img id="mainImg" src="images/ebel1.jpg">
+
+<div class="thumbs">
+  <img src="images/ebel1.jpg" onclick="changeImg(this.src)">
+  <img src="images/ebel2.jpg" onclick="changeImg(this.src)">
+  <img src="images/ebel3.jpg" onclick="changeImg(this.src)">
+</div>
+
+<div class="card">
+<h2>Request this watch</h2>
+
+<form id="orderForm">
+
+<input type="text" name="name" placeholder="Full Name" required>
+<input type="email" name="email" placeholder="Email" required>
+<input type="text" name="phone" placeholder="Phone / WhatsApp">
+<input type="text" name="country" placeholder="Country">
+<input type="text" name="address" placeholder="Full Address" required>
+
+<textarea name="message" id="messageField"></textarea>
+
+<div class="btns">
+  <button type="button" class="primary" onclick="sendRequest()">Send Request</button>
+  <button type="button" class="blue" onclick="buyNow()">Buy Now</button>
+  <button type="button" class="green" onclick="openWhatsApp()">WhatsApp</button>
+</div>
+
+<p class="note">You will be contacted regarding this watch.</p>
+</form>
+</div>
+
+</div>
+
+<script>
+/* ===== SETTINGS ===== */
+const WATCH_NAME = "Ebel 1911 Chronograph – Ref. 1911";
+const WHATSAPP_NUMBER = "355692408065";
+const EMAIL = "cele9317@gmail.com";
+const PAYPAL_LINK = "https://www.paypal.com/ncp/payment/2G6DFL5DHVUS";
+/* ==================== */
+
+document.getElementById("messageField").value =
+`Ebel 1911 Chronograph
+Automatic chronograph
+40mm case
+Steel & 18K yellow gold
+Very good condition
+No box, no papers`;
+
+function changeImg(src){
+  document.getElementById("mainImg").src = src;
+}
+
+function getData(){
+  const f = document.getElementById("orderForm");
+  return {
+    name:f.name.value.trim(),
+    email:f.email.value.trim(),
+    phone:f.phone.value.trim(),
+    country:f.country.value.trim(),
+    address:f.address.value.trim(),
+    msg:f.message.value.trim()
+  };
+}
+
+function validate(d){
+  if(!d.name || !d.email || !d.address){
+    alert("Please fill Name, Email and Address");
+    return false;
+  }
+  return true;
+}
+
+function sendRequest(){
+  const d = getData();
+  if(!validate(d)) return;
+
+  const subject = encodeURIComponent("Request: " + WATCH_NAME);
+  const body = encodeURIComponent(
+`Name: ${d.name}
+Email: ${d.email}
+Phone: ${d.phone}
+Country: ${d.country}
+Address: ${d.address}
+
+Message:
+${d.msg}`
+  );
+
+  window.open(
+    https://mail.google.com/mail/?view=cm&fs=1&to=${EMAIL}&su=${subject}&body=${body},
+    "_blank"
+  );
+}
+
+function buyNow(){
+  const d = getData();
+  if(!validate(d)) return;
+  window.location.href = PAYPAL_LINK;
+}
+
+function openWhatsApp(){
+  const d = getData();
+  const text = encodeURIComponent(
+`Hello, I am interested in ${WATCH_NAME}
+
+Name: ${d.name}
+Email: ${d.email}
+Phone: ${d.phone}
+Country: ${d.country}
+Address: ${d.address}
+
+${d.msg}`
+  );
+  window.open(https://wa.me/${WHATSAPP_NUMBER}?text=${text},"_blank");
+}
+</script>
+
+</body>
+</html>

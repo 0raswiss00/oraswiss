@@ -426,6 +426,97 @@ function goBack() {
 }
 </script>
 
+<script>
+/* ========= SETTINGS ========= */
+const WATCH_NAME = "Ebel 1911 Chronograph – Ref. 1911";
+const WHATSAPP_NUMBER = "355692408065"; // NUMRI YT pa +
+const CONTACT_EMAIL = "cele9317@gmail.com";
+/* ============================ */
+
+function getForm() {
+  return document.querySelector("form.form");
+}
+
+function collect() {
+  const f = getForm();
+  return {
+    name: f.querySelector('[name="name"]').value.trim(),
+    email: f.querySelector('[name="email"]').value.trim(),
+    phone: f.querySelector('[name="phone"]').value.trim(),
+    country: f.querySelector('[name="country"]').value.trim(),
+    address: f.querySelector('[name="address"]').value.trim(),
+    msg: f.querySelector('[name="message"]').value.trim()
+  };
+}
+
+/* ===== WHATSAPP ===== */
+function openWhatsApp() {
+  const d = collect();
+
+  const text =
+`Hello, I am interested in: ${WATCH_NAME}
+
+Name: ${d.name}
+Email: ${d.email}
+Phone: ${d.phone}
+Country: ${d.country}
+Address: ${d.address}
+
+Message:
+${d.msg}`;
+
+  const url = https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)};
+  window.open(url, "_blank");
+}
+
+/* ===== EMAIL (GMAIL + FALLBACK MAILTO) ===== */
+function openEmail(e) {
+  if (e) e.preventDefault();
+  const d = collect();
+
+  const subject = encodeURIComponent(Order / Request: ${WATCH_NAME});
+  const body = encodeURIComponent(
+`Hello,
+
+I am interested in: ${WATCH_NAME}
+
+Name: ${d.name}
+Email: ${d.email}
+Phone: ${d.phone}
+Country: ${d.country}
+Address: ${d.address}
+
+Message:
+${d.msg}
+
+Thank you.`
+  );
+
+  const gmail =
+    https://mail.google.com/mail/?view=cm&fs=1 +
+    &to=${CONTACT_EMAIL} +
+    &su=${subject} +
+    &body=${body};
+
+  const w = window.open(gmail, "_blank");
+  if (!w) {
+    window.location.href =
+      mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body};
+  }
+}
+
+/* ===== BUY NOW ===== */
+function buyNow() {
+  const paypal = document.getElementById("paypalLink").value;
+  window.location.href = paypal;
+}
+
+/* ===== SEND REQUEST ONLY (FAKE SUBMIT) ===== */
+function submitRequestOnly() {
+  alert("Request sent. We will contact you shortly.");
+}
+</script>
+
 
   
 </body>

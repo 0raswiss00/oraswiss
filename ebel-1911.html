@@ -14,11 +14,17 @@
     .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted);background:rgba(255,255,255,.03);font-size:13px}
     h1{margin:10px 0 8px;font-size:34px;line-height:1.15}
     .sub{color:var(--muted);line-height:1.55;margin:0 0 18px}
-    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+
+    /* Layout: 2 kolona desktop, 1 kolonë mobile */
+    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:start}
     @media(max-width:860px){.grid{grid-template-columns:1fr}}
+
     .card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:16px;padding:18px}
     .card h2{margin:0 0 12px;font-size:18px;letter-spacing:.2px}
     .lux-desc{color:var(--muted);line-height:1.65}
+    .divider{height:1px;background:var(--line);margin:14px 0}
+    .note{font-size:12px;color:var(--muted);line-height:1.6}
+
     .form{display:grid;gap:10px}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     @media(max-width:520px){.row{grid-template-columns:1fr}}
@@ -29,6 +35,7 @@
     }
     textarea{min-height:140px;resize:vertical}
     input:focus, textarea:focus{border-color:#3a3a3a}
+
     .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
     button, a.btn{
       border:1px solid var(--line); border-radius:999px; padding:12px 16px;
@@ -39,35 +46,38 @@
     button.green{background:#25D366;color:#0b0b0c;border-color:transparent}
     button.blue{background:#2f6fed;color:#fff;border-color:transparent}
     .small{font-size:12px;color:var(--muted);margin-top:10px}
-    .divider{height:1px;background:var(--line);margin:14px 0}
-    .note{font-size:12px;color:var(--muted);line-height:1.6}
 
     /* Gallery */
-    .gallery{display:grid;gap:10px;margin-bottom:16px}
-    .main-img{width:100%;border-radius:16px;border:1px solid var(--line);background:#0e0e10}
+    .gallery{display:grid;gap:10px}
+    #mainPhoto{
+      width:100%;
+      max-height:70vh;
+      object-fit:contain;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#0e0e10;
+      display:block;
+      cursor:zoom-in;
+    }
     .thumbs{display:flex;gap:8px;flex-wrap:wrap}
-    .thumbs img{width:88px;height:66px;object-fit:cover;border-radius:12px;border:1px solid var(--line);cursor:pointer;opacity:.9}
-    .thumbs img:hover{opacity:1}
+    .thumbs img{
+      width:88px;height:66px;object-fit:cover;
+      border-radius:12px;border:1px solid var(--line);
+      cursor:pointer;opacity:.7;transition:.2s;
+    }
+    .thumbs img:hover,.thumbs img.active{opacity:1;border-color:#c9a44c}
 
-    /* Simple modal */
-    .lux-modal{
+    /* Modal zoom */
+    .imgModal{
       position:fixed; inset:0; display:none; place-items:center;
-      background:rgba(0,0,0,.55); padding:20px; z-index:9999;
+      background:rgba(0,0,0,.85); padding:20px; z-index:9999;
     }
-    .lux-box{
-      width:min(520px,100%); background:#0f0f12; border:1px solid #2a2a2f;
-      border-radius:18px; padding:22px 18px; text-align:center;
-      box-shadow:0 18px 60px rgba(0,0,0,.55);
+    .imgModal.open{display:grid}
+    .imgModal img{max-width:92vw;max-height:92vh;border-radius:12px}
+    .imgModal .close{
+      position:absolute; top:18px; right:22px;
+      font-size:34px; color:#fff; cursor:pointer; user-select:none;
     }
-    .lux-icon{
-      width:54px;height:54px;border-radius:999px;margin:0 auto 10px;
-      display:grid;place-items:center;background:rgba(37,211,102,.12);
-      border:1px solid rgba(37,211,102,.35); color:#25D366; font-size:26px; font-weight:800;
-    }
-    .lux-box h3{margin:6px 0 8px;font-size:20px}
-    .lux-box p{margin:0;color:var(--muted);line-height:1.6}
-    .lux-actions{display:flex;justify-content:center;gap:10px;margin-top:14px;flex-wrap:wrap}
-    .lux-actions button{min-width:130px}
   </style>
 </head>
 
@@ -85,123 +95,133 @@
       Swiss chronograph crafted in stainless steel and 18K yellow gold. 40mm case. Recently serviced. Chronograph & date working.
     </p>
 
-      <div class="grid">
-        <!-- LEFT: GALLERY -->
-        <div>
-          <img id="mainPhoto" class="mainimg" src="ebel-1911.1.jpg" alt="ebel 1911"/>
-          <div class="thumbs">
-            <img src="ebel-1911.1.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.2.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.3.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.4.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.5.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.6.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.7.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.8.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.9.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.10.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.11.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.12.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.13.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.14.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.15.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.16.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.17.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.18.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.19.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.20.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.21.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.22.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.23.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.24.jpg" alt="" onclick="setMain(this.src)">
-            <img src="ebel-1911.25.jpg" alt="" onclick="setMain(this.src)">
-          </div>
-        </div>
-
-    
     <div class="grid">
-      <div class="card">
-        <h2>Overview</h2>
-        <div class="lux-desc">
-          <strong>Ebel 1911 Chronograph</strong> — a refined Swiss timepiece combining stainless steel and 18K yellow gold.
-          The 40mm case offers a classic, well-balanced presence on the wrist. The watch is in very good / near-mint condition,
-          runs perfectly, and has been recently serviced. Chronograph and date functions are fully operational.
-          Original bracelet fits wrists up to 16 cm. No box, no papers.
-        </div>
+      <!-- LEFT: GALLERY -->
+      <div class="gallery">
+        <img id="mainPhoto" src="ebel-1911.1.jpg" alt="ebel 1911" />
 
-        <div class="divider"></div>
-
-        <div class="note">
-          Tip: Use <b>Buy Now</b> to go straight to secure PayPal checkout.
+        <div class="thumbs">
+          <img src="ebel-1911.1.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.2.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.3.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.4.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.5.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.6.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.7.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.8.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.9.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.10.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.11.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.12.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.13.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.14.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.15.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.16.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.17.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.18.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.19.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.20.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.21.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.22.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.23.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.24.jpg" onclick="setMain(this.src)" alt="">
+          <img src="ebel-1911.25.jpg" onclick="setMain(this.src)" alt="">
         </div>
       </div>
 
-      <div class="card">
-        <h2>Request this watch</h2>
-
-        <form class="form" id="reqForm">
-          <div class="row">
-            <input type="text" name="name" placeholder="Full Name" required />
-            <input type="email" name="email" placeholder="Email" required />
+      <!-- RIGHT: INFO + FORM -->
+      <div>
+        <div class="card">
+          <h2>Overview</h2>
+          <div class="lux-desc">
+            <strong>Ebel 1911 Chronograph</strong> — a refined Swiss timepiece combining stainless steel and 18K yellow gold.
+            The 40mm case offers a classic, well-balanced presence on the wrist. The watch is in very good / near-mint condition,
+            runs perfectly, and has been recently serviced. Chronograph and date functions are fully operational.
+            Original bracelet fits wrists up to 16 cm. No box, no papers.
           </div>
+          <div class="divider"></div>
+          <div class="note">Tip: Use <b>Buy Now</b> to go straight to secure PayPal checkout.</div>
+        </div>
 
-          <div class="row">
-            <input type="text" name="phone" placeholder="Phone / WhatsApp" />
-            <input type="text" name="country" placeholder="Country" />
-          </div>
+        <div class="card" style="margin-top:18px">
+          <h2>Request this watch</h2>
 
-          <input type="text" name="address" placeholder="Full Address (Street, City, ZIP)" required />
+          <form class="form" id="reqForm">
+            <div class="row">
+              <input type="text" name="name" placeholder="Full Name" required />
+              <input type="email" name="email" placeholder="Email" required />
+            </div>
 
-          <textarea name="message" id="messageField" placeholder="Message"></textarea>
+            <div class="row">
+              <input type="text" name="phone" placeholder="Phone / WhatsApp" />
+              <input type="text" name="country" placeholder="Country" />
+            </div>
 
-          <div class="btns">
-            <button class="primary" type="button" id="btnSend">Send Request</button>
-            <button class="blue" type="button" id="btnBuy">Buy Now</button>
-            <button class="green" type="button" id="btnWa">WhatsApp</button>
-            <a class="btn" href="#" id="btnEmail">Email</a>
-          </div>
+            <input type="text" name="address" placeholder="Full Address (Street, City, ZIP)" required />
 
-          <div class="small">
-            By sending a request you agree to be contacted regarding this timepiece.
-          </div>
-        </form>
+            <textarea name="message" id="messageField" placeholder="Message"></textarea>
+
+            <div class="btns">
+              <button class="primary" type="button" id="btnSend">Send Request</button>
+              <button class="blue" type="button" id="btnBuy">Buy Now</button>
+              <button class="green" type="button" id="btnWa">WhatsApp</button>
+              <a class="btn" href="#" id="btnEmail">Email</a>
+            </div>
+
+            <div class="small">
+              By sending a request you agree to be contacted regarding this timepiece.
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL -->
-  <div id="luxModal" class="lux-modal">
-    <div class="lux-box">
-      <div class="lux-icon">✓</div>
-      <h3 id="luxTitle">Thank You</h3>
-      <p id="luxText">Saved.</p>
-      <div class="lux-actions">
-        <button class="primary" type="button" id="btnModalOk">OK</button>
-      </div>
-    </div>
+  <!-- ZOOM MODAL -->
+  <div id="imgModal" class="imgModal">
+    <div class="close" id="closeModal">&times;</div>
+    <img id="modalImg" alt="">
   </div>
 
   <script>
-    /* ===================== SETTINGS (VETËM KËTU NDRYSHON) ===================== */
-    const WATCH_NAME     = "Ebel 1911 Chronograph – Ref. 1911";
-    const WHATSAPP_NUMBER = "355692408065";                 // NUMRI YT pa +, pa hapësira
-    const CONTACT_EMAIL   = "cele9317@gmail.com";           // email ku vijnë kërkesat
-    const PAYPAL_URL      = "https://www.paypal.com/ncp/payment/2G6DFL5DHVUS"; // link pagesës
-    const REQUEST_ENDPOINT = "/send-request.php";           // nëse s’ke backend, lëre siç është
-    /* ======================================================================== */
+    /* SETTINGS */
+    const WATCH_NAME      = "Ebel 1911 Chronograph – Ref. 1911";
+    const WHATSAPP_NUMBER = "355692408065";
+    const CONTACT_EMAIL   = "cele9317@gmail.com";
+    const PAYPAL_URL      = "https://www.paypal.com/ncp/payment/2G6DFL5DHVUS";
 
     const form = document.getElementById("reqForm");
-    const modal = document.getElementById("luxModal");
-    const modalText = document.getElementById("luxText");
+    const mainPhoto = document.getElementById("mainPhoto");
 
-    function showModal(text){
-      modalText.textContent = text;
-      modal.style.display = "grid";
+    function buildAutoMessage(){
+      return `Ebel 1911 Chronograph
+
+Brand: Ebel
+Model: 1911 Chronograph
+Case Size: 40mm
+Material: Stainless Steel & 18K Yellow Gold
+Dial: White
+Condition: Very good / near-mint
+Functions: Chronograph and date working
+Recently serviced
+No box, no papers
+
+Request submitted via oraswiss.com`;
     }
-    function hideModal(){ modal.style.display = "none"; }
 
-    document.getElementById("btnModalOk").addEventListener("click", hideModal);
-    modal.addEventListener("click", (e)=>{ if(e.target === modal) hideModal(); });
+    window.addEventListener("DOMContentLoaded", () => {
+      if (!form.message.value) form.message.value = buildAutoMessage();
+      // set active first thumb
+      const first = document.querySelector(".thumbs img");
+      if(first) first.classList.add("active");
+    });
+
+    function setMain(src){
+      mainPhoto.src = src;
+      document.querySelectorAll(".thumbs img").forEach(img => img.classList.remove("active"));
+      const active = [...document.querySelectorAll(".thumbs img")].find(img => img.src.includes(src));
+      if(active) active.classList.add("active");
+    }
 
     function collect(){
       return {
@@ -214,56 +234,14 @@
       };
     }
 
-    function buildAutoMessage(){
-      return `Ebel 1911 Chronograph
-
-Brand: Ebel
-Model: 1911 Chronograph
-Case Size: 40mm
-Material: Stainless Steel & 18K Yellow Gold
-Bezel: 18K Yellow Gold, Fluted
-Dial: White
-Bracelet: Original steel & 18K gold (fits up to 16 cm wrist)
-
-Condition: Very good / near-mint
-Movement: Automatic chronograph
-Functions: Chronograph and date working
-Recently serviced
-No box, no papers
-
-Request submitted via oraswiss.com`;
-    }
-
-    // fill message once
-    window.addEventListener("DOMContentLoaded", () => {
-      if (!form.message.value) form.message.value = buildAutoMessage();
-
-      // thumbnails
-      document.querySelectorAll(".thumbs img").forEach(img=>{
-        img.addEventListener("click", ()=>{
-          document.getElementById("mainImage").src = img.dataset.src;
-        });
-      });
-    });
-
     async function sendRequest(){
-      // Validim bazë (që të mos të dalë ajo tabela kot)
       const d = collect();
       if(!d.name || !d.email || !d.address){
-        showModal("Please fill Full Name, Email, and Address.");
+        alert("Please fill Full Name, Email, and Address.");
         return false;
       }
-
-      // Nëse ke backend, e dërgon. Nëse s’ke, prap kthen OK.
-      try{
-        const fd = new FormData(form);
-        fd.append("watch", WATCH_NAME);
-        await fetch(REQUEST_ENDPOINT, { method:"POST", body: fd });
-        return true;
-      }catch(e){
-        // Mos e blloko user-in: në hostime pa PHP do dështojë
-        return true;
-      }
+      // Nëse s’ke backend, thjesht kthe true
+      return true;
     }
 
     function openWhatsApp(){
@@ -279,10 +257,7 @@ Address: ${d.address}
 
 Message:
 ${d.message}`;
-
       const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text);
-
-      // Mobile Safari shpesh s’lejon popups -> përdor location
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       if (isMobile) window.location.href = url;
       else window.open(url, "_blank");
@@ -291,7 +266,6 @@ ${d.message}`;
     function openEmail(e){
       if(e) e.preventDefault();
       const d = collect();
-
       const subject = encodeURIComponent("Order / Request: " + WATCH_NAME);
       const body = encodeURIComponent(
 `Hello,
@@ -309,8 +283,6 @@ ${d.message}
 
 Thank you.`
       );
-
-      // Gmail compose
       const gmail =
         "https://mail.google.com/mail/?view=cm&fs=1" +
         "&to=" + encodeURIComponent(CONTACT_EMAIL) +
@@ -319,19 +291,14 @@ Thank you.`
 
       const w = window.open(gmail, "_blank");
       if(!w){
-        // fallback mailto
-        window.location.href =
-          "mailto:" + CONTACT_EMAIL + "?subject=" + subject + "&body=" + body;
+        window.location.href = "mailto:" + CONTACT_EMAIL + "?subject=" + subject + "&body=" + body;
       }
     }
 
-    // Buttons
     document.getElementById("btnWa").addEventListener("click", openWhatsApp);
-
     document.getElementById("btnEmail").addEventListener("click", openEmail);
 
     document.getElementById("btnBuy").addEventListener("click", async () => {
-      // OPTIONAL: nëse do pagesë DIRECT pa validim, hiq 3 rreshtat poshtë (sendRequest)
       const ok = await sendRequest();
       if(!ok) return;
       window.location.href = PAYPAL_URL;
@@ -340,32 +307,22 @@ Thank you.`
     document.getElementById("btnSend").addEventListener("click", async () => {
       const ok = await sendRequest();
       if(ok){
-        showModal("Thank you. Your request has been received. Our team will contact you shortly.");
+        alert("Thank you. Your request has been received.");
         form.reset();
         form.message.value = buildAutoMessage();
       }
     });
-</script>
 
- <script>
-  function setMain(src) {
-    const mainPhoto = document.getElementById("mainPhoto");
-    mainPhoto.src = src;
+    /* Zoom modal */
+    const modal = document.getElementById("imgModal");
+    const modalImg = document.getElementById("modalImg");
+    document.getElementById("closeModal").addEventListener("click", ()=> modal.classList.remove("open"));
+    modal.addEventListener("click", (e)=>{ if(e.target === modal) modal.classList.remove("open"); });
 
-    // opsionale: highlight thumbnail aktiv
-    document.querySelectorAll(".thumbs img").forEach(img => {
-      img.classList.remove("active");
+    mainPhoto.addEventListener("click", ()=>{
+      modalImg.src = mainPhoto.src;
+      modal.classList.add("open");
     });
-
-  const activeThumb = [...document.querySelectorAll(".thumbs img")]
-      .find(img => img.src.includes(src));
-
-    if (activeThumb) {
-      activeThumb.classList.add("active");
-    }
-  }
-</script> 
-
-
+  </script>
 </body>
 </html>

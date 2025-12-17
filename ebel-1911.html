@@ -3,49 +3,45 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ebel 1911 Chronograph – Full Details</title>
+  <title>Ebel 1911 – Details</title>
 
   <style>
-    :root { --bg:#0b0b0c; --card:#121214; --text:#f2f2f2; --muted:#b9b9b9; --line:#222; }
+    :root{
+      --bg:#07070a;
+      --card: rgba(255,255,255,.05);
+      --line: rgba(255,255,255,.10);
+      --text:#f3f3f3;
+      --muted: rgba(255,255,255,.70);
+      --gold:#d4b87a;
+    }
     *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#070708,#0c0c0f);color:var(--text)}
-    .wrap{max-width:960px;margin:0 auto;padding:28px 16px 56px}
-    .top{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-    .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted);background:rgba(255,255,255,.03);font-size:13px}
-    h1{margin:10px 0 8px;font-size:34px;line-height:1.15}
-    .sub{color:var(--muted);line-height:1.55;margin:0 0 18px}
-
-    /* Layout: 2 kolona desktop, 1 kolonë mobile */
-    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:start}
-    @media(max-width:860px){.grid{grid-template-columns:1fr}}
-
-    .card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:16px;padding:18px}
-    .card h2{margin:0 0 12px;font-size:18px;letter-spacing:.2px}
-    .lux-desc{color:var(--muted);line-height:1.65}
-    .divider{height:1px;background:var(--line);margin:14px 0}
-    .note{font-size:12px;color:var(--muted);line-height:1.6}
-
-    .form{display:grid;gap:10px}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    @media(max-width:520px){.row{grid-template-columns:1fr}}
-    input, textarea{
-      width:100%; padding:12px 12px; border-radius:12px;
-      border:1px solid var(--line); background:#0e0e10; color:var(--text);
-      outline:none; font-size:14px
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(212,184,122,.12), transparent 60%),
+                  radial-gradient(900px 500px at 80% 20%, rgba(79,140,255,.10), transparent 60%),
+                  linear-gradient(180deg,#050506,#0b0b10);
+      color:var(--text);
     }
-    textarea{min-height:140px;resize:vertical}
-    input:focus, textarea:focus{border-color:#3a3a3a}
-
-    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
-    button, a.btn{
-      border:1px solid var(--line); border-radius:999px; padding:12px 16px;
-      background:#121214; color:var(--text); text-decoration:none; cursor:pointer;
-      font-weight:600; letter-spacing:.2px
+    .wrap{max-width:1050px;margin:0 auto;padding:26px 16px 64px;}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+    .brandpill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border:1px solid var(--line);border-radius:999px;
+      background:rgba(0,0,0,.25);color:var(--muted);font-size:13px
     }
-    button.primary{background:#f1f1f1;color:#0b0b0c;border-color:transparent}
-    button.green{background:#25D366;color:#0b0b0c;border-color:transparent}
-    button.blue{background:#2f6fed;color:#fff;border-color:transparent}
-    .small{font-size:12px;color:var(--muted);margin-top:10px}
+    .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:start}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      backdrop-filter: blur(10px);
+    }
+    h1{margin:10px 0 6px;font-size:34px;line-height:1.15}
+    .sub{margin:0 0 14px;color:var(--muted);line-height:1.6}
 
     /* Gallery */
     .gallery{display:grid;gap:10px}
@@ -53,287 +49,144 @@
       width:100%;
       max-height:70vh;
       object-fit:contain;
-      border-radius:16px;
+      border-radius:18px;
       border:1px solid var(--line);
-      background:#0e0e10;
+      background:rgba(0,0,0,.25);
       display:block;
-      cursor:zoom-in;
     }
     .thumbs{display:flex;gap:8px;flex-wrap:wrap}
     .thumbs img{
-      width:88px;height:66px;object-fit:cover;
-      border-radius:12px;border:1px solid var(--line);
-      cursor:pointer;opacity:.7;transition:.2s;
+      width:92px;height:68px;object-fit:cover;
+      border-radius:14px;border:1px solid var(--line);
+      cursor:pointer;opacity:.65;transition:.2s;
     }
-    .thumbs img:hover,.thumbs img.active{opacity:1;border-color:#c9a44c}
+    .thumbs img:hover,.thumbs img.active{
+      opacity:1;border-color:rgba(212,184,122,.7);
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+    }
 
-    /* Modal zoom */
-    .imgModal{
-      position:fixed; inset:0; display:none; place-items:center;
-      background:rgba(0,0,0,.85); padding:20px; z-index:9999;
+    /* Spec cards */
+    .specs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    @media(max-width:520px){.specs{grid-template-columns:1fr}}
+    .spec{
+      padding:14px;border-radius:16px;border:1px solid var(--line);
+      background:rgba(0,0,0,.20);
     }
-    .imgModal.open{display:grid}
-    .imgModal img{max-width:92vw;max-height:92vh;border-radius:12px}
-    .imgModal .close{
-      position:absolute; top:18px; right:22px;
-      font-size:34px; color:#fff; cursor:pointer; user-select:none;
+    .spec .k{font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+    .spec .v{margin-top:6px;font-size:15px;font-weight:650;color:#fff}
+    .desc{margin-top:14px;color:var(--muted);line-height:1.75}
+    .desc strong{color:#fff}
+
+    /* Buttons */
+    .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .btn{
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:12px 16px;
+      background:rgba(0,0,0,.25);
+      color:#fff;text-decoration:none;
+      font-weight:700;letter-spacing:.2px;
+      display:inline-flex;align-items:center;justify-content:center;
+      cursor:pointer;
+      transition:.2s;
+      min-width:150px;
     }
+    .btn:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.25)}
+    .btn.back{color:var(--muted)}
+    .btn.pay{
+      background:linear-gradient(135deg, rgba(212,184,122,.95), rgba(255,225,160,.85));
+      color:#0b0b0c;border-color:transparent;
+      box-shadow:0 14px 40px rgba(212,184,122,.22);
+    }
+    .btn.pay:hover{filter:brightness(1.03)}
+
+    .footnote{margin-top:10px;color:rgba(255,255,255,.55);font-size:12px;line-height:1.5}
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <div class="top">
-      <div class="pill">🌍 Worldwide Shipping</div>
-      <div class="pill">📍 Tracking Available</div>
+    <div class="topbar">
+      <div class="brandpill">✨ Details Page</div>
+      <div class="brandpill">Secure payment via PayPal</div>
     </div>
 
-    <a href="javascript:void(0)" onclick="history.back()" style="color:#b9b9b9;text-decoration:none;">← Back</a>
-
-    <h1>Ebel 1911 Chronograph – Full Details</h1>
-    <p class="sub">
-      Swiss chronograph crafted in stainless steel and 18K yellow gold. 40mm case. Recently serviced. Chronograph & date working.
-    </p>
+    <h1 id="title">Ebel 1911 Chronograph</h1>
+    <p class="sub" id="subtitle">Modern details page — photos + specs + description.</p>
 
     <div class="grid">
-      <!-- LEFT: GALLERY -->
-      <div class="gallery">
-        <img id="mainPhoto" src="ebel-1911.1.jpg" alt="ebel 1911" />
-
-        <div class="thumbs">
-          <img src="ebel-1911.1.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.2.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.3.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.4.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.5.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.6.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.7.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.8.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.9.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.10.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.11.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.12.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.13.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.14.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.15.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.16.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.17.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.18.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.19.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.20.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.21.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.22.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.23.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.24.jpg" onclick="setMain(this.src)" alt="">
-          <img src="ebel-1911.25.jpg" onclick="setMain(this.src)" alt="">
+      <!-- LEFT: PHOTOS -->
+      <div class="card">
+        <div class="gallery">
+          <img id="mainPhoto" src="ebel-1911.1.jpg" alt="Ebel 1911" />
+          <div class="thumbs" id="thumbs">
+            <img src="ebel-1911.1.jpg" alt="" class="active" onclick="setMain(this.src)">
+            <img src="ebel-1911.2.jpg" alt="" onclick="setMain(this.src)">
+            <img src="ebel-1911.3.jpg" alt="" onclick="setMain(this.src)">
+            <img src="ebel-1911.4.jpg" alt="" onclick="setMain(this.src)">
+          </div>
         </div>
       </div>
 
-      <!-- RIGHT: INFO + FORM -->
-      <div>
-        <div class="card">
-          <h2>Overview</h2>
-          <div class="lux-desc">
-            <strong>Ebel 1911 Chronograph</strong> — a refined Swiss timepiece combining stainless steel and 18K yellow gold.
-            The 40mm case offers a classic, well-balanced presence on the wrist. The watch is in very good / near-mint condition,
-            runs perfectly, and has been recently serviced. Chronograph and date functions are fully operational.
-            Original bracelet fits wrists up to 16 cm. No box, no papers.
+      <!-- RIGHT: SPECS + DESC + BUTTONS -->
+      <div class="card">
+        <div class="specs">
+          <div class="spec">
+            <div class="k">Mechanism</div>
+            <div class="v" id="mech">Automatic Chronograph</div>
           </div>
-          <div class="divider"></div>
-          <div class="note">Tip: Use <b>Buy Now</b> to go straight to secure PayPal checkout.</div>
+          <div class="spec">
+            <div class="k">Brand</div>
+            <div class="v" id="brand">Ebel</div>
+          </div>
+          <div class="spec">
+            <div class="k">Model</div>
+            <div class="v" id="model">1911 Chronograph</div>
+          </div>
+          <div class="spec">
+            <div class="k">Case Size</div>
+            <div class="v" id="size">40mm</div>
+          </div>
         </div>
 
-        <div class="card" style="margin-top:18px">
-          <h2>Request this watch</h2>
+        <div class="desc" id="desc">
+          <strong>Ebel 1911 Chronograph</strong> — Swiss timepiece combining stainless steel and 18K yellow gold.
+          The 40mm case offers a classic, well-balanced presence on the wrist. Recently serviced, runs perfectly.
+          Chronograph and date functions are fully operational. Original bracelet fits wrists up to 16 cm.
+          <br><br>
+          No box, no papers.
+        </div>
 
-          <form class="form" id="reqForm">
-            <div class="row">
-              <input type="text" name="name" placeholder="Full Name" required />
-              <input type="email" name="email" placeholder="Email" required />
-            </div>
+        <div class="cta">
+          <a class="btn back" href="javascript:void(0)" onclick="history.back()">← Back</a>
+          <a class="btn pay" id="payBtn" href="#" target="_blank" rel="noopener">Pay Now</a>
+        </div>
 
-            <div class="row">
-              <input type="text" name="phone" placeholder="Phone / WhatsApp" />
-              <input type="text" name="country" placeholder="Country" />
-            </div>
-
-            <input type="text" name="address" placeholder="Full Address (Street, City, ZIP)" required />
-
-            <textarea name="message" id="messageField" placeholder="Message"></textarea>
-
-            <div class="btns">
-              <a class="primary btn" id="btnSendMail" href="#">
-                Send Request
-              </a>
-              <a
-                href="https://www.paypal.com/ncp/payment/ECCX9XEYV9MWA"
-                class="btn blue"
-                target="_blank"
-                rel="noopener">
-                Buy Now
-              </a>
-              <button class="green" type="button" id="btnWa">WhatsApp</button>
-              <a class="btn" href="#" id="btnEmail">Email</a>
-            </div>
-
-            <div class="small">
-              By sending a request you agree to be contacted regarding this timepiece.
-            </div>
-          </form>
+        <div class="footnote">
+          * Payment button opens PayPal in a new tab.
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- ZOOM MODAL -->
-  <div id="imgModal" class="imgModal">
-    <div class="close" id="closeModal">&times;</div>
-    <img id="modalImg" alt="">
   </div>
 
   <script>
-    /* SETTINGS */
-    const WATCH_NAME      = "Ebel 1911 Chronograph – Ref. 1911";
-    const WHATSAPP_NUMBER = "355692408065";
-    const CONTACT_EMAIL   = "cele9317@gmail.com";
-    const PAYPAL_URL      = "https://www.paypal.com/ncp/payment/2G6DFL5DHVUS";
+    // Ndrysho vetem këtë:
+    const PAYPAL_URL = "https://www.paypal.com/ncp/payment/ECCX9XEYV9MWA";
 
-    const form = document.getElementById("reqForm");
-    const mainPhoto = document.getElementById("mainPhoto");
-
-    function buildAutoMessage(){
-      return `Ebel 1911 Chronograph
-
-Brand: Ebel
-Model: 1911 Chronograph
-Case Size: 40mm
-Material: Stainless Steel & 18K Yellow Gold
-Dial: White
-Condition: Very good / near-mint
-Functions: Chronograph and date working
-Recently serviced
-No box, no papers
-
-Request submitted via oraswiss.com`;
-    }
-
-    window.addEventListener("DOMContentLoaded", () => {
-      if (!form.message.value) form.message.value = buildAutoMessage();
-      // set active first thumb
-      const first = document.querySelector(".thumbs img");
-      if(first) first.classList.add("active");
-    });
+    document.getElementById("payBtn").href = PAYPAL_URL;
 
     function setMain(src){
-      mainPhoto.src = src;
-      document.querySelectorAll(".thumbs img").forEach(img => img.classList.remove("active"));
-      const active = [...document.querySelectorAll(".thumbs img")].find(img => img.src.includes(src));
+      const main = document.getElementById("mainPhoto");
+      main.src = src;
+
+      document.querySelectorAll("#thumbs img").forEach(i => i.classList.remove("active"));
+      const active = [...document.querySelectorAll("#thumbs img")].find(i => i.src.includes(src));
       if(active) active.classList.add("active");
     }
-
-    function collect(){
-      return {
-        name: form.name.value.trim(),
-        email: form.email.value.trim(),
-        phone: form.phone.value.trim(),
-        country: form.country.value.trim(),
-        address: form.address.value.trim(),
-        message: form.message.value.trim()
-      };
-    }
-
-    async function sendRequest(){
-      const d = collect();
-      if(!d.name || !d.email || !d.address){
-        alert("Please fill Full Name, Email, and Address.");
-        return false;
-      }
-      // Nëse s’ke backend, thjesht kthe true
-      return true;
-    }
-
-    function openWhatsApp(){
-      const d = collect();
-      const text =
-`Hello, I am interested in: ${WATCH_NAME}
-
-Name: ${d.name}
-Email: ${d.email}
-Phone: ${d.phone}
-Country: ${d.country}
-Address: ${d.address}
-
-Message:
-${d.message}`;
-      const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text);
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      if (isMobile) window.location.href = url;
-      else window.open(url, "_blank");
-    }
-
-    function openEmail(e){
-      if(e) e.preventDefault();
-      const d = collect();
-      const subject = encodeURIComponent("Order / Request: " + WATCH_NAME);
-      const body = encodeURIComponent(
-`Hello,
-
-I am interested in: ${WATCH_NAME}
-
-Name: ${d.name}
-Email: ${d.email}
-Phone: ${d.phone}
-Country: ${d.country}
-Address: ${d.address}
-
-Message:
-${d.message}
-
-Thank you.`
-      );
-      const gmail =
-        "https://mail.google.com/mail/?view=cm&fs=1" +
-        "&to=" + encodeURIComponent(CONTACT_EMAIL) +
-        "&su=" + subject +
-        "&body=" + body;
-
-      const w = window.open(gmail, "_blank");
-      if(!w){
-        window.location.href = "mailto:" + CONTACT_EMAIL + "?subject=" + subject + "&body=" + body;
-      }
-    }
-
-    document.getElementById("btnWa").addEventListener("click", openWhatsApp);
-    document.getElementById("btnEmail").addEventListener("click", openEmail);
-
-    document.getElementById("btnBuy").addEventListener("click", () => {
-    window.location.href = PAYPAL_URL;
-    });  
-
-    document.getElementById("btnSend").addEventListener("click", async () => {
-      const ok = await sendRequest();
-      if(ok){
-        alert("Thank you. Your request has been received.");
-        form.reset();
-        form.message.value = buildAutoMessage();
-      }
-    });
-
-    /* Zoom modal */
-    const modal = document.getElementById("imgModal");
-    const modalImg = document.getElementById("modalImg");
-    document.getElementById("closeModal").addEventListener("click", ()=> modal.classList.remove("open"));
-    modal.addEventListener("click", (e)=>{ if(e.target === modal) modal.classList.remove("open"); });
-
-    mainPhoto.addEventListener("click", ()=>{
-      modalImg.src = mainPhoto.src;
-      modal.classList.add("open");
-    });
   </script>
-
-
-
-
 </body>
 </html>
+
+
+
   

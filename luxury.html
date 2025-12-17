@@ -143,8 +143,8 @@
         <a href="https://wa.me/355692408065" class="whatsapp-btn" target="_blank">WhatsApp</a>
         <a href="mailto:cela9317@gmail.com"
            class="email-btn"
-           onclick="event.preventDefault(); window.location.href='mailto:cela9317@gmail.com';">
-        Email
+           onclick="event.stopImmediatePropagation(); window.location.href=this.href; return false;">
+          Email
         </a>
         <button class="like-btn"  data-id="rolex-datejust-16013">♥️</button>
         <button class="share-btn" data-url="https://oraswiss.com/rolex.html">📎 Share</button>

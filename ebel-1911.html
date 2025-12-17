@@ -136,6 +136,7 @@
             <button class="green" type="button" id="btnWa">WhatsApp</button>
             <a class="btn" href="#" id="btnEmail">Email</a>
           </div>
+            <input type="hidden" id="paypalLink" value="https://www.paypal.com/ncp/payment/2G6DFL5DHVUS">
 
           <div class="small">
             By sending a request you agree to be contacted regarding this timepiece.
@@ -321,7 +322,20 @@ Thank you.`
         form.message.value = buildAutoMessage();
       }
     });
-  </script>
+  <script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const btnBuy = document.getElementById("btnBuy");
+  const paypal = document.getElementById("paypalLink");
+
+  btnBuy.addEventListener("click", function () {
+    window.location.href = paypal.value;
+  });
+});
+</script>
+
+    
 </body>
 </html>
 

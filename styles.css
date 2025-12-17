@@ -1255,3 +1255,9 @@ gap:5px;
 .thumbs img.active {
   opacity: 1;
   border: 2px solid #c9a44c;
+
+html, body{
+  height: auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+}

@@ -162,7 +162,9 @@
             <textarea name="message" id="messageField" placeholder="Message"></textarea>
 
             <div class="btns">
-              <button class="primary" type="button" id="btnSend">Send Request</button>
+              <a class="primary btn" id="btnSendMail" href="#">
+                Send Request
+              </a>
               <a
                 href="https://www.paypal.com/ncp/payment/ECCX9XEYV9MWA"
                 class="btn blue"
@@ -328,5 +330,38 @@ Thank you.`
       modal.classList.add("open");
     });
   </script>
+
+const btn = document.getElementById("btnSendMail");
+
+btn.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  const name = form.name.value.trim();
+  const email = form.email.value.trim();
+  const phone = form.phone.value.trim();
+  const country = form.country.value.trim();
+  const message = form.message.value.trim();
+
+  if (!name || !email) {
+    alert("Fill Name and Email.");
+    return;
+  }
+
+  const subject = encodeURIComponent("Watch Request – Ebel 1911");
+  const body = encodeURIComponent(
+`Name: ${name}
+Email: ${email}
+Phone: ${phone}
+Country: ${country}
+
+Message:
+${message}`
+  );
+
+  window.location.href = mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body};
+});
+
+
 </body>
 </html>
+  

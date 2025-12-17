@@ -1235,4 +1235,24 @@ gap:5px;
   transform:translateY(-1px);
 }
 
+.gallery { display:flex; flex-direction:column; gap:10px; }
+.main-img { width:100%; max-width:520px; display:block; border-radius:12px; }
+
+.thumbs{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:6px;
+  -webkit-overflow-scrolling:touch;
+}
+.thumb{
+  width:78px;
+  height:78px;
+  object-fit:cover;
+  border-radius:10px;
+  cursor:pointer;
+  opacity:.75;
+  flex:0 0 auto;
+}
+.thumb:hover{ opacity:1; }
 

@@ -1245,14 +1245,13 @@ gap:5px;
   padding-bottom:6px;
   -webkit-overflow-scrolling:touch;
 }
-.thumb{
-  width:78px;
-  height:78px;
-  object-fit:cover;
-  border-radius:10px;
-  cursor:pointer;
-  opacity:.75;
-  flex:0 0 auto;
+.thumbs img {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: 0.3s;
 }
-.thumb:hover{ opacity:1; }
 
+.thumbs img:hover,
+.thumbs img.active {
+  opacity: 1;
+  border: 2px solid #c9a44c;

@@ -6,55 +6,64 @@
   <title>Ebel 1911 Chronograph – Full Details</title>
 
   <style>
-    :root{--bg:#0b0b0c;--card:#121214;--text:#f2f2f2;--muted:#b9b9b9;--line:#222}
+    :root { --bg:#0b0b0c; --card:#121214; --text:#f2f2f2; --muted:#b9b9b9; --line:#222; }
     *{box-sizing:border-box}
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#070708,#0c0c0f);color:var(--text)}
-    .wrap{max-width:980px;margin:0 auto;padding:28px 16px 56px}
+    .wrap{max-width:960px;margin:0 auto;padding:28px 16px 56px}
     .top{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
     .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted);background:rgba(255,255,255,.03);font-size:13px}
-    a.back-btn{display:inline-block;margin:8px 0 12px;color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.03)}
     h1{margin:10px 0 8px;font-size:34px;line-height:1.15}
     .sub{color:var(--muted);line-height:1.55;margin:0 0 18px}
-
     .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
     @media(max-width:860px){.grid{grid-template-columns:1fr}}
-
     .card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:16px;padding:18px}
     .card h2{margin:0 0 12px;font-size:18px;letter-spacing:.2px}
     .lux-desc{color:var(--muted);line-height:1.65}
-    .divider{height:1px;background:var(--line);margin:14px 0}
-    .note{font-size:12px;color:var(--muted);line-height:1.6}
-
-    /* Gallery */
-    .gallery{margin:0 0 18px}
-    .main-img{width:100%;max-height:520px;object-fit:contain;border-radius:16px;border:1px solid var(--line);background:#0e0e10}
-    .thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    .thumbs img{width:86px;height:86px;object-fit:cover;border-radius:12px;border:1px solid var(--line);cursor:pointer;opacity:.85}
-    .thumbs img:hover{opacity:1}
-
-    /* Form */
     .form{display:grid;gap:10px}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     @media(max-width:520px){.row{grid-template-columns:1fr}}
-    input,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0e0e10;color:var(--text);outline:none;font-size:14px}
+    input, textarea{
+      width:100%; padding:12px 12px; border-radius:12px;
+      border:1px solid var(--line); background:#0e0e10; color:var(--text);
+      outline:none; font-size:14px
+    }
     textarea{min-height:140px;resize:vertical}
-    input:focus,textarea:focus{border-color:#3a3a3a}
-
+    input:focus, textarea:focus{border-color:#3a3a3a}
     .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
-    button,a.btn{
-      border:1px solid var(--line);border-radius:999px;padding:12px 16px;
-      background:#121214;color:var(--text);text-decoration:none;cursor:pointer;
-      font-weight:600;letter-spacing:.2px
+    button, a.btn{
+      border:1px solid var(--line); border-radius:999px; padding:12px 16px;
+      background:#121214; color:var(--text); text-decoration:none; cursor:pointer;
+      font-weight:600; letter-spacing:.2px
     }
     button.primary{background:#f1f1f1;color:#0b0b0c;border-color:transparent}
     button.green{background:#25D366;color:#0b0b0c;border-color:transparent}
     button.blue{background:#2f6fed;color:#fff;border-color:transparent}
     .small{font-size:12px;color:var(--muted);margin-top:10px}
+    .divider{height:1px;background:var(--line);margin:14px 0}
+    .note{font-size:12px;color:var(--muted);line-height:1.6}
 
-    /* Modal */
-    .lux-modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.55);padding:20px;z-index:9999}
-    .lux-box{width:min(520px,100%);background:#0f0f12;border:1px solid #2a2a2f;border-radius:18px;padding:22px 18px;text-align:center;box-shadow:0 18px 60px rgba(0,0,0,.55)}
-    .lux-icon{width:54px;height:54px;border-radius:999px;margin:0 auto 10px;display:grid;place-items:center;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.35);color:#25D366;font-size:26px;font-weight:800}
+    /* Gallery */
+    .gallery{display:grid;gap:10px;margin-bottom:16px}
+    .main-img{width:100%;border-radius:16px;border:1px solid var(--line);background:#0e0e10}
+    .thumbs{display:flex;gap:8px;flex-wrap:wrap}
+    .thumbs img{width:88px;height:66px;object-fit:cover;border-radius:12px;border:1px solid var(--line);cursor:pointer;opacity:.9}
+    .thumbs img:hover{opacity:1}
+
+    /* Simple modal */
+    .lux-modal{
+      position:fixed; inset:0; display:none; place-items:center;
+      background:rgba(0,0,0,.55); padding:20px; z-index:9999;
+    }
+    .lux-box{
+      width:min(520px,100%); background:#0f0f12; border:1px solid #2a2a2f;
+      border-radius:18px; padding:22px 18px; text-align:center;
+      box-shadow:0 18px 60px rgba(0,0,0,.55);
+    }
+    .lux-icon{
+      width:54px;height:54px;border-radius:999px;margin:0 auto 10px;
+      display:grid;place-items:center;background:rgba(37,211,102,.12);
+      border:1px solid rgba(37,211,102,.35); color:#25D366; font-size:26px; font-weight:800;
+    }
     .lux-box h3{margin:6px 0 8px;font-size:20px}
     .lux-box p{margin:0;color:var(--muted);line-height:1.6}
     .lux-actions{display:flex;justify-content:center;gap:10px;margin-top:14px;flex-wrap:wrap}
@@ -69,7 +78,7 @@
       <div class="pill">📍 Tracking Available</div>
     </div>
 
-    <a href="javascript:void(0)" class="back-btn" onclick="goBack()">← Back</a>
+    <a href="javascript:void(0)" onclick="history.back()" style="color:#b9b9b9;text-decoration:none;">← Back</a>
 
     <h1>Ebel 1911 Chronograph – Full Details</h1>
     <p class="sub">
@@ -77,13 +86,12 @@
     </p>
 
     <div class="gallery">
-      <!-- ndrysho fotot sipas folder-it tënd -->
       <img src="/images/ebel-1911/1.jpg" class="main-img" id="mainImage" alt="Ebel 1911 Chronograph">
       <div class="thumbs">
-        <img src="/images/ebel-1911/1.jpg" onclick="changeImage(this.src)" alt="">
-        <img src="/images/ebel-1911/2.jpg" onclick="changeImage(this.src)" alt="">
-        <img src="/images/ebel-1911/3.jpg" onclick="changeImage(this.src)" alt="">
-        <img src="/images/ebel-1911/4.jpg" onclick="changeImage(this.src)" alt="">
+        <img src="/images/ebel-1911/1.jpg" alt="" data-src="/images/ebel-1911/1.jpg">
+        <img src="/images/ebel-1911/2.jpg" alt="" data-src="/images/ebel-1911/2.jpg">
+        <img src="/images/ebel-1911/3.jpg" alt="" data-src="/images/ebel-1911/3.jpg">
+        <img src="/images/ebel-1911/4.jpg" alt="" data-src="/images/ebel-1911/4.jpg">
       </div>
     </div>
 
@@ -100,17 +108,14 @@
         <div class="divider"></div>
 
         <div class="note">
-          Tip: Use <b>Buy Now</b> to submit your details first (including address), then you’ll be redirected to secure PayPal checkout.
+          Tip: Use <b>Buy Now</b> to go straight to secure PayPal checkout.
         </div>
       </div>
 
       <div class="card">
         <h2>Request this watch</h2>
 
-        <form class="form" id="reqForm" onsubmit="return false;">
-          <input type="hidden" name="watch" id="watchField" value="Ebel 1911 Chronograph – Ref. 1911" />
-          <button class="blue" type="button" onclick="buyNow()">Buy Now</button>
-
+        <form class="form" id="reqForm">
           <div class="row">
             <input type="text" name="name" placeholder="Full Name" required />
             <input type="email" name="email" placeholder="Email" required />
@@ -140,188 +145,50 @@
     </div>
   </div>
 
-  <div id="luxModal" class="lux-modal" onclick="closeModalIfBackdrop(event)">
+  <!-- MODAL -->
+  <div id="luxModal" class="lux-modal">
     <div class="lux-box">
       <div class="lux-icon">✓</div>
-      <h3>Thank You</h3>
-      <p id="luxText">Done.</p>
+      <h3 id="luxTitle">Thank You</h3>
+      <p id="luxText">Saved.</p>
       <div class="lux-actions">
-        <button class="primary" type="button" onclick="hideModal()">OK</button>
+        <button class="primary" type="button" id="btnModalOk">OK</button>
       </div>
     </div>
   </div>
 
   <script>
-    /* ========= SETTINGS (VETËM KËTU) ========= */
-  <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ebel 1911 Chronograph – Full Details</title>
+    /* ===================== SETTINGS (VETËM KËTU NDRYSHON) ===================== */
+    const WATCH_NAME     = "Ebel 1911 Chronograph – Ref. 1911";
+    const WHATSAPP_NUMBER = "355692408065";                 // NUMRI YT pa +, pa hapësira
+    const CONTACT_EMAIL   = "cele9317@gmail.com";           // email ku vijnë kërkesat
+    const PAYPAL_URL      = "https://www.paypal.com/ncp/payment/2G6DFL5DHVUS"; // link pagesës
+    const REQUEST_ENDPOINT = "/send-request.php";           // nëse s’ke backend, lëre siç është
+    /* ======================================================================== */
 
-  <style>
-    :root{--bg:#0b0b0c;--card:#121214;--text:#f2f2f2;--muted:#b9b9b9;--line:#222}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#070708,#0c0c0f);color:var(--text)}
-    .wrap{max-width:980px;margin:0 auto;padding:28px 16px 56px}
-    .top{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-    .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted);background:rgba(255,255,255,.03);font-size:13px}
-    a.back-btn{display:inline-block;margin:8px 0 12px;color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.03)}
-    h1{margin:10px 0 8px;font-size:34px;line-height:1.15}
-    .sub{color:var(--muted);line-height:1.55;margin:0 0 18px}
-
-    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
-    @media(max-width:860px){.grid{grid-template-columns:1fr}}
-
-    .card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:16px;padding:18px}
-    .card h2{margin:0 0 12px;font-size:18px;letter-spacing:.2px}
-    .lux-desc{color:var(--muted);line-height:1.65}
-    .divider{height:1px;background:var(--line);margin:14px 0}
-    .note{font-size:12px;color:var(--muted);line-height:1.6}
-
-    /* Gallery */
-    .gallery{margin:0 0 18px}
-    .main-img{width:100%;max-height:520px;object-fit:contain;border-radius:16px;border:1px solid var(--line);background:#0e0e10}
-    .thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    .thumbs img{width:86px;height:86px;object-fit:cover;border-radius:12px;border:1px solid var(--line);cursor:pointer;opacity:.85}
-    .thumbs img:hover{opacity:1}
-
-    /* Form */
-    .form{display:grid;gap:10px}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    @media(max-width:520px){.row{grid-template-columns:1fr}}
-    input,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0e0e10;color:var(--text);outline:none;font-size:14px}
-    textarea{min-height:140px;resize:vertical}
-    input:focus,textarea:focus{border-color:#3a3a3a}
-
-    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
-    button,a.btn{
-      border:1px solid var(--line);border-radius:999px;padding:12px 16px;
-      background:#121214;color:var(--text);text-decoration:none;cursor:pointer;
-      font-weight:600;letter-spacing:.2px
-    }
-    button.primary{background:#f1f1f1;color:#0b0b0c;border-color:transparent}
-    button.green{background:#25D366;color:#0b0b0c;border-color:transparent}
-    button.blue{background:#2f6fed;color:#fff;border-color:transparent}
-    .small{font-size:12px;color:var(--muted);margin-top:10px}
-
-    /* Modal */
-    .lux-modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.55);padding:20px;z-index:9999}
-    .lux-box{width:min(520px,100%);background:#0f0f12;border:1px solid #2a2a2f;border-radius:18px;padding:22px 18px;text-align:center;box-shadow:0 18px 60px rgba(0,0,0,.55)}
-    .lux-icon{width:54px;height:54px;border-radius:999px;margin:0 auto 10px;display:grid;place-items:center;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.35);color:#25D366;font-size:26px;font-weight:800}
-    .lux-box h3{margin:6px 0 8px;font-size:20px}
-    .lux-box p{margin:0;color:var(--muted);line-height:1.6}
-    .lux-actions{display:flex;justify-content:center;gap:10px;margin-top:14px;flex-wrap:wrap}
-    .lux-actions button{min-width:130px}
-  </style>
-</head>
-
-<body>
-  <div class="wrap">
-    <div class="top">
-      <div class="pill">🌍 Worldwide Shipping</div>
-      <div class="pill">📍 Tracking Available</div>
-    </div>
-
-    <a href="javascript:void(0)" class="back-btn" onclick="goBack()">← Back</a>
-
-    <h1>Ebel 1911 Chronograph – Full Details</h1>
-    <p class="sub">
-      Swiss chronograph crafted in stainless steel and 18K yellow gold. 40mm case. Recently serviced. Chronograph & date working.
-    </p>
-
-    <div class="gallery">
-      <!-- ndrysho fotot sipas folder-it tënd -->
-      <img src="ebel-1911.1.jpg" class="main-img" id="mainImage" alt="Ebel 1911 Chronograph">
-      <div class="thumbs">
-        <img src="ebel-1911.1.jpg" onclick="changeImage(this.src)" alt="">
-        <img src="ebel-1911.2.jpg" onclick="changeImage(this.src)" alt="">
-        <img src="ebel-1911.3.jpg" onclick="changeImage(this.src)" alt="">
-        <img src="ebel-1911.4.jpg" onclick="changeImage(this.src)" alt="">
-      </div>
-    </div>
-
-    <div class="grid">
-      <div class="card">
-        <h2>Overview</h2>
-        <div class="lux-desc">
-          <strong>Ebel 1911 Chronograph</strong> — a refined Swiss timepiece combining stainless steel and 18K yellow gold.
-          The 40mm case offers a classic, well-balanced presence on the wrist. The watch is in very good / near-mint condition,
-          runs perfectly, and has been recently serviced. Chronograph and date functions are fully operational.
-          Original bracelet fits wrists up to 16 cm. No box, no papers.
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="note">
-          Tip: Use <b>Buy Now</b> to submit your details first (including address), then you’ll be redirected to secure PayPal checkout.
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>Request this watch</h2>
-
-        <form class="form" id="reqForm" onsubmit="return false;">
-          <input type="hidden" name="watch" id="watchField" value="Ebel 1911 Chronograph – Ref. 1911" />
-          <input type="hidden" id="paypalLink" value="https://www.paypal.com/ncp/payment/2G6DFL5DHVUS" />
-
-          <div class="row">
-            <input type="text" name="name" placeholder="Full Name" required />
-            <input type="email" name="email" placeholder="Email" required />
-          </div>
-
-          <div class="row">
-            <input type="text" name="phone" placeholder="Phone / WhatsApp" />
-            <input type="text" name="country" placeholder="Country" />
-          </div>
-
-          <input type="text" name="address" placeholder="Full Address (Street, City, ZIP)" required />
-
-          <textarea name="message" id="messageField" placeholder="Message"></textarea>
-
-          <div class="btns">
-            <button class="primary" type="button" id="btnSend">Send Request</button>
-            <button class="blue" type="button" id="btnBuy">Buy Now</button>
-            <button class="green" type="button" id="btnWa">WhatsApp</button>
-            <a class="btn" href="#" id="btnEmail">Email</a>
-          </div>
-
-          <div class="small">
-            By sending a request you agree to be contacted regarding this timepiece.
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <div id="luxModal" class="lux-modal" onclick="closeModalIfBackdrop(event)">
-    <div class="lux-box">
-      <div class="lux-icon">✓</div>
-      <h3>Thank You</h3>
-      <p id="luxText">Done.</p>
-      <div class="lux-actions">
-        <button class="primary" type="button" onclick="hideModal()">OK</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    /* ========= SETTINGS (VETËM KËTU) ========= */
-    const WATCH_NAME      = "Ebel 1911 Chronograph – Ref. 1911";
-    const WHATSAPP_NUMBER = "355692408065";     // numri yt pa +
-    const CONTACT_EMAIL   = "cele9317@gmail.com"; // email ku do vijnë
-    const REQUEST_ENDPOINT = "/send-request.php"; // nëse e ke. nëse s’e ke, s’bllokon butonat.
-    /* ======================================== */
+    const form = document.getElementById("reqForm");
+    const modal = document.getElementById("luxModal");
+    const modalText = document.getElementById("luxText");
 
     function showModal(text){
-      document.getElementById("luxText").innerText = text;
-      document.getElementById("luxModal").style.display = "grid";
+      modalText.textContent = text;
+      modal.style.display = "grid";
     }
-    function hideModal(){ document.getElementById("luxModal").style.display = "none"; }
-    function closeModalIfBackdrop(e){ if(e.target && e.target.id==="luxModal") hideModal(); }
+    function hideModal(){ modal.style.display = "none"; }
 
-    function changeImage(src){ document.getElementById("mainImage").src = src; }
+    document.getElementById("btnModalOk").addEventListener("click", hideModal);
+    modal.addEventListener("click", (e)=>{ if(e.target === modal) hideModal(); });
+
+    function collect(){
+      return {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        phone: form.phone.value.trim(),
+        country: form.country.value.trim(),
+        address: form.address.value.trim(),
+        message: form.message.value.trim()
+      };
+    }
 
     function buildAutoMessage(){
       return `Ebel 1911 Chronograph
@@ -343,36 +210,36 @@ No box, no papers
 Request submitted via oraswiss.com`;
     }
 
-    function getForm(){ return document.getElementById("reqForm"); }
+    // fill message once
+    window.addEventListener("DOMContentLoaded", () => {
+      if (!form.message.value) form.message.value = buildAutoMessage();
 
-    function collect(){
-      const f = getForm();
-      return {
-        name:    f.querySelector('[name="name"]').value.trim(),
-        email:   f.querySelector('[name="email"]').value.trim(),
-        phone:   f.querySelector('[name="phone"]').value.trim(),
-        country: f.querySelector('[name="country"]').value.trim(),
-        address: f.querySelector('[name="address"]').value.trim(),
-        msg:     f.querySelector('[name="message"]').value.trim()
-      };
-    }
+      // thumbnails
+      document.querySelectorAll(".thumbs img").forEach(img=>{
+        img.addEventListener("click", ()=>{
+          document.getElementById("mainImage").src = img.dataset.src;
+        });
+      });
+    });
 
-    async function postRequest(){
-      const f = getForm();
+    async function sendRequest(){
+      // Validim bazë (që të mos të dalë ajo tabela kot)
       const d = collect();
       if(!d.name || !d.email || !d.address){
         showModal("Please fill Full Name, Email, and Address.");
         return false;
       }
 
-      // nëse s’ke backend, s’e bllokoj fare:
+      // Nëse ke backend, e dërgon. Nëse s’ke, prap kthen OK.
       try{
-        const data = new FormData(f);
-        await fetch(REQUEST_ENDPOINT, { method:"POST", body:data });
+        const fd = new FormData(form);
+        fd.append("watch", WATCH_NAME);
+        await fetch(REQUEST_ENDPOINT, { method:"POST", body: fd });
+        return true;
       }catch(e){
-        // mos e ndal faqen – thjesht vazhdo
+        // Mos e blloko user-in: në hostime pa PHP do dështojë
+        return true;
       }
-      return true;
     }
 
     function openWhatsApp(){
@@ -387,14 +254,18 @@ Country: ${d.country}
 Address: ${d.address}
 
 Message:
-${d.msg || "(no extra message)"}`;
+${d.message}`;
 
       const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text);
-      window.open(url, "_blank");
+
+      // Mobile Safari shpesh s’lejon popups -> përdor location
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (isMobile) window.location.href = url;
+      else window.open(url, "_blank");
     }
 
     function openEmail(e){
-      e.preventDefault();
+      if(e) e.preventDefault();
       const d = collect();
 
       const subject = encodeURIComponent("Order / Request: " + WATCH_NAME);
@@ -410,11 +281,12 @@ Country: ${d.country}
 Address: ${d.address}
 
 Message:
-${d.msg || "(no extra message)"}
+${d.message}
 
 Thank you.`
       );
 
+      // Gmail compose
       const gmail =
         "https://mail.google.com/mail/?view=cm&fs=1" +
         "&to=" + encodeURIComponent(CONTACT_EMAIL) +
@@ -423,146 +295,32 @@ Thank you.`
 
       const w = window.open(gmail, "_blank");
       if(!w){
-        window.location.href = "mailto:" + CONTACT_EMAIL + "?subject=" + subject + "&body=" + body;
+        // fallback mailto
+        window.location.href =
+          "mailto:" + CONTACT_EMAIL + "?subject=" + subject + "&body=" + body;
       }
     }
 
-    async function submitRequestOnly(){
-      const ok = await postRequest();
+    // Buttons
+    document.getElementById("btnWa").addEventListener("click", openWhatsApp);
+
+    document.getElementById("btnEmail").addEventListener("click", openEmail);
+
+    document.getElementById("btnBuy").addEventListener("click", async () => {
+      // OPTIONAL: nëse do pagesë DIRECT pa validim, hiq 3 rreshtat poshtë (sendRequest)
+      const ok = await sendRequest();
+      if(!ok) return;
+      window.location.href = PAYPAL_URL;
+    });
+
+    document.getElementById("btnSend").addEventListener("click", async () => {
+      const ok = await sendRequest();
       if(ok){
         showModal("Thank you. Your request has been received. Our team will contact you shortly.");
-        // mos e bëj reset automatik (se njerëzit e urrejnë), po deshe e shtojmë
+        form.reset();
+        form.message.value = buildAutoMessage();
       }
-    }
-
-    async function buyNow(){
-      const ok = await postRequest();
-      if(!ok) return;
-
-      const paypalUrl = document.getElementById("paypalLink").value;
-      showModal("Thank you. Redirecting you to secure checkout…");
-      setTimeout(()=>{ window.location.href = paypalUrl; }, 700);
-    }
-
-    function goBack(){
-      if(document.referrer && document.referrer.includes(window.location.hostname)){
-        window.history.back();
-      }else{
-        window.location.href = "/";
-      }
-    }
-
-    // Init
-    (function init(){
-      document.getElementById("watchField").value = WATCH_NAME;
-      const msg = document.getElementById("messageField");
-      if(msg) msg.value = buildAutoMessage();
-
-      document.getElementById("btnWa").addEventListener("click", openWhatsApp);
-      document.getElementById("btnEmail").addEventListener("click", openEmail);
-      document.getElementById("btnSend").addEventListener("click", submitRequestOnly);
-      document.getElementById("btnBuy").addEventListener("click", buyNow);
-    })();
+    });
   </script>
-</body>
-</html>
-
-<script>
-/* ===== SETTINGS ===== */
-const WATCH_NAME = "Ebel 1911 Chronograph – Ref. 1911";
-const WHATSAPP_NUMBER = "355692408065"; // pa +
-const CONTACT_EMAIL = "cele9317@gmail.com";
-/* ==================== */
-
-function getForm() {
-  return document.querySelector("form.form");
-}
-
-function collect() {
-  const f = getForm();
-  return {
-    name: f.querySelector('[name="name"]').value || "",
-    email: f.querySelector('[name="email"]').value || "",
-    phone: f.querySelector('[name="phone"]').value || "",
-    country: f.querySelector('[name="country"]').value || "",
-    address: f.querySelector('[name="address"]').value || "",
-    msg: f.querySelector('[name="message"]').value || ""
-  };
-}
-
-/* ===== WHATSAPP ===== */
-function openWhatsApp() {
-  const d = collect();
-
-  const text =
-`Hello, I am interested in: ${WATCH_NAME}
-
-Name: ${d.name}
-Email: ${d.email}
-Phone: ${d.phone}
-Country: ${d.country}
-Address: ${d.address}
-
-Message:
-${d.msg}`;
-
-  const url =
-    "https://wa.me/" +
-    WHATSAPP_NUMBER +
-    "?text=" +
-    encodeURIComponent(text);
-
-  window.open(url, "_blank");
-}
-
-/* ===== BUY NOW ===== */
-function buyNow() {
-  const paypal = document.getElementById("paypalLink").value;
-  if (!paypal) {
-    alert("PayPal link missing");
-    return;
-  }
-  window.location.href = paypal;
-}
-
-/* ===== EMAIL ===== */
-function openEmail() {
-  const d = collect();
-
-  const subject = encodeURIComponent("Order / Request: " + WATCH_NAME);
-  const body = encodeURIComponent(
-`Hello,
-
-I am interested in: ${WATCH_NAME}
-
-Name: ${d.name}
-Email: ${d.email}
-Phone: ${d.phone}
-Country: ${d.country}
-Address: ${d.address}
-
-Message:
-${d.msg}
-
-Thank you.`
-  );
-
-  window.location.href =
-    "mailto:" +
-    CONTACT_EMAIL +
-    "?subject=" +
-    subject +
-    "&body=" +
-    body;
-}
-</script>
-
-<script>
-function buyNow() {
-  const paypalUrl = "https://www.paypal.com/ncp/payment/2G6DFL5DHVUS";
-  window.location.href = paypalUrl;
-}
-</script>
-
 </body>
 </html>

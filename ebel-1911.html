@@ -286,18 +286,36 @@ ${msg}`;
     }
 
     // Email mailto with watch + details
-    function openEmail() {
-      const form = getForm();
-      const watch = WATCH_NAME;
+function openEmail() {
+  const form = getForm(); // ose document.querySelector("form")
 
-      const name = form.querySelector('[name="name"]').value.trim() || "";
-      const phone = form.querySelector('[name="phone"]').value.trim() || "";
-      const country = form.querySelector('[name="country"]').value.trim() || "";
-      const address = form.querySelector('[name="address"]').value.trim() || "";
-      const msg = form.querySelector('[name="message"]').value.trim() || "";
+  const name = form.querySelector('[name="Full Name"]').value.trim();
+  const email = form.querySelector('[name="Email"]').value.trim();
+  const phone = form.querySelector('[name="Phone"]').value.trim();
+  const country = form.querySelector('[name="Country"]').value.trim();
+  const msg = form.querySelector('[name="Message"]').value.trim();
 
-      const subject = encodeURIComponent(Order / Request: ${watch});
-      const body = encodeURIComponent(
+  const subject = encodeURIComponent(Order / Request: ${WATCH_NAME});
+  const body = encodeURIComponent(
+`Hello,
+
+I am interested in: ${WATCH_NAME}
+
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+Country: ${country}
+
+Message:
+${msg}
+
+Thank you.`
+  );
+
+  const gmailUrl = https://mail.google.com/mail/?view=cm&fs=1&to=tele9317@gmail.com&subject=${subject}&body=${body};
+  window.open(gmailUrl, "_blank");
+}
+
 `Hello,
 
 I am interested in: ${watch}

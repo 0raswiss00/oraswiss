@@ -158,174 +158,85 @@
     </div>
   </div>
 
-  <script>
-    /* ===================== SETTINGS (VETËM KËTU NDRYSHON) ===================== */
-    const WATCH_NAME     = "Ebel 1911 Chronograph – Ref. 1911";
-    const WHATSAPP_NUMBER = "355692408065";                 // NUMRI YT pa +, pa hapësira
-    const CONTACT_EMAIL   = "cele9317@gmail.com";           // email ku vijnë kërkesat
-    const PAYPAL_URL      = "https://www.paypal.com/ncp/payment/2G6DFL5DHVUS"; // link pagesës
-    const REQUEST_ENDPOINT = "/send-request.php";           // nëse s’ke backend, lëre siç është
-    /* ======================================================================== */
+  /* ===== SETTINGS ===== */
+const WATCH_NAME = "Ebel 1911 Chronograph – Ref. 1911";
+const WHATSAPP_NUMBER = "355692408065"; // pa +
+const CONTACT_EMAIL = "cele9317@gmail.com";
+/* ==================== */
 
-    const form = document.getElementById("reqForm");
-    const modal = document.getElementById("luxModal");
-    const modalText = document.getElementById("luxText");
+const form = document.querySelector("form.form");
 
-    function showModal(text){
-      modalText.textContent = text;
-      modal.style.display = "grid";
-    }
-    function hideModal(){ modal.style.display = "none"; }
+function getVal(name){
+  return form.querySelector([name="${name}"])?.value.trim() || "";
+}
 
-    document.getElementById("btnModalOk").addEventListener("click", hideModal);
-    modal.addEventListener("click", (e)=>{ if(e.target === modal) hideModal(); });
+/* ===== SEND REQUEST ===== */
+async function sendRequest(){
+  const name = getVal("name");
+  const email = getVal("email");
+  const address = getVal("address");
 
-    function collect(){
-      return {
-        name: form.name.value.trim(),
-        email: form.email.value.trim(),
-        phone: form.phone.value.trim(),
-        country: form.country.value.trim(),
-        address: form.address.value.trim(),
-        message: form.message.value.trim()
-      };
-    }
+  if(!name || !email || !address){
+    showModal("Please fill Full Name, Email, and Address.");
+    return false;
+  }
 
-    function buildAutoMessage(){
-      return `Ebel 1911 Chronograph
-
-Brand: Ebel
-Model: 1911 Chronograph
-Case Size: 40mm
-Material: Stainless Steel & 18K Yellow Gold
-Bezel: 18K Yellow Gold, Fluted
-Dial: White
-Bracelet: Original steel & 18K gold (fits up to 16 cm wrist)
-
-Condition: Very good / near-mint
-Movement: Automatic chronograph
-Functions: Chronograph and date working
-Recently serviced
-No box, no papers
-
-Request submitted via oraswiss.com`;
-    }
-
-    // fill message once
-    window.addEventListener("DOMContentLoaded", () => {
-      if (!form.message.value) form.message.value = buildAutoMessage();
-
-      // thumbnails
-      document.querySelectorAll(".thumbs img").forEach(img=>{
-        img.addEventListener("click", ()=>{
-          document.getElementById("mainImage").src = img.dataset.src;
-        });
-      });
+  try{
+    await fetch("/send-request.php", {
+      method:"POST",
+      body:new FormData(form)
     });
+    return true;
+  }catch(e){
+    showModal("Server error. Try again.");
+    return false;
+  }
+}
 
-    async function sendRequest(){
-      // Validim bazë (që të mos të dalë ajo tabela kot)
-      const d = collect();
-      if(!d.name || !d.email || !d.address){
-        showModal("Please fill Full Name, Email, and Address.");
-        return false;
-      }
+/* ===== BUY NOW ===== */
+async function buyNow(){
+  const ok = await sendRequest();
+  if(!ok) return;
 
-      // Nëse ke backend, e dërgon. Nëse s’ke, prap kthen OK.
-      try{
-        const fd = new FormData(form);
-        fd.append("watch", WATCH_NAME);
-        await fetch(REQUEST_ENDPOINT, { method:"POST", body: fd });
-        return true;
-      }catch(e){
-        // Mos e blloko user-in: në hostime pa PHP do dështojë
-        return true;
-      }
-    }
+  const paypal = document.getElementById("paypalLink").value;
+  window.location.href = paypal;
+}
 
-    function openWhatsApp(){
-      const d = collect();
-      const text =
-`Hello, I am interested in: ${WATCH_NAME}
+/* ===== WHATSAPP ===== */
+function openWhatsApp(){
+  const text = `Hello, I am interested in: ${WATCH_NAME}
 
-Name: ${d.name}
-Email: ${d.email}
-Phone: ${d.phone}
-Country: ${d.country}
-Address: ${d.address}
+Name: ${getVal("name")}
+Email: ${getVal("email")}
+Phone: ${getVal("phone")}
+Country: ${getVal("country")}
+Address: ${getVal("address")}
 
 Message:
-${d.message}`;
+${getVal("message")}`;
 
-      const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text);
+  window.open(
+    "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text),
+    "_blank"
+  );
+}
 
-      // Mobile Safari shpesh s’lejon popups -> përdor location
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      if (isMobile) window.location.href = url;
-      else window.open(url, "_blank");
-    }
-
-    function openEmail(e){
-      if(e) e.preventDefault();
-      const d = collect();
-
-      const subject = encodeURIComponent("Order / Request: " + WATCH_NAME);
-      const body = encodeURIComponent(
-`Hello,
-
-I am interested in: ${WATCH_NAME}
-
-Name: ${d.name}
-Email: ${d.email}
-Phone: ${d.phone}
-Country: ${d.country}
-Address: ${d.address}
+/* ===== EMAIL ===== */
+function openEmail(){
+  const subject = encodeURIComponent("Order / Request: " + WATCH_NAME);
+  const body = encodeURIComponent(
+`Name: ${getVal("name")}
+Email: ${getVal("email")}
+Phone: ${getVal("phone")}
+Country: ${getVal("country")}
+Address: ${getVal("address")}
 
 Message:
-${d.message}
+${getVal("message")}`
+  );
 
-Thank you.`
-      );
-
-      // Gmail compose
-      const gmail =
-        "https://mail.google.com/mail/?view=cm&fs=1" +
-        "&to=" + encodeURIComponent(CONTACT_EMAIL) +
-        "&su=" + subject +
-        "&body=" + body;
-
-      const w = window.open(gmail, "_blank");
-      if(!w){
-        // fallback mailto
-        window.location.href =
-          "mailto:" + CONTACT_EMAIL + "?subject=" + subject + "&body=" + body;
-      }
-    }
-
-    // Buttons
-    document.getElementById("btnWa").addEventListener("click", openWhatsApp);
-
-    document.getElementById("btnEmail").addEventListener("click", openEmail);
-
-    document.getElementById("btnBuy").addEventListener("click", async () => {
-      // OPTIONAL: nëse do pagesë DIRECT pa validim, hiq 3 rreshtat poshtë (sendRequest)
-      const ok = await sendRequest();
-      if(!ok) return;
-      window.location.href = PAYPAL_URL;
-    });
-
-    document.getElementById("btnSend").addEventListener("click", async () => {
-      const ok = await sendRequest();
-      if(ok){
-        showModal("Thank you. Your request has been received. Our team will contact you shortly.");
-        form.reset();
-        form.message.value = buildAutoMessage();
-      }
-    });
-  <script>
-
-
-    
-</body>
-</html>
+  window.location.href =
+    "mailto:" + CONTACT_EMAIL + "?subject=" + subject + "&body=" + body;
+}
+</script>
 

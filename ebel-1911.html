@@ -298,11 +298,9 @@ Thank you.`
     document.getElementById("btnWa").addEventListener("click", openWhatsApp);
     document.getElementById("btnEmail").addEventListener("click", openEmail);
 
-    document.getElementById("btnBuy").addEventListener("click", async () => {
-      const ok = await sendRequest();
-      if(!ok) return;
-      window.location.href = PAYPAL_URL;
-    });
+    document.getElementById("btnBuy").addEventListener("click", () => {
+    window.location.href = PAYPAL_URL;
+    });  
 
     document.getElementById("btnSend").addEventListener("click", async () => {
       const ok = await sendRequest();

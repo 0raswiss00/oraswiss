@@ -391,6 +391,17 @@ function changeImage(src) {
 }
 </script>
 
+function openWhatsApp() {
+  const form = document.querySelector("form");
+  const msg = form.querySelector('[name="message"]').value || "";
+  const text = encodeURIComponent(
+    Hello, I am interested in: ${WATCH_NAME}\n\nMessage:\n${msg}
+  );
+
+  const url = https://wa.me/${WHATSAPP_NUMBER}?text=${text};
+  window.open(url, "_blank");
+}
+  
 <script>
 // ===== SETTINGS =====
 const WATCH_NAME = "Ebel 1911 Chronograph - Ref. 1911";

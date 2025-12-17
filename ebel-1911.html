@@ -349,6 +349,24 @@ Thank you.`
     });
 </script>
 
+ <script>
+  function setMain(src) {
+    const mainPhoto = document.getElementById("mainPhoto");
+    mainPhoto.src = src;
+
+    // opsionale: highlight thumbnail aktiv
+    document.querySelectorAll(".thumbs img").forEach(img => {
+      img.classList.remove("active");
+    });
+
+  const activeThumb = [...document.querySelectorAll(".thumbs img")]
+      .find(img => img.src.includes(src));
+
+    if (activeThumb) {
+      activeThumb.classList.add("active");
+    }
+  }
+</script> 
 
 <div id="imgModal" class="modal">
   <span class="close">&times;</span>

@@ -314,6 +314,24 @@ product-gallery{
   padding:10px 0 10px 20px; /* 20px e shtyn djathtas */
 }
 
+.product-gallery{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 kolona */
+  gap:10px;
+  padding:12px;
+  justify-items:center;
+}
+Ora
+.product-gallery .thumb{
+  width:100%;
+  aspect-ratio:1/1;      /* katrore si në screenshot */
+  object-fit:cover;
+  border-radius:12px;
+  cursor:pointer;
+}
+
+
+
 #lightbox{
   display:none;
   position:fixed;

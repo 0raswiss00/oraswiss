@@ -316,6 +316,37 @@ ul {
 
 /* OPSIONET E LËVIZJES SË SFONDIT */
 
+.product-gallery{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;     /* scroll majtas-djathtas */
+  padding:10px 0;
+}
+
+.product-gallery .thumb{
+  width:110px;         /* ndrysho 90/120 sa te duash */
+  height:70px;
+  object-fit:cover;
+  border-radius:10px;
+  cursor:pointer;
+  flex:0 0 auto;
+}
+
+#lightbox{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+#lightboxImg{
+  max-width:92vw;
+  max-height:85vh;
+  border-radius:12px;
+}
 
 
 

@@ -176,7 +176,10 @@ ul {
 }
 
 /* Gallery thumbnails */
-
+.product-gallery {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
 
 
 .product-gallery img.thumb {
@@ -271,7 +274,6 @@ ul {
 
   .product-main-image img {
     max-width: 90%;
-    height: auto;
   }
 
   .product-gallery {
@@ -281,20 +283,43 @@ ul {
     width: 90%;
     margin-top: 10px;
   }
-
+         
+        
+     product-gallery img. thumb {
+         widht: 28%;
+         height; auto;
+     }
+ }
 
 /* FIX I FOTOVE – BËJI HORIZONTAL NË TË GJITHA: LUXURY / VINTAGE / PARTS */
 
 .product-images{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: flex !important(
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+  
+.product-images img {
+   height: 200px
+   widht: auto;
 }
 
 /* KUTIA KU VENDOS FOTON NË SFOND */
 
 
+#lightboimg {
+  max-with: 95vw;
+  max-height; 85bh;
+  border-radius: 14px;
 
+ .product-gallery .thumb{
+    width:100%;
+    aspect-ratio:cover;
+    border-radius:12px;
+    cursor:pointer;
+ }
 
 
 #lightbox{

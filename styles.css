@@ -1,1371 +1,198 @@
-o/* =========================
-      GLOBAL RESET
+/* =========================
+   GLOBAL RESET
 ========================= */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#f3f4f6;
+  color:#111827;
+  overflow-x:hidden;
 }
+h1,h2,h3,p,li{margin-bottom:8px}
+ul{list-style:disc;margin-left:20px}
 
-body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #f3f4f6;
-    color: #111827;
-    overflow-x: hidden;
+/* =========================
+   HEADER
+========================= */
+.site-header{
+  position:sticky;top:0;z-index:1000;
+  background:#000;color:#fff;
+  padding:16px 24px;
+  display:flex;align-items:center;justify-content:space-between;
 }
-
-h1, h2, h3, p, li {
-    margin-bottom: 8px;
+.site-title{
+  font-size:26px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
 }
+.menu{display:flex;gap:18px;align-items:center;justify-content:center;flex:1}
+.register-btn{
+  margin-left:auto;
+  color:#fff;
+  font-weight:700;
+  padding:8px 14px;
+  border:1px solid #fff;
+  border-radius:8px;
+  text-decoration:none;
+  background:transparent;
+}
+.register-btn:hover{background:#fff;color:#000}
 
-ul {
-    list-style: disc;
-    margin-left: 20px;
+/* Black bar */
+.black-bar{
+  background:#000;color:#fff;width:100%;
+  padding:14px;text-align:center;
+  position:sticky;top:0;
 }
 
 /* =========================
-           HEADER
+   PRODUCTS SECTION
 ========================= */
-.site-header {
-    position: sticky;
-    top: 0;
-    background: #000;
-    color: #fff;
-    padding: 16px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.label {
-    font-weight: bold;
-}
-
-.back-button {
-    color: #fff;
-    text-decoration: none;
-    font-size: 14px;
-    padding: 6px 12px;
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 999px;
-    transition: all 0.2s ease;
-}
-
-.back-button:hover {
-    background: #fff;
-    color: #000;
-}
-.black-bar {
-    background: black;
-    color: white;
-    width: 100%;
-    padding: 20px;
-    text-align: center;     /* E mban shiritin në qendër */
-    position: sticky;       /* Ky e bën të rrijë në vend */
-    top: 0;                 /* Vendoset lart ose ku të duash */             
-}
-
-.black-bar span {
-    display: inline-block;
-}
-/* =========================
-      PRODUCTS SECTION
-========================= */
-.products-section {
-    max-width: 700px;
-    margin: 40px auto;
-    padding: 0 16px;
+.products-section{
+  max-width:1100px;
+  margin:40px auto;
+  padding:0 16px;
 }
 
 /* =========================
-        PRODUCT CARD
+   PRODUCT CARD
 ========================= */
-.product {
-    background: #fff;
-    border-radius: 12px;
-    margin-bottom: 18px;
-    padding: 16px 16px;
-    box-shadow: 0 0 12px rgba(0,0,0,0.08);
+.product{
+  background:#fff;
+  border-radius:14px;
+  margin-bottom:18px;
+  padding:18px;
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
+.product h2{font-size:20px;margin-bottom:14px}
+.price{font-size:16px;font-weight:700}
 
-.product h2 {
-    font-size: 20px;
-    margin-bottom: 16px;
-}
-
-.price {
-    font-size: 16px;
-    font-weight: 600;
+/* =========================
+   INFO BOX
+========================= */
+.product-info{
+  background:#f9fafb;
+  padding:16px;
+  border-radius:12px;
 }
 
 /* =========================
-           INFO BOX
+   BUTTONS
 ========================= */
-.product-info {
-    background: #f9fafb;
-    padding: 16px;
-    border-radius: 12px;
+.product-buttons{margin:16px 0}
+.buy-button{
+  display:inline-block;
+  margin-right:8px;
+  padding:8px 16px;
+  background:linear-gradient(135deg,#2563eb,#3b82f6);
+  color:#fff;text-decoration:none;
+  font-size:13px;font-weight:700;
+  border-radius:999px;
+  transition:.2s;
 }
-
-
-
-
-
-.register-btn:hover {
-    background: white;
-    color: black;
-}
-
-
-/* =========================
-          BUTTONS
-========================= */
-.product-buttons {
-    margin: 16px 0;
-}
-
-.buy-button {
-    display: inline-block;
-    margin-right: 8px;
-    padding: 8px 16px;
-    background: linear-gradient(135deg, #2563eb, #3b82f6);
-    color: #fff;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 600;
-    border-radius: 999px;
-    transition: 0.2s;
-}
-
-.buy-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(59,130,246,0.4);
+.buy-button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 25px rgba(59,130,246,.35);
 }
 
 /* =========================
-      IMAGE LAYOUT (ALL)
+   IMAGE LAYOUT (MAIN + THUMBS)
 ========================= */
-.product-images {
-    display: flex;
-    gap: 18px;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-/* Foto kryesore */
-.product-main-image {
-    width: 100%;
-    max-width: 380px;
-    border-radius: 12px;
-    object-fit: contain;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-
-
-/* Zoom image */
-.product-main-image.zoomed {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1.5);
-    z-index: 9999;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-    background: white;
-}
-
-/* Gallery thumbnails */
-.product-gallery {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-
-
-.product-gallery img.thumb {
-    width: 90px;
-    height: 90px;
-    object-fit: cover;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-
-
-/* =========================
-      GALLERY PAGE FIX
-========================= */
-
-.gallery-grid img {
-    width: 250px;
-    height: auto;
-    border-radius: 12px;
-    margin: 10px;
-    object-fit: cover;
-}
-
-.gallery-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-/* =========================
-     CATEGORY COLORS
-========================= */
-
-/* Luxury – default */
-.product.luxury h2 {
-    color: #1f2937;
-}
-
-/* Vintage */
-.product.vintage h2 {
-    color: #8B5E3C;
-}
-
-/* Parts */
-.product.part h2 {
-    color: #333;
-}
-
-
-.luxury-vintage-parts-photos img {
-    width: auto;      /* ose vendos gjerësinë që do */
-    height: 200px;    /* shembull */
-}
-
-.luxury, 
-.vintage, 
-.parts {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;   /* që fotot të mos dalin jashtë ekranit */
-    gap: 15px;         /* hapësirë midis fotove */
-}
-
-
-
-.container img {
-    display: inline-block;
-    margin-right: 10px;
-}
-
-.container {
-    display: flex;
-    flex-direction: row; /* i vendos horizontalisht */
-    gap: 10px; /* opsionale, hapësirë mes fotove */
-}
-
-.product-main-image:hover:not(.zoomed) {
-    transform: scale(1.03);
-}
-
-/* =========================
-          RESPONSIVE
-========================= */
-@media (max-width: 900px) {
-
-  .product-images {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .product-main-image img {
-    max-width: 90%;
-  }
-
-  .product-gallery {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 90%;
-    margin-top: 10px;
-  }
-         
-        
-     product-gallery img. thumb {
-         widht: 28%;
-         height; auto;
-     }
- }
-
-/* FIX I FOTOVE – BËJI HORIZONTAL NË TË GJITHA: LUXURY / VINTAGE / PARTS */
-
 .product-images{
-  display: flex !important(
-  flex-direction: row !important;
-  flex-wrap: wrap;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-  
-.product-images img {
-   height: 200px
-   widht: auto;
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+  margin-bottom:16px;
 }
 
-/* KUTIA KU VENDOS FOTON NË SFOND */
+/* main photo */
+.product-main-image{
+  width:100%;
+  max-width:420px;
+  height:auto;
+  border-radius:14px;
+  object-fit:contain;
+  cursor:pointer;
+  transition:.2s;
+}
+.product-main-image:hover{transform:scale(1.02)}
 
+/* thumbnails grid */
+.product-gallery{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  max-width:280px;
+}
+.product-gallery img.thumb,
+.product-gallery img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  border-radius:12px;
+  cursor:pointer;
+  opacity:.8;
+  transition:.2s;
+}
+.product-gallery img.thumb:hover,
+.product-gallery img:hover{
+  opacity:1;
+  transform:scale(1.03);
+}
 
-#lightboimg {
-  max-with: 95vw;
-  max-height; 85bh;
-  border-radius: 14px;
-
- .product-gallery .thumb{
-    width:100%;
-    aspect-ratio:cover;
-    border-radius:12px;
-    cursor:pointer;
- }
-
-
+/* =========================
+   LIGHTBOX (click to zoom)
+========================= */
 #lightbox{
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.85);
+  background:rgba(0,0,0,.95);
   justify-content:center;
   align-items:center;
   z-index:9999;
-}
-
-#lightboxImg{
-  max-width:92vw;
-  max-height:85vh;
-  border-radius:12px;
-}
-
-
-
-/* Dropdown container */
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-/* Dropdown content */
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: white;
-    min-width: 180px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-    z-index: 10;
-    border-radius: 6px;
-}
-
-.dropdown-content a {
-    color: #333;
-    padding: 10px 14px;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown-content a:hover {
-    background-color: #f2f2f2;
-}
-
-/* Show menu on hover */
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-/* Logo Text Style */
-.site-title {
-    font-size: 32px;
-    font-weight: bold;
-    color: white;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-
-
-/* Kuti përshkrimi me scroll për Ora Swiss */
-.description-scroll {
-  max-height: 400px;    /* sa shumë tekst të duket pa scroll */
-  overflow-y: auto;     /* aktivizon scroll vertikal */
-  padding-right: 10px;
-}
-
-/* Scroll bar i hollë dhe i pastër (opsionale) */
-.description-scroll::-webkit-scrollbar {
-  width: 6px;
-}
-
-.description-scroll::-webkit-scrollbar-thumb {
-  background: #aaa;
-  border-radius: 10px;
-}
-
-/* Move Register / Login button to the right */
-.menu {
-    display: flex;
-    gap: 25px;
-    align-items: center;
-}
-
-.register-btn {
-    margin-left: auto;
-    color: white;
-    font-weight: bold;
-    padding: 8px 14px;
-    border: 1px solid white;
-    border-radius: 6px;
-    text-decoration: none;
-}
-
-.register-btn:hover {
-    background: white;
-    color: black;
-}
-
-/* Header i rregulluar në 3 pjesë: majtas – qendër – djathtas */
-.site-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-}
-
-/* Logo majtas */
-.site-title {
-    font-size: 26px;
-    font-weight: bold;
-    color: white;
-}
-
-/* Menu në qendër */
-.menu {
-    display: flex;
-    gap: 20px;
-    flex-grow: 1;
-    justify-content: center;
-}
-
-/* Move Register / Login button to the right */
-.menu {
-    display: flex;
-    gap: 25px;
-    align-items: center;
-}
-
-.register-btn {
-    margin-left: auto;
-    color: white;
-    font-weight: bold;
-    padding: 8px 14px;
-    border: 1px solid white;
-    border-radius: 6px;
-    text-decoration: none;
-}
-
-.register-btn:hover {
-    background: white;
-    color: black;
-}
-
-/* Kutia e formularit */
-.register-form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;       /* hapësirë midis inputeve */
-  margin-bottom: 20px;
-}
-
-/* Inputet */
-.register-form input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 6px;
-  border: 1px solid #444;
-  background-color: #111;
-  color: white;
-  font-size: 14px;
-}
-
-/* Input kur klikon mbi të */
-.register-form input:focus {
-  border-color: #aaa;
-  outline: none;
-}
-
-/* Butoni */
-.register-form button {
-  width: 100%;
-  padding: 12px;
-  background-color: #d4a017; /* ngjyrë ari */
-  border: none;
-  border-radius: 6px;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 15px;
-}
-
-/* Butoni kur e prek */
-.register-form button:hover {
-  background-color: #f2b91e;
-}
-
-.product-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.product-main img {
-    max-width: 380px;
-    height: auto;
-}
-
-@media (max-width: 768px) {
-    .product-row {
-        flex-direction: column;
-    }
-}
-
-/* Kutia kryesore me dy kolona */
-.product-box {
-  max-width: 1100px;
-  margin: 20px auto;
-  padding: 20px;
-  background: #f7f7f7;
-  border-radius: 18px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-  display: flex;
-  gap: 20px;
-}
-
-/* Kolonat majtas + djathtas */
-.product-left,
-.product-right {
-  flex: 1;
-}
-
-/* Fotoja */
-.product-left img {
-  width: 100%;
-  border-radius: 12px;
-  display: block;
-  margin-bottom: 15px;
-}
-
-/* Teksti i informacionit */
-.product-info p {
-  margin: 4px 0;
-  font-size: 14px;
-}
-
-.product-info .price {
-  margin-top: 10px;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-/* ===== PRODUKTI – OMEGA BOX ===== */
-
-.product {
-  margin: 40px auto;
-  max-width: 1100px;
-}
-
-
-
-/* Kolona majtas + djathtas */
-.product-left,
-.product-right {
-  flex: 1 1 340px;              /* madhësi të ngjashme */
-}
-
-/* FOTO E MADHE MAJTAS */
-.product-left img {
-  width: 100%;
-  display: block;
-  border-radius: 16px;
-  object-fit: cover;
-}
-
-/* FORMULARI DJATHTAS */
-.product-right {
-  display: flex;
-  flex-direction: column;
-}
-
-.product-right h3 {
-    text-align: center;
-    font-size: 22px;
-    margin-bottom: 30px;
-}
-.product-right form {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 16px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.06);
-}
-
-.product-right input,
-.product-right textarea {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  border: 1px solid #d0d0d0;
-  font-size: 14px;
-  box-sizing: border-box;
-}
-
-.product-right button[type="submit"] {
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
-  background: #000000;
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-/* ===== €400 + BUY NOW + WHATSAPP + EMAIL POSHTË FORMËS ===== */
-
-/* Butoni Like */
-.like-btn {
-    background: #ff4d6d;
-    color: #fff;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 999px;
-    font-size: 16px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s ease;
-}
-
-.like-btn.active {
-    background: #c9184a;
-    transform: scale(1.15);
-}
-
-/* Butoni Share */
-.share-btn {
-    background: #6c5ce7;
-    color: #fff;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 999px;
-    font-size: 16px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s ease;
-}
-
-
-.buy-row {
-  margin-top: 16px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-}
-
-.buy-row .price {
-  font-weight: 700;
-  font-size: 15px;
-}
-
-/* Butonat me ngjyra moderne */
-.buy-btn,
-.whatsapp-btn,
-.email-btn {
-  padding: 8px 14px;
-  border-radius: 999px;      /* forma “pill” */
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-  color: #ffffff;
-  display: inline-block;
-}
-
-/* Ngjyrat */
-.buy-btn {
-  background: #111111;       /* e zezë */
-}
-
-.whatsapp-btn {
-  background: #25d366;       /* jeshile WhatsApp */
-}
-
-.email-btn {
-  background: #007bff;       /* blu e qetë */
-}
-
-/* ===== PËRSHKRIMI POSHTË – KUTI E GJERË ===== */
-
-.product-info {
-  flex-basis: 100%;          /* zë gjithë rreshtin poshtë */
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 16px 18px;
-  font-size: 14px;
-}
-
-.product-info h3 {
-  margin-top: 0;
-  margin-bottom: 8px;
-}
-
-/* ===== RESPONSIVE – NË TELEFON ===== */
-
-@media (max-width: 900px) {
-  .product-box {
-    flex-direction: column;
-  }
-
-  .product-left,
-  .product-right {
-    flex-basis: 100%;
-  }
-}
-
-/* Mobile – kur ekrani është i vogël */
-@media (max-width: 800px) {
-  .product-box {
-    flex-direction: column;
-  }
-}
-
-/* SELL YOUR WATCH FORM STYLING */
-.sell-form {
-    background: #111;
-    padding: 30px 25px;
-    border-radius: 8px;
-    width: 100%;
-    max-width: 420px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-    color: #fff;
-    margin: 40px auto;
-}
- 
-/* Fix background for Sell Your Watch page */
-body {
-    background: #000 !important;
-}
-.sell-form h3 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 20px;
-    border-bottom: 1px solid #222;
-    padding-bottom: 5px;
-}
-
-.sell-form label {
-    display: block;
-    font-size: 14px;
-    margin-top: 10px;
-    margin-bottom: 4px;
-}
-
-.sell-form input,
-.sell-form textarea,
-.sell-form select {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 4px;
-    border: none;
-    outline: none;
-    background: #1b1b1b;
-    color: #fff;
-    font-size: 14px;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-}
-
-.sell-form input::placeholder,
-.sell-form textarea::placeholder {
-    color: #777;
-}
-
-.sell-form button[type="submit"] {
-    width: 100%;
-    margin-top: 15px;
-    padding: 12px;
-    border: none;
-    border-radius: 4px;
-    background: #0099ff;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.1s ease;
-}
-
-.sell-form button[type="submit"]:hover {
-    background: #0077cc;
-    transform: translateY(-1px);
-}
-
-.sell-form button[type="submit"]:active {
-    transform: translateY(0);
-}
-
-/* ====== NAV SCROLL – REGISTER / LOGIN ====== */
-.nav-scroll {
-    display: flex;
-    overflow-x: auto;
-    white-space: nowrap;
-    gap: 25px;
-    padding: 10px 15px;
-    scroll-behavior: smooth;
-}
-
-.nav-scroll a {
-    color: white;
-    font-size: 18px;
-    text-decoration: none;
-}
-
-.nav-scroll::-webkit-scrollbar {
-    display: none;
-}
-
-/* --- Modal for Image Zoom --- */
-
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  padding-top: 60px;
-  inset: 0;
-  background-color: rgba(0,0,0,0.9);
-}
-
-.modal-content {
-  margin: auto;
-  display: block;
-  width: 90%;
-  max-width: 600px;
-}
-
-.close {
-  position: absolute;
-  top: 20px;
-  right: 35px;
-  color: white;
-  font-size: 40px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-/* Thumbnails poshte produktit Omega */
-.product-gallery img.thumb {
-  margin-right: 6px;   /* hapësira midis fotove */
-  border-radius: 6px;  /* thjesht i bën pak më të buta qoshet */
-}
-
-.product-gallery img.thumb:last-child {
-  margin-right: 0;     /* pa hapësirë pas fotos së fundit */
-}
-
-
-/* ===== 2-column layout ===== */
-.parts-layout{
-  display:grid;
-  grid-template-columns: 320px 1fr;
-  gap: 14px;
-  margin-top: 12px;
-}
-
-@media (max-width: 980px){
-  .parts-layout{ grid-template-columns: 1fr; }
-}
-
-/* LEFT: list with scroll */
-.parts-list{
-  background:#fff;
-  border:1px solid #e5e7eb;
-  border-radius:14px;
-  padding:12px;
-  height: 520px;
-  overflow-y: auto;
-}
-
-.part-item{
-  padding:10px 10px;
-  border:1px solid #e5e7eb;
-  border-radius:10px;
-  margin:8px 0;
-  cursor:pointer;
-}
-
-.part-item:hover{
-  border-color:#b7922a;
-}
-
-/* RIGHT: content */
-.parts-content{
-  background:#fff;
-  border:1px solid #e5e7eb;
-  border-radius:14px;
-  padding:12px;
-}
-
-/* back button */
-.back-btn{
-  display:inline-block;
-  margin-bottom:10px;
-  padding:10px 12px;
-  border-radius:12px;
-  background:linear-gradient(180deg,#b7922a,#8a6b14);
-  color:#fff;
-  text-decoration:none;
-  font-weight:700;
-}
-
-.back-wrap {
-  margin: 12px 0;
-}
-
-.back-btn:hover {
-  opacity: .9;
-}
-
-/* === Separate Parts – images === */
-.parts-images{
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin: 16px 0;
-}
-
-.parts-images img{
-  width: 100%;
-  max-width: 500px;   /* ndrysho 400–600 sipas qejfit */
-  height: auto;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-}
-
-
-/* Luxury form – placeholder version */
-.request-form .rf-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-}
-
-.request-form input,
-.request-form textarea{
-  width:100%;
-  padding:14px 16px;
-  border-radius:12px;
-  border:1px solid #d6d6d6;
-  font-size:16px;
-  background:#fff;
-}
-
-.request-form textarea.rf-msg{
-  grid-column:1 / -1;
-  min-height:130px;
-}
-
-.request-form .rf-btn{
-  grid-column:1 / -1;
-  margin-top:6px;
-  padding:15px;
-  border-radius:14px;
-  background:#000;
-  color:#fff;
-  font-size:16px;
-  font-weight:600;
-  border:none;
-}
-
-@media(max-width:700px){
-  .request-form .rf-grid{
-    grid-template-columns:1fr;
-  }
-}
-
-
-/* ===============================
-   ONLY Separate Parts pages
-   =============================== */
-
-.parts-images{
-  display:flex;
-  gap:16px;
-  flex-wrap:wrap;
-  margin:20px 0;
-}
-
-.parts-images img{
-  width:100%;
-  max-width:500px;
-  height:auto;
-  border-radius:10px;
-  border:1px solid #e5e7eb;
-}
-
-.register-btn{
-  margin-left: auto;
-  color: #fff !important;
-  font-weight: bold;
-  padding: 8px 14px;
-  border: 1px solid #fff !important;
-  border-radius: 6px;
-  text-decoration: none;
-  background: transparent !important;
-}
-
-.register-btn:hover{
-  background: #fff !important;
-  color: #000 !important;
-}
-
-.register-btn{
-  margin-left: auto;
-  color: #fff;
-  font-weight: bold;
-  padding: 8px 14px;
-  border: 1px solid #fff;
-  border-radius: 6px;
-  text-decoration: none;
-  background: transparent;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.register-btn:hover{
-  background: #fff;
-  color: #000;
-}
-
-<div class="diagram-block">
-
-  <!-- FOTO -->
-  <div class="diagram">
-    <img src="images/rolex-2030-front.jpg" alt="Cal. 2030 parts diagram front">
-
-    <!-- DOTS -->
-    <div class="dot" style="top:32%;left:48%;" data-part="2030-400">1</div>
-    <div class="dot" style="top:18%;left:60%;" data-part="2030-500">2</div>
-    <div class="dot" style="top:55%;left:35%;" data-part="2030-210">3</div>
-  </div>
-
-  <!-- LISTA POSHTË FOTOS -->
-  <div class="diagram-list">
-    <div><strong>1.</strong> 2030-400 — Oscillating Weight (Rotor)</div>
-    <div><strong>2.</strong> 2030-500 — Date Wheel</div>
-    <div><strong>3.</strong> 2030-210 — Barrel (Complete)</div>
-  </div>
-</div>
-
-.diagram-block {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.diagram {
-  position: relative;
-  width: 100%;
-}
-
-.diagram img {
-  width: 100%;
-  display: block;
-  border-radius: 8px;
-}
-
-.dot {
-  position: absolute;
-  width: 26px;
-  height: 26px;
-  background: #b8942e;
-  color: #fff;
-  border-radius: 50%;
-  text-align: center;
-  line-height: 26px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,.3);
-}
-
-.diagram-list {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 14px;
-}
-
-.diagram-list div {
-  padding: 4px 0;
-}
-
-.diagram-wrap {
-  position: relative;
-  max-width: 100%;
-}
-
-/* Dy fotot bashkë */
-.diagram-row{
-  display:flex;
-  gap:16px;
-  align-items:flex-start;
-}
-
-.diagram{
-  flex:1;
-  position:relative;
-}
-
-.diagram img{
-  width:100%;
-  height:auto;
-  border-radius:8px;
-  display:block;
-}
-
-/* Dots */
-.dot{
-  position:absolute;
-  transform:translate(-50%,-50%);
-  background:#f6c343;
-  color:#111;
-  font-weight:700;
-  font-size:12px;
-  padding:6px 10px;
-  border-radius:999px;
-  cursor:pointer;
-  box-shadow:0 2px 10px rgba(0,0,0,.2);
-  user-select:none;
-}
-
-/* PayPal mos të zërë vend kur është disabled */
-.btn.disabled{
-  display:none;
-}
-
-/* Preview box (nëse s’e ke) */
-.preview{
-  display:none;
-  gap:12px;
-  align-items:center;
-  margin-top:12px;
-  padding:10px;
-  border:1px solid rgba(0,0,0,.08);
-  border-radius:10px;
-  background:#fff;
-}
-.preview.show{
-  display:flex;
-}
-.preview img{
-  width:72px;
-  height:72px;
-  object-fit:cover;
-  border-radius:8px;
-  border:1px solid rgba(0,0,0,.08);
-}
-
-.cta{
+  padding:18px;
+}
+#lightboxImg,
+#lightbox img{
+  max-width:95vw;
+  max-height:90vh;
+  object-fit:contain;
+  border-radius:16px;
+}
+
+/* =========================
+   GALLERY PAGE
+========================= */
+.gallery-grid{
   display:flex;
   flex-wrap:wrap;
-  gap:10px;
-  margin-top:15px;
-}
-
-.cta .btn{
-  padding:10px 14px;
-  border-radius:12px;
-  font-weight:600;
-  text-decoration:none;
-  border:none;
-  cursor:pointer;
-}
-
-.buy-btn{background:#000;color:#fff;}
-.wa-btn{background:#25D366;color:#fff;}
-.email-btn{background:#3b82f6;color:#fff;}
-.like-btn{background:#fde2e2;}
-.share-btn{background:#e5e7eb;}
-
-.cta{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:15px;
-}
-
-.btn{
-  padding:10px 16px;
-  border-radius:20px;
-  font-size:14px;
-  font-weight:600;
-  text-decoration:none;
-  border:none;
-  cursor:pointer;
-  display:inline-flex;
-  align-items:center;
   justify-content:center;
 }
-
-.brand-btn{
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-  margin-top:7px;
-  padding:4px 12px;
-  border-radius:999px;
-  background:linear-gradient(135deg,#1c1c1c,#2b2b2b);
-  border:3px solid rgba(255,255,255,0.18);
-  color:#d4b87a; /* gold luxury */
-  font-weight:600;
-  letter-spacing:.03em;
-  text-decoration:none;
-  transition:all .25s ease;
+.gallery-grid img{
+  width:250px;
+  height:auto;
+  border-radius:12px;
+  margin:10px;
+  object-fit:cover;
 }
 
-.brand-btn{
-  margin-top:5px;   /* ose 6px */
-}
+/* =========================
+   CATEGORY COLORS
+========================= */
+.product.luxury h2{color:#1f2937}
+.product.vintage h2{color:#8B5E3C}
+.product.part h2{color:#333}
 
-padding:5px 12px;
-font-size:12px;
-gap:5px;
-
-.brand-btn:hover{
-  background:linear-gradient(135deg,#2b2b2b,#3a3a3a);
-  border-color:rgba(212,184,122,.6);
-  color:#f1e2b6;
-  transform:translateY(-1px);
-}
-
-.gallery { display:flex; flex-direction:column; gap:10px; }
-.main-img { width:100%; max-width:520px; display:block; border-radius:12px; }
-
-/* SCROLL FIX */
-html, body{
-  height: auto !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-}
-
-/* MAIN PHOTO */
-.mainimg{
-  width:100%;
-  max-height:70vh;
-  object-fit:contain;
-}
-
-/* THUMBNAILS */
-.thumbs{
-  display: flex;
-  flex-wrap: wrap;      /* s’dalin djathtas */
-  gap: 8px;
-  max-width: 100%;
-}
-
-.thumbs img{
-  width: 70px;
-  height: 70px;
-  object-fit: cover;
-  cursor: pointer;
-  border-radius: 6px;
-  opacity: 0.6;
-  transition: 0.3s;
-}
-
-.thumbs img:hover,
-.thumbs img.active{
-  opacity: 1;
-  border: 2px solid #c9a44c;
-}
-
-/* DIAGRAM */
-.diagram-block{
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.diagram{
-  position: relative;
-  width: 100%;
-}
-
-.diagram img{
-  width: 100%;
-  display: block;
-  border-radius: 8px;
-}
-
-.dot{
-  position: absolute;
-  transform: translate(-50%, -50%);
-  width: 26px;
-  height: 26px;
-  background: #b8942e;
-  color: #fff;
-  border-radius: 50%;
-  text-align: center;
-  line-height: 26px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,.3);
-}
-
-.diagram-list{
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 14px;
-}
-.diagram-list div{ padding: 4px 0; }
-
-html, body{
-  height: auto !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-}
-
-#mainPhoto{
-  width: 100%;
-  max-height: 70vh;
-  object-fit: contain;
-  display: block;
-}
-
-.btns{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  align-items:center;
-}
-
-.btns button, .btns a.btn{
-  padding:12px 18px;
-  border-radius:999px;
-  font-weight:700;
-}
-
-/* Buy Now më i madh */
-#btnBuy{
-  padding:14px 22px;
-  font-size:15px;
-}
-
-/* Mobile: dy butonat kryesorë full */
-@media(max-width:520px){
-  #btnBuy, #btnSend, #btnWa, #btnEmail{
-    width:100%;
-    justify-content:center;
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width:900px){
+  .product-images{
+    flex-direction:column;
+    align-items:center;
+  }
+  .product-gallery{
+    max-width:100%;
+    grid-template-columns:repeat(4,1fr);
   }
 }
 

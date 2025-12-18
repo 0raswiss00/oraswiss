@@ -264,22 +264,23 @@ ul {
 ========================= */
 @media (max-width: 900px) {
 
-    .product-images {
-        flex-direction: column;
-        align-items: center;
-    }
+  .product-images {
+    flex-direction: column;
+    align-items: center;
+  }
 
- .product-main-image img{
-  max-width: 90%;
-  height: auto;
-}
-    .product-gallery {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        width: 90%;
-        margin-top: 10px;
-    }
+  .product-main-image img {
+    max-width: 90%;
+    height: auto;
+  }
+
+  .product-gallery {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 90%;
+    margin-top: 10px;
+  }
 
 
 /* FIX I FOTOVE – BËJI HORIZONTAL NË TË GJITHA: LUXURY / VINTAGE / PARTS */

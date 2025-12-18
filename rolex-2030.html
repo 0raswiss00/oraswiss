@@ -107,7 +107,7 @@
         <h3 class="card-title">Rolex – Separate Parts – Cal. 2030</h3>
 
         <div class="row">
-          <input id="q" type="search" placeholder="Enter Part No. e.g. 2030-820" />
+          <input id="q" type="search" placeholder="Enter Part No. e.g. 2030.820" />
         </div>
 
         <div id="info" class="result">Select a part by entering the Part Number.</div>
@@ -201,7 +201,7 @@
       const p = PARTS[key];
 
       if(!p){
-        info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>2030-820</strong>';
+        info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>2030.820</strong>';
         info.style.color = "#6b7280";
         payBtn.classList.add("disabled");
         payBtn.href = "#";

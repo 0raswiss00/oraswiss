@@ -1359,12 +1359,16 @@ html, body{
 }
 
 @media (max-width: 768px) {
-  .view-full-info{
-    width: auto !important;     /* jo 100% */
-    max-width: 90% !important;  /* mos u bej shirit */
-    display: inline-block !important;
-    padding: 10px 16px !important;
-    border-radius: 10px !important;
+  .view-full-info {
+    position: fixed !important;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    z-index: 9999;
+
+    font-size: 14px;
+    padding: 12px;
+    border-radius: 12px;
   }
 }
-

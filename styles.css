@@ -307,6 +307,23 @@ ul {
 }
 /* KUTIA KU VENDOS FOTON NË SFOND */
 
+#lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+#lightboxImg {
+  max-width: 95vw;
+  max-height: 85vh;
+  border-radius: 14px;
+}
+
+
 product-gallery{
   display:flex;
   gap:10px;

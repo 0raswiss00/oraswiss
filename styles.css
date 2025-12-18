@@ -269,10 +269,10 @@ ul {
         align-items: center;
     }
 
-    .product-main-image {
-        max-width: 90%;
-    }
-
+ .product-main-image img{
+  max-width: 90%;
+  height: auto;
+}
     .product-gallery {
         flex-direction: row;
         flex-wrap: wrap;

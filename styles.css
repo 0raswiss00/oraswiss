@@ -176,11 +176,8 @@ ul {
 }
 
 /* Gallery thumbnails */
-.product-gallery {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-}
+
+
 
 .product-gallery img.thumb {
     width: 90px;
@@ -192,10 +189,6 @@ ul {
 }
 
 
-.product-gallery img.thumb:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.25);
-}
 
 /* =========================
       GALLERY PAGE FIX

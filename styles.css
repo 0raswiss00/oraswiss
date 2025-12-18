@@ -1360,6 +1360,9 @@ html, body{
 
 @media (max-width: 768px) {
   .view-full-info {
+    background: #000000 !important;   /* shirit i zi */
+    color: #d4af37 !important;        /* gold klasik */
+
     position: fixed !important;
     bottom: 10px;
     left: 50%;
@@ -1370,5 +1373,8 @@ html, body{
     font-size: 14px;
     padding: 12px;
     border-radius: 12px;
+    border: 1px solid #d4af37;        /* opsionale, shumë elegante */
+    text-align: center;
   }
 }
+

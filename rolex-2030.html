@@ -300,9 +300,112 @@ const PARTS = {
 
 
     
- function money(n){ return Number(n).toFixed(2); }
+<script>
+  const PAYPAL_BASE = "https://paypal.me/EMRIYT"; // ndrysho EMRIYT
+
+
+
+
+  // LISTA E PJESËVE (vetëm 1 herë!)
+  const PARTS = {
+    "2030-100": { name:"Main Plate", price:250, currency:"EUR", qty:1, img:"images/parts/2030-100.jpg" },
+    "2030-110": { name:"Train Wheel Bridge", price:75, currency:"EUR", qty:1, img:"images/parts/2030-110.jpg" },
+    "2030-121": { name:"Barrel Bridge", price:65, currency:"EUR", qty:1, img:"images/parts/2030-121.jpg" },
+    "2030-140": { name:"Balance Cock", price:280, currency:"EUR", qty:1, img:"images/parts/2030-140.jpg" },
+    "2030-150": { name:"Pallet Bridge", price:45, currency:"EUR", qty:1, img:"images/parts/2030-150.jpg" },
+    "2030-180": { name:"Automatic Device Bridge", price:110, currency:"EUR", qty:1, img:"images/parts/2030-180.jpg" },
+
+    "2030-210": { name:"Barrel (Complete)", price:100, currency:"EUR", qty:1, img:"images/parts/2030-210.jpg" },
+    "2030-220": { name:"Centre Wheel", price:50, currency:"EUR", qty:1, img:"images/parts/2030-220.jpg" },
+    "2030-230": { name:"Third Wheel", price:40, currency:"EUR", qty:1, img:"images/parts/2030-230.jpg" },
+    "2030-240": { name:"Fourth Wheel", price:40, currency:"EUR", qty:1, img:"images/parts/2030-240.jpg" },
+    "2030-250": { name:"Escape Wheel", price:50, currency:"EUR", qty:1, img:"images/parts/2030-250.jpg" },
+
+    "2030-300": { name:"Pallet Fork", price:0, currency:"EUR", qty:1, img:"images/parts/2030-300.jpg" },
+    "2030-305": { name:"Pallet Staff", price:0, currency:"EUR", qty:1, img:"images/parts/2030-305.jpg" },
+   "2030-308": { name:"Balance Cock Screw", price:50, currency:"EUR", qty:1, img:"images/parts/2030-308.jpg" },
+    "2030-310": { name:"Balance Complete", price:400, currency:"EUR", qty:1, img:"images/parts/2030-310.jpg" },
+    "2030-315": { name:"Balance Staff", price:0, currency:"EUR", qty:1, img:"images/parts/2030-315.jpg" },
+    "2030-320": { name:"Hairspring", price:0, currency:"EUR", qty:1, img:"images/parts/2030-320.jpg" },
+
+    "2030-400": { name:"Oscillating Weight (Rotor)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-400.jpg" },
+    "2030-410": { name:"Automatic Driving Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-410.jpg" },
+    "2030-420": { name:"Reduction Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-420.jpg" },
+    "2030-430A": { name:"Reversing Wheel (1)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-430A.jpg" },
+    "2030-430B": { name:"Reversing Wheel (2)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-430B.jpg" },
+    "2030-440": { name:"Rotor Axle", price:0, currency:"EUR", qty:1, img:"images/parts/2030-440.jpg" },
+
+    "2030-500": { name:"Date Wheel", price:180, currency:"EUR", qty:1, img:"images/parts/2030-500.jpg" },
+    "2030-510": { name:"Date Jumper", price:0, currency:"EUR", qty:1, img:"images/parts/2030-510.jpg" },
+    "2030-520": { name:"Date Driving Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-520.jpg" },
+    "2030-530": { name:"Date Indicator Guard", price:0, currency:"EUR", qty:1, img:"images/parts/2030-530.jpg" },
+    "2030-540": { name:"Date Corrector Lever (non-quickset)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-540.jpg" },
+
+    "2030-600": { name:"Winding Stem", price:0, currency:"EUR", qty:1, img:"images/parts/2030-600.jpg" },
+    "2030-610": { name:"Sliding Pinion", price:0, currency:"EUR", qty:1, img:"images/parts/2030-610.jpg" },
+    "2030-620": { name:"Winding Pinion", price:0, currency:"EUR", qty:1, img:"images/parts/2030-620.jpg" },
+    "2030-630": { name:"Setting Lever", price:0, currency:"EUR", qty:1, img:"images/parts/2030-630.jpg" },
+    "2030-640": { name:"Yoke", price:0, currency:"EUR", qty:1, img:"images/parts/2030-640.jpg" },
+    "2030-650": { name:"Setting Lever Spring", price:0, currency:"EUR", qty:1, img:"images/parts/2030-650.jpg" },
+
+    "2030-700": { name:"Balance Cock Screw", price:0, currency:"EUR", qty:1, img:"images/parts/2030-700.jpg" },
+    "2030-710": { name:"Bridge Screws (various)", price:0, currency:"EUR", qty:1, img:"images/parts/2030-710.jpg" },
+    "2030-720": { name:"Rotor Screw", price:0, currency:"EUR", qty:1, img:"images/parts/2030-720.jpg" },
+    "2030-730": { name:"Date Guard Screws", price:0, currency:"EUR", qty:1, img:"images/parts/2030-730.jpg" },
+
+    "2030-800": { name:"Mainspring Barrel", price:0, currency:"EUR", qty:1, img:"images/parts/2030-800.jpg" },
+    "2030-810": { name:"Mainspring", price:0, currency:"EUR", qty:1, img:"images/parts/2030-810.jpg" },
+    "2030-820": { name:"Barrel Arbor", price:0, currency:"EUR", qty:1, img:"images/parts/2030-820.jpg" }
+
+    "2030-900": { name:"Automatic Winding Rotor", price:400, currency:"EUR", qty:1, img:"rolex-2030-900.jpg" }
+    "2030-910": { name:"Automatic Rotor Screws (Set of 3)", price:100, currency:"EUR", qty:1, img:"rolex-2030-910.jpg" }
+    
+const PARTS = {
+  "2030-500": {
+    name: "Date Wheel",
+    price: 180,
+    currency:
+
+const PARTS = {
+"2030-308": {
+  name: "Balance Screw",
+  price:50,
+  currency: "EUR",
+  qty: 1,
+  img: "images/parts/2030-308.jpg"
+},
+
+const PARTS = {
+"2030-310": {
+  name: "Balance Complete",
+  price:400,
+  currency: "EUR",
+  qty: 1,
+  img: "images/parts/2030-310.jpg"
+},
+
+const PARTS = {
+"2030-900": {
+  name: "Automatic Winding Rotor",
+  price:400,
+  currency: "EUR",
+  qty: 1,
+  img: "images/parts/2030-900.jpg"
+},
+ const PARTS = {
+"2030-910": {
+  name: "Automatic Device Bridge",
+  price:100,
+  currency: "EUR",
+  qty: 1,
+  img: "images/parts/2030-910.jpg"
+},
+
+
+
+  function money(n){ return Number(n).toFixed(2); }
   function paypalLink(amount){ return PAYPAL_BASE.replace(/\/$/,"") + "/" + money(amount); }
-   
+
   const q = document.getElementById("q");
   const info = document.getElementById("info");
   const payBtn = document.getElementById("payBtn");
@@ -316,7 +419,7 @@ const PARTS = {
     const p = PARTS[key];
 
     if(!p){
-      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>2030-1500</strong>';
+      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>2030-100</strong>';
       info.style.color = "#6b7280";
       payBtn.classList.add("disabled");
       payBtn.href = "#";
@@ -328,7 +431,7 @@ const PARTS = {
     info.innerHTML =
       `<div><strong>Part No.</strong>: ${key}</div>
        <div><strong>Description</strong>: ${p.name}</div>
-       <div><strong>Condition</strong>: Original vintage Rolex part</div>
+       <div><strong>Condition</strong>: Vintage part (sold as-is)</div>
        <div><strong>Quantity</strong>: ${Number(p.qty) === 1 ? "1 available" : (Number(p.qty) + " available")}</div>
        <div><strong>Price</strong>: ${money(p.price)} ${p.currency || ""}</div>`;
 
@@ -337,7 +440,7 @@ const PARTS = {
       pvNo.textContent = key;
       pvName.textContent = p.name;
       preview.style.display = "flex";
-    }else if(preview){
+    } else if(preview){
       preview.style.display = "none";
     }
 
@@ -350,28 +453,32 @@ const PARTS = {
     payBtn.classList.remove("disabled");
     payBtn.href = paypalLink(p.price);
   }
- 
-  // input search
-  q.addEventListener("input", () => showPart((q.value||"").trim()));
 
-  // DOT click (delegation: punon gjithmonë)
+  // search input
+  if(q){
+    q.addEventListener("input", () => showPart((q.value||"").trim()));
+  }
+
+  // DOT click (delegation)
   document.addEventListener("click", (e) => {
     const dot = e.target.closest(".dot");
     if(!dot) return;
     const partNo = dot.dataset.part;
-    q.value = partNo;
+    if(!partNo) return;
+    if(q) q.value = partNo;
     showPart(partNo);
   });
 
-/ PART button click (works for the list buttons)
-document.addEventListener("click", (e) => {
-  const btn = e.target.closest(".part");
-  if(!btn) return;
-  const partNo = btn.dataset.part;
-  q.value = partNo;
-  showPart(partNo);
-});
-   
+  // PART button click (works for list buttons)
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".part");
+    if(!btn) return;
+    const partNo = btn.dataset.part;
+    if(!partNo) return;
+    if(q) q.value = partNo;
+    showPart(partNo);
+  });
+
   // LISTA poshtë fotos (Front/Back)
   function fillDiagramList(diagramId, listId){
     const list = document.getElementById(listId);
@@ -392,9 +499,9 @@ document.addEventListener("click", (e) => {
     }).join("");
   }
 
-  
+  fillDiagramList("diagramFront", "frontList");
+  fillDiagramList("diagramBack", "backList");
 </script>
-
 
 
        

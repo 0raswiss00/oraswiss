@@ -362,6 +362,15 @@
     showPart(partNo);
   });
 
+/ PART button click (works for the list buttons)
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".part");
+  if(!btn) return;
+  const partNo = btn.dataset.part;
+  q.value = partNo;
+  showPart(partNo);
+});
+   
   // LISTA poshtë fotos (Front/Back)
   function fillDiagramList(diagramId, listId){
     const list = document.getElementById(listId);
@@ -386,16 +395,7 @@
   fillDiagramList("diagramBack", "backList");
 </script>
 
-<script>
-  const input = document.getElementById("q");
 
-  document.querySelectorAll(".part").forEach(btn => {
-    btn.addEventListener("click", () => {
-      input.value = btn.dataset.part;
-      input.dispatchEvent(new Event("input"));
-    });
-  });
-</script>
 
        
   </body>

@@ -1347,3 +1347,13 @@ html, body{
     justify-content:center;
   }
 }
+
+@media (max-width: 768px) {
+  .view-full-info {
+    position: relative;   /* jo fixed */
+    width: 90%;
+    margin: 20px auto;
+    font-size: 14px;
+    padding: 10px;
+  }
+}

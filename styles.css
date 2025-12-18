@@ -1357,3 +1357,14 @@ html, body{
     padding: 10px;
   }
 }
+Ora
+@media (max-width: 768px) {
+  .view-full-info{
+    width: auto !important;     /* jo 100% */
+    max-width: 90% !important;  /* mos u bej shirit */
+    display: inline-block !important;
+    padding: 10px 16px !important;
+    border-radius: 10px !important;
+  }
+}
+

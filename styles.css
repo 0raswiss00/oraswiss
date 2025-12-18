@@ -1,4 +1,4 @@
-/* =========================
+o/* =========================
       GLOBAL RESET
 ========================= */
 * {
@@ -290,31 +290,7 @@ ul {
     gap: 15px;
 }
 
-/* === FIX FINAL GALERI === */
 
-.product-images {
-  display: flex !important;
-  flex-direction: column;
-  align-items: center;
-}
-
-.product-gallery {
-  display: flex !important;
-  flex-direction: row !important;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-  width: 90%;
-  margin-top: 10px;
-}
-
-.product-gallery img.thumb {
-  width: 90px;
-  height: 90px;
-  object-fit: cover;
-  border-radius: 8px;
-  cursor: pointer;
-}
 
 /* KUTIA KU VENDOS FOTON NË SFOND */
 

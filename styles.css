@@ -2327,27 +2327,3 @@ html, body{
   }
 }
 
-/* GRID SI INSTAGRAM */
-.product-gallery {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  padding: 10px;
-}
-
-.product-gallery img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  border-radius: 14px;
-  cursor: pointer;
-}
-
-body {
-  background-image: url("https://raw.githubusercontent.com/Oraswiss00/oraswiss/main/logo-sfond-chrono-oraswiss-zeze-1.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-

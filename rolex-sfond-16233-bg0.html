@@ -54,6 +54,16 @@ body {
 </style>
 </head>
 
+<script>
+function openImg(img) {
+  document.getElementById("zoomImg").src = img.src;
+  document.querySelector(".overlay").style.display = "flex";
+}
+function closeImg() {
+  document.querySelector(".overlay").style.display = "none";
+}
+</script>
+  
 <body>
 </body>
 </html>

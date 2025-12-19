@@ -2384,3 +2384,8 @@ body {
   background-position: left center, right center;
   background-repeat: no-repeat;
 }
+
+.gallery img.active {
+  transform: scale(2);   /* zmadhohet kur klikohet */
+  z-index: 999;
+}

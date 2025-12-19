@@ -2377,11 +2377,10 @@ html, body{
 body {
   margin: 0;
   background-image:
-    url("https://raw.githubusercontent.com/Oraswiss00/oraswiss/main/logo-sfond-chrono-oraswiss-zeze-1.png"),
-    url("https://raw.githubusercontent.com/Oraswiss00/oraswiss/main/rolex-sfond-16233-1.jpg");
+    url("https://raw.githubusercontent.com/Oraswiss00/oraswiss/main/img1.jpg"),
+    url("https://raw.githubusercontent.com/Oraswiss00/oraswiss/main/img2.jpg");
 
-  background-size: contain, cover;
-  background-position: center, center;
-  background-repeat: no-repeat, no-repeat;
+  background-size: 50% 100%, 50% 100%;
+  background-position: left center, right center;
+  background-repeat: no-repeat;
 }
-

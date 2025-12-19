@@ -2360,3 +2360,31 @@ html, body{
   border-radius: 16px;
 }
 
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.gallery img {
+  width: 100%;
+  max-width: 900px;
+  margin: auto;
+  cursor: pointer;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.overlay img {
+  max-width: 95%;
+  max-height: 95%;
+}

@@ -1,1 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Background</title>
+
+<style>
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  animation: bg 102s infinite;
+}
+
+@keyframes bg {
+  0%   { background-image: url("assets/bg/bg01.jpg"); }
+  6%   { background-image: url("assets/bg/bg02.jpg"); }
+  12%  { background-image: url("assets/bg/bg03.jpg"); }
+  18%  { background-image: url("assets/bg/bg04.jpg"); }
+  24%  { background-image: url("assets/bg/bg05.jpg"); }
+  30%  { background-image: url("assets/bg/bg06.jpg"); }
+  36%  { background-image: url("assets/bg/bg07.jpg"); }
+  42%  { background-image: url("assets/bg/bg08.jpg"); }
+  48%  { background-image: url("assets/bg/bg09.jpg"); }
+  54%  { background-image: url("assets/bg/bg10.jpg"); }
+  60%  { background-image: url("assets/bg/bg11.jpg"); }
+  66%  { background-image: url("assets/bg/bg12.jpg"); }
+  72%  { background-image: url("assets/bg/bg13.jpg"); }
+  78%  { background-image: url("assets/bg/bg14.jpg"); }
+  84%  { background-image: url("assets/bg/bg15.jpg"); }
+  90%  { background-image: url("assets/bg/bg16.jpg"); }
+  96%  { background-image: url("assets/bg/bg17.jpg"); }
+}
+</style>
+</head>
+
+<body>
+</body>
+</html>
+
 

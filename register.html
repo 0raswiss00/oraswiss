@@ -116,34 +116,45 @@
   const msg = document.getElementById("msg");
   const btn = document.getElementById("registerBtn");
 
-  function show(x){ msg.innerText = String(x); }
+  const SUPABASE_URL = "https://gnwsrmelmeqduhmfmoa.supabase.co";
+  const SUPABASE_ANON_KEY = "VENDOS_ANON_KEY_KETU"; // ai i gjati
 
-  try {
-    show("✅ JS start");
+  msg.innerText = "✅ Ready";
 
-    const SUPABASE_URL = "https://gnwsrmelmeqduhmfmoa.supabase.co";
-    const SUPABASE_ANON_KEY = "PASTE_KETU_KEY_QE_FILLON_ME_eyJ";
+  // krijo client nga global-i i supabase
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    if (!window.supabase) throw "❌ Supabase library nuk u ngarkua (window.supabase = bosh)";
-    if (!SUPABASE_ANON_KEY.startsWith("eyJ")) throw "❌ ANON KEY s’është vendosur (duhet të fillojë me eyJ)";
+  btn.addEventListener("click", async () => {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    show("✅ Ready (Supabase OK)");
+    if (!email || !password) {
+      msg.innerText = "❌ Plotëso email & password";
+      return;
+    }
 
-    btn.addEventListener("click", async () => {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
+    btn.disabled = true;
+    btn.innerText = "Please wait...";
+    msg.innerText = "⏳ Po krijohet llogaria...";
 
-      if (!email || !password) return show("❌ Plotëso email & password");
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          // përdor faqen ku je i hapur (github.io / domain)
+          emailRedirectTo: location.origin
+        }
+      });
 
-      show("⏳ Po regjistron...");
-      const { error } = await supabase.auth.signUp({ email, password });
+      msg.innerText = error
+        ? "❌ " + error.message
+        : "✅ U regjistrua. Kontrollo email-in për konfirmim (edhe spam).";
+    } catch (e) {
+      msg.innerText = "❌ Gabim: " + (e?.message || e);
+    }
 
-      show(error ? ("❌ " + error.message) : "✅ U regjistrua. Kontrollo email-in.");
-    });
-
-  } catch (e) {
-    show(e?.message || e);
-  }
+    btn.disabled = false;
+    btn.innerText = "Register";
+  });
 </script>
-

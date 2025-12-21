@@ -116,34 +116,34 @@
   const msg = document.getElementById("msg");
   const btn = document.getElementById("registerBtn");
 
-  msg.innerText = "✅ JS u ngarkua";
+  function show(x){ msg.innerText = String(x); }
 
-  const SUPABASE_URL = "https://gnwsrmelmeqduhmfmoa.supabase.co";
-  const SUPABASE_ANON_KEY = "PASTE_KETU_KEY_QE_FILLON_ME_eyJ";
+  try {
+    show("✅ JS start");
 
-  const supabase = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
+    const SUPABASE_URL = "https://gnwsrmelmeqduhmfmoa.supabase.co";
+    const SUPABASE_ANON_KEY = "PASTE_KETU_KEY_QE_FILLON_ME_eyJ";
 
-  btn.addEventListener("click", async () => {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
+    if (!window.supabase) throw "❌ Supabase library nuk u ngarkua (window.supabase = bosh)";
+    if (!SUPABASE_ANON_KEY.startsWith("eyJ")) throw "❌ ANON KEY s’është vendosur (duhet të fillojë me eyJ)";
 
-    if (!email || !password) {
-      msg.innerText = "❌ Plotëso email & password";
-      return;
-    }
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    show("✅ Ready (Supabase OK)");
 
-    msg.innerText = "⏳ Po krijohet llogaria...";
+    btn.addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password
+      if (!email || !password) return show("❌ Plotëso email & password");
+
+      show("⏳ Po regjistron...");
+      const { error } = await supabase.auth.signUp({ email, password });
+
+      show(error ? ("❌ " + error.message) : "✅ U regjistrua. Kontrollo email-in.");
     });
 
-    msg.innerText = error
-      ? "❌ " + error.message
-      : "✅ U regjistrua. Kontrollo email-in.";
-  });
+  } catch (e) {
+    show(e?.message || e);
+  }
 </script>
+

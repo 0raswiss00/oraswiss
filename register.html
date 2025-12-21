@@ -110,47 +110,48 @@
     <a href="index.html">← Back to Home</a>
   </div>
 
-<script type="module">
-  import { createClient } from "/js/supabase.js";
+  <!-- ✅ Pa import/module: më stabile në iPhone -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-  const SUPABASE_URL = "https://gnwsrmelmeqduhmfmoa.supabase.co";
-  const SUPABASE_ANON_KEY = "PASTE_KETU_KEY_TEN_E_PLOTE";
+  <script>
+    const SUPABASE_URL = "https://gnwsrmelmeqduhmfmoa.supabase.co";
+    const SUPABASE_ANON_KEY = "VENDOS_ANON_KEY_E_SAKTE_KETU"; 
+    // duhet të jetë shumë i gjatë, zakonisht fillon me: eyJ...
 
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const btn = document.getElementById("registerBtn");
-  const msg = document.getElementById("msg");
+    const btn = document.getElementById("registerBtn");
+    const msg = document.getElementById("msg");
 
-  btn.addEventListener("click", async () => {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
+    btn.addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
 
-    if (!email || !password) {
-      msg.innerText = "❌ Plotëso email & password";
-      return;
-    }
-
-    btn.disabled = true;
-    btn.innerText = "Please wait...";
-    msg.innerText = "";
-
-    try {
-      const { data, error } = await supabase.auth.signUp({ email, password });
-
-      if (error) {
-        msg.innerText = "❌ " + error.message;
-      } else if (data?.user && !data?.session) {
-        msg.innerText = "✅ U krijua! Kontrollo email-in për konfirmim.";
-      } else {
-        msg.innerText = "✅ U regjistrove me sukses!";
+      if (!email || !password) {
+        msg.innerText = "❌ Plotëso email & password";
+        return;
       }
-    } catch (e) {
-      msg.innerText = "❌ Network/Load error: " + (e?.message || e);
-    }
 
-    btn.disabled = false;
-    btn.innerText = "Register";
-  });
-</script>
+      btn.disabled = true;
+      btn.innerText = "Please wait...";
+      msg.innerText = "";
+
+      try {
+        const { data, error } = await supabase.auth.signUp({ email, password });
+
+        if (error) {
+          msg.innerText = "❌ " + error.message;
+        } else {
+          msg.innerText = "✅ Account created! Check your email.";
+        }
+      } catch (e) {
+        msg.innerText = "❌ Load failed / problem me internetin ose CDN";
+      }
+
+      btn.disabled = false;
+      btn.innerText = "Register";
+    });
+  </script>
+
 </body>
 </html>

@@ -112,17 +112,20 @@
 
   <!-- ✅ Pa import/module: më stabile në iPhone -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
   const msg = document.getElementById("msg");
   const btn = document.getElementById("registerBtn");
 
+  msg.innerText = "✅ JS u ngarkua";
+
   const SUPABASE_URL = "https://gnwsrmelmeqduhmfmoa.supabase.co";
-  const SUPABASE_ANON_KEY = "VENDOS_ANON_KEY_KETU"; // ai i gjati
+  const SUPABASE_ANON_KEY = "PASTE_KETU_KEY_QE_FILLON_ME_eyJ";
 
-  msg.innerText = "✅ Ready";
-
-  // krijo client nga global-i i supabase
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
 
   btn.addEventListener("click", async () => {
     const email = document.getElementById("email").value.trim();
@@ -133,28 +136,15 @@
       return;
     }
 
-    btn.disabled = true;
-    btn.innerText = "Please wait...";
     msg.innerText = "⏳ Po krijohet llogaria...";
 
-    try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          // përdor faqen ku je i hapur (github.io / domain)
-          emailRedirectTo: location.origin
-        }
-      });
+    const { error } = await supabase.auth.signUp({
+      email,
+      password
+    });
 
-      msg.innerText = error
-        ? "❌ " + error.message
-        : "✅ U regjistrua. Kontrollo email-in për konfirmim (edhe spam).";
-    } catch (e) {
-      msg.innerText = "❌ Gabim: " + (e?.message || e);
-    }
-
-    btn.disabled = false;
-    btn.innerText = "Register";
+    msg.innerText = error
+      ? "❌ " + error.message
+      : "✅ U regjistrua. Kontrollo email-in.";
   });
 </script>

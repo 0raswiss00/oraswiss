@@ -103,7 +103,7 @@
     <label>Password</label>
     <input id="password" type="password" placeholder="••••••••">
 
-    <button id="registerBtn">Register</button>
+    <button id="registerBtn" type="button">Register</button>
 
     <div id="msg" class="msg"></div>
 
@@ -111,19 +111,18 @@
   </div>
 
   <!-- ✅ Pa import/module: më stabile në iPhone -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script><script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
   const msg = document.getElementById("msg");
   const btn = document.getElementById("registerBtn");
 
   const SUPABASE_URL = "https://gnwsrmelmeqduhmfmoa.supabase.co";
-  const SUPABASE_ANON_KEY = "VENDOS_ANON_KEY_KETU"; // ai i gjati që fillon me eyJ...
+  const SUPABASE_ANON_KEY = "VENDOS_ANON_KEY_KETU"; // ai i gjati
 
-  // ✅ Ready sapo ngarkohet faqja
   msg.innerText = "✅ Ready";
 
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  // krijo client nga global-i i supabase
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   btn.addEventListener("click", async () => {
     const email = document.getElementById("email").value.trim();
@@ -143,15 +142,14 @@
         email,
         password,
         options: {
-          emailRedirectTo: "https://oraswiss.com"
+          // përdor faqen ku je i hapur (github.io / domain)
+          emailRedirectTo: location.origin
         }
       });
 
-      if (error) {
-        msg.innerText = "❌ " + error.message;
-      } else {
-        msg.innerText = "✅ U regjistrua. Kontrollo email-in për konfirmim (edhe spam).";
-      }
+      msg.innerText = error
+        ? "❌ " + error.message
+        : "✅ U regjistrua. Kontrollo email-in për konfirmim (edhe spam).";
     } catch (e) {
       msg.innerText = "❌ Gabim: " + (e?.message || e);
     }

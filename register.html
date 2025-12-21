@@ -113,45 +113,78 @@
   <!-- ✅ Pa import/module: më stabile në iPhone -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-  <script>
-    const SUPABASE_URL = "https://gnwsrmelmeqduhmfmoa.supabase.co";
-    const SUPABASE_ANON_KEY = "VENDOS_ANON_KEY_E_SAKTE_KETU"; 
-    // duhet të jetë shumë i gjatë, zakonisht fillon me: eyJ...
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+<script>
+  const msg = document.getElementById("msg");
+  const btn = document.getElementById("registerBtn");
 
-    const btn = document.getElementById("registerBtn");
-    const msg = document.getElementById("msg");
+  // Shfaq çdo error që ndodh para klikimit
+  window.addEventListener("error", (e) => {
+    msg.innerText = "❌ JS error: " + (e.message || "unknown");
+  });
 
-    btn.addEventListener("click", async () => {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
+  const SUPABASE_URL = "https://gnwsrmelmeqduhmfmoa.supabase.co";
+  const SUPABASE_ANON_KEY = "VENDOS_ANON KEY TE SAKTIN KETU"; // duhet të jetë i gjatë dhe zakonisht fillon me eyJ...
 
-      if (!email || !password) {
-        msg.innerText = "❌ Plotëso email & password";
-        return;
+  // Kontrollo a u ngarkua supabase-js
+  if (!window.supabase) {
+    msg.innerText = "❌ Supabase library nuk u ngarkua (CDN problem).";
+  } else {
+    msg.innerText = "✅ Ready";
+  }
+
+  let supabaseClient;
+  try {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  } catch (e) {
+    msg.innerText = "❌ createClient error: " + (e?.message || e);
+  }
+
+  function withTimeout(promise, ms = 12000) {
+    return Promise.race([
+      promise,
+      new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout (s’po përgjigjet serveri)")), ms))
+    ]);
+  }
+
+  btn.addEventListener("click", async () => {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    if (!email || !password) {
+      msg.innerText = "❌ Plotëso email & password";
+      return;
+    }
+    if (!supabaseClient) {
+      msg.innerText = "❌ Supabase nuk u inicializua (key ose library).";
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerText = "Please wait...";
+    msg.innerText = "⏳ Po dërgohet kërkesa...";
+
+    try {
+      const { data, error } = await withTimeout(
+        supabaseClient.auth.signUp({ email, password }),
+        12000
+      );
+
+      if (error) {
+        msg.innerText = "❌ " + error.message;
+      } else {
+        // Shfaq info që të kuptojmë ç’ndodhi
+        const u = data?.user?.email ? data.user.email : "(pa email)";
+        msg.innerText = "✅ U krijua: " + u + ". Kontrollo email-in për konfirmim (spam gjithashtu).";
       }
+    } catch (e) {
+      msg.innerText = "❌ " + (e?.message || e);
+    }
 
-      btn.disabled = true;
-      btn.innerText = "Please wait...";
-      msg.innerText = "";
-
-      try {
-        const { data, error } = await supabase.auth.signUp({ email, password });
-
-        if (error) {
-          msg.innerText = "❌ " + error.message;
-        } else {
-          msg.innerText = "✅ Account created! Check your email.";
-        }
-      } catch (e) {
-        msg.innerText = "❌ Load failed / problem me internetin ose CDN";
-      }
-
-      btn.disabled = false;
-      btn.innerText = "Register";
-    });
-  </script>
-
+    btn.disabled = false;
+    btn.innerText = "Register";
+  });
+</script>
 </body>
 </html>

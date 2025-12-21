@@ -2190,6 +2190,36 @@ body {
 }
 
 .brand-btn{
+  margin-top:5px;
+  padding:5px 12px;
+  font-size:12px;
+  gap:5px;
+
+  display:inline-flex;
+  align-items:center;
+
+  background:#000;
+  color:#d4af37;
+  border:1px solid #d4af37;
+  border-radius:999px;
+
+  text-decoration:none;
+  font-weight:600;
+  cursor:pointer;
+
+  position:relative;
+  z-index:10;
+}
+
+.brand-btn:hover{
+  background:linear-gradient(135deg,#2b2b2b,#3a3a3a);
+  border-color:rgba(212,184,122,.6);
+  color:#f1e2b6;
+}
+
+
+      
+.brand-btn{
   margin-top:5px;   /* ose 6px */
 }
 
@@ -2204,24 +2234,7 @@ gap:5px;
   transform:translateY(-1px);
 }
 
-.brand-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
 
-  padding: 10px 18px;
-  background: #000000;          /* i zi */
-  color: #d4af37;               /* gold */
-  border: 1px solid #d4af37;    /* border gold */
-
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 14px;
-
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
       
 .gallery { display:flex; flex-direction:column; gap:10px; }
 .main-img { width:100%; max-width:520px; display:block; border-radius:12px; }

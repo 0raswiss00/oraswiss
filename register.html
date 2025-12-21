@@ -111,17 +111,19 @@
   </div>
 
   <!-- ✅ Pa import/module: më stabile në iPhone -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script type="module">
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script><script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
+  const msg = document.getElementById("msg");
+  const btn = document.getElementById("registerBtn");
+
   const SUPABASE_URL = "https://gnwsrmelmeqduhmfmoa.supabase.co";
-  const SUPABASE_ANON_KEY = "VENDOS_ANON_KEY_KETU";
+  const SUPABASE_ANON_KEY = "VENDOS_ANON_KEY_KETU"; // ai i gjati që fillon me eyJ...
+
+  // ✅ Ready sapo ngarkohet faqja
+  msg.innerText = "✅ Ready";
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  const btn = document.getElementById("registerBtn");
-  const msg = document.getElementById("msg");
 
   btn.addEventListener("click", async () => {
     const email = document.getElementById("email").value.trim();
@@ -136,23 +138,25 @@
     btn.innerText = "Please wait...";
     msg.innerText = "⏳ Po krijohet llogaria...";
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: "https://oraswiss.com"
-      }
-    });
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: "https://oraswiss.com"
+        }
+      });
 
-    if (error) {
-      msg.innerText = "❌ " + error.message;
-    } else {
-      msg.innerText =
-        "✅ U regjistrua me sukses. Kontrollo email-in për konfirmim.";
+      if (error) {
+        msg.innerText = "❌ " + error.message;
+      } else {
+        msg.innerText = "✅ U regjistrua. Kontrollo email-in për konfirmim (edhe spam).";
+      }
+    } catch (e) {
+      msg.innerText = "❌ Gabim: " + (e?.message || e);
     }
 
     btn.disabled = false;
     btn.innerText = "Register";
   });
 </script>
-</html>

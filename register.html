@@ -2,179 +2,80 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Create account – Ora Swiss</title>
-
+  <title>Create account</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(180deg, #050b1c, #0a1633);
-      font-family: Arial, sans-serif;
-      color: #fff;
-    }
-
-    .card {
-      width: 100%;
-      max-width: 380px;
-      background: rgba(10, 18, 40, 0.95);
-      border-radius: 18px;
-      padding: 28px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.6);
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 26px;
-      text-align: center;
-    }
-
-    p {
-      text-align: center;
-      color: #9bb0ff;
-      margin-top: 6px;
-      margin-bottom: 22px;
-    }
-
-    label {
-      font-size: 14px;
-      margin-top: 14px;
-      display: block;
-    }
-
-    input {
-      width: 100%;
-      padding: 14px;
-      margin-top: 6px;
-      border-radius: 12px;
-      border: 1px solid #1e2a55;
-      background: #070f25;
-      color: #fff;
-      font-size: 15px;
-      outline: none;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 22px;
-      padding: 15px;
-      border-radius: 14px;
-      border: none;
-      background: #3b82f6;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    button:disabled {
-      opacity: .6;
-      cursor: not-allowed;
-    }
-
-    .msg {
-      margin-top: 14px;
-      font-size: 14px;
-      text-align: center;
-    }
-
-    a {
-      display: block;
-      margin-top: 18px;
-      text-align: center;
-      color: #9bb0ff;
-      text-decoration: none;
-    }
-  </style>
 </head>
-<body>
 
-  <div class="card">
+<body style="background:#0b1220;color:white;font-family:sans-serif">
+
+  <div style="max-width:400px;margin:80px auto;padding:30px;background:#111a2e;border-radius:12px">
     <h1>Create account</h1>
     <p>Join Ora Swiss</p>
 
-    <label>Email</label>
-    <input id="email" type="email" placeholder="you@email.com">
+    <label>Email</label><br>
+    <input id="email" type="email" style="width:100%;padding:10px"><br><br>
 
-    <label>Password</label>
-    <input id="password" type="password" placeholder="••••••••">
+    <label>Password</label><br>
+    <input id="password" type="password" style="width:100%;padding:10px"><br><br>
 
-    <button id="registerBtn" type="button">Register</button>
+    <button id="registerBtn" style="width:100%;padding:12px">Register</button>
 
-    <div id="msg" class="msg"></div>
+    <p id="msg"></p>
 
-    <a href="index.html">← Back to Home</a>
+    <a href="index.html" style="color:#6ea8ff">← Back to Home</a>
   </div>
 
-  <!-- ✅ Pa import/module: më stabile në iPhone -->
- <div class="card">
-    <h1>Create account</h1>
-    <p>Join Ora Swiss</p>
+  <!-- ✅ Supabase library -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-    <label>Email</label>
-    <input id="email" type="email" placeholder="you@email.com">
+  <script>
+    const SUPABASE_URL = "https://gnwsrmelmeqduhmfmoa.supabase.co";
+    const SUPABASE_ANON_KEY = "VENDOS_ANON_KEY_QE_FILLON_ME_eyJ";
 
-    <label>Password</label>
-    <input id="password" type="password" placeholder="••••••••">
+    const msg = document.getElementById("msg");
+    const btn = document.getElementById("registerBtn");
 
-    <button id="registerBtn">Register</button>
-
-    <div id="msg" class="msg"></div>
-
-    <a href="index.html">← Back to Home</a>
-  </div>
-
-  <!-- ✅ Pa import/module: më stabile në iPhone -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script><script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-  const msg = document.getElementById("msg");
-  const btn = document.getElementById("registerBtn");
-
-  const SUPABASE_URL = "https://gnwsrmelmeqduhmfmoa.supabase.co";
-  const SUPABASE_ANON_KEY = "VENDOS_ANON_KEY_KETU"; // ai i gjati që fillon me eyJ...
-
-  // ✅ Ready sapo ngarkohet faqja
-  msg.innerText = "✅ Ready";
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  btn.addEventListener("click", async () => {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-
-    if (!email || !password) {
-      msg.innerText = "❌ Plotëso email & password";
-      return;
+    // kontroll ANON KEY
+    if (!SUPABASE_ANON_KEY.startsWith("eyJ")) {
+      msg.innerText = "❌ ANON KEY nuk është vendosur";
+      btn.disabled = true;
     }
 
-    btn.disabled = true;
-    btn.innerText = "Please wait...";
-    msg.innerText = "⏳ Po krijohet llogaria...";
+    const supabase = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
 
-    try {
+    btn.addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (!email || !password) {
+        msg.innerText = "❌ Plotëso email & password";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Please wait...";
+      msg.innerText = "⏳ Duke u regjistruar...";
+
       const { error } = await supabase.auth.signUp({
         email,
-        password,
-        options: {
-          emailRedirectTo: "https://oraswiss.com"
-        }
+        password
       });
 
       if (error) {
         msg.innerText = "❌ " + error.message;
       } else {
-        msg.innerText = "✅ U regjistrua. Kontrollo email-in për konfirmim (edhe spam).";
+        msg.innerText = "✅ U regjistrua! Kontrollo email-in (edhe spam).";
       }
-    } catch (e) {
-      msg.innerText = "❌ Gabim: " + (e?.message || e);
-    }
 
-    btn.disabled = false;
-    btn.innerText = "Register";
-  });
-</script>
+      btn.disabled = false;
+      btn.innerText = "Register";
+    });
+  </script>
+
+</body>
+</html>
+
+ 

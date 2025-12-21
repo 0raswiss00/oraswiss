@@ -99,7 +99,7 @@
       <h3 class="card-title">Vetta Valjoux – Separate Parts – Cal. 22</h3>
 
       <div class="row">
-        <input id="q" type="search" placeholder="Enter Part No. e.g. 22-210" />
+        <input id="q" type="search" placeholder="Enter Part No. e.g. 22-800" />
       </div>
 
       <div id="info" class="result">Select a part by entering the Part Number.</div>
@@ -116,7 +116,7 @@
         <a id="payBtn" class="btn disabled" href="#" target="_blank" rel="noopener">Buy with PayPal</a>
       </div>
 
-      <div class="tip">Tip: enter e.g. <b>22-700</b> or click a number on the diagram.</div>
+      <div class="tip">Tip: enter e.g. <b>22-800</b> or click a number on the diagram.</div>
     </div>
 
     <!-- RIGHT -->
@@ -138,50 +138,30 @@
 
   <div><strong>PLATE &amp; BRIDGES</strong></div>
   <div><button class="part" data-part="22-100">22-100</button> – Main Plate <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-110">22-110</button> – Train Wheel Bridge <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-120">22-120</button> – Barrel Bridge <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-130">22-130</button> – Balance Bridge <span class="price">€0</span></div>
 
   <br><div><strong>GOING TRAIN</strong></div>
   <div><button class="part" data-part="22-200">22-200</button> – Barrel (Complete) <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-210">22-210</button> – Centre Wheel <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-220">22-220</button> – Third Wheel <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-230">22-230</button> – Fourth Wheel <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-240">22-240</button> – Escape Wheel <span class="price">€0</span></div>
+ 
 
   <br><div><strong>ESCAPEMENT</strong></div>
   <div><button class="part" data-part="22-300">22-300</button> – Pallet Fork <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-310">22-310</button> – Balance Complete <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-320">22-320</button> – Balance Staff <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-330">22-330</button> – Hairspring <span class="price">€0</span></div>
+ 
 
   <br><div><strong>AUTOMATIC MODULE</strong></div>
   <div><button class="part" data-part="22-500">22-500</button> – Rotor (Oscillating Weight) <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-510">22-510</button> – Reversing Wheel (A) <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-511">22-511</button> – Reversing Wheel (B) <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-520">22-520</button> – Automatic Driving Wheel <span class="price">€0</span></div>
+ 
 
   <br><div><strong>CHRONOGRAPH (MOST REQUESTED)</strong></div>
   <div><button class="part" data-part="22-700">22-700</button> – Column Wheel <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-710">22-710</button> – Chronograph Clutch <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-720">22-720</button> – Chronograph Runner / Wheel <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-730">22-730</button> – Coupling Lever <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-740">22-740</button> – Start/Stop Lever <span class="price">€---</span></div>
-  <div><button class="part" data-part="22-750">22-750</button> – Reset Hammer <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-760">22-760</button> – Heart Cam (Chrono seconds) <span class="price">€0</span></div>
+  
 
   <br><div><strong>KEYLESS WORKS</strong></div>
   <div><button class="part" data-part="22-800">22-800</button> – Winding Stem <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-810">22-810</button> – Sliding Pinion <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-820">22-820</button> – Winding Pinion <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-830">22-830</button> – Setting Lever <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-840">22-840</button> – Yoke <span class="price">€0</span></div>
-
+  
   <br><div><strong>DATE (IF APPLICABLE)</strong></div>
   <div><button class="part" data-part="22-900">22-900</button> – Date Wheel <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-910">22-910</button> – Date Jumper <span class="price">€0</span></div>
-  <div><button class="part" data-part="22-920">22-920</button> – Date Driving Wheel <span class="price">€0</span></div>
-
+  <div><button class="part" data-part="22-910">22-910</button> – Date Wheel <span class="price">€0</span></div>
+  <div><button class="part" data-part="22-920">22-920</button> – Date Wheel <span class="price">€0</span></div>
 </div>
 
 
@@ -192,43 +172,20 @@ const PAYPAL_BASE = "https://paypal.me/EMRIYT"; // vetëm 1 herë
 // vetëm 1 herë PARTS (pa e përsëritur më poshtë)
 const PARTS = {
   "22-100": { name:"Main Plate", price:0, currency:"EUR", qty:1, img:"images/parts/22-100.jpg" },
-  "22-110": { name:"Train Wheel Bridge", price:0, currency:"EUR", qty:1, img:"images/parts/22-110.jpg" },
-  "22-120": { name:"Barrel Bridge", price:0, currency:"EUR", qty:1, img:"images/parts/22-120.jpg" },
-  "22-130": { name:"Balance Bridge", price:0, currency:"EUR", qty:1, img:"images/parts/22-130.jpg" },
-
+ 
   "22-200": { name:"Barrel (Complete)", price:0, currency:"EUR", qty:1, img:"images/parts/22-200.jpg" },
-  "22-210": { name:"Centre Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/22-210.jpg" },
-  "22-220": { name:"Third Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/22-220.jpg" },
-  "22-230": { name:"Fourth Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/22-230.jpg" },
-  "22-240": { name:"Escape Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/22-240.jpg" },
-
+ 
   "22-300": { name:"Pallet Fork", price:0, currency:"EUR", qty:1, img:"images/parts/22-300.jpg" },
-  "22-310": { name:"Balance Complete", price:0, currency:"EUR", qty:1, img:"images/parts/22-310.jpg" },
-  "22-320": { name:"Balance Staff", price:0, currency:"EUR", qty:1, img:"images/parts/22-320.jpg" },
-  "22-330": { name:"Hairspring", price:0, currency:"EUR", qty:1, img:"images/parts/22-330.jpg" },
 
   "22-500": { name:"Rotor (Oscillating Weight)", price:0, currency:"EUR", qty:1, img:"images/parts/22-500.jpg" },
-  "22-510": { name:"Reversing Wheel (A)", price:0, currency:"EUR", qty:1, img:"images/parts/22-510.jpg" },
-  "22-511": { name:"Reversing Wheel (B)", price:0, currency:"EUR", qty:1, img:"images/parts/22-511.jpg" },
-  "22-520": { name:"Automatic Driving Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/22-520.jpg" },
-
+ 
   "22-700": { name:"Column Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/22-700.jpg" },
-  "22-710": { name:"Chronograph Clutch", price:0, currency:"EUR", qty:1, img:"images/parts/22-710.jpg" },
-  "22-720": { name:"Chronograph Runner / Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/22-720.jpg" },
-  "22-730": { name:"Coupling Lever", price:0, currency:"EUR", qty:1, img:"images/parts/22-730.jpg" },
-  "22-740": { name:"Start/Stop Lever", price:0, currency:"EUR", qty:1, img:"images/parts/22-740.jpg" },
-  "22-750": { name:"Reset Hammer", price:0, currency:"EUR", qty:1, img:"images/parts/22-750.jpg" },
-  "22-760": { name:"Heart Cam (Chrono seconds)", price:0, currency:"EUR", qty:1, img:"images/parts/22-760.jpg" },
 
   "22-800": { name:"Winding Stem", price:0, currency:"EUR", qty:1, img:"images/parts/22-800.jpg" },
-  "22-810": { name:"Sliding Pinion", price:0, currency:"EUR", qty:1, img:"images/parts/22-810.jpg" },
-  "22-820": { name:"Winding Pinion", price:0, currency:"EUR", qty:1, img:"images/parts/22-820.jpg" },
-  "22-830": { name:"Setting Lever", price:0, currency:"EUR", qty:1, img:"images/parts/22-830.jpg" },
-  "22-840": { name:"Yoke", price:0, currency:"EUR", qty:1, img:"images/parts/22-840.jpg" },
 
   "22-900": { name:"Date Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/22-900.jpg" },
   "22-910": { name:"Date Jumper", price:0, currency:"EUR", qty:1, img:"images/parts/22-910.jpg" },
-  "22-920": { name:"Date Driving Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/22-920.jpg" },
+  "22-920": { name:"Date Driving Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/22-920.jpg" }
 };
 
 
@@ -249,7 +206,7 @@ const PARTS = {
     const p = PARTS[key];
 
     if(!p){
-      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>2030-400</strong>';
+      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>22-800</strong>';
       info.style.color = "#6b7280";
       payBtn.classList.add("disabled");
       payBtn.href = "#";
@@ -261,7 +218,7 @@ const PARTS = {
     info.innerHTML =
       `<div><strong>Part No.</strong>: ${key}</div>
        <div><strong>Description</strong>: ${p.name}</div>
-       <div><strong>Condition</strong>: Original vintage Rolex part</div>
+       <div><strong>Condition</strong>: Original vintage Vetta Valjoux 22 part</div>
        <div><strong>Quantity</strong>: ${Number(p.qty) === 1 ? "1 available" : (Number(p.qty) + " available")}</div>
        <div><strong>Price</strong>: ${money(p.price)} ${p.currency || ""}</div>`;
 

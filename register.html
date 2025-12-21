@@ -111,10 +111,10 @@
   </div>
 
 <script type="module">
- https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm";
 
   const SUPABASE_URL = "https://gnwsrmelmeqduhmfmoa.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+  const SUPABASE_ANON_KEY = "PASTE_KETU_KEY_TEN_E_PLOTE";
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -134,21 +134,23 @@
     btn.innerText = "Please wait...";
     msg.innerText = "";
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password
-    });
+    try {
+      const { data, error } = await supabase.auth.signUp({ email, password });
 
-    if (error) {
-      msg.innerText = "❌ " + error.message;
-    } else {
-      msg.innerText = "✅ Account created! Check your email.";
+      if (error) {
+        msg.innerText = "❌ " + error.message;
+      } else if (data?.user && !data?.session) {
+        msg.innerText = "✅ U krijua! Kontrollo email-in për konfirmim.";
+      } else {
+        msg.innerText = "✅ U regjistrove me sukses!";
+      }
+    } catch (e) {
+      msg.innerText = "❌ Network/Load error: " + (e?.message || e);
     }
 
     btn.disabled = false;
     btn.innerText = "Register";
   });
 </script>
-
 </body>
 </html>

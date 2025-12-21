@@ -111,19 +111,37 @@
   </div>
 
   <!-- ✅ Pa import/module: më stabile në iPhone -->
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script>
+ <div class="card">
+    <h1>Create account</h1>
+    <p>Join Ora Swiss</p>
+
+    <label>Email</label>
+    <input id="email" type="email" placeholder="you@email.com">
+
+    <label>Password</label>
+    <input id="password" type="password" placeholder="••••••••">
+
+    <button id="registerBtn">Register</button>
+
+    <div id="msg" class="msg"></div>
+
+    <a href="index.html">← Back to Home</a>
+  </div>
+
+  <!-- ✅ Pa import/module: më stabile në iPhone -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script><script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
   const msg = document.getElementById("msg");
   const btn = document.getElementById("registerBtn");
 
   const SUPABASE_URL = "https://gnwsrmelmeqduhmfmoa.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+  const SUPABASE_ANON_KEY = "VENDOS_ANON_KEY_KETU"; // ai i gjati që fillon me eyJ...
 
-
+  // ✅ Ready sapo ngarkohet faqja
   msg.innerText = "✅ Ready";
 
-  // krijo client nga global-i i supabase
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   btn.addEventListener("click", async () => {
     const email = document.getElementById("email").value.trim();
@@ -143,14 +161,15 @@
         email,
         password,
         options: {
-          // përdor faqen ku je i hapur (github.io / domain)
-          emailRedirectTo: location.origin
+          emailRedirectTo: "https://oraswiss.com"
         }
       });
 
-      msg.innerText = error
-        ? "❌ " + error.message
-        : "✅ U regjistrua. Kontrollo email-in për konfirmim (edhe spam).";
+      if (error) {
+        msg.innerText = "❌ " + error.message;
+      } else {
+        msg.innerText = "✅ U regjistrua. Kontrollo email-in për konfirmim (edhe spam).";
+      }
     } catch (e) {
       msg.innerText = "❌ Gabim: " + (e?.message || e);
     }

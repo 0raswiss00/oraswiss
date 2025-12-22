@@ -124,6 +124,11 @@
       password: password,
     });
 
+    function done() {
+      document.getElementById("msg").innerText =
+        "✅ Registration demo successful";
+    }
+    
     if (error) {
       msg.innerText = "❌ " + error.message;
     } else {
@@ -133,7 +138,6 @@
 </script>
 
 
+
 </body>
 </html>
-
-

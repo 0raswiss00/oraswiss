@@ -90,25 +90,49 @@
     <h1>Create account</h1>
     <p>Join Ora Swiss</p>
 
-    <label>Email</label>
-    <input type="email" placeholder="you@email.com">
+   <label>Email</label>
+   <input type="email" id="email" placeholder="you@email.com">
 
-    <label>Password</label>
-    <input type="password" placeholder="••••••••">
-
-    <button onclick="done()">Register</button>
+   <label>Password</label>
+   <input type="password" id="password" placeholder="••••••••">
+   <button onclick="register()">Register</button>
 
     <div class="msg" id="msg"></div>
 
     <a href="index.html">← Back to Home</a>
   </div>
 
-  <script>
-    function done() {
-      document.getElementById("msg").innerText =
-        "✅ Registration demo successful";
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const supabaseUrl = "https://YOUR_URL.supabase.co";
+  const supabaseKey = "YOUR_ANON_KEY";
+  const supabase = supabaseJs.createClient(supabaseUrl, supabaseKey);
+
+  async function register() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const msg = document.getElementById("msg");
+
+    if (!email || !password) {
+      msg.innerText = "❌ Plotëso email dhe password";
+      return;
     }
-  </script>
+
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+    });
+
+    if (error) {
+      msg.innerText = "❌ " + error.message;
+    } else {
+      msg.innerText = "✅ Regjistrimi u krye! Kontrollo email-in";
+    }
+  }
+</script>
+
+
 </body>
 </html>
 

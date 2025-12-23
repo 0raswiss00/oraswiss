@@ -449,7 +449,12 @@ function openCart(){
   showPart(partNo);
   addToCart(partNo); // 👈 KJO E ÇON TE CASA + SHPORTA
 });
-  </script>
+
+function closeCart(){
+  document.getElementById("cartPanel").style.right = "-360px";
+}
+    
+  </script>  
 
 <!-- CART PANEL -->
 <aside id="cartPanel" style="
@@ -460,7 +465,11 @@ function openCart(){
 ">
   <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding-bottom:10px">
     <strong>Shporta</strong>
-    <button type="button" onclick="closeCart()">X</button>
+    <button type="button"
+        onclick="closeCart()"
+        style="cursor:pointer; z-index:10001; position:relative; pointer-events:auto;">
+  X
+</button>
   </div>
 
   <div id="cartItems">Shporta është bosh.</div>

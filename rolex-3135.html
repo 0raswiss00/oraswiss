@@ -263,7 +263,121 @@
 
     function money(n){ return Number(n).toFixed(2); }
     function paypalLink(amount){ return PAYPAL_BASE.replace(/\/$/,"") + "/" + money(amount); }
+    // ===== CART DATA =====
+    const CART_KEY = "oraswiss_cart";
 
+    function loadCart(){
+      return JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+    }
+    function saveCart(cart){
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    }
+
+        function addToCart(partNo){
+      const p = PARTS[partNo];
+      if(!p) return;
+
+      let cart = loadCart();
+      let item = cart.find(i => i.partNo === partNo);
+
+      if(item){
+        item.qty += 1;
+      } else {
+        cart.push({
+          partNo: partNo,
+          name: p.name,
+          price: Number(p.price),
+          img: p.img || "",
+          qty: 1
+        });
+      }
+
+      saveCart(cart);
+      renderCart();
+      openCart();
+    }
+
+    function openCart(){
+      const panel = document.getElementById("cartPanel");
+      if(panel) panel.style.right = "0";
+    }
+
+function openCart(){
+  const panel = document.getElementById("cartPanel");
+  if(panel) panel.style.right = "0";
+}
+
+    function renderCart(){
+      const cart = loadCart();
+      const box = document.getElementById("cartItems");
+      if(!box) return;
+
+      if(!cart.length){
+        box.innerHTML = "Shporta është bosh.";
+        return;
+      }
+
+      let total = 0;
+
+      box.innerHTML = cart.map(i => {
+        const line = (Number(i.price)||0) * (Number(i.qty)||0);
+        total += line;
+
+        return `
+          <div style="border-bottom:1px solid #eee;padding:10px 0">
+            <strong>${i.partNo}</strong><br>
+            ${i.name}
+            <div style="margin-top:6px;display:flex;align-items:center;gap:8px">
+              <button data-dec="${i.partNo}">−</button>
+              <strong>${i.qty}</strong>
+              <button data-inc="${i.partNo}">+</button>
+              <span style="margin-left:auto;font-weight:800">€${money(line)}</span>
+            </div>
+          </div>
+        `;
+      }).join("") + `
+        <div style="padding-top:12px;font-weight:900;text-align:right">
+          TOTAL: €${money(total)}
+        </div>
+      `;
+    }
+    
+    function renderCart(){
+      const cart = loadCart();
+      const box = document.getElementById("cartItems");
+      if(!box) return;
+
+      if(!cart.length){
+        box.innerHTML = "Shporta është bosh.";
+        return;
+      }
+
+      let total = 0;
+
+      box.innerHTML = cart.map(i => {
+        const line = (Number(i.price)||0) * (Number(i.qty)||0);
+        total += line;
+
+        return `
+          <div style="border-bottom:1px solid #eee;padding:10px 0">
+            <strong>${i.partNo}</strong><br>
+            ${i.name}
+            <div style="margin-top:6px;display:flex;align-items:center;gap:8px">
+              <button data-dec="${i.partNo}">−</button>
+              <strong>${i.qty}</strong>
+              <button data-inc="${i.partNo}">+</button>
+              <span style="margin-left:auto;font-weight:800">€${money(line)}</span>
+            </div>
+          </div>
+    `    ;
+      }).join("") + `
+        <div style="padding-top:12px;font-weight:900;text-align:right">
+          TOTAL: €${money(total)}
+        </div>
+  `    ;
+    }
+
+    
     const q = document.getElementById("q");
     const info = document.getElementById("info");
     const payBtn = document.getElementById("payBtn");
@@ -346,11 +460,10 @@
 ">
   <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding-bottom:10px">
     <strong>Shporta</strong>
-    <button onclick="document.getElementById('cartPanel').style.right='-360px'">✕</button>
+    <button type="button" onclick="closeCart()">X</button>
   </div>
 
   <div id="cartItems">Shporta është bosh.</div>
 </aside>
-  
 </body>
 </html>

@@ -204,10 +204,10 @@
   </div>
 
   <script>
-    const PAYPAL_BASE = "https://paypal.me/EMRIYT"; // ndrysho EMRIYT
 
-    // Vetëm 1 herë PARTS (pa dublime)
-   const PARTS = {
+const PAYPAL_BASE = "https://paypal.me/EMRIYT"; // ndrysho EMRIYT
+const CART_KEY = "oraswiss_cart";
+    const PARTS = {
   "2030.100": { name:"Main Plate", price:330, currency:"EUR", qty:1, img:"rolex-2030.100.jpg" },
   "2030.110": { name:"Train Wheel Bridge", price:230, currency:"EUR", qty:1, img:"rolex-2030.110.jpg" },
   "2030.121": { name:"Barrel Bridge", price:280, currency:"EUR", qty:1, img:"rolex-2030.121.jpg" },
@@ -263,80 +263,217 @@
 };
 
 
-    function money(n){ return Number(n).toFixed(2); }
-    function paypalLink(amount){ return PAYPAL_BASE.replace(/\/$/,"") + "/" + money(amount); }
+  function money(n){ return Number(n || 0).toFixed(2); }
+  function paypalLink(amount){ return PAYPAL_BASE.replace(/\/$/,"") + "/" + money(amount); }
 
-    const q = document.getElementById("q");
-    const info = document.getElementById("info");
-    const payBtn = document.getElementById("payBtn");
+  function loadCart(){
+    try { return JSON.parse(localStorage.getItem(CART_KEY) || "[]"); }
+    catch(e){ return []; }
+  }
+  function saveCart(cart){
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  }
 
-    const preview = document.getElementById("preview");
-    const pvImg = document.getElementById("pvImg");
-    const pvNo = document.getElementById("pvNo");
-    const pvName = document.getElementById("pvName");
+  function openCart(){
+    const panel = document.getElementById("cartPanel");
+    if(panel) panel.style.right = "0";
+  }
+  function closeCart(){
+    const panel = document.getElementById("cartPanel");
+    if(panel) panel.style.right = "-360px";
+  }
 
-    function showPart(key){
-      const p = PARTS[key];
+  function addToCart(partNo){
+    const p = PARTS[partNo];
+    if(!p) return;
 
-      if(!p){
-        info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>2030.820</strong>';
-        info.style.color = "#6b7280";
-        payBtn.classList.add("disabled");
-        payBtn.href = "#";
-        if(preview) preview.style.display = "none";
-        return;
-      }
+    const cart = loadCart();
+    const item = cart.find(i => i.partNo === partNo);
 
-      info.style.color = "#111827";
-      info.innerHTML =
-        `<div><strong>Part No.</strong>: ${key}</div>
-         <div><strong>Description</strong>: ${p.name}</div>
-         <div><strong>Condition</strong>: Vintage part (sold as-is)</div>
-         <div><strong>Quantity</strong>: ${Number(p.qty) === 1 ? "1 available" : (Number(p.qty) + " available")}</div>
-         <div><strong>Price</strong>: ${money(p.price)} ${p.currency || ""}</div>`;
-
-      if(preview && p.img){
-        pvImg.src = p.img;
-        pvNo.textContent = key;
-        pvName.textContent = p.name;
-        preview.style.display = "flex";
-      } else if(preview){
-        preview.style.display = "none";
-      }
-
-      if(Number(p.qty) <= 0){
-        payBtn.classList.add("disabled");
-        payBtn.href = "#";
-        return;
-      }
-
-      payBtn.classList.remove("disabled");
-      payBtn.href = paypalLink(p.price);
+    if(item){
+      item.qty = Number(item.qty || 0) + 1;
+    }else{
+      cart.push({
+        partNo,
+        name: p.name || "",
+        price: Number(p.price || 0),
+        qty: 1
+      });
     }
 
-    // search input
-    q.addEventListener("input", () => showPart((q.value||"").trim()));
+    saveCart(cart);
+    renderCart();
+    openCart();
+  }
 
-    // click on dot (opsionale)
-    document.addEventListener("click", (e) => {
-      const dot = e.target.closest(".dot");
-      if(!dot) return;
-      const partNo = dot.dataset.part;
-      if(!partNo) return;
-      q.value = partNo;
-      showPart(partNo);
-    });
+  function changeQty(partNo, delta){
+    const cart = loadCart();
+    const item = cart.find(i => i.partNo === partNo);
+    if(!item) return;
 
-    // click on part buttons list
-    document.addEventListener("click", (e) => {
-      const btn = e.target.closest(".part");
-      if(!btn) return;
-      const partNo = btn.dataset.part;
-      if(!partNo) return;
-      q.value = partNo;
-      showPart(partNo);
-    });
-  </script>
+    item.qty = Number(item.qty || 0) + delta;
+
+    // nëse shkon 0, hiqe nga shporta
+    if(item.qty <= 0){
+      const idx = cart.findIndex(i => i.partNo === partNo);
+      if(idx !== -1) cart.splice(idx, 1);
+    }
+
+    saveCart(cart);
+    renderCart();
+  }
+
+  function renderCart(){
+    const cart = loadCart();
+    const box = document.getElementById("cartItems");
+    if(!box) return;
+
+    if(!cart.length){
+      box.innerHTML = "Shporta është bosh.";
+      return;
+    }
+
+    let total = 0;
+
+    box.innerHTML = cart.map(i => {
+      const qty = Number(i.qty || 0);
+      const price = Number(i.price || 0);
+      const line = price * qty;
+      total += line;
+
+      return `
+        <div style="border-bottom:1px solid #eee;padding:10px 0">
+          <strong>${i.partNo}</strong><br>
+          ${i.name}
+          <div style="margin-top:6px;display:flex;align-items:center;gap:8px">
+            <button type="button" class="qtyBtn" data-action="dec" data-part="${i.partNo}">−</button>
+            <strong>${qty}</strong>
+            <button type="button" class="qtyBtn" data-action="inc" data-part="${i.partNo}">+</button>
+            <span style="margin-left:auto;font-weight:800">€${money(line)}</span>
+          </div>
+        </div>
+      `;
+    }).join("") + `
+      <div style="padding-top:12px;font-weight:900;text-align:right">
+        TOTAL: €${money(total)}
+      </div>
+      <a class="btn" style="display:block;margin-top:10px;text-align:center" target="_blank" rel="noopener"
+         href="${paypalLink(total)}">PayPal (Total)</a>
+    `;
+  }
+
+  // ====== Pjesa që shfaq info të pjesës (siç e kishe) ======
+  const q = document.getElementById("q");
+  const info = document.getElementById("info");
+  const payBtn = document.getElementById("payBtn");
+
+  const preview = document.getElementById("preview");
+  const pvImg = document.getElementById("pvImg");
+  const pvNo = document.getElementById("pvNo");
+  const pvName = document.getElementById("pvName");
+
+  function showPart(key){
+    const p = PARTS[key];
+
+    if(!p){
+      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>3155.820</strong>';
+      info.style.color = "#6b7280";
+      payBtn.classList.add("disabled");
+      payBtn.href = "#";
+      if(preview) preview.style.display = "none";
+      return;
+    }
+
+    info.style.color = "#111827";
+    info.innerHTML =
+      `<div><strong>Part No.</strong>: ${key}</div>
+       <div><strong>Description</strong>: ${p.name}</div>
+       <div><strong>Condition</strong>: Vintage part (sold as-is)</div>
+       <div><strong>Quantity</strong>: ${Number(p.qty) === 1 ? "1 available" : (Number(p.qty) + " available")}</div>
+       <div><strong>Price</strong>: ${money(p.price)} ${p.currency || ""}</div>`;
+
+    if(preview && p.img){
+      pvImg.src = p.img;
+      pvNo.textContent = key;
+      pvName.textContent = p.name;
+      preview.style.display = "flex";
+    } else if(preview){
+      preview.style.display = "none";
+    }
+
+    if(Number(p.qty) <= 0){
+      payBtn.classList.add("disabled");
+      payBtn.href = "#";
+      return;
+    }
+
+    payBtn.classList.remove("disabled");
+    payBtn.href = paypalLink(p.price);
+  }
+
+  // input search
+  if(q){
+    q.addEventListener("input", () => showPart((q.value || "").trim()));
+  }
+
+  // klik në .dot (nëse i përdor)
+  document.addEventListener("click", (e) => {
+    const dot = e.target.closest(".dot");
+    if(!dot) return;
+    const partNo = dot.dataset.part;
+    if(!partNo) return;
+    q.value = partNo;
+    showPart(partNo);
+    addToCart(partNo);
+  });
+
+  // klik në butonat .part (lista)
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".part");
+    if(!btn) return;
+    const partNo = btn.dataset.part;
+    if(!partNo) return;
+
+    q.value = partNo;
+    showPart(partNo);
+    addToCart(partNo);
+  });
+
+  // ✅ plus/minus në shportë (delegation) — kjo e rregullon “nuk punon”
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest(".qtyBtn");
+    if(!b) return;
+
+    const partNo = b.dataset.part;
+    const action = b.dataset.action;
+
+    if(action === "inc") changeQty(partNo, +1);
+    if(action === "dec") changeQty(partNo, -1);
+  });
+
+  // me u shfaq shporta e ruajtur kur hapet faqja
+  window.addEventListener("DOMContentLoaded", renderCart);
+</script>
+  </script>  
+
+<!-- CART PANEL -->
+<aside id="cartPanel" style="
+  position:fixed; top:0; right:-360px; width:360px; height:100%;
+  background:#fff; border-left:1px solid #e5e7eb;
+  box-shadow:-10px 0 30px rgba(0,0,0,.15);
+  transition:right .25s ease; z-index:9999; padding:12px;
+">
+  <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding-bottom:10px">
+    <strong>Shporta</strong>
+    <button type="button"
+        onclick="closeCart()"
+        style="cursor:pointer; z-index:10001; position:relative; pointer-events:auto;">
+  X
+</button>
+  </div>
+
+  <div id="cartItems">Shporta është bosh.</div>
+</aside>
 </body>
 </html>
 

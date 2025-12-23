@@ -325,15 +325,32 @@
       showPart(partNo);
     });
 
-    // click on part buttons list
-    document.addEventListener("click", (e) => {
-      const btn = e.target.closest(".part");
-      if(!btn) return;
-      const partNo = btn.dataset.part;
-      if(!partNo) return;
-      q.value = partNo;
-      showPart(partNo);
-    });
+ document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".part");
+  if(!btn) return;
+  const partNo = btn.dataset.part;
+  if(!partNo) return;
+
+  q.value = partNo;
+  showPart(partNo);
+  addToCart(partNo); // 👈 KJO E ÇON TE CASA + SHPORTA
+});
   </script>
+
+<!-- CART PANEL -->
+<aside id="cartPanel" style="
+  position:fixed; top:0; right:-360px; width:360px; height:100%;
+  background:#fff; border-left:1px solid #e5e7eb;
+  box-shadow:-10px 0 30px rgba(0,0,0,.15);
+  transition:right .25s ease; z-index:9999; padding:12px;
+">
+  <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding-bottom:10px">
+    <strong>Shporta</strong>
+    <button onclick="document.getElementById('cartPanel').style.right='-360px'">✕</button>
+  </div>
+
+  <div id="cartItems">Shporta është bosh.</div>
+</aside>
+  
 </body>
 </html>

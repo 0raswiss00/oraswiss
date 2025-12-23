@@ -1,337 +1,275 @@
-
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Ora Swiss — Spare Parts — Zenith EL Primero Cal 400Z</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Ora Swiss — Spare Parts — Zenith EL Primero Cal 400Z</title>
 
-<style>
-  :root{
-    --bg:#f6f3ea; --card:#fff; --ink:#111827; --muted:#6b7280; --line:#e5e7eb;
-    --gold:#b7922a; --gold2:#8a6b14;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
-  .topbar{background:#111;color:#fff;border-bottom:4px solid var(--gold)}
-  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;max-width:1100px;margin:0 auto}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
-  .brand span{opacity:.7;font-weight:600}
-  .pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);padding:6px 10px;border-radius:999px;font-size:12px}
-  .wrap{max-width:1100px;margin:0 auto;padding:16px}
-  .crumbs{font-size:13px;color:var(--muted);margin:10px 0 14px}
-  .crumbs b{color:var(--ink)}
-  h1{margin:0 0 8px;font-size:28px}
-  .back-btn{
-    display:inline-block;margin:6px 0 14px;padding:10px 12px;border-radius:12px;
-    background:linear-gradient(180deg,var(--gold),var(--gold2));
-    color:#fff;text-decoration:none;font-weight:800;font-size:13px;
-  }
-  .grid{display:grid;grid-template-columns:380px 1fr;gap:14px}
-  @media (max-width:980px){.grid{grid-template-columns:1fr}}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.06)}
-  .card-title{margin:0 0 12px;font-size:18px;font-weight:800;color:var(--ink)}
-  .row{display:flex;gap:10px;align-items:center;margin:10px 0;flex-wrap:wrap}
-  input{
-    flex:1;min-width:240px;padding:12px 12px;border-radius:12px;border:1px solid var(--line);
-    background:#fff;color:var(--ink);outline:none
-  }
-  input:focus{border-color:var(--gold)}
-  .btn{
-    display:inline-block;padding:11px 14px;border-radius:12px;border:1px solid var(--gold2);
-    background:linear-gradient(180deg,var(--gold),var(--gold2));
-    color:#fff;text-decoration:none;font-weight:800
-  }
-  .btn.disabled{opacity:.45;pointer-events:none}
-  .result{min-height:86px;padding:12px;border-radius:12px;border:1px dashed var(--line);color:var(--muted)}
-  .result strong{color:var(--ink)}
-  .tip{color:var(--muted);font-size:12px;margin-top:10px}
+  <style>
+    :root{
+      --bg:#f6f3ea; --card:#fff; --ink:#111827; --muted:#6b7280; --line:#e5e7eb;
+      --gold:#b7922a; --gold2:#8a6b14;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    .topbar{background:#111;color:#fff;border-bottom:4px solid var(--gold)}
+    .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;max-width:1100px;margin:0 auto}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
+    .brand span{opacity:.7;font-weight:600}
+    .pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);padding:6px 10px;border-radius:999px;font-size:12px}
+    .wrap{max-width:1100px;margin:0 auto;padding:16px}
+    .crumbs{font-size:13px;color:var(--muted);margin:10px 0 14px}
+    h1{margin:0 0 8px;font-size:28px}
+    .back-btn{
+      display:inline-block;margin:6px 0 14px;padding:10px 12px;border-radius:12px;
+      background:linear-gradient(180deg,var(--gold),var(--gold2));
+      color:#fff;text-decoration:none;font-weight:800;font-size:13px;
+    }
+    .grid{display:grid;grid-template-columns:380px 1fr;gap:14px}
+    @media (max-width:980px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+    .card-title{margin:0 0 12px;font-size:18px;font-weight:800;color:var(--ink)}
+    .row{display:flex;gap:10px;align-items:center;margin:10px 0;flex-wrap:wrap}
+    input{
+      flex:1;min-width:240px;padding:12px 12px;border-radius:12px;border:1px solid var(--line);
+      background:#fff;color:var(--ink);outline:none
+    }
+    input:focus{border-color:var(--gold)}
+    .btn{
+      display:inline-block;padding:11px 14px;border-radius:12px;border:1px solid var(--gold2);
+      background:linear-gradient(180deg,var(--gold),var(--gold2));
+      color:#fff;text-decoration:none;font-weight:800
+    }
+    .btn.disabled{opacity:.45;pointer-events:none}
+    .result{min-height:86px;padding:12px;border-radius:12px;border:1px dashed var(--line);color:var(--muted)}
+    .result strong{color:var(--ink)}
+    .tip{color:var(--muted);font-size:12px;margin-top:10px}
 
-  /* preview */
-  .preview{
-    display:none; gap:10px; align-items:center;
-    margin-top:10px; padding:10px; border:1px solid var(--line);
-    border-radius:12px; background:#fff;
-  }
-  .preview img{width:64px;height:64px;object-fit:contain;border:1px solid var(--line);border-radius:10px;background:#fff}
+    /* preview */
+    .preview{
+      display:none; gap:10px; align-items:center;
+      margin-top:10px; padding:10px; border:1px solid var(--line);
+      border-radius:12px; background:#fff;
+    }
+    .preview img{width:64px;height:64px;object-fit:contain;border:1px solid var(--line);border-radius:10px;background:#fff}
 
-  /* diagrams layout */
-  .parts-images{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  @media (max-width:980px){.parts-images{grid-template-columns:1fr}}
-  .diagram{position:relative}
-  .diagram img{
-    width:100%;height:420px;object-fit:contain;
-    border:1px solid var(--line);border-radius:12px;background:#fff;
-    display:block;
-  }
+    /* diagrams */
+    .diagram{position:relative;margin-bottom:14px}
+    .diagram img{
+      width:100%;height:420px;object-fit:contain;
+      border:1px solid var(--line);border-radius:12px;background:#fff;
+      display:block;
+    }
 
-  /* dots */
-  .dot{
-    position:absolute;
-    width:28px;height:28px;border-radius:999px;
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;
-    background:rgba(183,146,42,.95);
-    color:#111;font-weight:900;
-    border:2px solid #fff;
-    box-shadow:0 6px 16px rgba(0,0,0,.25);
-    user-select:none;
-  }
-  .dot:hover{transform:scale(1.06)}
-</style>
+    /* dots (opsionale nëse i shton në HTML) */
+    .dot{
+      position:absolute;
+      width:28px;height:28px;border-radius:999px;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+      background:rgba(183,146,42,.95);
+      color:#111;font-weight:900;
+      border:2px solid #fff;
+      box-shadow:0 6px 16px rgba(0,0,0,.25);
+      user-select:none;
+    }
+    .dot:hover{transform:scale(1.06)}
+
+    /* list buttons */
+    .diagram-info button.part{
+      background:#111; color:var(--gold);
+      border:1px solid var(--gold2);
+      padding:6px 10px; border-radius:10px;
+      cursor:pointer; font-weight:800;
+    }
+    .diagram-info .price{margin-left:6px;color:#111;font-weight:800}
+  </style>
 </head>
 
 <body>
-
-<div class="topbar">
-  <div class="wrap">
-    <div class="brand">ORA SWISS <span>Spare Parts</span></div>
-    <div class="pill">Zenith EL Primero • Separate Parts • <b style="color:#fff">Cal. 400Z</b></div>
+  <div class="topbar">
+    <div class="wrap">
+      <div class="brand">ORASWISS <span>Spare Parts</span></div>
+      <div class="pill">Zenith EL Primero • Separate Parts • <b style="color:#fff">Cal. 400Z</b></div>
+    </div>
   </div>
-</div>
 
-<div class="wrap">
-  <div class="crumbs">Ora Swiss <span style="opacity:.6">›</span> Spare Parts <span style="opacity:.6">›</span> 
-  <a class="back-btn" href="/separate-parts.html">← Back to Spare Parts</a>
-
-  <div class="grid">
-    <!-- LEFT -->
-    <div class="card">
-      <h3 class="card-title">Zenith EL Primero – Separate Parts – Cal. 400Z</h3>
-
-      <div class="row">
-        <input id="q" type="search" placeholder="Enter Part No. e.g. 400Z-210" />
-      </div>
-
-      <div id="info" class="result">Select a part by entering the Part Number.</div>
-
-      <div id="preview" class="preview">
-        <img id="pvImg" src="" alt="">
-        <div>
-          <div><strong id="pvNo"></strong></div>
-          <div id="pvName" style="opacity:.85;margin-top:4px"></div>
-        </div>
-      </div>
-
-      <div class="row">
-        <a id="payBtn" class="btn disabled" href="#" target="_blank" rel="noopener">Buy with PayPal</a>
-      </div>
-
-      <div class="tip">Tip: enter e.g. <b>400Z-700</b> or click a number on the diagram.</div>
+  <div class="wrap">
+    <div class="crumbs">
+      OraSwiss › Spare Parts › Zenith EL Primero – Separate Parts – Cal. 400Z
     </div>
 
-    <!-- RIGHT -->
-    <div class="card">
-      <h3 class="card-title">Zenith EL Primero– Separate Parts – Cal.400Z – Diagrams</h3>
+    <a class="back-btn" href="/separate-parts.html">← Back to Spare Parts</a>
 
-     <div class="diagram-block">
+    <div class="grid">
+      <!-- LEFT -->
+      <div class="card">
+        <h3 class="card-title">Zenith EL Primero – Separate Parts – Cal. 400Z</h3>
 
-  <!-- FOTO -->
-<div class="diagram">
-  <img src="el-primero-cal400-1.jpg" alt="Cal. 400Z parts diagram front">
+        <div class="row">
+          <input id="q" type="search" placeholder="Enter Part No. e.g. 400Z-990" />
+        </div>
 
+        <div id="info" class="result">Select a part by entering the Part Number.</div>
 
-<!-- FOTO 2 (BACK) -->
-<div class="diagram" style="margin-top:20px;">
-  <img src="el-primero-cal400-2.jpg" alt="Cal. 400Z parts diagram back">
+        <div id="preview" class="preview">
+          <img id="pvImg" src="" alt="">
+          <div>
+            <div><strong id="pvNo"></strong></div>
+            <div id="pvName" style="opacity:.85;margin-top:4px"></div>
+          </div>
+        </div>
 
-<div class="diagram-info">
+        <div class="row">
+          <a id="payBtn" class="btn disabled" href="#" target="_blank" rel="noopener">Buy with PayPal</a>
+        </div>
 
-  <div><strong>PLATE &amp; BRIDGES</strong></div>
-  <div><button class="part" data-part="400Z-100">400Z-100</button> – Main Plate <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-110">400Z-110</button> – Train Wheel Bridge <span class="price">€200</span></div>
-  <div><button class="part" data-part="400Z-120">400Z-120</button> – Barrel Bridge <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-130">400Z-130</button> – Balance Bridge <span class="price">€---</span></div>
+        <div class="tip">Tip: enter e.g. <b>400Z.990</b> or click a part button in the list.</div>
+      </div>
 
-  <br><div><strong>GOING TRAIN</strong></div>
-  <div><button class="part" data-part="400Z-200">400Z-200</button> – Barrel (Complete) <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-210">400Z-210</button> – Centre Wheel <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-220">400Z-220</button> – Third Wheel <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-230">400Z-230</button> – Fourth Wheel <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-240">400Z-240</button> – Escape Wheel <span class="price">€---</span></div>
+      <!-- RIGHT -->
+      <div class="card">
+        <h3 class="card-title">Zenith EL Primero – Separate Parts – Cal. 400Z – Diagrams</h3>
 
-  <br><div><strong>ESCAPEMENT</strong></div>
-  <div><button class="part" data-part="400Z-300">400Z-300</button> – Pallet Fork <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-310">400Z-310</button> – Balance Complete <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-320">400Z-320</button> – Balance Staff <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-330">400Z-330</button> – Hairspring <span class="price">€---</span></div>
+        <div class="diagram">
+          <img src="zenith-400z.1.jpg" alt="Cal. 400z parts diagram front">
+          <!-- Nëse do dots, i shton këtu p.sh:
+          <div class="dot" data-part="22.100" data-n="1" style="left:20%;top:30%;">1</div>
+          -->
+        </div>
 
-  <br><div><strong>AUTOMATIC MODULE</strong></div>
-  <div><button class="part" data-part="400Z-500">400Z-500</button> – Rotor (Oscillating Weight) <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-510">400Z-510</button> – Reversing Wheel (A) <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-511">400Z-511</button> – Reversing Wheel (B) <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-520">400Z-520</button> – Automatic Driving Wheel <span class="price">€---</span></div>
+        <div class="diagram">
+          <img src="zenith-400z.2.jpg" alt="Cal. 400z parts diagram back">
+        </div>
 
-  <br><div><strong>CHRONOGRAPH (MOST REQUESTED)</strong></div>
-  <div><button class="part" data-part="400Z-700">400Z-700</button> – Column Wheel <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-710">400Z-710</button> – Chronograph Clutch <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-720">400Z-720</button> – Chronograph Runner / Wheel <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-730">400Z-730</button> – Coupling Lever <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-740">400Z-740</button> – Start/Stop Lever <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-750">400Z-750</button> – Reset Hammer <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-760">400Z-760</button> – Heart Cam (Chrono seconds) <span class="price">€---</span></div>
+        <div class="diagram-info">
+          <div><strong>PLATE &amp; BRIDGES</strong></div>
+          <div><button class="part" data-part="400z.300">400z.300</button> – Main Plate <span class="price">€00</span></div>
+          <div><button class="part" data-part="400z.340">400z.340</button> – Train Bridge Wheel <span class="price">€50</span></div>
+          <div><button class="part" data-part="400z.345">400z.345</button> – Chronograph Bridge <span class="price">€30</span></div>
+          <div><button class="part" data-part="400z.360">400z.360</button> – Balanc Bridge <span class="price">€70</span></div>
+          
+          <div><button class="part" data-part="400z.390">400z.390</button> – Copuling Clutch <span class="price">€80</span></div>
+          <div><button class="part" data-part="400z.420">400z.420</button> – Sliding Gear <span class="price">€48</span></div>
+          <div><button class="part" data-part="400z.445">400z.445</button> – Hammer <span class="price">€37</span></div>
+          
+          <br><div><strong>BARREL &amp; POWER</strong></div>
+          <div><button class="part" data-part="400z.820">400z.820</button> – Barrel Ccomplete <span class="price">€50</span></div>
+          <div><button class="part" data-part="400z.830">400z.830</button> – Barrel Cover <span class="price">€25</span></div>
+          <div><button class="part" data-part="400z.835">400z.835</button> – Barrel Arbor <span class="price">€25</span></div>
+          
+          <div><button class="part" data-part="400z.860">400z.860</button> – Corwn Wheel <span class="price">€25</span></div>
+                  
+          <br><div><strong>AUTOMATIC</strong></div>
+          <div><button class="part" data-part="400z.900">400z.900</button> – Automatic Winding Rotor <span class="price">€00</span></div>
+          <div><button class="part" data-part="400z.920">400z.920</button> – Automatic Rotor Screws (Set of 3) <span class="price">€00</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <br><div><strong>KEYLESS WORKS</strong></div>
-  <div><button class="part" data-part="400Z-800">400Z-800</button> – Winding Stem <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-810">400Z-810</button> – Sliding Pinion <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-820">400Z-820</button> – Winding Pinion <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-830">400Z-830</button> – Setting Lever <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-840">400Z-840</button> – Yoke <span class="price">€---</span></div>
-
-  <br><div><strong>DATE (IF APPLICABLE)</strong></div>
-  <div><button class="part" data-part="400Z-900">400Z-900</button> – Date Wheel <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-910">400Z-910</button> – Date Jumper <span class="price">€---</span></div>
-  <div><button class="part" data-part="400Z-920">400Z-920</button> – Date Driving Wheel <span class="price">€---</span></div>
-
-</div>
-
-
- 
   <script>
-const PAYPAL_BASE = "https://paypal.me/EMRIYT"; // vetëm 1 herë
+    const PAYPAL_BASE = "https://paypal.me/EMRIYT"; // ndrysho EMRIYT
 
-// vetëm 1 herë PARTS (pa e përsëritur më poshtë)
-const PARTS = {
-  "400Z-100": { name:"Main Plate", price:0, currency:"EUR", qty:1, img:"images/parts/400z-100.jpg" },
-  "400Z-110": { name:"Train Wheel Bridge", price:200, currency:"EUR", qty:1, img:"images/parts/400z-110.jpg" },
-  "400Z-120": { name:"Barrel Bridge", price:0, currency:"EUR", qty:1, img:"images/parts/400z-120.jpg" },
-  "400Z-130": { name:"Balance Bridge", price:0, currency:"EUR", qty:1, img:"images/parts/400z-130.jpg" },
-
-  "400Z-200": { name:"Barrel (Complete)", price:0, currency:"EUR", qty:1, img:"images/parts/400z-200.jpg" },
-  "400Z-210": { name:"Centre Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/400z-210.jpg" },
-  "400Z-220": { name:"Third Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/400z-220.jpg" },
-  "400Z-230": { name:"Fourth Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/400z-230.jpg" },
-  "400Z-240": { name:"Escape Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/400z-240.jpg" },
-
-  "400Z-300": { name:"Pallet Fork", price:0, currency:"EUR", qty:1, img:"images/parts/400z-300.jpg" },
-  "400Z-310": { name:"Balance Complete", price:0, currency:"EUR", qty:1, img:"images/parts/400z-310.jpg" },
-  "400Z-320": { name:"Balance Staff", price:0, currency:"EUR", qty:1, img:"images/parts/400z-320.jpg" },
-  "400Z-330": { name:"Hairspring", price:0, currency:"EUR", qty:1, img:"images/parts/400z-330.jpg" },
-
-  "400Z-500": { name:"Rotor (Oscillating Weight)", price:0, currency:"EUR", qty:1, img:"images/parts/400z-500.jpg" },
-  "400Z-510": { name:"Reversing Wheel (A)", price:0, currency:"EUR", qty:1, img:"images/parts/400z-510.jpg" },
-  "400Z-511": { name:"Reversing Wheel (B)", price:0, currency:"EUR", qty:1, img:"images/parts/400z-511.jpg" },
-  "400Z-520": { name:"Automatic Driving Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/400z-520.jpg" },
-
-  "400Z-700": { name:"Column Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/400z-700.jpg" },
-  "400Z-710": { name:"Chronograph Clutch", price:0, currency:"EUR", qty:1, img:"images/parts/400z-710.jpg" },
-  "400Z-720": { name:"Chronograph Runner / Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/400z-720.jpg" },
-  "400Z-730": { name:"Coupling Lever", price:0, currency:"EUR", qty:1, img:"images/parts/400z-730.jpg" },
-  "400Z-740": { name:"Start/Stop Lever", price:0, currency:"EUR", qty:1, img:"images/parts/400z-740.jpg" },
-  "400Z-750": { name:"Reset Hammer", price:0, currency:"EUR", qty:1, img:"images/parts/400z-750.jpg" },
-  "400Z-760": { name:"Heart Cam (Chrono seconds)", price:0, currency:"EUR", qty:1, img:"images/parts/400z-760.jpg" },
-
-  "400Z-800": { name:"Winding Stem", price:0, currency:"EUR", qty:1, img:"images/parts/400z-800.jpg" },
-  "400Z-810": { name:"Sliding Pinion", price:0, currency:"EUR", qty:1, img:"images/parts/400z-810.jpg" },
-  "400Z-820": { name:"Winding Pinion", price:0, currency:"EUR", qty:1, img:"images/parts/400z-820.jpg" },
-  "400Z-830": { name:"Setting Lever", price:0, currency:"EUR", qty:1, img:"images/parts/400z-830.jpg" },
-  "400Z-840": { name:"Yoke", price:0, currency:"EUR", qty:1, img:"images/parts/400z-840.jpg" },
-
-  "400Z-900": { name:"Date Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/400z-900.jpg" },
-  "400Z-910": { name:"Date Jumper", price:0, currency:"EUR", qty:1, img:"images/parts/400z-910.jpg" },
-  "400Z-920": { name:"Date Driving Wheel", price:0, currency:"EUR", qty:1, img:"images/parts/400z-920.jpg" }
+    // Vetëm 1 herë PARTS (pa dublime)
+   const PARTS = {
+  "22.400z": { name:"Main Plate", price:00, currency:"EUR", qty:1, img:"zenith-400z.300.jpg" },
+  "22.400z": { name:"Train Bridge Wheel", price:50, currency:"EUR", qty:1, img:"zenith-400z.340.jpg" },
+  "22.400z": { name:"Chronograph Bridge", price:30, currency:"EUR", qty:1, img:"zenith-400z.345.jpg" },
+  "22.400z": { name:"Balanc Bridge", price:70, currency:"EUR", qty:1, img:"zenith-400z.360.jpg" },
+    
+ 
+  "22.400z": { name:"Copuling Clutch", price:80, currency:"EUR", qty:1, img:"zenith-400z.390.jpg" },
+  "22.400z": { name:"Sliding Gear", price:48, currency:"EUR", qty:1, img:"zenith-400z.420.jpg" },
+  "22.400z": { name:"Sliding Gear", price:37, currency:"EUR", qty:1, img:"zenith-400z.445.jpg" },
+   
+  "22.400z": { name:"Barrel Complete", price:50, currency:"EUR", qty:1, img:"zenith-400z.820.jpg" },
+  "22.400z": { name:"Barrel Cover", price:25, currency:"EUR", qty:1, img:"zenith-400z.830.jpg" },
+  "22.400z": { name:"Barrel Arbor", price:25, currency:"EUR", qty:1, img:"zenith-400z.835.jpg" },
+     
+  "22.400z": { name:"Barrel Cover", price:25, currency:"EUR", qty:1, img:"zenith-400z.860.jpg" },  
+     
+  "22.400z": { name:"Automatic Winding Rotor", price:00, currency:"EUR", qty:1, img:"zenith-400z.900.jpg" },
+  "22.400z": { name:"Automatic Rotor Screws (Set of 3)", price:00, currency:"EUR", qty:1, img:"zenith-400z.910.jpg" }
 };
 
 
+    function money(n){ return Number(n).toFixed(2); }
+    function paypalLink(amount){ return PAYPAL_BASE.replace(/\/$/,"") + "/" + money(amount); }
 
- function money(n){ return Number(n).toFixed(2); }
-  function paypalLink(amount){ return PAYPAL_BASE.replace(/\/$/,"") + "/" + money(amount); }
-   
-  const q = document.getElementById("q");
-  const info = document.getElementById("info");
-  const payBtn = document.getElementById("payBtn");
+    const q = document.getElementById("q");
+    const info = document.getElementById("info");
+    const payBtn = document.getElementById("payBtn");
 
-  const preview = document.getElementById("preview");
-  const pvImg = document.getElementById("pvImg");
-  const pvNo = document.getElementById("pvNo");
-  const pvName = document.getElementById("pvName");
+    const preview = document.getElementById("preview");
+    const pvImg = document.getElementById("pvImg");
+    const pvNo = document.getElementById("pvNo");
+    const pvName = document.getElementById("pvName");
 
-  function showPart(key){
-    const p = PARTS[key];
+    function showPart(key){
+      const p = PARTS[key];
 
-    if(!p){
-      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>2030-400</strong>';
-      info.style.color = "#6b7280";
-      payBtn.classList.add("disabled");
-      payBtn.href = "#";
-      if(preview) preview.style.display = "none";
-      return;
+      if(!p){
+        info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>400Z.990</strong>';
+        info.style.color = "#6b7280";
+        payBtn.classList.add("disabled");
+        payBtn.href = "#";
+        if(preview) preview.style.display = "none";
+        return;
+      }
+
+      info.style.color = "#111827";
+      info.innerHTML =
+        `<div><strong>Part No.</strong>: ${key}</div>
+         <div><strong>Description</strong>: ${p.name}</div>
+         <div><strong>Condition</strong>: Vintage part (sold as-is)</div>
+         <div><strong>Quantity</strong>: ${Number(p.qty) === 1 ? "1 available" : (Number(p.qty) + " available")}</div>
+         <div><strong>Price</strong>: ${money(p.price)} ${p.currency || ""}</div>`;
+
+      if(preview && p.img){
+        pvImg.src = p.img;
+        pvNo.textContent = key;
+        pvName.textContent = p.name;
+        preview.style.display = "flex";
+      } else if(preview){
+        preview.style.display = "none";
+      }
+
+      if(Number(p.qty) <= 0){
+        payBtn.classList.add("disabled");
+        payBtn.href = "#";
+        return;
+      }
+
+      payBtn.classList.remove("disabled");
+      payBtn.href = paypalLink(p.price);
     }
 
-    info.style.color = "#111827";
-    info.innerHTML =
-      `<div><strong>Part No.</strong>: ${key}</div>
-       <div><strong>Description</strong>: ${p.name}</div>
-       <div><strong>Condition</strong>: Original vintage Rolex part</div>
-       <div><strong>Quantity</strong>: ${Number(p.qty) === 1 ? "1 available" : (Number(p.qty) + " available")}</div>
-       <div><strong>Price</strong>: ${money(p.price)} ${p.currency || ""}</div>`;
+    // search input
+    q.addEventListener("input", () => showPart((q.value||"").trim()));
 
-    if(preview && p.img){
-      pvImg.src = p.img;
-      pvNo.textContent = key;
-      pvName.textContent = p.name;
-      preview.style.display = "flex";
-    }else if(preview){
-      preview.style.display = "none";
-    }
-
-    if(Number(p.qty) <= 0){
-      payBtn.classList.add("disabled");
-      payBtn.href = "#";
-      return;
-    }
-
-    payBtn.classList.remove("disabled");
-    payBtn.href = paypalLink(p.price);
-  }
- 
-  // input search
-  q.addEventListener("input", () => showPart((q.value||"").trim()));
-
-  // DOT click (delegation: punon gjithmonë)
-  document.addEventListener("click", (e) => {
-    const dot = e.target.closest(".dot");
-    if(!dot) return;
-    const partNo = dot.dataset.part;
-    q.value = partNo;
-    showPart(partNo);
-  });
-
-  // LISTA poshtë fotos (Front/Back)
-  function fillDiagramList(diagramId, listId){
-    const list = document.getElementById(listId);
-    const diagram = document.getElementById(diagramId);
-    if(!list || !diagram) return;
-
-    const dots = Array.from(diagram.querySelectorAll(".dot"))
-      .sort((a,b)=> Number(a.dataset.n||0) - Number(b.dataset.n||0));
-
-    list.innerHTML = dots.map(d => {
-      const n = d.dataset.n || d.textContent.trim();
-      const code = d.dataset.part;
-      const name = (PARTS[code] && PARTS[code].name) ? PARTS[code].name : "—";
-      return `<div class="item">
-                <div class="n">${n}</div>
-                <div><span class="code">${code}</span> <span class="name">— ${name}</span></div>
-              </div>`;
-    }).join("");
-  }
-
-  fillDiagramList("diagramFront", "frontList");
-  fillDiagramList("diagramBack", "backList");
-</script>
-
-<script>
-  const input = document.getElementById("q");
-
-  document.querySelectorAll(".part").forEach(btn => {
-    btn.addEventListener("click", () => {
-      input.value = btn.dataset.part;
-      input.dispatchEvent(new Event("input"));
+    // click on dot (opsionale)
+    document.addEventListener("click", (e) => {
+      const dot = e.target.closest(".dot");
+      if(!dot) return;
+      const partNo = dot.dataset.part;
+      if(!partNo) return;
+      q.value = partNo;
+      showPart(partNo);
     });
-  });
-</script>
 
-       
-  </body>
+    // click on part buttons list
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest(".part");
+      if(!btn) return;
+      const partNo = btn.dataset.part;
+      if(!partNo) return;
+      q.value = partNo;
+      showPart(partNo);
+    });
+  </script>
+</body>
 </html>
+
+
+

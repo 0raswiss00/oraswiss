@@ -400,8 +400,15 @@
       addToCart(partNo);
     });
 
-    // render cart on load
+   // render cart on load
     renderCart();
+    
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest(".part");
+  if (!btn) return;
+  alert("Klikove: " + btn.dataset.part);
+});
+    
   </script>
 </body>
 </html>

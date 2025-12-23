@@ -405,4 +405,46 @@
   </script>
 </body>
 </html>
+Ora
+// ---- CART (localStorage) ----
+const CART_KEY = "oraswiss_cart_3155";
 
+function loadCart(){
+  try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+  catch { return []; }
+}
+function saveCart(items){ localStorage.setItem(CART_KEY, JSON.stringify(items)); }
+
+function cartTotal(cart){
+  return cart.reduce((s,i)=> s + (Number(i.price)||0) * (Number(i.qty)||0), 0);
+}
+
+function openCart(){
+  document.getElementById("cartOverlay").classList.remove("hidden");
+  document.getElementById("cartDrawer").classList.remove("hidden");
+  document.getElementById("cartDrawer").setAttribute("aria-hidden","false");
+}
+function closeCart(){
+  document.getElementById("cartOverlay").classList.add("hidden");
+  document.getElementById("cartDrawer").classList.add("hidden");
+  document.getElementById("cartDrawer").setAttribute("aria-hidden","true");
+}
+
+function renderCart(){
+  const el = document.getElementById("cartItems");
+  const pay = document.getElementById("cartPayBtn");
+  const cart = loadCart();
+
+  if(!cart.length){
+    el.textContent = "Shporta është bosh.";
+    pay.href = "#";
+    pay.classList.add("disabled");
+    return;
+  }
+
+  const total = cartTotal(cart);
+  pay.classList.remove("disabled");
+  pay.href = paypalLink(total);
+
+  el.innerHTML = cart.map(i => `
+    <div style="display:flex;

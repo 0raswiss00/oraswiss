@@ -479,4 +479,280 @@ window.addEventListener("DOMContentLoaded", () => {
 </aside>
 </body>
 </html>
+ktuuuuu
+<script>
+  const PAYPAL_BASE = "https://paypal.me/EMRIYT"; // ndrysho EMRIYT
+  const CART_KEY = "oraswiss_cart";
 
+  // ✅ Përdor STOCK këtu (jo qty)
+  const PARTS = {
+    "22.300": { name:"Main Plate", price:0,  currency:"EUR", stock:1, img:"valjoux-22.300.jpg" },
+    "22.340": { name:"Train Bridge Wheel", price:50, currency:"EUR", stock:1, img:"vetta-22.340.jpg" },
+    "22.345": { name:"Chronograph Bridge", price:30, currency:"EUR", stock:3, img:"vetta-22.345.jpg" },
+    "22.347": { name:"Chronograph Operating Lever", price:45, currency:"EUR", stock:3, img:"vetta-22.347.jpg" },
+    "22.349": { name:"Screws Chronograph Operating Lever", price:25, currency:"EUR", stock:1, img:"vetta-22.349.jpg" },
+    "22.360": { name:"Balance Bridge", price:70, currency:"EUR", stock:1, img:"vetta-22.360.jpg" },
+    "22.370": { name:"Click spring", price:20, currency:"EUR", stock:1, img:"vetta-22.370.jpg" },
+    "22.373": { name:"Screws click spring", price:20, currency:"EUR", stock:1, img:"vetta-22.373.jpg" },
+    "22.390": { name:"Coupling Clutch", price:80, currency:"EUR", stock:1, img:"vetta-22.390.jpg" },
+    "22.420": { name:"Sliding Gear", price:48, currency:"EUR", stock:1, img:"vetta-22.420.jpg" }
+      "22.445": { name:"Hammer", price:37, currency:"EUR", stock:1, img:"vetta-22.445.jpg" },
+
+    "22.499": { name:"Friction Spring Wheel", price:22, currency:"EUR", stock:1, img:"vetta-22.499.jpg" },  
+    "22.500": { name:"Hour Wheel", price:80, currency:"EUR", stock:1, img:"vetta-22.500.jpg" },
+    "22.505": { name:"Minut Wheel", price:43, currency:"EUR", stock:1, img:"vetta-22.505.jpg" },
+
+   "22.515": { name:"Yoke Part", price:35, currency:"EUR", stock:1, img:"vetta-22.515.jpg" },
+
+     
+    "22.550": { name:"Cannon Pinion", price:47, currency:"EUR", stock:1, img:"vetta-22.550.jpg" },
+    "22.560": { name:"Winding Pinion", price:50, currency:"EUR", stock:1, img:"vetta-22.560.jpg" },
+    "22.565": { name:"Sliding Pinion", price:60, currency:"EUR", stock:1, img:"vetta-22.565.jpg" },
+    
+    "22.820": { name:"Barrel Complete", price:50, currency:"EUR", stock:1, img:"vetta-22.820.jpg" },
+    "22.830": { name:"Barrel Cover", price:25, currency:"EUR", stock:1, img:"vetta-22.830.jpg" },
+    "22.835": { name:"Barrel Arbor", price:25, currency:"EUR", stock:1, img:"vetta-22.835.jpg" },
+      
+    "22.860": { name:"Barrel Cover", price:25, currency:"EUR", stock:1, img:"vetta-22.860.jpg" },  
+      // ... vazhdo për të gjitha pjesët 22.xxx
+  };
+
+  function money(n){ return Number(n || 0).toFixed(2); }
+  function paypalLink(amount){
+    return PAYPAL_BASE.replace(/\/$/,"") + "/" + money(amount);
+  }
+
+  // --- Cart helpers (me normalizim për cart të vjetër) ---
+  function loadCart(){
+    let cart = [];
+    try { cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]"); }
+    catch(e){ cart = []; }
+
+    // ✅ normalizo fusha të vjetra (part -> partNo)
+    cart = cart.map(it => {
+      const partNo = (it.partNo ?? it.part ?? "").toString().trim();
+      return {
+        partNo,
+        name: (it.name ?? "").toString(),
+        price: Number(it.price || 0),
+        qty: Number(it.qty || 0)
+      };
+    }).filter(it => it.partNo);
+
+    return cart;
+  }
+
+  function saveCart(cart){
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  }
+
+  function getQtyInCart(partNo){
+    const cart = loadCart();
+    const item = cart.find(i => i.partNo === partNo);
+    return Number(item?.qty || 0);
+  }
+
+  function openCart(){
+    const panel = document.getElementById("cartPanel");
+    if(panel) panel.style.right = "0";
+  }
+  function closeCart(){
+    const panel = document.getElementById("cartPanel");
+    if(panel) panel.style.right = "-360px";
+  }
+
+  // ✅ Add to cart (qty fillon 1, max = stock)
+  function addToCart(partNo){
+    partNo = (partNo || "").toString().trim();
+    const p = PARTS[partNo];
+    if(!p) return;
+
+    const cart = loadCart();
+    const item = cart.find(i => i.partNo === partNo);
+    const maxStock = Number(p.stock ?? 1);
+
+    if(item){
+      const nextQty = Number(item.qty || 0) + 1;
+      if(nextQty > maxStock){
+        alert("Nuk ka më stok për këtë produkt");
+        return;
+      }
+      item.qty = nextQty;
+    } else {
+      cart.push({
+        partNo,
+        name: p.name || "",
+        price: Number(p.price || 0),
+        qty: 1
+      });
+    }
+
+    saveCart(cart);
+    renderCart();
+    openCart();
+    showPart(partNo); // rifresko “available”
+  }
+
+  // ✅ Change qty (+/-) dhe fshin kur shkon 0
+  function changeQty(partNo, delta){
+    partNo = (partNo || "").toString().trim();
+    const p = PARTS[partNo];
+    if(!p) return;
+
+    const cart = loadCart();
+    const idx = cart.findIndex(i => i.partNo === partNo);
+    if(idx === -1) return;
+
+    const maxStock = Number(p.stock ?? 1);
+    const current = Number(cart[idx].qty || 0);
+    let next = current + Number(delta || 0);
+
+    if(next > maxStock) next = maxStock;
+
+    if(next <= 0){
+      cart.splice(idx, 1); // ✅ heq produktin
+    } else {
+      cart[idx].qty = next;
+    }
+
+    saveCart(cart);
+    renderCart();
+    showPart(partNo); // rifresko “available”
+  }
+
+  function renderCart(){
+    const cart = loadCart();
+    const box = document.getElementById("cartItems");
+    if(!box) return;
+
+    if(!cart.length){
+      box.innerHTML = "Shporta është bosh.";
+      return;
+    }
+
+    let total = 0;
+
+    box.innerHTML = cart.map(i => {
+      const qty = Number(i.qty || 0);
+      const price = Number(i.price || 0);
+      const line = price * qty;
+      total += line;
+
+      return `
+        <div style="border-bottom:1px solid #eee;padding:10px 0">
+          <strong>${i.partNo}</strong><br>
+          ${i.name}
+          <div style="margin-top:6px;display:flex;align-items:center;gap:8px">
+            <button type="button" class="qtyBtn" data-action="dec" data-part="${i.partNo}">−</button>
+            <strong>${qty}</strong>
+            <button type="button" class="qtyBtn" data-action="inc" data-part="${i.partNo}">+</button>
+            <span style="margin-left:auto;font-weight:800">€${money(line)}</span>
+          </div>
+        </div>
+      `;
+    }).join("") + `
+      <div style="padding-top:12px;font-weight:900;text-align:right">
+        TOTAL: €${money(total)}
+      </div>
+      <a class="btn" style="display:block;margin-top:10px;text-align:center" target="_blank" rel="noopener"
+         href="${paypalLink(total)}">PayPal (Total)</a>
+    `;
+  }
+
+  // ===== Preview / Info =====
+  const q = document.getElementById("q");
+  const info = document.getElementById("info");
+  const payBtn = document.getElementById("payBtn");
+
+  const preview = document.getElementById("preview");
+  const pvImg = document.getElementById("pvImg");
+  const pvNo = document.getElementById("pvNo");
+  const pvName = document.getElementById("pvName");
+
+  function showPart(key){
+    key = (key || "").toString().trim();
+    const p = PARTS[key];
+
+    if(!p){
+      if(info){
+        info.innerHTML = 'Part not found. Enter a Part No.';
+        info.style.color = "#6b7280";
+      }
+      if(payBtn){
+        payBtn.classList.add("disabled");
+        payBtn.href = "#";
+      }
+      if(preview) preview.style.display = "none";
+      return;
+    }
+
+    const inCart = getQtyInCart(key);
+    const stock = Number(p.stock ?? 1);
+    const remaining = Math.max(0, stock - inCart);
+
+    if(info){
+      info.style.color = "#111827";
+      info.innerHTML =
+        `<div><strong>Part No.</strong>: ${key}</div>
+         <div><strong>Description</strong>: ${p.name}</div>
+         <div><strong>Condition</strong>: Vintage part (sold as-is)</div>
+         <div><strong>Quantity</strong>: ${remaining} available</div>
+         <div><strong>Price</strong>: ${money(p.price)} ${p.currency || ""}</div>`;
+    }
+
+    if(preview && p.img){
+      pvImg.src = p.img;
+      pvNo.textContent = key;
+      pvName.textContent = p.name;
+      preview.style.display = "flex";
+    } else if(preview){
+      preview.style.display = "none";
+    }
+
+    if(payBtn){
+      if(remaining <= 0){
+        payBtn.classList.add("disabled");
+        payBtn.href = "#";
+      } else {
+        payBtn.classList.remove("disabled");
+        payBtn.href = paypalLink(p.price);
+      }
+    }
+  }
+
+  // input search
+  if(q){
+    q.addEventListener("input", () => showPart((q.value || "").trim()));
+  }
+
+  // klik në butonat .part (data-part)
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".part");
+    if(btn){
+      const partNo = (btn.dataset.part || "").trim();
+      if(partNo){
+        if(q) q.value = partNo;
+        showPart(partNo);
+        addToCart(partNo);
+      }
+    }
+  });
+
+  // plus/minus në shportë
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest(".qtyBtn");
+    if(!b) return;
+    const partNo = (b.dataset.part || "").trim();
+    const action = b.dataset.action;
+    if(action === "inc") changeQty(partNo, +1);
+    if(action === "dec") changeQty(partNo, -1);
+  });
+
+  window.addEventListener("DOMContentLoaded", () => {
+    renderCart();
+    if(q && q.value) showPart(q.value.trim());
+  });
+
+  // ekspozo closeCart për butonin X
+  window.closeCart = closeCart;
+</script>

@@ -475,3 +475,23 @@ window.addEventListener("DOMContentLoaded", () => {
 // bëje closeCart global për butonin X
 window.closeCart = closeCart;
 </script>
+<!-- CART PANEL -->
+<aside id="cartPanel" style="
+  position:fixed; top:0; right:-360px; width:360px; height:100%;
+  background:#fff; border-left:1px solid #e5e7eb;
+  box-shadow:-10px 0 30px rgba(0,0,0,.15);
+  transition:right .25s ease; z-index:9999; padding:12px;
+">
+  <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding-bottom:10px">
+    <strong>Shporta</strong>
+    <button type="button"
+        onclick="closeCart()"
+        style="cursor:pointer; z-index:10001; position:relative; pointer-events:auto;">
+  X
+</button>
+  </div>
+
+  <div id="cartItems">Shporta është bosh.</div>
+</aside>
+</body>
+</html>

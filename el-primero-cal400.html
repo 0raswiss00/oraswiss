@@ -184,12 +184,6 @@ const PAYPAL_BASE = "https://paypal.me/EMRIYT"; // ndrysho EMRIYT
 const CART_KEY = "oraswiss_cart";
 const maxStock = p.stock ?? 1;
 
-if (item.qty < maxStock) {
-  item.qty += 1;
-} else {
-  alert("Nuk ka më stok për këtë produkt");
-  return;
-}
 const PARTS = {
   "400z.300": {
     name: "Main Plate",
@@ -262,11 +256,12 @@ function addToCart(partNo){
 
   const cart = loadCart();
   const item = cart.find(i => i.partNo === partNo);
+
   const maxStock = p.stock ?? 1;
 
   if(item){
     if(item.qty < maxStock){
-      item.qty += 1;
+      item.qty = Number(item.qty || 0) + 1;
     } else {
       alert("Nuk ka më stok për këtë produkt");
       return;
@@ -274,7 +269,7 @@ function addToCart(partNo){
   } else {
     cart.push({
       partNo,
-      name: p.name,
+      name: p.name || "",
       price: Number(p.price || 0),
       qty: 1
     });

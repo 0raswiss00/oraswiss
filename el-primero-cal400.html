@@ -436,14 +436,7 @@ document.addEventListener("click", (e) => {
   if(action === "inc") changeQty(partNo, +1);
   if(action === "dec") changeQty(partNo, -1);
 });
-window.addEventListener("DOMContentLoaded", () => {
-  cleanupCart();
-  renderCart();
-});
-window.addEventListener("DOMContentLoaded", () => {
-  renderCart();
-  if(q && q.value) showPart(q.value.trim());
-});
+
 </script>
 
   

@@ -194,40 +194,64 @@ const CART_KEY = "oraswiss_cart";
    - Përdor: stock (jo qty)
    ========================= */
 const PARTS = {
-  "22.300": { name:"Main Plate", price:00, currency:"EUR", qty:1, img:"valjoux-22.300.jpg" },
-  "22.340": { name:"Train Bridge Wheel", price:50, currency:"EUR", qty:1, img:"vetta-22.340.jpg" },
-  "22.345": { name:"Chronograph Bridge", price:30, currency:"EUR", qty:1, img:"vetta-22.345.jpg" },
-  "22.347": { name:"Chronograph Operating Lever", price:45, currency:"EUR", qty:3, img:"vetta-22.347.jpg" },
-  "22.349": { name:"Screws Chronograph Operating Lever", price:25, currency:"EUR", qty:1, img:"vetta-22.349.jpg" },
-     
-  "22.360": { name:"Balanc Bridge", price:70, currency:"EUR", qty:1, img:"vetta-22.360.jpg" }, 
+  "22.300": {
+    name: "Main Plate",
+    price: 0,
+    currency: "EUR",
+    stock: 1,
+    img: "valjoux-22.300.jpg"
+  },
 
-  "22.370": { name:"click spring", price:40, currency:"EUR", qty:3, img:"vetta-22.370.jpg" }, 
-  "22.373": { name:"Screws click spring", price:20, currency:"EUR", qty:1, img:"vetta-22.373.jpg" }, 
+  "22.340": {
+    name: "Train Bridge Wheel",
+    price: 50,
+    currency: "EUR",
+    stock: 1,
+    img: "vetta-22.340.jpg"
+  },
+
+  "22.347": {   // 👈 KËTU
+    name: "Chronograph Operating Lever",
+    price: 45,
+    currency: "EUR",
+    stock: 3,   // ✅ KËTU vendoset sasia reale
+    img: "vetta-22.347.jpg"
+  }
+};
+  "22.300": { name:"Main Plate", price:00, currency:"EUR", qty:1, stock:"valjoux-22.300.jpg" },
+  "22.340": { name:"Train Bridge Wheel", price:50, currency:"EUR", stock:1, img:"vetta-22.340.jpg" },
+  "22.345": { name:"Chronograph Bridge", price:30, currency:"EUR", stock:1, img:"vetta-22.345.jpg" },
+  "22.347": { name:"Chronograph Operating Lever", price:45, currency:"EUR", stock:3, img:"vetta-22.347.jpg" },
+  "22.349": { name:"Screws Chronograph Operating Lever", price:25, currency:"EUR", stock:1, img:"vetta-22.349.jpg" },
+     
+  "22.360": { name:"Balanc Bridge", price:70, currency:"EUR", stock:1, img:"vetta-22.360.jpg" }, 
+
+  "22.370": { name:"click spring", price:40, currency:"EUR", stock:3, img:"vetta-22.370.jpg" }, 
+  "22.373": { name:"Screws click spring", price:20, currency:"EUR", stock:1, img:"vetta-22.373.jpg" }, 
    
-  "22.390": { name:"Copuling Clutch", price:80, currency:"EUR", qty:2, img:"vetta-22.390.jpg" },
-  "22.420": { name:"Sliding Gear", price:48, currency:"EUR", qty:1, img:"vetta-22.420.jpg" },
-  "22.445": { name:"Hammer", price:37, currency:"EUR", qty:3, img:"vetta-22.445.jpg" },
+  "22.390": { name:"Copuling Clutch", price:80, currency:"EUR", stock:2, img:"vetta-22.390.jpg" },
+  "22.420": { name:"Sliding Gear", price:48, currency:"EUR", stock:1, img:"vetta-22.420.jpg" },
+  "22.445": { name:"Hammer", price:37, currency:"EUR", stock:3, img:"vetta-22.445.jpg" },
 
-  "22.499": { name:"Friction Spring Wheel", price:22, currency:"EUR", qty:1, img:"vetta-22.499.jpg" },  
-  "22.500": { name:"Hour Wheel", price:80, currency:"EUR", qty:2, img:"vetta-22.500.jpg" },
-  "22.505": { name:"Minut Wheel", price:43, currency:"EUR", qty:2, img:"vetta-22.505.jpg" },
+  "22.499": { name:"Friction Spring Wheel", price:22, currency:"EUR", stock:1, img:"vetta-22.499.jpg" },  
+  "22.500": { name:"Hour Wheel", price:80, currency:"EUR", stock:2, img:"vetta-22.500.jpg" },
+  "22.505": { name:"Minut Wheel", price:43, currency:"EUR", stock:2, img:"vetta-22.505.jpg" },
 
- "22.515": { name:"Yoke Part", price:35, currency:"EUR", qty:1, img:"vetta-22.515.jpg" },
+ "22.515": { name:"Yoke Part", price:35, currency:"EUR", stock:1, img:"vetta-22.515.jpg" },
 
      
-  "22.550": { name:"Cannon Pinion", price:47, currency:"EUR", qty:1, img:"vetta-22.550.jpg" },
-  "22.560": { name:"Winding Pinion", price:50, currency:"EUR", qty:1, img:"vetta-22.560.jpg" },
-  "22.565": { name:"Sliding Pinion", price:60, currency:"EUR", qty:1, img:"vetta-22.565.jpg" },
+  "22.550": { name:"Cannon Pinion", price:47, currency:"EUR", stock:1, img:"vetta-22.550.jpg" },
+  "22.560": { name:"Winding Pinion", price:50, currency:"EUR", stock:1, img:"vetta-22.560.jpg" },
+  "22.565": { name:"Sliding Pinion", price:60, currency:"EUR", stock:1, img:"vetta-22.565.jpg" },
     
-  "22.820": { name:"Barrel Complete", price:50, currency:"EUR", qty:1, img:"vetta-22.820.jpg" },
-  "22.830": { name:"Barrel Cover", price:25, currency:"EUR", qty:1, img:"vetta-22.830.jpg" },
-  "22.835": { name:"Barrel Arbor", price:25, currency:"EUR", qty:1, img:"vetta-22.835.jpg" },
+  "22.820": { name:"Barrel Complete", price:50, currency:"EUR", stock:1, img:"vetta-22.820.jpg" },
+  "22.830": { name:"Barrel Cover", price:25, currency:"EUR", stock:1, img:"vetta-22.830.jpg" },
+  "22.835": { name:"Barrel Arbor", price:25, currency:"EUR", stock:1, img:"vetta-22.835.jpg" },
      
-  "22.860": { name:"Barrel Cover", price:25, currency:"EUR", qty:1, img:"vetta-22.860.jpg" },  
+  "22.860": { name:"Barrel Cover", price:25, currency:"EUR", stock:1, img:"vetta-22.860.jpg" },  
      
-  "22.900": { name:"Automatic Winding Rotor", price:00, currency:"EUR", qty:1, img:"valjoux-22.900.jpg" },
-  "22.910": { name:"Automatic Rotor Screws (Set of 3)", price:00, currency:"EUR", qty:1, img:"valjoux-22.910.jpg" }
+  "22.900": { name:"Automatic Winding Rotor", price:00, currency:"EUR", stock:1, img:"valjoux-22.900.jpg" },
+  "22.910": { name:"Automatic Rotor Screws (Set of 3)", price:00, currency:"EUR", stock:1, img:"valjoux-22.910.jpg" }
 };
 
 

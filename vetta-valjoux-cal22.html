@@ -180,11 +180,14 @@
     </div>
   </div>
 <script>
-  const PAYPAL_BASE = "https://paypal.me/EMRIYT"; // ndrysho EMRIYT
-  const CART_KEY = "oraswiss_cart";
+<script>
+const PAYPAL_BASE = "https://paypal.me/EMRIYT"; // ndrysho EMRIYT
+const CART_KEY = "oraswiss_cart";
 
-  // ✅ Përdor STOCK këtu (jo qty)
-  const PARTS = {
+/* =========================
+   1) PRODUCTS (PARTS) - STOCK
+========================= */
+const PARTS = {
     "22.300": { name:"Main Plate", price:0,  currency:"EUR", stock:1, img:"valjoux-22.300.jpg" },
     "22.340": { name:"Train Bridge Wheel", price:50, currency:"EUR", stock:1, img:"vetta-22.340.jpg" },
     "22.345": { name:"Chronograph Bridge", price:30, currency:"EUR", stock:3, img:"vetta-22.345.jpg" },
@@ -216,245 +219,292 @@
       // ... vazhdo për të gjitha pjesët 22.xxx
   };
 
-  function money(n){ return Number(n || 0).toFixed(2); }
-  function paypalLink(amount){
-    return PAYPAL_BASE.replace(/\/$/,"") + "/" + money(amount);
-  }
+/* =========================
+   2) HELPERS
+========================= */
+function money(n){ return Number(n || 0).toFixed(2); }
+function paypalLink(amount){
+  return PAYPAL_BASE.replace(/\/$/,"") + "/" + money(amount);
+}
 
-  // --- Cart helpers (me normalizim për cart të vjetër) ---
-  function loadCart(){
-    let cart = [];
-    try { cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]"); }
-    catch(e){ cart = []; }
+function loadCart(){
+  try { return JSON.parse(localStorage.getItem(CART_KEY) || "[]"); }
+  catch(e){ return []; }
+}
+function saveCart(cart){
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+}
 
-    // ✅ normalizo fusha të vjetra (part -> partNo)
-    cart = cart.map(it => {
-      const partNo = (it.partNo ?? it.part ?? "").toString().trim();
-      return {
-        partNo,
-        name: (it.name ?? "").toString(),
-        price: Number(it.price || 0),
-        qty: Number(it.qty || 0)
-      };
-    }).filter(it => it.partNo);
+/* ✅ PASTRIMI - fshin ghost items (p.sh. 22.347 që s’është më te PARTS) */
+function cleanupCart(){
+  let cart = loadCart();
 
-    return cart;
-  }
+  // normalizo cart (nqs ka fusha të vjetra)
+  cart = cart.map(it => ({
+    partNo: String(it.partNo ?? it.part ?? "").trim(),
+    name: String(it.name ?? ""),
+    price: Number(it.price || 0),
+    qty: Number(it.qty || 0)
+  })).filter(it => it.partNo);
 
-  function saveCart(cart){
-    localStorage.setItem(CART_KEY, JSON.stringify(cart));
-  }
+  // fshi artikuj që s’ekzistojnë më në PARTS
+  cart = cart.filter(it => PARTS[it.partNo]);
 
-  function getQtyInCart(partNo){
-    const cart = loadCart();
-    const item = cart.find(i => i.partNo === partNo);
-    return Number(item?.qty || 0);
-  }
+  saveCart(cart);
+}
 
-  function openCart(){
-    const panel = document.getElementById("cartPanel");
-    if(panel) panel.style.right = "0";
-  }
-  function closeCart(){
-    const panel = document.getElementById("cartPanel");
-    if(panel) panel.style.right = "-360px";
-  }
+/* =========================
+   3) CART PANEL OPEN/CLOSE
+========================= */
+function openCart(){
+  const panel = document.getElementById("cartPanel");
+  if(panel) panel.style.right = "0";
+}
+function closeCart(){
+  const panel = document.getElementById("cartPanel");
+  if(panel) panel.style.right = "-360px";
+}
 
-  // ✅ Add to cart (qty fillon 1, max = stock)
-  function addToCart(partNo){
-    partNo = (partNo || "").toString().trim();
-    const p = PARTS[partNo];
-    if(!p) return;
+/* =========================
+   4) ADD TO CART (limit = stock)
+========================= */
+function addToCart(partNo){
+  partNo = String(partNo || "").trim();
+  const p = PARTS[partNo];
+  if(!p) return;
 
-    const cart = loadCart();
-    const item = cart.find(i => i.partNo === partNo);
-    const maxStock = Number(p.stock ?? 1);
+  const cart = loadCart();
+  const item = cart.find(i => i.partNo === partNo);
+  const maxStock = Number(p.stock ?? 1);
 
-    if(item){
-      const nextQty = Number(item.qty || 0) + 1;
-      if(nextQty > maxStock){
-        alert("Nuk ka më stok për këtë produkt");
-        return;
-      }
-      item.qty = nextQty;
+  if(item){
+    const cur = Number(item.qty || 0);
+    if(cur < maxStock){
+      item.qty = cur + 1;
     } else {
-      cart.push({
-        partNo,
-        name: p.name || "",
-        price: Number(p.price || 0),
-        qty: 1
-      });
-    }
-
-    saveCart(cart);
-    renderCart();
-    openCart();
-    showPart(partNo); // rifresko “available”
-  }
-
-  // ✅ Change qty (+/-) dhe fshin kur shkon 0
-  function changeQty(partNo, delta){
-    partNo = (partNo || "").toString().trim();
-    const p = PARTS[partNo];
-    if(!p) return;
-
-    const cart = loadCart();
-    const idx = cart.findIndex(i => i.partNo === partNo);
-    if(idx === -1) return;
-
-    const maxStock = Number(p.stock ?? 1);
-    const current = Number(cart[idx].qty || 0);
-    let next = current + Number(delta || 0);
-
-    if(next > maxStock) next = maxStock;
-
-    if(next <= 0){
-      cart.splice(idx, 1); // ✅ heq produktin
-    } else {
-      cart[idx].qty = next;
-    }
-
-    saveCart(cart);
-    renderCart();
-    showPart(partNo); // rifresko “available”
-  }
-
-  function renderCart(){
-    const cart = loadCart();
-    const box = document.getElementById("cartItems");
-    if(!box) return;
-
-    if(!cart.length){
-      box.innerHTML = "Shporta është bosh.";
+      alert("Nuk ka më stok për këtë produkt");
       return;
     }
+  } else {
+    if(maxStock <= 0){
+      alert("S’ka stok");
+      return;
+    }
+    cart.push({
+      partNo,
+      name: p.name || "",
+      price: Number(p.price || 0),
+      qty: 1
+    });
+  }
 
-    let total = 0;
+  saveCart(cart);
+  renderCart();
+  openCart();
+  showPart(partNo);
+}
 
-    box.innerHTML = cart.map(i => {
-      const qty = Number(i.qty || 0);
-      const price = Number(i.price || 0);
-      const line = price * qty;
-      total += line;
+/* =========================
+   5) CHANGE QTY (+/-)
+========================= */
+function changeQty(partNo, delta){
+  partNo = String(partNo || "").trim();
+  const p = PARTS[partNo];
+  if(!p) return;
 
-      return `
-        <div style="border-bottom:1px solid #eee;padding:10px 0">
-          <strong>${i.partNo}</strong><br>
-          ${i.name}
-          <div style="margin-top:6px;display:flex;align-items:center;gap:8px">
-            <button type="button" class="qtyBtn" data-action="dec" data-part="${i.partNo}">−</button>
-            <strong>${qty}</strong>
-            <button type="button" class="qtyBtn" data-action="inc" data-part="${i.partNo}">+</button>
-            <span style="margin-left:auto;font-weight:800">€${money(line)}</span>
-          </div>
+  const cart = loadCart();
+  const idx = cart.findIndex(i => i.partNo === partNo);
+  if(idx === -1) return;
+
+  const maxStock = Number(p.stock ?? 1);
+  let next = Number(cart[idx].qty || 0) + Number(delta || 0);
+
+  if(next > maxStock) next = maxStock;
+
+  if(next <= 0){
+    cart.splice(idx, 1);
+  } else {
+    cart[idx].qty = next;
+  }
+
+  saveCart(cart);
+  renderCart();
+  showPart(partNo);
+}
+
+/* =========================
+   6) RENDER CART
+========================= */
+function renderCart(){
+  const cart = loadCart();
+  const box = document.getElementById("cartItems");
+  if(!box) return;
+
+  if(!cart.length){
+    box.innerHTML = "Shporta është bosh.";
+    return;
+  }
+
+  let total = 0;
+
+  box.innerHTML = cart.map(i => {
+    const qty = Number(i.qty || 0);
+    const price = Number(i.price || 0);
+    const line = price * qty;
+    total += line;
+
+    return `
+      <div style="border-bottom:1px solid #eee;padding:10px 0">
+        <strong>${i.partNo}</strong><br>
+        ${i.name}
+        <div style="margin-top:6px;display:flex;align-items:center;gap:8px">
+          <button type="button" class="qtyBtn" data-action="dec" data-part="${i.partNo}">−</button>
+          <strong>${qty}</strong>
+          <button type="button" class="qtyBtn" data-action="inc" data-part="${i.partNo}">+</button>
+          <span style="margin-left:auto;font-weight:800">€${money(line)}</span>
         </div>
-      `;
-    }).join("") + `
-      <div style="padding-top:12px;font-weight:900;text-align:right">
-        TOTAL: €${money(total)}
       </div>
-      <a class="btn" style="display:block;margin-top:10px;text-align:center" target="_blank" rel="noopener"
-         href="${paypalLink(total)}">PayPal (Total)</a>
     `;
-  }
+  }).join("") + `
+    <div style="padding-top:12px;font-weight:900;text-align:right">
+      TOTAL: €${money(total)}
+    </div>
+    <a class="btn" style="display:block;margin-top:10px;text-align:center" target="_blank" rel="noopener"
+       href="${paypalLink(total)}">PayPal (Total)</a>
+  `;
+}
 
-  // ===== Preview / Info =====
-  const q = document.getElementById("q");
-  const info = document.getElementById("info");
-  const payBtn = document.getElementById("payBtn");
+/* =========================
+   7) SHOW PART INFO (Quantity = stock)
+========================= */
+const q = document.getElementById("q");
+const info = document.getElementById("info");
+const payBtn = document.getElementById("payBtn");
 
-  const preview = document.getElementById("preview");
-  const pvImg = document.getElementById("pvImg");
-  const pvNo = document.getElementById("pvNo");
-  const pvName = document.getElementById("pvName");
+const preview = document.getElementById("preview");
+const pvImg = document.getElementById("pvImg");
+const pvNo = document.getElementById("pvNo");
+const pvName = document.getElementById("pvName");
 
-  function showPart(key){
-    key = (key || "").toString().trim();
-    const p = PARTS[key];
+function showPart(key){
+  key = String(key || "").trim();
+  const p = PARTS[key];
 
-    if(!p){
-      if(info){
-        info.innerHTML = 'Part not found. Enter a Part No.';
-        info.style.color = "#6b7280";
-      }
-      if(payBtn){
-        payBtn.classList.add("disabled");
-        payBtn.href = "#";
-      }
-      if(preview) preview.style.display = "none";
-      return;
-    }
-
-    const inCart = getQtyInCart(key);
-    const stock = Number(p.stock ?? 1);
-    const remaining = Math.max(0, stock - inCart);
-
+  if(!p){
     if(info){
-      info.style.color = "#111827";
-      info.innerHTML =
-        `<div><strong>Part No.</strong>: ${key}</div>
-         <div><strong>Description</strong>: ${p.name}</div>
-         <div><strong>Condition</strong>: Vintage part (sold as-is)</div>
-         <div><strong>Quantity</strong>: ${remaining} available</div>
-         <div><strong>Price</strong>: ${money(p.price)} ${p.currency || ""}</div>`;
+      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>22.990</strong>';
+      info.style.color = "#6b7280";
     }
-
-    if(preview && p.img){
-      pvImg.src = p.img;
-      pvNo.textContent = key;
-      pvName.textContent = p.name;
-      preview.style.display = "flex";
-    } else if(preview){
-      preview.style.display = "none";
-    }
-
     if(payBtn){
-      if(remaining <= 0){
-        payBtn.classList.add("disabled");
-        payBtn.href = "#";
-      } else {
-        payBtn.classList.remove("disabled");
-        payBtn.href = paypalLink(p.price);
-      }
+      payBtn.classList.add("disabled");
+      payBtn.href = "#";
     }
+    if(preview) preview.style.display = "none";
+    return;
   }
 
-  // input search
-  if(q){
-    q.addEventListener("input", () => showPart((q.value || "").trim()));
+  const st = Number(p.stock ?? 1);
+
+  if(info){
+    info.style.color = "#111827";
+    info.innerHTML =
+      `<div><strong>Part No.</strong>: ${key}</div>
+       <div><strong>Description</strong>: ${p.name}</div>
+       <div><strong>Quantity</strong>: ${st} available</div>
+       <div><strong>Price</strong>: ${money(p.price)} ${p.currency || ""}</div>`;
   }
 
-  // klik në butonat .part (data-part)
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest(".part");
-    if(btn){
-      const partNo = (btn.dataset.part || "").trim();
-      if(partNo){
-        if(q) q.value = partNo;
-        showPart(partNo);
-        addToCart(partNo);
-      }
+  if(preview && p.img){
+    pvImg.src = p.img;
+    pvNo.textContent = key;
+    pvName.textContent = p.name;
+    preview.style.display = "flex";
+  } else if(preview){
+    preview.style.display = "none";
+  }
+
+  if(payBtn){
+    if(st <= 0){
+      payBtn.classList.add("disabled");
+      payBtn.href = "#";
+    } else {
+      payBtn.classList.remove("disabled");
+      payBtn.href = paypalLink(p.price);
     }
-  });
+  }
+}
 
-  // plus/minus në shportë
-  document.addEventListener("click", (e) => {
-    const b = e.target.closest(".qtyBtn");
-    if(!b) return;
-    const partNo = (b.dataset.part || "").trim();
-    const action = b.dataset.action;
-    if(action === "inc") changeQty(partNo, +1);
-    if(action === "dec") changeQty(partNo, -1);
-  });
+/* =========================
+   😎 EVENTS
+========================= */
+if(q){
+  q.addEventListener("input", () => showPart((q.value || "").trim()));
+}
 
-  window.addEventListener("DOMContentLoaded", () => {
-    renderCart();
-    if(q && q.value) showPart(q.value.trim());
-  });
+// klik në .dot
+document.addEventListener("click", (e) => {
+  const dot = e.target.closest(".dot");
+  if(!dot) return;
+  const partNo = String(dot.dataset.part || "").trim();
+  if(!partNo) return;
 
-  // ekspozo closeCart për butonin X
-  window.closeCart = closeCart;
+  if(q) q.value = partNo;
+  showPart(partNo);
+  addToCart(partNo);
+});
+
+// klik në .part
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".part");
+  if(!btn) return;
+  const partNo = String(btn.dataset.part || "").trim();
+  if(!partNo) return;
+
+  if(q) q.value = partNo;
+  showPart(partNo);
+  addToCart(partNo);
+});
+
+// plus/minus në shportë
+document.addEventListener("click", (e) => {
+  const b = e.target.closest(".qtyBtn");
+  if(!b) return;
+
+  const partNo = String(b.dataset.part || "").trim();
+  const action = b.dataset.action;
+
+  if(action === "inc") changeQty(partNo, +1);
+  if(action === "dec") changeQty(partNo, -1);
+});
+
+/* ✅ VETËM 1 DOMContentLoaded */
+window.addEventListener("DOMContentLoaded", () => {
+  cleanupCart();
+  renderCart();
+  if(q && q.value) showPart(q.value.trim());
+});
+
+// bëje closeCart global për butonin X
+window.closeCart = closeCart;
 </script>
+
+
+<!-- CART PANEL -->
+<aside id="cartPanel" style="
+  position:fixed; top:0; right:-360px; width:360px; height:100%;
+  background:#fff; border-left:1px solid #e5e7eb;
+  box-shadow:-10px 0 30px rgba(0,0,0,.15);
+  transition:right .25s ease; z-index:9999; padding:12px;
+">
+  <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding-bottom:10px">
+    <strong>Shporta</strong>
+    <button type="button"
+        onclick="closeCart()"
+        style="cursor:pointer; z-index:10001; position:relative; pointer-events:auto;">
+  X
+</button>
+  </div>
+
   <div id="cartItems">Shporta është bosh.</div>
 </aside>
 </body>

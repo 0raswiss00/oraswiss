@@ -107,7 +107,7 @@
         <h3 class="card-title">Vetta Vljoux – Separate Parts – Cal. 22</h3>
 
         <div class="row">
-          <input id="q" type="search" placeholder="Enter Part No. e.g. 22.990" />
+          <input id="q" type="search" placeholder="Enter Part No. e.g. 22.950" />
         </div>
 
         <div id="info" class="result">Select a part by entering the Part Number.</div>
@@ -124,7 +124,7 @@
           <a id="payBtn" class="btn disabled" href="#" target="_blank" rel="noopener">Buy with PayPal</a>
         </div>
 
-        <div class="tip">Tip: enter e.g. <b>22.990</b> or click a part button in the list.</div>
+        <div class="tip">Tip: enter e.g. <b>22.950</b> or click a part button in the list.</div>
       </div>
 
       <!-- RIGHT -->
@@ -161,11 +161,11 @@ const CART_KEY = "oraswiss_cart";
    1) PRODUCTS (PARTS) - STOCK
 ========================= */
 const PARTS = {
-    "22.300": { name:"Main Plate", price:0,  currency:"EUR", stock:1, img:"valjoux-22.300.jpg" },
+    "00.1500": { name:"Main Plate", price:0,  currency:"EUR", stock:1, img:"valjoux-00.1500.jpg" },
 
       
-    "22.860": { name:"Barrel Cover", price:25, currency:"EUR", stock:1, img:"vetta-22.860.jpg" },  
-      // ... vazhdo për të gjitha pjesët 22.xxx
+    "00.1500": { name:"Barrel Cover", price:25, currency:"EUR", stock:1, img:"vetta-00.1500.jpg" },  
+      // ... vazhdo për të gjitha pjesët 00.xxx
   };
 
 /* =========================
@@ -184,7 +184,7 @@ function saveCart(cart){
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
 }
 
-/* ✅ PASTRIMI - fshin ghost items (p.sh. 00.000 që s’është më te PARTS) */
+/* ✅ PASTRIMI - fshin ghost items (p.sh. 00.1500 që s’është më te PARTS) */
 function cleanupCart(){
   let cart = loadCart();
 
@@ -341,7 +341,7 @@ function showPart(key){
 
   if(!p){
     if(info){
-      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>22.990</strong>';
+      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>2030.950</strong>';
       info.style.color = "#6b7280";
     }
     if(payBtn){
@@ -458,3 +458,5 @@ window.closeCart = closeCart;
 </aside>
 </body>
 </html>
+
+

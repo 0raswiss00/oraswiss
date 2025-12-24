@@ -212,7 +212,7 @@ const PARTS = {
   "22.820": { name:"Barrel Complete", price:50, currency:"EUR", stock:1, img:"vetta-22.820.jpg" },
   "22.830": { name:"Barrel Cover", price:25, currency:"EUR", stock:1, img:"vetta-22.830.jpg" },
   "22.835": { name:"Barrel Arbor", price:25, currency:"EUR", stock:1, img:"vetta-22.835.jpg" },
-};
+ };
 
 /* =========================
    2) HELPERS
@@ -230,7 +230,7 @@ function saveCart(cart){
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
 }
 
-/* ✅ PASTRIMI - fshin ghost items (p.sh. 00.1500 që s’është më te PARTS) */
+/* ✅ PASTRIMI - fshin ghost items (p.sh. 00.0000 që s’është më te PARTS) */
 function cleanupCart(){
   let cart = loadCart();
 

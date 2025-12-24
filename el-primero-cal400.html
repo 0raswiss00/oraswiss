@@ -380,7 +380,7 @@ function showPart(key){
 
   if(!p){
     if(info){
-      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>400z.1000</strong>';
+      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>400z.300</strong>';
       info.style.color = "#6b7280";
     }
     if(payBtn){
@@ -475,47 +475,3 @@ window.addEventListener("DOMContentLoaded", () => {
 // bëje closeCart global për butonin X
 window.closeCart = closeCart;
 </script>
-
-<!-- PREVIEW (foto + paypal për artikullin e zgjedhur) -->
-<!-- PREVIEW (foto + paypal për artikullin e zgjedhur) -->
-<div id="preview" style="display:none;border:1px solid #e5e7eb;padding:14px;border-radius:12px;margin-top:12px">
-
-  <!-- FOTO E MADHE -->
- <!-- FOTO E MADHE (klik = zmadhohet 3x) -->
-<div id="preview" style="display:none;border:1px solid #e5e7eb;padding:14px;border-radius:12px;margin-top:12px;">
-  <img id="pvImg" src=""
-       style="width:100%;max-width:600px;height:auto;object-fit:cover;border-radius:12px;border:1px solid #e5e7eb;display:block;margin-bottom:12px;cursor:zoom-in;transition:transform .2s ease;" />
-
-  <div>
-    <div><strong id="pvNo"></strong></div>
-    <div id="pvName" style="opacity:.85;margin-top:2px"></div>
-    <div id="pvPrice" style="font-weight:800;margin-top:6px"></div>
-  </div>
-
-  <a id="pvPay" class="btn" target="_blank" rel="noopener"
-     style="display:inline-block;margin-top:14px;text-align:center;width:100%">
-    Buy with PayPal
-  </a>
-</div>
- 
-<!-- CART PANEL -->
-<aside id="cartPanel" style="
-  position:fixed; top:0; right:-360px; width:360px; height:100%;
-  background:#fff; border-left:1px solid #e5e7eb;
-  box-shadow:-10px 0 30px rgba(0,0,0,.15);
-  transition:right .25s ease; z-index:9999; padding:12px;
-">
-  <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding-bottom:10px">
-    <strong>Shporta</strong>
-    <button type="button"
-        onclick="closeCart()"
-        style="cursor:pointer; z-index:10001; position:relative; pointer-events:auto;">
-  X
-</button>
-  </div>
-
-  <div id="cartItems">Shporta është bosh.</div>
-</aside>
-</body>
-</html>
-  

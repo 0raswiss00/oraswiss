@@ -190,22 +190,23 @@ if (item.qty < maxStock) {
   alert("Nuk ka më stok për këtë produkt");
   return;
 }
-    const PARTS = {
+const PARTS = {
   "400z.300": {
     name: "Main Plate",
     price: 0,
     currency: "EUR",
-    stock: 2,   // 👈 KE 2 COPË
+    stock: 2,
     img: "zenith-400z.300.jpg"
   },
   "400z.340": {
     name: "Train Bridge Wheel",
     price: 50,
     currency: "EUR",
-    stock: 1,   // 👈 KE 1 COPË
+    stock: 1,
     img: "zenith-400z.340.jpg"
   }
 };
+
   "400z.300": { name:"Main Plate", price:400, currency:"EUR", qty:2, img:"zenith-400z.300.jpg" },
   "400z.340": { name:"Train Bridge Wheel", price:50, currency:"EUR", qty:1, img:"zenith-400z.340.jpg" },
   "400z.345": { name:"Chronograph Bridge", price:140, currency:"EUR", qty:1, img:"zenith-400z.345.jpg" },
@@ -255,24 +256,34 @@ if (item.qty < maxStock) {
     if(panel) panel.style.right = "-360px";
   }
 
-  function addToCart(partNo){
-    const p = PARTS[partNo];
-    if(!p) return;
+function addToCart(partNo){
+  const p = PARTS[partNo];
+  if(!p) return;
 
-    const cart = loadCart();
-    const item = cart.find(i => i.partNo === partNo);
+  const cart = loadCart();
+  const item = cart.find(i => i.partNo === partNo);
+  const maxStock = p.stock ?? 1;
 
- if(item){
-  const maxStock = p.stock ?? 1;   // stok sipas artikullit
-
-  if(item.qty < maxStock){
-    item.qty = Number(item.qty || 0) + 1;
+  if(item){
+    if(item.qty < maxStock){
+      item.qty += 1;
+    } else {
+      alert("Nuk ka më stok për këtë produkt");
+      return;
+    }
   } else {
-    alert("Nuk ka më stok për këtë produkt");
-    return;
+    cart.push({
+      partNo,
+      name: p.name,
+      price: Number(p.price || 0),
+      qty: 1
+    });
   }
-}
 
+  saveCart(cart);
+  renderCart();
+  openCart();
+}
  
     }else{
       cart.push({
@@ -296,14 +307,11 @@ function changeQty(partNo, delta){
   const item = cart.find(i => i.partNo === partNo);
   if(!item) return;
 
-  item.qty = Number(item.qty || 0) + delta;
+  item.qty += delta;
 
   const maxStock = p.stock ?? 1;
-  if(item.qty > maxStock){
-    item.qty = maxStock;
-  }
+  if(item.qty > maxStock) item.qty = maxStock;
 
-  // nëse shkon 0, hiqe nga shporta
   if(item.qty <= 0){
     const idx = cart.findIndex(i => i.partNo === partNo);
     if(idx !== -1) cart.splice(idx, 1);
@@ -312,6 +320,7 @@ function changeQty(partNo, delta){
   saveCart(cart);
   renderCart();
 }
+
 
 
   function renderCart(){

@@ -288,22 +288,31 @@ if (item.qty < maxStock) {
     openCart();
   }
 
-  function changeQty(partNo, delta){
-    const cart = loadCart();
-    const item = cart.find(i => i.partNo === partNo);
-    if(!item) return;
+function changeQty(partNo, delta){
+  const p = PARTS[partNo];
+  if(!p) return;
 
-    item.qty = Number(item.qty || 0) + delta;
+  const cart = loadCart();
+  const item = cart.find(i => i.partNo === partNo);
+  if(!item) return;
 
-    // nëse shkon 0, hiqe nga shporta
-    if(item.qty <= 0){
-      const idx = cart.findIndex(i => i.partNo === partNo);
-      if(idx !== -1) cart.splice(idx, 1);
-    }
+  item.qty = Number(item.qty || 0) + delta;
 
-    saveCart(cart);
-    renderCart();
+  const maxStock = p.stock ?? 1;
+  if(item.qty > maxStock){
+    item.qty = maxStock;
   }
+
+  // nëse shkon 0, hiqe nga shporta
+  if(item.qty <= 0){
+    const idx = cart.findIndex(i => i.partNo === partNo);
+    if(idx !== -1) cart.splice(idx, 1);
+  }
+
+  saveCart(cart);
+  renderCart();
+}
+
 
   function renderCart(){
     const cart = loadCart();

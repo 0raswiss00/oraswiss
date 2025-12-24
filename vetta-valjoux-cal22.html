@@ -176,11 +176,7 @@
           <div><button class="part" data-part="22.835">22.835</button> – Barrel Arbor <span class="price">€25</span></div>
           
           <div><button class="part" data-part="22.860">22.860</button> – Corwn Wheel <span class="price">€25</span></div>
-                  
-          <br><div><strong>AUTOMATIC</strong></div>
-          <div><button class="part" data-part="22.900">3155.900</button> – Automatic Winding Rotor <span class="price">€00</span></div>
-          <div><button class="part" data-part="22.920">3155.920</button> – Automatic Rotor Screws (Set of 3) <span class="price">€00</span></div>
-        </div>
+        
       </div>
     </div>
   </div>
@@ -194,7 +190,7 @@ const CART_KEY = "oraswiss_cart";
    - Përdor: stock (jo qty)
    ========================= */
 const PARTS = {
- "22.300": { name:"Main Plate", price:0, currency:"EUR", stock:1, img:"valjoux-22.300.jpg" },
+  "22.300": { name:"Main Plate", price:0, currency:"EUR", stock:1, img:"valjoux-22.300.jpg" },
   "22.340": { name:"Train Bridge Wheel", price:50, currency:"EUR", stock:1, img:"vetta-22.340.jpg" },
   "22.345": { name:"Chronograph Bridge", price:30, currency:"EUR", stock:3, img:"vetta-22.345.jpg" },
   "22.347": { name:"Chronograph Operating Lever", price:45, currency:"EUR", stock:3, img:"vetta-22.347.jpg" },
@@ -226,9 +222,7 @@ const PARTS = {
      
   "22.860": { name:"Barrel Cover", price:25, currency:"EUR", stock:1, img:"vetta-22.860.jpg" },  
      
-  "22.900": { name:"Automatic Winding Rotor", price:00, currency:"EUR", stock:1, img:"valjoux-22.900.jpg" },
-  "22.910": { name:"Automatic Rotor Screws (Set of 3)", price:00, currency:"EUR", stock:1, img:"valjoux-22.910.jpg" }
-};
+ 
   
 /* =========================
    2) HELPERS
@@ -375,7 +369,7 @@ function showPart(key){
 
   if(!p){
     if(info){
-      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>400z.999</strong>';
+      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>22.999</strong>';
       info.style.color = "#6b7280";
     }
     if(payBtn){

@@ -481,25 +481,23 @@ window.closeCart = closeCart;
 <div id="preview" style="display:none;border:1px solid #e5e7eb;padding:14px;border-radius:12px;margin-top:12px">
 
   <!-- FOTO E MADHE -->
+ <!-- FOTO E MADHE (klik = zmadhohet 3x) -->
+<div id="preview" style="display:none;border:1px solid #e5e7eb;padding:14px;border-radius:12px;margin-top:12px;">
   <img id="pvImg" src=""
-       style="width:100%;max-width:420px;height:auto;object-fit:cover;
-              border-radius:12px;border:1px solid #e5e7eb;display:block;margin-bottom:12px;">
+       style="width:100%;max-width:600px;height:auto;object-fit:cover;border-radius:12px;border:1px solid #e5e7eb;display:block;margin-bottom:12px;cursor:zoom-in;transition:transform .2s ease;" />
 
-  <!-- INFO -->
   <div>
     <div><strong id="pvNo"></strong></div>
     <div id="pvName" style="opacity:.85;margin-top:2px"></div>
     <div id="pvPrice" style="font-weight:800;margin-top:6px"></div>
   </div>
 
-  <!-- PAYPAL -->
   <a id="pvPay" class="btn" target="_blank" rel="noopener"
      style="display:inline-block;margin-top:14px;text-align:center;width:100%">
     Buy with PayPal
   </a>
-
 </div>
-  
+ 
 <!-- CART PANEL -->
 <aside id="cartPanel" style="
   position:fixed; top:0; right:-360px; width:360px; height:100%;

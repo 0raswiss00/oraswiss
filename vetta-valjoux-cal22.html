@@ -107,7 +107,7 @@
         <h3 class="card-title">Vetta Vljoux – Separate Parts – Cal. 22</h3>
 
         <div class="row">
-          <input id="q" type="search" placeholder="Enter Part No. e.g. vetta-22.950" />
+          <input id="q" type="search" placeholder="Enter Part No. e.g. 22.950" />
         </div>
 
         <div id="info" class="result">Select a part by entering the Part Number.</div>
@@ -145,7 +145,7 @@
         <div class="diagram-info">
           <div><strong>PLATE &amp; BRIDGES</strong></div>
           <div><button class="part" data-part="22.300">22.300</button> – Main Plate <span class="price">€00</span></div>
-        <div><button class="part" data-part="22.340">22.340</button> – Train Bridge Wheel <span class="price">€50</span></div>
+          <div><button class="part" data-part="22.340">22.340</button> – Train Bridge Wheel <span class="price">€50</span></div>
           <div><button class="part" data-part="22.345">22.345</button> – Chronograph Bridge <span class="price">€30</span></div>
           <div><button class="part" data-part="22.348">22.348</button> – Chronograph Operating Lever <span class="price">€45</span></div>
           <div><button class="part" data-part="22.349">22.349</button> – Screws Chronograph Operating Lever <span class="price">€25</span></div>
@@ -189,7 +189,7 @@ const CART_KEY = "oraswiss_cart";
 const PARTS = {
   "22.340": { name:"Train Bridge Wheel", price:50, currency:"EUR", stock:1, img:"vetta-22.340.jpg" },
   "22.345": { name:"Chronograph Bridge", price:30, currency:"EUR", stock:3, img:"vetta-22.345.jpg" },
-  "22.347": { name:"Chronograph Operating Lever", price:45, currency:"EUR", stock:3, img:"vetta-22.347.jpg" },
+  "22.348": { name:"Chronograph Operating Lever", price:45, currency:"EUR", stock:3, img:"vetta-22.348.jpg" },
   "22.349": { name:"Screws Chronograph Operating Lever", price:25, currency:"EUR", stock:1, img:"vetta-22.349.jpg" },
   "22.360": { name:"Balance Bridge", price:70, currency:"EUR", stock:1, img:"vetta-22.360.jpg" },
   "22.370": { name:"Click spring", price:20, currency:"EUR", stock:1, img:"vetta-22.370.jpg" },
@@ -230,7 +230,7 @@ function saveCart(cart){
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
 }
 
-/* ✅ PASTRIMI - fshin ghost items (p.sh. 00.15000 që s’është më te PARTS) */
+/* ✅ PASTRIMI - fshin ghost items (p.sh. 00.1500 që s’është më te PARTS) */
 function cleanupCart(){
   let cart = loadCart();
 
@@ -387,7 +387,7 @@ function showPart(key){
 
   if(!p){
     if(info){
-      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>vetta-22.820</strong>';
+      info.innerHTML = 'Part not found. Enter a Part No. e.g. <strong>22.95</strong>';
       info.style.color = "#6b7280";
     }
     if(payBtn){

@@ -164,3 +164,101 @@
     <img class="thumb" src="revue-r3625a b-9.jpg" alt="Revue r3625a b image 9">     
   </div>
 </article>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // 1. GALERIA – THUMB → FOTO KRYESORE
+  document.querySelectorAll('.product').forEach(function (product) {
+    const mainImage = product.querySelector('.product-main-image');
+    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
+
+    if (!mainImage || !thumbs.length) return;
+
+    thumbs.forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        mainImage.src = thumb.src;
+        if (thumb.alt) {
+          mainImage.alt = thumb.alt;
+        }
+      });
+    });
+  });
+
+  // 2. ZOOM – KUR KLIKON FOTON KRYESORE
+  document.querySelectorAll('.product-main-image').forEach(function (img) {
+    img.addEventListener('click', function () {
+      img.classList.toggle('zoomed');
+    });
+  });
+
+  // 3. LIKE PER CDO PRODUKT
+  document.querySelectorAll('.like-btn').forEach(function (btn) {
+    const id = btn.getAttribute('data-id');
+    if (!id) return;
+
+    const storageKey = 'liked_' + id;
+
+    // Nëse është pëlqyer më parë
+    if (localStorage.getItem(storageKey) === 'true') {
+      btn.classList.add('active');
+      btn.innerText = '✓ Liked';
+    }
+
+    btn.addEventListener('click', function () {
+      const isLiked = localStorage.getItem(storageKey) === 'true';
+
+      if (!isLiked) {
+        localStorage.setItem(storageKey, 'true');
+        btn.classList.add('active');
+        btn.innerText = '✓ Liked';
+        alert('U ruajt te Favorites ❤️');
+      } else {
+        localStorage.removeItem(storageKey);
+        btn.classList.remove('active');
+        btn.innerText = '❤️ Like';
+        alert('U hoq nga Favorites.');
+      }
+    });
+  });
+
+  // 4. SHARE PER CDO PRODUKT
+  document.querySelectorAll('.share-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const url  = btn.getAttribute('data-url') || window.location.href;
+      const text = btn.getAttribute('data-share-text') || 'Shiko këtë produkt nga ORA SWISS!';
+
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          text: text,
+          url:  url
+        }).catch(function (err) {
+          console.log('Share u anulua:', err);
+        });
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(url);
+        alert('Linku u kopjua! Mund ta ngjitësh kudo për ta shpërndarë.');
+      } else {
+        alert('Kopjo këtë link:\n' + url);
+      }
+    });
+  });
+});
+
+// 5. KERKIMI I PRODUKTEVE
+function searchProducts() {
+  const input = document.getElementById('searchBar');
+  if (!input) return;
+
+  const value = input.value.toLowerCase();
+  const products = document.querySelectorAll('.product');
+
+  products.forEach(function (product) {
+    const text = product.innerText.toLowerCase();
+    product.style.display = text.includes(value) ? '' : 'none';
+  });
+}
+</script>
+    
+</body>  
+</html>

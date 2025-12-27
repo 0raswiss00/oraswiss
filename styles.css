@@ -2390,4 +2390,44 @@ html, body{
   }
 }
 
+@media (max-width: 768px){
+
+  /* bëje thumb video/foto 100% të dukshme */
+  .product-gallery video.thumb,
+  .product-gallery img.thumb{
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+
+    width:90px !important;
+    height:90px !important;
+
+    transform:none !important;
+    filter:none !important;
+
+    position:relative !important;
+    z-index:99999 !important;
+
+    pointer-events:auto !important;
+    background:#000;
+  }
+
+  /* MAIN video gjithashtu */
+  .product-gallery video:not(.thumb){
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    position:relative !important;
+    z-index:99999 !important;
+  }
+
+  /* nëse ka overlay që bllokon/mbulon */
+  .product-gallery::before,
+  .product-gallery::after,
+  .overlay,
+  .modal-backdrop,
+  .product-gallery-overlay{
+    pointer-events:none !important;
+  }
+}
 

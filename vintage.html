@@ -1430,52 +1430,43 @@
   </div>
 </article>
     
- <script>
-  document.addEventListener('DOMContentLoaded', function () {
+<script>
+document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.product').forEach(function (product) {
 
-    const mainImg = product.querySelector('#mainImage');
-    const mainVideo = product.querySelector('#mainVideo');
+    const mainImg = product.querySelector('.product-main-image');
+    const mainVideo = product.querySelector('.product-main-video');
     const thumbs = product.querySelectorAll('.product-gallery .thumb');
 
     if (!mainImg || !mainVideo || !thumbs.length) return;
 
     thumbs.forEach(function (thumb) {
+      thumb.addEventListener('click', function (e) {
+        e.preventDefault();
 
-      thumb.addEventListener('click', function () {
+        // VIDEO (img me data-video)
+        if (thumb.dataset && thumb.dataset.video) {
+          mainImg.style.display = 'none';
+          mainVideo.style.display = 'block';
+          mainVideo.querySelector('source').src = thumb.dataset.video;
+          mainVideo.load();
+          return;
+        }
 
-        // 👉 FOTO
-        if (thumb.tagName.toLowerCase() === 'img') {
+        // FOTO
+        if (thumb.tagName === 'IMG') {
           mainVideo.pause();
           mainVideo.style.display = 'none';
-
           mainImg.style.display = 'block';
           mainImg.src = thumb.src;
-          if (thumb.alt) mainImg.alt = thumb.alt;
         }
-
-        // 👉 VIDEO
-        if (thumb.tagName.toLowerCase() === 'video') {
-          const videoSrc =
-            thumb.getAttribute('data-video') ||
-            thumb.currentSrc ||
-            thumb.src;
-
-          mainImg.style.display = 'none';
-
-          mainVideo.style.display = 'block';
-          mainVideo.querySelector('source').src = videoSrc;
-          mainVideo.load();
-        }
-
       });
-
     });
 
   });
-
 });
 </script>
+
 
   // 2. ZOOM – KUR KLIKON FOTON KRYESORE
   document.querySelectorAll('.product-main-image').forEach(function (img) {

@@ -203,6 +203,11 @@ ul {
   transition: 0.2s;
 }
 
+.product-gallery video.thumb:hover{
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+}
+
 .product-gallery img.thumb:hover {
     transform: scale(1.05);
     box-shadow: 0 10px 20px rgba(0,0,0,0.25);

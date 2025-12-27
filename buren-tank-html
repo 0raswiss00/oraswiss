@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ora Swiss - Shop</title>
+    <title>BUREN GRAND PRIX TANK - Shop</title>
     <link rel="stylesheet" href="styles.css">
 
     <!-- Google tag (gtag.js) -->
@@ -89,15 +89,14 @@
     
 <main class="products-section">
 
-
-<article class="product" id="omega-2400-4">
+<article class="product" id="buren-Grand Prix-tank-4">
   <div class="product-box">
 
     <!-- Kolona majtas: imazhi kryesor -->
     <div class="product-left">
       <img class="product-main-image" id="mainImage"
-           src="omega-2400-4-1.jpg"
-           alt="Omega 2400-4 image 1">
+           src="buren-tank-1.jpg"
+           alt="Buren tank image 1">
 
       <!-- Main video (hidden) -->
       <video id="mainVideo" controls style="display:none; width:100%;" playsinline preload="metadata">
@@ -111,7 +110,7 @@
 
       <form action="https://api.web3forms.com/submit" method="POST">
         <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
-        <input type="hidden" name="subject" value="New Request: Omega2400-4.cal 30t2">
+        <input type="hidden" name="subject" value="New Request: Buren-Tank.cal 14">
         <input type="hidden" name="Product" value="Omega">
 
         <input type="text"  name="Full Name" placeholder="Full Name" required>
@@ -127,10 +126,10 @@
                  <a href="https://www.paypal.com/ncp/payment/4E7LWTY66ESN8" class="buy-btn" target="_blank">Buy Now</a>
                  <a href="https://wa.me/355692408065" class="whatsapp-btn" target="_blank">WhatsApp</a>
                  <a href="mailto:cela9317@gmail.com" class="email-btn">Email</a>
-                 <button class="like-btn"  data-id="vintage-omega-2400-4">♥️</button>
+                 <button class="like-btn"  data-id="vintage-buren-grand prix-tank">♥️</button>
                  <button class="share-btn" data-url="https://oraswiss.com/vintage.html">📎 Share</button>
-                 <a href="omega-2400-4.html" class="brand-btn">
-                   ⏱ Omega 2400-4
+                 <a href="buren-tank-.html" class="brand-btn">
+                   ⏱ Buren Tank
                  </a>
                 </a>
               </div>  
@@ -138,31 +137,134 @@
 
     <!-- PERSHKRIMI POSHTE TE DYJA KOLUMNAVE -->
     <div class="product-info">
-      <h3>OMEGA CAL. 30T2 • VINTAGE "SOUVENIR" • 35MM</h3>
+      <h3>BUREN CAL. 14 • VINTAGE "GREND PRIX" • 35MM</h3>
       <p>Brand: OMEGA</p>
-      <p>Model: Suvenir</p>
-      <p>Reference: 2400-4</p>
-      <p>Year: 1944–1950 (approx.)</p>
-      <p>Dial: Original sector dial with natural patina</p>
-      <p>Movement: Caliber 30T2, 15 jewels</p>
+      <p>Model:Grand Prix</p>
+      <p>Reference: 721731</p>
+      <p>Year: 1920–1930 (approx.)</p>
+      <p>Dial: Original Buren dial </p>
+      <p>Movement:Buren Caliber 14, 15 jewels</p>
       <p>Functions: Manual wind, Small Seconds</p>
       <p>Condition: Very good, fully serviced, all original</p>
-      <p><strong>Price: €1200</strong></p>
+      <p><strong>Price: €400</strong></p>
     </div>
 
   </div><!-- /product-box -->
 
   <!-- GALERIA POSHTE -->
   <div class="product-gallery">
-    <img class="thumb" src="omega-2400-4-1.jpg" alt="Omega 2400-4 Suvenir image 1">
-    <img class="thumb" src="omega-2400-4-2.jpg" alt="Omega 2400-4 Suvenir image 2">
-    <img class="thumb" src="omega-2400-4-3.jpg" alt="Omega 2400-4 Suvenir image 3">
-    <img class="thumb" src="omega-2400-4-4.jpg" alt="Omega 2400-4 Suvenir image 4">
-    <img class="thumb" src="omega-2400-4-5.jpg" alt="Omega 2400-4 Suvenir image 5">
-    <img class="thumb" src="omega-2400-4-6.jpg" alt="Omega 2400-4 Suvenir image 6">
+    <img class="thumb" src="buren-tank-1.jpg" alt="Buren tank Grand Prix image 1">
+    <img class="thumb" src="buren-tank-2.jpg" alt="Buren tank Grand Prix image 2">
+    <img class="thumb" src="buren-tank-3.jpg" alt="Buren tank Grand Prix image 3">
+    <img class="thumb" src="buren-tank-4.jpg" alt="Buren tank Grand Prix image 4">
+    <img class="thumb" src="buren-tank-5.jpg" alt="Buren tank Grand Prix image 5">
+    <img class="thumb" src="buren-tank-6.jpg" alt="Buren tank Grand Prix image 6">
+    <img class="thumb" src="buren-tank-7.jpg" alt="Buren tank Grand Prix image 4">
+    <img class="thumb" src="buren-tank-8.jpg" alt="Buren tank Grand Prix image 5">
+    <img class="thumb" src="buren-tank-9.jpg" alt="Buren tank Grand Prix image 6">  
     <video class="thumb" controls preload="metadata">
-      <source src="omega-2400-4-video.mp4" type="video/mp4">
+      <source src="buren-tank-video.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
   </div>
 </article>
+    
+    
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // 1. GALERIA – THUMB → FOTO KRYESORE
+  document.querySelectorAll('.product').forEach(function (product) {
+ const mainImage = product.querySelector('.product-main-image');
+    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
+
+    if (!mainImage || !thumbs.length) return;
+
+    thumbs.forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        mainImage.src = thumb.src;
+        if (thumb.alt) {
+          mainImage.alt = thumb.alt;
+        }
+      });
+    });
+  });
+
+  // 2. ZOOM – KUR KLIKON FOTON KRYESORE
+  document.querySelectorAll('.product-main-image').forEach(function (img) {
+    img.addEventListener('click', function () {
+      img.classList.toggle('zoomed');
+    });
+  });
+
+  // 3. LIKE PER CDO PRODUKT
+  document.querySelectorAll('.like-btn').forEach(function (btn) {
+    const id = btn.getAttribute('data-id');
+    if (!id) return;
+
+    const storageKey = 'liked_' + id;
+
+    // Nëse është pëlqyer më parë
+    if (localStorage.getItem(storageKey) === 'true') {
+      btn.classList.add('active');
+      btn.innerText = '✓ Liked';
+    }
+
+    btn.addEventListener('click', function () {
+      const isLiked = localStorage.getItem(storageKey) === 'true';
+
+      if (!isLiked) {
+        localStorage.setItem(storageKey, 'true');
+        btn.classList.add('active');
+        btn.innerText = '✓ Liked';
+        alert('U ruajt te Favorites ❤️');
+      } else {
+        localStorage.removeItem(storageKey);
+        btn.classList.remove('active');
+        btn.innerText = '❤️ Like';
+        alert('U hoq nga Favorites.');
+      }
+    });
+  });
+
+  // 4. SHARE PER CDO PRODUKT
+  document.querySelectorAll('.share-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const url  = btn.getAttribute('data-url') || window.location.href;
+      const text = btn.getAttribute('data-share-text') || 'Shiko këtë produkt nga ORA SWISS!';
+
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          text: text,
+          url:  url
+        }).catch(function (err) {
+          console.log('Share u anulua:', err);
+        });
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(url);
+        alert('Linku u kopjua! Mund ta ngjitësh kudo për ta shpërndarë.');
+      } else {
+        alert('Kopjo këtë link:\n' + url);
+      }
+    });
+  });
+});
+
+// 5. KERKIMI I PRODUKTEVE
+function searchProducts() {
+  const input = document.getElementById('searchBar');
+  if (!input) return;
+
+  const value = input.value.toLowerCase();
+  const products = document.querySelectorAll('.product');
+
+  products.forEach(function (product) {
+    const text = product.innerText.toLowerCase();
+    product.style.display = text.includes(value) ? '' : 'none';
+  });
+}
+</script>
+
+    
+</body>  
+</html>

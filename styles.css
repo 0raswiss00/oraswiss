@@ -2395,35 +2395,3 @@ html, body{
   }
 }
 
-/* FORCE show MAIN video on mobile */
-@media (max-width: 768px) {
-
-  /* video e madhe + thumb (për çdo rast) */
-  .product-gallery video {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-
-    width: 100% !important;
-    height: auto !important;
-    max-height: 320px;
-
-    position: relative !important;
-    z-index: 9999 !important;
-  }
-
-  /* mos e “pre” container-i */
-  .product-gallery,
-  .product-gallery * {
-    overflow: visible !important;
-  }
-
-  /* nëse dikush i jep height:0 prindit */
-  .product-gallery,
-  .product-gallery .main,
-  .product-gallery .main-media,
-  .product-gallery .main-image {
-    height: auto !important;
-    max-height: none !important;
-  }
-}

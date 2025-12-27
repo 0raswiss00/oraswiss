@@ -1192,15 +1192,16 @@
 
     <!-- Kolona majtas: imazhi kryesor -->
     <div class="product-left">
-      <img class="product-main-image"
+      <img class="product-main-image" id="mainImage"
            src="longines-23259-1.jpg"
            alt="Longines 23259 image 1">
-          <video class="thumb" controls preload="metadata">
-            <source src="longines-23259-video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-         </video
+
+      <!-- Main video (hidden) -->
+      <video id="mainVideo" controls style="display:none; width:100%;" playsinline preload="metadata">
+        <source src="" type="video/mp4">
+      </video>
     </div>
-      
+     
     <!-- Kolona djathtas: form + butonat -->
     <div class="product-right">
       <h3>Request this watch</h3>

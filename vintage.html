@@ -1275,38 +1275,20 @@
 document.addEventListener('DOMContentLoaded', function () {
   // 1. GALERIA – THUMB → FOTO KRYESORE
   document.querySelectorAll('.product').forEach(function (product) {
- const mainImage = document.getElementById('mainImage');
-const mainVideo = document.getElementById('mainVideo');
+ const mainImage = product.querySelector('.product-main-image');
+    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
 
-const items = document.querySelectorAll('.product-gallery img, .product-gallery video');
+    if (!mainImage || !thumbs.length) return;
 
-items.forEach(item => {
-  item.addEventListener('click', () => {
-
-    // Nese klikohet FOTO
-    if (item.tagName === 'IMG') {
-      mainVideo.pause();
-      mainVideo.style.display = 'none';
-
-      mainImage.src = item.src;
-      mainImage.style.display = 'block';
-    }
-
-    // Nese klikohet VIDEO
-    if (item.tagName === 'VIDEO') {
-      const videoSrc = item.querySelector('source').src;
-
-      mainImage.style.display = 'none';
-
-      mainVideo.querySelector('source').src = videoSrc;
-      mainVideo.load();
-      mainVideo.style.display = 'block';
-      mainVideo.play();
-    }
-
+    thumbs.forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        mainImage.src = thumb.src;
+        if (thumb.alt) {
+          mainImage.alt = thumb.alt;
+        }
+      });
+    });
   });
-});
-
 
   // 2. ZOOM – KUR KLIKON FOTON KRYESORE
   document.querySelectorAll('.product-main-image').forEach(function (img) {

@@ -1360,10 +1360,11 @@
            alt="Buren tank image 1">
 
       <!-- Main video (hidden) -->
-      <video id="mainVideo" class="product-main-video" controls playsinline>
-         <source src="" type="video/mp4">
-      </video>
-    </div>
+<!-- VIDEO THUMB (poster) -->
+<img class="thumb video-thumb"
+     src="videos/buren-poster.jpg"
+     data-video="videos/buren.mp4"
+     alt="Video">
 
     <!-- Kolona djathtas: form + butonat -->
     <div class="product-right">
@@ -1423,16 +1424,14 @@
     <img class="thumb" src="buren-tank-7.jpg" alt="Buren tank Grand Prix image 7">
     <img class="thumb" src="buren-tank-8.jpg" alt="Buren tank Grand Prix image 8">
     <img class="thumb" src="buren-tank-9.jpg" alt="Buren tank Grand Prix image 9">  
-    <video class="thumb" controls preload="metadata">
-      <source src="buren-tank-video.mp4" type="video/mp4">
-      Your browser does not support the video tag.
+    <video class="product-main-video" controls playsinline style="display:none; width:100%;">
+      <source src="" type="video/mp4">
     </video>
   </div>
 </article>
     
  <script>
-document.addEventListener('DOMContentLoaded', function () {
-
+  document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.product').forEach(function (product) {
 
     const mainImg = product.querySelector('#mainImage');

@@ -1195,8 +1195,11 @@
       <img class="product-main-image"
            src="longines-23259-1.jpg"
            alt="Longines 23259 image 1">
+     <video id="mainVideo" controls style="display:none; width:100%;">
+       <source src="" type="video/mp4">
+     </video>
     </div>
-
+      
     <!-- Kolona djathtas: form + butonat -->
     <div class="product-right">
       <h3>Request this watch</h3>
@@ -1272,20 +1275,38 @@
 document.addEventListener('DOMContentLoaded', function () {
   // 1. GALERIA – THUMB → FOTO KRYESORE
   document.querySelectorAll('.product').forEach(function (product) {
-    const mainImage = product.querySelector('.product-main-image');
-    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
+ const mainImage = document.getElementById('mainImage');
+const mainVideo = document.getElementById('mainVideo');
 
-    if (!mainImage || !thumbs.length) return;
+const items = document.querySelectorAll('.product-gallery img, .product-gallery video');
 
-    thumbs.forEach(function (thumb) {
-      thumb.addEventListener('click', function () {
-        mainImage.src = thumb.src;
-        if (thumb.alt) {
-          mainImage.alt = thumb.alt;
-        }
-      });
-    });
+items.forEach(item => {
+  item.addEventListener('click', () => {
+
+    // Nese klikohet FOTO
+    if (item.tagName === 'IMG') {
+      mainVideo.pause();
+      mainVideo.style.display = 'none';
+
+      mainImage.src = item.src;
+      mainImage.style.display = 'block';
+    }
+
+    // Nese klikohet VIDEO
+    if (item.tagName === 'VIDEO') {
+      const videoSrc = item.querySelector('source').src;
+
+      mainImage.style.display = 'none';
+
+      mainVideo.querySelector('source').src = videoSrc;
+      mainVideo.load();
+      mainVideo.style.display = 'block';
+      mainVideo.play();
+    }
+
   });
+});
+
 
   // 2. ZOOM – KUR KLIKON FOTON KRYESORE
   document.querySelectorAll('.product-main-image').forEach(function (img) {

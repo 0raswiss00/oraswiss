@@ -2395,3 +2395,11 @@ html, body{
   }
 }
 
+.product-gallery video.thumb{
+  display:block !important;
+  width:90px !important;
+  height:90px !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  background:#000; /* vetëm që të shihet nëse s’ka poster */
+}

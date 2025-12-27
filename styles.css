@@ -709,14 +709,6 @@ ul {
     transition: 0.3s ease;
 }
 
-
-
-
-
-
-
-
-
 .buy-row {
   margin-top: 16px;
   display: flex;
@@ -2418,3 +2410,9 @@ html, body{
   }
 }
 
+@media (max-width: 768px) {
+  .product-gallery,
+  .product-gallery * {
+    overflow: visible !important;
+  }
+}

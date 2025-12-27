@@ -193,6 +193,15 @@ ul {
     transition: 0.2s;
 }
 
+/* VIDEO thumbnail – same size as images */
+.product-gallery video.thumb {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
 
 .product-gallery img.thumb:hover {
     transform: scale(1.05);

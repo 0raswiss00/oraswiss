@@ -1434,42 +1434,20 @@
 
     
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('.product').forEach(function (product) {
+  const mainImage = product.querySelector('.product-main-image');
+    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
 
-    const mainImg = product.querySelector('.product-main-image');
-    const mainVideo = product.querySelector('.product-main-video');
-    const thumbs = product.querySelectorAll('.product-gallery .thumb');
-
-    if (!mainImg || !mainVideo || !thumbs.length) return;
+    if (!mainImage || !thumbs.length) return;
 
     thumbs.forEach(function (thumb) {
-      thumb.addEventListener('click', function (e) {
-        e.preventDefault();
-
-        // VIDEO (img me data-video)
-        if (thumb.dataset && thumb.dataset.video) {
-          mainImg.style.display = 'none';
-          mainVideo.style.display = 'block';
-          mainVideo.querySelector('source').src = thumb.dataset.video;
-          mainVideo.load();
-          return;
-        }
-
-        // FOTO
-        if (thumb.tagName === 'IMG') {
-          mainVideo.pause();
-          mainVideo.style.display = 'none';
-          mainImg.style.display = 'block';
-          mainImg.src = thumb.src;
+      thumb.addEventListener('click', function () {
+        mainImage.src = thumb.src;
+        if (thumb.alt) {
+          mainImage.alt = thumb.alt;
         }
       });
     });
-
   });
-});
-</script>
-
 
   // 2. ZOOM – KUR KLIKON FOTON KRYESORE
   document.querySelectorAll('.product-main-image').forEach(function (img) {

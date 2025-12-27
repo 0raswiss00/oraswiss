@@ -1430,25 +1430,53 @@
   </div>
 </article>
     
-    
-<script>
+ <script>
 document.addEventListener('DOMContentLoaded', function () {
-  // 1. GALERIA – THUMB → FOTO KRYESORE
-  document.querySelectorAll('.product').forEach(function (product) {
- const mainImage = product.querySelector('.product-main-image');
-    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
 
-    if (!mainImage || !thumbs.length) return;
+  document.querySelectorAll('.product').forEach(function (product) {
+
+    const mainImg = product.querySelector('#mainImage');
+    const mainVideo = product.querySelector('#mainVideo');
+    const thumbs = product.querySelectorAll('.product-gallery .thumb');
+
+    if (!mainImg || !mainVideo || !thumbs.length) return;
 
     thumbs.forEach(function (thumb) {
+
       thumb.addEventListener('click', function () {
-        mainImage.src = thumb.src;
-        if (thumb.alt) {
-          mainImage.alt = thumb.alt;
+
+        // 👉 FOTO
+        if (thumb.tagName.toLowerCase() === 'img') {
+          mainVideo.pause();
+          mainVideo.style.display = 'none';
+
+          mainImg.style.display = 'block';
+          mainImg.src = thumb.src;
+          if (thumb.alt) mainImg.alt = thumb.alt;
         }
+
+        // 👉 VIDEO
+        if (thumb.tagName.toLowerCase() === 'video') {
+          const videoSrc =
+            thumb.getAttribute('data-video') ||
+            thumb.currentSrc ||
+            thumb.src;
+
+          mainImg.style.display = 'none';
+
+          mainVideo.style.display = 'block';
+          mainVideo.querySelector('source').src = videoSrc;
+          mainVideo.load();
+        }
+
       });
+
     });
+
   });
+
+});
+</script>
 
   // 2. ZOOM – KUR KLIKON FOTON KRYESORE
   document.querySelectorAll('.product-main-image').forEach(function (img) {

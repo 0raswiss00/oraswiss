@@ -2,33 +2,107 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>buren-grand-prix</title>
+    <title>buren-grand-prix - Shop</title>
     <link rel="stylesheet" href="styles.css">
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
+
       gtag('config', 'G-KD2ZZ3MJYY');
     </script>
-</head>
+    <style>
+        .products-section {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 16px;
+        }
+
+        .product {
+            background: #ffffff;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            padding: 16px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.08);
+        }
+
+        .product-main {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .product-main-image {
+            width: 100%;
+            max-width: 380px;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .product-info {
+            flex: 1 1 260px;
+        }
+
+       .product-gallery {
+    margin-top: 0 !important;
+}
+
+.product-gallery img {
+    margin-top: 0 !important;
+}
+        .price {
+            font-size: 1.1rem;
+            margin-top: 8px;
+        }
+    </style>
+
+ </head>
+<body>
+<header class="site-header">
+    <h1>ORA SWISS – WATCH SHOP</h1>
+    <a href="index.html" class="back-button">← Back to Home</a>
+</header>
+
+<input
+    type="text"
+    id="searchBar"
+    placeholder="Search by brand or model..."
+    onkeyup="searchProducts()">
+
+<style>
+#searchBar {
+    width: 90%;
+    max-width: 600px;
+    padding: 12px;
+    margin: 20px auto;
+    display: block;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+</style>
+    
+<main class="products-section">
 
 
-<div class="product-box">
+<!-- ================== BUREN GRAND PRIX ================== -->
+<article class="product" id="buren-grand-prix">
+  <div class="product-box">
 
-
-
-<article id="buren-grand-prix" class="product-box">
-
-  <div class="product-left">
+    <!-- FOTO KRYESORE MAJTAS -->
+    <div class="product-left">
       <img class="product-main-image"
            src="buren-grand-prix-1.jpg"
            alt="Buren Grand Prix Super Slender image 1">
-  </div>
+    </div>
 
-  <div class="product-right">
+    <!-- FORMULARI + BUTONAT -->
+    <div class="product-right">
       <h3>Request this watch</h3>
 
       <form action="https://api.web3forms.com/submit" method="POST">
@@ -54,9 +128,10 @@
          <button class="like-btn" data-id="buren-grand-prix">♥️</button>
          <button class="share-btn" data-url="https://oraswiss.com/vintage.html#buren-grand-prix">📎 Share</button>
       </div>
-  </div>
+    </div>
 
-  <div class="product-info">
+    <!-- PËRSHKRIMI -->
+    <div class="product-info">
       <h3>BUREN “GRAND PRIX – SUPER SLENDER” • 35MM</h3>
       <p><strong>Brand:</strong> Buren</p>
       <p><strong>Model:</strong> Grand Prix “Super Slender”</p>
@@ -67,30 +142,32 @@
       <p><strong>Functions:</strong> Hours, minutes, central seconds</p>
       <p><strong>Condition:</strong> Very good, fully serviced, all original</p>
       <p><strong>Price: €390</strong></p>
+    </div>
+
+  </div><!-- /product-box -->
+
+  <!-- GALERIA -->
+  <div class="product-gallery">
+    <img class="thumb" src="buren-grand-prix-1.jpg" alt="Buren Grand Prix image 1">
+    <img class="thumb" src="buren-grand-prix-2.jpg" alt="Buren Grand Prix image 2">
+    <img class="thumb" src="buren-grand-prix-3.jpg" alt="Buren Grand Prix image 3">
+    <img class="thumb" src="buren-grand-prix-4.jpg" alt="Buren Grand Prix image 4">
+    <img class="thumb" src="buren-grand-prix-5.jpg" alt="Buren Grand Prix image 5">
+    <img class="thumb" src="buren-grand-prix-6.jpg" alt="Buren Grand Prix image 6">
+    <img class="thumb" src="buren-grand-prix-7.jpg" alt="Buren Grand Prix image 7">
+    <img class="thumb" src="buren-grand-prix-8.jpg" alt="Buren Grand Prix image 8">
+    <video class="thumb" controls preload="metadata">
+      <source src="buren-grand-prix-video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
   </div>
-
-</div><!-- /product-box -->
-
-<div class="product-gallery">
-    <img class="thumb" src="buren-grand-prix-1.jpg" alt="image 1">
-    <img class="thumb" src="buren-grand-prix-2.jpg" alt="image 2">
-    <img class="thumb" src="buren-grand-prix-3.jpg" alt="image 3">
-    <img class="thumb" src="buren-grand-prix-4.jpg" alt="image 4">
-    <img class="thumb" src="buren-grand-prix-5.jpg" alt="image 5">
-    <img class="thumb" src="buren-grand-prix-6.jpg" alt="image 6">
-    <img class="thumb" src="buren-grand-prix-7.jpg" alt="image 7">
-    <img class="thumb" src="buren-grand-prix-8.jpg" alt="image 8">
-</div>
-
 </article>
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   // 1. GALERIA – THUMB → FOTO KRYESORE
   document.querySelectorAll('.product').forEach(function (product) {
     const mainImage = product.querySelector('.product-main-image');
-    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
-
+    const thumbs = product.querySelectorAll('.product-gallery img.thumb, .product-gallery video.thumb');
     if (!mainImage || !thumbs.length) return;
 
     thumbs.forEach(function (thumb) {
@@ -103,6 +180,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+if (thumb.classList.contains('video-thumb')) {
+  const v = product.querySelector('.product-main-video');
+  v.style.display = 'block';
+  v.play().catch(()=>{});
+}
+    
   // 2. ZOOM – KUR KLIKON FOTON KRYESORE
   document.querySelectorAll('.product-main-image').forEach(function (img) {
     img.addEventListener('click', function () {
@@ -178,11 +261,6 @@ function searchProducts() {
   });
 }
 </script>
-Shkruaj te Ora Swiss
-
-
-
-
     
 </body>  
 </html>

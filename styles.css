@@ -2492,3 +2492,39 @@ html, body{
   object-fit: cover;
   display: inline-block;
 }
+
+
+/* LINKS PRODUKTE – VINTAGE & LUXURY */
+.product a,
+.product-title a,
+.product-name a,
+.watch-name a,
+.product-link,
+a.product-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  background: #000;        /* black */
+  color: #d4af37;          /* gold luxury */
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+}
+
+/* HOVER */
+.product a:hover,
+.product-title a:hover,
+.product-name a:hover,
+.watch-name a:hover,
+.product-link:hover {
+  background: #111;
+  color: #f5d76e;          /* gold më i ndritshëm */
+  text-decoration: none;
+}
+Ora
+.product a,
+.product-link {
+  border: 1px solid #d4af37;
+}
+

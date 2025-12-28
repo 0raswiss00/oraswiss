@@ -2,170 +2,274 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Zenith-Respirator-Sc 6787-1-html</title>
+    <title>ZENITH RESPIRATOR SC 6787-1 - Shop</title>
     <link rel="stylesheet" href="styles.css">
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
       gtag('config', 'G-KD2ZZ3MJYY');
     </script>
-
     <style>
-    .container {
-        display: flex;
-        gap: 25px;
-        align-items: flex-start;
-        margin-bottom: 40px;
-    }
+        .products-section {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 16px;
+        }
 
-    .product-images img {
-        width: 200px; 
-        display: block;
-        margin-bottom: 10px;
-    }
+        .product {
+            background: #ffffff;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            padding: 16px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.08);
+        }
 
-    .product-description {
-        max-width: 450px;
-    }
+        .product-main {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-start;
+        }
 
-    .title-vintage {
-        color: #8B5E3C; /* ngjyrë vintage */
-        margin-bottom: 10px;
-    }
+        .product-main-image {
+            width: 100%;
+            max-width: 380px;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
 
-    .title-parts {
-        color: #333; /* ngjyrë neutrale për parts */
-        margin-bottom: 10px;
-    }
+        .product-info {
+            flex: 1 1 260px;
+        }
 
-    .product {
-        margin: 40px auto;
-        max-width: 1000px;
-    }
+       .product-gallery {
+    margin-top: 0 !important;
+}
 
-    .product-main {
-        display: flex;
-        gap: 30px;
-        margin-bottom: 20px;
-        align-items: flex-start;
-        flex-wrap: wrap;
-    }
-
-    .product-main-image {
-        max-width: 320px;
-        height: auto;
-        display: block;
-    }
-
-    .product-info p {
-        margin: 4px 0;
-    }
-
-    .price {
-        margin-top: 10px;
-        font-size: 1.1rem;
-    }
-
-    .product-buttons {
-        margin: 15px 0;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .buy-button {
-        padding: 10px 18px;
-        border-radius: 4px;
-        text-decoration: none;
-        background: #000;
-        color: #fff;
-        font-size: 0.9rem;
-    }
-
-    .product-gallery {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 15px;
-    }
-
-    .product-gallery .thumb {
-        width: 110px;
-        height: auto;
-        cursor: pointer;
-        object-fit: cover;
-    }
+.product-gallery img {
+    margin-top: 0 !important;
+}
+        .price {
+            font-size: 1.1rem;
+            margin-top: 8px;
+        }
     </style>
-</head>
+
+ </head>
 <body>
+<header class="site-header">
+    <h1>ORA SWISS – WATCH SHOP</h1>
+    <a href="index.html" class="back-button">← Back to Home</a>
+</header>
 
-    <!-- ====================== -->
-    <!--     ZENITH RESPIRATORE REF SC 6787-1    -->
-    <!-- ====================== -->
-    <article class="product">
-        <h2 class="title-parts">Rolex Oyster Perpetual Date – For Parts</h2>
+<input
+    type="text"
+    id="searchBar"
+    placeholder="Search by brand or model..."
+    onkeyup="searchProducts()">
 
-   <div class="product-main">
-       <img class="product-main-image"
-            src="zenith-6786-1-1.jpg"
-              alt="Zenith 6786 – foto 1">
+<style>
+#searchBar {
+    width: 90%;
+    max-width: 600px;
+    padding: 12px;
+    margin: 20px auto;
+    display: block;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+</style>
+    
+<main class="products-section">
 
-<div class="product-info">
+<!-- ZENITH RESPIRATOR SC 6787-1 — FOR PARTS -->
+<article class="product" id="zenith-respirator-6787-1">
+  <div class="product-box">
 
-     <!-- Këtu fillon “xhepi” me scroll -->
-   <div class="description-scroll">
-     <p><strong>Case:</strong> Zenith Swiss Made – Gold-filled bezel, stainless steel back.<br>
-     Markings: <em>“Swiss Made – Gold Filled Bezel G.P. M.C. – Steel Back – SC 6787-1”</em><br>
-     <strong>Note:</strong> Case in very good condition, no cracks or damage.</p>
-     <p><strong>Movement:</strong> Zenith Automatic wind – fully functional.<br>
-      Original Zenith calibre, 28 jewels – 100% authentic.</p>
-     <p><strong>Functions:</strong> Time only (hours, minutes, seconds).</p>
-     <p>Crystal is clean and free of fractures.</p>
-     <p>Original Zenith crown – works perfectly.</p>
-     <p>Bracelet shows light wear but functions properly.</p>
-          <p><strong>Condition:</strong> Sold as <em>for parts</em>, even though the movement is 100% functional.
-       Suitable for parts: hands, dial, crown, movement, and other original Zenith components.</p>
+    <!-- FOTO KRYESORE MAJTAS -->
+    <div class="product-left">
+      <img class="product-main-image"
+           src="zenith-6786-1-1.jpg"
+           alt="Zenith Respirator SC 6787-1 image 1">
+    </div>
 
-       <!-- Përshkrim shtesë (shto sa të duash) --> 
- <p>This vintage Zenith Respirator works perfectly and has been serviced.</p>
- <p>Ideal for collectors needing original Zenith parts or a functional vintage movement.</p>
-    Zenith is serviced and works perfectly. Date works, day works.
-    100% Original Zenith Respirator X </p>
-    </div> 
-        <!-- Këtu mbaron “xhepi” -->
+    <!-- FORMULARI + BUTONAT -->
+    <div class="product-right">
+      <h3>Request this watch</h3>
 
-  <!-- Çmimin e lëmë jashtë xhepit, që të duket gjithmonë -->
-<p class="price"><strong>Price:</strong> €400</p>
-</div>
+      <form action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
+        <input type="hidden" name="subject" value="Request: Zenith Respirator SC 6787-1">
+        <input type="hidden" name="Product" value="Zenith Respirator Parts">
 
+        <input type="text"  name="Full Name" placeholder="Full Name" required>
+        <input type="email" name="Email"      placeholder="Email" required>
+        <input type="text"  name="Phone"      placeholder="Phone / WhatsApp" required>
+        <input type="text"  name="Country"    placeholder="Country" required>
 
+        <textarea name="Message" rows="5" placeholder="Message" required></textarea>
 
-        <div class="product-buttons">
-            <a href="mailto:info@oraswiss.com" class="buy-button">Buy Now</a>
-            <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>
-            <a href="mailto:info@oraswiss.com" class="buy-button">Email</a>
-        </div>
+        <button type="submit">Send Request</button>
+      </form>
 
+      <div class="buy-row">
+        <a href="https://swiss-watches-6630.myshopify.com/products/zenith-respirator-x-vintage-swiss-automatic-watch-day-date-gold-tone-case-serviced" class="buy-button" target="_blank">Buy Now</a>
+        <a href="https://wa.me/355692408065" target="_blank" class="buy-button">WhatsApp</a>
+        <a href="mailto:cela9317@gmail.com" class="buy-button">cela9317@gmail.com</a>
+        <button class="like-btn" data-id="zenith-respirator-6787-1">♥️</button>       
+        <button class="share-btn" data-url="https://oraswiss.com/vintage.html#zenith-respirator-6787-1">🔗</button>
+      </div>
+    </div>
 
+    <!-- PËRSHKRIMI -->
+    <div class="product-info">
+      <h3>ZENITH RESPIRATOR • FOR PARTS • AUTOMATIC</h3>
 
-     <div class="product-gallery">
-       <img class="thumb" src="zenith-6786-1-1.jpg" alt="Zenith 6786 – foto 1">
-       <img class="thumb" src="zenith-6786-1-2.jpg" alt="Zenith 6786 - foto 2">
-       <img class="thumb" src="zenith-6786-1-3.jpg" alt="Zenith 6786 - foto 3">
-       <img class="thumb" src="zenith-6786-1-4.jpg" alt="Zenith 6786 - foto 4">
-       <img class="thumb" src="zenith-6786-1-5.jpg" alt="Zenith 6786 - foto 5">
-       <img class="thumb" src="zenith-6786-1-6.jpg" alt="Zenith 6786 - foto 6">
-       <img class="thumb" src="zenith-6786-1-7.jpg" alt="Zenith 6786 - foto 7">
-       <img class="thumb" src="zenith-6786-1-8.jpg" alt="Zenith 6786 - foto 8">
-       <img class="thumb" src="zenith-6786-1-9.jpg" alt="Zenith 6786 - foto 9">
-   </div>
-  </article>
+      <p><strong>Case:</strong> Swiss Made — Gold-filled bezel, stainless steel back.<br>
+      Markings: <em>“Swiss Made – Gold Filled Bezel G.P. M.C. – Steel Back – SC 6787-1”</em></p>
 
+      <p><strong>Movement:</strong> Zenith Automatic, 28 jewels — fully functional.</p>
+      <p><strong>Functions:</strong> Hours, minutes, seconds.</p>
+      <p><strong>Date:</strong>The date calendar is damaged.</p>
+      <p><strong>Crystal:</strong> Original Zenith, no fractures.</p>
+      <p><strong>Crown:</strong> Original Zenith — perfect working.</p>
+      <p><strong>Bracelet:</strong> Minor wear, fully functional.</p>
 
-</body>
+      <p><strong>Condition:</strong> Sold as <em>for parts</em> even though movement works perfectly.  
+      Includes original dial, hands, crown, case components.</p>
+
+      <p>This vintage Zenith Respirator is serviced and working. Date and day function correctly.</p>
+      <p>Ideal for collectors needing genuine Zenith components.</p>
+
+      <p><strong>Price:</strong> €400</p>
+    </div>
+
+  </div><!-- /product-box -->
+
+  <!-- GALERIA POSHTE -->
+  <div class="product-gallery">
+    <img class="thumb" src="zenith-6786-1-1.jpg" alt="Zenith image 1">
+    <img class="thumb" src="zenith-6786-1-2.jpg" alt="Zenith image 2">
+    <img class="thumb" src="zenith-6786-1-3.jpg" alt="Zenith image 3">
+    <img class="thumb" src="zenith-6786-1-4.jpg" alt="Zenith image 4">
+    <img class="thumb" src="zenith-6786-1-5.jpg" alt="Zenith image 5">
+    <img class="thumb" src="zenith-6786-1-6.jpg" alt="Zenith image 6">
+    <img class="thumb" src="zenith-6786-1-7.jpg" alt="Zenith image 7">
+    <img class="thumb" src="zenith-6786-1-8.jpg" alt="Zenith image 8">
+    <img class="thumb" src="zenith-6786-1-9.jpg" alt="Zenith image 9">
+    <video class="thumb" controls preload="metadata">
+      <source src="zenith-6786-1-video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</article>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // 1. GALERIA – THUMB → FOTO KRYESORE
+  document.querySelectorAll('.product').forEach(function (product) {
+    const mainImage = product.querySelector('.product-main-image');
+    const thumbs = product.querySelectorAll('.product-gallery img.thumb, .product-gallery video.thumb');
+    if (!mainImage || !thumbs.length) return;
+
+    thumbs.forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        mainImage.src = thumb.src;
+        if (thumb.alt) {
+          mainImage.alt = thumb.alt;
+        }
+      });
+    });
+  });
+
+if (thumb.classList.contains('video-thumb')) {
+  const v = product.querySelector('.product-main-video');
+  v.style.display = 'block';
+  v.play().catch(()=>{});
+}
+    
+  // 2. ZOOM – KUR KLIKON FOTON KRYESORE
+  document.querySelectorAll('.product-main-image').forEach(function (img) {
+    img.addEventListener('click', function () {
+      img.classList.toggle('zoomed');
+    });
+  });
+
+  // 3. LIKE PER CDO PRODUKT
+  document.querySelectorAll('.like-btn').forEach(function (btn) {
+    const id = btn.getAttribute('data-id');
+    if (!id) return;
+
+    const storageKey = 'liked_' + id;
+
+    // Nëse është pëlqyer më parë
+    if (localStorage.getItem(storageKey) === 'true') {
+      btn.classList.add('active');
+      btn.innerText = '✓ Liked';
+    }
+
+    btn.addEventListener('click', function () {
+      const isLiked = localStorage.getItem(storageKey) === 'true';
+
+      if (!isLiked) {
+        localStorage.setItem(storageKey, 'true');
+        btn.classList.add('active');
+        btn.innerText = '✓ Liked';
+        alert('U ruajt te Favorites ❤️');
+      } else {
+        localStorage.removeItem(storageKey);
+        btn.classList.remove('active');
+        btn.innerText = '❤️ Like';
+        alert('U hoq nga Favorites.');
+      }
+    });
+  });
+
+  // 4. SHARE PER CDO PRODUKT
+  document.querySelectorAll('.share-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const url  = btn.getAttribute('data-url') || window.location.href;
+      const text = btn.getAttribute('data-share-text') || 'Shiko këtë produkt nga ORA SWISS!';
+
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          text: text,
+          url:  url
+        }).catch(function (err) {
+          console.log('Share u anulua:', err);
+        });
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(url);
+        alert('Linku u kopjua! Mund ta ngjitësh kudo për ta shpërndarë.');
+      } else {
+        alert('Kopjo këtë link:\n' + url);
+      }
+    });
+  });
+});
+
+// 5. KERKIMI I PRODUKTEVE
+function searchProducts() {
+  const input = document.getElementById('searchBar');
+  if (!input) return;
+
+  const value = input.value.toLowerCase();
+  const products = document.querySelectorAll('.product');
+
+  products.forEach(function (product) {
+    const text = product.innerText.toLowerCase();
+    product.style.display = text.includes(value) ? '' : 'none';
+  });
+}
+</script>
+    
+</body>  
 </html>

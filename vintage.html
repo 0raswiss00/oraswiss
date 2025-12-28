@@ -1308,9 +1308,9 @@
     <img class="thumb" src="longines-23259-7.jpg" alt="Longines 23259 image 7">
     <img class="thumb" src="longines-23259-8.jpg" alt="Longines 23259 image 8">
     <img class="thumb" src="longines-23259-9.jpg" alt="Longines 23259 image 9">
-    <video class="thumb" controls preload="metadata">
-      <source src="longines-23259-video.mp4" type="video/mp4">
-      Your browser does not support the video tag.
+    <video class="thumb video-thumb" playsinline muted preload="metadata">
+      <source src="doyle-23-video.mp4" type="video/mp4">
+    </video>
     </video>
   </div>
 </article>
@@ -1565,12 +1565,14 @@ function searchProducts() {
 </script>
 
 <div id="videoModal" class="video-modal">
-  <div class="video-modal-content">
+  <div class="video-modal-inner">
     <button id="closeVideoModal" class="video-close">✕</button>
 
-    <video id="modalVideo" controls>
-      <source id="modalVideoSrc" src="" type="video/mp4">
+    <video id="modalVideo" controls playsinline>
+      <source id="modalVideoSource" src="" type="video/mp4">
     </video>
+
+    <button id="fsVideo" class="video-fs">Full screen</button>
   </div>
 </div>
 

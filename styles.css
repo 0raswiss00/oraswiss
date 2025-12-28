@@ -2494,17 +2494,17 @@ html, body{
 }
 
 
-/* ===== FINAL: BLACK + GOLD ===== */
+/* ===== FINAL OVERRIDE – BLACK & GOLD (LUXURY) ===== */
 
-/* link/button në header (Register/Login) */
+/* Register / Login link në header */
 .register-btn{
   background: #000 !important;
   color: #d4af37 !important;
   border: 1px solid #d4af37 !important;
-  border-radius: 999px;
+  border-radius: 999px !important;
+  padding: 8px 14px !important;
+  font-weight: 800 !important;
   text-decoration: none !important;
-  padding: 8px 14px;
-  font-weight: 800;
 }
 
 .register-btn:hover{
@@ -2512,18 +2512,20 @@ html, body{
   color: #f5d76e !important;
 }
 
-/* butoni brenda formës register/login */
+/* Butonat e formave (Register / Login / Submit) */
+button,
 .register-form button,
-button#registerBtn{
+#registerBtn{
   background: #000 !important;
   color: #d4af37 !important;
   border: 1px solid #d4af37 !important;
-  border-radius: 14px;
-  font-weight: 800;
+  font-weight: 800 !important;
 }
 
+button:hover,
 .register-form button:hover,
-button#registerBtn:hover{
+#registerBtn:hover{
   background: #111 !important;
   color: #f5d76e !important;
 }
+

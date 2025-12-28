@@ -1474,7 +1474,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // 1. GALERIA – THUMB → FOTO KRYESORE
   document.querySelectorAll('.product').forEach(function (product) {
     const mainImage = product.querySelector('.product-main-image');
-    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
+    const thumbs = product.querySelectorAll('.product-gallery .thumb');
 
     if (!mainImage || !thumbs.length) return;
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ora Swiss - Shop</title>
+    <title>Revue 3168133 - Shop</title>
     <link rel="stylesheet" href="styles.css">
 
     <!-- Google tag (gtag.js) -->
@@ -89,6 +89,8 @@
     
 <main class="products-section">
 
+
+<!-- ================== REVUE CAL 07 ================== -->
 <article class="product" id="revue-3168133">
   <div class="product-box">
 
@@ -96,7 +98,7 @@
     <div class="product-left">
       <img class="product-main-image"
            src="revue-3168133-1.jpg"
-           alt="Revue Vintage Swiss wristwatch 3168133 image 1">
+           alt="Revue 3168133 image 1">
     </div>
 
     <!-- FORMULARI + BUTONAT -->
@@ -157,13 +159,12 @@
     <img class="thumb" src="revue-3168133-4.jpg" alt="Revue 3168133 image 4">
     <img class="thumb" src="revue-3168133-5.jpg" alt="Revue 3168133 image 5">
     <img class="thumb" src="revue-3168133-6.jpg" alt="Revue 3168133 image 6">
-    <img class="thumb" src="revue-3168133-7.jpg" alt="Revue 3168133 image 7">
-    <img class="thumb" src="revue-3168133-8.jpg" alt="Revue 3168133 image 8">
+    <video class="thumb" controls preload="metadata">
+      <source src="revue-3168133-video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
   </div>
-
 </article>
-
-
 
 
 <script>
@@ -171,8 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // 1. GALERIA – THUMB → FOTO KRYESORE
   document.querySelectorAll('.product').forEach(function (product) {
     const mainImage = product.querySelector('.product-main-image');
-    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
-
+    const thumbs = product.querySelectorAll('.product-gallery img.thumb, .product-gallery video.thumb');
     if (!mainImage || !thumbs.length) return;
 
     thumbs.forEach(function (thumb) {
@@ -185,6 +185,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+if (thumb.classList.contains('video-thumb')) {
+  const v = product.querySelector('.product-main-video');
+  v.style.display = 'block';
+  v.play().catch(()=>{});
+}
+    
   // 2. ZOOM – KUR KLIKON FOTON KRYESORE
   document.querySelectorAll('.product-main-image').forEach(function (img) {
     img.addEventListener('click', function () {
@@ -260,11 +266,6 @@ function searchProducts() {
   });
 }
 </script>
-
-
-
-
-
     
 </body>  
 </html>

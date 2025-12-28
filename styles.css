@@ -698,8 +698,15 @@ ul {
 }
 
 /* Ngjyrat */
-.buy-btn {
-  background: #111111;       /* e zezë */
+.buy-btn{
+  background: #000;          /* e zezë */
+  color: #d4af37 !important; /* ari */
+  border: 1px solid #d4af37; /* kornizë ari (opsionale, duket bukur) */
+}
+.buy-btn:hover{
+  background: #111;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
 }
 
 .whatsapp-btn {

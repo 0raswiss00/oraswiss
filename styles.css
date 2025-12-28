@@ -2494,34 +2494,36 @@ html, body{
 }
 
 
-/* LINKS PRODUKTE – VINTAGE & LUXURY */
-.product a,
-.product-title a,
-.product-name a,
-.watch-name a,
-.product-link,
-a.product-link {
-button {
-  width: 100%;
-  margin-top: 22px;
-  padding: 15px;
+/* ===== FINAL: BLACK + GOLD ===== */
+
+/* link/button në header (Register/Login) */
+.register-btn{
+  background: #000 !important;
+  color: #d4af37 !important;
+  border: 1px solid #d4af37 !important;
+  border-radius: 999px;
+  text-decoration: none !important;
+  padding: 8px 14px;
+  font-weight: 800;
+}
+
+.register-btn:hover{
+  background: #111 !important;
+  color: #f5d76e !important;
+}
+
+/* butoni brenda formës register/login */
+.register-form button,
+button#registerBtn{
+  background: #000 !important;
+  color: #d4af37 !important;
+  border: 1px solid #d4af37 !important;
   border-radius: 14px;
-  border: 1px solid #d4af37;   /* gold border */
-  background: #000;            /* black */
-  color: #d4af37;              /* gold text */
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all .2s ease;
+  font-weight: 800;
 }
 
-button:hover {
-  background: #111;
-  color: #f5d76e;              /* gold më i ndritshëm */
+.register-form button:hover,
+button#registerBtn:hover{
+  background: #111 !important;
+  color: #f5d76e !important;
 }
-
-button:disabled {
-  opacity: .6;
-  cursor: not-allowed;
-}
-

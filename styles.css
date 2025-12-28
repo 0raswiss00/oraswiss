@@ -2431,3 +2431,49 @@ html, body{
   }
 }
 
+.video-modal{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  padding: 14px;
+}
+
+.video-modal.active{ display: flex; }
+
+.video-modal-inner{
+  position: relative;
+  width: min(92vw, 900px);
+}
+
+#modalVideo{
+  width: 100%;
+  max-height: 80vh;
+  height: auto;
+  background: #000;
+  border-radius: 10px;
+}
+
+.video-close{
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 0;
+  background: #fff;
+  cursor: pointer;
+}
+
+.video-fs{
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+}

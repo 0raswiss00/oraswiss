@@ -1453,13 +1453,13 @@
   </div>
 </article>
 
-    
-<script>
+ <script>
 document.addEventListener('DOMContentLoaded', function () {
   // 1. GALERIA – THUMB → FOTO KRYESORE
   document.querySelectorAll('.product').forEach(function (product) {
     const mainImage = product.querySelector('.product-main-image');
-    const thumbs = product.querySelectorAll('.product-gallery img.thumb, .product-gallery video.thumb');
+    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
+
     if (!mainImage || !thumbs.length) return;
 
     thumbs.forEach(function (thumb) {
@@ -1472,12 +1472,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-if (thumb.classList.contains('video-thumb')) {
-  const v = product.querySelector('.product-main-video');
-  v.style.display = 'block';
-  v.play().catch(()=>{});
-}
-    
   // 2. ZOOM – KUR KLIKON FOTON KRYESORE
   document.querySelectorAll('.product-main-image').forEach(function (img) {
     img.addEventListener('click', function () {
@@ -1553,11 +1547,7 @@ function searchProducts() {
   });
 }
 </script>
-
-
-
-
-
     
 </body>  
 </html>
+   

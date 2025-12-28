@@ -2485,3 +2485,10 @@ html, body{
   border-radius: 10px;
   cursor: pointer;
 }
+.product-gallery img.thumb,
+.product-gallery video.thumb{
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  display: inline-block;
+}

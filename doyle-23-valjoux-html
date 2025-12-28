@@ -2,7 +2,98 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Rolex Datejust 16013</title>
+    <title>Doyle Valjoux 23 - Shop</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KD2ZZ3MJYY');
+    </script>
+    <style>
+        .products-section {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 16px;
+        }
+
+        .product {
+            background: #ffffff;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            padding: 16px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.08);
+        }
+
+        .product-main {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .product-main-image {
+            width: 100%;
+            max-width: 380px;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .product-info {
+            flex: 1 1 260px;
+        }
+
+       .product-gallery {
+    margin-top: 0 !important;
+}
+
+.product-gallery img {
+    margin-top: 0 !important;
+}
+        .price {
+            font-size: 1.1rem;
+            margin-top: 8px;
+        }
+    </style>
+
+ </head>
+<body>
+<header class="site-header">
+    <h1>ORA SWISS – WATCH SHOP</h1>
+    <a href="index.html" class="back-button">← Back to Home</a>
+</header>
+
+<input
+    type="text"
+    id="searchBar"
+    placeholder="Search by brand or model..."
+    onkeyup="searchProducts()">
+
+<style>
+#searchBar {
+    width: 90%;
+    max-width: 600px;
+    padding: 12px;
+    margin: 20px auto;
+    display: block;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+</style>
+    
+<main class="products-section">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Doyle Valjoux 23</title>
     <link rel="stylesheet" href="styles.css">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
@@ -63,24 +154,111 @@
     </div>
 </main>
 
+
 <script>
-// Kliko kryesoren për zoom
-document.querySelectorAll('.product-main-image').forEach(img => {
-    img.addEventListener('click', () => {
-        img.classList.toggle('zoomed');
+document.addEventListener('DOMContentLoaded', function () {
+  // 1. GALERIA – THUMB → FOTO KRYESORE
+  document.querySelectorAll('.product').forEach(function (product) {
+    const mainImage = product.querySelector('.product-main-image');
+    const thumbs = product.querySelectorAll('.product-gallery img.thumb, .product-gallery video.thumb');
+    if (!mainImage || !thumbs.length) return;
+
+    thumbs.forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        mainImage.src = thumb.src;
+        if (thumb.alt) {
+          mainImage.alt = thumb.alt;
+        }
+      });
     });
+  });
+
+if (thumb.classList.contains('video-thumb')) {
+  const v = product.querySelector('.product-main-video');
+  v.style.display = 'block';
+  v.play().catch(()=>{});
+}
+    
+  // 2. ZOOM – KUR KLIKON FOTON KRYESORE
+  document.querySelectorAll('.product-main-image').forEach(function (img) {
+    img.addEventListener('click', function () {
+      img.classList.toggle('zoomed');
+    });
+  });
+
+  // 3. LIKE PER CDO PRODUKT
+  document.querySelectorAll('.like-btn').forEach(function (btn) {
+    const id = btn.getAttribute('data-id');
+    if (!id) return;
+
+    const storageKey = 'liked_' + id;
+
+    // Nëse është pëlqyer më parë
+    if (localStorage.getItem(storageKey) === 'true') {
+      btn.classList.add('active');
+      btn.innerText = '✓ Liked';
+    }
+
+    btn.addEventListener('click', function () {
+      const isLiked = localStorage.getItem(storageKey) === 'true';
+
+      if (!isLiked) {
+        localStorage.setItem(storageKey, 'true');
+        btn.classList.add('active');
+        btn.innerText = '✓ Liked';
+        alert('U ruajt te Favorites ❤️');
+      } else {
+        localStorage.removeItem(storageKey);
+        btn.classList.remove('active');
+        btn.innerText = '❤️ Like';
+        alert('U hoq nga Favorites.');
+      }
+    });
+  });
+
+  // 4. SHARE PER CDO PRODUKT
+  document.querySelectorAll('.share-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const url  = btn.getAttribute('data-url') || window.location.href;
+      const text = btn.getAttribute('data-share-text') || 'Shiko këtë produkt nga ORA SWISS!';
+
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          text: text,
+          url:  url
+        }).catch(function (err) {
+          console.log('Share u anulua:', err);
+        });
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(url);
+        alert('Linku u kopjua! Mund ta ngjitësh kudo për ta shpërndarë.');
+      } else {
+        alert('Kopjo këtë link:\n' + url);
+      }
+    });
+  });
 });
 
-// Kliko thumbnail për të ndryshuar kryesoren
-document.querySelectorAll('.product-gallery img.thumb').forEach(thumb => {
-    thumb.addEventListener('click', () => {
-        const article = thumb.closest('.product');
-        const mainImg = article.querySelector('.product-main-image');
-        mainImg.src = thumb.src;
-        if(thumb.alt) mainImg.alt = thumb.alt;
-    });
-});
+// 5. KERKIMI I PRODUKTEVE
+function searchProducts() {
+  const input = document.getElementById('searchBar');
+  if (!input) return;
+
+  const value = input.value.toLowerCase();
+  const products = document.querySelectorAll('.product');
+
+  products.forEach(function (product) {
+    const text = product.innerText.toLowerCase();
+    product.style.display = text.includes(value) ? '' : 'none';
+  });
+}
 </script>
 
-</body>
+
+
+
+
+    
+</body>  
 </html>

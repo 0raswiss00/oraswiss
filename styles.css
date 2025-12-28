@@ -2501,30 +2501,27 @@ html, body{
 .watch-name a,
 .product-link,
 a.product-link {
-  display: inline-flex;
-  align-items: center;
-  padding: 10px 16px;
-  background: #000;        /* black */
-  color: #d4af37;          /* gold luxury */
-  border-radius: 999px;
+button {
+  width: 100%;
+  margin-top: 22px;
+  padding: 15px;
+  border-radius: 14px;
+  border: 1px solid #d4af37;   /* gold border */
+  background: #000;            /* black */
+  color: #d4af37;              /* gold text */
+  font-size: 16px;
   font-weight: 700;
-  text-decoration: none;
-  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: all .2s ease;
 }
 
-/* HOVER */
-.product a:hover,
-.product-title a:hover,
-.product-name a:hover,
-.watch-name a:hover,
-.product-link:hover {
+button:hover {
   background: #111;
-  color: #f5d76e;          /* gold më i ndritshëm */
-  text-decoration: none;
+  color: #f5d76e;              /* gold më i ndritshëm */
 }
-Ora
-.product a,
-.product-link {
-  border: 1px solid #d4af37;
+
+button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
 }
 

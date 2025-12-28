@@ -236,6 +236,14 @@ ul {
   }
 }
 
+.product-gallery img.thumb {
+  width: 90px;          /* ose sa i do */
+  height: 90px;
+  object-fit: cover;    /* KY ËSHTË ÇELËSI */
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
 /* =========================
       GALLERY PAGE FIX
 ========================= */

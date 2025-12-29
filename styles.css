@@ -2503,51 +2503,32 @@ html { background: #f3f4f6; }
 body { background: #f3f4f6 !important; min-height: 100vh; }
 
 /* =========================
-   SERVICE PAGE OVERRIDES
+   SERVICE PAGE (DARK)
 ========================= */
-body {
+body.service-page {
   background: #000;
   color: #e6e6e6;
 }
 
-.service-section {
-  max-width: 850px;
-  width: 100%;
-  margin: 30px auto;
-  padding: 25px;
+body.service-page .service-section {
   background: #111;
-  border-radius: 10px;
-  box-shadow: 0 0 25px rgba(0,0,0,0.6);
 }
 
-.sub-section {
+body.service-page .sub-section {
   background: #181818;
-  padding: 18px;
-  border-radius: 8px;
-  margin-bottom: 18px;
   border-left: 4px solid #4da6ff;
 }
 
-.service-section h1,
-.service-section h2,
-.contact-title {
+body.service-page h1,
+body.service-page h2,
+body.service-page .contact-title {
   color: #4da6ff;
 }
 
-.back-button {
-  color: #4da6ff;
-  text-decoration: none;
-  display: inline-block;
-  margin-bottom: 20px;
-}
-
-.contact-box p,
-.contact-box a {
-  font-size: 16px;
-}
-
-.map-box {
-  margin-top: 15px;
-  border-radius: 10px;
-  overflow: hidden;
+/* =========================
+   HOME PAGE (BLUE)
+========================= */
+body.home-page {
+  background: linear-gradient(180deg, #0f172a, #020617);
+  color: #e5e7eb;
 }

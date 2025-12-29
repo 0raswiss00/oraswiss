@@ -2500,62 +2500,37 @@ button:hover,
 html { background: #f3f4f6; }
 body { background: #f3f4f6 !important; min-height: 100vh; }
 
-/* =========================
-   SERVICE PAGE – FINAL FIX
-========================= */
-
-body.service-page{
-  background: #000 !important;
-  color: #e6e6e6 !important;
-  min-height: 100vh;
+/* SERVICE PAGE – clean, pa u zënë me styles.css */
+body{
+  margin: 0;
+  background:#000;
+  color:#e6e6e6;
+  font-family: Arial, sans-serif;
 }
 
-/* Container */
-body.service-page .service-section{
-  max-width: 850px;
-  margin: 30px auto;
-  padding: 25px;
-  background: #111;
-  border-radius: 12px;
+.service-section{
+  max-width:850px;
+  margin:30px auto;
+  padding:25px;
+  background:#111;
+  border-radius:12px;
 }
 
-/* Tituj */
-body.service-page h1,
-body.service-page h2,
-body.service-page .contact-title{
-  color: #4da6ff;
+.sub-section{
+  background:#181818;
+  padding:18px;
+  border-radius:8px;
+  margin-bottom:18px;
+  border-left:4px solid #4da6ff;
 }
 
-/* Service blocks */
-body.service-page .sub-section{
-  background: #181818;
-  padding: 18px;
-  border-radius: 8px;
-  margin-bottom: 18px;
-  border-left: 4px solid #4da6ff;
+h1, h2, .contact-title{ color:#4da6ff; }
+
+.back-button{
+  color:#4da6ff;
+  text-decoration:none;
+  display:inline-block;
+  margin-bottom:20px;
 }
 
-/* Back button */
-body.service-page .back-button{
-  color: #4da6ff;
-  text-decoration: none;
-  display: inline-block;
-  margin-bottom: 20px;
-}
-
-/* Contact text */
-body.service-page .contact-box p,
-body.service-page .contact-box a{
-  color: #e6e6e6;
-  font-size: 15px;
-}
-
-/* Google map */
-body.service-page iframe{
-  width: 100%;
-  height: 300px;
-  border-radius: 10px;
-  border: 0;
-  margin-top: 10px;
-}
 

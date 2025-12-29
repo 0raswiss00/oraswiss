@@ -2500,37 +2500,40 @@ button:hover,
 html { background: #f3f4f6; }
 body { background: #f3f4f6 !important; min-height: 100vh; }
 
-/* SERVICE PAGE – clean, pa u zënë me styles.css */
-body{
-  margin: 0;
-  background:#000;
-  color:#e6e6e6;
+/* ===== SERVICE ONLY (override) ===== */
+body.service-page{
+  background:#000 !important;
+  color:#e6e6e6 !important;
+  margin:0;
   font-family: Arial, sans-serif;
 }
 
-.service-section{
+body.service-page .service-section{
   max-width:850px;
-  margin:30px auto;
-  padding:25px;
-  background:#111;
+  width:calc(100% - 32px);
+  margin:24px auto;
+  padding:24px;
+  background:#111 !important;
   border-radius:12px;
 }
 
-.sub-section{
-  background:#181818;
+body.service-page .sub-section{
+  background:#181818 !important;
   padding:18px;
   border-radius:8px;
   margin-bottom:18px;
-  border-left:4px solid #4da6ff;
+  border-left:4px solid #4da6ff !important;
 }
 
-h1, h2, .contact-title{ color:#4da6ff; }
+body.service-page h1,
+body.service-page h2,
+body.service-page .contact-title{
+  color:#4da6ff !important;
+}
 
-.back-button{
-  color:#4da6ff;
+body.service-page .back-button{
+  color:#4da6ff !important;
   text-decoration:none;
   display:inline-block;
-  margin-bottom:20px;
+  margin-bottom:16px;
 }
-
-

@@ -2503,8 +2503,12 @@ html { background: #f3f4f6; }
 body { background: #f3f4f6 !important; min-height: 100vh; }
 
 /* =========================
-   SERVICE PAGE
+   SERVICE PAGE OVERRIDES
 ========================= */
+body {
+  background: #000;
+  color: #e6e6e6;
+}
 
 .service-section {
   max-width: 850px;
@@ -2513,12 +2517,7 @@ body { background: #f3f4f6 !important; min-height: 100vh; }
   padding: 25px;
   background: #111;
   border-radius: 10px;
-  color: #e6e6e6;
-}
-
-.service-section h2 {
-  margin-top: 0;
-  color: #4da6ff;
+  box-shadow: 0 0 25px rgba(0,0,0,0.6);
 }
 
 .sub-section {
@@ -2529,3 +2528,26 @@ body { background: #f3f4f6 !important; min-height: 100vh; }
   border-left: 4px solid #4da6ff;
 }
 
+.service-section h1,
+.service-section h2,
+.contact-title {
+  color: #4da6ff;
+}
+
+.back-button {
+  color: #4da6ff;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.contact-box p,
+.contact-box a {
+  font-size: 16px;
+}
+
+.map-box {
+  margin-top: 15px;
+  border-radius: 10px;
+  overflow: hidden;
+}

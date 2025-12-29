@@ -2498,8 +2498,8 @@ button:hover,
 
 /* FIX: mos u shfaq kurrë background i zi gjatë scroll */
 html { background: #f3f4f6; }
-body { background: #f3f4f6 !important; min-height: 100vh; }
-
+body:not(.service-page) { background: #f3f4f6; min-height: 100vh; }
+      
 /* ===== SERVICE ONLY (override) ===== */
 body.service-page{
   background:#000 !important;

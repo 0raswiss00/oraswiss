@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ebel EL 1119 – Details</title>
+  <title>Ebel 119 – Details</title>
 
   <style>
     :root{
@@ -112,7 +112,7 @@
       padding:12px 18px;
       background:rgba(0,0,0,.25);
       color:#fff;
-      text-decoration:none;
+      text-decoration:none;     /* <-- heq underline */
       font-weight:750;
       display:inline-flex;align-items:center;justify-content:center;
       cursor:pointer;
@@ -165,47 +165,43 @@
   <div class="wrap">
     <div class="topbar">
       <div class="pill">✨ Luxury Details</div>
-      <div class="pill">Fast & Secure Shipping</div>
+      <div class="pill">Secure payment via PayPal</div>
     </div>
 
-    <h1>Ebel EL 1119 Chronograph</h1>
-    <p class="sub">Ref. 1134901 • Year: 1990 • Steel & 18K Gold</p>
+    <h1>Ebel 1119 Chronograph</h1>
+    <p class="sub">Photos • Specs • Description • Pay Now</p>
 
     <div class="grid">
       <!-- LEFT: PHOTOS -->
       <div class="card">
         <div class="gallery">
-          <img id="mainPhoto" src="ebel-el-1119.1.jpg" alt="Ebel EL 1119">
+          <img id="mainPhoto" src="ebel-1119.1.jpg" alt="Ebel 1119">
 
           <div class="thumbs" id="thumbs">
             <!-- 4 visible -->
-            <img src="ebel-el-1119.1.jpg" class="active" onclick="setMain(0)" alt="">
-            <img src="ebel-el-1119.2.jpg" onclick="setMain(1)" alt="">
-            <img src="ebel-el-1119.3.jpg" onclick="setMain(2)" alt="">
-            <img src="ebel-el-1119.4.jpg" onclick="setMain(3)" alt="">
+            <img src="ebel-1119.1.jpg" class="active" onclick="setMain(0)" alt="">
+            <img src="ebel-1119.2.jpg" onclick="setMain(1)" alt="">
+            <img src="ebel-1119.3.jpg" onclick="setMain(2)" alt="">
+            <img src="ebel-1119.4.jpg" onclick="setMain(3)" alt="">
 
-            <!-- 21 hidden -->
-            <img src="ebel-el-1119.5.jpg"  class="extra" onclick="setMain(4)"  alt="">
-            <img src="ebel-el-1119.6.jpg"  class="extra" onclick="setMain(5)"  alt="">
-            <img src="ebel-el-1119.7.jpg"  class="extra" onclick="setMain(6)"  alt="">
-            <img src="ebel-el-1119.8.jpg"  class="extra" onclick="setMain(7)"  alt="">
-            <img src="ebel-el-1119.9.jpg"  class="extra" onclick="setMain(😎"  alt="">
-            <img src="ebel-el-1119.10.jpg" class="extra" onclick="setMain(9)"  alt="">
-            <img src="ebel-el-1119.11.jpg" class="extra" onclick="setMain(10)" alt="">
-            <img src="ebel-el-1119.12.jpg" class="extra" onclick="setMain(11)" alt="">
-            <img src="ebel-el-1119.13.jpg" class="extra" onclick="setMain(12)" alt="">
-            <img src="ebel-el-1119.14.jpg" class="extra" onclick="setMain(13)" alt="">
-            <img src="ebel-el-1119.15.jpg" class="extra" onclick="setMain(14)" alt="">
-            <img src="ebel-el-1119.16.jpg" class="extra" onclick="setMain(15)" alt="">
-            <img src="ebel-el-1119.17.jpg" class="extra" onclick="setMain(16)" alt="">
-            <img src="ebel-el-1119.18.jpg" class="extra" onclick="setMain(17)" alt="">
-            <img src="ebel-el-1119.19.jpg" class="extra" onclick="setMain(18)" alt="">
-            <img src="ebel-el-1119.20.jpg" class="extra" onclick="setMain(19)" alt="">
-            <img src="ebel-el-1119.21.jpg" class="extra" onclick="setMain(20)" alt="">
-            <img src="ebel-el-1119.22.jpg" class="extra" onclick="setMain(21)" alt="">
-            <img src="ebel-el-1119.23.jpg" class="extra" onclick="setMain(22)" alt="">
-            <img src="ebel-el-1119.24.jpg" class="extra" onclick="setMain(23)" alt="">
-            <img src="ebel-el-1119.25.jpg" class="extra" onclick="setMain(24)" alt="">
+            <!-- 21 hidden until Show more -->
+            <img src="ebel-1911.5.jpg"  class="extra" onclick="setMain(4)"  alt="">
+            <img src="ebel-1911.6.jpg"  class="extra" onclick="setMain(5)"  alt="">
+            <img src="ebel-1119.7.jpg"  class="extra" onclick="setMain(6)"  alt="">
+            <img src="ebel-1119.8.jpg"  class="extra" onclick="setMain(7)"  alt="">
+            <img src="ebel-1119.9.jpg"  class="extra" onclick="setMain(8)"  alt="">
+            <img src="ebel-1119.10.jpg" class="extra" onclick="setMain(9)"  alt="">
+            <img src="ebel-1119.11.jpg" class="extra" onclick="setMain(10)" alt="">
+            <img src="ebel-1119.12.jpg" class="extra" onclick="setMain(11)" alt="">
+            <img src="ebel-1119.13.jpg" class="extra" onclick="setMain(12)" alt="">
+            <img src="ebel-1119.14.jpg" class="extra" onclick="setMain(13)" alt="">
+            <img src="ebel-1119.15.jpg" class="extra" onclick="setMain(14)" alt="">
+            <img src="ebel-1119.16.jpg" class="extra" onclick="setMain(15)" alt="">
+            <img src="ebel-1119.17.jpg" class="extra" onclick="setMain(16)" alt="">
+            <img src="ebel-1119.18.jpg" class="extra" onclick="setMain(17)" alt="">
+            <img src="ebel-1119.19.jpg" class="extra" onclick="setMain(18)" alt="">
+            <img src="ebel-1119.20.jpg" class="extra" onclick="setMain(19)" alt="">
+            <img src="ebel-1119.21.jpg" class="extra" onclick="setMain(20)" alt="">
           </div>
 
           <button class="showmore" id="toggleThumbs" type="button">Show more photos</button>
@@ -215,30 +211,34 @@
       <!-- RIGHT: SPECS + DESC + BUTTONS -->
       <div class="card">
         <div class="specs">
-          <div class="spec"><div class="k">Movement</div><div class="v">Chronograph Automatic</div></div>
-          <div class="spec"><div class="k">Functions</div><div class="v">Date</div></div>
-          <div class="spec"><div class="k">Material</div><div class="v">Steel & 18K Gold</div></div>
+          <div class="spec"><div class="k">Mechanism</div><div class="v">Automatic El Primero</div></div>
+          <div class="spec"><div class="k">Brand</div><div class="v">Ebel</div></div>
+          <div class="spec"><div class="k">Model</div><div class="v">El Primero 1911</div></div>
 
-          <div class="spec"><div class="k">Case size</div><div class="v">39mm</div></div>
-          <div class="spec"><div class="k">Dial</div><div class="v">White</div></div>
-          <div class="spec"><div class="k">Dial color</div><div class="v">Cold White</div></div>
+          <div class="spec"><div class="k">Case size</div><div class="v">38mm</div></div>
+          <div class="spec"><div class="k">Dial</div><div class="v">Orginal very clean</div></div>
+          <div class="spec"><div class="k">Dial color</div><div class="v">White</div></div>
 
-          <div class="spec"><div class="k">Reference</div><div class="v">1134901</div></div>
-          <div class="spec"><div class="k">Year</div><div class="v">1990</div></div>
-          <div class="spec"><div class="k">Bracelet</div><div class="v">Original / Good fit</div></div>
+          <div class="spec"><div class="k">Materials</div><div class="v">Steel & 18K Gold</div></div>
+          <div class="spec"><div class="k">Functions</div><div class="v">Chronograph + Date</div></div>
+          <div class="spec"><div class="k">Condition</div><div class="v">Very good / near-mint</div></div>
 
-          <div class="spec"><div class="k">Box / Papers</div><div class="v">No</div></div>
+          <div class="spec"><div class="k">serviced</div><div class="v">Yes</div></div>
+          <div class="spec"><div class="k">serviced</div><div class="v">Yes</div></div>
+          <<div class="spec"><div class="k">Condition</div><div class="v">Very good / near-mint</div></div>
         </div>
 
         <div class="desc">
-          <strong>Ebel EL 1119 Chronograph</strong> (Ref. <strong>1134901</strong>) from <strong>1990</strong>,
-          a refined Swiss chronograph in <strong>stainless steel & 18K gold</strong>, with a crisp
-          <strong>cold white dial</strong> and a comfortable <strong>39mm</strong> case.
-
-          <br><br>
-          The watch is in <strong>very good, tidy condition</strong> and has been <strong>serviced</strong>.
-          It comes with a <strong>certificate from The Watch Register</strong> and <strong>Enquirus</strong>
-          for added peace of mind. <strong>Fast and secure shipping</strong> available.
+          <strong>Ebel 1911 Chronograph</strong> — Ebel El Primero Chronograph – circa 1990
+           Original Ebel El Primero chronograph from around 1990.
+           The watch comes with the original Ebel leather strap (no metal bracelet).
+           The strap is in very good condition, with visible signs of normal use.
+           Fitted with the original Ebel clasp.
+           The watch is in perfect working condition.
+           Chronograph and date functions work flawlessly.
+           A classic and elegant Swiss chronograph powered by the renowned El Primero movement.
+           The watch does not include the original box or papers.
+           It is sold with a certificate of authenticity from Enquirus.
         </div>
 
         <div class="cta">
@@ -260,10 +260,11 @@
   </div>
 
   <script>
-    // 🔁 Vendos këtu linkun e pagesës (PayPal)
-    const PAYPAL_URL = "PASTE_PAYPAL_LINK_HERE";
+    // ✅ NDËRRO VETËM KËTË LINK (PayPal)
+    const PAYPAL_URL = "https://www.paypal.com/ncp/payment/QC7YAG7UNPY7A";
     document.getElementById("payBtn").href = PAYPAL_URL;
 
+    // Build photo list from thumbs
     const thumbs = Array.from(document.querySelectorAll("#thumbs img"));
     const photos = thumbs.map(t => t.getAttribute("src"));
     let current = 0;
@@ -293,8 +294,10 @@
     document.getElementById("mNext").addEventListener("click", next);
     document.getElementById("mPrev").addEventListener("click", prev);
 
+    // Click outside image closes
     modal.addEventListener("click", (e)=>{ if(e.target === modal) closeModal(); });
 
+    // Keyboard controls
     document.addEventListener("keydown", (e)=>{
       if(!modal.classList.contains("open")) return;
       if(e.key === "Escape") closeModal();
@@ -302,6 +305,7 @@
       if(e.key === "ArrowLeft") prev();
     });
 
+    // Show more / less thumbs
     const toggle = document.getElementById("toggleThumbs");
     toggle.addEventListener("click", () => {
       const extras = document.querySelectorAll(".extra");

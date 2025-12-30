@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery – Ora Swiss</title>
+    <link rel="stylesheet" href="styles.css">
+
+        <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KD2ZZ3MJYY');
+    </script>
+</head>
+<body>
+
+/* --- Modal for Image Zoom --- */
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  padding-top: 60px;
+  inset: 0;
+  background-color: rgba(0,0,0,0.9);
+}
+
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 90%;
+  max-width: 600px;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 35px;
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+}
+</style>
+
+       <!-- Back Button -->
+    <div style="width:100%; padding:15px;">
+        <a href="index.html" class="back-button">← Back to Home</a>
+    </div>
+
+    <!-- Title -->
+    <h1 style="text-align:center; color:white; margin-bottom:20px;">
+        Gallery
+    </h1>
+    <!-- MAIN CONTENT -->
+    <main>
+      <!-- Image Gallery -->
+     <div class="gallery-grid">
+       <img src="datejust-16013-1.jpg" alt="Rolex Datejust 16013 image 1">
+       <img src="datejust-16013-2.jpg" alt="Rolex Datejust 16013 image 2">
+       <img src="datejust-16013-3.jpg" alt="Rolex Datejust 16013 image 3">
+       <img src="datejust-16013-4.jpg" alt="Rolex Datejust 16013 image 4">
+       <img src="datejust-16013-5.jpg" alt="Rolex Datejust 16013 image 5">
+       <img src="datejust-16013-6.jpg" alt="Rolex Datejust 16013 image 6">
+       <img src="datejust-16013-7.jpg" alt="Rolex Datejust 16013 image 7">
+       <img src="datejust-16013-8.jpg" alt="Rolex Datejust 16013 image 8">
+    </div>
+    <div class="gallery-grid">
+      <img src="rolex-16233-1.jpg"  alt="rolex-16233 image 1">
+      <img src="rolex-16233-2.jpg"  alt="rolex-16233 image 2">
+      <img src="rolex-16233-3.jpg"  alt="rolex-16233 image 3">
+      <img src="rolex-16233-4.jpg"  alt="rolex-16233 image 4">
+      <img src="rolex-16233-5.jpg"  alt="rolex-16233 image 5">
+      <img src="rolex-16233-6.jpg"  alt="rolex-16233 image 6">
+      <img src="rolex-16233-7.jpg"  alt="rolex-16233 image 7">
+      <img src="rolex-16233-8.jpg"  alt="rolex-16233 image 8">
+   </div>    
+         <!-- Image Gallery -->
+   <div class="gallery-grid">
+     <img src="explorer-16570-1.jpg" alt="Explorer 16570 image 1">
+     <img src="explorer-16570-2.jpg" alt="Explorer 16570 image 2">
+     <img src="explorer-16570-3.jpg" alt="Explorer 16570 image 3">
+     <img src="explorer-16570-4.jpg" alt="Explorer 16570 image 4">
+     <img src="explorer-16570-5.jpg" alt="Explorer 16570 image 5">
+     <img src="explorer-16570-6.jpg" alt="Explorer 16570 image 6">
+     <img src="explorer-16570-7.jpg" alt="Explorer 16570 image 7">
+     <img src="explorer-16570-8.jpg" alt="Explorer 16570 image 8">
+ </div>
+ <div class="gallery-grid">
+    <img src="oyster-15010-1.jpg" alt="Oyster 15010 image 1">
+    <img src="oyster-15010-2.jpg" alt="Oyster 15010 image 2">
+    <img src="oyster-15010-3.jpg" alt="Oyster 15010 image 3">
+    <img src="oyster-15010-4.jpg" alt="Oyster 15010 image 4">
+    <img src="oyster-15010-5.jpg" alt="Oyster 15010 image 5">
+    <img src="oyster-15010-6.jpg" alt="Oyster 15010 image 6">
+    <img src="oyster-15010-7.jpg" alt="Oyster 15010 image 7">
+    <img src="oyster-15010-8.jpg" alt="Oyster 15010 image 8">
+    <img src="oyster-15010-9.jpg" alt="Oyster 15010 image 9">
+  </div>
+    <!-- Image Gallery -->
+  <div class="gallery-grid">
+    <img src="ebel-1119-1.jpg" alt="Ebel 1119 image 1">
+    <img src="ebel-1119-2.jpg" alt="Ebel 1119 image 2">
+    <img src="ebel-1119-3.jpg" alt="Ebel 1119 image 3">
+    <img src="ebel-1119-4.jpg" alt="Ebel 1119 image 4">
+    <img src="ebel-1119-5.jpg" alt="Ebel 1119 image 5">
+    <img src="ebel-1119-6.jpg" alt="Ebel 1119 image 6">
+    <img src="ebel-1119-7.jpg" alt="Ebel 1119 image 7">
+    <img src="ebel-1119-8.jpg" alt="Ebel 1119 image 8">
+  </div>
+  <div class="gallery-grid">
+    <img src="ebel-1911-1.jpg"  alt="Ebel 1911 image 1">
+    <img src="ebel-1911-2.jpg"  alt="Ebel 1911 image 2">
+    <img src="ebel-1911-3.jpg"  alt="Ebel 1911 image 3">
+    <img src="ebel-1911-4.jpg"  alt="Ebel 1911 image 4">
+    <img src="ebel-1911-5.jpg"  alt="Ebel 1911 image 5">
+    <img src="ebel-1911-6.jpg"  alt="Ebel 1911 image 6">
+    <img src="ebel-1911-7.jpg"  alt="Ebel 1911 image 7">
+    <img src="ebel-1911-8.jpg"  alt="Ebel 1911 image 8">
+    <img src="ebel-1911-9.jpg"  alt="Ebel 1911 image 9">
+  </div>     
+   <!-- Image Gallery -->
+  <div class="gallery-grid">
+    <img src="omega-2402-2-1.jpg" alt="Omega 2402-2 Jumbo image 1">
+    <img src="omega-2402-2-2.jpg" alt="Omega 2402-2 Jumbo image 2">
+    <img src="omega-2402-2-3.jpg" alt="Omega 2402-2 Jumbo image 3">
+    <img src="omega-2402-2-4.jpg" alt="Omega 2402-2 Jumbo image 4">
+    <img src="omega-2402-2-5.jpg" alt="Omega 2402-2 Jumbo image 5">
+    <img src="omega-2402-2-6.jpg" alt="Omega 2402-2 Jumbo image 6">
+    <img src="omega-2402-2-7.jpg" alt="Omega 2402-2 Jumbo image 7">
+    <img src="omega-2402-2-8.jpg" alt="Omega 2402-2 Jumbo image 8">
+  </div>     
+
+</main>
+
+<!-- Modal HTML -->
+<div id="imgModal" class="modal">
+  <span class="close">&times;</span>
+  <img id="modalImg" class="modal-content">
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const modal = document.getElementById("imgModal");
+  const modalImg = document.getElementById("modalImg");
+  const closeBtn = document.querySelector(".close");
+
+  // TANI përdorim .thumb
+  document.querySelectorAll(".gallery-grid img").forEach(function (img) {
+    img.addEventListener("click", function () {
+      modal.style.display = "block";
+      modalImg.src = this.src;
+    });
+  });
+
+  closeBtn.onclick = function () {
+    modal.style.display = "none";
+  };
+
+  modal.onclick = function (e) {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  };
+
+});
+</script>
+
+</body>
+</html>

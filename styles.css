@@ -179,8 +179,6 @@ ul {
     transition: 0.3s;
 }
 
-
-
 /* Zoom image */
 .product-main-image.zoomed {
     position: fixed;
@@ -349,7 +347,6 @@ ul {
   font-weight: 700;
 }
 
-
 /* =========================
           RESPONSIVE
 ========================= */
@@ -399,10 +396,6 @@ ul {
 }
 
 /* OPSIONET E LËVIZJES SË SFONDIT */
-
-
-
-
 /* Dropdown container */
 .dropdown {
     position: relative;
@@ -444,8 +437,6 @@ ul {
     letter-spacing: 2px;
 }
 
-
-
 /* Kuti përshkrimi me scroll për Ora Swiss */
 .description-scroll {
   max-height: 400px;    /* sa shumë tekst të duket pa scroll */
@@ -469,7 +460,6 @@ ul {
     gap: 25px;
     align-items: center;
 }
-
 
 /* Header i rregulluar në 3 pjesë: majtas – qendër – djathtas */
 .site-header {
@@ -500,8 +490,6 @@ ul {
     gap: 25px;
     align-items: center;
 }
-
-
 
 /* Inputet */
 .register-form input {
@@ -595,13 +583,10 @@ ul {
 }
 
 /* ===== PRODUKTI – OMEGA BOX ===== */
-
 .product {
   margin: 40px auto;
   max-width: 1100px;
 }
-
-
 
 /* Kolona majtas + djathtas */
 .product-left,
@@ -659,7 +644,6 @@ ul {
 }
 
 /* ===== €400 + BUY NOW + WHATSAPP + EMAIL POSHTË FORMËS ===== */
-
 /* Butoni Like */
 .like-btn {
     background: #ff4d6d;
@@ -738,7 +722,6 @@ ul {
 }
 
 /* ===== PËRSHKRIMI POSHTË – KUTI E GJERË ===== */
-
 .product-info {
   flex-basis: 100%;          /* zë gjithë rreshtin poshtë */
   background: #ffffff;
@@ -771,8 +754,6 @@ ul {
     flex-direction: column;
   }
 }
-
-
 
 /* SELL YOUR WATCH FORM STYLING */
 .sell-form {
@@ -1218,8 +1199,6 @@ ul {
     gap: 15px;         /* hapësirë midis fotove */
 }
 
-
-
 .container img {
     display: inline-block;
     margin-right: 10px;
@@ -1324,8 +1303,6 @@ ul {
     text-transform: uppercase;
     letter-spacing: 2px;
 }
-
-
 
 /* Kuti përshkrimi me scroll për Ora Swiss */
 .description-scroll {
@@ -1518,8 +1495,6 @@ ul {
   max-width: 1100px;
 }
 
-
-
 /* Kolona majtas + djathtas */
 .product-left,
 .product-right {
@@ -1607,7 +1582,6 @@ ul {
     font-weight: bold;
     transition: 0.3s ease;
 }
-
 
 .buy-row {
   margin-top: 16px;
@@ -1932,36 +1906,6 @@ body {
 @media(max-width:700px){
   .request-form .rf-grid{
     grid-template-columns:1fr;
-  }
-}
-
-/* ================= PRODUCT RESPONSIVE ================= */
-
-@media (max-width: 900px) {
-  .product-box {
-    flex-direction: column;
-  }
-
-  .product-left,
-  .product-right {
-    flex-basis: 100%;
-  }
-
-  .product-images {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-@media (max-width: 768px) {
-  .product-row {
-    flex-direction: column;
-  }
-
-  .product-main-image img,
-  .product-main img {
-    max-width: 90%;
-    height: auto;
   }
 }
       

@@ -1,5 +1,11 @@
+<!doctype html>
+<html lang="sq">
 <head>
-  <!-- Google tag -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gallery</title>
+
+  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -7,6 +13,20 @@
     gtag('js', new Date());
     gtag('config', 'G-XXXXXXX');
   </script>
+
+  <!-- Preferohet CSS në file -->
+  <link rel="stylesheet" href="style.css" />
+  
+  <!-- Nese do CSS brenda HTML, VETEM brenda style dhe mbylle -->
+  <!--
+  <style>
+    body{background:#000;color:#fff;}
+    .gallery-grid{display:flex;flex-wrap:wrap;justify-content:center;}
+    .gallery-grid img{width:250px;border-radius:12px;margin:10px;object-fit:cover;}
+  </style>
+  -->
+</head>
+<body>
 
   <style>
     /* --- Modal for Image Zoom --- */

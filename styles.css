@@ -1935,7 +1935,36 @@ body {
   }
 }
 
+/* ================= PRODUCT RESPONSIVE ================= */
 
+@media (max-width: 900px) {
+  .product-box {
+    flex-direction: column;
+  }
+
+  .product-left,
+  .product-right {
+    flex-basis: 100%;
+  }
+
+  .product-images {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-row {
+    flex-direction: column;
+  }
+
+  .product-main-image img,
+  .product-main img {
+    max-width: 90%;
+    height: auto;
+  }
+}
+      
 /* ===============================
    ONLY Separate Parts pages
    =============================== */

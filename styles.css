@@ -1026,6 +1026,51 @@ body {
   outline: none;
   box-shadow: none;
 }
+/* SERVICE ONLY */
+html, body{
+  background:#000 !important;
+}
+
+body.service-page{
+  margin:0;
+  color:#e6e6e6;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body.service-page .service-section{
+  max-width:850px;
+  width:calc(100% - 32px);
+  margin:24px auto;
+  padding:24px;
+  background:#111;
+  border-radius:12px;
+}
+
+body.service-page .sub-section{
+  background:#181818;
+  padding:18px;
+  border-radius:8px;
+  margin-bottom:18px;
+  border-left:4px solid #4da6ff;
+}
+
+body.service-page h1,
+body
+
+body {
+  overflow-x: hidden;
+}
+
+body.service-page {
+  background: #000 !important;
+}
+
+body.service-page .service-section {
+  background: transparent !important;
+}      
+body{background:#000!important;color:#E6E6E6!important}
+.card-title,.hero-title{color:#D4AF37!important}
+.card-text,.hero-text{color:#B9B9B9!important;opacity:1!important}
 
 /* =========================
       GLOBAL RESET
@@ -1137,15 +1182,10 @@ ul {
     border-radius: 12px;
 }
 
-
-
-
-
 .register-btn:hover {
     background: white;
     color: black;
 }
-
 
 /* =========================
           BUTTONS
@@ -1192,8 +1232,6 @@ ul {
     transition: 0.3s;
 }
 
-
-
 /* Zoom image */
 .product-main-image.zoomed {
     position: fixed;
@@ -1206,9 +1244,6 @@ ul {
 }
 
 /* Gallery thumbnails */
-
-
-
 .product-gallery img.thumb {
     width: 90px;
     height: 90px;
@@ -1217,8 +1252,6 @@ ul {
     cursor: pointer;
     transition: 0.2s;
 }
-
-
 
 /* =========================
       GALLERY PAGE FIX
@@ -1322,10 +1355,6 @@ ul {
 
 /* KUTIA KU VENDOS FOTON NË SFOND */
 
-
-
-
-
 #lightbox{
   display:none;
   position:fixed;
@@ -1341,8 +1370,6 @@ ul {
   max-height:85vh;
   border-radius:12px;
 }
-
-
 
 /* Dropdown container */
 .dropdown {
@@ -2519,36 +2546,7 @@ button:hover,
 }
 
       
-/* SERVICE ONLY */
-html, body{
-  background:#000 !important;
-}
 
-body.service-page{
-  margin:0;
-  color:#e6e6e6;
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-}
-
-body.service-page .service-section{
-  max-width:850px;
-  width:calc(100% - 32px);
-  margin:24px auto;
-  padding:24px;
-  background:#111;
-  border-radius:12px;
-}
-
-body.service-page .sub-section{
-  background:#181818;
-  padding:18px;
-  border-radius:8px;
-  margin-bottom:18px;
-  border-left:4px solid #4da6ff;
-}
-
-body.service-page h1,
-body
 
 /* FIX FINAL – heq perden e zeze gjate scroll */
 html, body {
@@ -2556,17 +2554,3 @@ html, body {
   min-height: 100%;
 }
 
-body {
-  overflow-x: hidden;
-}
-
-body.service-page {
-  background: #000 !important;
-}
-
-body.service-page .service-section {
-  background: transparent !important;
-}      
-body{background:#000!important;color:#E6E6E6!important}
-.card-title,.hero-title{color:#D4AF37!important}
-.card-text,.hero-text{color:#B9B9B9!important;opacity:1!important}

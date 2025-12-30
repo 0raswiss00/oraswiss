@@ -2577,11 +2577,22 @@ body {
   overflow-x: hidden;
 }
 
-body.about-page{
-  background:#000;
-  color:#E6E6E6;
+body.about-page,
+body.service-page{
+  background:#000 !important;
+  color:#e6e6e6 !important;
 }
 
+.about-page .service-section,
+.service-page .service-section{
+  max-width: 900px;
+  margin: 24px auto;
+  padding: 24px;
+  background: #111;
+  border-radius: 12px;
+}
+
+      
 body.service-page .service-section {
   background: transparent !important;
 }      

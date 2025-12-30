@@ -985,6 +985,16 @@ body {
   border: 1px solid #e5e7eb;
 }
 
+/* ===== FIX text not visible in cards/requests ===== */
+.details-card, .watch-details, .watch-info, .request-details, .modal-content, .card {
+  color: #111 !important;
+}
+
+.details-card *, .watch-details *, .watch-info *, .request-details *, .modal-content * , .card * {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 /* ===============================
    ONLY Separate Parts pages
    =============================== */

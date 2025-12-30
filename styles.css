@@ -768,9 +768,7 @@ ul {
 }
  
 /* Fix background for Sell Your Watch page */
-body {
-    background: #000 !important;
-}
+
 .sell-form h3 {
     margin-top: 0;
     margin-bottom: 15px;
@@ -2579,7 +2577,10 @@ body {
   overflow-x: hidden;
 }
 
-
+body.about-page{
+  background:#000;
+  color:#E6E6E6;
+}
 
 body.service-page .service-section {
   background: transparent !important;

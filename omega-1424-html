@@ -1,3 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ora Swiss - Omega Constellation Movement Cal 1424 Parts Shop</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KD2ZZ3MJYY');
+    </script>
+    <style>
+        .products-section {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 16px;
+        }
+
+        .product {
+            background: #ffffff;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            padding: 16px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.08);
+        }
+
+        .product-main {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .product-main-image {
+            width: 100%;
+            max-width: 380px;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .product-info {
+            flex: 1 1 260px;
+        }
+
+       .product-gallery {
+    margin-top: 0 !important;
+}
+
+.product-gallery img {
+    margin-top: 0 !important;
+}
+        .price {
+            font-size: 1.1rem;
+            margin-top: 8px;
+        }
+    </style>
+
+  <style>
+    .details-btn {
+      display: inline-block;
+      padding: 10px 18px;
+      border-radius: 8px;
+      background: #6a5acd;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .details-btn:hover {
+      background: #5848c2;
+      transform: translateY(-2px);
+    }
+  </style>
+
+ </head>
+<body>
+<header class="site-header">
+    <h1>ORA SWISS – WATCH SHOP</h1>
+    <a href="index.html" class="back-button">← Back to Home</a>
+</header>
+
+<input
+    type="text"
+    id="searchBar"
+    placeholder="Search by brand or model..."
+    onkeyup="searchProducts()">
+
+<style>
+#searchBar {
+    width: 90%;
+    max-width: 600px;
+    padding: 12px;
+    margin: 20px auto;
+    display: block;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+</style>
+    
+<main class="products-section">
 <!-- ================= OMEGA CONSTELLATION MOVEMEN CAL 1432 ================= -->
 <article class="product" id="omega-1424">
   <div class="product-box">
@@ -71,3 +180,133 @@
     <img class="thumb" src="omega-1424-6.jpg" alt="omega 1424 image 6">
   </div>
 </article>
+
+  <script>  
+document.addEventListener('DOMContentLoaded', function () {
+  // për çdo produkt në faqe
+  document.querySelectorAll('.product').forEach(function (product) {
+    const mainImage = product.querySelector('.product-main-image');
+    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
+
+    if (!mainImage || !thumbs.length) return;
+
+    thumbs.forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        mainImage.src = thumb.src;
+        if (thumb.alt) {
+          mainImage.alt = thumb.alt;
+        }
+      });
+    });
+  });
+});
+</script>
+    
+<script>
+// ZOOM SCRIPT
+document.addEventListener('DOMContentLoaded', () => {
+    const mainImages = document.querySelectorAll('.product-main-image');
+
+    mainImages.forEach(img => {
+        img.addEventListener('click', () => {
+            img.classList.toggle('zoomed');
+        });
+    });
+});
+</script>
+<script>
+function searchProducts() {
+    const input = document.getElementById("searchBar").value.toLowerCase();
+    const products = document.querySelectorAll(".product");
+
+    products.forEach(product => {
+        const text = product.innerText.toLowerCase();
+        product.style.display = text.includes(input) ? "block" : "none";
+    });
+}
+</script>
+
+<script>
+// LIKE për çdo part veç e veç
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.like-btn').forEach(function (btn) {
+    const partId = btn.getAttribute('data-part-id') || 'default-part';
+
+    // nëse ky part është pëlqyer më parë
+    if (localStorage.getItem('liked_' + partId) === 'true') {
+      btn.classList.add('active');
+    }
+
+    btn.addEventListener('click', function () {
+      btn.classList.toggle('active');
+      const isLiked = btn.classList.contains('active');
+      localStorage.setItem('liked_' + partId, isLiked);
+    });
+  });
+
+  // SHARE – thjesht kopjon linkun ose hap share API
+  document.querySelectorAll('.share-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          url: window.location.href
+        }).catch(() => {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Link copied! Paste it anywhere to share.');
+      } else {
+        alert('Sharing not supported. Copy the link from the address bar.');
+      }
+    });
+  });
+});
+</script>
+    
+<script>
+document.querySelectorAll(".like-btn").forEach(function (btn) {
+
+    // ID unike e produktit (vjen nga data-id)
+    let id = btn.getAttribute("data-id");
+
+    // Nëse produkti është pëlqyer më parë → ndrysho butonin
+    if (localStorage.getItem("liked_" + id) === "true") {
+        btn.innerText = "✓ Liked";
+        btn.style.background = "#ff1a4d";
+    }
+
+    // Kur klikon butonin
+    btn.addEventListener("click", function () {
+
+        // Nëse nuk është pëlqyer → pëlqeje
+        if (localStorage.getItem("liked_" + id) !== "true") {
+            localStorage.setItem("liked_" + id, "true");
+            btn.innerText = "✓ Liked";
+            btn.style.background = "#ff1a4d";
+            alert("U ruajt te Favorites ❤️");
+        } 
+        else {
+            // Nëse është pëlqyer → hiqe
+            localStorage.removeItem("liked_" + id);
+            btn.innerText = "❤️ Like";
+            btn.style.background = "#ff4d6d";
+            alert("U hoq nga Favorites.");
+        }
+    });
+
+});
+
+document.querySelectorAll(".share-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+        if (navigator.share) {
+            navigator.share({
+                title: document.title,
+                text: "Shiko këtë produkt nga ORA SWISS",
+                url: window.location.href
+            });
+        } else {
+            alert("Share nuk përkrahet në këtë pajisje.");
+        }
+    });
+});
+</script>

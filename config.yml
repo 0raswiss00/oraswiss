@@ -1,45 +1,21 @@
 collections:
-  - name: "watches"
-    label: "Watches"
-    folder: "watches"
-    create: true
-    fields:
-      - { label: "Brand", name: "brand", widget: "string" }
-      ...
-         - label: "Category"
-        name: "category"
-        widget: "select"
-        options:
-          - { label: "Luxury", value: "luxury" }
-          - { label: "Vintage", value: "vintage" }
-          - { label: "Parts", value: "parts" }
-         backend:
-  name: git-gateway
-  branch: main
+  - name: "catalog"
+    label: "Catalog"
+    files:
+      - name: "watches"
+        label: "Watches"
+        file: "data/watches.json"
+        format: "json"
+        fields:
+          - name: "items"
+            label: "Items"
+            widget: "list"
+            fields:
+              - {label: "Category", name: "category", widget: "select", options: ["luxury","vintage","parts"], default: "luxury"}
+              - {label: "Brand", name: "brand", widget: "string"}
+              - {label: "Model", name: "model", widget: "string"}
+              - {label: "Year", name: "year", widget: "string", required: false}
+              - {label: "Price", name: "price", widget: "string", required: false}
+              - {label: "Description", name: "description", widget: "text", required: false}
+              - {label: "Photos", name: "photos", widget: "list", required: false, field: {label: "Image", name: "image", widget: "image"}}
 
-media_folder: "images/uploads"
-public_folder: "/images/uploads"
-
-collections:
-  - name: "watches"
-    label: "Watches"
-    folder: "watches"
-    create: true
-    slug: "{{year}}-{{brand}}-{{model}}"
-    fields:
-      - { label: "Brand", name: "brand", widget: "string" }
-      - { label: "Model", name: "model", widget: "string" }
-      - { label: "Reference", name: "ref", widget: "string", required: false }
-      - { label: "Year", name: "year", widget: "string" }
-
-      - label: "Category"
-        name: "category"
-        widget: "select"
-        options:
-          - { label: "Luxury", value: "luxury" }
-          - { label: "Vintage", value: "vintage" }
-          - { label: "Parts", value: "parts" }
-
-      - { label: "Price", name: "price", widget: "string" }
-      - { label: "Description", name: "description", widget: "text" }
-      - { label: "Photos", name: "images", widget: "image", required: false }

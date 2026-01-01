@@ -83,7 +83,6 @@
  </head>
 <body>
  <div id="products"></div>   
-<header class="site-header">
     <h1>ORA SWISS – WATCH SHOP</h1>
     <a href="index.html" class="back-button">← Back to Home</a>
 </header>
@@ -1541,27 +1540,3 @@ function searchProducts() {
 }
 </script>
 
-<script>
-const SHEET_URL = "https://opensheet.elk.sh/1iIa-Zni-x6WhNVT3B5923EHoHLWjubk7bAPjP_a2L4c/Sheet1";
-
-fetch(SHEET_URL)
-  .then(r => r.json())
-  .then(products => {
-    const el = document.getElementById("products");
-    if (!el) return;
-
-    el.innerHTML = products.map(p => `
-      <div class="product-card">
-        <img src="${p.image || ''}" alt="${p.name || ''}">
-        <h3>${p.name || ''}</h3>
-        <div class="price">${p.price || ''}</div>
-        <p>${p.description || ''}</p>
-      </div>
-    `).join("");
-  })
-  .catch(err => console.log("Products load error:", err));
-</script>
-
-    
-</body>  
-</html>

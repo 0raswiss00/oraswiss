@@ -2594,20 +2594,3 @@ body{background:#000!important;color:#E6E6E6!important}
 .card-title,.hero-title{color:#D4AF37!important}
 .card-text,.hero-text{color:#B9B9B9!important;opacity:1!important}
 
-#products {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-  margin-top: 30px;
-}
-.product-card {
-  border: 1px solid #eee;
-  border-radius: 12px;
-  padding: 12px;
-}
-.product-card img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  border-radius: 10px;
-}

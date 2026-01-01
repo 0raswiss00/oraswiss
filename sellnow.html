@@ -3,25 +3,43 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SellNow</title>
+  <title>SellNow (Private)</title>
+  <meta name="robots" content="noindex,nofollow">
 </head>
+
 <body>
-  <script>
-    // GitHub Pages needs the full path:
-    window.location.replace("/oraswiss/admin/index.html");
-  </script>
 
-  <p>
-    Redirecting… If not redirected,
-    <a href="/oraswiss/admin/index.html">open Admin</a>.
-  </p>
-
- <script>
+<script>
   const pass = prompt("Password:");
   if (pass !== "1234") {
-    document.body.innerHTML = "Access denied";
+    document.body.innerHTML = "<h2>Access denied</h2>";
   }
-</script> 
-  
-</body> 
+</script>
+
+<h1>SellNow – Private Upload</h1>
+
+<form>
+  <label>Brand</label><br>
+  <input type="text"><br><br>
+
+  <label>Model</label><br>
+  <input type="text"><br><br>
+
+  <label>Year</label><br>
+  <input type="text"><br><br>
+
+  <label>Price</label><br>
+  <input type="text"><br><br>
+
+  <label>Description</label><br>
+  <textarea></textarea><br><br>
+
+  <label>Photos</label><br>
+  <input type="file"><br><br>
+
+  <button type="submit">Save</button>
+</form>
+
+</body>
 </html>
+

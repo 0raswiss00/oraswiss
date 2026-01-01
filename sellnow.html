@@ -15,5 +15,13 @@
     Redirecting… If not redirected,
     <a href="/oraswiss/admin/index.html">open Admin</a>.
   </p>
-</body>
+
+ <script>
+  const pass = prompt("Password:");
+  if (pass !== "1234") {
+    document.body.innerHTML = "Access denied";
+  }
+</script> 
+  
+</body> 
 </html>

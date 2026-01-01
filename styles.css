@@ -1275,7 +1275,14 @@ ul {
   outline: none;
   box-shadow: none;
 }
+      
+/* FIX I FOTOVE – BËJI HORIZONTAL NË TË GJITHA: LUXURY / VINTAGE / PARTS */
 
+.product-images{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .product{
   display:flex;
   gap:20px;
@@ -1360,16 +1367,6 @@ ul {
   border-radius:10px;
   border:0;
   cursor:pointer;
-}
-
-
-      
-/* FIX I FOTOVE – BËJI HORIZONTAL NË TË GJITHA: LUXURY / VINTAGE / PARTS */
-
-.product-images{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 /* KUTIA KU VENDOS FOTON NË SFOND */

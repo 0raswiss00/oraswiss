@@ -5,38 +5,93 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SellNow (Private)</title>
   <meta name="robots" content="noindex,nofollow">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background:#f5f5f5;
+      padding:30px;
+    }
+    form {
+      max-width:400px;
+      background:#fff;
+      padding:20px;
+      border-radius:6px;
+    }
+    label {
+      font-weight:bold;
+    }
+    input, select, textarea, button {
+      width:100%;
+      padding:8px;
+      margin:6px 0 15px;
+    }
+    button {
+      background:#000;
+      color:#fff;
+      border:none;
+      cursor:pointer;
+    }
+  </style>
 </head>
 
 <body>
 
 <div id="privateContent" style="display:none;">
-
   <h1>SellNow – Private Upload</h1>
 
   <form>
+    <label>Brand</label>
+    <input type="text">
 
-    <label>Brand</label><br>
-    <input type="text"><br><br>
+    <label>Model</label>
+    <input type="text">
 
-    <label>Model</label><br>
-    <input type="text"><br><br>
+    <label>Year</label>
+    <input type="text">
 
-    <label>Year</label><br>
-    <input type="text"><br><br>
+    <label>Material</label>
+    <input type="text">
 
-    <label>Price</label><br>
-    <input type="text"><br><br>
+    <label>Case size (mm)</label>
+    <input type="text">
 
-    <label>Description</label><br>
-    <textarea></textarea><br><br>
+    <label>Bracelet / Strap</label>
+    <select>
+      <option>Bracelet</option>
+      <option>Strap (Leather)</option>
+      <option>Rubber</option>
+      <option>NATO</option>
+    </select>
 
-    <label>Photos</label><br>
-    <input type="file"><br><br>
+    <label>Movement</label>
+    <select>
+      <option>Automatic</option>
+      <option>Quartz</option>
+      <option>Manual</option>
+    </select>
+
+    <label>Functions</label>
+    <input type="text" placeholder="Date, Chronograph, GMT...">
+
+    <label>Condition</label>
+    <select>
+      <option>New</option>
+      <option>Used – Good</option>
+      <option>Used – Fair</option>
+    </select>
+
+    <label>Price</label>
+    <input type="text">
+
+    <label>Description</label>
+    <textarea rows="4"></textarea>
+
+    <label>Photos</label>
+    <input type="file" multiple>
 
     <button type="submit">Save</button>
-
   </form>
-
 </div>
 
 <script>
@@ -50,4 +105,3 @@
 
 </body>
 </html>
-

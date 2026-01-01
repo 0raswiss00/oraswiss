@@ -2021,72 +2021,7 @@
   </div>
 </article>
 
-    
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  // Thumb -> ndërron foton e madhe (punon edhe për shumë produkte)
-  document.body.addEventListener("click", (e) => {
-    const thumb = e.target.closest(".product-gallery .thumb");
-    if (thumb) {
-      const product = thumb.closest(".product");
-      const main = product.querySelector(".product-main-image");
-      if (!main) return;
-
-      const full = thumb.getAttribute("data-full") || thumb.src;
-      main.src = full;
-      if (thumb.alt) main.alt = thumb.alt;
-
-      product.querySelectorAll(".product-gallery .thumb").forEach(t => t.classList.remove("active"));
-      thumb.classList.add("active");
-      return;
-    }
-
-    // Klik te foto e madhe -> ZOOM
-    const mainImg = e.target.closest(".product-main-image");
-    if (mainImg) {
-      mainImg.classList.toggle("zoomed");
-      return;
-    }
-
-    // LIKE (ruhet me localStorage)
-    const likeBtn = e.target.closest(".like-btn");
-    if (likeBtn) {
-      const id = likeBtn.getAttribute("data-id") || likeBtn.closest(".product")?.getAttribute("data-id") || "default";
-      const key = "liked_" + id;
-      const liked = localStorage.getItem(key) === "true";
-
-      localStorage.setItem(key, (!liked).toString());
-      likeBtn.textContent = !liked ? "✓ Liked" : "❤️ Like";
-      return;
-    }
-
-    // SHARE
-    const shareBtn = e.target.closest(".share-btn");
-    if (shareBtn) {
-      if (navigator.share) {
-        navigator.share({ title: document.title, url: location.href }).catch(()=>{});
-      } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(location.href);
-        alert("Link copied!");
-      } else {
-        alert("Copy link from address bar.");
-      }
-      return;
-    }
-  });
-
-  // Init LIKE buttons on load
-  document.querySelectorAll(".like-btn").forEach(btn => {
-    const id = btn.getAttribute("data-id") || btn.closest(".product")?.getAttribute("data-id") || "default";
-    if (localStorage.getItem("liked_" + id) === "true") {
-      btn.textContent = "✓ Liked";
-    }
-  });
-
-});
-</script>
-Ora
+    <!-- ============= IWC CASE BACK REF 3714 ============= -->
 <div class="product" data-id="iwc-3714">
   <div class="product-left">
     <img class="product-main-image" src="iwc-3714-1.jpg" alt="IWC Portuguese 3714 caseback">

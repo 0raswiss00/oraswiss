@@ -9,36 +9,44 @@
 
 <body>
 
+<div id="privateContent" style="display:none;">
+
+  <h1>SellNow – Private Upload</h1>
+
+  <form>
+
+    <label>Brand</label><br>
+    <input type="text"><br><br>
+
+    <label>Model</label><br>
+    <input type="text"><br><br>
+
+    <label>Year</label><br>
+    <input type="text"><br><br>
+
+    <label>Price</label><br>
+    <input type="text"><br><br>
+
+    <label>Description</label><br>
+    <textarea></textarea><br><br>
+
+    <label>Photos</label><br>
+    <input type="file"><br><br>
+
+    <button type="submit">Save</button>
+
+  </form>
+
+</div>
+
 <script>
   const pass = prompt("Password:");
-  if (pass !== "1234") {
+  if (pass === "1234") {
+    document.getElementById("privateContent").style.display = "block";
+  } else {
     document.body.innerHTML = "<h2>Access denied</h2>";
   }
 </script>
-
-<h1>SellNow – Private Upload</h1>
-
-<form>
-  <label>Brand</label><br>
-  <input type="text"><br><br>
-
-  <label>Model</label><br>
-  <input type="text"><br><br>
-
-  <label>Year</label><br>
-  <input type="text"><br><br>
-
-  <label>Price</label><br>
-  <input type="text"><br><br>
-
-  <label>Description</label><br>
-  <textarea></textarea><br><br>
-
-  <label>Photos</label><br>
-  <input type="file"><br><br>
-
-  <button type="submit">Save</button>
-</form>
 
 </body>
 </html>

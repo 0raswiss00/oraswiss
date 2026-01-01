@@ -2022,96 +2022,124 @@
 </article>
 
     
-<!-- ============= IWC PORTUGUESE 3714 – ORIGINAL CASEBACK ============= -->
-<article class="product" id="iwc-3714-caseback">
-  <div class="product-box">
+<script>
+document.addEventListener("DOMContentLoaded", () => {
 
-    <!-- FOTO KRYESORE -->
-    <div class="product-left">
-      <img class="product-main-image"
-           src="iwc-3714-1.jpg"
-           alt="IWC 3714 caseback image 1">
-    </div>
+  // Thumb -> ndërron foton e madhe (punon edhe për shumë produkte)
+  document.body.addEventListener("click", (e) => {
+    const thumb = e.target.closest(".product-gallery .thumb");
+    if (thumb) {
+      const product = thumb.closest(".product");
+      const main = product.querySelector(".product-main-image");
+      if (!main) return;
 
-    <!-- FORMULARI -->
-    <div class="product-right">
-      <h3>Request this item</h3>
+      const full = thumb.getAttribute("data-full") || thumb.src;
+      main.src = full;
+      if (thumb.alt) main.alt = thumb.alt;
 
-      <form action="https://api.web3forms.com/submit" method="POST">
-        <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
-        <input type="hidden" name="subject" value="New Request: IWC Portuguese 3714 Caseback">
-        <input type="hidden" name="Product" value="IWC Portuguese Original Caseback – Ref. 3714 / 3808175">
+      product.querySelectorAll(".product-gallery .thumb").forEach(t => t.classList.remove("active"));
+      thumb.classList.add("active");
+      return;
+    }
 
-        <input type="text"  name="Full Name" placeholder="Full Name" required>
-        <input type="email" name="Email"      placeholder="Email" required>
-        <input type="text"  name="Phone"      placeholder="Phone / WhatsApp" required>
-        <input type="text"  name="Country"    placeholder="Country" required>
+    // Klik te foto e madhe -> ZOOM
+    const mainImg = e.target.closest(".product-main-image");
+    if (mainImg) {
+      mainImg.classList.toggle("zoomed");
+      return;
+    }
 
-        <textarea name="Message" rows="5" placeholder="Message" required></textarea>
+    // LIKE (ruhet me localStorage)
+    const likeBtn = e.target.closest(".like-btn");
+    if (likeBtn) {
+      const id = likeBtn.getAttribute("data-id") || likeBtn.closest(".product")?.getAttribute("data-id") || "default";
+      const key = "liked_" + id;
+      const liked = localStorage.getItem(key) === "true";
 
-        <button type="submit">Send Request</button>
-      </form>
+      localStorage.setItem(key, (!liked).toString());
+      likeBtn.textContent = !liked ? "✓ Liked" : "❤️ Like";
+      return;
+    }
 
-      <div class="buy-row">
-        <a href="https://www.paypal.com/ncp/payment/AH7P4VW5NM2EJ" class="buy-btn" target="_blank">Buy Now</a>
-        <a href="https://wa.me/355692408065" class="whatsapp-btn" target="_blank">WhatsApp</a>
-        <a href="mailto:oraswisssuport00@gmail.com" class="email-btn">Email</a>
+    // SHARE
+    const shareBtn = e.target.closest(".share-btn");
+    if (shareBtn) {
+      if (navigator.share) {
+        navigator.share({ title: document.title, url: location.href }).catch(()=>{});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(location.href);
+        alert("Link copied!");
+      } else {
+        alert("Copy link from address bar.");
+      }
+      return;
+    }
+  });
 
-        <button class="like-btn" data-id="iwc-3714-caseback">♥️</button>
-        <button class="share-btn" data-url="https://oraswiss.com/parts.html#iwc-3714-caseback">📎 Share</button>
-      </div>
-    </div>
+  // Init LIKE buttons on load
+  document.querySelectorAll(".like-btn").forEach(btn => {
+    const id = btn.getAttribute("data-id") || btn.closest(".product")?.getAttribute("data-id") || "default";
+    if (localStorage.getItem("liked_" + id) === "true") {
+      btn.textContent = "✓ Liked";
+    }
+  });
 
-   <!-- Këtu fillon "xhepi" me scroll -->
-<div class="description-scroll">
- <div style="
-    width: 400px;
-    height: 300px;
-    overflow-y: scroll;
-    padding: 10px;
-    border: 1px solid #ccc;
-    line-height: 1.5;
-">    
-
-     <div class="product-right">
-  <!-- KJO PJESË ËSHTË SCROLL (xhepi) -->
-  <div class="product-text-scroll">
-    <h3>IWC PORTUGUESE 3714 ...</h3>
-    <p><strong>Price:</strong> €450</p> 
-    <li><strong>Brand:</strong> IWC International Watch Co.</li>
-    <li><strong>Model:</strong> Portuguese Chronograph</li>
-    <li><strong>Reference:</strong> 3714</li>
-    <li><strong>Inside Reference:</strong> 3808175</li>
-    <li><strong>Material:</strong> Stainless Steel</li>
-    <li><strong>Finish:</strong> Original factory perlage (inside) & polished exterior</li>
-    <li><strong>Compatibility:</strong> IWC Portuguese 3714 / Cal. 79350</li>
-    <li><strong>Condition:</strong> Pre-owned – original 100%, no modifications</li> 
-    <p><p>Original <strong>IWC International Watch Co.</strong> stainless steel caseback for the Portuguese Chronograph reference <strong>3714</strong>.  
-     Fully genuine and 100% original IWC part, stamped internally with reference <strong>3808175</strong> and classic perlage finishing.</p>
-
-    <p>The exterior features the correct factory engraving and stainless-steel polish typical of early and mid-production 3714 models.  
-     Ideal for restorations, replacements, or completing an authentic IWC Portuguese Cal. 79350 watch.</p>
-    <ul>...</ul>
-    <p>Original <strong>IWC International Watch Co.</strong> stainless steel caseback for the Portuguese Chronograph reference <strong>3714</strong>.  
-     Fully genuine and 100% original IWC part, stamped internally with reference <strong>3808175</strong> and classic perlage finishing.</p>
-
-    <p>The exterior features the correct factory engraving and stainless-steel polish typical of early and mid-production 3714 models.  
-     Ideal for restorations, replacements, or completing an authentic IWC Portuguese Cal. 79350 watch.</p>
+});
+</script>
+Ora
+<div class="product" data-id="iwc-3714">
+  <div class="product-left">
+    <img class="product-main-image" src="iwc-3714-1.jpg" alt="IWC Portuguese 3714 caseback">
   </div>
-  <!-- Ketu mbaron "xhepi" -->
 
-  <!-- GALERIA JASHTE SCROLL-it -->
-  <div class="product-gallery">
-    <img class="thumb active" src="iwc-3714-1.jpg" data-full="iwc-3714-1.jpg" alt="">
-    <img class="thumb" src="iwc-3714-2.jpg" data-full="iwc-3714-2.jpg" alt="">
-    <img class="thumb" src="iwc-3714-3.jpg" data-full="iwc-3714-3.jpg" alt="">
-    <img class="thumb" src="iwc-3714-4.jpg" data-full="iwc-3714-4.jpg" alt="">
+  <div class="product-middle">
+    <h3>Request this item</h3>
+    <input placeholder="Full Name">
+    <input placeholder="Email">
+    <input placeholder="Phone / WhatsApp">
+    <input placeholder="Country">
+    <textarea placeholder="Message"></textarea>
+
+    <button class="send-btn">Send Request</button>
+
+    <div class="actions">
+      <button class="like-btn" data-id="iwc-3714">❤️ Like</button>
+      <button class="share-btn">Share</button>
+    </div>
+  </div>
+
+  <div class="product-right">
+    <!-- KJO PJESË ËSHTË SCROLL -->
+    <div class="product-text-scroll">
+      <h3>IWC PORTUGUESE 3714 • ORIGINAL STAINLESS STEEL CASEBACK • REF. 3808175</h3>
+
+      <p><strong>Price:</strong> €450</p>
+
+      <ul>
+        <li><strong>Brand:</strong> IWC International Watch Co.</li>
+        <li><strong>Model:</strong> Portuguese Chronograph</li>
+        <li><strong>Reference:</strong> 3714</li>
+        <li><strong>Inside Reference:</strong> 3808175</li>
+        <li><strong>Material:</strong> Stainless Steel</li>
+        <li><strong>Finish:</strong> Original factory perlage (inside) & polished exterior</li>
+        <li><strong>Compatibility:</strong> IWC Portuguese 3714 / Cal. 79350</li>
+        <li><strong>Condition:</strong> Pre-owned – original 100%</li>
+      </ul>
+
+      <p>
+        Original IWC stainless steel caseback for the Portuguese Chronograph reference 3714...
+      </p>
+    </div>
+
+    <!-- GALERIA JASHTE SCROLL-it -->
+    <div class="product-gallery">
+      <img class="thumb active" src="iwc-3714-1.jpg" data-full="iwc-3714-1.jpg" alt="IWC 3714 caseback 1">
+      <img class="thumb" src="iwc-3714-2.jpg" data-full="iwc-3714-2.jpg" alt="IWC 3714 caseback 2">
+      <img class="thumb" src="iwc-3714-3.jpg" data-full="iwc-3714-3.jpg" alt="IWC 3714 caseback 3">
+      <img class="thumb" src="iwc-3714-4.jpg" data-full="iwc-3714-4.jpg" alt="IWC 3714 caseback 4">
+    </div>
   </div>
 </div>
-
-<!-- FOTO KRYESORE (majtas) -->
-<img id="mainPhoto" class="main-photo" src="iwc-3714-1.jpg" alt="">
-</article>
   
 <!-- ================= OMEGA 1538 ================= -->
 <article class="product" id="omega-1538">
@@ -3499,132 +3527,68 @@
 
 
     
-  <script>  
-document.addEventListener('DOMContentLoaded', function () {
-  // për çdo produkt në faqe
-  document.querySelectorAll('.product').forEach(function (product) {
-    const mainImage = product.querySelector('.product-main-image');
-    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
-
-    if (!mainImage || !thumbs.length) return;
-
-    thumbs.forEach(function (thumb) {
-      thumb.addEventListener('click', function () {
-        mainImage.src = thumb.src;
-        if (thumb.alt) {
-          mainImage.alt = thumb.alt;
-        }
-      });
-    });
-  });
-});
-</script>
-    
 <script>
-// ZOOM SCRIPT
-document.addEventListener('DOMContentLoaded', () => {
-    const mainImages = document.querySelectorAll('.product-main-image');
+document.addEventListener("DOMContentLoaded", () => {
 
-    mainImages.forEach(img => {
-        img.addEventListener('click', () => {
-            img.classList.toggle('zoomed');
-        });
-    });
-});
-</script>
-<script>
-function searchProducts() {
-    const input = document.getElementById("searchBar").value.toLowerCase();
-    const products = document.querySelectorAll(".product");
+  // Thumb -> ndërron foton e madhe (punon edhe për shumë produkte)
+  document.body.addEventListener("click", (e) => {
+    const thumb = e.target.closest(".product-gallery .thumb");
+    if (thumb) {
+      const product = thumb.closest(".product");
+      const main = product.querySelector(".product-main-image");
+      if (!main) return;
 
-    products.forEach(product => {
-        const text = product.innerText.toLowerCase();
-        product.style.display = text.includes(input) ? "block" : "none";
-    });
-}
-</script>
+      const full = thumb.getAttribute("data-full") || thumb.src;
+      main.src = full;
+      if (thumb.alt) main.alt = thumb.alt;
 
-<script>
-// LIKE për çdo part veç e veç
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('.like-btn').forEach(function (btn) {
-    const partId = btn.getAttribute('data-part-id') || 'default-part';
-
-    // nëse ky part është pëlqyer më parë
-    if (localStorage.getItem('liked_' + partId) === 'true') {
-      btn.classList.add('active');
+      product.querySelectorAll(".product-gallery .thumb").forEach(t => t.classList.remove("active"));
+      thumb.classList.add("active");
+      return;
     }
 
-    btn.addEventListener('click', function () {
-      btn.classList.toggle('active');
-      const isLiked = btn.classList.contains('active');
-      localStorage.setItem('liked_' + partId, isLiked);
-    });
-  });
+    // Klik te foto e madhe -> ZOOM
+    const mainImg = e.target.closest(".product-main-image");
+    if (mainImg) {
+      mainImg.classList.toggle("zoomed");
+      return;
+    }
 
-  // SHARE – thjesht kopjon linkun ose hap share API
-  document.querySelectorAll('.share-btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
+    // LIKE (ruhet me localStorage)
+    const likeBtn = e.target.closest(".like-btn");
+    if (likeBtn) {
+      const id = likeBtn.getAttribute("data-id") || likeBtn.closest(".product")?.getAttribute("data-id") || "default";
+      const key = "liked_" + id;
+      const liked = localStorage.getItem(key) === "true";
+
+      localStorage.setItem(key, (!liked).toString());
+      likeBtn.textContent = !liked ? "✓ Liked" : "❤️ Like";
+      return;
+    }
+
+    // SHARE
+    const shareBtn = e.target.closest(".share-btn");
+    if (shareBtn) {
       if (navigator.share) {
-        navigator.share({
-          title: document.title,
-          url: window.location.href
-        }).catch(() => {});
+        navigator.share({ title: document.title, url: location.href }).catch(()=>{});
       } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(window.location.href);
-        alert('Link copied! Paste it anywhere to share.');
+        navigator.clipboard.writeText(location.href);
+        alert("Link copied!");
       } else {
-        alert('Sharing not supported. Copy the link from the address bar.');
+        alert("Copy link from address bar.");
       }
-    });
-  });
-});
-</script>
-    
-<script>
-document.querySelectorAll(".like-btn").forEach(function (btn) {
-
-    // ID unike e produktit (vjen nga data-id)
-    let id = btn.getAttribute("data-id");
-
-    // Nëse produkti është pëlqyer më parë → ndrysho butonin
-    if (localStorage.getItem("liked_" + id) === "true") {
-        btn.innerText = "✓ Liked";
-        btn.style.background = "#ff1a4d";
+      return;
     }
+  });
 
-    // Kur klikon butonin
-    btn.addEventListener("click", function () {
+  // Init LIKE buttons on load
+  document.querySelectorAll(".like-btn").forEach(btn => {
+    const id = btn.getAttribute("data-id") || btn.closest(".product")?.getAttribute("data-id") || "default";
+    if (localStorage.getItem("liked_" + id) === "true") {
+      btn.textContent = "✓ Liked";
+    }
+  });
 
-        // Nëse nuk është pëlqyer → pëlqeje
-        if (localStorage.getItem("liked_" + id) !== "true") {
-            localStorage.setItem("liked_" + id, "true");
-            btn.innerText = "✓ Liked";
-            btn.style.background = "#ff1a4d";
-            alert("U ruajt te Favorites ❤️");
-        } 
-        else {
-            // Nëse është pëlqyer → hiqe
-            localStorage.removeItem("liked_" + id);
-            btn.innerText = "❤️ Like";
-            btn.style.background = "#ff4d6d";
-            alert("U hoq nga Favorites.");
-        }
-    });
-
-});
-
-document.querySelectorAll(".share-btn").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-        if (navigator.share) {
-            navigator.share({
-                title: document.title,
-                text: "Shiko këtë produkt nga ORA SWISS",
-                url: window.location.href
-            });
-        } else {
-            alert("Share nuk përkrahet në këtë pajisje.");
-        }
-    });
 });
 </script>
+

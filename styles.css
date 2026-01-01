@@ -1275,6 +1275,94 @@ ul {
   outline: none;
   box-shadow: none;
 }
+
+.product{
+  display:flex;
+  gap:20px;
+  align-items:flex-start;
+  padding:18px;
+  border-radius:14px;
+  background:#f3f3f3;
+  margin:18px 0;
+}
+
+.product-left img{
+  width:320px;
+  height:auto;
+  border-radius:14px;
+  cursor:zoom-in;
+  transition:transform .2s ease;
+}
+
+.product-left img.zoomed{
+  transform:scale(1.8);
+  cursor:zoom-out;
+}
+
+.product-middle{
+  width:260px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.product-middle input,
+.product-middle textarea{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #ddd;
+}
+
+.product-middle textarea{ min-height:90px; }
+
+.product-right{
+  width:520px;
+}
+
+.product-text-scroll{
+  max-height:260px;      /* KJO bën scroll vetëm për tekstin */
+  overflow:auto;
+  padding:14px;
+  background:#fff;
+  border-radius:12px;
+  border:1px solid #e6e6e6;
+}
+
+.product-gallery{
+  display:flex;
+  gap:10px;
+  padding-top:10px;      /* Jashtë scroll-it */
+}
+
+.product-gallery .thumb{
+  width:86px;
+  height:86px;
+  object-fit:cover;
+  border-radius:12px;
+  cursor:pointer;
+  opacity:.8;
+  border:2px solid transparent;
+}
+
+.product-gallery .thumb.active{
+  opacity:1;
+  border-color:#111;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:8px;
+}
+.like-btn, .share-btn, .send-btn{
+  padding:10px 12px;
+  border-radius:10px;
+  border:0;
+  cursor:pointer;
+}
+
+
       
 /* FIX I FOTOVE – BËJI HORIZONTAL NË TË GJITHA: LUXURY / VINTAGE / PARTS */
 

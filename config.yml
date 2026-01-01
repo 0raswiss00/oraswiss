@@ -13,3 +13,33 @@ collections:
           - { label: "Luxury", value: "luxury" }
           - { label: "Vintage", value: "vintage" }
           - { label: "Parts", value: "parts" }
+         backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "watches"
+    label: "Watches"
+    folder: "watches"
+    create: true
+    slug: "{{year}}-{{brand}}-{{model}}"
+    fields:
+      - { label: "Brand", name: "brand", widget: "string" }
+      - { label: "Model", name: "model", widget: "string" }
+      - { label: "Reference", name: "ref", widget: "string", required: false }
+      - { label: "Year", name: "year", widget: "string" }
+
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Luxury", value: "luxury" }
+          - { label: "Vintage", value: "vintage" }
+          - { label: "Parts", value: "parts" }
+
+      - { label: "Price", name: "price", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Photos", name: "images", widget: "image", required: false }

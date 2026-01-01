@@ -6,3 +6,10 @@ collections:
     fields:
       - { label: "Brand", name: "brand", widget: "string" }
       ...
+         - label: "Category"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Luxury", value: "luxury" }
+          - { label: "Vintage", value: "vintage" }
+          - { label: "Parts", value: "parts" }

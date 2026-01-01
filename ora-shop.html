@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="sq">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ORA SWISS – WATCH SHOP</title>
+
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      margin:0;
+      background:#efefef;
+    }
+
+    .site-header{
+      background:#111;
+      color:#fff;
+      padding:18px 22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .site-header h1{
+      margin:0;
+      font-size:22px;
+      letter-spacing:1px;
+    }
+    .back-button{
+      color:#fff;
+      text-decoration:none;
+      opacity:.85;
+    }
+    .back-button:hover{opacity:1;}
+
+    .toolbar{
+      padding:16px 22px;
+      background:#efefef;
+    }
+    #searchBar{
+      width:100%;
+      max-width:520px;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid #cfcfcf;
+      outline:none;
+      font-size:15px;
+    }
+
+    /* ===== PRODUCT LAYOUT (3 KOLONA) ===== */
+    .product{
+      max-width:1100px;
+      margin:18px auto;
+      background:#f7f7f7;
+      border-radius:16px;
+      padding:18px;
+      box-shadow: 0 8px 18px rgba(0,0,0,.08);
+
+      display:grid;
+      grid-template-columns: 320px 280px 1fr;
+      gap:18px;
+      align-items:flex-start;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .product{ grid-template-columns: 1fr; }
+    }
+
+    /* ===== LEFT: MAIN IMAGE ===== */
+    .product-left .product-main-image{
+      width:100%;
+      max-height:420px;
+      object-fit:cover;
+      border-radius:14px;
+      border:1px solid #ddd;
+      cursor: zoom-in;
+      display:block;
+      background:#fff;
+    }
+
+    .product-left .product-main-image.zoomed{
+      transform: scale(1.8);
+      transform-origin:center;
+      cursor: zoom-out;
+    }
+    /* mos e prish layout-in kur bën zoom */
+    .product-left{
+      overflow:hidden;
+      border-radius:14px;
+    }
+
+    /* ===== MIDDLE: REQUEST FORM ===== */
+    .product-middle h3{
+      margin:4px 0 12px;
+      font-size:18px;
+      color:#333;
+    }
+    .req-form{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .req-form input, .req-form textarea{
+      padding:10px 12px;
+      border:1px solid #cfcfcf;
+      border-radius:10px;
+      font-size:14px;
+      outline:none;
+      background:#fff;
+    }
+    .req-form textarea{ min-height:88px; resize:vertical; }
+
+    .req-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-top:6px;
+      flex-wrap:wrap;
+    }
+    .btn{
+      border:none;
+      padding:10px 14px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:13px;
+    }
+    .btn-send{ background:#111; color:#fff; }
+    .btn-like{ background:#ff4d6d; color:#fff; }
+    .btn-like.active{ background:#ff1a4d; }
+    .btn-share{ background:#5b6cff; color:#fff; }
+
+    /* ===== RIGHT: TEXT SCROLL + GALLERY POSHTE ===== */
+    .product-right{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .product-text-scroll{
+      max-height:300px;
+      overflow-y:auto;
+      padding:14px;
+      background:#fff;
+      border-radius:12px;
+      border:1px solid #ddd;
+    }
+    .product-text-scroll h2{
+      margin:0 0 10px;
+      font-size:18px;
+    }
+    .price{
+      font-weight:800;
+      margin:8px 0 10px;
+      font-size:16px;
+    }
+    .desc{
+      line-height:1.45;
+      color:#333;
+    }
+
+    /* GALLERY = JASHTE SCROLL-IT */
+    .product-gallery{
+      display:flex;
+      gap:10px;
+      overflow-x:auto;
+      padding-bottom:6px;
+    }
+    .product-gallery::-webkit-scrollbar{ height:6px; }
+    .product-gallery::-webkit-scrollbar-thumb{
+      background:#bdbdbd;
+      border-radius:10px;
+    }
+
+    .product-gallery .thumb{
+      width:82px;
+      height:82px;
+      object-fit:cover;
+      border-radius:12px;
+      cursor:pointer;
+      opacity:.7;
+      border:2px solid transparent;
+      background:#fff;
+      flex: 0 0 auto;
+    }
+    .product-gallery .thumb.active{
+      opacity:1;
+      border-color:#111;
+    }
+
+    /* pak spacing mes produkteve */
+    #products{ padding:0 18px 30px; }
+  </style>
+</head>
+
+<body>
+
+  <header class="site-header">
+    <h1>ORA SWISS – WATCH SHOP</h1>
+    <a class="back-button" href="index.html">← Back to Home</a>
+  </header>
+
+  <div class="toolbar">
+    <input id="searchBar" type="text" placeholder="Search by brand or model..." oninput="searchProducts()" />
+  </div>
+
+  <div id="products"></div>
+
+  <script>
+    // ====== CONFIG ======
+    const SHEET_URL = "https://opensheet.elk.sh/1iIa-Zni-x6WhNVT3B5923EHoHLWjubk7bAPjP_a2L4c/Sheet1";
+
+    // ====== HELPERS ======
+    function escapeHTML(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    // Pranon:
+    // - p.images (me presje)  -> "url1, url2, url3"
+    // - ose p.image vetem
+    // - ose p.image1, p.image2, p.image3...
+    function getImages(p){
+      const imgs = [];
+
+      if (p.images){
+        String(p.images).split(",").map(s=>s.trim()).filter(Boolean).forEach(u=>imgs.push(u));
+      }
+
+      // image1..image10
+      for (let i=1;i<=10;i++){
+        const key = "image"+i;
+        if (p[key] && String(p[key]).trim()) imgs.push(String(p[key]).trim());
+      }
+
+      // fallback: single image
+      if (p.image && String(p.image).trim()) imgs.unshift(String(p.image).trim());
+
+      // hiq dublikatat
+      return [...new Set(imgs)].filter(Boolean);
+    }
+
+    function productId(p, idx){
+      // nëse ke kolonë "id" në sheet, e përdorim atë
+      return (p.id && String(p.id).trim()) ? String(p.id).trim() : ("p_"+idx);
+    }
+
+    // ====== RENDER ======
+    function renderProducts(products){
+      const el = document.getElementById("products");
+      if (!el) return;
+
+      el.innerHTML = products.map((p, idx) => {
+        const id = productId(p, idx);
+        const name = escapeHTML(p.name || "");
+        const price = escapeHTML(p.price || "");
+        const description = escapeHTML(p.description || "");
+        const images = getImages(p);
+        const main = images[0] || "";
+
+        // thumbs
+        const thumbsHTML = images.map((u, i) => `
+          <img class="thumb ${i===0?'active':''}" src="${escapeHTML(u)}" alt="${name}" data-full="${escapeHTML(u)}">
+        `).join("");
+
+        return `
+          <div class="product" data-product-id="${escapeHTML(id)}">
+            <!-- LEFT -->
+            <div class="product-left">
+              <img class="product-main-image" src="${escapeHTML(main)}" alt="${name}">
+            </div>
+
+            <!-- MIDDLE -->
+            <div class="product-middle">
+              <h3>Request this item</h3>
+              <div class="req-form">
+                <input type="text" placeholder="Full Name">
+                <input type="email" placeholder="Email">
+                <input type="text" placeholder="Phone / WhatsApp">
+                <input type="text" placeholder="Country">
+                <textarea placeholder="Message"></textarea>
+
+                <div class="req-actions">
+                  <button class="btn btn-send" type="button">Send Request</button>
+                  <button class="btn btn-like like-btn" type="button" data-part-id="${escapeHTML(id)}">❤️ Like</button>
+                  <button class="btn btn-share share-btn" type="button">Share</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT -->
+            <div class="product-right">
+              <div class="product-text-scroll">
+                <h2>${name}</h2>
+                <div class="price">${price ? "Price: " + price : ""}</div>
+                <div class="desc">${description}</div>
+              </div>
+
+              <div class="product-gallery">
+                ${thumbsHTML}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      // pas render, aplikojmë state e like
+      document.querySelectorAll('.like-btn').forEach(btn=>{
+        const pid = btn.getAttribute('data-part-id');
+        if (localStorage.getItem('liked_'+pid) === 'true'){
+          btn.classList.add('active');
+          btn.textContent = "✓ Liked";
+        }
+      });
+    }
+
+    // ====== LOAD SHEET ======
+    fetch(SHEET_URL)
+      .then(r => r.json())
+      .then(products => renderProducts(products))
+      .catch(err => console.log("Products load error:", err));
+
+    // ====== EVENTS (delegation) ======
+    document.addEventListener('click', async (e)=>{
+      // THUMB CLICK
+      const thumb = e.target.closest('.thumb');
+      if (thumb){
+        const product = thumb.closest('.product');
+        if (!product) return;
+        const main = product.querySelector('.product-main-image');
+        if (!main) return;
+
+        // active border
+        product.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));
+        thumb.classList.add('active');
+
+        const full = thumb.getAttribute('data-full') || thumb.src;
+        main.src = full;
+        if (thumb.alt) main.alt = thumb.alt;
+        return;
+      }
+
+      // MAIN IMAGE ZOOM
+      const mainImg = e.target.closest('.product-main-image');
+      if (mainImg){
+        mainImg.classList.toggle('zoomed');
+        return;
+      }
+
+      // LIKE
+      const likeBtn = e.target.closest('.like-btn');
+      if (likeBtn){
+        const partId = likeBtn.getAttribute('data-part-id') || 'default';
+        const key = 'liked_' + partId;
+
+        const newState = !(localStorage.getItem(key) === 'true');
+        localStorage.setItem(key, newState ? 'true' : 'false');
+
+        likeBtn.classList.toggle('active', newState);
+        likeBtn.textContent = newState ? "✓ Liked" : "❤️ Like";
+        return;
+      }
+
+      // SHARE
+      const shareBtn = e.target.closest('.share-btn');
+      if (shareBtn){
+        const product = shareBtn.closest('.product');
+        const title = (product?.querySelector('.product-text-scroll h2')?.textContent || document.title);
+
+        try{
+          if (navigator.share){
+            await navigator.share({ title, url: window.location.href });
+          } else if (navigator.clipboard){
+            await navigator.clipboard.writeText(window.location.href);
+            alert("Link copied!");
+          } else {
+            alert("Copy link from address bar.");
+          }
+        }catch(_){}
+        return;
+      }
+    });
+
+    // ====== SEARCH ======
+    function searchProducts(){
+      const input = document.getElementById("searchBar").value.toLowerCase();
+      const products = document.querySelectorAll(".product");
+      products.forEach(p=>{
+        const text = p.innerText.toLowerCase();
+        p.style.display = text.includes(input) ? "grid" : "none";
+      });
+    }
+    window.searchProducts = searchProducts;
+  </script>
+
+</body>
+</html>

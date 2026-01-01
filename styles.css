@@ -2679,3 +2679,80 @@ body{background:#000!important;color:#E6E6E6!important}
 .card-title,.hero-title{color:#D4AF37!important}
 .card-text,.hero-text{color:#B9B9B9!important;opacity:1!important}
 
+/* Lightbox overlay */
+.lightbox{
+  display: none;              /* e fshehur derisa ta hapësh me JS */
+  position: fixed;
+  inset: 0;                   /* top:0 right:0 bottom:0 left:0 */
+  background: rgba(0,0,0,.85);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+/* kur e hap me JS, zakonisht vendos display:flex */
+.lightbox.show{
+  display: flex;
+}
+
+/* Foto brenda lightbox */
+#lightbox-img{
+  max-width: min(92vw, 1100px);
+  max-height: 88vh;
+  width: auto;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.6);
+}
+
+/* Butoni X */
+.lightbox .close{
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  font-size: 34px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+.lightbox .close:hover{
+  background: rgba(255,255,255,.12);
+}
+
+/* Nav buttons */
+.lightbox .nav{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: rgba(255,255,255,.14);
+  color: #fff;
+  font-size: 34px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.lightbox .nav:hover{
+  background: rgba(255,255,255,.22);
+}
+
+.lightbox .prev{ left: 18px; }
+.lightbox .next{ right: 18px; }
+
+/* Mobile tweak */
+@media (max-width: 480px){
+  .lightbox .nav{
+    width: 46px;
+    height: 46px;
+    font-size: 28px;
+  }
+}
+

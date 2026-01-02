@@ -3,164 +3,132 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SellNow - Parts</title>
+  <title>Sell Luxury</title>
+  <meta name="robots" content="noindex,nofollow">
   <style>
-    body{font-family:Arial, sans-serif; margin:24px;}
-    .tabs{display:flex; gap:12px; margin:12px 0 18px;}
-    .tabs a{color:#0b57d0; text-decoration:none; font-weight:600}
-    form{max-width:720px;}
-    label{display:block; margin:12px 0 6px; font-weight:600}
-    input, select, textarea{width:100%; padding:10px; border:1px solid #ccc; border-radius:8px;}
-    textarea{min-height:110px;}
-    .row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
-    button{margin-top:16px; width:100%; padding:12px; border:0; border-radius:10px; font-weight:700; cursor:pointer;}
-    .hint{opacity:.8; margin:6px 0 0;}
-    .ok{margin-top:12px; padding:10px; border:1px solid #b7e1cd; background:#e6f4ea; border-radius:10px; display:none;}
+    body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;padding:24px}
+    .box{max-width:820px;margin:0 auto;background:#fff;padding:18px;border-radius:10px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+    .back{display:inline-block;padding:10px 14px;border:1px solid #ccc;border-radius:10px;text-decoration:none;color:#111;background:#fff}
+    .back:hover{background:#f3f3f3}
+    h1{margin:0}
+    label{display:block;font-weight:700;margin:12px 0 6px}
+    input,select,textarea,button{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px}
+    textarea{min-height:120px}
+    button{margin-top:14px;background:#000;color:#fff;border:none;cursor:pointer}
+    .msg{margin-top:10px;color:#0a7a2a;font-weight:700;display:none}
+    .tabs{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+    .tabs a{padding:10px 12px;border:1px solid #ddd;border-radius:10px;text-decoration:none;color:#111;background:#fafafa}
+    .tabs a:hover{background:#f0f0f0}
   </style>
 </head>
 <body>
 
-<div id="privateContent" style="display:none;">
-  <h1>Luxury Watches</h1>
+  <div class="box" id="privateContent" style="display:none;">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to Home</a>
+      <h1>SellNow – Luxury</h1>
+    </div>
 
-  <div class="tabs">
-    <a href="sellnow.html">← Back</a>
-    <a href="sellnow-luxury.html">Luxury</a>
-    <a href="sellnow-vintage.html">Vintage</a>
-    <a href="sellnow-parts.html">Parts</a>
+    <div class="tabs">
+      <a href="sellnow-luxury.html">Luxury</a>
+      <a href="sellnow-vintage.html">Vintage</a>
+      <a href="sellnow-parts.html">Parts</a>
+    </div>
+
+    <form id="sellForm">
+      <label>Brand</label>
+      <input type="text" id="brand" required>
+
+      <label>Model</label>
+      <input type="text" id="model">
+
+      <label>Ref</label>
+      <input type="text" id="ref">
+
+      <label>Year</label>
+      <input type="text" id="year">
+
+      <label>Material</label>
+      <input type="text" id="material">
+
+      <label>Case size (mm)</label>
+      <input type="text" id="caseSize">
+
+      <label>Bracelet / Strap</label>
+      <select id="bracelet">
+        <option value="Bracelet">Bracelet</option>
+        <option value="Leather">Leather</option>
+        <option value="Rubber">Rubber</option>
+        <option value="NATO">NATO</option>
+      </select>
+
+      <label>Movement</label>
+      <select id="movement">
+        <option value="Automatic">Automatic</option>
+        <option value="Quartz">Quartz</option>
+        <option value="Manual">Manual</option>
+      </select>
+
+      <label>Functions</label>
+      <input type="text" id="functions">
+
+      <label>Condition</label>
+      <select id="condition">
+        <option value="New">New</option>
+        <option value="Used - Good">Used - Good</option>
+        <option value="Used - Fair">Used - Fair</option>
+      </select>
+
+      <label>Price</label>
+      <input type="text" id="price">
+
+      <label>Description</label>
+      <textarea id="description"></textarea>
+
+      <label>Photos</label>
+      <input id="photos" name="photos" type="file" multiple accept="image/*">
+
+      <button type="submit">Save</button>
+      <div class="msg" id="msg">Saved locally ✅ (no refresh)</div>
+    </form>
   </div>
 
-  <form id="sellForm">
-    <label>Brand</label>
-    <input type="text" id="brand" required>
-
-    <label>Model</label>
-    <input type="text" id="model" required>
-
-    <div class="row">
-      <div>
-        <label>Ref</label>
-        <input type="text" id="ref">
-      </div>
-      <div>
-        <label>Year</label>
-        <input type="text" id="year">
-      </div>
-    </div>
-
-    <label>Material</label>
-    <input type="text" id="material">
-
-    <label>Case size (mm)</label>
-    <input type="text" id="caseSize">
-
-    <div class="row">
-      <div>
-        <label>Bracelet / Strap</label>
-        <select id="bracelet">
-          <option value="Bracelet">Bracelet</option>
-          <option value="Leather">Strap (Leather)</option>
-          <option value="Rubber">Rubber</option>
-          <option value="NATO">NATO</option>
-        </select>
-      </div>
-      <div>
-        <label>Movement</label>
-        <select id="movement">
-          <option value="Automatic">Automatic</option>
-          <option value="Quartz">Quartz</option>
-          <option value="Manual">Manual</option>
-        </select>
-      </div>
-    </div>
-
-    <label>Functions</label>
-    <input type="text" id="functions" placeholder="Date, Chronograph, GMT...">
-
-    <label>Condition</label>
-    <select id="condition">
-      <option value="New">New</option>
-      <option value="Used - Good">Used - Good</option>
-      <option value="Used - Fair">Used - Fair</option>
-    </select>
-
-    <label>Price</label>
-    <input type="text" id="price">
-
-    <label>Description</label>
-    <textarea id="description"></textarea>
-
-    <label>Photos</label>
-    <input id="photos" type="file" multiple>
-    <div class="hint">Fotot s’ruhen në localStorage (vetëm emrat). Për upload real duhet backend.</div>
-
-    <button id="saveBtn" type="submit">Save</button>
-    <div id="savedBox" class="ok">Saved locally ✅ (no refresh)</div>
-  </form>
-</div>
-
-<script>
-  // ===== AUTH (shared) =====
-  (function auth(){
-    const KEY = "oraswiss_auth_ok";
-    if (sessionStorage.getItem(KEY) === "1") {
-      document.getElementById("privateContent").style.display = "block";
-      return;
-    }
+  <script>
+    // password (ndryshe hiqe krejt nqs s’e do)
     const pass = prompt("Password:");
     if (pass === "1234") {
-      sessionStorage.setItem(KEY, "1");
       document.getElementById("privateContent").style.display = "block";
     } else {
-      document.body.innerHTML = "<h2>Access denied</h2>";
+      document.body.innerHTML = "<h2 style='font-family:Arial'>Access denied</h2>";
     }
-  })();
+  </script>
 
-  // ===== SAVE HANDLER =====
-  const CATEGORY = "luxury";
-  const form = document.getElementById("sellForm");
-  const savedBox = document.getElementById("savedBox");
+  <script>
+    document.getElementById("sellForm").addEventListener("submit", function(e){
+      e.preventDefault();
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault(); // ✅ mos bëj refresh / mos shko në faqe tjetër
+      const data = {
+        category: "luxury",
+        brand: brand.value,
+        model: model.value,
+        ref: ref.value,
+        year: year.value,
+        material: material.value,
+        caseSize: caseSize.value,
+        bracelet: bracelet.value,
+        movement: movement.value,
+        functions: functions.value,
+        condition: condition.value,
+        price: price.value,
+        description: description.value
+      };
 
-    const photosInput = document.getElementById("photos");
-    const photoNames = Array.from(photosInput.files || []).map(f => f.name);
-
-    const data = {
-      category: CATEGORY,
-      createdAt: new Date().toISOString(),
-      brand: document.getElementById("brand").value.trim(),
-      model: document.getElementById("model").value.trim(),
-      ref: document.getElementById("ref").value.trim(),
-      year: document.getElementById("year").value.trim(),
-      material: document.getElementById("material").value.trim(),
-      caseSize: document.getElementById("caseSize").value.trim(),
-      bracelet: document.getElementById("bracelet").value,
-      movement: document.getElementById("movement").value,
-      functions: document.getElementById("functions").value.trim(),
-      condition: document.getElementById("condition").value,
-      price: document.getElementById("price").value.trim(),
-      description: document.getElementById("description").value.trim(),
-      photoNames
-    };
-
-    // ruaj listë items për kategori
-    const key = sellnow_items_${CATEGORY};
-    const prev = JSON.parse(localStorage.getItem(key) || "[]");
-    prev.push(data);
-    localStorage.setItem(key, JSON.stringify(prev));
-
-    // ruaj edhe "last draft"
-    localStorage.setItem("sellnow_last", JSON.stringify(data));
-
-    savedBox.style.display = "block";
-    setTimeout(()=> savedBox.style.display = "none", 1800);
-
-    // optional: pastro fushat (po deshe)
-    form.reset();
-  });
-</script>
+      localStorage.setItem("sellnow_last", JSON.stringify(data));
+      document.getElementById("msg").style.display = "block";
+      setTimeout(()=>document.getElementById("msg").style.display="none", 1800);
+    });
+  </script>
 
 </body>
 </html>

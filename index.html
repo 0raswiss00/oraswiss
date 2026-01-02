@@ -199,6 +199,29 @@
   </div>
 
 <script>
+  const buttons = document.querySelectorAll(".catBtn");
+  const items = document.querySelectorAll("#gallery [data-cat]");
+
+  function filter(cat) {
+    items.forEach(el => {
+      el.style.display =
+        cat === "all" || el.dataset.cat === cat ? "" : "none";
+    });
+
+    document.getElementById("gallery")
+      .scrollIntoView({ behavior: "smooth" });
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      filter(btn.dataset.filter);
+    });
+  });
+
+  filter("all");
+</script>
+
+<script>
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js");
 }

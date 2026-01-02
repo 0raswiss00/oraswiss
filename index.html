@@ -134,6 +134,17 @@
     <section style="margin:40px 0; text-align:center;">
   <h2>Watch Categories</h2>
 
+<h2 style="text-align:center; margin:30px 0 15px;">
+  Watch Categories
+</h2>
+
+<div class="cats">
+  <button class="catBtn" data-filter="luxury">Luxury Watches</button>
+  <button class="catBtn" data-filter="vintage">Vintage Watches</button>
+  <button class="catBtn" data-filter="parts">Parts</button>
+  <button class="catBtn" data-filter="all">All</button>
+</div>
+        
   <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-top:20px;">
     <a href="luxury.html" style="padding:14px 22px; border:1px solid #000; text-decoration:none; color:#000;">
       Luxury Watches
@@ -148,11 +159,20 @@
     </a>
   </div>
 </section>
-   
-<div class="gallery-grid">
-  <img src="rolex-sfond-16233-1.jpg" onclick="openImg(this)">
-  <img src="rolex-sfond-16233-2.jpg" onclick="openImg(this)">
-  <img src="rolex-sfond-16233-3.jpg" onclick="openImg(this)">
+    
+<div class="gallery-grid" id="gallery">
+
+  <!-- LUXURY -->
+  <img src="rolex-sfond-16233-1.jpg" data-cat="luxury">
+  <img src="rolex-sfond-16233-2.jpg" data-cat="luxury">
+  <img src="rolex-sfond-16233-3.jpg" data-cat="luxury">
+
+  <!-- VINTAGE -->
+  <img src="omega-vintage-1.jpg" data-cat="vintage">
+
+  <!-- PARTS -->
+  <img src="parts-1.jpg" data-cat="parts">
+
 </div>
 
 

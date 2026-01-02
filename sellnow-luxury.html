@@ -130,5 +130,40 @@
     });
   </script>
 
+<script>
+document.getElementById("sellForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const photosInput = document.getElementById("photos");
+  const files = photosInput?.files ? Array.from(photosInput.files) : [];
+
+  // kthe fotot në base64 (që të ruhen)
+  const photos = await Promise.all(files.map(f => new Promise(res => {
+    const r = new FileReader();
+    r.onload = () => res(r.result);
+    r.readAsDataURL(f);
+  })));
+
+  const item = {
+    id: Date.now(),
+    cat: "luxury",
+    brand: document.getElementById("brand").value,
+    model: document.getElementById("model").value,
+    ref: document.getElementById("ref").value,
+    price: document.getElementById("price").value,
+    description: document.getElementById("description").value,
+    photos
+  };
+
+  const key = "sellnow_items";
+  const all = JSON.parse(localStorage.getItem(key) || "[]");
+  all.unshift(item);
+  localStorage.setItem(key, JSON.stringify(all));
+
+  alert("U ruajt ✅");
+  e.target.reset();
+});
+</script>
+  
 </body>
 </html>

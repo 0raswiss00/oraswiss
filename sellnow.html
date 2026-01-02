@@ -1,149 +1,206 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SellNow (Private)</title>
-  <meta name="robots" content="noindex,nofollow">
+  <meta name="robots" content="noindex,nofollow" />
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background:#f5f5f5;
-      padding:30px;
-    }
-    form {
-      max-width:400px;
-      background:#fff;
-      padding:20px;
-      border-radius:6px;
-    }
-    label {
-      font-weight:bold;
-    }
-    input, select, textarea, button {
-      width:100%;
-      padding:8px;
-      margin:6px 0 15px;
-    }
-    button {
-      background:#000;
-      color:#fff;
-      border:none;
-      cursor:pointer;
-    }
+    body{font-family:Arial,sans-serif;background:#f5f5f5;padding:24px}
+    .wrap{max-width:820px;margin:0 auto}
+    .card{background:#fff;padding:18px;border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.08)}
+    .tabs{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 8px}
+    .tab{padding:10px 14px;border:1px solid #ccc;border-radius:10px;text-decoration:none;color:#111;background:#fff;cursor:pointer}
+    .tab.active{border-color:#111;font-weight:700}
+    .hint{opacity:.75;margin:8px 0 14px}
+    label{font-weight:700;display:block;margin:10px 0 6px}
+    input,select,textarea,button{width:100%;padding:10px;border:1px solid #d6d6d6;border-radius:8px;box-sizing:border-box}
+    textarea{min-height:110px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:720px){.row{grid-template-columns:1fr}}
+    button{background:#000;color:#fff;border:none;cursor:pointer;padding:12px;border-radius:10px}
+    .ok{margin-top:10px;padding:10px;border-radius:10px;background:#eaffea;border:1px solid #bfe6bf;display:none}
+    .err{margin-top:10px;padding:10px;border-radius:10px;background:#ffecec;border:1px solid #f0b5b5;display:none}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    .small{font-size:12px;opacity:.75}
   </style>
 </head>
 
 <body>
+  <div class="wrap">
+    <div id="privateContent" class="card" style="display:none;">
+      <div class="topbar">
+        <h2 style="margin:0;">SellNow – Private Upload</h2>
+        <div class="small">Category: <b id="catLabel">Luxury</b></div>
+      </div>
 
-<div id="privateContent" style="display:none;">
-  <h1>SellNow – Private Upload</h1>
+      <div class="tabs" role="tablist" aria-label="Categories">
+        <a class="tab active" data-cat="luxury">+ New Luxury</a>
+        <a class="tab" data-cat="vintage">+ New Vintage</a>
+        <a class="tab" data-cat="parts">+ New Parts</a>
+      </div>
 
-<div style="margin:20px 0; display:flex; gap:12px; flex-wrap:wrap;">
-  <a href="#" class="catLink" data-cat="luxury">+ New Luxury</a>
-  <a href="#" class="catLink" data-cat="vintage">+ New Vintage</a>
-  <a href="#" class="catLink" data-cat="parts">+ New Parts</a>
-</div>
-  
-<p style="margin:0 0 15px; opacity:.8;">
-  Pasi të hapet “New Watch”, zgjidh Category (Luxury / Vintage / Parts).
-</p>
+      <div class="hint">
+        Zgjidh kategorinë sipër. Pastaj plotëso formularin dhe kliko <b>Save</b>.
+        (Nuk bën refresh / nuk të nxjerr nga faqja.)
+      </div>
 
-<style>
-  .btn{padding:10px 14px;border:1px solid #ccc;border-radius:8px;text-decoration:none;color:#111;background:#fff}
-  .btn:hover{background:#f3f3f3}
-</style>
-  
-  
-  <form id="sellForm">
+      <form id="sellForm">
+        <div class="row">
+          <div>
+            <label for="brand">Brand</label>
+            <input type="text" id="brand" required />
+          </div>
+          <div>
+            <label for="model">Model</label>
+            <input type="text" id="model" required />
+          </div>
+        </div>
 
-   <label>Brand</label>
-   <input type="text" id="brand">
+        <div class="row">
+          <div>
+            <label for="ref">Ref</label>
+            <input type="text" id="ref" />
+          </div>
+          <div>
+            <label for="year">Year</label>
+            <input type="text" id="year" />
+          </div>
+        </div>
 
-   <label>Model</label>
-   <input type="text" id="model">
+        <div class="row">
+          <div>
+            <label for="material">Material</label>
+            <input type="text" id="material" />
+          </div>
+          <div>
+            <label for="caseSize">Case size (mm)</label>
+            <input type="text" id="caseSize" />
+          </div>
+        </div>
 
-   <label>Ref</label>
-   <input type="text" id="ref">
+        <div class="row">
+          <div>
+            <label for="bracelet">Bracelet / Strap</label>
+            <select id="bracelet">
+              <option value="Bracelet">Bracelet</option>
+              <option value="Leather">Leather</option>
+              <option value="Rubber">Rubber</option>
+              <option value="NATO">NATO</option>
+            </select>
+          </div>
+          <div>
+            <label for="movement">Movement</label>
+            <select id="movement">
+              <option value="Automatic">Automatic</option>
+              <option value="Quartz">Quartz</option>
+              <option value="Manual">Manual</option>
+            </select>
+          </div>
+        </div>
 
-   <label>Year</label>
-   <input type="text" id="year">
+        <label for="functions">Functions</label>
+        <input type="text" id="functions" placeholder="Date, Chronograph, GMT..." />
 
-   <label>Material</label>
-   <input type="text" id="material">
+        <label for="condition">Condition</label>
+        <select id="condition">
+          <option value="New">New</option>
+          <option value="Used - Good">Used - Good</option>
+          <option value="Used - Fair">Used - Fair</option>
+        </select>
 
-   <label>Case size (mm)</label>
-   <input type="text" id="caseSize">
+        <div class="row">
+          <div>
+            <label for="price">Price</label>
+            <input type="text" id="price" />
+          </div>
+          <div>
+            <label for="photos">Photos</label>
+            <input id="photos" type="file" multiple accept="image/*" />
+          </div>
+        </div>
 
-   <label>Bracelet / Strap</label>
-   <select id="bracelet">
-     <option>Bracelet</option>
-     <option>Leather</option>
-     <option>Rubber</option>
-     <option>NATO</option>
-   </select>
+        <label for="description">Description</label>
+        <textarea id="description"></textarea>
 
-   <label>Movement</label>
-   <select id="movement">
-     <option>Automatic</option>
-     <option>Quartz</option>
-     <option>Manual</option>
-   </select>
+        <button id="saveBtn" type="submit">Save</button>
 
-   <label>Functions</label>
-   <input type="text" id="functions">
+        <div id="okBox" class="ok">Saved locally ✅ (no refresh)</div>
+        <div id="errBox" class="err">Gabim: nuk u ruajt. Provo prapë.</div>
+      </form>
+    </div>
+  </div>
 
-   <label>Condition</label>
-   <select id="condition">
-     <option>New</option>
-     <option>Used - Good</option>
-     <option>Used - Fair</option>
-   </select>
+  <script>
+    // 1) Password gate (mos e lejo ctrl+f5 me e heq - kjo është vetëm “private”, jo security e fortë)
+    (function(){
+      const pass = prompt("Password:");
+      if (pass === "1234") {
+        document.getElementById("privateContent").style.display = "block";
+      } else {
+        document.body.innerHTML = "<h2>Access denied</h2>";
+      }
+    })();
 
-   <label>Price</label>
-   <input type="text" id="price">
+    // 2) Category tabs (pa href, pa redirect)
+    let currentCat = "luxury";
+    const catLabel = document.getElementById("catLabel");
+    const tabs = Array.from(document.querySelectorAll(".tab"));
 
-   <label>Description</label>
-   <textarea id="description"></textarea>
+    function setCat(cat){
+      currentCat = cat;
+      catLabel.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+      tabs.forEach(t => t.classList.toggle("active", t.dataset.cat === cat));
+    }
 
-   <label>Photos</label>
-   <input type
-  </form>
-</div>
+    tabs.forEach(t => {
+      t.addEventListener("click", (e) => {
+        e.preventDefault();
+        setCat(t.dataset.cat);
+      });
+    });
 
-<script>
-  document.getElementById("sellForm").addEventListener("submit", function(e){
-    e.preventDefault(); // NDALON refresh + redirect
+    // 3) Save form (ndalon refresh)
+    const form = document.getElementById("sellForm");
+    const okBox = document.getElementById("okBox");
+    const errBox = document.getElementById("errBox");
 
-    const data = {
-      brand: document.getElementById("brand").value,
-      model: document.getElementById("model").value,
-      ref: document.getElementById("ref").value,
-      year: document.getElementById("year").value,
-      material: document.getElementById("material").value,
-      caseSize: document.getElementById("caseSize").value,
-      bracelet: document.getElementById("bracelet").value,
-      movement: document.getElementById("movement").value,
-      functions: document.getElementById("functions").value,
-      condition: document.getElementById("condition").value,
-      price: document.getElementById("price").value,
-      description: document.getElementById("description").value
-    };
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      okBox.style.display = "none";
+      errBox.style.display = "none";
 
-    localStorage.setItem("sellnow_last", JSON.stringify(data));
-    alert("Saved locally ✅ (no refresh)");
-  });
-</script>
-  
-<script>
-  const pass = prompt("Password:");
-  if (pass === "1234") {
-    document.getElementById("privateContent").style.display = "block";
-  } else {
-    document.body.innerHTML = "<h2>Access denied</h2>";
-  }
-</script>
+      try{
+        const photosInput = document.getElementById("photos");
+        const photoNames = Array.from(photosInput.files || []).map(f => f.name);
 
+        const data = {
+          category: currentCat,
+          brand: document.getElementById("brand").value.trim(),
+          model: document.getElementById("model").value.trim(),
+          ref: document.getElementById("ref").value.trim(),
+          year: document.getElementById("year").value.trim(),
+          material: document.getElementById("material").value.trim(),
+          caseSize: document.getElementById("caseSize").value.trim(),
+          bracelet: document.getElementById("bracelet").value,
+          movement: document.getElementById("movement").value,
+          functions: document.getElementById("functions").value.trim(),
+          condition: document.getElementById("condition").value,
+          price: document.getElementById("price").value.trim(),
+          description: document.getElementById("description").value.trim(),
+          photos: photoNames,
+          savedAt: new Date().toISOString()
+        };
+
+        localStorage.setItem("sellnow_last", JSON.stringify(data));
+        okBox.style.display = "block";
+      }catch(err){
+        console.error(err);
+        errBox.style.display = "block";
+      }
+    });
+  </script>
 </body>
 </html>
+

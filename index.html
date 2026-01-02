@@ -74,73 +74,68 @@
   </header>
 
   <!-- ✅ vetëm 1 herë categories -->
-  <h2 style="text-align:center; margin:30px 0 15px;">Watch Categories</h2>
+  <!-- ================= WATCH CATEGORIES ================= -->
 
-  <div class="cats">
+<section id="watch-categories" style="max-width:1200px; margin:40px auto; padding:0 16px;">
+
+  <h2 style="text-align:center; margin-bottom:20px;">
+    Watch Categories
+  </h2>
+
+  <!-- Buttons -->
+  <div class="cats" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:30px;">
+    <button class="catBtn" data-filter="all">All</button>
     <button class="catBtn" data-filter="luxury">Luxury Watches</button>
     <button class="catBtn" data-filter="vintage">Vintage Watches</button>
     <button class="catBtn" data-filter="parts">Parts</button>
-    <button class="catBtn" data-filter="all">All</button>
   </div>
-     <!-- LUXURY -->
-   <img src="rolex-Luxury-1.jpg" data-cat="Luxury" alt="Luxury 1">
-  
+
+  <!-- Gallery -->
+  <div class="gallery-grid" id="gallery" style="
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:18px;
+  ">
+
+    <!-- LUXURY -->
+    <img src="rolex-sfond-16233-1.jpg" data-cat="luxury">
+    <img src="rolex-sfond-16233-2.jpg" data-cat="luxury">
+    <img src="rolex-sfond-16233-3.jpg" data-cat="luxury">
+
     <!-- VINTAGE -->
-    <img src="omega-vintage-1.jpg" data-cat="vintage" alt="Vintage 1">
+    <img src="omega-vintage-1.jpg" data-cat="vintage">
 
     <!-- PARTS -->
-    <img src="parts-1.jpg" data-cat="parts" alt="Parts 1">
+    <img src="parts-1.jpg" data-cat="parts">
+
   </div>
 
- <div class="gallery-grid" id="gallery">
-    <img src="rolex-sfond-16233-1.jpg" data-cat="luxury" alt="Luxury 1">
-    <img src="rolex-sfond-16233-2.jpg" data-cat="luxury" alt="Luxury 2">
-    <img src="rolex-sfond-16233-3.jpg" data-cat="luxury" alt="Luxury 3">
-  
-  <!-- Info pocket -->
-  <div class="info-pocket-toggle" style="max-width:800px; margin:20px auto;">
-    <button onclick="this.nextElementSibling.style.display = (this.nextElementSibling.style.display==='block')?'none':'block';"
-            style="width:100%; padding:12px; font-size:16px; border:none; background:#0070ba; color:white; border-radius:5px; cursor:pointer;">
-      View Full Info
-    </button>
+</section>
 
-    <div style="display:none; padding:15px; border:1px solid #ccc; border-radius:8px; background:#f9f9f9; margin-top:10px; line-height:1.5;">
-      <p>Luxury, vintage, parts info goes here...</p>
-      <ul>
-        <li>Brand History</li>
-        <li>Movement Details</li>
-        <li>Original Parts & Certificates</li>
-        <li>Servicing & Maintenance</li>
-        <li>Authenticity Verification</li>
-      </ul>
-    </div>
-  </div>
+<!-- ================= FILTER SCRIPT ================= -->
+<script>
+  const buttons = document.querySelectorAll(".catBtn");
+  const images  = document.querySelectorAll("#gallery img");
 
-  <!-- ✅ Filter script -->
-  <script>
-    const buttons = document.querySelectorAll(".catBtn");
-    const items = document.querySelectorAll("#gallery [data-cat]");
-
-    function filter(cat) {
-      items.forEach(el => {
-        el.style.display = (cat === "all" || el.dataset.cat === cat) ? "" : "none";
-      });
-      document.getElementById("gallery").scrollIntoView({ behavior: "smooth" });
-    }
-
-    buttons.forEach(btn => {
-      btn.addEventListener("click", () => filter(btn.dataset.filter));
+  function filterImages(category) {
+    images.forEach(img => {
+      img.style.display =
+        (category === "all" || img.dataset.cat === category)
+        ? "block"
+        : "none";
     });
+  }
 
-    filter("all");
-  </script>
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      filterImages(btn.dataset.filter);
+    });
+  });
 
-  <!-- Service worker -->
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("sw.js");
-    }
-  </script>
+  // default
+  filterImages("all");
+</script>
+
 
 </body>
 </html>

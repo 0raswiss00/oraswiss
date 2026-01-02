@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Watch Parts</title>
+  <title>Vintage Watches</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-  <h1>Watch Parts</h1>
+  <h1>Vintage Watches</h1>
   <div id="list"></div>
 
   <script>
@@ -15,7 +15,7 @@
       const data = await res.json();
 
       const items = (data.items || data).filter(
-        x => x.category === "parts"
+        x => x.category === "vintage"
       );
 
       document.getElementById("list").innerHTML = items.map(x => `
@@ -35,4 +35,3 @@
   </script>
 </body>
 </html>
-

@@ -1,37 +1,166 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Vintage Watches</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SellNow - Vintage</title>
+  <style>
+    body{font-family:Arial, sans-serif; margin:24px;}
+    .tabs{display:flex; gap:12px; margin:12px 0 18px;}
+    .tabs a{color:#0b57d0; text-decoration:none; font-weight:600}
+    form{max-width:720px;}
+    label{display:block; margin:12px 0 6px; font-weight:600}
+    input, select, textarea{width:100%; padding:10px; border:1px solid #ccc; border-radius:8px;}
+    textarea{min-height:110px;}
+    .row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+    button{margin-top:16px; width:100%; padding:12px; border:0; border-radius:10px; font-weight:700; cursor:pointer;}
+    .hint{opacity:.8; margin:6px 0 0;}
+    .ok{margin-top:12px; padding:10px; border:1px solid #b7e1cd; background:#e6f4ea; border-radius:10px; display:none;}
+  </style>
 </head>
 <body>
-  <h1>Vintage Watches</h1>
-  <div id="list"></div>
 
-  <script>
-    (async () => {
-      const res = await fetch("/data/watches.json");
-      const data = await res.json();
+<div id="privateContent" style="display:none;">
+  <h1>Luxury Watches</h1>
 
-      const items = (data.items || data).filter(
-        x => x.category === "vintage"
-      );
+  <div class="tabs">
+    <a href="sellnow.html">← Back</a>
+    <a href="sellnow-luxury.html">Luxury</a>
+    <a href="sellnow-vintage.html">Vintage</a>
+    <a href="sellnow-parts.html">Parts</a>
+  </div>
 
-      document.getElementById("list").innerHTML = items.map(x => `
-        <div style="border:1px solid #ddd;padding:12px;margin-bottom:12px">
-          <b>${x.brand || ""} ${x.model || ""}</b>
-          ${x.year ? <div>Year: ${x.year}</div> : ""}
-          ${x.price ? <div>Price: ${x.price}</div> : ""}
-          ${x.description ? <div>${x.description}</div> : ""}
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            ${(x.images || []).map(p =>
-              <img src="${p}" style="width:120px">
-            ).join("")}
-          </div>
-        </div>
-      `).join("");
-    })();
-  </script>
+  <form id="sellForm">
+    <label>Brand</label>
+    <input type="text" id="brand" required>
+
+    <label>Model</label>
+    <input type="text" id="model" required>
+
+    <div class="row">
+      <div>
+        <label>Ref</label>
+        <input type="text" id="ref">
+      </div>
+      <div>
+        <label>Year</label>
+        <input type="text" id="year">
+      </div>
+    </div>
+
+    <label>Material</label>
+    <input type="text" id="material">
+
+    <label>Case size (mm)</label>
+    <input type="text" id="caseSize">
+
+    <div class="row">
+      <div>
+        <label>Bracelet / Strap</label>
+        <select id="bracelet">
+          <option value="Bracelet">Bracelet</option>
+          <option value="Leather">Strap (Leather)</option>
+          <option value="Rubber">Rubber</option>
+          <option value="NATO">NATO</option>
+        </select>
+      </div>
+      <div>
+        <label>Movement</label>
+        <select id="movement">
+          <option value="Automatic">Automatic</option>
+          <option value="Quartz">Quartz</option>
+          <option value="Manual">Manual</option>
+        </select>
+      </div>
+    </div>
+
+    <label>Functions</label>
+    <input type="text" id="functions" placeholder="Date, Chronograph, GMT...">
+
+    <label>Condition</label>
+    <select id="condition">
+      <option value="New">New</option>
+      <option value="Used - Good">Used - Good</option>
+      <option value="Used - Fair">Used - Fair</option>
+    </select>
+
+    <label>Price</label>
+    <input type="text" id="price">
+
+    <label>Description</label>
+    <textarea id="description"></textarea>
+
+    <label>Photos</label>
+    <input id="photos" type="file" multiple>
+    <div class="hint">Fotot s’ruhen në localStorage (vetëm emrat). Për upload real duhet backend.</div>
+
+    <button id="saveBtn" type="submit">Save</button>
+    <div id="savedBox" class="ok">Saved locally ✅ (no refresh)</div>
+  </form>
+</div>
+
+<script>
+  // ===== AUTH (shared) =====
+  (function auth(){
+    const KEY = "oraswiss_auth_ok";
+    if (sessionStorage.getItem(KEY) === "1") {
+      document.getElementById("privateContent").style.display = "block";
+      return;
+    }
+    const pass = prompt("Password:");
+    if (pass === "1234") {
+      sessionStorage.setItem(KEY, "1");
+      document.getElementById("privateContent").style.display = "block";
+    } else {
+      document.body.innerHTML = "<h2>Access denied</h2>";
+    }
+  })();
+
+  // ===== SAVE HANDLER =====
+  const CATEGORY = "luxury";
+  const form = document.getElementById("sellForm");
+  const savedBox = document.getElementById("savedBox");
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault(); // ✅ mos bëj refresh / mos shko në faqe tjetër
+
+    const photosInput = document.getElementById("photos");
+    const photoNames = Array.from(photosInput.files || []).map(f => f.name);
+
+    const data = {
+      category: CATEGORY,
+      createdAt: new Date().toISOString(),
+      brand: document.getElementById("brand").value.trim(),
+      model: document.getElementById("model").value.trim(),
+      ref: document.getElementById("ref").value.trim(),
+      year: document.getElementById("year").value.trim(),
+      material: document.getElementById("material").value.trim(),
+      caseSize: document.getElementById("caseSize").value.trim(),
+      bracelet: document.getElementById("bracelet").value,
+      movement: document.getElementById("movement").value,
+      functions: document.getElementById("functions").value.trim(),
+      condition: document.getElementById("condition").value,
+      price: document.getElementById("price").value.trim(),
+      description: document.getElementById("description").value.trim(),
+      photoNames
+    };
+
+    // ruaj listë items për kategori
+    const key = sellnow_items_${CATEGORY};
+    const prev = JSON.parse(localStorage.getItem(key) || "[]");
+    prev.push(data);
+    localStorage.setItem(key, JSON.stringify(prev));
+
+    // ruaj edhe "last draft"
+    localStorage.setItem("sellnow_last", JSON.stringify(data));
+
+    savedBox.style.display = "block";
+    setTimeout(()=> savedBox.style.display = "none", 1800);
+
+    // optional: pastro fushat (po deshe)
+    form.reset();
+  });
+</script>
+
 </body>
 </html>

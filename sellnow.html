@@ -41,9 +41,9 @@
   <h1>SellNow – Private Upload</h1>
 
 <div style="margin:20px 0; display:flex; gap:12px; flex-wrap:wrap;">
-  <a href="sellnow-luxury.html">+ New Luxury</a>
-  <a href="sellnow-vintage.html">+ New Vintage</a>
-  <a href="sellnow-parts.html">+ New Parts</a>
+  <a href="#" class="catLink" data-cat="luxury">+ New Luxury</a>
+  <a href="#" class="catLink" data-cat="vintage">+ New Vintage</a>
+  <a href="#" class="catLink" data-cat="parts">+ New Parts</a>
 </div>
   
 <p style="margin:0 0 15px; opacity:.8;">
@@ -55,63 +55,80 @@
   .btn:hover{background:#f3f3f3}
 </style>
   
-  <form>
+  <form id="sellForm">
+
     <label>Brand</label>
-    <input type="text">
+    <input type="text" id="brand">
 
     <label>Model</label>
-    <input type="text">
-    
+    <input type="text" id="model">
+
     <label>Ref</label>
-    <input type="text">
+    <input type="text" id="ref">
 
     <label>Year</label>
-    <input type="text">
+    <input type="text" id="year">
 
     <label>Material</label>
-    <input type="text">
+    <input type="text" id="material">
 
     <label>Case size (mm)</label>
-    <input type="text">
+    <input type="text" id="caseSize">
 
     <label>Bracelet / Strap</label>
-    <select>
+    <select id="bracelet">
       <option>Bracelet</option>
-      <option>Strap (Leather)</option>
+      <option>Leather</option>
       <option>Rubber</option>
       <option>NATO</option>
-    </select>
+   </select>
 
     <label>Movement</label>
-    <select>
+    <select id="movement">
       <option>Automatic</option>
       <option>Quartz</option>
       <option>Manual</option>
     </select>
 
     <label>Functions</label>
-    <input type="text" placeholder="Date, Chronograph, GMT...">
+    <input type="text" id="functions">
 
     <label>Condition</label>
-    <select>
+    <select id="condition">
       <option>New</option>
-      <option>Used – Good</option>
-      <option>Used – Fair</option>
+      <option>Used - Good</option>
+      <option>Used - Fair</option>
     </select>
 
     <label>Price</label>
-    <input type="text">
-
-    <label>Description</label>
-    <textarea rows="4"></textarea>
-
-    <label>Photos</label>
-    <input type="file" multiple>
-
-    <button type="submit">Save</button>
+    <input type="text" id="price">
   </form>
 </div>
 
+<script>
+  document.getElementById("sellForm").addEventListener("submit", function(e){
+    e.preventDefault(); // NDALON refresh + redirect
+
+    const data = {
+      brand: document.getElementById("brand").value,
+      model: document.getElementById("model").value,
+      ref: document.getElementById("ref").value,
+      year: document.getElementById("year").value,
+      material: document.getElementById("material").value,
+      caseSize: document.getElementById("caseSize").value,
+      bracelet: document.getElementById("bracelet").value,
+      movement: document.getElementById("movement").value,
+      functions: document.getElementById("functions").value,
+      condition: document.getElementById("condition").value,
+      price: document.getElementById("price").value,
+      description: document.getElementById("description").value
+    };
+
+    localStorage.setItem("sellnow_last", JSON.stringify(data));
+    alert("Saved locally ✅ (no refresh)");
+  });
+</script>
+  
 <script>
   const pass = prompt("Password:");
   if (pass === "1234") {

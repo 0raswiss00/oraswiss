@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Watch Parts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <h1>Watch Parts</h1>
+  <div id="list"></div>
+
+  <script>
+    (async () => {
+      const res = await fetch("/data/watches.json");
+      const data = await res.json();
+
+      const items = (data.items || data).filter(
+        x => x.category === "parts"
+      );
+
+      document.getElementById("list").innerHTML = items.map(x => `
+        <div style="border:1px solid #ddd;padding:12px;margin-bottom:12px">
+          <b>${x.brand || ""} ${x.model || ""}</b>
+          ${x.year ? <div>Year: ${x.year}</div> : ""}
+          ${x.price ? <div>Price: ${x.price}</div> : ""}
+          ${x.description ? <div>${x.description}</div> : ""}
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            ${(x.images || []).map(p =>
+              <img src="${p}" style="width:120px">
+            ).join("")}
+          </div>
+        </div>
+      `).join("");
+    })();
+  </script>
+</body>
+</html>
+

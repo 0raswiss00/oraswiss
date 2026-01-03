@@ -4,9 +4,11 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Sell Now</title>
+
   <style>
     body{font-family:Arial,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:20px}
     .wrap{max-width:900px;margin:0 auto}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     @media(max-width:820px){.row{grid-template-columns:1fr}}
     label{display:block;margin:12px 0 6px;color:#ddd}
@@ -16,20 +18,23 @@
     .btn:hover{background:#1a1a1a}
     .note{opacity:.85;font-size:13px;margin-top:8px;line-height:1.4}
     pre{background:#111;border:1px solid #222;border-radius:12px;padding:12px;overflow:auto}
-    .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .smallbtn{padding:8px 10px;border-radius:12px;border:1px solid #2a2a2a;background:#0f0f0f;color:#fff;cursor:pointer}
+    .smallbtn:hover{background:#1a1a1a}
   </style>
 
+  <!-- Password (client-side) -->
   <script>
-    // PASSWORD (client-side). Ndrysho këtu:
-    const PASS = "1234";
+    const PASS = "1234"; // ndrysho password
     const KEY = "sellnow_ok";
-
     if (localStorage.getItem(KEY) !== "1") {
       const p = prompt("Password:");
       if (p === PASS) localStorage.setItem(KEY,"1");
       else { alert("Wrong password"); location.href="index.html"; }
     }
   </script>
+
+  <!-- Cloudinary Upload Widget -->
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 </head>
 
 <body>
@@ -37,12 +42,11 @@
 
   <div class="top">
     <h1 style="margin:0">Sell Now</h1>
-    <button class="btn" id="logout" type="button">Logout</button>
+    <button class="smallbtn" id="logout" type="button">Logout</button>
   </div>
 
   <div class="note">
-    Kjo faqe nuk ngarkon foto në server (site statik). Fotot duhen ngarkuar te GitHub në <b>/img</b>.
-    Këtu shkruan paths: <b>img/emri.jpg</b> ose URL të plotë.
+    ✅ Upload Photos ngarkon foto REALISHT nga telefoni/PC dhe i vendos URL-të automatikisht te <b>photos</b>.
   </div>
 
   <label>Category</label>
@@ -53,35 +57,43 @@
   </select>
 
   <div class="row">
-    <div><label>Brand</label><input id="brand" placeholder="Rolex"></div>
-    <div><label>Model</label><input id="model" placeholder="Datejust"></div>
+    <div><label>Brand</label><input id="brand" placeholder="Omega"></div>
+    <div><label>Model</label><input id="model" placeholder="Vintage"></div>
   </div>
 
   <div class="row">
-    <div><label>Ref</label><input id="ref" placeholder="16013"></div>
-    <div><label>Year</label><input id="year" placeholder="1985"></div>
+    <div><label>Ref</label><input id="ref" placeholder="2400-4"></div>
+    <div><label>Year</label><input id="year" placeholder="1999"></div>
   </div>
 
   <div class="row">
-    <div><label>Material</label><input id="material" placeholder="Steel / Gold"></div>
-    <div><label>Case Size (mm)</label><input id="caseSize" placeholder="36"></div>
+    <div><label>Material</label><input id="material" placeholder="Steel"></div>
+    <div><label>Case Size (mm)</label><input id="caseSize" placeholder="35"></div>
   </div>
 
   <div class="row">
     <div>
       <label>Condition</label>
       <select id="condition">
-        <option>New</option><option>Like New</option><option selected>Very Good</option><option>Good</option><option>Used - Fair</option>
+        <option>New</option>
+        <option>Like New</option>
+        <option selected>Very Good</option>
+        <option>Good</option>
+        <option>Used - Fair</option>
       </select>
     </div>
-    <div><label>Price</label><input id="price" placeholder="5000 €"></div>
+    <div><label>Price</label><input id="price" placeholder="900 €"></div>
   </div>
 
   <label>Description</label>
-  <textarea id="description" placeholder="Original dial, serviced"></textarea>
+  <textarea id="description" placeholder="Original, serviced"></textarea>
 
-  <label>Photos (paths ose URL, me presje)</label>
-  <textarea id="photos" placeholder="img/rolex1.jpg, img/rolex2.jpg"></textarea>
+  <label>Photos (URLs)</label>
+  <button class="btn" id="uploadBtn" type="button">Upload Photos</button>
+  <textarea id="photos" placeholder="URL-të e fotove do dalin këtu, me presje"></textarea>
+  <div class="note">
+    Nëse s’po hapet widget-i: Cloud name / upload preset janë gabim.
+  </div>
 
   <button class="btn" id="make" type="button">Generate JSON</button>
 
@@ -95,15 +107,51 @@
 const $ = id => document.getElementById(id);
 const parse = t => (t||"").split(/[\n,]+/g).map(s=>s.trim()).filter(Boolean);
 
+// LOGOUT
 $("logout").onclick = ()=>{
   localStorage.removeItem("sellnow_ok");
   location.href="index.html";
 };
 
+// CLOUDINARY CONFIG (zëvendëso këto 2 vlera)
+const CLOUD_NAME = "PASTE_CLOUD_NAME_HERE";
+const UPLOAD_PRESET = "PASTE_UNSIGNED_PRESET_HERE";
+
+// UPLOAD BUTTON
+$("uploadBtn").onclick = ()=>{
+  if (!CLOUD_NAME.includes("PASTE") && !UPLOAD_PRESET.includes("PASTE")) {
+    cloudinary.openUploadWidget(
+      {
+        cloudName: CLOUD_NAME,
+        uploadPreset: UPLOAD_PRESET,
+        multiple: true,
+        sources: ["local","camera"],
+        folder: "products"
+      },
+      (err, result) => {
+        if (err) {
+          alert("Upload error");
+          console.error(err);
+          return;
+        }
+        if (result && result.event === "success") {
+          const ta = $("photos");
+          const urls = parse(ta.value);
+          urls.push(result.info.secure_url);
+          ta.value = urls.join(", ");
+        }
+      }
+    );
+  } else {
+    alert("Vendos CLOUD_NAME dhe UPLOAD_PRESET te kodi.");
+  }
+};
+
+// JSON GENERATOR
 $("make").onclick = ()=>{
   const item = {
     id: Date.now(),
-    cat: $("cat").value,
+    cat: ($("cat").value||"").toLowerCase().trim(),
     brand: $("brand").value.trim(),
     model: $("model").value.trim(),
     ref: $("ref").value.trim(),
@@ -118,6 +166,7 @@ $("make").onclick = ()=>{
   $("out").textContent = JSON.stringify(item, null, 2);
 };
 
+// COPY
 $("copy").onclick = async ()=>{
   try { await navigator.clipboard.writeText($("out").textContent); alert("Copied ✅"); }
   catch { alert("Copy manualisht."); }
@@ -125,4 +174,3 @@ $("copy").onclick = async ()=>{
 </script>
 </body>
 </html>
-

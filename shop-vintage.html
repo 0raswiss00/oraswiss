@@ -20,7 +20,7 @@
     .title{margin:0 0 8px;font-size:20px}
     .spec{display:flex;justify-content:space-between;gap:10px;background:#101010;border-radius:12px;padding:10px 12px;margin:8px 0}
     .spec b{color:#cfcfcf}
-    .desc{color:#cfcfcf;line-height:1.4}
+    .desc{color:#cfcfcf;line-height:1.4;white-space:pre-line}
     .actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
     .btn{padding:10px 12px;border-radius:12px;border:1px solid #2a2a2a;background:#0f0f0f}
     .btn:hover{background:#1a1a1a}
@@ -30,8 +30,11 @@
   <div class="wrap">
     <div class="top">
       <h1 style="margin:0">Vintage Watches</h1>
+
+      <!-- Nëse do vetëm “Vintage”, ok. Nëse do edhe Parts, shtoje këtu -->
       <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <a class="btn" href="vintage-vintage.html">Vintage</a>
+        <!-- Kjo ishte gabim te ti: vintage-vintage.html -->
+        <a class="btn" href="shop-vintage.html">Vintage</a>
       </div>
     </div>
 
@@ -44,16 +47,20 @@ const CATEGORY = "vintage";
 const PHONE = "355692408065";
 const EMAIL = "adice1899@gmail.com";
 
-function esc(s){ return (s||"").toString(); }
-function enc(s){ return encodeURIComponent(s||""); }
+function esc(s){ return (s ?? "").toString(); }
+function enc(s){ return encodeURIComponent(s ?? ""); }
 
 const items = JSON.parse(localStorage.getItem(KEY) || "[]")
-  .filter(p => (p.cat||"").toLowerCase() === CATEGORY);
+  .filter(p => (p.cat || "").toLowerCase() === CATEGORY);
 
 const list = document.getElementById("list");
 
 if (!items.length) {
-  list.innerHTML = <div class="card"><div class="panel">No products yet. Add from SellNow.</div></div>;
+  list.innerHTML = `
+    <div class="card">
+      <div class="panel">No products yet. Add from SellNow.</div>
+    </div>
+  `;
 } else {
   list.innerHTML = items.map(p => {
     const photos = Array.isArray(p.photos) ? p.photos : [];
@@ -76,7 +83,7 @@ Price: ${esc(p.price)}
         <div>
           <img class="main" src="${main}" alt="">
           <div class="thumbs">
-            ${photos.map(ph=>`<img class="thumb" src="${ph}" alt="">`).join("")}
+            ${photos.map(ph => <img class="thumb" src="${ph}" alt="">).join("")}
           </div>
         </div>
 
@@ -101,11 +108,11 @@ Price: ${esc(p.price)}
     `;
   }).join("");
 
-  // thumbs -> foto kryesore (pa prish CSS)
-  document.querySelectorAll(".card").forEach(card=>{
+  // thumbs -> foto kryesore
+  document.querySelectorAll(".card").forEach(card => {
     const mainImg = card.querySelector(".main");
-    card.querySelectorAll(".thumb").forEach(t=>{
-      t.addEventListener("click", ()=>{ mainImg.src = t.src; });
+    card.querySelectorAll(".thumb").forEach(t => {
+      t.addEventListener("click", () => { mainImg.src = t.src; });
     });
   });
 }

@@ -1,72 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Vintage Watches</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0b0b0b;
-      color: #fff;
-      margin: 0;
-      padding: 20px;
-    }
-    h1 { margin-bottom: 20px; }
+<meta charset="UTF-8">
+<title>Vintage Watches</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin: 0;
+  padding: 20px;
+  background: #0b0b0b;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+h1 { margin-bottom: 20px; }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: #111;
-      border: 1px solid #222;
-      padding: 15px;
-    }
-    .card img.main {
-      width: 100%;
-      height: auto;
-      margin-bottom: 10px;
-    }
-    .thumbs {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 10px;
-    }
-    .thumb {
-      width: 50px;
-      cursor: pointer;
-      border: 1px solid #333;
-    }
-    .panel p {
-      margin: 4px 0;
-      font-size: 14px;
-    }
-  </style>
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #151515;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card img.main {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+}
+
+.thumbs {
+  display: flex;
+  gap: 6px;
+  padding: 8px;
+}
+.thumbs img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  cursor: pointer;
+  opacity: 0.7;
+}
+.thumbs img:hover { opacity: 1; }
+
+.panel {
+  padding: 12px;
+}
+.panel h3 { margin: 0 0 6px; }
+.panel p { margin: 4px 0; font-size: 14px; }
+</style>
 </head>
 
 <body>
 
 <h1>Vintage Watches</h1>
 
-<!-- KJO DUHET TË JETË JASHTË SCRIPT -->
 <div id="list" class="grid"></div>
 
 <script>
 const JSON_URL = "watches.json";
 const CATEGORY = "vintage";
 
-function esc(s){ return (s ?? "").toString(); }
-
 const list = document.getElementById("list");
 
-function render(items){
-  const filtered = (items || []).filter(
-    p => (p.cat || "").toLowerCase() === CATEGORY
+function render(items) {
+  const filtered = items.filter(p =>
+    (p.cat || "").toLowerCase() === CATEGORY
   );
 
-  if(!filtered.length){
+  if (!filtered.length) {
     list.innerHTML = "<p>No products found.</p>";
     return;
   }
@@ -77,41 +82,31 @@ function render(items){
 
     return `
       <section class="card">
-        <img class="main" src="${main}" alt="">
+        <img class="main" src="${main}">
         <div class="thumbs">
-          ${photos.map(ph => <img class="thumb" src="${ph}" alt="">).join("")}
+          ${photos.map(ph => <img src="${ph}" onclick="this.closest('.card').querySelector('.main').src='${ph}'">).join("")}
         </div>
         <div class="panel">
-          <p><b>${esc(p.brand)} ${esc(p.model)}</b></p>
-          <p>Ref: ${esc(p.ref)}</p>
-          <p>Year: ${esc(p.year)}</p>
-          <p>Case: ${esc(p.caseSize)}mm</p>
-          <p>Material: ${esc(p.material)}</p>
-          <p>Condition: ${esc(p.condition)}</p>
-          <p>Price: ${esc(p.price)}</p>
-          <p>${esc(p.description)}</p>
+          <h3>${p.brand} ${p.model}</h3>
+          <p>Ref: ${p.ref}</p>
+          <p>Year: ${p.year}</p>
+          <p>Condition: ${p.condition}</p>
+          <p><b>${p.price}</b></p>
         </div>
       </section>
     `;
   }).join("");
-
-  document.querySelectorAll(".card").forEach(card => {
-    const mainImg = card.querySelector(".main");
-    card.querySelectorAll(".thumb").forEach(t => {
-      t.onclick = () => mainImg.src = t.src;
-    });
-  });
 }
 
-async function load(){
-  try{
+async function load() {
+  try {
     const res = await fetch(JSON_URL + "?v=" + Date.now(), { cache: "no-store" });
-    if(!res.ok) throw new Error("HTTP " + res.status);
+    if (!res.ok) throw new Error(res.status);
     const data = await res.json();
-    render(Array.isArray(data) ? data : data.items);
-  }catch(err){
-    console.error("Failed to load JSON:", err);
+    render(data);
+  } catch (e) {
     list.innerHTML = "<p>Error loading products.</p>";
+    console.error(e);
   }
 }
 

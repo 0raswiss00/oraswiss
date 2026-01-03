@@ -77,7 +77,7 @@ document.getElementById("sellForm").addEventListener("submit", async (e) => {
 
   const all = JSON.parse(localStorage.getItem(KEY) || "[]");
   all.unshift(item);
-  localStorage.setItem(KEY, JSON.stringify(all));
+  console.log("COPY THIS:", JSON.stringify(item, null, 2));
 
   alert("U ruajt ✅");
   e.target.reset();

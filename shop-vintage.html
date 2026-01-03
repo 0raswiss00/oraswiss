@@ -78,7 +78,7 @@ Price: ${esc(p.price)}
 `;
 
     const wa = https://wa.me/${PHONE}?text=${enc(msg)};
-    const mail = mailto:${EMAIL}?subject=${enc("Watch Inquiry: " + (p.brand||"") + " " + (p.model||""))}&body=${enc(msg)};
+    const mail = mailto:${EMAIL}?subject=${enc("Watch Inquiry: " + (p.brand||""))};
 
     return `
       <section class="card">

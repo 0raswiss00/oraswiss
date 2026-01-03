@@ -1,86 +1,135 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SellNow – Vintage</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Sell Vintage</title>
   <style>
-    body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;padding:24px}
-    .box{max-width:820px;margin:0 auto;background:#fff;padding:18px;border-radius:12px}
-    label{display:block;font-weight:700;margin:12px 0 6px}
-    input,select,textarea,button{width:100%;padding:10px;border:1px solid #ccc;border-radius:10px}
-    textarea{min-height:110px}
-    button{margin-top:14px;background:#000;color:#fff;border:none;cursor:pointer}
+    body{font-family:Arial,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:20px}
+    .wrap{max-width:900px;margin:0 auto}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:820px){.row{grid-template-columns:1fr}}
+    label{display:block;margin:12px 0 6px;color:#ddd}
+    input,select,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #333;background:#111;color:#fff}
+    textarea{min-height:90px}
+    .btn{margin-top:14px;padding:10px 12px;border-radius:12px;border:1px solid #2a2a2a;background:#0f0f0f;color:#fff;cursor:pointer}
+    .btn:hover{background:#1a1a1a}
+    .note{opacity:.85;font-size:13px;margin-top:8px;line-height:1.4}
+    pre{background:#111;border:1px solid #222;border-radius:12px;padding:12px;overflow:auto}
+    .thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .thumbs img{width:90px;height:90px;object-fit:cover;border-radius:10px;border:1px solid #222}
   </style>
 </head>
 <body>
-  <div class="box">
-    <h1>SellNow – Vintage</h1>
+  <div class="wrap">
+    <h1 style="margin:0 0 10px">Sell – Vintage</h1>
+    <div class="note">
+      ✅ Zgjidh fotot nga telefoni → bëhen automatikisht në <b>Base64</b> → Copy JSON → ngjite te <b>watches.json</b>.
+      <br>⚠️ Mos zgjidh shumë foto.
+    </div>
 
-    <form id="sellForm">
-      <label>Brand</label><input id="brand" required>
-      <label>Model</label><input id="model">
-      <label>Ref</label><input id="ref">
-      <label>Year</label><input id="year">
-      <label>Material</label><input id="material">
-      <label>Case size (mm)</label><input id="caseSize">
-      <label>Condition</label>
-      <select id="condition">
-        <option value="New">New</option>
-        <option value="Used - Good">Used - Good</option>
-        <option value="Used - Fair">Used - Fair</option>
-      </select>
-      <label>Price</label><input id="price">
-      <label>Description</label><textarea id="description"></textarea>
+    <input type="hidden" id="cat" value="vintage"/>
 
-      <label>Photos</label>
-      <input id="photos" type="text" placeholder="Shkruaj: img/omega-2400-4-4.jpg  (ose https://...)" />
-      <small style="color:#bbb;display:block;margin-top:6px">
-        Shkruaj 1 ose më shumë foto të ndara me presje: img/a.jpg, img/b.jpg
-      </small>
+    <div class="row">
+      <div><label>Brand</label><input id="brand" placeholder="Rolex"></div>
+      <div><label>Model</label><input id="model" placeholder="Datejust"></div>
+    </div>
 
-      <button type="submit">Save</button>
-    </form>
+    <div class="row">
+      <div><label>Ref</label><input id="ref" placeholder="16013"></div>
+      <div><label>Year</label><input id="year" placeholder="1985"></div>
+    </div>
+
+    <div class="row">
+      <div><label>Material</label><input id="material" placeholder="Steel / Gold"></div>
+      <div><label>Case Size (mm)</label><input id="caseSize" placeholder="36"></div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>Condition</label>
+        <select id="condition">
+          <option>New</option><option>Like New</option><option selected>Very Good</option><option>Good</option><option>Used - Fair</option>
+        </select>
+      </div>
+      <div><label>Price</label><input id="price" placeholder="5000"></div>
+    </div>
+
+    <label>Description</label>
+    <textarea id="description" placeholder="Original dial, serviced"></textarea>
+
+    <label>Photos from phone</label>
+    <input id="photosFile" type="file" accept="image/*" multiple/>
+    <div class="thumbs" id="thumbs"></div>
+
+    <button class="btn" id="make">Generate JSON</button>
+
+    <h3 style="margin:18px 0 8px">Copy this object into watches.json</h3>
+    <pre id="out">Click "Generate JSON"</pre>
+    <button class="btn" id="copy">Copy</button>
   </div>
 
 <script>
-const KEY = "sellnow_items";
+const $ = (id)=>document.getElementById(id);
+let photos = [];
 
-function fileToDataURL(file){
-  return new Promise(res=>{
-    const r = new FileReader();
-    r.onload = () => res(r.result);
-    r.readAsDataURL(file);
+function fileToDataURL(file, maxW=1200, quality=0.82){
+  return new Promise((resolve,reject)=>{
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = () => { img.src = reader.result; };
+    img.onerror = reject;
+    img.onload = () => {
+      const scale = Math.min(1, maxW / img.width);
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+      const canvas = document.createElement("canvas");
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL("image/jpeg", quality));
+    };
+    reader.readAsDataURL(file);
   });
 }
 
-document.getElementById("sellForm").addEventListener("submit", async (e) => {
+$("photosFile").addEventListener("change", async (e)=>{
+  photos = [];
+  $("thumbs").innerHTML = "";
+  const files = Array.from(e.target.files || []);
+  for(const f of files){
+    const dataUrl = await fileToDataURL(f);
+    photos.push(dataUrl);
+    const im = document.createElement("img");
+    im.src = dataUrl;
+    $("thumbs").appendChild(im);
+  }
+});
+
+$("make").addEventListener("click",(e)=>{
   e.preventDefault();
-
-  const photosVal = document.getElementById("photos").value.trim();
-  const photos = photosVal ? photosVal.split(",").map(s => s.trim()) : [];
-
   const item = {
     id: Date.now(),
-    cat: "vintage",
-    brand: brand.value.trim(),
-    model: model.value.trim(),
-    ref: ref.value.trim(),
-    year: year.value.trim(),
-    material: material.value.trim(),
-    caseSize: caseSize.value.trim(),
-    condition: condition.value,
-    price: price.value.trim(),
-    description: description.value.trim(),
-    photos: photos,
+    cat: $("cat").value,
+    brand: $("brand").value.trim(),
+    model: $("model").value.trim(),
+    ref: $("ref").value.trim(),
+    year: $("year").value.trim(),
+    material: $("material").value.trim(),
+    caseSize: $("caseSize").value.trim(),
+    condition: $("condition").value,
+    price: $("price").value.trim(),
+    description: $("description").value.trim(),
+    photos: photos
   };
+  $("out").textContent = JSON.stringify(item, null, 2);
+});
 
-  const all = JSON.parse(localStorage.getItem(KEY) || "[]");
-  all.unshift(item);
-  console.log("COPY THIS:", JSON.stringify(item, null, 2));
-
-  alert("U ruajt ✅");
-  e.target.reset();
+$("copy").addEventListener("click", async ()=>{
+  const txt = $("out").textContent;
+  try{ await navigator.clipboard.writeText(txt); alert("Copied ✅"); }
+  catch{ alert("S’u kopjua. Kopjoje me dorë."); }
 });
 </script>
 </body>

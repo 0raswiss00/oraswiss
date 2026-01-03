@@ -42,31 +42,32 @@
   </div>
 
 <script>
-const KEY = "sellnow_items";
 const CATEGORY = "vintage";
 const PHONE = "355692408065";
 const EMAIL = "adice1899@gmail.com";
 
-function esc(s){ return (s ?? "").toString(); }
-function enc(s){ return encodeURIComponent(s ?? ""); }
-
-const items = JSON.parse(localStorage.getItem(KEY) || "[]")
-  .filter(p => (p.cat || "").toLowerCase() === CATEGORY);
+function esc(s){ return (s||"").toString(); }
+function enc(s){ return encodeURIComponent(s||""); }
 
 const list = document.getElementById("list");
 
-if (!items.length) {
-  list.innerHTML = `
-    <div class="card">
-      <div class="panel">No products yet. Add from SellNow.</div>
-    </div>
-  `;
-} else {
-  list.innerHTML = items.map(p => {
-    const photos = Array.isArray(p.photos) ? p.photos : [];
-    const main = photos[0] || "";
+fetch("watches.json?v=" + Date.now())
+  .then(r => r.json())
+  .then(all => {
+    const items = (Array.isArray(all) ? all : []).filter(p => (p.cat||"").toLowerCase() === CATEGORY);
 
-    const msg =
+    if (!items.length) {
+      list.innerHTML = `
+        <div class="card"><div class="panel">No products yet.</div></div>
+      `;
+      return;
+    }
+
+    list.innerHTML = items.map(p => {
+      const photos = Array.isArray(p.photos) ? p.photos : [];
+      const main = photos[0] || "";
+
+      const msg =
 `Hello, I am interested in:
 Brand: ${esc(p.brand)}
 Model: ${esc(p.model)}
@@ -75,47 +76,49 @@ Year: ${esc(p.year)}
 Price: ${esc(p.price)}
 `;
 
-    const wa = https://wa.me/${PHONE}?text=${enc(msg)};
-    const mail = mailto:${EMAIL}?subject=${enc("Watch Inquiry: " + (p.brand||"") + " " + (p.model||""))}&body=${enc(msg)};
+      const wa = https://wa.me/${PHONE}?text=${enc(msg)};
+      const mail = mailto:${EMAIL}?subject=${enc("Watch Inquiry: " + (p.brand||"") + " " + (p.model||""))}&body=${enc(msg)};
 
-    return `
-      <section class="card">
-        <div>
-          <img class="main" src="${main}" alt="">
-          <div class="thumbs">
-            ${photos.map(ph => <img class="thumb" src="${ph}" alt="">).join("")}
+      return `
+        <section class="card">
+          <div>
+            <img class="main" src="${main}" alt="">
+            <div class="thumbs">
+              ${photos.map(ph=>`<img class="thumb" src="${ph}" alt="">`).join("")}
+            </div>
           </div>
-        </div>
 
-        <div class="panel">
-          <h2 class="title">${esc(p.brand)} ${esc(p.model)}</h2>
-
-          <div class="spec"><b>Ref</b><span>${esc(p.ref)}</span></div>
-          <div class="spec"><b>Year</b><span>${esc(p.year)}</span></div>
-          <div class="spec"><b>Material</b><span>${esc(p.material)}</span></div>
-          <div class="spec"><b>Case</b><span>${esc(p.caseSize)} mm</span></div>
-          <div class="spec"><b>Condition</b><span>${esc(p.condition)}</span></div>
-          <div class="spec"><b>Price</b><span>${esc(p.price)}</span></div>
-
-          <p class="desc">${esc(p.description)}</p>
-
-          <div class="actions">
-            <a class="btn" target="_blank" href="${wa}">WhatsApp</a>
-            <a class="btn" href="${mail}">Email</a>
+          <div class="panel">
+            <h2 class="title">${esc(p.brand)} ${esc(p.model)}</h2>
+            <div class="spec"><b>Ref</b><span>${esc(p.ref)}</span></div>
+            <div class="spec"><b>Year</b><span>${esc(p.year)}</span></div>
+            <div class="spec"><b>Material</b><span>${esc(p.material)}</span></div>
+            <div class="spec"><b>Case</b><span>${esc(p.caseSize)} mm</span></div>
+            <div class="spec"><b>Condition</b><span>${esc(p.condition)}</span></div>
+            <div class="spec"><b>Price</b><span>${esc(p.price)}</span></div>
+            <p class="desc">${esc(p.description)}</p>
+            <div class="actions">
+              <a class="btn" target="_blank" href="${wa}">WhatsApp</a>
+              <a class="btn" href="${mail}">Email</a>
+            </div>
           </div>
-        </div>
-      </section>
-    `;
-  }).join("");
+        </section>
+      `;
+    }).join("");
 
-  // thumbs -> foto kryesore
-  document.querySelectorAll(".card").forEach(card => {
-    const mainImg = card.querySelector(".main");
-    card.querySelectorAll(".thumb").forEach(t => {
-      t.addEventListener("click", () => { mainImg.src = t.src; });
+    document.querySelectorAll(".card").forEach(card=>{
+      const mainImg = card.querySelector(".main");
+      card.querySelectorAll(".thumb").forEach(t=>{
+        t.addEventListener("click", ()=>{ mainImg.src = t.src; });
+      });
     });
+  })
+  .catch(err => {
+    list.innerHTML = <div class="card"><div class="panel">Error loading watches.json</div></div>;
+    console.error(err);
   });
-}
 </script>
+
+  
 </body>
 </html>

@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Shop – Vintage Watches</title>
+  <style>
+    body{font-family:Arial,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:20px}
+    .wrap{max-width:1100px;margin:0 auto}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+    a{color:#fff;text-decoration:none}
+    .grid{display:flex;flex-direction:column;gap:16px}
+    .card{background:#151515;border:1px solid #222;border-radius:16px;padding:14px;display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
+    @media(max-width:900px){.card{grid-template-columns:1fr}}
+    .main{width:100%;height:520px;object-fit:cover;border-radius:14px;background:#222}
+    .thumbs{display:flex;gap:10px;margin-top:10px;overflow:auto;padding-bottom:6px}
+    .thumb{width:74px;height:74px;object-fit:cover;border-radius:12px;cursor:pointer;border:2px solid transparent}
+    .thumb:hover{border-color:#fff}
+    .panel{border:1px solid #222;border-radius:14px;padding:12px}
+    .title{margin:0 0 8px;font-size:20px}
+    .spec{display:flex;justify-content:space-between;gap:10px;background:#101010;border-radius:12px;padding:10px 12px;margin:8px 0}
+    .spec b{color:#cfcfcf}
+    .desc{color:#cfcfcf;line-height:1.4}
+    .actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+    .btn{padding:10px 12px;border-radius:12px;border:1px solid #2a2a2a;background:#0f0f0f}
+    .btn:hover{background:#1a1a1a}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <h1 style="margin:0">Vintage Watches</h1>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <button class="back-btn" onclick="history.back()">← Back</button>
+      </div>
+    </div>
+
+    <div id="list" class="grid"></div>
+  </div>
+
+<script>
+const JSON_URL = "watches.json";
+const CATEGORY = "luxury";
+const PHONE = "355692408065";
+const EMAIL = "adice1899@gmail.com";
+
+function esc(s){ return (s ?? "").toString(); }
+function enc(s){ return encodeURIComponent(esc(s)); }
+
+const list = document.getElementById("list");
+
+function render(items){
+  const filtered = (items || []).filter(p => (p.cat || "").toLowerCase() === CATEGORY.toLowerCase());
+
+  if (!filtered.length) {
+    list.innerHTML = `
+      <section class="card">
+        <div class="panel">No products yet for <b>${CATEGORY}</b>.</div>
+      </section>
+    `;
+    return;
+  }
+
+  list.innerHTML = filtered.map(p => {
+    const photos = Array.isArray(p.photos) ? p.photos : [];
+    const main = photos[0] || "";
+
+    const msg =
+`Hello, I am interested in:
+Brand: ${esc(p.brand)}
+Model: ${esc(p.model)}
+Ref: ${esc(p.ref)}
+Year: ${esc(p.year)}
+Price: ${esc(p.price)}
+`;
+
+    const wa = https://wa.me/${PHONE}?text=${enc(msg)};
+    const mail = mailto:${EMAIL}?subject=${enc("Watch Inquiry: " + (p.brand||"") + " " + (p.model||""))}&body=${enc(msg)};
+
+    return `
+      <section class="card">
+        <div>
+          <img class="main" src="${main}" alt="">
+          <div class="thumbs">
+            ${photos.map(ph=>`<img class="thumb" src="${ph}" alt="">`).join("")}
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2 class="title">${esc(p.brand)} ${esc(p.model)}</h2>
+
+          <div class="spec"><b>Ref</b><span>${esc(p.ref)}</span></div>
+          <div class="spec"><b>Year</b><span>${esc(p.year)}</span></div>
+          <div class="spec"><b>Material</b><span>${esc(p.material)}</span></div>
+          <div class="spec"><b>Case</b><span>${esc(p.caseSize)} mm</span></div>
+          <div class="spec"><b>Condition</b><span>${esc(p.condition)}</span></div>
+          <div class="spec"><b>Price</b><span>${esc(p.price)}</span></div>
+
+          <p class="desc">${esc(p.description)}</p>
+
+          <div class="actions">
+            <a class="btn" target="_blank" href="${wa}">WhatsApp</a>
+            <a class="btn" href="${mail}">Email</a>
+          </div>
+        </div>
+      </section>
+    `;
+  }).join("");
+
+  // thumbs -> main image
+  document.querySelectorAll(".card").forEach(card=>{
+    const mainImg = card.querySelector(".main");
+    card.querySelectorAll(".thumb").forEach(t=>{
+      t.addEventListener("click", ()=>{ mainImg.src = t.src; });
+    });
+  });
+}
+
+async function load(){
+  try{
+    const res = await fetch(${JSON_URL}?v=${Date.now()}, { cache: "no-store" });
+    if(!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    const items = Array.isArray(data) ? data : (data.items || []);
+    render(items);
+  }catch(err){
+    console.log("Failed to load JSON:", err);
+    list.innerHTML = `
+      <section class="card">
+        <div class="panel">
+          Could not load <b>${JSON_URL}</b>. Open Console for details.
+        </div>
+      </section>
+    `;
+  }
+}
+
+load();
+</script>
+
+  
+</body>
+</html>

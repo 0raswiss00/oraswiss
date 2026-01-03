@@ -42,7 +42,7 @@
   </div>
 
 <script>
-const JSON_URL = "watches.json";   // duhet te ekzistoje ne root: https://oraswiss.com/watches.json
+const JSON_URL = "watches.json";
 const CATEGORY = "vintage";
 const PHONE = "355692408065";
 const EMAIL = "adice1899@gmail.com";
@@ -53,7 +53,7 @@ function enc(s){ return encodeURIComponent(esc(s)); }
 const list = document.getElementById("list");
 
 function render(items){
-  const filtered = (items || []).filter(p => (p.cat || "").toLowerCase() === CATEGORY);
+  const filtered = (items || []).filter(p => (p.cat || "").toLowerCase() === CATEGORY.toLowerCase());
 
   if (!filtered.length) {
     list.innerHTML = `
@@ -121,14 +121,9 @@ Price: ${esc(p.price)}
 
 async function load(){
   try{
-    // cache-bust qe te mos ngeci me version te vjeter
     const res = await fetch(${JSON_URL}?v=${Date.now()}, { cache: "no-store" });
     if(!res.ok) throw new Error("HTTP " + res.status);
     const data = await res.json();
-
-    // pranon te dy formatet:
-    // 1) [ ... ]
-    // 2) { "items": [ ... ] }
     const items = Array.isArray(data) ? data : (data.items || []);
     render(items);
   }catch(err){
@@ -145,6 +140,7 @@ async function load(){
 
 load();
 </script>
+
   
 </body>
 </html>

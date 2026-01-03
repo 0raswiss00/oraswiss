@@ -39,23 +39,29 @@
   </div>
 
 <script>
-const KEY = "sellnow_items";
+const JSON_URL = "watches.json";
 const CATEGORY = "luxury";
 const PHONE = "355692408065";
 const EMAIL = "adice1899@gmail.com";
 
-function esc(s){ return (s||"").toString(); }
-function enc(s){ return encodeURIComponent(s||""); }
-
-const items = JSON.parse(localStorage.getItem(KEY) || "[]")
-  .filter(p => (p.cat||"").toLowerCase() === CATEGORY);
+function esc(s){ return (s ?? "").toString(); }
+function enc(s){ return encodeURIComponent(esc(s)); }
 
 const list = document.getElementById("list");
 
-if (!items.length) {
-  list.innerHTML = <div class="card"><div class="panel">No products yet. Add from SellNow.</div></div>;
-} else {
-  list.innerHTML = items.map(p => {
+function render(items){
+  const filtered = (items || []).filter(p => (p.cat || "").toLowerCase() === CATEGORY.toLowerCase());
+
+  if (!filtered.length) {
+    list.innerHTML = `
+      <section class="card">
+        <div class="panel">No products yet for <b>${CATEGORY}</b>.</div>
+      </section>
+    `;
+    return;
+  }
+
+  list.innerHTML = filtered.map(p => {
     const photos = Array.isArray(p.photos) ? p.photos : [];
     const main = photos[0] || "";
 
@@ -101,7 +107,7 @@ Price: ${esc(p.price)}
     `;
   }).join("");
 
-  // thumbs -> foto kryesore (pa prish CSS)
+  // thumbs -> main image
   document.querySelectorAll(".card").forEach(card=>{
     const mainImg = card.querySelector(".main");
     card.querySelectorAll(".thumb").forEach(t=>{
@@ -109,7 +115,30 @@ Price: ${esc(p.price)}
     });
   });
 }
+
+async function load(){
+  try{
+    const res = await fetch(${JSON_URL}?v=${Date.now()}, { cache: "no-store" });
+    if(!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    const items = Array.isArray(data) ? data : (data.items || []);
+    render(items);
+  }catch(err){
+    console.log("Failed to load JSON:", err);
+    list.innerHTML = `
+      <section class="card">
+        <div class="panel">
+          Could not load <b>${JSON_URL}</b>. Open Console for details.
+        </div>
+      </section>
+    `;
+  }
+}
+
+load();
 </script>
+
+  
 </body>
 </html>
 

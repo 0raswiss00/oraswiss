@@ -42,34 +42,33 @@
   </div>
 
 <script>
+const JSON_URL = "watches.json";   // duhet te ekzistoje ne root: https://oraswiss.com/watches.json
 const CATEGORY = "vintage";
 const PHONE = "355692408065";
 const EMAIL = "adice1899@gmail.com";
 
 function esc(s){ return (s ?? "").toString(); }
-function enc(s){ return encodeURIComponent((s ?? "").toString()); }
+function enc(s){ return encodeURIComponent(esc(s)); }
 
-async function load(){
-  const list = document.getElementById("list");
+const list = document.getElementById("list");
 
-  try{
-    const res = await fetch("watches.json?v=" + Date.now());
-    if(!res.ok) throw new Error("Cannot load watches.json (" + res.status + ")");
-    const all = await res.json();
+function render(items){
+  const filtered = (items || []).filter(p => (p.cat || "").toLowerCase() === CATEGORY);
 
-    const items = (Array.isArray(all) ? all : (all.items || []))
-      .filter(p => (p.cat||"").toLowerCase() === CATEGORY);
+  if (!filtered.length) {
+    list.innerHTML = `
+      <section class="card">
+        <div class="panel">No products yet for <b>${CATEGORY}</b>.</div>
+      </section>
+    `;
+    return;
+  }
 
-    if(!items.length){
-      list.innerHTML = <div class="card"><div class="panel">No products yet.</div></div>;
-      return;
-    }
+  list.innerHTML = filtered.map(p => {
+    const photos = Array.isArray(p.photos) ? p.photos : [];
+    const main = photos[0] || "";
 
-    list.innerHTML = items.map(p => {
-      const photos = Array.isArray(p.photos) ? p.photos : [];
-      const main = photos[0] || "";
-
-      const msg =
+    const msg =
 `Hello, I am interested in:
 Brand: ${esc(p.brand)}
 Model: ${esc(p.model)}
@@ -78,48 +77,69 @@ Year: ${esc(p.year)}
 Price: ${esc(p.price)}
 `;
 
-      const wa = https://wa.me/${PHONE}?text=${enc(msg)};
-      const mail = mailto:${EMAIL}?subject=${enc("Watch Inquiry: " + (p.brand||"") + " " + (p.model||""))}&body=${enc(msg)};
+    const wa = https://wa.me/${PHONE}?text=${enc(msg)};
+    const mail = mailto:${EMAIL}?subject=${enc("Watch Inquiry: " + (p.brand||"") + " " + (p.model||""))}&body=${enc(msg)};
 
-      return `
-        <section class="card">
-          <div>
-            <img class="main" src="${main}" alt="">
-            <div class="thumbs">
-              ${photos.map(ph=>`<img class="thumb" src="${ph}" alt="">`).join("")}
-            </div>
+    return `
+      <section class="card">
+        <div>
+          <img class="main" src="${main}" alt="">
+          <div class="thumbs">
+            ${photos.map(ph=>`<img class="thumb" src="${ph}" alt="">`).join("")}
           </div>
+        </div>
 
-          <div class="panel">
-            <h2 class="title">${esc(p.brand)} ${esc(p.model)}</h2>
+        <div class="panel">
+          <h2 class="title">${esc(p.brand)} ${esc(p.model)}</h2>
 
-            <div class="spec"><b>Ref</b><span>${esc(p.ref)}</span></div>
-            <div class="spec"><b>Year</b><span>${esc(p.year)}</span></div>
-            <div class="spec"><b>Material</b><span>${esc(p.material)}</span></div>
-            <div class="spec"><b>Case</b><span>${esc(p.caseSize)} mm</span></div>
-            <div class="spec"><b>Condition</b><span>${esc(p.condition)}</span></div>
-            <div class="spec"><b>Price</b><span>${esc(p.price)}</span></div>
+          <div class="spec"><b>Ref</b><span>${esc(p.ref)}</span></div>
+          <div class="spec"><b>Year</b><span>${esc(p.year)}</span></div>
+          <div class="spec"><b>Material</b><span>${esc(p.material)}</span></div>
+          <div class="spec"><b>Case</b><span>${esc(p.caseSize)} mm</span></div>
+          <div class="spec"><b>Condition</b><span>${esc(p.condition)}</span></div>
+          <div class="spec"><b>Price</b><span>${esc(p.price)}</span></div>
 
-            <p class="desc">${esc(p.description)}</p>
+          <p class="desc">${esc(p.description)}</p>
 
-            <div class="actions">
-              <a class="btn" target="_blank" href="${wa}">WhatsApp</a>
-              <a class="btn" href="${mail}">Email</a>
-            </div>
+          <div class="actions">
+            <a class="btn" target="_blank" href="${wa}">WhatsApp</a>
+            <a class="btn" href="${mail}">Email</a>
           </div>
-        </section>
-      `;
-    }).join("");
+        </div>
+      </section>
+    `;
+  }).join("");
 
-    document.querySelectorAll(".card").forEach(card=>{
-      const mainImg = card.querySelector(".main");
-      card.querySelectorAll(".thumb").forEach(t=>{
-        t.addEventListener("click", ()=>{ mainImg.src = t.src; });
-      });
+  // thumbs -> main image
+  document.querySelectorAll(".card").forEach(card=>{
+    const mainImg = card.querySelector(".main");
+    card.querySelectorAll(".thumb").forEach(t=>{
+      t.addEventListener("click", ()=>{ mainImg.src = t.src; });
     });
+  });
+}
 
-  }catch(e){
-    list.innerHTML = <div class="card"><div class="panel">Error: ${esc(e.message)}</div></div>;
+async function load(){
+  try{
+    // cache-bust qe te mos ngeci me version te vjeter
+    const res = await fetch(${JSON_URL}?v=${Date.now()}, { cache: "no-store" });
+    if(!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+
+    // pranon te dy formatet:
+    // 1) [ ... ]
+    // 2) { "items": [ ... ] }
+    const items = Array.isArray(data) ? data : (data.items || []);
+    render(items);
+  }catch(err){
+    console.log("Failed to load JSON:", err);
+    list.innerHTML = `
+      <section class="card">
+        <div class="panel">
+          Could not load <b>${JSON_URL}</b>. Open Console for details.
+        </div>
+      </section>
+    `;
   }
 }
 

@@ -34,7 +34,10 @@
       <label>Description</label><textarea id="description"></textarea>
 
       <label>Photos</label>
-      <input id="photos" type="file" multiple accept="image/*">
+      <input id="photos" type="text" placeholder="Shkruaj: img/omega-2400-4-4.jpg  (ose https://...)" />
+      <small style="color:#bbb;display:block;margin-top:6px">
+        Shkruaj 1 ose më shumë foto të ndara me presje: img/a.jpg, img/b.jpg
+      </small>
 
       <button type="submit">Save</button>
     </form>
@@ -54,8 +57,8 @@ function fileToDataURL(file){
 document.getElementById("sellForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const files = Array.from(document.getElementById("photos").files || []);
-  const photos = await Promise.all(files.map(fileToDataURL));
+  const photosVal = document.getElementById("photos").value.trim();
+  const photos = photosVal ? photosVal.split(",").map(s => s.trim()) : [];
 
   const item = {
     id: Date.now(),
@@ -69,7 +72,7 @@ document.getElementById("sellForm").addEventListener("submit", async (e) => {
     condition: condition.value,
     price: price.value.trim(),
     description: description.value.trim(),
-    photos
+    photos: photos,
   };
 
   const all = JSON.parse(localStorage.getItem(KEY) || "[]");

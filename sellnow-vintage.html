@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Sell Now (Protected)</title>
+  <title>Sell Now</title>
+
   <style>
     body{font-family:Arial,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:20px}
     .wrap{max-width:900px;margin:0 auto}
@@ -16,24 +17,46 @@
     .btn:hover{background:#1a1a1a}
     .note{opacity:.85;font-size:13px;margin-top:8px;line-height:1.4}
     pre{background:#111;border:1px solid #222;border-radius:12px;padding:12px;overflow:auto}
-    .hidden{display:none}
-    .login{max-width:420px;margin:60px auto;border:1px solid #222;border-radius:12px;padding:16px;background:#0f0f0f}
+    .box{border:1px solid #222;border-radius:12px;padding:12px;background:#0f0f0f;margin-top:10px}
+    .thumbs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .thumbs img{width:78px;height:78px;object-fit:cover;border-radius:10px;border:1px solid #222}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .topbar h1{margin:0}
   </style>
+
+  <!-- PASSWORD (ndrysho PASS) -->
+  <script>
+  (function () {
+    const PASS = "1234";        // <= NDRYSHO KETU
+    const KEY  = "sellnow_ok";
+
+    if (localStorage.getItem(KEY) === "1") return;
+
+    const p = prompt("Password:");
+    if (p === PASS) {
+      localStorage.setItem(KEY, "1");
+      return;
+    }
+
+    alert("Wrong password");
+    window.location.href = "index.html"; // ndrysho ku te duash
+  })();
+  </script>
 </head>
+
 <body>
+<div class="wrap">
 
-<!-- LOGIN -->
-<div id="login" class="login">
-  <h2>Login</h2>
-  <label>Password</label>
-  <input id="pw" type="password" placeholder="••••">
-  <button class="btn" id="loginBtn">Enter</button>
-  <div class="note" id="loginMsg"></div>
-</div>
+  <div class="topbar">
+    <h1>Sell Now</h1>
+    <button class="btn" id="logout" type="button">Logout</button>
+  </div>
 
-<!-- APP -->
-<div id="app" class="wrap hidden">
-  <h1>Sell Now</h1>
+  <div class="note">
+    ⚠️ Foto nga telefoni *nuk ngarkohet automatikisht* në GitHub/website.
+    Kjo faqe bën: preview + krijon listën e path-ve si <b>img/emri.jpg</b>.
+    Pastaj TI i ngarkon fotot te GitHub → folder <b>/img</b> me të njëjtat emra.
+  </div>
 
   <label>Category</label>
   <select id="cat">
@@ -43,18 +66,18 @@
   </select>
 
   <div class="row">
-    <div><label>Brand</label><input id="brand"></div>
-    <div><label>Model</label><input id="model"></div>
+    <div><label>Brand</label><input id="brand" placeholder="Rolex"></div>
+    <div><label>Model</label><input id="model" placeholder="Datejust"></div>
   </div>
 
   <div class="row">
-    <div><label>Ref</label><input id="ref"></div>
-    <div><label>Year</label><input id="year"></div>
+    <div><label>Ref</label><input id="ref" placeholder="16013"></div>
+    <div><label>Year</label><input id="year" placeholder="1985"></div>
   </div>
 
   <div class="row">
-    <div><label>Material</label><input id="material"></div>
-    <div><label>Case Size (mm)</label><input id="caseSize"></div>
+    <div><label>Material</label><input id="material" placeholder="Steel / Gold"></div>
+    <div><label>Case Size (mm)</label><input id="caseSize" placeholder="36"></div>
   </div>
 
   <div class="row">
@@ -68,57 +91,83 @@
         <option>Used - Fair</option>
       </select>
     </div>
-    <div><label>Price</label><input id="price"></div>
+    <div><label>Price</label><input id="price" placeholder="5000"></div>
   </div>
 
   <label>Description</label>
-  <textarea id="description"></textarea>
+  <textarea id="description" placeholder="Original dial, serviced"></textarea>
 
-  <label>Photos (URL ose img/.., me presje)</label>
-  <textarea id="photos" placeholder="https://i.ibb.co/xxx/a.jpg, https://i.ibb.co/yyy/b.jpg"></textarea>
+  <div class="box">
+    <b>FOTOT</b>
 
-  <button class="btn" id="make">Generate JSON</button>
+    <label>Zgjidh foto nga telefoni (preview + nxjerr img/emri.jpg automatikisht)</label>
+    <input id="photoFiles" type="file" accept="image/*" multiple>
 
-  <h3>Copy këtë te watches.json</h3>
-  <pre id="out"></pre>
-  <button class="btn" id="copy">Copy</button>
+    <div class="thumbs" id="thumbs"></div>
+
+    <label>Photos (paths) – kopjo këto në JSON</label>
+    <textarea id="photosOut" placeholder="img/rolex1.jpg, img/rolex2.jpg"></textarea>
+
+    <div class="note">
+      Nëse do URL të plotë, mund t’i shkruash vetë këtu:
+      p.sh. <b>https://oraswiss.com/img/rolex1.jpg</b>
+    </div>
+  </div>
+
+  <button class="btn" id="make" type="button">Generate JSON</button>
+
+  <h3 style="margin:18px 0 8px">Copy this into watches.json</h3>
+  <pre id="out">Kliko "Generate JSON"</pre>
+  <button class="btn" id="copy" type="button">Copy</button>
 
   <div class="note">
-    Ngjite objektin *brenda [ ... ]* te <b>watches.json</b> dhe Commit.
+    Pastaj: GitHub → <b>watches.json</b> → Edit → fut objektin brenda <b>[ ... ]</b> me presje dhe Commit.
   </div>
+
 </div>
 
 <script>
-/* ===== CONFIG ===== */
-const PASSWORD = "1234"; // <- ndrysho këtu
+const $ = (id)=>document.getElementById(id);
 
-/* ===== LOGIN ===== */
-const login = document.getElementById("login");
-const app = document.getElementById("app");
-const msg = document.getElementById("loginMsg");
-
-document.getElementById("loginBtn").onclick = () => {
-  const pw = document.getElementById("pw").value;
-  if(pw === PASSWORD){
-    login.classList.add("hidden");
-    app.classList.remove("hidden");
-    sessionStorage.setItem("sell_auth","1");
-  }else{
-    msg.textContent = "Wrong password";
-  }
-};
-
-if(sessionStorage.getItem("sell_auth")==="1"){
-  login.classList.add("hidden");
-  app.classList.remove("hidden");
+function safeName(name){
+  return (name || "")
+    .trim()
+    .replace(/\s+/g,"-")
+    .replace(/[^a-zA-Z0-9.\-_]/g,"")
+    .toLowerCase();
 }
 
-/* ===== APP ===== */
-const $ = id => document.getElementById(id);
-const parse = t => (t||"").split(/[\n,]+/g).map(s=>s.trim()).filter(Boolean);
+function parseList(t){
+  return (t||"")
+    .split(/[\n,]+/g)
+    .map(s=>s.trim())
+    .filter(Boolean);
+}
 
-$("make").onclick = (e)=>{
-  e.preventDefault();
+// logout
+$("logout").addEventListener("click", ()=>{
+  localStorage.removeItem("sellnow_ok");
+  location.href = "index.html";
+});
+
+// select photos -> preview + auto paths
+$("photoFiles").addEventListener("change", ()=>{
+  const files = Array.from($("photoFiles").files || []);
+  $("thumbs").innerHTML = "";
+
+  const paths = files.map(f => "img/" + safeName(f.name));
+  $("photosOut").value = paths.join(", ");
+
+  files.forEach(f=>{
+    const img = document.createElement("img");
+    img.alt = "";
+    img.src = URL.createObjectURL(f);
+    $("thumbs").appendChild(img);
+  });
+});
+
+// generate JSON
+$("make").addEventListener("click", ()=>{
   const item = {
     id: Date.now(),
     cat: $("cat").value,
@@ -131,19 +180,22 @@ $("make").onclick = (e)=>{
     condition: $("condition").value,
     price: $("price").value.trim(),
     description: $("description").value.trim(),
-    photos: parse($("photos").value)
+    photos: parseList($("photosOut").value)
   };
-  $("out").textContent = JSON.stringify(item, null, 2);
-};
 
-$("copy").onclick = async ()=>{
+  $("out").textContent = JSON.stringify(item, null, 2);
+});
+
+// copy
+$("copy").addEventListener("click", async ()=>{
+  const txt = $("out").textContent;
   try{
-    await navigator.clipboard.writeText($("out").textContent);
+    await navigator.clipboard.writeText(txt);
     alert("Copied ✅");
   }catch{
-    alert("Copy manualisht.");
+    alert("S’u kopjua. Kopjoje me dorë nga kutia.");
   }
-};
+});
 </script>
 </body>
 </html>

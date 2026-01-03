@@ -68,7 +68,7 @@ function render(items){
     const photos = Array.isArray(p.photos) ? p.photos : [];
     const main = photos[0] || "";
 
-    const msg =
+const msg =
 `Hello, I am interested in:
 Brand: ${esc(p.brand)}
 Model: ${esc(p.model)}
@@ -121,7 +121,7 @@ Price: ${esc(p.price)}
 
 async function load(){
   try{
-    const res = await fetch(${JSON_URL}?v=${Date.now()}, { cache: "no-store" });
+    fetch(${JSON_URL}?v=${Date.now()}, { cache: "no-store" });
     if(!res.ok) throw new Error("HTTP " + res.status);
     const data = await res.json();
     const items = Array.isArray(data) ? data : (data.items || []);

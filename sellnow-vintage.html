@@ -4,7 +4,6 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Sell Now</title>
-
   <style>
     body{font-family:Arial,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:20px}
     .wrap{max-width:900px;margin:0 auto}
@@ -17,45 +16,33 @@
     .btn:hover{background:#1a1a1a}
     .note{opacity:.85;font-size:13px;margin-top:8px;line-height:1.4}
     pre{background:#111;border:1px solid #222;border-radius:12px;padding:12px;overflow:auto}
-    .box{border:1px solid #222;border-radius:12px;padding:12px;background:#0f0f0f;margin-top:10px}
-    .thumbs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-    .thumbs img{width:78px;height:78px;object-fit:cover;border-radius:10px;border:1px solid #222}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .topbar h1{margin:0}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
   </style>
 
-  <!-- PASSWORD (ndrysho PASS) -->
   <script>
-  (function () {
-    const PASS = "1234";        // <= NDRYSHO KETU
-    const KEY  = "sellnow_ok";
+    // PASSWORD (client-side). Ndrysho këtu:
+    const PASS = "1234";
+    const KEY = "sellnow_ok";
 
-    if (localStorage.getItem(KEY) === "1") return;
-
-    const p = prompt("Password:");
-    if (p === PASS) {
-      localStorage.setItem(KEY, "1");
-      return;
+    if (localStorage.getItem(KEY) !== "1") {
+      const p = prompt("Password:");
+      if (p === PASS) localStorage.setItem(KEY,"1");
+      else { alert("Wrong password"); location.href="index.html"; }
     }
-
-    alert("Wrong password");
-    window.location.href = "index.html"; // ndrysho ku te duash
-  })();
   </script>
 </head>
 
 <body>
 <div class="wrap">
 
-  <div class="topbar">
-    <h1>Sell Now</h1>
+  <div class="top">
+    <h1 style="margin:0">Sell Now</h1>
     <button class="btn" id="logout" type="button">Logout</button>
   </div>
 
   <div class="note">
-    ⚠️ Foto nga telefoni *nuk ngarkohet automatikisht* në GitHub/website.
-    Kjo faqe bën: preview + krijon listën e path-ve si <b>img/emri.jpg</b>.
-    Pastaj TI i ngarkon fotot te GitHub → folder <b>/img</b> me të njëjtat emra.
+    Kjo faqe nuk ngarkon foto në server (site statik). Fotot duhen ngarkuar te GitHub në <b>/img</b>.
+    Këtu shkruan paths: <b>img/emri.jpg</b> ose URL të plotë.
   </div>
 
   <label>Category</label>
@@ -84,35 +71,17 @@
     <div>
       <label>Condition</label>
       <select id="condition">
-        <option>New</option>
-        <option>Like New</option>
-        <option selected>Very Good</option>
-        <option>Good</option>
-        <option>Used - Fair</option>
+        <option>New</option><option>Like New</option><option selected>Very Good</option><option>Good</option><option>Used - Fair</option>
       </select>
     </div>
-    <div><label>Price</label><input id="price" placeholder="5000"></div>
+    <div><label>Price</label><input id="price" placeholder="5000 €"></div>
   </div>
 
   <label>Description</label>
   <textarea id="description" placeholder="Original dial, serviced"></textarea>
 
-  <div class="box">
-    <b>FOTOT</b>
-
-    <label>Zgjidh foto nga telefoni (preview + nxjerr img/emri.jpg automatikisht)</label>
-    <input id="photoFiles" type="file" accept="image/*" multiple>
-
-    <div class="thumbs" id="thumbs"></div>
-
-    <label>Photos (paths) – kopjo këto në JSON</label>
-    <textarea id="photosOut" placeholder="img/rolex1.jpg, img/rolex2.jpg"></textarea>
-
-    <div class="note">
-      Nëse do URL të plotë, mund t’i shkruash vetë këtu:
-      p.sh. <b>https://oraswiss.com/img/rolex1.jpg</b>
-    </div>
-  </div>
+  <label>Photos (paths ose URL, me presje)</label>
+  <textarea id="photos" placeholder="img/rolex1.jpg, img/rolex2.jpg"></textarea>
 
   <button class="btn" id="make" type="button">Generate JSON</button>
 
@@ -120,54 +89,18 @@
   <pre id="out">Kliko "Generate JSON"</pre>
   <button class="btn" id="copy" type="button">Copy</button>
 
-  <div class="note">
-    Pastaj: GitHub → <b>watches.json</b> → Edit → fut objektin brenda <b>[ ... ]</b> me presje dhe Commit.
-  </div>
-
 </div>
 
 <script>
-const $ = (id)=>document.getElementById(id);
+const $ = id => document.getElementById(id);
+const parse = t => (t||"").split(/[\n,]+/g).map(s=>s.trim()).filter(Boolean);
 
-function safeName(name){
-  return (name || "")
-    .trim()
-    .replace(/\s+/g,"-")
-    .replace(/[^a-zA-Z0-9.\-_]/g,"")
-    .toLowerCase();
-}
-
-function parseList(t){
-  return (t||"")
-    .split(/[\n,]+/g)
-    .map(s=>s.trim())
-    .filter(Boolean);
-}
-
-// logout
-$("logout").addEventListener("click", ()=>{
+$("logout").onclick = ()=>{
   localStorage.removeItem("sellnow_ok");
-  location.href = "index.html";
-});
+  location.href="index.html";
+};
 
-// select photos -> preview + auto paths
-$("photoFiles").addEventListener("change", ()=>{
-  const files = Array.from($("photoFiles").files || []);
-  $("thumbs").innerHTML = "";
-
-  const paths = files.map(f => "img/" + safeName(f.name));
-  $("photosOut").value = paths.join(", ");
-
-  files.forEach(f=>{
-    const img = document.createElement("img");
-    img.alt = "";
-    img.src = URL.createObjectURL(f);
-    $("thumbs").appendChild(img);
-  });
-});
-
-// generate JSON
-$("make").addEventListener("click", ()=>{
+$("make").onclick = ()=>{
   const item = {
     id: Date.now(),
     cat: $("cat").value,
@@ -180,24 +113,15 @@ $("make").addEventListener("click", ()=>{
     condition: $("condition").value,
     price: $("price").value.trim(),
     description: $("description").value.trim(),
-    photos: parseList($("photosOut").value)
+    photos: parse($("photos").value)
   };
-
   $("out").textContent = JSON.stringify(item, null, 2);
-});
+};
 
-// copy
-$("copy").addEventListener("click", async ()=>{
-  const txt = $("out").textContent;
-  try{
-    await navigator.clipboard.writeText(txt);
-    alert("Copied ✅");
-  }catch{
-    alert("S’u kopjua. Kopjoje me dorë nga kutia.");
-  }
-});
+$("copy").onclick = async ()=>{
+  try { await navigator.clipboard.writeText($("out").textContent); alert("Copied ✅"); }
+  catch { alert("Copy manualisht."); }
+};
 </script>
 </body>
 </html>
-
-

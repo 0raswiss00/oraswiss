@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="sq">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Sell Vintage</title>
+  <title>Sell Now</title>
   <style>
     body{font-family:Arial,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:20px}
     .wrap{max-width:900px;margin:0 auto}
@@ -16,99 +16,146 @@
     .btn:hover{background:#1a1a1a}
     .note{opacity:.85;font-size:13px;margin-top:8px;line-height:1.4}
     pre{background:#111;border:1px solid #222;border-radius:12px;padding:12px;overflow:auto}
-    .thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    .thumbs img{width:90px;height:90px;object-fit:cover;border-radius:10px;border:1px solid #222}
+    .box{border:1px solid #222;border-radius:12px;padding:12px;background:#0f0f0f;margin-top:10px}
+    .thumbs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .thumbs img{width:78px;height:78px;object-fit:cover;border-radius:10px;border:1px solid #222}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1 style="margin:0 0 10px">Sell – Vintage</h1>
+<div class="wrap">
+  <h1 style="margin:0 0 10px">Sell Now</h1>
+
+  <div class="note">
+    ✅ Fotot në Shop dalin vetëm nëse hapen me link (jo 404).  
+    Pra: i ngarkon te GitHub në <b>/img</b>, pastaj përdor <b>img/emri.jpg</b> ose URL të plotë.
+  </div>
+
+  <label>Category</label>
+  <select id="cat">
+    <option value="luxury">Luxury</option>
+    <option value="vintage" selected>Vintage</option>
+    <option value="parts">Parts</option>
+  </select>
+
+  <div class="row">
+    <div><label>Brand</label><input id="brand" placeholder="Rolex"></div>
+    <div><label>Model</label><input id="model" placeholder="Datejust"></div>
+  </div>
+
+  <div class="row">
+    <div><label>Ref</label><input id="ref" placeholder="16013"></div>
+    <div><label>Year</label><input id="year" placeholder="1985"></div>
+  </div>
+
+  <div class="row">
+    <div><label>Material</label><input id="material" placeholder="Steel / Gold"></div>
+    <div><label>Case Size (mm)</label><input id="caseSize" placeholder="36"></div>
+  </div>
+
+  <div class="row">
+    <div>
+      <label>Condition</label>
+      <select id="condition">
+        <option>New</option>
+        <option>Like New</option>
+        <option selected>Very Good</option>
+        <option>Good</option>
+        <option>Used - Fair</option>
+      </select>
+    </div>
+    <div><label>Price</label><input id="price" placeholder="5000 €"></div>
+  </div>
+
+  <label>Description</label>
+  <textarea id="description" placeholder="Original dial, serviced"></textarea>
+
+  <div class="box">
+    <b>PHOTOS – 3 opsione (zgjedh 1)</b>
+
+    <!-- OPSIONI 1 -->
+    <label style="margin-top:10px">Opsioni 1: Zgjidh foto nga telefoni (preview + emra)</label>
+    <input id="photoFiles" type="file" accept="image/*" multiple>
     <div class="note">
-      ✅ Zgjidh fotot nga telefoni → bëhen automatikisht në <b>Base64</b> → Copy JSON → ngjite te <b>watches.json</b>.
-      <br>⚠️ Mos zgjidh shumë foto.
+      Kjo s’i ngarkon automatikisht online. Vetëm preview + të nxjerr emrat si <b>img/emri.jpg</b>.
+      Pastaj ti i ngarkon fotot te GitHub /img me të njëjtat emra.
     </div>
 
-    <input type="hidden" id="cat" value="vintage"/>
-
-    <div class="row">
-      <div><label>Brand</label><input id="brand" placeholder="Rolex"></div>
-      <div><label>Model</label><input id="model" placeholder="Datejust"></div>
-    </div>
-
-    <div class="row">
-      <div><label>Ref</label><input id="ref" placeholder="16013"></div>
-      <div><label>Year</label><input id="year" placeholder="1985"></div>
-    </div>
-
-    <div class="row">
-      <div><label>Material</label><input id="material" placeholder="Steel / Gold"></div>
-      <div><label>Case Size (mm)</label><input id="caseSize" placeholder="36"></div>
-    </div>
-
-    <div class="row">
-      <div>
-        <label>Condition</label>
-        <select id="condition">
-          <option>New</option><option>Like New</option><option selected>Very Good</option><option>Good</option><option>Used - Fair</option>
-        </select>
-      </div>
-      <div><label>Price</label><input id="price" placeholder="5000"></div>
-    </div>
-
-    <label>Description</label>
-    <textarea id="description" placeholder="Original dial, serviced"></textarea>
-
-    <label>Photos from phone</label>
-    <input id="photosFile" type="file" accept="image/*" multiple/>
     <div class="thumbs" id="thumbs"></div>
 
-    <button class="btn" id="make">Generate JSON</button>
+    <label>Paths që u krijuan nga fotot (auto)</label>
+    <textarea id="photosAuto" placeholder="img/rolex1.jpg, img/rolex2.jpg"></textarea>
 
-    <h3 style="margin:18px 0 8px">Copy this object into watches.json</h3>
-    <pre id="out">Click "Generate JSON"</pre>
-    <button class="btn" id="copy">Copy</button>
+    <!-- OPSIONI 2 -->
+    <label>Opsioni 2: Shkruaj paths vetë</label>
+    <textarea id="photosPaths" placeholder="img/rolex1.jpg, img/rolex2.jpg"></textarea>
+
+    <!-- OPSIONI 3 -->
+    <label>Opsioni 3: Vendos URL të plota (https://...)</label>
+    <textarea id="photosUrls" placeholder="https://site.com/a.jpg, https://site.com/b.jpg"></textarea>
   </div>
+
+  <button class="btn" id="make">Generate JSON</button>
+
+  <h3 style="margin:18px 0 8px">Copy this into watches.json</h3>
+  <pre id="out">Kliko "Generate JSON"</pre>
+  <button class="btn" id="copy">Copy</button>
+
+  <div class="note">
+    Pastaj: GitHub → <b>watches.json</b> → Edit → fut objektin brenda <b>[ ... ]</b> me presje dhe Commit.
+  </div>
+</div>
 
 <script>
 const $ = (id)=>document.getElementById(id);
-let photos = [];
 
-function fileToDataURL(file, maxW=1200, quality=0.82){
-  return new Promise((resolve,reject)=>{
-    const img = new Image();
-    const reader = new FileReader();
-    reader.onerror = reject;
-    reader.onload = () => { img.src = reader.result; };
-    img.onerror = reject;
-    img.onload = () => {
-      const scale = Math.min(1, maxW / img.width);
-      const w = Math.round(img.width * scale);
-      const h = Math.round(img.height * scale);
-      const canvas = document.createElement("canvas");
-      canvas.width = w; canvas.height = h;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, w, h);
-      resolve(canvas.toDataURL("image/jpeg", quality));
-    };
-    reader.readAsDataURL(file);
-  });
+function parseList(t){
+  return (t||"")
+    .split(/[\n,]+/g)
+    .map(s=>s.trim())
+    .filter(Boolean);
 }
 
-$("photosFile").addEventListener("change", async (e)=>{
-  photos = [];
+function pickPhotos(){
+  // PRIORITET: URL -> Paths manual -> Auto
+  const urls = parseList($("photosUrls").value);
+  if(urls.length) return urls;
+
+  const paths = parseList($("photosPaths").value);
+  if(paths.length) return paths;
+
+  const auto = parseList($("photosAuto").value);
+  return auto;
+}
+
+// Preview + auto-paths from selected files
+$("photoFiles").addEventListener("change", ()=>{
+  const files = Array.from($("photoFiles").files || []);
   $("thumbs").innerHTML = "";
-  const files = Array.from(e.target.files || []);
-  for(const f of files){
-    const dataUrl = await fileToDataURL(f);
-    photos.push(dataUrl);
-    const im = document.createElement("img");
-    im.src = dataUrl;
-    $("thumbs").appendChild(im);
-  }
+
+  const paths = files.map(f=>{
+    // normalizo emrin
+    const safe = f.name
+      .trim()
+      .replace(/\s+/g,"-")
+      .replace(/[^a-zA-Z0-9.\-_]/g,"")
+      .toLowerCase();
+    return "img/" + safe;
+  });
+
+  $("photosAuto").value = paths.join(", ");
+
+  files.forEach(f=>{
+    const img = document.createElement("img");
+    img.alt = "";
+    const url = URL.createObjectURL(f);
+    img.src = url;
+    $("thumbs").appendChild(img);
+  });
 });
 
-$("make").addEventListener("click",(e)=>{
+$("make").addEventListener("click", (e)=>{
   e.preventDefault();
+
   const item = {
     id: Date.now(),
     cat: $("cat").value,
@@ -121,18 +168,24 @@ $("make").addEventListener("click",(e)=>{
     condition: $("condition").value,
     price: $("price").value.trim(),
     description: $("description").value.trim(),
-    photos: photos
+    photos: pickPhotos()
   };
+
   $("out").textContent = JSON.stringify(item, null, 2);
 });
 
 $("copy").addEventListener("click", async ()=>{
   const txt = $("out").textContent;
-  try{ await navigator.clipboard.writeText(txt); alert("Copied ✅"); }
-  catch{ alert("S’u kopjua. Kopjoje me dorë."); }
+  try{
+    await navigator.clipboard.writeText(txt);
+    alert("Copied ✅");
+  }catch{
+    alert("S’u kopjua. Kopjoje me dorë nga kutia.");
+  }
 });
 </script>
-<div id="list" class="grid"></div>
-</body>   
+</body>
 </html>
+Login | HSTS Redirection Community
+HSTS Redirection Community Customer Secure Login Page. Login to your HSTS Redirection Community Customer Account.
 

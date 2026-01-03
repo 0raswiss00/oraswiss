@@ -201,6 +201,33 @@
       }
     });
   </script>
+
+<script>
+  let ACTIVE_CATEGORY = "luxury";
+
+  const tabs = document.querySelectorAll(".tab");
+  const catLabel = document.getElementById("catLabel");
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+
+      // hiq active nga të gjithë
+      tabs.forEach(t => t.classList.remove("active"));
+
+      // vendos active te i klikuari
+      tab.classList.add("active");
+
+      // merr kategorinë
+      ACTIVE_CATEGORY = tab.dataset.cat;
+
+      // update label
+      catLabel.textContent = 
+        ACTIVE_CATEGORY.charAt(0).toUpperCase() + ACTIVE_CATEGORY.slice(1);
+    });
+  });
+</script>
+
+  
 </body>
 </html>
 

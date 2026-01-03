@@ -1,78 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Vintage Watches</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {
-  margin: 0;
-  padding: 20px;
-  background: #0b0b0b;
-  color: #fff;
-  font-family: Arial, sans-serif;
-}
-h1 { margin-bottom: 20px; }
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
-}
-
-.card {
-  background: #151515;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.card img.main {
-  width: 100%;
-  height: 260px;
-  object-fit: cover;
-}
-
-.thumbs {
-  display: flex;
-  gap: 6px;
-  padding: 8px;
-}
-.thumbs img {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  cursor: pointer;
-  opacity: 0.7;
-}
-.thumbs img:hover { opacity: 1; }
-
-.panel {
-  padding: 12px;
-}
-.panel h3 { margin: 0 0 6px; }
-.panel p { margin: 4px 0; font-size: 14px; }
-</style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Shop – Vintage Watches</title>
+  <style>
+    body{font-family:Arial,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:20px}
+    .wrap{max-width:1100px;margin:0 auto}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+    a{color:#fff;text-decoration:none}
+    .btn{padding:10px 12px;border-radius:12px;border:1px solid #2a2a2a;background:#0f0f0f;display:inline-block}
+    .btn:hover{background:#1a1a1a}
+    .grid{display:flex;flex-direction:column;gap:16px}
+    .card{background:#151515;border:1px solid #222;border-radius:16px;padding:14px;display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
+    @media(max-width:900px){.card{grid-template-columns:1fr}}
+    .main{width:100%;height:520px;object-fit:cover;border-radius:14px;background:#222}
+    .thumbs{display:flex;gap:10px;margin-top:10px;overflow:auto;padding-bottom:6px}
+    .thumb{width:74px;height:74px;object-fit:cover;border-radius:12px;cursor:pointer;border:2px solid transparent}
+    .thumb:hover{border-color:#fff}
+    .panel{border:1px solid #222;border-radius:14px;padding:12px}
+    .title{margin:0 0 8px;font-size:20px}
+    .spec{display:flex;justify-content:space-between;gap:10px;background:#101010;border-radius:12px;padding:10px 12px;margin:8px 0}
+    .spec b{color:#cfcfcf}
+    .desc{color:#cfcfcf;line-height:1.4;white-space:pre-line}
+  </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <div class="top">
+      <h1 style="margin:0">Vintage Watches</h1>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn" href="index.html">Home</a>
+        <a class="btn" href="shop-luxury.html">Luxury</a>
+        <a class="btn" href="shop-parts.html">Parts</a>
+        <a class="btn" href="sellnow.html">Sell Now</a>
+      </div>
+    </div>
 
-<h1>Vintage Watches</h1>
-
-<div id="list" class="grid"></div>
+    <div id="list" class="grid"></div>
+  </div>
 
 <script>
-const JSON_URL = "watches.json";
+const JSON_URL = "/watches.json";
 const CATEGORY = "vintage";
 
+function esc(s){ return (s ?? "").toString(); }
 const list = document.getElementById("list");
 
-function render(items) {
-  const filtered = items.filter(p =>
-    (p.cat || "").toLowerCase() === CATEGORY
+function render(items){
+  const filtered = (items || []).filter(p =>
+    (p.cat || "").toString().trim().toLowerCase() === CATEGORY
   );
 
-  if (!filtered.length) {
-    list.innerHTML = "<p>No products found.</p>";
+  if(!filtered.length){
+    list.innerHTML = <section class="card"><div class="panel">No products yet for <b>${CATEGORY}</b>.</div></section>;
     return;
   }
 
@@ -82,37 +63,49 @@ function render(items) {
 
     return `
       <section class="card">
-        <img class="main" src="${main}">
-        <div class="thumbs">
-          ${photos.map(ph => <img src="${ph}" onclick="this.closest('.card').querySelector('.main').src='${ph}'">).join("")}
+        <div>
+          <img class="main" src="${main}" alt="">
+          <div class="thumbs">
+            ${photos.map(ph=>`<img class="thumb" src="${ph}" alt="">`).join("")}
+          </div>
         </div>
+
         <div class="panel">
-          <h3>${p.brand} ${p.model}</h3>
-          <p>Ref: ${p.ref}</p>
-          <p>Year: ${p.year}</p>
-          <p>Condition: ${p.condition}</p>
-          <p><b>${p.price}</b></p>
+          <h2 class="title">${esc(p.brand)} ${esc(p.model)}</h2>
+          <div class="spec"><b>Ref</b><span>${esc(p.ref)}</span></div>
+          <div class="spec"><b>Year</b><span>${esc(p.year)}</span></div>
+          <div class="spec"><b>Material</b><span>${esc(p.material)}</span></div>
+          <div class="spec"><b>Case</b><span>${esc(p.caseSize)} mm</span></div>
+          <div class="spec"><b>Condition</b><span>${esc(p.condition)}</span></div>
+          <div class="spec"><b>Price</b><span>${esc(p.price)}</span></div>
+          <p class="desc">${esc(p.description)}</p>
         </div>
       </section>
     `;
   }).join("");
+
+  document.querySelectorAll(".card").forEach(card=>{
+    const mainImg = card.querySelector(".main");
+    card.querySelectorAll(".thumb").forEach(t=>{
+      t.addEventListener("click", ()=>{ mainImg.src = t.src; });
+    });
+  });
 }
 
-async function load() {
-  try {
-    const res = await fetch(JSON_URL + "?v=" + Date.now(), { cache: "no-store" });
-    if (!res.ok) throw new Error(res.status);
+async function load(){
+  try{
+    const res = await fetch(${JSON_URL}?v=${Date.now()}, { cache: "no-store" });
+    if(!res.ok) throw new Error("HTTP " + res.status);
     const data = await res.json();
-    render(data);
-  } catch (e) {
-    list.innerHTML = "<p>Error loading products.</p>";
-    console.error(e);
+    const items = Array.isArray(data) ? data : (data.items || []);
+    render(items);
+  }catch(err){
+    console.error(err);
+    list.innerHTML = <section class="card"><div class="panel">Could not load <b>${JSON_URL}</b>.</div></section>;
   }
 }
 
 load();
 </script>
-
 </body>
 </html>
-

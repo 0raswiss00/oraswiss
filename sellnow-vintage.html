@@ -1,60 +1,150 @@
 <!doctype html>
-<html lang="en">
+<html lang="sq">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Vintage Watches</title>
-<style>
-body{background:#0b0b0b;color:#fff;font-family:Arial;margin:0;padding:20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
-.card{background:#111;border:1px solid #222;border-radius:12px;padding:12px}
-.card img{width:100%;border-radius:10px;border:1px solid #222}
-</style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Sell Now (Protected)</title>
+  <style>
+    body{font-family:Arial,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:20px}
+    .wrap{max-width:900px;margin:0 auto}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:820px){.row{grid-template-columns:1fr}}
+    label{display:block;margin:12px 0 6px;color:#ddd}
+    input,select,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #333;background:#111;color:#fff}
+    textarea{min-height:90px}
+    .btn{margin-top:14px;padding:10px 12px;border-radius:12px;border:1px solid #2a2a2a;background:#0f0f0f;color:#fff;cursor:pointer}
+    .btn:hover{background:#1a1a1a}
+    .note{opacity:.85;font-size:13px;margin-top:8px;line-height:1.4}
+    pre{background:#111;border:1px solid #222;border-radius:12px;padding:12px;overflow:auto}
+    .hidden{display:none}
+    .login{max-width:420px;margin:60px auto;border:1px solid #222;border-radius:12px;padding:16px;background:#0f0f0f}
+  </style>
 </head>
 <body>
 
-<h1>Vintage Watches</h1>
+<!-- LOGIN -->
+<div id="login" class="login">
+  <h2>Login</h2>
+  <label>Password</label>
+  <input id="pw" type="password" placeholder="••••">
+  <button class="btn" id="loginBtn">Enter</button>
+  <div class="note" id="loginMsg"></div>
+</div>
 
-<!-- KËTU E KE LISTËN: BRENDA BODY, POSHTË TITULLIT -->
-<div id="list" class="grid"></div>
+<!-- APP -->
+<div id="app" class="wrap hidden">
+  <h1>Sell Now</h1>
+
+  <label>Category</label>
+  <select id="cat">
+    <option value="luxury">Luxury</option>
+    <option value="vintage" selected>Vintage</option>
+    <option value="parts">Parts</option>
+  </select>
+
+  <div class="row">
+    <div><label>Brand</label><input id="brand"></div>
+    <div><label>Model</label><input id="model"></div>
+  </div>
+
+  <div class="row">
+    <div><label>Ref</label><input id="ref"></div>
+    <div><label>Year</label><input id="year"></div>
+  </div>
+
+  <div class="row">
+    <div><label>Material</label><input id="material"></div>
+    <div><label>Case Size (mm)</label><input id="caseSize"></div>
+  </div>
+
+  <div class="row">
+    <div>
+      <label>Condition</label>
+      <select id="condition">
+        <option>New</option>
+        <option>Like New</option>
+        <option selected>Very Good</option>
+        <option>Good</option>
+        <option>Used - Fair</option>
+      </select>
+    </div>
+    <div><label>Price</label><input id="price"></div>
+  </div>
+
+  <label>Description</label>
+  <textarea id="description"></textarea>
+
+  <label>Photos (URL ose img/.., me presje)</label>
+  <textarea id="photos" placeholder="https://i.ibb.co/xxx/a.jpg, https://i.ibb.co/yyy/b.jpg"></textarea>
+
+  <button class="btn" id="make">Generate JSON</button>
+
+  <h3>Copy këtë te watches.json</h3>
+  <pre id="out"></pre>
+  <button class="btn" id="copy">Copy</button>
+
+  <div class="note">
+    Ngjite objektin *brenda [ ... ]* te <b>watches.json</b> dhe Commit.
+  </div>
+</div>
 
 <script>
-const list = document.getElementById("list");
+/* ===== CONFIG ===== */
+const PASSWORD = "1234"; // <- ndrysho këtu
 
-fetch("watches.json?v=" + Date.now(), { cache: "no-store" })
-  .then(r => {
-    if(!r.ok) throw new Error("HTTP " + r.status);
-    return r.json();
-  })
-  .then(data => {
-    const items = Array.isArray(data) ? data : (data.items || []);
-    const filtered = items.filter(p => (p.cat||"").toLowerCase() === "vintage");
+/* ===== LOGIN ===== */
+const login = document.getElementById("login");
+const app = document.getElementById("app");
+const msg = document.getElementById("loginMsg");
 
-    if(!filtered.length){
-      list.innerHTML = "<p>No vintage products.</p>";
-      return;
-    }
+document.getElementById("loginBtn").onclick = () => {
+  const pw = document.getElementById("pw").value;
+  if(pw === PASSWORD){
+    login.classList.add("hidden");
+    app.classList.remove("hidden");
+    sessionStorage.setItem("sell_auth","1");
+  }else{
+    msg.textContent = "Wrong password";
+  }
+};
 
-    list.innerHTML = filtered.map(p => {
-      const photos = Array.isArray(p.photos) ? p.photos : [];
-      const main = photos[0] || "";
-      return `
-        <section class="card">
-          ${main ? <img src="${main}" alt=""> : `<div style="height:220px;border:1px dashed #333;border-radius:10px;display:flex;align-items:center;justify-content:center">NO PHOTO</div>`}
-          <h3 style="margin:10px 0 6px">${p.brand||""} ${p.model||""}</h3>
-          <div style="opacity:.85">${p.year||""} • ${p.caseSize||""}mm • ${p.material||""}</div>
-          <div style="margin-top:8px"><b>${p.price||""}</b></div>
-          <div style="opacity:.85;margin-top:6px">${p.description||""}</div>
-        </section>
-      `;
-    }).join("");
-  })
-  .catch(err => {
-    console.error("Failed to load JSON:", err);
-    list.innerHTML = "<p>ERROR loading products. (Check watches.json + img paths)</p>";
-  });
+if(sessionStorage.getItem("sell_auth")==="1"){
+  login.classList.add("hidden");
+  app.classList.remove("hidden");
+}
+
+/* ===== APP ===== */
+const $ = id => document.getElementById(id);
+const parse = t => (t||"").split(/[\n,]+/g).map(s=>s.trim()).filter(Boolean);
+
+$("make").onclick = (e)=>{
+  e.preventDefault();
+  const item = {
+    id: Date.now(),
+    cat: $("cat").value,
+    brand: $("brand").value.trim(),
+    model: $("model").value.trim(),
+    ref: $("ref").value.trim(),
+    year: $("year").value.trim(),
+    material: $("material").value.trim(),
+    caseSize: $("caseSize").value.trim(),
+    condition: $("condition").value,
+    price: $("price").value.trim(),
+    description: $("description").value.trim(),
+    photos: parse($("photos").value)
+  };
+  $("out").textContent = JSON.stringify(item, null, 2);
+};
+
+$("copy").onclick = async ()=>{
+  try{
+    await navigator.clipboard.writeText($("out").textContent);
+    alert("Copied ✅");
+  }catch{
+    alert("Copy manualisht.");
+  }
+};
 </script>
-
 </body>
 </html>
 

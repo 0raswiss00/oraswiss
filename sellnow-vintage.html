@@ -15,7 +15,7 @@
 </head>
 <body>
   <div class="box">
-    <h1>SellNow – Luxury</h1>
+    <h1>SellNow – Vintage</h1>
 
     <form id="sellForm">
       <label>Brand</label><input id="brand" required>
@@ -62,7 +62,7 @@ document.getElementById("sellForm").addEventListener("submit", async (e) => {
 
   const item = {
     id: Date.now(),
-    cat: "luxury",
+    cat: "vintage",
     brand: brand.value.trim(),
     model: model.value.trim(),
     ref: ref.value.trim(),

@@ -1,84 +1,108 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vintage Watches</title>
 
   <style>
-    body{margin:0;font-family:Arial,sans-serif;background:#0b0b0b;color:#fff;padding:20px}
-    h1{margin:0 0 14px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
-    .card{background:#141414;border:1px solid #2a2a2a;border-radius:14px;overflow:hidden}
-    .main{width:100%;height:260px;object-fit:cover;background:#000;display:block}
-    .thumbs{display:flex;gap:8px;flex-wrap:wrap;padding:10px;border-top:1px solid #2a2a2a}
-    .thumb{width:54px;height:54px;object-fit:cover;border-radius:8px;border:1px solid #333;cursor:pointer}
-    .panel{padding:12px}
-    .row{display:flex;gap:8px;flex-wrap:wrap;opacity:.92;font-size:14px}
-    .price{font-size:18px;margin:10px 0 0}
+    body {
+      background: #0b0b0b;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 { margin-bottom: 20px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #111;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .card img.main {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      background: #000;
+    }
+
+    .thumbs {
+      display: flex;
+      gap: 6px;
+      padding: 6px;
+    }
+
+    .thumb {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .panel {
+      padding: 12px;
+    }
   </style>
 </head>
 
 <body>
   <h1>Vintage Watches</h1>
 
+  <!-- KJO DUHET TË JETË KËTU -->
   <div id="list" class="grid"></div>
 
   <script>
-    const JSON_URL = "watches.json";     // duhet të jetë NË ROOT
+    const JSON_URL = "watches.json";
     const CATEGORY = "vintage";
-
     const list = document.getElementById("list");
 
-    function esc(s){ return (s ?? "").toString(); }
+    function render(items) {
+      const filtered = items.filter(p => p.cat === CATEGORY);
 
-    function render(items){
-      const filtered = (items || []).filter(p => (p.cat || "").toLowerCase() === CATEGORY);
-
-      if(!filtered.length){
+      if (!filtered.length) {
         list.innerHTML = "<p>No products found.</p>";
         return;
       }
 
-      list.innerHTML = filtered.map((p, idx) => {
+      list.innerHTML = filtered.map(p => {
         const photos = Array.isArray(p.photos) ? p.photos : [];
         const main = photos[0] || "";
 
         return `
-          <section class="card" data-i="${idx}">
+          <section class="card">
             <img class="main" src="${main}" alt="">
             <div class="thumbs">
-              ${photos.map(ph => <img class="thumb" src="${ph}" alt="">).join("")}
+              ${photos.map(ph => <img class="thumb" src="${ph}" onclick="this.closest('.card').querySelector('.main').src='${ph}'">).join("")}
             </div>
             <div class="panel">
-              <div class="row"><b>${esc(p.brand)}</b> ${esc(p.model)} • Ref: ${esc(p.ref)} • Year: ${esc(p.year)}</div>
-              <div class="row">Material: ${esc(p.material)} • Size: ${esc(p.caseSize)} • Condition: ${esc(p.condition)}</div>
-              <div class="price"><b>€${esc(p.price)}</b></div>
-              <div class="row" style="margin-top:8px">${esc(p.description)}</div>
+              <b>${p.brand}</b> ${p.model}<br>
+              Ref: ${p.ref}<br>
+              Year: ${p.year}<br>
+              €${p.price}
             </div>
           </section>
         `;
       }).join("");
-
-      // thumbs -> main image
-      document.querySelectorAll(".card").forEach(card=>{
-        const mainImg = card.querySelector(".main");
-        card.querySelectorAll(".thumb").forEach(t=>{
-          t.addEventListener("click", ()=>{ mainImg.src = t.src; });
-        });
-      });
     }
 
-    async function load(){
-      try{
-        const res = await fetch(JSON_URL + "?v=" + Date.now(), { cache: "no-store" });
-        if(!res.ok) throw new Error("HTTP " + res.status);
+    async function load() {
+      try {
+        const res = await fetch(JSON_URL + "?v=" + Date.now());
         const data = await res.json();
-        const items = Array.isArray(data) ? data : (data.items || []);
-        render(items);
-      }catch(err){
-        console.error("Failed to load JSON:", err);
+        render(Array.isArray(data) ? data : data.items);
+      } catch (e) {
         list.innerHTML = "<p>Error loading products.</p>";
+        console.error(e);
       }
     }
 

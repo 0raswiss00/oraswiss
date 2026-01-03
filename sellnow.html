@@ -93,45 +93,82 @@
   </div>
 
 <script>
-const $ = (id)=>document.getElementById(id);
+const JSON_URL = "watches.json";   // e njejta folder me shop-*.html
+const CATEGORY = "vintage";        // ndrysho: "luxury" ose "parts"
 
-function parsePhotos(t){
-  return (t||"")
-    .split(/[\n,]+/g)
-    .map(s=>s.trim())
-    .filter(Boolean);
+const list = document.getElementById("list");
+
+// kthen src korrekt per foto: base64, http, ose img/...
+function fixSrc(s){
+  s = (s || "").trim();
+  if(!s) return "";
+  if(s.startsWith("data:image/")) return s;          // ✅ Base64 nga telefoni
+  if(s.startsWith("http://") || s.startsWith("https://")) return s;
+  if(s.startsWith("/")) return s;
+  return s; // p.sh. "img/rolex1.jpg" (relativ ne te njejtin domain)
 }
 
-$("make").addEventListener("click", (e)=>{
-  e.preventDefault();
+function esc(s){
+  return (s ?? "").toString()
+    .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
 
-  const item = {
-    id: Date.now(),
-    cat: $("cat").value,
-    brand: $("brand").value.trim(),
-    model: $("model").value.trim(),
-    ref: $("ref").value.trim(),
-    year: $("year").value.trim(),
-    material: $("material").value.trim(),
-    caseSize: $("caseSize").value.trim(),
-    condition: $("condition").value,
-    price: $("price").value.trim(),
-    description: $("description").value.trim(),
-    photos: parsePhotos($("photos").value)
-  };
-
-  $("out").textContent = JSON.stringify(item, null, 2);
-});
-
-$("copy").addEventListener("click", async ()=>{
-  const txt = $("out").textContent;
-  try{
-    await navigator.clipboard.writeText(txt);
-    alert("Copied ✅");
-  }catch{
-    alert("S’u kopjua. Kopjoje me dorë nga kutia.");
+function render(items){
+  const filtered = (items || []).filter(p => (p.cat || "").toLowerCase() === CATEGORY);
+  if(!filtered.length){
+    list.innerHTML = <p>No products found.</p>;
+    return;
   }
-});
+
+  list.innerHTML = filtered.map(p=>{
+    const photos = Array.isArray(p.photos) ? p.photos.map(fixSrc).filter(Boolean) : [];
+    const main = photos[0] || "";
+    const thumbs = photos.map(ph => <img class="thumb" src="${ph}" alt="">).join("");
+
+    return `
+      <section class="card">
+        <div>
+          ${main ? <img class="main" src="${main}" alt=""> : `<div class="panel">No photo</div>`}
+          ${thumbs ? <div class="thumbs">${thumbs}</div> : ``}
+        </div>
+
+        <div class="panel">
+          <div><b>${esc(p.brand)}</b> ${esc(p.model)}</div>
+          <div>Ref: ${esc(p.ref)} | Year: ${esc(p.year)}</div>
+          <div>${esc(p.material)} | ${esc(p.caseSize)}mm | ${esc(p.condition)}</div>
+          <div style="margin-top:6px"><b>${esc(p.price)}</b></div>
+          <div style="margin-top:6px">${esc(p.description)}</div>
+        </div>
+      </section>
+    `;
+  }).join("");
+
+  // thumbs -> main image
+  document.querySelectorAll(".card").forEach(card=>{
+    const mainImg = card.querySelector("img.main");
+    card.querySelectorAll("img.thumb").forEach(t=>{
+      t.addEventListener("click", ()=>{ if(mainImg) mainImg.src = t.src; });
+    });
+  });
+}
+
+async function load(){
+  try{
+    const res = await fetch(JSON_URL + "?v=" + Date.now(), { cache: "no-store" });
+    if(!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+
+    const items = Array.isArray(data) ? data : (data.items || []);
+    render(items);
+  }catch(err){
+    console.error("Failed to load JSON:", err);
+    list.innerHTML = <p>Error loading products.</p>;
+  }
+}
+
+window.addEventListener("DOMContentLoaded", load);
 </script>
+
 </body>
 </html>

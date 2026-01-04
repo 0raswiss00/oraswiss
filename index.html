@@ -119,13 +119,25 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
     
-      window.location.href = "profile.html";
-    }
-  });
+         window.location.href = "profile.html";
+       }
+     });
     
-    const guest = document.getElementById("guest");
-    const loggedIn = document.getElementById("loggedIn");
-    const profile = document.getElementById("profile");
+   onAuthStateChanged(auth, (user) => {
+     if (!user) {
+       // nuk është logged in → ktheje te login
+       window.location.replace("login.html"); // ose index.html
+       return;
+     }
+
+     // është logged in
+     console.log("USER LOGGED IN:", user.email);
+
+     // këtu mund të shfaqësh email / emër etj
+     document.getElementById("userEmail").innerText = user.email;
+   });
+
+
 
     document.getElementById("btnRegister").addEventListener("click", async () => {
       try {

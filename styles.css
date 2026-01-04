@@ -828,39 +828,35 @@ ul {
 }
 
 /* ====== NAV SCROLL – REGISTER / LOGIN ====== */
-.nav-scroll {
-    display: flex;
-    overflow-x: auto;
-    white-space: nowrap;
-    gap: 25px;
-    padding: 10px 15px;
-    scroll-behavior: smooth;
-}
+.nav-scroll{
+  display:flex;
+  gap:18px;
+  align-items:center;
 
-.nav-scroll a {
-    color: white;
-    font-size: 18px;
-    text-decoration: none;
-}
-
-.nav-scroll::-webkit-scrollbar {
-    display: none;
-}
-
-.nav-scroll {
-  display: flex;
-  gap: 18px;
-  align-items: center;
-
-  overflow-x: scroll;          /* JO auto */
+  overflow-x: scroll;
   overflow-y: hidden;
-
   white-space: nowrap;
-  padding: 14px 16px;
 
-  -webkit-overflow-scrolling: touch; /* 🔥 KJO E RREGULLON SAFARI */
+  padding:14px 16px;
+
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
 }
 
+.nav-scroll a{
+  color:#fff;
+  text-decoration:none;
+  padding:6px 10px;
+  display:inline-block;
+}
+
+.nav-scroll a:hover{
+  color:gold;
+}
+
+.nav-scroll::-webkit-scrollbar{
+  height:0;
+}
 
 /* --- Modal for Image Zoom --- */
 

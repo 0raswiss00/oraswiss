@@ -114,6 +114,27 @@
   </div>
 </section>
 
+<div id="guest">
+  <h3>Regjistrohu</h3>
+  <input id="fullName" placeholder="Emri dhe Mbiemri">
+  <input id="phone" placeholder="Telefoni">
+  <input id="country" placeholder="Shteti">
+  <input id="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Fjalëkalimi">
+  <button onclick="registerUser()">Register</button>
+
+  <h3>Hyr</h3>
+  <input id="loginEmail" placeholder="Email">
+  <input id="loginPassword" type="password" placeholder="Fjalëkalimi">
+  <button onclick="loginUser()">Login</button>
+</div>
+
+<div id="loggedIn" style="display:none;">
+  <h3>Je i kyçur</h3>
+  <button onclick="logoutUser()">Logout</button>
+  <pre id="profile"></pre>
+</div>
+  
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";

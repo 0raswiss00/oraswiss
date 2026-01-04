@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ora Swiss</title>
+
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
+    .site-header{position:sticky;top:0;z-index:9999;background:#111}
+    .nav-scroll{display:flex;gap:18px;align-items:center;overflow-x:auto;white-space:nowrap;padding:14px 16px}
+    .nav-scroll a{color:#fff;text-decoration:none;padding:6px 10px}
+    .nav-scroll a:hover{color:gold}
+    .site-title{font-weight:700;line-height:1.05;margin-right:10px}
+    .wrap{max-width:1100px;margin:0 auto;padding:30px 16px}
+    .btnRow{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:18px 0 30px}
+    .btnRow a{padding:14px 22px;border:1px solid #888;border-radius:10px;text-decoration:none;color:#fff;background:#111}
+    #guest,#loggedIn{max-width:520px;margin:0 auto}
+    input{width:100%;padding:10px 12px;margin:8px 0;border-radius:8px;border:1px solid #444;background:#fff;color:#000}
+    button{padding:10px 14px;border-radius:10px;border:1px solid #777;background:#111;color:#fff;cursor:pointer}
+    button:hover{color:gold;border-color:gold}
+    pre{background:#111;border:1px solid #333;padding:12px;border-radius:10px;overflow:auto}
+  </style>
+</head>
+
+<body>
+
+  <header class="site-header">
+    <nav class="nav-scroll">
+      <span class="site-title">ORA<br>SWISS</span>
+      <a href="register.html">Register</a>
+      <a href="sellnow.html">Sell Now</a>
+      <a href="home.html">Home</a>
+      <a href="luxury.html">Luxury</a>
+      <a href="vintage.html">Vintage</a>
+      <a href="parts.html">Parts</a>
+      <a href="separate-parts.html">Separate Parts</a>
+      <a href="service.html">Service</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="jewelry.html">Jewelry</a>
+      <a href="policy.html">Policy</a>
+      <a href="sell.html">Sell</a>
+    </nav>
+  </header>
+
+  <div class="wrap">
+    <section style="text-align:center; margin:20px 0 10px;">
+      <h2>Shop Categories</h2>
+      <div class="btnRow">
+        <a href="shop-luxury.html">Shop Luxury</a>
+        <a href="shop-vintage.html">Shop Vintage</a>
+        <a href="shop-parts.html">Shop Parts</a>
+      </div>
+    </section>
+
+    <div id="guest">
+      <h3>Regjistrohu</h3>
+      <input id="fullName" placeholder="Emri dhe Mbiemri">
+      <input id="phone" placeholder="Telefoni">
+      <input id="country" placeholder="Shteti">
+      <input id="email" placeholder="Email">
+      <input id="password" type="password" placeholder="Fjalëkalimi">
+      <button id="btnRegister" type="button">Register</button>
+
+      <h3 style="margin-top:22px;">Hyr</h3>
+      <input id="loginEmail" placeholder="Email">
+      <input id="loginPassword" type="password" placeholder="Fjalëkalimi">
+      <button id="btnLogin" type="button">Login</button>
+    </div>
+
+    <div id="loggedIn" style="display:none;">
+      <h3>Je i kyçur</h3>
+      <button id="btnLogout" type="button">Logout</button>
+      <pre id="profile"></pre>
+    </div>
+  </div>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/service-worker.js");
+    }
+  </script>
+
+  <!-- ✅ VETËM SDK i RI (module). ASNJË compat. -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+   const firebaseConfig = {
+     apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+     authDomain: "oraswiss-27e57.firebaseapp.com",
+     projectId: "oraswiss-27e57",
+     storageBucket: "oraswiss-27e57.firebasestorage.app",
+     messagingSenderId: "596627676936",
+     appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+     measurementId: "G-VZPKMD67VQ"
+   };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+   onAuthStateChanged(auth, (user) => {
+    if (user) {
+      
+      window.location.href = "profile.html";
+    }
+  });
+    
+    const guest = document.getElementById("guest");
+    const loggedIn = document.getElementById("loggedIn");
+    const profile = document.getElementById("profile");
+
+    document.getElementById("btnRegister").addEventListener("click", async () => {
+      try {
+        const fullName = document.getElementById("fullName").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const country = document.getElementById("country").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const pass = document.getElementById("password").value;
+
+        if (!fullName || !phone || !country || !email || !pass) {
+          alert("Plotëso të gjitha fushat!");
+          return;
+        }
+
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+
+        await setDoc(doc(db, "users", cred.user.uid), {
+          fullName, phone, country, email, createdAt: Date.now()
+        });
+
+        alert("U regjistrua me sukses!");
+      } catch (e) {
+        alert(e.message);
+        console.error(e);
+      }
+    });
+
+    document.getElementById("btnLogin").addEventListener("click", async () => {
+      try {
+        const email = document.getElementById("loginEmail").value.trim();
+        const pass = document.getElementById("loginPassword").value;
+        await signInWithEmailAndPassword(auth, email, pass);
+      } catch (e) {
+        alert(e.message);
+        console.error(e);
+      }
+    });
+
+    document.getElementById("btnLogout").addEventListener("click", async () => {
+      await signOut(auth);
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        guest.style.display = "none";
+        loggedIn.style.display = "block";
+
+        try {
+          const snap = await getDoc(doc(db, "users", user.uid));
+          profile.textContent = snap.exists() ? JSON.stringify(snap.data(), null, 2) : "No profile";
+        } catch (e) {
+          profile.textContent = "No profile";
+        }
+      } else {
+        loggedIn.style.display = "none";
+        guest.style.display = "block";
+        profile.textContent = "";
+      }
+    });
+  </script>
+
+</body>
+</html>

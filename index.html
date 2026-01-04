@@ -127,6 +127,40 @@ if ("serviceWorker" in navigator) {
   });
 </script>
 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+import { 
+  getAuth, 
+  onAuthStateChanged, 
+  signOut 
+} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+  authDomain: "oraswiss-27e57.firebaseapp.com",
+  projectId: "oraswiss-27e57",
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const emailSpan = document.getElementById("userEmail");
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "index.html";
+  } else {
+    emailSpan.textContent = user.email;
+  }
+});
+
+document.getElementById("btnLogout").addEventListener("click", async () => {
+  await signOut(auth);
+  window.location.href = "index.html";
+});
+</script>
+
+  
 <script>alert("PO NGARKOHET");</script>
 </body>
 </html>

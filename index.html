@@ -1,64 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#ffffff">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ora Swiss</title>
-  <meta name="robots" content="noindex,nofollow">
+
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#ffffff">
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-KD2ZZ3MJYY');
-  </script>
-  <link rel="manifest" href="/manifest.webmanifest">
-  <meta name="theme-color" content="#ffffff">
-  
   <style>
-    .top-nav { background:black; color:white; display:flex; justify-content:center; align-items:center; padding:15px 20px; position:sticky; top:0; width:100%; z-index:9999; }
-    .menu { background:#111; padding:12px; display:flex; justify-content:center; gap:35px; overflow-x:auto; white-space:nowrap; padding-bottom:5px; }
-    .menu a { text-decoration:none; color:white; font-size:18px; padding:5px 10px; transition:0.3s; }
-    .menu a:hover { color:gold; }
-    .menu::-webkit-scrollbar { display:none; }
-
-    .footer { background:black; color:white; text-align:center; padding:18px; margin-top:40px; }
-
-    /* Categories */
-    .cats{display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin: 10px 0 18px;}
-    .cats button{padding:12px 18px; border:1px solid #000; background:#fff; cursor:pointer; border-radius:10px;}
-    .gallery-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; max-width:1100px; margin:0 auto;}
-    .gallery-grid img{width:100%; border-radius:14px; display:block;}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
+    .site-header{position:sticky;top:0;z-index:9999;background:#111}
+    .nav-scroll{display:flex;gap:18px;align-items:center;overflow-x:auto;white-space:nowrap;padding:14px 16px}
+    .nav-scroll a{color:#fff;text-decoration:none;padding:6px 10px}
+    .nav-scroll a:hover{color:gold}
+    .site-title{font-weight:700;line-height:1.05;margin-right:10px}
+    .wrap{max-width:1100px;margin:0 auto;padding:30px 16px}
+    .btnRow{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:18px 0 30px}
+    .btnRow a{padding:14px 22px;border:1px solid #888;border-radius:10px;text-decoration:none;color:#fff;background:#111}
+    #guest,#loggedIn{max-width:520px;margin:0 auto}
+    input{width:100%;padding:10px 12px;margin:8px 0;border-radius:8px;border:1px solid #444;background:#fff;color:#000}
+    button{padding:10px 14px;border-radius:10px;border:1px solid #777;background:#111;color:#fff;cursor:pointer}
+    button:hover{color:gold;border-color:gold}
+    pre{background:#111;border:1px solid #333;padding:12px;border-radius:10px;overflow:auto}
   </style>
 </head>
 
 <body>
 
-  <!-- ✅ MODAL duhet në BODY -->
-  <div id="partsModal" class="modal" style="display:none;">
-    <div class="modal-box">
-      <span class="close" onclick="closeParts()">×</span>
-      <h2>Watch Parts</h2>
-      <input type="search" placeholder="Search by brand or caliber…">
-      <div class="modal-content">
-        <h3>Zenith</h3>
-        <ul>
-          <li><a href="el-primero-cal400.html" target="_self">El Primero Cal. 400</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
   <header class="site-header">
     <nav class="nav-scroll">
       <span class="site-title">ORA<br>SWISS</span>
-      <a href="register.html" class="register-btn">Register</a>
+      <a href="register.html">Register</a>
       <a href="sellnow.html">Sell Now</a>
       <a href="home.html">Home</a>
       <a href="luxury.html">Luxury</a>
@@ -75,148 +50,138 @@
     </nav>
   </header>
 
+  <div class="wrap">
+    <section style="text-align:center; margin:20px 0 10px;">
+      <h2>Shop Categories</h2>
+      <div class="btnRow">
+        <a href="shop-luxury.html">Shop Luxury</a>
+        <a href="shop-vintage.html">Shop Vintage</a>
+        <a href="shop-parts.html">Shop Parts</a>
+      </div>
+    </section>
 
-<section style="text-align:center; margin:60px 0;">
-  <h2>Shop Categories</h2>
+    <div id="guest">
+      <h3>Regjistrohu</h3>
+      <input id="fullName" placeholder="Emri dhe Mbiemri">
+      <input id="phone" placeholder="Telefoni">
+      <input id="country" placeholder="Shteti">
+      <input id="email" placeholder="Email">
+      <input id="password" type="password" placeholder="Fjalëkalimi">
+      <button id="btnRegister" type="button">Register</button>
 
-  <div style="display:flex; gap:16px; justify-content:center; margin-top:20px;">
-    
-    <a href="shop-luxury.html"
-       style="padding:14px 22px;
-              border:1px solid #888;
-              border-radius:10px;
-              text-decoration:none;
-              color:#fff;
-              background:#111;">
-      Shop Luxury
-    </a>
+      <h3 style="margin-top:22px;">Hyr</h3>
+      <input id="loginEmail" placeholder="Email">
+      <input id="loginPassword" type="password" placeholder="Fjalëkalimi">
+      <button id="btnLogin" type="button">Login</button>
+    </div>
 
-    <a href="shop-vintage.html"
-       style="padding:14px 22px;
-              border:1px solid #888;
-              border-radius:10px;
-              text-decoration:none;
-              color:#fff;
-              background:#111;">
-      Shop Vintage
-    </a>
-
-    <a href="shop-parts.html"
-       style="padding:14px 22px;
-              border:1px solid #888;
-              border-radius:10px;
-              text-decoration:none;
-              color:#fff;
-              background:#111;">
-      Shop Parts
-    </a>
-
+    <div id="loggedIn" style="display:none;">
+      <h3>Je i kyçur</h3>
+      <button id="btnLogout" type="button">Logout</button>
+      <pre id="profile"></pre>
+    </div>
   </div>
-</section>
 
-<div id="guest">
-  <h3>Regjistrohu</h3>
-  <input id="fullName" placeholder="Emri dhe Mbiemri">
-  <input id="phone" placeholder="Telefoni">
-  <input id="country" placeholder="Shteti">
-  <input id="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Fjalëkalimi">
-  <button onclick="registerUser()">Register</button>
-
-  <h3>Hyr</h3>
-  <input id="loginEmail" placeholder="Email">
-  <input id="loginPassword" type="password" placeholder="Fjalëkalimi">
-  <button onclick="loginUser()">Login</button>
-</div>
-
-<div id="loggedIn" style="display:none;">
-  <h3>Je i kyçur</h3>
-  <button onclick="logoutUser()">Logout</button>
-  <pre id="profile"></pre>
-</div>
-  
-<!-- ================= FILTER SCRIPT ================= -->
-<script>
-  const buttons = document.querySelectorAll(".catBtn");
-  const images  = document.querySelectorAll("#gallery img");
-
-  function filterImages(category) {
-    images.forEach(img => {
-      img.style.display =
-        (category === "all" || img.dataset.cat === category)
-        ? "block"
-        : "none";
-    });
-  }
-
-  buttons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      filterImages(btn.dataset.filter);
-    });
-  });
-
-  // default
-  filterImages("all");
-</script>
-
-<script>
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/service-worker.js");
-  }
-</script>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyACmJj10Gz1gfRUjxz-w3_k94tNBfNyvVg",
-    authDomain: "oraswiss-27e57.firebaseapp.com",
-    projectId: "oraswiss-27e57",
-    storageBucket: "oraswiss-27e57.appspot.com",
-    messagingSenderId: "596627676936",
-    appId: "1:596627676936:web:ddaa6ac46077f5169616bd"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  window.registerUser = async () => {
-    const fullName = fullName.value.trim();
-    const phone = phone.value.trim();
-    const country = country.value.trim();
-    const email = email.value.trim();
-    const pass = password.value;
-
-    if (!fullName || !phone || !country || !email || !pass) {
-      alert("Plotëso të gjitha fushat!");
-      return;
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/service-worker.js");
     }
+  </script>
 
-    const cred = await createUserWithEmailAndPassword(auth, email, pass);
-    await setDoc(doc(db, "users", cred.user.uid), {
-      fullName, phone, country, email, createdAt: Date.now()
+  <!-- ✅ VETËM SDK i RI (module). ASNJË compat. -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyACmJj10Gz1gfRUjxz-w3_k94tNBfNyvVg",
+      authDomain: "oraswiss-27e57.firebaseapp.com",
+      projectId: "oraswiss-27e57",
+      storageBucket: "oraswiss-27e57.appspot.com",
+      messagingSenderId: "596627676936",
+      appId: "1:596627676936:web:ddaa6ac46077f5169616bd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const guest = document.getElementById("guest");
+    const loggedIn = document.getElementById("loggedIn");
+    const profile = document.getElementById("profile");
+
+    document.getElementById("btnRegister").addEventListener("click", async () => {
+      try {
+        const fullName = document.getElementById("fullName").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const country = document.getElementById("country").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const pass = document.getElementById("password").value;
+
+        if (!fullName || !phone || !country || !email || !pass) {
+          alert("Plotëso të gjitha fushat!");
+          return;
+        }
+
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+
+        await setDoc(doc(db, "users", cred.user.uid), {
+          fullName, phone, country, email, createdAt: Date.now()
+        });
+
+        alert("U regjistrua me sukses!");
+      } catch (e) {
+        alert(e.message);
+        console.error(e);
+      }
     });
 
-    alert("U regjistrua me sukses!");
-  };
+    document.getElementById("btnLogin").addEventListener("click", async () => {
+      try {
+        const email = document.getElementById("loginEmail").value.trim();
+        const pass = document.getElementById("loginPassword").value;
+        await signInWithEmailAndPassword(auth, email, pass);
+      } catch (e) {
+        alert(e.message);
+        console.error(e);
+      }
+    });
 
-  window.loginUser = async () => {
-    await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPassword.value);
-  };
+    document.getElementById("btnLogout").addEventListener("click", async () => {
+      await signOut(auth);
+    });
 
-  window.logoutUser = async () => {
-    await signOut(auth);
-  };
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        guest.style.display = "none";
+        loggedIn.style.display = "block";
 
-  onAuthStateChanged(auth, user => {
-    guest.style.display = user ? "none" : "block";
-    loggedIn.style.display = user ? "block" : "none";
-  });
-</script>
+        try {
+          const snap = await getDoc(doc(db, "users", user.uid));
+          profile.textContent = snap.exists() ? JSON.stringify(snap.data(), null, 2) : "No profile";
+        } catch (e) {
+          profile.textContent = "No profile";
+        }
+      } else {
+        loggedIn.style.display = "none";
+        guest.style.display = "block";
+        profile.textContent = "";
+      }
+    });
+  </script>
 
-  
 </body>
 </html>
+

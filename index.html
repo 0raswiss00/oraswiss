@@ -1,24 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="sq">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Profile - Ora Swiss</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ora Swiss</title>
 
   <style>
     body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
     .wrap{max-width:520px;margin:30px auto;padding:0 16px}
+    input{width:100%;padding:10px 12px;margin:8px 0;border-radius:8px;border:1px solid #444;background:#fff;color:#000}
     button{padding:10px 14px;border-radius:10px;border:1px solid #777;background:#111;color:#fff;cursor:pointer}
   </style>
 </head>
 
 <body>
-  
+
+<header class="site-header">
+    <nav class="nav-scroll">
+      <span class="site-title">ORA<br>SWISS</span>
+      <a href="register.html">Register</a>
+      <a href="sellnow.html">Sell Now</a>
+      <a href="home.html">Home</a>
+      <a href="luxury.html">Luxury</a>
+      <a href="vintage.html">Vintage</a>
+      <a href="parts.html">Parts</a>
+      <a href="separate-parts.html">Separate Parts</a>
+      <a href="service.html">Service</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="jewelry.html">Jewelry</a>
+      <a href="policy.html">Policy</a>
+      <a href="sell.html">Sell</a>
+    </nav>
+  </header>
+
   <div class="wrap">
-    <h2>Profili</h2>
-    <p>Email: <b id="userEmail">...</b></p>
-    <button id="btnLogout" type="button">Logout</button>
-    <p id="msg" style="margin-top:12px;"></p>
+    <h3>Regjistrohu</h3>
+    <input id="fullName" placeholder="Emri dhe Mbiemri" autocomplete="name">
+    <input id="phone" placeholder="Telefoni" autocomplete="tel">
+    <input id="country" placeholder="Shteti" autocomplete="country-name">
+    <input id="email" type="email" placeholder="Email" autocomplete="email" autocapitalize="none">
+    <input id="password" type="password" placeholder="Fjalëkalimi" autocomplete="new-password">
+    <button id="btnRegister" type="button">Register</button>
+
+    <hr style="margin:22px 0;border-color:#222">
+
+    <h3>Hyr</h3>
+    <input id="loginEmail" type="email" placeholder="Email" autocomplete="email" autocapitalize="none">
+    <input id="loginPassword" type="password" placeholder="Fjalëkalimi" autocomplete="current-password">
+    <button id="btnLogin" type="button">Login</button>
   </div>
 
   <!-- ✅ VETËM 1 SCRIPT MODULE -->
@@ -26,11 +57,19 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import {
       getAuth,
-      onAuthStateChanged,
-      signOut
+      setPersistence,
+      browserLocalPersistence,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-    // ✅ SAME CONFIG (identik me index.html)
+    // ✅ SAME CONFIG (mos e ndrysho)
     const firebaseConfig = {
       apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
       authDomain: "oraswiss-27e57.firebaseapp.com",
@@ -43,24 +82,62 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    const emailEl = document.getElementById("userEmail");
-    const msgEl = document.getElementById("msg");
+    // ✅ Mbaj user-in të kyçur në faqe të tjera
+    await setPersistence(auth, browserLocalPersistence);
 
+    // ✅ Nëse është i kyçur, shko në profil
     onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "index.html";
-        return;
-      }
-      emailEl.textContent = user.email || "";
-      msgEl.textContent = "Je i kyçur ✅";
+      if (user) window.location.href = "profile.html";
     });
 
-    document.getElementById("btnLogout").addEventListener("click", async () => {
-      await signOut(auth);
-      window.location.href = "index.html";
+    // REGISTER
+    document.getElementById("btnRegister").addEventListener("click", async () => {
+      const fullName = document.getElementById("fullName").value.trim();
+      const phone    = document.getElementById("phone").value.trim();
+      const country  = document.getElementById("country").value.trim();
+      const email    = document.getElementById("email").value.trim();
+      const pass     = document.getElementById("password").value;
+
+      if (!fullName || !phone || !country || !email || !pass) {
+        alert("Plotëso të gjitha fushat!");
+        return;
+      }
+
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+
+        await setDoc(doc(db, "users", cred.user.uid), {
+          fullName, phone, country, email,
+          createdAt: Date.now()
+        });
+
+        window.location.href = "profile.html";
+      } catch (e) {
+        alert(e.message);
+        console.error(e);
+      }
+    });
+
+    // LOGIN
+    document.getElementById("btnLogin").addEventListener("click", async () => {
+      const email = document.getElementById("loginEmail").value.trim();
+      const pass  = document.getElementById("loginPassword").value;
+
+      if (!email || !pass) {
+        alert("Vendos email dhe fjalëkalim.");
+        return;
+      }
+
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        window.location.href = "profile.html";
+      } catch (e) {
+        alert(e.message);
+        console.error(e);
+      }
     });
   </script>
 </body>
 </html>
-

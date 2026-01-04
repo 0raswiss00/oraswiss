@@ -255,36 +255,6 @@ document.getElementById("btnLogin").addEventListener("click", async () => {
   }
 });
 
-// ✅ REGISTER BUTTON (nqs e ke)
-document.getElementById("btnRegister").addEventListener("click", async () => {
-  const fullName = document.getElementById("fullName").value.trim();
-  const phone    = document.getElementById("phone").value.trim();
-  const country  = document.getElementById("country").value.trim();
-  const email    = document.getElementById("email").value.trim();
-  const pass     = document.getElementById("password").value;
-
-  if (!fullName || !phone || !country || !email || !pass) {
-    alert("Plotëso të gjitha fushat!");
-    return;
-  }
-
-  try {
-    await setPersistence(auth, browserLocalPersistence);
-
-    const cred = await createUserWithEmailAndPassword(auth, email, pass);
-
-    await setDoc(doc(db, "users", cred.user.uid), {
-      fullName,
-      phone,
-      country,
-      email
-    });
-
-    window.location.href = "profile.html";
-  } catch (e) {
-    alert(e.message);
-  }
-});
 
   
 </body>  

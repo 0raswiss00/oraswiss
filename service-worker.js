@@ -1,4 +1,4 @@
-const CACHE = "oraswiss-v2";
+const CACHE = "oraswiss-v3";
 
 const ASSETS = [
   "/",

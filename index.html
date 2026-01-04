@@ -95,9 +95,28 @@ if ("serviceWorker" in navigator) {
   </script>
 
   <!-- ✅ VETËM SDK i RI (module). ASNJË compat. -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/service-worker.js");
+    }
+  </script>
+
+  <!-- ✅ VETËM SDK i RI (module). ASNJË compat. -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
    const firebaseConfig = {
      apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
@@ -109,26 +128,80 @@ if ("serviceWorker" in navigator) {
      measurementId: "G-VZPKMD67VQ"
    };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-  const btn = document.getElementById("btnLogin");
-  if (btn) {
-    btn.addEventListener("click", async () => {
-      const email = document.getElementById("loginEmail").value.trim();
-      const pass  = document.getElementById("loginPassword").value;
+   onAuthStateChanged(auth, (user) => {
+    if (user) {
+      
+      window.location.href = "profile.html";
+    }
+  });
+    
+    const guest = document.getElementById("guest");
+    const loggedIn = document.getElementById("loggedIn");
+    const profile = document.getElementById("profile");
 
+    document.getElementById("btnRegister").addEventListener("click", async () => {
       try {
-        await signInWithEmailAndPassword(auth, email, pass);
-        window.location.href = "profile.html";
+        const fullName = document.getElementById("fullName").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const country = document.getElementById("country").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const pass = document.getElementById("password").value;
+
+        if (!fullName || !phone || !country || !email || !pass) {
+          alert("Plotëso të gjitha fushat!");
+          return;
+        }
+
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+
+        await setDoc(doc(db, "users", cred.user.uid), {
+          fullName, phone, country, email, createdAt: Date.now()
+        });
+
+        alert("U regjistrua me sukses!");
       } catch (e) {
         alert(e.message);
+        console.error(e);
       }
     });
-  } else {
-    console.error("btnLogin nuk ekziston");
-  }
-</script>
+
+    document.getElementById("btnLogin").addEventListener("click", async () => {
+      try {
+        const email = document.getElementById("loginEmail").value.trim();
+        const pass = document.getElementById("loginPassword").value;
+        await signInWithEmailAndPassword(auth, email, pass);
+      } catch (e) {
+        alert(e.message);
+        console.error(e);
+      }
+    });
+
+    document.getElementById("btnLogout").addEventListener("click", async () => {
+      await signOut(auth);
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        guest.style.display = "none";
+        loggedIn.style.display = "block";
+
+        try {
+          const snap = await getDoc(doc(db, "users", user.uid));
+          profile.textContent = snap.exists() ? JSON.stringify(snap.data(), null, 2) : "No profile";
+        } catch (e) {
+          profile.textContent = "No profile";
+        }
+      } else {
+        loggedIn.style.display = "none";
+        guest.style.display = "block";
+        profile.textContent = "";
+      }
+    });
+  </script>
 
 </body>
 </html>

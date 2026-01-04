@@ -260,6 +260,100 @@
     navigator.serviceWorker.register("/service-worker.js");
   }
 </script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    setDoc,
+    getDoc
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+  // 🔥 Firebase config (YTI)
+  const firebaseConfig = {
+    apiKey: "AIzaSyACmJj10Gz1gfRUjxz-w3_k94tNBfNyvVg",
+    authDomain: "oraswiss-27e57.firebaseapp.com",
+    projectId: "oraswiss-27e57",
+    storageBucket: "oraswiss-27e57.appspot.com",
+    messagingSenderId: "596627676936",
+    appId: "1:596627676936:web:ddaa6ac46077f5169616bd"
+  };
+
+  // Init
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // REGISTER
+  window.registerUser = async () => {
+    const fullName = document.getElementById("fullName").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const country = document.getElementById("country").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const pass = document.getElementById("password").value;
+
+    if (!fullName || !phone || !country || !email || !pass) {
+      alert("Plotëso të gjitha fushat!");
+      return;
+    }
+
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+
+    await setDoc(doc(db, "users", cred.user.uid), {
+      fullName,
+      phone,
+      country,
+      email,
+      createdAt: Date.now()
+    });
+
+    alert("U regjistrua me sukses!");
+  };
+
+  // LOGIN
+  window.loginUser = async () => {
+    const email = document.getElementById("loginEmail").value.trim();
+    const pass = document.getElementById("loginPassword").value;
+
+    await signInWithEmailAndPassword(auth, email, pass);
+  };
+
+  // LOGOUT
+  window.logoutUser = async () => {
+    await signOut(auth);
+  };
+
+  // AUTH STATE
+  onAuthStateChanged(auth, async (user) => {
+    const logged = document.getElementById("loggedIn");
+    const guest = document.getElementById("guest");
+    const profileBox = document.getElementById("profile");
+
+    if (user) {
+      guest.style.display = "none";
+      logged.style.display = "block";
+
+      const snap = await getDoc(doc(db, "users", user.uid));
+      profileBox.textContent = snap.exists()
+        ? JSON.stringify(snap.data(), null, 2)
+        : "No profile";
+    } else {
+      logged.style.display = "none";
+      guest.style.display = "block";
+      profileBox.textContent = "";
+    }
+  });
+</script>
+
+
   
 </body>
 </html>

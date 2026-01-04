@@ -20,7 +20,7 @@
 
   <main style="max-width:900px;margin:40px auto;padding:0 16px;">
     <h2>Profili</h2>
-
+    <p>Email: <span id="userEmail"></span></p>
     <div id="loading">Duke u ngarkuar...</div>
 
     <div id="profileBox" style="display:none;">
@@ -184,6 +184,36 @@
       window.location.href = "index.html";
     });
   </script>
-</body>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSy...",
+    authDomain: "oraswiss-27e57.firebaseapp.com",
+    projectId: "oraswiss-27e57",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  const emailSpan = document.getElementById("userEmail");
+  const loading = document.getElementById("loading");
+  const profileBox = document.getElementById("profileBox");
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      emailSpan.textContent = user.email;
+      loading.style.display = "none";
+      profileBox.style.display = "block";
+    } else {
+      loading.innerHTML = 'Nuk je i kyçur. <a href="index.html">Shko te Login</a>';
+      profileBox.style.display = "none";
+    }
+  });
+</script>
+  
+</body>  
 </html>
 

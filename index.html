@@ -104,17 +104,13 @@ if ("serviceWorker" in navigator) {
   <!-- ✅ VETËM SDK i RI (module). ASNJË compat. -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import {
-    getAuth,
-    signInWithEmailAndPassword,
-    setPersistence,
-    browserLocalPersistence
-  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
     authDomain: "oraswiss-27e57.firebaseapp.com",
     projectId: "oraswiss-27e57",
+    storageBucket: "oraswiss-27e57.firebasestorage.app",
     messagingSenderId: "596627676936",
     appId: "1:596627676936:web:0c96cf820fef4e979616bd"
   };
@@ -122,29 +118,19 @@ if ("serviceWorker" in navigator) {
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  window.addEventListener("DOMContentLoaded", () => {
-    const btn = document.getElementById("btnLogin");
-    const emailEl = document.getElementById("loginEmail");
-    const passEl = document.getElementById("loginPassword");
+  const emailSpan = document.getElementById("userEmail");
 
-    if (!btn || !emailEl || !passEl) {
-      console.error("Mungon element: btnLogin/loginEmail/loginPassword");
-      return;
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      emailSpan.textContent = user.email || "";
+    } else {
+      window.location.href = "index.html";
     }
+  });
 
-    btn.addEventListener("click", async () => {
-      const email = emailEl.value.trim();
-      const pass = passEl.value;
-
-      try {
-        await setPersistence(auth, browserLocalPersistence); // ruan login
-        await signInWithEmailAndPassword(auth, email, pass);
-        window.location.href = "profile.html";
-      } catch (e) {
-        alert(e.message);
-        console.error(e);
-      }
-    });
+  document.getElementById("btnLogout")?.addEventListener("click", async () => {
+    await signOut(auth);
+    window.location.href = "index.html";
   });
 </script>
 

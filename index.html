@@ -167,21 +167,9 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    onAuthStateChanged,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-  import {
-    getFirestore,
-    doc,
-    setDoc,
-    getDoc
-  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-  // 🔥 Firebase config (YTI)
   const firebaseConfig = {
     apiKey: "AIzaSyACmJj10Gz1gfRUjxz-w3_k94tNBfNyvVg",
     authDomain: "oraswiss-27e57.firebaseapp.com",
@@ -191,18 +179,16 @@
     appId: "1:596627676936:web:ddaa6ac46077f5169616bd"
   };
 
-  // Init
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // REGISTER
   window.registerUser = async () => {
-    const fullName = document.getElementById("fullName").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const country = document.getElementById("country").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const pass = document.getElementById("password").value;
+    const fullName = fullName.value.trim();
+    const phone = phone.value.trim();
+    const country = country.value.trim();
+    const email = email.value.trim();
+    const pass = password.value;
 
     if (!fullName || !phone || !country || !email || !pass) {
       alert("Plotëso të gjitha fushat!");
@@ -210,53 +196,26 @@
     }
 
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
-
     await setDoc(doc(db, "users", cred.user.uid), {
-      fullName,
-      phone,
-      country,
-      email,
-      createdAt: Date.now()
+      fullName, phone, country, email, createdAt: Date.now()
     });
 
     alert("U regjistrua me sukses!");
   };
 
-  // LOGIN
   window.loginUser = async () => {
-    const email = document.getElementById("loginEmail").value.trim();
-    const pass = document.getElementById("loginPassword").value;
-
-    await signInWithEmailAndPassword(auth, email, pass);
+    await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPassword.value);
   };
 
-  // LOGOUT
   window.logoutUser = async () => {
     await signOut(auth);
   };
 
-  // AUTH STATE
-  onAuthStateChanged(auth, async (user) => {
-    const logged = document.getElementById("loggedIn");
-    const guest = document.getElementById("guest");
-    const profileBox = document.getElementById("profile");
-
-    if (user) {
-      guest.style.display = "none";
-      logged.style.display = "block";
-
-      const snap = await getDoc(doc(db, "users", user.uid));
-      profileBox.textContent = snap.exists()
-        ? JSON.stringify(snap.data(), null, 2)
-        : "No profile";
-    } else {
-      logged.style.display = "none";
-      guest.style.display = "block";
-      profileBox.textContent = "";
-    }
+  onAuthStateChanged(auth, user => {
+    guest.style.display = user ? "none" : "block";
+    loggedIn.style.display = user ? "block" : "none";
   });
 </script>
-
 
   
 </body>

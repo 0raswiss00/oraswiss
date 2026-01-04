@@ -95,103 +95,115 @@ if ("serviceWorker" in navigator) {
   </script>
 
   <!-- ✅ VETËM SDK i RI (module). ASNJË compat. -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import {
-      getAuth,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      onAuthStateChanged,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      setDoc,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    setDoc,
+    getDoc
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-   const firebaseConfig = {
-     apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
-     authDomain: "oraswiss-27e57.firebaseapp.com",
-     projectId: "oraswiss-27e57",
-     storageBucket: "oraswiss-27e57.appspot.com"
-     messagingSenderId: "596627676936",
-     appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-     measurementId: "G-VZPKMD67VQ"
-   };
+  const firebaseConfig = {
+    apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+    authDomain: "oraswiss-27e57.firebaseapp.com",
+    projectId: "oraswiss-27e57",
+    storageBucket: "oraswiss-27e57.appspot.com",
+    messagingSenderId: "596627676936",
+    appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+    measurementId: "G-VZPKMD67VQ"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-      
-      window.location.href = "profile.html";
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const guest = document.getElementById("guest");
+  const loggedIn = document.getElementById("loggedIn");
+  const profile = document.getElementById("profile");
+
+  // ✅ REGISTER
+  document.getElementById("btnRegister").addEventListener("click", async () => {
+    try {
+      const fullName = document.getElementById("fullName").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const country = document.getElementById("country").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const pass = document.getElementById("password").value;
+
+      if (!fullName || !phone || !country || !email || !pass) {
+        alert("Plotëso të gjitha fushat!");
+        return;
+      }
+
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+
+      await setDoc(doc(db, "users", cred.user.uid), {
+        fullName,
+        phone,
+        country,
+        email,
+        createdAt: Date.now()
+      });
+
+      alert("U regjistrua me sukses!");
+      window.location.href = "profile.html"; // ✅ shko te profili pas register
+    } catch (e) {
+      alert(e.message);
+      console.error(e);
     }
   });
-    
-    const guest = document.getElementById("guest");
-    const loggedIn = document.getElementById("loggedIn");
-    const profile = document.getElementById("profile");
 
-    document.getElementById("btnRegister").addEventListener("click", async () => {
+  // ✅ LOGIN
+  document.getElementById("btnLogin").addEventListener("click", async () => {
+    try {
+      const email = document.getElementById("loginEmail").value.trim();
+      const pass = document.getElementById("loginPassword").value;
+
+      await signInWithEmailAndPassword(auth, email, pass);
+
+      window.location.href = "profile.html"; // ✅ KJO MUNGOI TEK TI
+    } catch (e) {
+      alert(e.message);
+      console.error(e);
+    }
+  });
+
+  // ✅ LOGOUT
+  document.getElementById("btnLogout").addEventListener("click", async () => {
+    await signOut(auth);
+    window.location.href = "index.html";
+  });
+
+  // ✅ UI (opsionale) në index
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      guest.style.display = "none";
+      loggedIn.style.display = "block";
+
       try {
-        const fullName = document.getElementById("fullName").value.trim();
-        const phone = document.getElementById("phone").value.trim();
-        const country = document.getElementById("country").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const pass = document.getElementById("password").value;
-
-        if (!fullName || !phone || !country || !email || !pass) {
-          alert("Plotëso të gjitha fushat!");
-          return;
-        }
-
-        const cred = await createUserWithEmailAndPassword(auth, email, pass);
-
-        await setDoc(doc(db, "users", cred.user.uid), {
-          fullName, phone, country, email, createdAt: Date.now()
-        });
-
-        alert("U regjistrua me sukses!");
+        const snap = await getDoc(doc(db, "users", user.uid));
+        profile.textContent = snap.exists()
+          ? JSON.stringify(snap.data(), null, 2)
+          : "No profile";
       } catch (e) {
-        alert(e.message);
-        console.error(e);
+        profile.textContent = "No profile";
       }
-    });
+    } else {
+      loggedIn.style.display = "none";
+      guest.style.display = "block";
+      profile.textContent = "";
+    }
+  });
+</script>
 
-    document.getElementById("btnLogin").addEventListener("click", async () => {
-      try {
-        const email = document.getElementById("loginEmail").value.trim();
-        const pass = document.getElementById("loginPassword").value;
-        await signInWithEmailAndPassword(auth, email, pass);
-      } catch (e) {
-        alert(e.message);
-        console.error(e);
-      }
-    });
-
-    document.getElementById("btnLogout").addEventListener("click", async () => {
-      await signOut(auth);
-    });
-
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        guest.style.display = "none";
-        loggedIn.style.display = "block";
-
-        try {
-          const snap = await getDoc(doc(db, "users", user.uid));
-          profile.textContent = snap.exists() ? JSON.stringify(snap.data(), null, 2) : "No profile";
-        } catch (e) {
-          profile.textContent = "No profile";
-        }
-      } else {
-        loggedIn.style.display = "none";
-        guest.style.display = "block";
-        profile.textContent = "";
-      }
-    });
-  </script>
-
+ 
 </body>
 </html>

@@ -33,7 +33,7 @@ if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js");
 }
 </script>
-  
+
 <body>
 
   <header class="site-header">
@@ -96,94 +96,45 @@ if ("serviceWorker" in navigator) {
 
   <!-- ✅ VETËM SDK i RI (module). ASNJË compat. -->
   <script type="module">
-   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-   import {
-     getAuth,
-     setPersistence,
-     browserLocalPersistence,
-     signInWithEmailAndPassword,
-     createUserWithEmailAndPassword,
-     onAuthStateChanged,
-     signOut
-   } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-   import {
-     getFirestore,
-     doc,
-     setDoc,
-     getDoc
-   } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-   // firebaseConfig = {...} (e ke ti)
+   const firebaseConfig = {
+     apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+     authDomain: "oraswiss-27e57.firebaseapp.com",
+     projectId: "oraswiss-27e57",
+     storageBucket: "oraswiss-27e57.firebasestorage.app",
+     messagingSenderId: "596627676936",
+     appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+     measurementId: "G-VZPKMD67VQ"
+   };
 
-   const app = initializeApp(firebaseConfig);
-   const auth = getAuth(app);
-   const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-   // ✅ LOGIN BUTTON
-   document.getElementById("btnLogin").addEventListener("click", async () => {
-     const email = document.getElementById("loginEmail").value.trim();
-     const pass  = document.getElementById("loginPassword").value;
-
-     try {
-       // ✅ ruan login-in (mos u çkyç kur ndërron faqe)
-       await setPersistence(auth, browserLocalPersistence);
-
-       await signInWithEmailAndPassword(auth, email, pass);
-
-       // ✅ shko te profili
-       window.location.href = "profile.html";
-     } catch (e) {
-       alert(e.message);
-     }
-   });
-
-   // ✅ REGISTER BUTTON (nqs e ke)
-   document.getElementById("btnRegister").addEventListener("click", async () => {
-     const fullName = document.getElementById("fullName").value.trim();
-     const phone    = document.getElementById("phone").value.trim();
-     const country  = document.getElementById("country").value.trim();
-     const email    = document.getElementById("email").value.trim();
-     const pass     = document.getElementById("password").value;
-
-     if (!fullName || !phone || !country || !email || !pass) {
-       alert("Plotëso të gjitha fushat!");
-       return;
-     }
-
-     try {
-       await setPersistence(auth, browserLocalPersistence);
-
-       const cred = await createUserWithEmailAndPassword(auth, email, pass);
-
-       await setDoc(doc(db, "users", cred.user.uid), {
-         fullName,
-         phone,
-         country,
-         email
-       });
-
-       window.location.href = "profile.html";
-     } catch (e) {
-       alert(e.message);
-     }
-   });
-
-    
    onAuthStateChanged(auth, (user) => {
-     if (!user) {
-       // nuk është logged in → ktheje te login
-       window.location.replace("login.html"); // ose index.html
-       return;
-     }
-
-     // është logged in
-     console.log("USER LOGGED IN:", user.email);
-
-     // këtu mund të shfaqësh email / emër etj
-     document.getElementById("userEmail").innerText = user.email;
-   });
-
-
+    if (user) {
+      
+      window.location.href = "profile.html";
+    }
+  });
+    
+    const guest = document.getElementById("guest");
+    const loggedIn = document.getElementById("loggedIn");
+    const profile = document.getElementById("profile");
 
     document.getElementById("btnRegister").addEventListener("click", async () => {
       try {
@@ -247,4 +198,3 @@ if ("serviceWorker" in navigator) {
 
 </body>
 </html>
-

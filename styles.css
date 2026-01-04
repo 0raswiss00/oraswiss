@@ -847,6 +847,21 @@ ul {
     display: none;
 }
 
+.nav-scroll {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+
+  overflow-x: scroll;          /* JO auto */
+  overflow-y: hidden;
+
+  white-space: nowrap;
+  padding: 14px 16px;
+
+  -webkit-overflow-scrolling: touch; /* 🔥 KJO E RREGULLON SAFARI */
+}
+
+
 /* --- Modal for Image Zoom --- */
 
 .modal {

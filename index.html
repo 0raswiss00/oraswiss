@@ -120,13 +120,6 @@ if ("serviceWorker" in navigator) {
 
   const emailSpan = document.getElementById("userEmail");
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      emailSpan.textContent = user.email || "";
-    } else {
-      window.location.href = "index.html";
-    }
-  });
 
   document.getElementById("btnLogout")?.addEventListener("click", async () => {
     await signOut(auth);

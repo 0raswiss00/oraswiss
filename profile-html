@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile - Ora Swiss</title>
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="robots" content="noindex,nofollow">
+</head>
+
+<body>
+  <header class="site-header">
+    <nav class="nav-scroll">
+      <span class="site-title">ORA<br>SWISS</span>
+      <a href="home.html">Home</a>
+      <a href="profile.html" class="register-btn">Profile</a>
+      <a href="index.html">Login</a>
+    </nav>
+  </header>
+
+  <main style="max-width:900px;margin:40px auto;padding:0 16px;">
+    <h2>Profili</h2>
+
+    <div id="loading">Duke u ngarkuar...</div>
+
+    <div id="profileBox" style="display:none;">
+      <div style="display:grid;gap:12px;max-width:520px;">
+        <label>
+          Emri dhe Mbiemri
+          <input id="fullName" />
+        </label>
+
+        <label>
+          Telefoni
+          <input id="phone" />
+        </label>
+
+        <label>
+          Shteti
+          <input id="country" />
+        </label>
+
+        <label>
+          Email (s’ndryshohet)
+          <input id="email" disabled />
+        </label>
+
+        <div style="display:flex;gap:10px;margin-top:10px;">
+          <button id="btnSave" type="button">Ruaj</button>
+          <button id="btnLogout" type="button">Dil</button>
+        </div>
+
+        <small id="msg" style="display:block;margin-top:6px;"></small>
+      </div>
+    </div>
+
+    <div id="notLogged" style="display:none;">
+      <p>Nuk je i kyçur. Shko te <a href="index.html">Login</a>.</p>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    // 🔥 Vendos configun tënd (i njëjti si te index.html)
+    const firebaseConfig = {
+      apiKey: "AIzaSyACmJj10Gz1gfRUjxz-w3_k94tNBfNyvVg",
+      authDomain: "oraswiss-27e57.firebaseapp.com",
+      projectId: "oraswiss-27e57",
+      storageBucket: "oraswiss-27e57.appspot.com",
+      messagingSenderId: "596627676936",
+      appId: "1:596627676936:web:ddaa6ac46077f5169616bd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const loading = document.getElementById("loading");
+    const profileBox = document.getElementById("profileBox");
+    const notLogged = document.getElementById("notLogged");
+    const msg = document.getElementById("msg");
+
+    const inpFullName = document.getElementById("fullName");
+    const inpPhone = document.getElementById("phone");
+    const inpCountry = document.getElementById("country");
+    const inpEmail = document.getElementById("email");
+
+    const btnSave = document.getElementById("btnSave");
+    const btnLogout = document.getElementById("btnLogout");
+
+    let currentUser = null;
+
+    function showMessage(text, ok=true){
+      msg.textContent = text;
+      msg.style.color = ok ? "green" : "crimson";
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user;
+
+      loading.style.display = "none";
+
+      if (!user) {
+        profileBox.style.display = "none";
+        notLogged.style.display = "block";
+        return;
+      }
+
+      notLogged.style.display = "none";
+      profileBox.style.display = "block";
+
+      // mbush email nga Auth
+      inpEmail.value = user.email || "";
+
+      // merr profilin nga Firestore
+      try {
+        const ref = doc(db, "users", user.uid);
+        const snap = await getDoc(ref);
+
+        if (snap.exists()) {
+          const data = snap.data();
+          inpFullName.value = data.fullName || "";
+          inpPhone.value = data.phone || "";
+          inpCountry.value = data.country || "";
+        } else {
+          // nëse s’ka dokument, krijoje minimal
+          await setDoc(ref, {
+            fullName: "",
+            phone: "",
+            country: "",
+            email: user.email || "",
+            createdAt: Date.now()
+          });
+        }
+      } catch (e) {
+        showMessage(e.message, false);
+        console.error(e);
+      }
+    });
+
+    btnSave.addEventListener("click", async () => {
+      if (!currentUser) return;
+
+      const fullName = inpFullName.value.trim();
+      const phone = inpPhone.value.trim();
+      const country = inpCountry.value.trim();
+
+      if (!fullName || !phone || !country) {
+        showMessage("Plotëso emrin, telefonin dhe shtetin.", false);
+        return;
+      }
+
+      try {
+        const ref = doc(db, "users", currentUser.uid);
+        await setDoc(ref, {
+          fullName,
+          phone,
+          country,
+          email: currentUser.email || "",
+          updatedAt: Date.now()
+        }, { merge: true });
+
+        showMessage("U ruajt me sukses!");
+      } catch (e) {
+        showMessage(e.message, false);
+        console.error(e);
+      }
+    });
+
+    btnLogout.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
+

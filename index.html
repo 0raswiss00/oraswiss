@@ -124,9 +124,6 @@ if ("serviceWorker" in navigator) {
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-
-   onAuthStateChanged(auth, (user) => {
-    if (user) {
       
       window.location.href = "profile.html";
     }

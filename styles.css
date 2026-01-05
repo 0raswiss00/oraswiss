@@ -2837,23 +2837,31 @@ body{background:#000!important;color:#E6E6E6!important}
 }
 </style>     
 
+/* HERO – desktop */
 .hero{
+  min-height: 70vh;              /* lartësia që mungon */
   display: flex;
-  min-height: 100vh;
+  align-items: center;
+  justify-content: space-between;
+  padding: 60px 80px;
+  background: 
+    linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)),
+    url("images/oraswiss-bg.jpg"); /* FOTO SFOND */
+  background-size: cover;
+  background-position: center;
 }
 
 .hero-left{
   flex: 1;
+  color: #fff;
 }
 
 .hero-right{
   flex: 1;
-  background: url("images/oraswiss-bg.jpg") center/cover no-repeat;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .hero-right img{
-  max-width: 280px;
+  max-width: 360px;
 }

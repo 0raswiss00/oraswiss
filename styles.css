@@ -886,6 +886,23 @@ ul {
   cursor: pointer;
 }
 
+/* FIX REGISTER FORM */
+.register-form{
+  max-width: 420px;
+  margin: 40px auto;
+}
+
+.register-form input{
+  width: 100%;
+}
+
+.register-form button{
+  width: 220px;
+  margin: 10px auto 0;
+  display: block;
+}
+
+
 /* Thumbnails poshte produktit Omega */
 .product-gallery img.thumb {
   margin-right: 6px;   /* hapësira midis fotove */
@@ -2873,18 +2890,3 @@ body{background:#000!important;color:#E6E6E6!important}
 }
 </style>     
 
-/* FIX REGISTER FORM */
-.register-form{
-  max-width: 420px;
-  margin: 40px auto;
-}
-
-.register-form input{
-  width: 100%;
-}
-
-.register-form button{
-  width: 220px;
-  margin: 10px auto 0;
-  display: block;
-}

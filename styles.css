@@ -2797,60 +2797,58 @@ body{background:#000!important;color:#E6E6E6!important}
 }
 </style>     
 
-/* === REGISTER / LOGIN DESIGN === */
-
-body{
-  background: #0b2a6f;   /* blu */
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* karta e formës */
-.wrap{
-  background: #ffffff;
-  color: #111;
+/* ===== Register/Login page (card në mes) ===== */
+.auth-card{
   max-width: 420px;
-  margin: 60px auto;
-  padding: 25px;
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  margin: 80px auto;
+  padding: 22px;
+  background: #0f0f0f;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
 }
 
-/* titujt */
-.wrap h3{
-  text-align: center;
-  margin-bottom: 15px;
+.auth-card h3{
+  margin: 0 0 14px;
+  color: #fff;
 }
 
-/* inputet */
-.wrap input{
+.auth-card input{
   width: 100%;
-  padding: 12px;
+  display: block;
+  padding: 12px 14px;
   margin: 10px 0;
   border-radius: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #333;
+  background: #141414;
+  color: #fff;
+  font-size: 15px;
+}
+
+.auth-card input:focus{
   outline: none;
+  border-color: #2f6fed;
+  box-shadow: 0 0 0 3px rgba(47,111,237,.25);
 }
 
-/* focus input */
-.wrap input:focus{
-  border-color: #1e5eff;
-  box-shadow: 0 0 0 3px rgba(30,94,255,0.2);
-}
-
-/* butonat */
-#btnRegister,
-#btnLogin{
-  background: #1e5eff;
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 10px;
+.auth-card button{
   width: 100%;
+  padding: 12px 14px;
+  margin-top: 12px;
+  border: 0;
+  border-radius: 10px;
+  background: #d4a017;   /* ari */
+  color: #111;
+  font-weight: 700;
   cursor: pointer;
-  margin-top: 10px;
 }
 
-#btnRegister:hover,
-#btnLogin:hover{
-  filter: brightness(0.9);
+.auth-card button:hover{
+  filter: brightness(1.05);
+}
+
+.auth-card hr{
+  border: 0;
+  border-top: 1px solid #2a2a2a;
+  margin: 18px 0;
 }

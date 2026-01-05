@@ -2796,3 +2796,61 @@ body{background:#000!important;color:#E6E6E6!important}
   cursor:pointer;
 }
 </style>     
+
+/* === REGISTER / LOGIN DESIGN === */
+
+body{
+  background: #0b2a6f;   /* blu */
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* karta e formës */
+.wrap{
+  background: #ffffff;
+  color: #111;
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* titujt */
+.wrap h3{
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* inputet */
+.wrap input{
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  outline: none;
+}
+
+/* focus input */
+.wrap input:focus{
+  border-color: #1e5eff;
+  box-shadow: 0 0 0 3px rgba(30,94,255,0.2);
+}
+
+/* butonat */
+#btnRegister,
+#btnLogin{
+  background: #1e5eff;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  width: 100%;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#btnRegister:hover,
+#btnLogin:hover{
+  filter: brightness(0.9);
+}

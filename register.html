@@ -1,138 +1,113 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Create account – Ora Swiss</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(180deg, #0b1c2d, #0f2e5c);
-      font-family: Arial, sans-serif;
-      color: white;
-    }
+  <div class="wrap">
+    <h3>Regjistrohu</h3>
+    <input id="fullName" placeholder="Emri dhe Mbiemri" autocomplete="name">
+    <input id="phone" placeholder="Telefoni" autocomplete="tel">
+    <input id="country" placeholder="Shteti" autocomplete="country-name">
+    <input id="email" type="email" placeholder="Email" autocomplete="email" autocapitalize="none">
+    <input id="password" type="password" placeholder="Fjalëkalimi" autocomplete="new-password">
+    <button id="btnRegister" type="button">Register</button>
 
-    .card {
-      width: 320px;
-      background: rgba(10, 25, 50, 0.9);
-      padding: 30px;
-      border-radius: 18px;
-      box-shadow: 0 0 30px rgba(0,0,0,0.5);
-      text-align: center;
-    }
+    <hr style="margin:22px 0;border-color:#222">
 
-    h1 {
-      margin: 0;
-      font-size: 26px;
-    }
-
-    p {
-      margin-top: 6px;
-      color: #8bb6ff;
-    }
-
-    label {
-      display: block;
-      margin-top: 20px;
-      margin-bottom: 6px;
-      text-align: left;
-      font-size: 14px;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: none;
-      outline: none;
-      font-size: 15px;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 25px;
-      padding: 14px;
-      background: #2f6bff;
-      border: none;
-      border-radius: 14px;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #2556d8;
-    }
-
-    .msg {
-      margin-top: 15px;
-      font-size: 14px;
-      color: #7cff9a;
-    }
-
-    a {
-      display: block;
-      margin-top: 20px;
-      color: #8bb6ff;
-      text-decoration: none;
-      font-size: 14px;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="card">
-    <h1>Create account</h1>
-    <p>Join Ora Swiss</p>
-
-   <label>Email</label>
-   <input type="email" id="email" placeholder="you@email.com">
-
-   <label>Password</label>
-   <input type="password" id="password" placeholder="••••••••">
-   <button onclick="register()">Register</button>
-
-    <div class="msg" id="msg"></div>
-
-    <a href="index.html">← Back to Home</a>
+    <h3>Hyr</h3>
+    <input id="loginEmail" type="email" placeholder="Email" autocomplete="email" autocapitalize="none">
+    <input id="loginPassword" type="password" placeholder="Fjalëkalimi" autocomplete="current-password">
+    <button id="btnLogin" type="button">Login</button>
   </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- ✅ VETËM 1 SCRIPT MODULE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import {
+      getAuth,
+      setPersistence,
+      browserLocalPersistence,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-<script>
-  const supabaseUrl = "https://YOUR_URL.supabase.co";
-  const supabaseKey = "YOUR_ANON_KEY";
-  const supabase = supabaseJs.createClient(supabaseUrl, supabaseKey);
+    // ✅ SAME CONFIG (mos e ndrysho)
+    const firebaseConfig = {
+      apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+      authDomain: "oraswiss-27e57.firebaseapp.com",
+      projectId: "oraswiss-27e57",
+      storageBucket: "oraswiss-27e57.firebasestorage.app",
+      messagingSenderId: "596627676936",
+      appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+      measurementId: "G-VZPKMD67VQ"
+    };
 
-  async function register() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const msg = document.getElementById("msg");
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    if (!email || !password) {
-      msg.innerText = "❌ Plotëso email dhe password";
-      return;
-    }
+    // ✅ Mbaj user-in të kyçur në faqe të tjera
+    await setPersistence(auth, browserLocalPersistence);
 
-    const { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
+    // ✅ Nëse është i kyçur, shko në profil
+    onAuthStateChanged(auth, (user) => {
+      if (user) window.location.href = "profile.html";
     });
 
-    function done() {
-      document.getElementById("msg").innerText =
-        "✅ Registration demo successful";
-    }
-    
-   
+    // REGISTER
+    document.getElementById("btnRegister").addEventListener("click", async () => {
+      const fullName = document.getElementById("fullName").value.trim();
+      const phone    = document.getElementById("phone").value.trim();
+      const country  = document.getElementById("country").value.trim();
+      const email    = document.getElementById("email").value.trim();
+      const pass     = document.getElementById("password").value;
+
+      if (!fullName || !phone || !country || !email || !pass) {
+        alert("Plotëso të gjitha fushat!");
+        return;
+      }
+
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+
+        await setDoc(doc(db, "users", cred.user.uid), {
+          fullName, phone, country, email,
+          createdAt: Date.now()
+        });
+
+        window.location.href = "profile.html";
+      } catch (e) {
+        alert(e.message);
+        console.error(e);
+      }
+    });
+
+    // LOGIN
+    document.getElementById("btnLogin").addEventListener("click", async () => {
+      const email = document.getElementById("loginEmail").value.trim();
+      const pass  = document.getElementById("loginPassword").value;
+
+      if (!email || !pass) {
+        alert("Vendos email dhe fjalëkalim.");
+        return;
+      }
+
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        window.location.href = "profile.html";
+      } catch (e) {
+        alert(e.message);
+        console.error(e);
+      }
+    });
+  </script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/service-worker.js");
+}
 </script>
-
-
-
-</body>
+</body>  
 </html>

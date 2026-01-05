@@ -913,35 +913,6 @@ ul {
   margin-right: 0;     /* pa hapësirë pas fotos së fundit */
 }
 
-/* HERO – desktop */
-.hero{
-  min-height: 70vh;              /* lartësia që mungon */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 60px 80px;
-  background: 
-    linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)),
-    url("images/oraswiss-bg.jpg"); /* FOTO SFOND */
-  background-size: cover;
-  background-position: center;
-}
-
-.hero-left{
-  flex: 1;
-  color: #fff;
-}
-
-.hero-right{
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.hero-right img{
-  max-width: 360px;
-}
-
 /* ===== 2-column layout ===== */
 .parts-layout{
   display:grid;

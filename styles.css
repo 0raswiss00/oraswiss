@@ -2893,3 +2893,26 @@ body{background:#000!important;color:#E6E6E6!important}
 .hero-right img{
   max-width: 360px;
 }
+.hero{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 30px 20px;
+}
+
+.hero-right img{
+  max-width: 220px;
+  width: 100%;
+  height: auto;
+  display:block;
+}
+
+/* Mobile */
+@media (max-width: 768px){
+  .hero{
+    justify-content:center;
+    padding: 20px 14px;
+  }
+  .hero-left{ display:none; }
+  .hero-right img{ max-width: 180px; }
+}

@@ -59,6 +59,16 @@
 
   <!-- ... pjesa tjetër e faqes ... -->
 
+<div class="hero">
+  <div class="hero-left">
+    <!-- këtu mund të mbetet tekst ose bosh -->
+  </div>
+
+  <div class="hero-right">
+    <img src="images/oraswiss-logo.png" alt="Oraswiss">
+  </div>
+</div>
+
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/service-worker.js");
@@ -68,23 +78,7 @@
 </body>
 </html>
 
-  <div class="wrap">
-    <h3>Regjistrohu</h3>
-    <input id="fullName" placeholder="Emri dhe Mbiemri" autocomplete="name">
-    <input id="phone" placeholder="Telefoni" autocomplete="tel">
-    <input id="country" placeholder="Shteti" autocomplete="country-name">
-    <input id="email" type="email" placeholder="Email" autocomplete="email" autocapitalize="none">
-    <input id="password" type="password" placeholder="Fjalëkalimi" autocomplete="new-password">
-    <button id="btnRegister" type="button">Register</button>
-
-    <hr style="margin:22px 0;border-color:#222">
-
-    <h3>Hyr</h3>
-    <input id="loginEmail" type="email" placeholder="Email" autocomplete="email" autocapitalize="none">
-    <input id="loginPassword" type="password" placeholder="Fjalëkalimi" autocomplete="current-password">
-    <button id="btnLogin" type="button">Login</button>
-  </div>
-
+ 
   <!-- ✅ VETËM 1 SCRIPT MODULE -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";

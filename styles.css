@@ -2798,60 +2798,38 @@ body{background:#000!important;color:#E6E6E6!important}
 </style>     
 
 /* ===== Register/Login page (card në mes) ===== */
-.auth-card{
-  max-width: 420px;
-  margin: 80px auto;
-  padding: 22px;
-  background: #0f0f0f;
-  border: 1px solid #2a2a2a;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.35);
-}
-
-.auth-card h3{
-  margin: 0 0 14px;
-  color: #fff;
-}
-
-.auth-card input{
+#btnRegister,
+#btnLogin {
   width: 100%;
-  display: block;
-  padding: 12px 14px;
-  margin: 10px 0;
-  border-radius: 10px;
-  border: 1px solid #333;
-  background: #141414;
-  color: #fff;
+  padding: 12px;
+  background-color: #d4a017;
+  border: none;
+  border-radius: 6px;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
   font-size: 15px;
 }
 
-.auth-card input:focus{
-  outline: none;
-  border-color: #2f6fed;
-  box-shadow: 0 0 0 3px rgba(47,111,237,.25);
+#btnRegister:hover,
+#btnLogin:hover {
+  background-color: #f2b91e;
 }
-
-.auth-card button{
+Ora
+#btnRegister,
+#btnLogin {
   width: 100%;
-  padding: 12px 14px;
-  margin-top: 12px;
-  border: 0;
-  border-radius: 10px;
-  background: #d4a017;   /* ari */
-  color: #111;
-  font-weight: 700;
+  padding: 12px;
+  background-color: #d4a017;
+  border: none;
+  border-radius: 6px;
+  color: black;
+  font-weight: bold;
   cursor: pointer;
+  font-size: 15px;
 }
 
-.auth-card button:hover{
-  filter: brightness(1.05);
+#btnRegister:hover,
+#btnLogin:hover {
+  background-color: #f2b91e;
 }
-
-.auth-card hr{
-  border: 0;
-  border-top: 1px solid #2a2a2a;
-  margin: 18px 0;
-}
-
-.auth-card input{ width:100% !important; }
-.auth-card{ max-width:420px !important; }

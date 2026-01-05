@@ -2349,6 +2349,87 @@ body {
   box-shadow: none;
 }
 
+/* =========================
+   REGISTER / LOGIN PAGE ONLY
+   ========================= */
+
+.auth-page{
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #0b0b0b;
+}
+
+.auth-card{
+  width: 100%;
+  max-width: 420px;
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.45);
+}
+
+.auth-card h2{
+  margin: 0 0 12px 0;
+  color: #fff;
+  font-size: 22px;
+}
+
+.register-form input{
+  width: 100%;
+  display: block;
+  padding: 12px 12px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #2a2a2a;
+  background: #0f0f0f;
+  color: #fff;
+  font-size: 14px;
+}
+
+.register-form input::placeholder{
+  color: #9a9a9a;
+}
+
+.register-form input:focus{
+  outline: none;
+  border-color: #d4a017;
+  box-shadow: 0 0 0 3px rgba(212,160,23,.15);
+}
+
+.auth-btn{
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background: #d4a017;
+  border: none;
+  border-radius: 10px;
+  color: #111;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.auth-btn:hover{
+  background: #f2b91e;
+}
+
+.auth-sep{
+  height: 1px;
+  background: #222;
+  margin: 18px 0;
+}
+
+.wrap {
+  max-width: 380px;   /* kontrollon sa të gjera janë */
+  margin: 40px auto;  /* qendër horizontale */
+  padding: 20px;
+}
+
+      
 /* ================= PRODUCT RESPONSIVE ================= */
 
 @media (max-width: 900px) {
@@ -2797,82 +2878,3 @@ body{background:#000!important;color:#E6E6E6!important}
 }
 </style>     
 
-/* =========================
-   REGISTER / LOGIN PAGE ONLY
-   ========================= */
-
-.auth-page{
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background: #0b0b0b;
-}
-
-.auth-card{
-  width: 100%;
-  max-width: 420px;
-  background: #111;
-  border: 1px solid #222;
-  border-radius: 14px;
-  padding: 22px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.45);
-}
-
-.auth-card h2{
-  margin: 0 0 12px 0;
-  color: #fff;
-  font-size: 22px;
-}
-
-.register-form input{
-  width: 100%;
-  display: block;
-  padding: 12px 12px;
-  margin: 10px 0;
-  border-radius: 10px;
-  border: 1px solid #2a2a2a;
-  background: #0f0f0f;
-  color: #fff;
-  font-size: 14px;
-}
-
-.register-form input::placeholder{
-  color: #9a9a9a;
-}
-
-.register-form input:focus{
-  outline: none;
-  border-color: #d4a017;
-  box-shadow: 0 0 0 3px rgba(212,160,23,.15);
-}
-
-.auth-btn{
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  background: #d4a017;
-  border: none;
-  border-radius: 10px;
-  color: #111;
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 15px;
-}
-
-.auth-btn:hover{
-  background: #f2b91e;
-}
-
-.auth-sep{
-  height: 1px;
-  background: #222;
-  margin: 18px 0;
-}
-
-.wrap {
-  max-width: 380px;   /* kontrollon sa të gjera janë */
-  margin: 40px auto;  /* qendër horizontale */
-  padding: 20px;
-}

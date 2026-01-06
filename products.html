@@ -1,41 +1,88 @@
 <!doctype html>
 <html lang="sq">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Products</title>
-
-<style>
-body{font-family:Arial;margin:20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-.card{border:1px solid #ccc;border-radius:10px;padding:10px}
-.card img{width:100%;height:200px;object-fit:cover;border-radius:8px}
-.price{font-weight:bold}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Products</title>
+  <style>
+    body{font-family:Arial;margin:20px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+    .card{border:1px solid #ccc;border-radius:10px;padding:10px}
+    .card img{width:100%;height:200px;object-fit:cover;border-radius:8px;background:#f3f3f3}
+    .price{font-weight:bold}
+    .muted{color:#666;font-size:14px}
+  </style>
 </head>
-
 <body>
-<h1>Produktet</h1>
-<div class="grid" id="products"></div>
+  <h1>Produktet</h1>
+  <p class="muted">Lista vjen nga <b>products.csv</b></p>
 
-<script>
-fetch("products.csv")
-.then(r=>r.text())
-.then(t=>{
-  const rows=t.trim().split("\n").slice(1);
-  const grid=document.getElementById("products");
+  <div id="msg" class="muted"></div>
+  <div class="grid" id="products"></div>
 
-  rows.forEach(r=>{
-    const [name,price,image,desc]=r.split(",");
-    grid.innerHTML+=`
-      <div class="card">
-        <img src="${image}">
-        <h3>${name}</h3>
-        <p>${desc}</p>
-        <p class="price">${price} €</p>
-      </div>`;
-  });
-});
-</script>
+  <script>
+    const grid = document.getElementById("products");
+    const msg = document.getElementById("msg");
+
+    function parseCSVLine(line){
+      const out = [];
+      let cur = "", inQuotes = false;
+      for (let i=0;i<line.length;i++){
+        const ch = line[i];
+        if (ch === '"') inQuotes = !inQuotes;
+        else if (ch === "," && !inQuotes) { out.push(cur); cur=""; }
+        else cur += ch;
+      }
+      out.push(cur);
+      return out.map(x => x.trim().replace(/^"|"$/g,""));
+    }
+
+    fetch("products.csv", {cache:"no-store"})
+      .then(r => {
+        if (!r.ok) throw new Error("Nuk u gjet products.csv (status " + r.status + ")");
+        return r.text();
+      })
+      .then(text => {
+        const lines = text.replace(/\r/g,"").split("\n").filter(l => l.trim().length);
+        if (lines.length < 2) { msg.textContent = "S’ka produkte ende."; return; }
+
+        const headers = parseCSVLine(lines[0]).map(h => h.toLowerCase());
+        const idx = (name) => headers.indexOf(name);
+
+        const iName = idx("name");
+        const iPrice = idx("price");
+        const iImage = idx("image");
+        const iDesc = idx("description");
+
+        let count = 0;
+
+        for (let i=1;i<lines.length;i++){
+          const cols = parseCSVLine(lines[i]);
+          const name = cols[iName] || "";
+          const price = cols[iPrice] || "";
+          const image = cols[iImage] || "";
+          const desc  = cols[iDesc]  || "";
+
+          if (!name) continue;
+
+          grid.insertAdjacentHTML("beforeend", `
+            <div class="card">
+              <img src="${image}" alt="${name}" onerror="this.style.display='none'">
+              <h3>${name}</h3>
+              <p>${desc}</p>
+              <p class="price">${price} €</p>
+            </div>
+          `);
+          count++;
+        }
+
+        msg.textContent = count ? ("U ngarkuan " + count + " produkte.") : "S’ka produkte ende.";
+      })
+      .catch(err => {
+        console.error(err);
+        msg.textContent = "Gabim: " + err.message;
+      });
+  </script>
 </body>
 </html>
+

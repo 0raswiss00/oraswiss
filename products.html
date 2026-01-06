@@ -1,200 +1,41 @@
 <!doctype html>
 <html lang="sq">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Products</title>
-  <style>
-    body{font-family:system-ui;margin:16px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-    .card{border:1px solid #ddd;border-radius:12px;overflow:hidden;cursor:pointer}
-    .card img{width:100%;height:200px;object-fit:cover;display:block}
-    .p{padding:10px}
-    .price{font-weight:800;margin-top:6px}
-    .muted{opacity:.7;font-size:13px}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Products</title>
 
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;padding:16px}
-    .modal.open{display:flex}
-    .box{background:#fff;width:min(980px,100%);border-radius:12px;overflow:hidden}
-    .head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid #eee}
-    .close{font-size:22px;cursor:pointer;user-select:none}
-    .body{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;padding:14px}
-    @media(max-width:820px){.body{grid-template-columns:1fr}}
-
-    #mainImg{width:100%;border-radius:10px}
-    .thumbs{display:flex;gap:8px;margin-top:10px;overflow:auto;padding-bottom:6px}
-    .thumbs img{width:72px;height:72px;object-fit:cover;border-radius:8px;cursor:pointer;opacity:.75}
-    .thumbs img:hover{opacity:1}
-
-    .spec{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-    .spec > div{border:1px solid #eee;border-radius:10px;padding:10px}
-    .label{font-size:12px;opacity:.7}
-    .val{font-weight:700;margin-top:2px}
-    video{width:100%;border-radius:10px;margin-top:10px}
-  </style>
+<style>
+body{font-family:Arial;margin:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.card{border:1px solid #ccc;border-radius:10px;padding:10px}
+.card img{width:100%;height:200px;object-fit:cover;border-radius:8px}
+.price{font-weight:bold}
+</style>
 </head>
+
 <body>
+<h1>Produktet</h1>
+<div class="grid" id="products"></div>
 
-<h2>Products</h2>
-<div id="grid" class="grid">Loading...</div>
+<script>
+fetch("products.csv")
+.then(r=>r.text())
+.then(t=>{
+  const rows=t.trim().split("\n").slice(1);
+  const grid=document.getElementById("products");
 
-<div id="modal" class="modal">
-  <div class="box" onclick="event.stopPropagation()">
-    <div class="head">
-      <div id="title" style="font-weight:800"></div>
-      <div class="close" onclick="closeModal()">×</div>
-    </div>
-    <div class="body">
-      <div>
-        <img id="mainImg" src="" alt="">
-        <div id="thumbs" class="thumbs"></div>
-        <div id="videoWrap"></div>
-      </div>
-      <div>
-        <div id="price" class="price"></div>
-        <div id="meta" class="muted"></div>
-        <div id="spec" class="spec"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
-  // ✅ NGJIT firebaseConfig këtu (i njëjti si te admin.html)
-  const firebaseConfig = {
-    // apiKey: "...",
-    // authDomain: "...",
-    // projectId: "...",
-    // storageBucket: "...",
-    // messagingSenderId: "...",
-    // appId: "..."
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  const grid = document.getElementById("grid");
-  const modal = document.getElementById("modal");
-
-  const mainImg = document.getElementById("mainImg");
-  const thumbs = document.getElementById("thumbs");
-
-  let galleryImages = [];
-  let currentIndex = 0;
-  let startX = 0;
-
-  // Swipe (telefon)
-  mainImg.addEventListener("touchstart", e => { startX = e.touches[0].clientX; });
-  mainImg.addEventListener("touchend", e => {
-    const endX = e.changedTouches[0].clientX;
-    const diff = startX - endX;
-    if (Math.abs(diff) > 50) changeImage(diff > 0 ? 1 : -1);
+  rows.forEach(r=>{
+    const [name,price,image,desc]=r.split(",");
+    grid.innerHTML+=`
+      <div class="card">
+        <img src="${image}">
+        <h3>${name}</h3>
+        <p>${desc}</p>
+        <p class="price">${price} €</p>
+      </div>`;
   });
-
-  function setMain(src){ mainImg.src = src; }
-
-  function loadGallery(images){
-    galleryImages = images || [];
-    currentIndex = 0;
-    thumbs.innerHTML = "";
-    if (galleryImages.length > 0) setMain(galleryImages[0]);
-    galleryImages.forEach((img,i)=>{
-      const t = document.createElement("img");
-      t.src = img;
-      t.onclick = ()=>{ currentIndex=i; setMain(img); };
-      thumbs.appendChild(t);
-    });
-  }
-
-  function changeImage(dir){
-    if (galleryImages.length < 2) return;
-    currentIndex += dir;
-    if (currentIndex < 0) currentIndex = galleryImages.length-1;
-    if (currentIndex >= galleryImages.length) currentIndex = 0;
-    setMain(galleryImages[currentIndex]);
-  }
-
-  function addSpec(label, value){
-    if (value === null || value === undefined) return;
-    if (typeof value === "string" && value.trim() === "") return;
-    const box = document.createElement("div");
-    box.innerHTML = <div class="label">${label}</div><div class="val">${value}</div>;
-    document.getElementById("spec").appendChild(box);
-  }
-
-  function openModal(p){
-    document.getElementById("title").textContent = ${p.brand||""} ${p.model||""}.trim();
-    document.getElementById("price").textContent = € ${p.priceEur ?? ""}.trim();
-    document.getElementById("meta").textContent = [
-      p.year ? Year: ${p.year} : "",
-      p.reference ? Ref: ${p.reference} : "",
-      p.negotiable === true ? "Negotiable" : (p.negotiable === false ? "Not negotiable" : "")
-    ].filter(Boolean).join(" • ");
-
-    document.getElementById("spec").innerHTML = "";
-    addSpec("Brand", p.brand);
-    addSpec("Model", p.model);
-    addSpec("Year", p.year);
-    addSpec("Reference", p.reference);
-    addSpec("Material", p.material);
-    addSpec("Case (mm)", p.caseMm);
-    addSpec("Bracelet type", p.braceletType);
-    addSpec("Bracelet (mm)", p.braceletMm);
-    addSpec("Movement", p.movement);
-    addSpec("Caliber", p.caliber);
-    addSpec("Dial color", p.dialColor);
-    addSpec("Work", p.work);
-    addSpec("Service date", p.serviceDate);
-    addSpec("Box & Papers", p.boxPapers);
-    addSpec("Functions", p.functions);
-
-    loadGallery(p.images || []);
-
-    const videoWrap = document.getElementById("videoWrap");
-    if (p.videoUrl && p.videoUrl.trim() !== "") {
-      videoWrap.innerHTML = <video controls playsinline src="${p.videoUrl}"></video>;
-    } else {
-      videoWrap.innerHTML = "";
-    }
-
-    modal.classList.add("open");
-  }
-
-  window.closeModal = function(){ modal.classList.remove("open"); };
-  modal.addEventListener("click", closeModal);
-
-  async function loadProducts(){
-    try{
-      const snap = await getDocs(collection(db,"products"));
-      grid.innerHTML = "";
-      snap.forEach(doc=>{
-        const p = doc.data();
-        const img = (p.images && p.images[0]) ? p.images[0] : "";
-        const card = document.createElement("div");
-        card.className = "card";
-        card.onclick = ()=> openModal(p);
-        card.innerHTML = `
-          <img src="${img}" alt="">
-          <div class="p">
-            <div style="font-weight:800">${(p.brand||"")} ${(p.model||"")}</div>
-            <div class="muted">${p.year ? Year ${p.year} : ""} ${p.reference ? • ${p.reference} : ""}</div>
-            <div class="price">€ ${p.priceEur ?? ""}</div>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-      if (grid.innerHTML.trim() === "") grid.textContent = "No products yet.";
-    } catch (e){
-      console.error(e);
-      grid.textContent = "Error: kontrollo firebaseConfig dhe Firestore rules.";
-    }
-  }
-
-  loadProducts();
+});
 </script>
-
 </body>
 </html>

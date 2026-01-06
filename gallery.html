@@ -125,53 +125,42 @@
     }
   </script>
 
-let startX = 0;
+<script>
+document.addEventListener("DOMContentLoaded", () => {
 
-const mainImg = document.getElementById("mainImage");
+  let startX = 0;
+  const mainImg = document.getElementById("mainImg");
 
-mainImg.addEventListener("touchstart", e => {
-  startX = e.touches[0].clientX;
-});
+  if (!mainImg) return;
 
-mainImg.addEventListener("touchend", e => {
-  const endX = e.changedTouches[0].clientX;
-  const diff = startX - endX;
-
-  if (Math.abs(diff) > 50) {
-    changeImage(diff > 0 ? 1 : -1);
-  }
-});
-
-let currentIndex = 0;
-let galleryImages = [];
-
-function loadGallery(images) {
-  galleryImages = images;
-  currentIndex = 0;
-  mainImg.src = images[0];
-  renderThumbs(images);
-}
-
-function changeImage(direction) {
-  currentIndex += direction;
-  if (currentIndex < 0) currentIndex = galleryImages.length - 1;
-  if (currentIndex >= galleryImages.length) currentIndex = 0;
-  mainImg.src = galleryImages[currentIndex];
-}
-
-function renderThumbs(images) {
-  const thumbs = document.getElementById("thumbs");
-  thumbs.innerHTML = "";
-  images.forEach((img, i) => {
-    const t = document.createElement("img");
-    t.src = img;
-    t.onclick = () => {
-      currentIndex = i;
-      mainImg.src = img;
-    };
-    thumbs.appendChild(t);
+  mainImg.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
   });
-}
+
+  mainImg.addEventListener("touchend", e => {
+    const endX = e.changedTouches[0].clientX;
+    const diff = startX - endX;
+    if (Math.abs(diff) > 50) {
+      changeImage(diff > 0 ? 1 : -1);
+    }
+  });
+
+  let currentIndex = 0;
+  const galleryImages = [
+    "img/rolex1.jpg",
+    "img/rolex2.jpg",
+    "img/rolex3.jpg"
+  ];
+
+  function changeImage(direction) {
+    currentIndex += direction;
+    if (currentIndex < 0) currentIndex = galleryImages.length - 1;
+    if (currentIndex >= galleryImages.length) currentIndex = 0;
+    mainImg.src = galleryImages[currentIndex];
+  }
+
+});
+</script>
   
 </body>
 </html>

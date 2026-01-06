@@ -580,3 +580,235 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+products  prov
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Products</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Arial; margin: 16px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+    .card { border: 1px solid #ddd; border-radius: 10px; overflow: hidden; cursor: pointer; }
+    .card img { width: 100%; height: 200px; object-fit: cover; display: block; }
+    .card .p { padding: 10px; }
+    .muted { opacity: .7; font-size: 13px; }
+    .price { font-weight: 700; margin-top: 6px; }
+
+    /* Modal */
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,.75); display: none; align-items: center; justify-content: center; padding: 18px; }
+    .modal.open { display: flex; }
+    .modalBox { background: #fff; width: min(980px, 100%); border-radius: 12px; overflow: hidden; }
+    .modalHead { padding: 12px 14px; display:flex; justify-content: space-between; align-items:center; border-bottom:1px solid #eee; }
+    .closeBtn { font-size: 22px; cursor:pointer; user-select:none; }
+    .modalBody { display: grid; grid-template-columns: 1.2fr .8fr; gap: 14px; padding: 14px; }
+    @media (max-width: 820px) { .modalBody { grid-template-columns: 1fr; } }
+
+    /* Gallery */
+    .mainImg { width: 100%; border-radius: 10px; cursor: zoom-in; }
+    .thumbs { display:flex; gap:8px; margin-top:10px; overflow:auto; padding-bottom:6px; }
+    .thumbs img { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; cursor:pointer; opacity:.7; }
+    .thumbs img:hover { opacity: 1; }
+
+    .spec { display:grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .spec div { border:1px solid #eee; border-radius:10px; padding:10px; }
+    .label { font-size:12px; opacity:.7; }
+    .val { font-weight:600; margin-top:2px; }
+    .videoWrap { margin-top: 10px; }
+    video { width: 100%; border-radius: 10px; }
+
+  </style>
+</head>
+<body>
+
+<h2>Products</h2>
+<div id="grid" class="grid"></div>
+
+<!-- Modal -->
+<div id="modal" class="modal" onclick="closeModal(event)">
+  <div class="modalBox" onclick="event.stopPropagation()">
+    <div class="modalHead">
+      <div id="modalTitle" style="font-weight:700;"></div>
+      <div class="closeBtn" onclick="closeModal()">×</div>
+    </div>
+    <div class="modalBody">
+      <div>
+        <img id="mainImg" class="mainImg" src="" alt="Main" onclick="openFullscreen()">
+        <div id="thumbs" class="thumbs"></div>
+
+        <div id="videoWrap" class="videoWrap" style="display:none;"></div>
+      </div>
+
+      <div>
+        <div class="price" id="modalPrice"></div>
+        <div class="muted" id="modalMeta"></div>
+        <div style="height:12px;"></div>
+
+        <div class="spec" id="specGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+  const firebaseConfig = {
+    // TODO: paste SAME config here (same as admin.html)
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const grid = document.getElementById("grid");
+  const modal = document.getElementById("modal");
+
+  // Gallery state
+  let galleryImages = [];
+  let currentIndex = 0;
+  let startX = 0;
+
+  const mainImg = document.getElementById("mainImg");
+  const thumbs = document.getElementById("thumbs");
+
+  // Swipe on main image
+  mainImg.addEventListener("touchstart", e => { startX = e.touches[0].clientX; });
+  mainImg.addEventListener("touchend", e => {
+    const endX = e.changedTouches[0].clientX;
+    const diff = startX - endX;
+    if (Math.abs(diff) > 50) changeImage(diff > 0 ? 1 : -1);
+  });
+
+  function setMain(src) {
+    mainImg.src = src;
+  }
+
+  function renderThumbs(images) {
+    thumbs.innerHTML = "";
+    if (!images || images.length < 2) return;
+    images.forEach((img, i) => {
+      const t = document.createElement("img");
+      t.src = img;
+      t.onclick = () => { currentIndex = i; setMain(img); };
+      thumbs.appendChild(t);
+    });
+  }
+
+  function loadGallery(images) {
+    galleryImages = images || [];
+    currentIndex = 0;
+    if (galleryImages.length > 0) setMain(galleryImages[0]);
+    renderThumbs(galleryImages);
+  }
+
+  function changeImage(direction) {
+    if (!galleryImages || galleryImages.length < 2) return;
+    currentIndex += direction;
+    if (currentIndex < 0) currentIndex = galleryImages.length - 1;
+    if (currentIndex >= galleryImages.length) currentIndex = 0;
+    setMain(galleryImages[currentIndex]);
+  }
+
+  window.openFullscreen = function () {
+    if (mainImg.requestFullscreen) mainImg.requestFullscreen();
+  };
+
+  window.closeModal = function (e) {
+    modal.classList.remove("open");
+  };
+
+  function addSpec(container, label, value) {
+    if (value === null || value === undefined) return;
+    if (typeof value === "string" && value.trim() === "") return;
+
+    const box = document.createElement("div");
+    const l = document.createElement("div");
+    l.className = "label";
+    l.textContent = label;
+
+    const v = document.createElement("div");
+    v.className = "val";
+    v.textContent = value;
+
+    box.appendChild(l);
+    box.appendChild(v);
+    container.appendChild(box);
+  }
+
+  function openProduct(p) {
+    document.getElementById("modalTitle").textContent = ${p.brand || ""} ${p.model || ""}.trim();
+    document.getElementById("modalPrice").textContent = € ${p.priceEur ?? ""}.trim();
+    document.getElementById("modalMeta").textContent = [
+      p.year ? Year: ${p.year} : "",
+      p.reference ? Ref: ${p.reference} : "",
+      p.negotiable === true ? "Negotiable" : (p.negotiable === false ? "Not negotiable" : "")
+    ].filter(Boolean).join(" • ");
+
+    // Gallery
+    loadGallery(p.images || []);
+
+    // Video (only if exists)
+    const videoWrap = document.getElementById("videoWrap");
+    if (p.videoUrl && p.videoUrl.trim() !== "") {
+      videoWrap.style.display = "block";
+      videoWrap.innerHTML = <video controls playsinline src="${p.videoUrl}"></video>;
+    } else {
+      videoWrap.style.display = "none";
+      videoWrap.innerHTML = "";
+    }
+
+    // Specs (auto-hide empty)
+    const specGrid = document.getElementById("specGrid");
+    specGrid.innerHTML = "";
+    addSpec(specGrid, "Material", p.material);
+    addSpec(specGrid, "Case (mm)", p.caseMm);
+    addSpec(specGrid, "Bracelet type", p.braceletType);
+    addSpec(specGrid, "Bracelet (mm)", p.braceletMm);
+    addSpec(specGrid, "Wrist long", p.wristLong);
+    addSpec(specGrid, "Wrist short", p.wristShort);
+    addSpec(specGrid, "Movement", p.movement);
+    addSpec(specGrid, "Caliber", p.caliber);
+    addSpec(specGrid, "Dial color", p.dialColor);
+    addSpec(specGrid, "Work", p.work);
+    addSpec(specGrid, "Service date", p.serviceDate);
+    addSpec(specGrid, "Box & Papers", p.boxPapers);
+    addSpec(specGrid, "Functions", p.functions);
+
+    modal.classList.add("open");
+  }
+
+  async function loadProducts() {
+    grid.innerHTML = "Loading...";
+    const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+    const snap = await getDocs(q);
+
+    grid.innerHTML = "";
+    snap.forEach(doc => {
+      const p = doc.data();
+      const img = (p.images && p.images[0]) ? p.images[0] : "";
+
+      const card = document.createElement("div");
+      card.className = "card";
+      card.onclick = () => openProduct(p);
+
+      card.innerHTML = `
+        <img src="${img}" alt="">
+        <div class="p">
+          <div style="font-weight:700;">${(p.brand || "")} ${(p.model || "")}</div>
+          <div class="muted">${p.year ? Year ${p.year} : ""} ${p.reference ? • ${p.reference} : ""}</div>
+          <div class="price">€ ${p.priceEur ?? ""}</div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    if (grid.innerHTML.trim() === "") grid.innerHTML = "No products yet.";
+  }
+
+  loadProducts();
+</script>
+
+</body>
+</html>

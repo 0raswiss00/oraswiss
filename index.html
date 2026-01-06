@@ -6,8 +6,15 @@
   <title>Ora Swiss</title>
 
   <link rel="manifest" href="/manifest.webmanifest">
-  <meta name="theme-color" content="#ffffff">
+  
+  <meta name="theme-color" content="#000000">
+  
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Ora Swiss">
 
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
   <link rel="stylesheet" href="styles.css">
 
   <style>
@@ -27,12 +34,6 @@
     pre{background:#111;border:1px solid #333;padding:12px;border-radius:10px;overflow:auto}
   </style>
 </head>
-
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
-}
-</script>
 
 <body>
 
@@ -56,37 +57,17 @@ if ("serviceWorker" in navigator) {
     </nav>
   </header>
 
-  <div class="wrap">
-    <section style="text-align:center; margin:20px 0 10px;">
-      <h2>Shop Categories</h2>
-      <div class="btnRow">
-        <a href="shop-luxury.html">Shop Luxury</a>
-        <a href="shop-vintage.html">Shop Vintage</a>
-        <a href="shop-parts.html">Shop Parts</a>
-      </div>
-    </section>
+  <!-- ... pjesa tjetër e faqes ... -->
 
-    <div id="guest">
-      <h3>Regjistrohu</h3>
-      <input id="fullName" placeholder="Emri dhe Mbiemri">
-      <input id="phone" placeholder="Telefoni">
-      <input id="country" placeholder="Shteti">
-      <input id="email" placeholder="Email">
-      <input id="password" type="password" placeholder="Fjalëkalimi">
-      <button id="btnRegister" type="button">Register</button>
-
-      <h3 style="margin-top:22px;">Hyr</h3>
-      <input id="loginEmail" placeholder="Email">
-      <input id="loginPassword" type="password" placeholder="Fjalëkalimi">
-      <button id="btnLogin" type="button">Login</button>
-    </div>
-
-    <div id="loggedIn" style="display:none;">
-      <h3>Je i kyçur</h3>
-      <button id="btnLogout" type="button">Logout</button>
-      <pre id="profile"></pre>
-    </div>
+<div class="hero">
+  <div class="hero-left">
+    <!-- këtu mund të mbetet tekst ose bosh -->
   </div>
+
+  <div class="hero-right">
+    <img src="images/oraswiss-logo.png" alt="Oraswiss">
+  </div>
+</div>
 
   <script>
     if ("serviceWorker" in navigator) {
@@ -94,107 +75,105 @@ if ("serviceWorker" in navigator) {
     }
   </script>
 
-  <!-- ✅ VETËM SDK i RI (module). ASNJË compat. -->
+</body>
+</html>
+
+ 
+  <!-- ✅ VETËM 1 SCRIPT MODULE -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import {
       getAuth,
+      setPersistence,
+      browserLocalPersistence,
       createUserWithEmailAndPassword,
       signInWithEmailAndPassword,
-      onAuthStateChanged,
-      signOut
+      onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
     import {
       getFirestore,
       doc,
-      setDoc,
-      getDoc
+      setDoc
     } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-   const firebaseConfig = {
-     apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
-     authDomain: "oraswiss-27e57.firebaseapp.com",
-     projectId: "oraswiss-27e57",
-     storageBucket: "oraswiss-27e57.firebasestorage.app",
-     messagingSenderId: "596627676936",
-     appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-     measurementId: "G-VZPKMD67VQ"
-   };
+    // ✅ SAME CONFIG (mos e ndrysho)
+    const firebaseConfig = {
+      apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+      authDomain: "oraswiss-27e57.firebaseapp.com",
+      projectId: "oraswiss-27e57",
+      storageBucket: "oraswiss-27e57.firebasestorage.app",
+      messagingSenderId: "596627676936",
+      appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+      measurementId: "G-VZPKMD67VQ"
+    };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-   onAuthStateChanged(auth, (user) => {
-    if (user) {
-      
-      window.location.href = "profile.html";
-    }
-  });
-    
-    const guest = document.getElementById("guest");
-    const loggedIn = document.getElementById("loggedIn");
-    const profile = document.getElementById("profile");
+    // ✅ Mbaj user-in të kyçur në faqe të tjera
+    await setPersistence(auth, browserLocalPersistence);
 
+    // ✅ Nëse është i kyçur, shko në profil
+    onAuthStateChanged(auth, (user) => {
+      if (user) window.location.href = "profile.html";
+    });
+
+    // REGISTER
     document.getElementById("btnRegister").addEventListener("click", async () => {
+      const fullName = document.getElementById("fullName").value.trim();
+      const phone    = document.getElementById("phone").value.trim();
+      const country  = document.getElementById("country").value.trim();
+      const email    = document.getElementById("email").value.trim();
+      const pass     = document.getElementById("password").value;
+
+      if (!fullName || !phone || !country || !email || !pass) {
+        alert("Plotëso të gjitha fushat!");
+        return;
+      }
+
       try {
-        const fullName = document.getElementById("fullName").value.trim();
-        const phone = document.getElementById("phone").value.trim();
-        const country = document.getElementById("country").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const pass = document.getElementById("password").value;
-
-        if (!fullName || !phone || !country || !email || !pass) {
-          alert("Plotëso të gjitha fushat!");
-          return;
-        }
-
         const cred = await createUserWithEmailAndPassword(auth, email, pass);
 
         await setDoc(doc(db, "users", cred.user.uid), {
-          fullName, phone, country, email, createdAt: Date.now()
+          fullName, phone, country, email,
+          createdAt: Date.now()
         });
 
-        alert("U regjistrua me sukses!");
+        window.location.href = "profile.html";
       } catch (e) {
         alert(e.message);
         console.error(e);
       }
     });
 
+    // LOGIN
     document.getElementById("btnLogin").addEventListener("click", async () => {
+      const email = document.getElementById("loginEmail").value.trim();
+      const pass  = document.getElementById("loginPassword").value;
+
+      if (!email || !pass) {
+        alert("Vendos email dhe fjalëkalim.");
+        return;
+      }
+
       try {
-        const email = document.getElementById("loginEmail").value.trim();
-        const pass = document.getElementById("loginPassword").value;
         await signInWithEmailAndPassword(auth, email, pass);
+        window.location.href = "profile.html";
       } catch (e) {
         alert(e.message);
         console.error(e);
-      }
-    });
-
-    document.getElementById("btnLogout").addEventListener("click", async () => {
-      await signOut(auth);
-    });
-
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        guest.style.display = "none";
-        loggedIn.style.display = "block";
-
-        try {
-          const snap = await getDoc(doc(db, "users", user.uid));
-          profile.textContent = snap.exists() ? JSON.stringify(snap.data(), null, 2) : "No profile";
-        } catch (e) {
-          profile.textContent = "No profile";
-        }
-      } else {
-        loggedIn.style.display = "none";
-        guest.style.display = "block";
-        profile.textContent = "";
       }
     });
   </script>
 
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/service-worker.js");
+}
+document.addEventListener("DOMContentLoaded", () => {
+  // këtu brenda vendos gjithë kodin e galerisë + swipe
+});  
+</script>
 </body>
 </html>

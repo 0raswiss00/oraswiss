@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin - Add Product</title>
+</head>
+<body>
+
+<h2>Add product</h2>
+
+<form id="productForm">
+  <input id="brand" placeholder="Brand" required><br>
+  <input id="model" placeholder="Model" required><br>
+  <input id="year" type="number" placeholder="Year"><br>
+  <input id="reference" placeholder="Reference"><br>
+
+  <input id="material" placeholder="Material"><br>
+  <input id="caseMm" type="number" placeholder="Case (mm)"><br>
+
+  <label>Bracelet type</label><br>
+  <select id="braceletType">
+    <option value="">— None —</option>
+    <option value="Bracelet">Bracelet</option>
+    <option value="Leather">Leather strap</option>
+    <option value="Silicone">Silicone strap</option>
+  </select><br>
+
+  <input id="braceletMm" type="number" placeholder="Bracelet width (mm)"><br>
+  <input id="wristLong" placeholder="Wrist long (optional)"><br>
+  <input id="wristShort" placeholder="Wrist short (optional)"><br>
+
+  <label>Movement</label><br>
+  <select id="movement">
+    <option value="Automatic">Automatic</option>
+    <option value="Manual">Manual</option>
+    <option value="Quartz">Quartz</option>
+    <option value="Unknown">Unknown</option>
+  </select><br>
+
+  <input id="caliber" placeholder="Caliber"><br>
+  <input id="dialColor" placeholder="Dial color"><br>
+
+  <label>Work</label><br>
+  <select id="work">
+    <option value="Working">Working (Good)</option>
+    <option value="Not working">Not working</option>
+    <option value="Needs service">Needs service</option>
+    <option value="Unknown">Unknown</option>
+  </select><br>
+
+  <label>Service date (optional)</label><br>
+  <input id="serviceDate" type="date"><br>
+
+  <label>Box & Papers</label><br>
+  <select id="boxPapers">
+    <option value="">— None —</option>
+    <option value="Box">Box</option>
+    <option value="Box + Papers">Box + Papers</option>
+    <option value="Papers">Papers</option>
+  </select><br>
+
+  <label>Functions</label><br>
+  <select id="functions">
+    <option value="">— None —</option>
+    <option value="Date">Date</option>
+    <option value="Chronograph">Chronograph</option>
+    <option value="Chronograph + Moonphase">Chronograph + Moonphase</option>
+  </select><br>
+
+  <label>Price (€)</label><br>
+  <input id="priceEur" type="number" placeholder="9500" required><br>
+
+  <label>Negotiable</label><br>
+  <select id="negotiable">
+    <option value="true">Negotiable</option>
+    <option value="false">Not negotiable</option>
+  </select><br><br>
+
+  <label>Photos (multiple)</label><br>
+  <input id="photos" type="file" accept="image/*" multiple><br><br>
+
+  <label>Video (optional)</label><br>
+  <input id="video" type="file" accept="video/*"><br><br>
+
+  <button type="submit">Publish</button>
+</form>
+
+<p id="status"></p>
+
+<script type="module">
+  // 1) Vendos Firebase config-in tënd këtu
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
+
+  const firebaseConfig = {
+    // TODO: paste config from Firebase project settings
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
+
+  const statusEl = document.getElementById("status");
+  const form = document.getElementById("productForm");
+
+  // 2) Mbrojtje: vetëm logged-in mund të hapë admin
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "/login.html"; // ndrysho në faqen tënde të login
+    }
+  });
+
+  async function uploadFile(path, file) {
+    const fileRef = ref(storage, path);
+    await uploadBytes(fileRef, file);
+    return await getDownloadURL(fileRef);
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    statusEl.textContent = "Uploading...";
+
+    try {
+      const brand = document.getElementById("brand").value.trim();
+      const model = document.getElementById("model").value.trim();
+      const yearVal = document.getElementById("year").value;
+      const reference = document.getElementById("reference").value.trim();
+      const material = document.getElementById("material").value.trim();
+      const caseMmVal = document.getElementById("caseMm").value;
+      const braceletType = document.getElementById("braceletType").value;
+      const braceletMmVal = document.getElementById("braceletMm").value;
+      const wristLong = document.getElementById("wristLong").value.trim();
+      const wristShort = document.getElementById("wristShort").value.trim();
+      const movement = document.getElementById("movement").value;
+      const caliber = document.getElementById("caliber").value.trim();
+      const dialColor = document.getElementById("dialColor").value.trim();
+      const work = document.getElementById("work").value;
+      const serviceDate = document.getElementById("serviceDate").value; // "" nëse s’ka
+      const boxPapers = document.getElementById("boxPapers").value;
+      const functions = document.getElementById("functions").value;
+      const priceEur = Number(document.getElementById("priceEur").value);
+      const negotiable = document.getElementById("negotiable").value === "true";
+
+      // Upload photos
+      const photosInput = document.getElementById("photos");
+      const photoFiles = Array.from(photosInput.files || []);
+      const productIdTemp = crypto.randomUUID(); // id për folder
+
+      const images = [];
+      for (let i = 0; i < photoFiles.length; i++) {
+        const f = photoFiles[i];
+        const url = await uploadFile(products/${productIdTemp}/photos/${i}-${f.name}, f);
+        images.push(url);
+      }
+
+      // Upload video (optional)
+      const videoFile = document.getElementById("video").files?.[0];
+      let videoUrl = "";
+      if (videoFile) {
+        videoUrl = await uploadFile(products/${productIdTemp}/video/${videoFile.name}, videoFile);
+      }
+
+      // Save product
+      await addDoc(collection(db, "products"), {
+        brand,
+        model,
+        year: yearVal ? Number(yearVal) : null,
+        reference,
+        material,
+        caseMm: caseMmVal ? Number(caseMmVal) : null,
+        braceletType,
+        braceletMm: braceletMmVal ? Number(braceletMmVal) : null,
+        wristLong: wristLong || "",
+        wristShort: wristShort || "",
+        movement,
+        caliber,
+        dialColor,
+        work,
+        serviceDate: serviceDate || "",
+        boxPapers,
+        functions,
+        priceEur,
+        negotiable,
+        images,        // ✅ galeri
+        videoUrl,      // ✅ video opsionale
+        createdAt: serverTimestamp()
+      });
+
+      statusEl.textContent = "✅ Published!";
+      form.reset();
+    } catch (err) {
+      console.error(err);
+      statusEl.textContent = "❌ Error: " + (err?.message || err);
+    }
+  });
+</script>
+
+</body>
+</html>

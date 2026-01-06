@@ -1,102 +1,157 @@
 <!doctype html>
-<html>
+<html lang="sq">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin - Add Product</title>
+  <style>
+    body{font-family:system-ui;margin:16px;max-width:760px}
+    input,select,button{width:100%;padding:10px;margin:6px 0;border:1px solid #ddd;border-radius:10px}
+    label{font-weight:600}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .muted{opacity:.7;font-size:13px}
+  </style>
 </head>
 <body>
 
 <h2>Add product</h2>
+<p class="muted">Vetëm për admin (kërkon login me Firebase Auth).</p>
 
 <form id="productForm">
-  <input id="brand" placeholder="Brand" required><br>
-  <input id="model" placeholder="Model" required><br>
-  <input id="year" type="number" placeholder="Year"><br>
-  <input id="reference" placeholder="Reference"><br>
+  <div class="row">
+    <div>
+      <label>Brand</label>
+      <input id="brand" placeholder="Rolex" required>
+    </div>
+    <div>
+      <label>Model</label>
+      <input id="model" placeholder="Submariner" required>
+    </div>
+  </div>
 
-  <input id="material" placeholder="Material"><br>
-  <input id="caseMm" type="number" placeholder="Case (mm)"><br>
+  <div class="row">
+    <div>
+      <label>Year (optional)</label>
+      <input id="year" type="number" placeholder="2020">
+    </div>
+    <div>
+      <label>Reference (optional)</label>
+      <input id="reference" placeholder="126610LN">
+    </div>
+  </div>
 
-  <label>Bracelet type</label><br>
+  <div class="row">
+    <div>
+      <label>Material (optional)</label>
+      <input id="material" placeholder="Steel">
+    </div>
+    <div>
+      <label>Case (mm) (optional)</label>
+      <input id="caseMm" type="number" placeholder="41">
+    </div>
+  </div>
+
+  <label>Bracelet type (optional)</label>
   <select id="braceletType">
     <option value="">— None —</option>
     <option value="Bracelet">Bracelet</option>
     <option value="Leather">Leather strap</option>
     <option value="Silicone">Silicone strap</option>
-  </select><br>
+  </select>
 
-  <input id="braceletMm" type="number" placeholder="Bracelet width (mm)"><br>
-  <input id="wristLong" placeholder="Wrist long (optional)"><br>
-  <input id="wristShort" placeholder="Wrist short (optional)"><br>
+  <div class="row">
+    <div>
+      <label>Bracelet width (mm) (optional)</label>
+      <input id="braceletMm" type="number" placeholder="20">
+    </div>
+    <div>
+      <label>Dial color (optional)</label>
+      <input id="dialColor" placeholder="Black">
+    </div>
+  </div>
 
-  <label>Movement</label><br>
+  <label>Movement</label>
   <select id="movement">
     <option value="Automatic">Automatic</option>
     <option value="Manual">Manual</option>
     <option value="Quartz">Quartz</option>
     <option value="Unknown">Unknown</option>
-  </select><br>
+  </select>
 
-  <input id="caliber" placeholder="Caliber"><br>
-  <input id="dialColor" placeholder="Dial color"><br>
+  <div class="row">
+    <div>
+      <label>Caliber (optional)</label>
+      <input id="caliber" placeholder="3235">
+    </div>
+    <div>
+      <label>Work</label>
+      <select id="work">
+        <option value="Working">Working (Good)</option>
+        <option value="Not working">Not working</option>
+        <option value="Needs service">Needs service</option>
+        <option value="Unknown">Unknown</option>
+      </select>
+    </div>
+  </div>
 
-  <label>Work</label><br>
-  <select id="work">
-    <option value="Working">Working (Good)</option>
-    <option value="Not working">Not working</option>
-    <option value="Needs service">Needs service</option>
-    <option value="Unknown">Unknown</option>
-  </select><br>
+  <label>Service date (optional)</label>
+  <input id="serviceDate" type="date">
 
-  <label>Service date (optional)</label><br>
-  <input id="serviceDate" type="date"><br>
-
-  <label>Box & Papers</label><br>
+  <label>Box & Papers (optional)</label>
   <select id="boxPapers">
     <option value="">— None —</option>
     <option value="Box">Box</option>
     <option value="Box + Papers">Box + Papers</option>
     <option value="Papers">Papers</option>
-  </select><br>
+  </select>
 
-  <label>Functions</label><br>
+  <label>Functions (optional)</label>
   <select id="functions">
     <option value="">— None —</option>
     <option value="Date">Date</option>
     <option value="Chronograph">Chronograph</option>
     <option value="Chronograph + Moonphase">Chronograph + Moonphase</option>
-  </select><br>
+  </select>
 
-  <label>Price (€)</label><br>
-  <input id="priceEur" type="number" placeholder="9500" required><br>
+  <div class="row">
+    <div>
+      <label>Price (€)</label>
+      <input id="priceEur" type="number" placeholder="9500" required>
+    </div>
+    <div>
+      <label>Negotiable</label>
+      <select id="negotiable">
+        <option value="true">Negotiable</option>
+        <option value="false">Not negotiable</option>
+      </select>
+    </div>
+  </div>
 
-  <label>Negotiable</label><br>
-  <select id="negotiable">
-    <option value="true">Negotiable</option>
-    <option value="false">Not negotiable</option>
-  </select><br><br>
+  <label>Photos (multiple)</label>
+  <input id="photos" type="file" accept="image/*" multiple>
 
-  <label>Photos (multiple)</label><br>
-  <input id="photos" type="file" accept="image/*" multiple><br><br>
-
-  <label>Video (optional)</label><br>
-  <input id="video" type="file" accept="video/*"><br><br>
+  <label>Video (optional)</label>
+  <input id="video" type="file" accept="video/*">
 
   <button type="submit">Publish</button>
 </form>
 
-<p id="status"></p>
+<p id="status" class="muted"></p>
 
 <script type="module">
-  // 1) Vendos Firebase config-in tënd këtu
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
   import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
 
+  // ✅ PASTE config-un tënd këtu (i njëjti edhe te products.html)
   const firebaseConfig = {
-    // TODO: paste config from Firebase project settings
+    // apiKey: "...",
+    // authDomain: "...",
+    // projectId: "...",
+    // storageBucket: "...",
+    // messagingSenderId: "...",
+    // appId: "..."
   };
 
   const app = initializeApp(firebaseConfig);
@@ -107,11 +162,9 @@
   const statusEl = document.getElementById("status");
   const form = document.getElementById("productForm");
 
-  // 2) Mbrojtje: vetëm logged-in mund të hapë admin
+  // ✅ Redirect te login (relative path – punon në GitHub Pages)
   onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      window.location.href = "/login.html"; // ndrysho në faqen tënde të login
-    }
+    if (!user) window.location.href = "./login.html";
   });
 
   async function uploadFile(path, file) {
@@ -131,29 +184,31 @@
       const reference = document.getElementById("reference").value.trim();
       const material = document.getElementById("material").value.trim();
       const caseMmVal = document.getElementById("caseMm").value;
+
       const braceletType = document.getElementById("braceletType").value;
       const braceletMmVal = document.getElementById("braceletMm").value;
-      const wristLong = document.getElementById("wristLong").value.trim();
-      const wristShort = document.getElementById("wristShort").value.trim();
+
       const movement = document.getElementById("movement").value;
       const caliber = document.getElementById("caliber").value.trim();
       const dialColor = document.getElementById("dialColor").value.trim();
+
       const work = document.getElementById("work").value;
-      const serviceDate = document.getElementById("serviceDate").value; // "" nëse s’ka
+      const serviceDate = document.getElementById("serviceDate").value;
+
       const boxPapers = document.getElementById("boxPapers").value;
       const functions = document.getElementById("functions").value;
+
       const priceEur = Number(document.getElementById("priceEur").value);
       const negotiable = document.getElementById("negotiable").value === "true";
 
       // Upload photos
-      const photosInput = document.getElementById("photos");
-      const photoFiles = Array.from(photosInput.files || []);
-      const productIdTemp = crypto.randomUUID(); // id për folder
+      const photoFiles = Array.from(document.getElementById("photos").files || []);
+      const productId = crypto.randomUUID();
 
       const images = [];
       for (let i = 0; i < photoFiles.length; i++) {
         const f = photoFiles[i];
-        const url = await uploadFile(products/${productIdTemp}/photos/${i}-${f.name}, f);
+        const url = await uploadFile(products/${productId}/photos/${i}-${f.name}, f);
         images.push(url);
       }
 
@@ -161,32 +216,30 @@
       const videoFile = document.getElementById("video").files?.[0];
       let videoUrl = "";
       if (videoFile) {
-        videoUrl = await uploadFile(products/${productIdTemp}/video/${videoFile.name}, videoFile);
+        videoUrl = await uploadFile(products/${productId}/video/${videoFile.name}, videoFile);
       }
 
-      // Save product
+      // Save to Firestore
       await addDoc(collection(db, "products"), {
         brand,
         model,
         year: yearVal ? Number(yearVal) : null,
-        reference,
-        material,
+        reference: reference || "",
+        material: material || "",
         caseMm: caseMmVal ? Number(caseMmVal) : null,
-        braceletType,
+        braceletType: braceletType || "",
         braceletMm: braceletMmVal ? Number(braceletMmVal) : null,
-        wristLong: wristLong || "",
-        wristShort: wristShort || "",
         movement,
-        caliber,
-        dialColor,
+        caliber: caliber || "",
+        dialColor: dialColor || "",
         work,
         serviceDate: serviceDate || "",
-        boxPapers,
-        functions,
+        boxPapers: boxPapers || "",
+        functions: functions || "",
         priceEur,
         negotiable,
-        images,        // ✅ galeri
-        videoUrl,      // ✅ video opsionale
+        images,
+        videoUrl,
         createdAt: serverTimestamp()
       });
 
@@ -201,3 +254,4 @@
 
 </body>
 </html>
+

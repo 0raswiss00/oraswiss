@@ -4,21 +4,37 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Shto orë (Admin)</title>
-
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="admin.css">
+
+  
+  <style>
+    body{font-family:Arial,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:20px}
+    .wrap{max-width:900px;margin:0 auto}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:820px){.row{grid-template-columns:1fr}}
+    label{display:block;margin:12px 0 6px;color:#ddd}
+    input,select,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #333;background:#111;color:#fff}
+    textarea{min-height:90px}
+    .btn{margin-top:14px;padding:12px 14px;border-radius:12px;border:1px solid #2a2a2a;background:#0f0f0f;color:#fff;cursor:pointer}
+    .btn:hover{background:#1a1a1a}
+    .note{opacity:.85;font-size:13px;margin-top:8px;line-height:1.4}
+    .ok{color:#25D366}
+    .bad{color:#ff6b6b}
+  </style>
 </head>
 
 <body>
 <div class="wrap">
 
-  <div class="top" style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+  <div class="top">
     <h2 style="margin:0">Shto orë (Admin)</h2>
     <button class="btn" type="button" onclick="history.back()">← Back</button>
   </div>
 
   <div class="note">
-    1) Kliko <b>Upload Photos</b><br/>
+    1) Kliko <b>Upload Photos</b> (ngarkon fotot dhe mbush automatikisht URL-të)<br/>
     2) Plotëso fushat<br/>
     3) Kliko <b>PUBLISH</b> → shkon në Supabase me status <b>pending</b>
   </div>
@@ -88,6 +104,7 @@
   <textarea id="photos" placeholder="URL-të dalin këtu (automatikisht)..." readonly></textarea>
 
   <button class="btn" id="publishBtn" type="button">PUBLISH</button>
+
   <div id="msg" class="note"></div>
 
 </div>
@@ -104,10 +121,10 @@
       uploadPreset: UPLOAD_PRESET,
       folder: "watches",
       multiple: true,
-      sources: ["local","camera"]
+      sources: ["local", "camera"]
     },
     (error, result) => {
-      if (error) return;
+      if (error) { console.error(error); return; }
       if (result && result.event === "success") {
         const ta = document.getElementById("photos");
         const current = ta.value.trim();
@@ -115,20 +132,22 @@
       }
     }
   );
-  document.getElementById("uploadBtn").onclick = () => widget.open();
+
+  document.getElementById("uploadBtn").addEventListener("click", () => widget.open());
 </script>
 
-<!-- Supabase (FIXED) -->
+<!-- Supabase (v2) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = "PASTE_SUPABASE_URL";
-  const SUPABASE_ANON_KEY = "PASTE_SUPABASE_ANON_KEY";
+  // 🔥 VENDOS KËTU TË TUAJAT (Settings → API)
+  const SUPABASE_URL = "PASTE_PROJECT_URL_KETU";
+  const SUPABASE_ANON_KEY = "PASTE_ANON_PUBLIC_KEY_KETU";
 
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const msg = (text, ok=true) => {
     const el = document.getElementById("msg");
-    el.className = "note " + (ok ? "ok":"bad");
+    el.className = "note " + (ok ? "ok" : "bad");
     el.textContent = text;
   };
 
@@ -137,9 +156,10 @@
       const photosText = document.getElementById("photos").value.trim();
       if (!photosText) { msg("Ngarko të paktën 1 foto.", false); return; }
 
+      // ✅ text[] (një URL për rresht ose me presje)
       const photos = photosText
         .split(/\n|,/g)
-        .map(p => p.trim())
+        .map(s => s.trim())
         .filter(Boolean);
 
       const data = {
@@ -153,15 +173,18 @@
         description: document.getElementById("description").value.trim(),
         case_size: document.getElementById("case_size").value ? Number(document.getElementById("case_size").value) : null,
         price: document.getElementById("price").value ? Number(document.getElementById("price").value) : null,
-        photos: photos,                 // ✅ text[]
+        photos: photos,                 // ✅ RUHET SI ARRAY (text[])
         box: document.getElementById("box").value || null,
         working: document.getElementById("working").value || null,
-        status: "pending"               // ✅ ekziston tani në DB
+        status: "pending"
       };
 
+      msg("Duke dërguar...", true);
+
       const { error } = await supabaseClient.from("watches").insert([data]);
-      if (error) { msg("Gabim: " + error.message, false); console.error(error); }
-      else { msg("U dërgua ✅ (pending).", true); }
+      if (error) { msg("Gabim Supabase: " + error.message, false); console.error(error); return; }
+
+      msg("U dërgua ✅ (pending).", true);
     } catch (e) {
       msg("Gabim rrjeti/JS: " + (e?.message || String(e)), false);
       console.error(e);

@@ -152,38 +152,58 @@
   };
 
   document.getElementById("publishBtn").addEventListener("click", async () => {
-    const photos: photos, = document.getElementById("photos").value.trim();
-    if (!photosText) { msg("Ngarko të paktën 1 foto.", false); return; }
-    // KTHE STRING NE ARRAY
+    // 1) Merr fotot si TEXT nga input/textarea
+    const photosText = document.getElementById("photos").value.trim();
+
+    if (!photosText) {
+      msg("Ngarko të paktën 1 foto.", false);
+      return;
+    }
+
+    // 2) Ktheji në ARRAY (text[])
+    // - pranon 1 foto për rresht
+    // - nëse dikush i fut me presje, i ndan edhe me presje
     const photos = photosText
-      .split("\n")        // nëse janë disa foto, një për rresht
+      .split(/\n|,/g)
       .map(p => p.trim())
       .filter(Boolean);
 
+    // 3) Data për Supabase
     const data = {
       category: document.getElementById("category").value,
       brand: document.getElementById("brand").value.trim(),
       model: document.getElementById("model").value.trim(),
       ref: document.getElementById("ref").value.trim(),
-      year: document.getElementById("year").value ? Number(document.getElementById("year").value) : null,
+      year: document.getElementById("year").value
+        ? Number(document.getElementById("year").value)
+        : null,
       material: document.getElementById("material").value.trim(),
       condition: document.getElementById("condition").value,
       description: document.getElementById("description").value.trim(),
-      case_size: document.getElementById("case_size").value ? Number(document.getElementById("case_size").value) : null,
-      price: document.getElementById("price").value ? Number(document.getElementById("price").value) : null,
-      photos: photosText,          // ✅ ruhet si TEXT: "url1, url2, url3"
+      case_size: document.getElementById("case_size").value
+        ? Number(document.getElementById("case_size").value)
+        : null,
+      price: document.getElementById("price").value
+        ? Number(document.getElementById("price").value)
+        : null,
+
+      // ✅ TANI RUHET SI ARRAY ne Supabase (text[])
+      photos: photos,
+
       box: document.getElementById("box").value || null,
       working: document.getElementById("working").value || null,
       status: "pending"
     };
 
+    // 4) Insert
     const { error } = await supabaseClient.from("watches").insert([data]);
 
     if (error) {
       msg("Gabim: " + error.message, false);
+      console.error(error);
     } else {
       msg("U dërgua ✅ (pending). Tani aprovoje te Supabase dhe del te watches.html", true);
-      // opsionale: boshatis fushat
+      // opsionale:
       // location.reload();
     }
   });

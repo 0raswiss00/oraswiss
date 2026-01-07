@@ -88,6 +88,46 @@
 <script>
 const STORAGE_KEY = "oraswiss_watches";
 
+<script>
+const $ = id => document.getElementById(id);
+
+function loadWatches(){
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveWatches(list){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+
+$("publishBtn").onclick = () => {
+  const photos = $("photos").value.trim();
+  if (!photos) {
+    alert("Duhet të ngarkosh të paktën një foto");
+    return;
+  }
+
+  const item = {
+    id: Date.now(),
+    brand: $("brand")?.value || "",
+    model: $("model")?.value || "",
+    price: $("price")?.value || "",
+    description: $("description")?.value || "",
+    photos: photos.split(/\n|,/).map(p => p.trim()).filter(Boolean)
+  };
+
+  const list = loadWatches();
+  list.unshift(item);
+  saveWatches(list);
+
+  alert("Ora u shtua me sukses ✅");
+  location.href = "watches.html";
+};
+</script>
+  
 // Cloudinary (vendos këto të sakta)
 const widget = cloudinary.createUploadWidget(
   {

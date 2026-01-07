@@ -61,44 +61,40 @@ if(!list.length){
   const SUPABASE_URL = "https://XXXX.supabase.co";
   const SUPABASE_ANON_KEY = "ANON_PUBLIC_KEY";
 
-  const supabase = supabaseJs.createClient(
+  const supabase = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_ANON_KEY
   );
-</script>
-<script>
-async function loadWatches() {
-  const { data, error } = await supabase
-    .from("watches")
-    .select("*")
-    .order("created_at", { ascending: false });
 
-  if (error) {
-    console.error(error);
-    return;
+  async function loadWatches() {
+    const { data, error } = await supabase
+      .from("watches")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    const grid = document.getElementById("grid");
+    if (error) { grid.innerHTML = "<p>Gabim loading.</p>"; console.error(error); return; }
+    if (!data?.length) { grid.innerHTML = "<p>S’ka produkte ende.</p>"; return; }
+
+    grid.innerHTML = data.map(w => {
+      const img = (w.photos || "").split(",")[0] || "";
+      return `
+        <div class="card">
+          <img class="img" src="${img}" alt="">
+          <div class="pad">
+            <div class="title">${(w.brand||"").toUpperCase()} ${w.model||""}</div>
+            <div class="meta">
+              Ref: ${w.ref||"—"}<br>
+              Year: ${w.year||"—"}<br>
+              Condition: ${w.condition||"—"}<br>
+              Price: ${w.price||"—"} €
+            </div>
+          </div>
+        </div>`;
+    }).join("");
   }
 
-  const grid = document.getElementById("grid");
-  grid.innerHTML = "";
-
-  data.forEach(w => {
-    const img = (w.photos || "").split(",")[0] || "";
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <img src="${img}">
-      <div class="pad">
-        <div class="title">${w.brand} ${w.model}</div>
-        <div class="meta">${w.ref || ""} · ${w.year || ""}</div>
-        <div class="meta">${w.condition || ""}</div>
-        <div class="meta"><b>${w.price || ""} €</b></div>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-}
-
-loadWatches();
+  loadWatches();
 </script>
   
 </body>  

@@ -152,8 +152,13 @@
   };
 
   document.getElementById("publishBtn").addEventListener("click", async () => {
-    const photosText = document.getElementById("photos").value.trim();
+    const photos: photos, = document.getElementById("photos").value.trim();
     if (!photosText) { msg("Ngarko të paktën 1 foto.", false); return; }
+    // KTHE STRING NE ARRAY
+    const photos = photosText
+      .split("\n")        // nëse janë disa foto, një për rresht
+      .map(p => p.trim())
+      .filter(Boolean);
 
     const data = {
       category: document.getElementById("category").value,

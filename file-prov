@@ -1081,3 +1081,26 @@ index regi
   </div>
 
 
+supabaze
+alter table public.watches
+add column if not exists status text not null default 'pending';
+
+alter table public.watches
+add column if not exists photos text[] not null default '{}';
+
+alter table public.watches enable row level security
+
+drop policy if exists "allow anon insert" on public.watches;
+create policy "allow anon insert"
+on public.watches
+for insert
+to anon
+with check (true);
+
+drop policy if exists "allow anon read approved" on public.watches;
+create policy "allow anon read approved"
+on public.watches
+for select
+to anon
+using (status = 'approved');
+

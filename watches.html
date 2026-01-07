@@ -3,99 +3,90 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Watches</title>
+  <title>Ora Swiss - Watches</title>
+
   <style>
-    body{font-family:Arial;background:#0b0b0b;color:#fff;margin:0;padding:20px}
-    .wrap{max-width:1000px;margin:auto}
+    body{font-family:Arial,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:20px}
+    .wrap{max-width:1100px;margin:0 auto}
     .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
     @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:600px){.grid{grid-template-columns:1fr}}
-    .card{border:1px solid #222;background:#111;border-radius:14px;overflow:hidden}
-    .img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+    .card{border:1px solid #222;background:#111;border-radius:16px;overflow:hidden}
+    .img{width:100%;aspect-ratio:4/3;object-fit:cover;background:#000}
     .pad{padding:12px}
-    .title{font-weight:700}
-    .meta{opacity:.85;font-size:13px;margin-top:6px;line-height:1.35}
+    .title{font-weight:800;margin-bottom:6px}
+    .meta{opacity:.85;font-size:13px;line-height:1.35}
+    .price{margin-top:8px;font-weight:800}
+    .note{opacity:.85;font-size:13px;margin:10px 0}
   </style>
 </head>
+
 <body>
 <div class="wrap">
-  <h2>Watches</h2>
+  <h2 style="margin:0 0 8px">Watches</h2>
+  <div class="note" id="status">Po ngarkon...</div>
   <div id="grid" class="grid"></div>
 </div>
 
-<script>
-const STORAGE_KEY = "oraswiss_watches";
-function loadList(){
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
-  catch { return []; }
-}
-
-const list = loadList();
-const grid = document.getElementById("grid");
-
-if(!list.length){
-  grid.innerHTML = "<p>S’ka produkte ende.</p>";
-} else {
-  grid.innerHTML = list.map(w => `
-    <div class="card">
-      <img class="img" src="${w.photos?.[0] || ""}" alt="">
-      <div class="pad">
-        <div class="title">${(w.brand||"").toUpperCase()} ${w.model||""}</div>
-        <div class="meta">
-          Ref: ${w.ref||"—"}<br>
-          Year: ${w.year||"—"}<br>
-          Condition: ${w.condition||"—"}<br>
-          Box & Papers: ${w.box||"—"}<br>
-          Working: ${w.working||"—"}<br>
-          Price: ${w.price||"—"} €
-        </div>
-      </div>
-    </div>
-  `).join("");
-}
-</script>
-
+<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
+  // ✅ Vendos të njëjtat vlera si te sellnow.html
   const SUPABASE_URL = "https://abcd1234.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const supabase = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
+  function firstPhoto(photosText){
+    if (!photosText) return "";
+    return photosText.split(",")[0].trim();
+  }
 
-  async function loadWatches() {
-    const { data, error } = await supabase
+  async function loadWatches(){
+    const statusEl = document.getElementById("status");
+    const grid = document.getElementById("grid");
+
+    const { data, error } = await supabaseClient
       .from("watches")
       .select("*")
+      .eq("status", "approved")               // ✅ shfaq vetëm approved
       .order("created_at", { ascending: false });
 
-    const grid = document.getElementById("grid");
-    if (error) { grid.innerHTML = "<p>Gabim loading.</p>"; console.error(error); return; }
-    if (!data?.length) { grid.innerHTML = "<p>S’ka produkte ende.</p>"; return; }
+    if (error){
+      statusEl.textContent = "Gabim: " + error.message;
+      return;
+    }
+
+    if (!data || data.length === 0){
+      statusEl.textContent = "S’ka produkte ende.";
+      grid.innerHTML = "";
+      return;
+    }
+
+    statusEl.textContent = "Produkte: " + data.length;
 
     grid.innerHTML = data.map(w => {
-      const img = (w.photos || "").split(",")[0] || "";
+      const img = firstPhoto(w.photos);
       return `
         <div class="card">
           <img class="img" src="${img}" alt="">
           <div class="pad">
             <div class="title">${(w.brand||"").toUpperCase()} ${w.model||""}</div>
             <div class="meta">
-              Ref: ${w.ref||"—"}<br>
-              Year: ${w.year||"—"}<br>
-              Condition: ${w.condition||"—"}<br>
-              Price: ${w.price||"—"} €
+              Ref: ${w.ref || "—"}<br/>
+              Year: ${w.year || "—"}<br/>
+              Condition: ${w.condition || "—"}<br/>
+              Box: ${w.box || "—"}<br/>
+              Working: ${w.working || "—"}
             </div>
+            <div class="price">${w.price ? (w.price + " €") : "—"}</div>
           </div>
-        </div>`;
+        </div>
+      `;
     }).join("");
   }
 
   loadWatches();
 </script>
-  
-</body>  
+
+</body>
 </html>

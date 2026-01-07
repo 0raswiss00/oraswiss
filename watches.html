@@ -31,57 +31,51 @@
 <!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // ✅ Vendos të njëjtat vlera si te sellnow.html
-  const SUPABASE_URL = "https://...supabase.co";
-  const SUPABASE_ANON_KEY = "...";
+  const SUPABASE_URL = "PASTE_PROJECT_URL_KETU";
+  const SUPABASE_ANON_KEY = "PASTE_ANON_PUBLIC_KEY_KETU";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  function firstPhoto(photosValue){
-    if (!photosValue) return "";
-    if (Array.isArray(photosValue)) return (photosValue[0] || "").trim();
-    return String(photosValue).split("\n")[0].split(",")[0].trim();
-  }
+  const firstPhoto = (photos) => {
+    if (!photos) return "";
+    if (Array.isArray(photos)) return (photos[0] || "").trim();
+    // fallback nëse diku vjen string
+    return String(photos).split(/\n|,/g)[0]?.trim() || "";
+  };
 
-  async function loadWatches(){
+  async function loadWatches() {
     const statusEl = document.getElementById("status");
     const grid = document.getElementById("grid");
+    statusEl.textContent = "Po ngarkon...";
 
     const { data, error } = await supabaseClient
       .from("watches")
       .select("*")
-      .eq("status", "approved")               // ✅ shfaq vetëm approved
+      .eq("status", "approved")
       .order("created_at", { ascending: false });
 
-    if (error){
+    if (error) {
       statusEl.textContent = "Gabim: " + error.message;
+      console.error(error);
       return;
     }
 
-    if (!data || data.length === 0){
-      statusEl.textContent = "S’ka produkte ende.";
+    if (!data || data.length === 0) {
+      statusEl.textContent = "S’ka ora për momentin.";
       grid.innerHTML = "";
       return;
     }
 
-    statusEl.textContent = "Produkte: " + data.length;
-
+    statusEl.textContent = "";
     grid.innerHTML = data.map(w => {
       const img = firstPhoto(w.photos);
       return `
-        <div class="card">
-          <img class="img" src="${img}" alt="">
-          <div class="pad">
-            <div class="title">${(w.brand||"").toUpperCase()} ${w.model||""}</div>
-            <div class="meta">
-              Ref: ${w.ref || "—"}<br/>
-              Year: ${w.year || "—"}<br/>
-              Condition: ${w.condition || "—"}<br/>
-              Box: ${w.box || "—"}<br/>
-              Working: ${w.working || "—"}
-            </div>
-            <div class="price">${w.price ? (w.price + " €") : "—"}</div>
+        <a class="card" href="watch.html?id=${w.id}">
+          <div class="thumb">${img ? <img src="${img}" alt=""> : ""}</div>
+          <div class="meta">
+            <div class="t">${(w.brand || "")} ${(w.model || "")}</div>
+            <div class="p">${w.price ? w.price + " €" : ""}</div>
           </div>
-        </div>
+        </a>
       `;
     }).join("");
   }

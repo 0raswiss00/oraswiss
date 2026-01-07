@@ -195,22 +195,19 @@
       status: "pending"
     };
 
-     msg("Po provoj të dërgoj...", true);
-     console.log("DATA që po dërgohet:", data);
-    
-    try {
-      const res = await supabaseClient.from("watches").insert([data]).select();
-      console.log("INSERT RES:", res);
+ // 4) Insert
+    const { error } = await supabaseClient.from("watches").insert([data]);
 
-      if (res.error) {
-        msg("Gabim Supabase: " + res.error.message, false);
-      } else {
-        msg("U dërgua ✅", true);
-      }
-    } catch (e) {
-      msg("Gabim rrjeti: " + (e?.message || String(e)), false);
-      console.error("Network/CORS error:", e);
+    if (error) {
+      msg("Gabim: " + error.message, false);
+      console.error(error);
+    } else {
+      msg("U dërgua ✅ (pending). Tani aprovoje te Supabase dhe del te watches.html", true);
+      // opsionale:
+      // location.reload();
     }
+  });
+</script>
 
 </body>
 </html>

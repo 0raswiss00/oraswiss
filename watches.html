@@ -54,5 +54,52 @@ if(!list.length){
   `).join("");
 }
 </script>
-</body>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const SUPABASE_URL = "https://XXXX.supabase.co";
+  const SUPABASE_ANON_KEY = "ANON_PUBLIC_KEY";
+
+  const supabase = supabaseJs.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+</script>
+<script>
+async function loadWatches() {
+  const { data, error } = await supabase
+    .from("watches")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+
+  data.forEach(w => {
+    const img = (w.photos || "").split(",")[0] || "";
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <img src="${img}">
+      <div class="pad">
+        <div class="title">${w.brand} ${w.model}</div>
+        <div class="meta">${w.ref || ""} · ${w.year || ""}</div>
+        <div class="meta">${w.condition || ""}</div>
+        <div class="meta"><b>${w.price || ""} €</b></div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+loadWatches();
+</script>
+  
+</body>  
 </html>

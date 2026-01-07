@@ -108,11 +108,9 @@
 
 <!-- Cloudinary -->
 <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
-
 <script>
-  // ✅ Vendos këto të sakta:
-  const CLOUD_NAME = "drfjznv52";        // p.sh. drfjznv52
-  const UPLOAD_PRESET = "oraswiss_upload"; // p.sh. oraswiss_upload
+  const CLOUD_NAME = "drfjznv52";
+  const UPLOAD_PRESET = "oraswiss_upload";
 
   const widget = cloudinary.createUploadWidget(
     {
@@ -120,109 +118,76 @@
       uploadPreset: UPLOAD_PRESET,
       folder: "watches",
       multiple: true,
-      sources: ["local","camera"]
+      sources: ["local", "camera"]
     },
     (error, result) => {
-      if (error) return;
+      if (error) { console.error(error); return; }
       if (result && result.event === "success") {
         const ta = document.getElementById("photos");
         const current = ta.value.trim();
-        ta.value = current ? (current + ", " + result.info.secure_url) : result.info.secure_url;
+        ta.value = current ? (current + "\n" + result.info.secure_url) : result.info.secure_url;
       }
     }
   );
 
-  document.getElementById("uploadBtn").onclick = () => widget.open();
+  document.getElementById("uploadBtn").addEventListener("click", () => widget.open());
 </script>
 
-<!-- Supabase -->
+<!-- Supabase (v2) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-  // ✅ Vendos këto nga Supabase:
-  const SUPABASE_URL = "https://xyzcompany.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ...";
+  // 🔥 VENDOS KËTU TË TUAJAT (Settings → API)
+  const SUPABASE_URL = "PASTE_PROJECT_URL_KETU";
+  const SUPABASE_ANON_KEY = "PASTE_ANON_PUBLIC_KEY_KETU";
 
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const msg = (text, ok=true) => {
     const el = document.getElementById("msg");
-    el.className = "note " + (ok ? "ok":"bad");
+    el.className = "note " + (ok ? "ok" : "bad");
     el.textContent = text;
   };
 
   document.getElementById("publishBtn").addEventListener("click", async () => {
-    // 1) Merr fotot si TEXT nga input/textarea
-    const photosText = document.getElementById("photos").value.trim();
+    try {
+      const photosText = document.getElementById("photos").value.trim();
+      if (!photosText) { msg("Ngarko të paktën 1 foto.", false); return; }
 
-    if (!photosText) {
-      msg("Ngarko të paktën 1 foto.", false);
-      return;
+      // ✅ text[] (një URL për rresht ose me presje)
+      const photos = photosText
+        .split(/\n|,/g)
+        .map(s => s.trim())
+        .filter(Boolean);
+
+      const data = {
+        category: document.getElementById("category").value,
+        brand: document.getElementById("brand").value.trim(),
+        model: document.getElementById("model").value.trim(),
+        ref: document.getElementById("ref").value.trim(),
+        year: document.getElementById("year").value ? Number(document.getElementById("year").value) : null,
+        material: document.getElementById("material").value.trim(),
+        condition: document.getElementById("condition").value,
+        description: document.getElementById("description").value.trim(),
+        case_size: document.getElementById("case_size").value ? Number(document.getElementById("case_size").value) : null,
+        price: document.getElementById("price").value ? Number(document.getElementById("price").value) : null,
+        photos: photos,                 // ✅ RUHET SI ARRAY (text[])
+        box: document.getElementById("box").value || null,
+        working: document.getElementById("working").value || null,
+        status: "pending"
+      };
+
+      msg("Duke dërguar...", true);
+
+      const { error } = await supabaseClient.from("watches").insert([data]);
+      if (error) { msg("Gabim Supabase: " + error.message, false); console.error(error); return; }
+
+      msg("U dërgua ✅ (pending).", true);
+    } catch (e) {
+      msg("Gabim rrjeti/JS: " + (e?.message || String(e)), false);
+      console.error(e);
     }
-
-    // 2) Ktheji në ARRAY (text[])
-    // - pranon 1 foto për rresht
-    // - nëse dikush i fut me presje, i ndan edhe me presje
-    const photos = photosText
-      .split(/\n|,/g)
-      .map(p => p.trim())
-      .filter(Boolean);
-
-    // 3) Data për Supabase
-    const data = {
-      category: document.getElementById("category").value,
-      brand: document.getElementById("brand").value.trim(),
-      model: document.getElementById("model").value.trim(),
-      ref: document.getElementById("ref").value.trim(),
-      year: document.getElementById("year").value
-        ? Number(document.getElementById("year").value)
-        : null,
-      material: document.getElementById("material").value.trim(),
-      condition: document.getElementById("condition").value,
-      description: document.getElementById("description").value.trim(),
-      case_size: document.getElementById("case_size").value
-        ? Number(document.getElementById("case_size").value)
-        : null,
-      price: document.getElementById("price").value
-        ? Number(document.getElementById("price").value)
-        : null,
-
-      // ✅ TANI RUHET SI ARRAY ne Supabase (text[])
-      photos: photos,
-
-      box: document.getElementById("box").value || null,
-      working: document.getElementById("working").value || null,
-      status: "pending"
-    };
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("publishBtn");
-  const msgEl = document.getElementById("msg");
-
-  // Debug: a u ngarkua JS?
-  if (msgEl) {
-    msgEl.textContent = "JS u ngarkua ✅";
-    msgEl.className = "note ok";
-  }
-
-  if (!btn) {
-    if (msgEl) {
-      msgEl.textContent = "S’po gjej publishBtn ❌ (kontrollo id)";
-      msgEl.className = "note bad";
-    }
-    console.log("publishBtn missing");
-    return;
-  }
-
-  btn.addEventListener("click", async () => {
-    alert("PUBLISH u klikua ✅");
-    // këtu pastaj vendos kodin tënd të insert-it (supabase)
   });
-});
 </script>
-<div style="color:#25D366;font-weight:700">VERSION: 777</div>
-
 
 </body>
 </html>

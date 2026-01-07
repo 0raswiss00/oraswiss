@@ -185,11 +185,10 @@ document.getElementById("publishBtn").onclick = () => {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  // 🔴 KËTU VENDOSEN SUPABASE
   const SUPABASE_URL = "https://XXXX.supabase.co";
-  const SUPABASE_ANON_KEY = "ANON_PUBLIC_KEY_KETU";
+  const SUPABASE_ANON_KEY = "ANON_PUBLIC_KEY";
 
-  const supabase = supabaseJs.createClient(
+  const supabase = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_ANON_KEY
   );
@@ -197,6 +196,14 @@ document.getElementById("publishBtn").onclick = () => {
 
 <script>
 document.getElementById("publishBtn").addEventListener("click", async () => {
+
+  const photos = document.getElementById("photos").value
+    .split(/\n|,/).map(p=>p.trim()).filter(Boolean);
+
+  if (!photos.length) {
+    alert("Ngarko të paktën 1 foto");
+    return;
+  }
 
   const data = {
     category: document.getElementById("category").value,
@@ -209,14 +216,14 @@ document.getElementById("publishBtn").addEventListener("click", async () => {
     description: document.getElementById("description").value,
     case_size: document.getElementById("case_size").value || null,
     price: document.getElementById("price").value || null,
-    photos: document.getElementById("photos").value,
+    photos: photos.join(","),
     status: "pending"
   };
 
   const { error } = await supabase.from("watches").insert([data]);
 
   if (error) {
-    alert(error.message);
+    alert("Gabim: " + error.message);
   } else {
     alert("Ora u dërgua ✔️ (pending)");
   }

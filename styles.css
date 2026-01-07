@@ -2887,3 +2887,16 @@ body{background:#000!important;color:#E6E6E6!important}
   .hero-left{ display:none; }
   .hero-right img{ max-width: 180px; }
 }
+
+#msg{
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  background: #0b0b0b;
+  color: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #222;
+  z-index: 9999;
+}

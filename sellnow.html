@@ -192,5 +192,28 @@ $("copy").onclick = async ()=>{
   catch { alert("Copy manualisht."); }
 };
 </script>
+<script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
+
+<script>
+const widget = cloudinary.createUploadWidget(
+  {
+    cloudName: "drfjznv52",
+    uploadPreset: "oraswiss_upload",
+    folder: "watches",
+    multiple: true
+  },
+  (error, result) => {
+    if (!error && result && result.event === "success") {
+      const textarea = document.getElementById("photos");
+      textarea.value += result.info.secure_url + "\n";
+    }
+  }
+);
+
+document.getElementById("uploadBtn").addEventListener("click", () => {
+  widget.open();
+});
+</script>
+
 </body>
 </html>

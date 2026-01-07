@@ -36,9 +36,10 @@
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  function firstPhoto(photosText){
-    if (!photosText) return "";
-    return photosText.split(",")[0].trim();
+  function firstPhoto(photosValue){
+    if (!photosValue) return "";
+    if (Array.isArray(photosValue)) return (photosValue[0] || "").trim();
+    return String(photosValue).split("\n")[0].split(",")[0].trim();
   }
 
   async function loadWatches(){

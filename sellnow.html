@@ -195,19 +195,22 @@
       status: "pending"
     };
 
-try {
-  const { error } = await supabaseClient.from("watches").insert([data]);
+     msg("Po provoj të dërgoj...", true);
+     console.log("DATA që po dërgohet:", data);
+    
+    try {
+      const res = await supabaseClient.from("watches").insert([data]).select();
+      console.log("INSERT RES:", res);
 
-  if (error) {
-    msg("Gabim Supabase: " + error.message, false);
-    console.error("Supabase error:", error);
-  } else {
-    msg("U dërgua ✅ (pending).", true);
-  }
-} catch (e) {
-  msg("Gabim rrjeti: " + (e?.message || String(e)), false);
-  console.error("Network/CORS error:", e);
-}
+      if (res.error) {
+        msg("Gabim Supabase: " + res.error.message, false);
+      } else {
+        msg("U dërgua ✅", true);
+      }
+    } catch (e) {
+      msg("Gabim rrjeti: " + (e?.message || String(e)), false);
+      console.error("Network/CORS error:", e);
+    }
 
 </body>
 </html>

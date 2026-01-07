@@ -195,21 +195,33 @@
       status: "pending"
     };
 
- // 4) Insert
-    const { error } = await supabaseClient.from("watches").insert([data]);
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("publishBtn");
+  const msgEl = document.getElementById("msg");
 
-    if (error) {
-      msg("Gabim: " + error.message, false);
-      console.error(error);
-    } else {
-      msg("U dërgua ✅ (pending). Tani aprovoje te Supabase dhe del te watches.html", true);
-      // opsionale:
-      // location.reload();
+  // Debug: a u ngarkua JS?
+  if (msgEl) {
+    msgEl.textContent = "JS u ngarkua ✅";
+    msgEl.className = "note ok";
+  }
+
+  if (!btn) {
+    if (msgEl) {
+      msgEl.textContent = "S’po gjej publishBtn ❌ (kontrollo id)";
+      msgEl.className = "note bad";
     }
+    console.log("publishBtn missing");
+    return;
+  }
+
+  btn.addEventListener("click", async () => {
+    alert("PUBLISH u klikua ✅");
+    // këtu pastaj vendos kodin tënd të insert-it (supabase)
   });
+});
 </script>
-console.log("publishBtn element:", document.getElementById("publishBtn"));
-Shkruaj te Ora Swiss
+
 
 </body>
 </html>

@@ -105,7 +105,7 @@
   <button class="btn" id="uploadBtn" type="button">Upload Photos</button>
   <textarea id="photos" placeholder="URL-të e fotove do dalin këtu, me presje"></textarea>
   <a
-    href="https://wa.me/3556XXXXXXXX?text=Hello%20dua%20te%20shes%20nje%20ore"
+    href="https://wa.me/355692408065?text=Hello%20dua%20te%20shes%20nje%20ore"
     class="sell-btn"
     target="_blank"
 
@@ -215,5 +215,31 @@ document.getElementById("uploadBtn").addEventListener("click", () => {
 });
 </script>
 
+<script>
+document.getElementById("sellNow").addEventListener("click", function (e) {
+  const photos = document.getElementById("photos").value.trim();
+
+  if (!photos) {
+    e.preventDefault();
+    alert("Duhet të ngarkosh të paktën një foto para se të shesësh.");
+    return;
+  }
+
+  const brand = document.getElementById("brand").value;
+  const model = document.getElementById("model").value;
+  const price = document.getElementById("price").value;
+
+  const message =
+    Përshëndetje,%0A +
+    Dua të shes një orë:%0A +
+    Brand: ${brand}%0A +
+    Model: ${model}%0A +
+    Çmimi: ${price}€%0A%0A +
+    Fotot:%0A${photos};
+
+  this.href = https://wa.me/355692408065?text=${message};
+});
+</script>
+  
 </body>
 </html>

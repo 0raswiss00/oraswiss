@@ -1060,3 +1060,24 @@ document.getElementById("sellNow").addEventListener("click", function (e) {
   
 </body>
 </html>
+
+
+index regi
+  <div class="wrap">
+    <h3>Regjistrohu</h3>
+    <input id="fullName" placeholder="Emri dhe Mbiemri" autocomplete="name">
+    <input id="phone" placeholder="Telefoni" autocomplete="tel">
+    <input id="country" placeholder="Shteti" autocomplete="country-name">
+    <input id="email" type="email" placeholder="Email" autocomplete="email" autocapitalize="none">
+    <input id="password" type="password" placeholder="Fjalëkalimi" autocomplete="new-password">
+    <button id="btnRegister" type="button">Register</button>
+
+    <hr style="margin:22px 0;border-color:#222">
+
+    <h3>Hyr</h3>
+    <input id="loginEmail" type="email" placeholder="Email" autocomplete="email" autocapitalize="none">
+    <input id="loginPassword" type="password" placeholder="Fjalëkalimi" autocomplete="current-password">
+    <button id="btnLogin" type="button">Login</button>
+  </div>
+
+

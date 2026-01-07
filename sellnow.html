@@ -3,91 +3,63 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <button class="back-btn" onclick="history.back()">← Back</button>
-  <title>Sell Now</title>
-  
+  <title>Add Watch</title>
   <style>
-    body{font-family:Arial,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:20px}
-    .wrap{max-width:900px;margin:0 auto}
-    .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media(max-width:820px){.row{grid-template-columns:1fr}}
-    label{display:block;margin:12px 0 6px;color:#ddd}
+    body{font-family:Arial;background:#0b0b0b;color:#fff;margin:0;padding:20px}
+    .wrap{max-width:700px;margin:auto}
+    label{display:block;margin-top:12px;color:#ddd}
     input,select,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #333;background:#111;color:#fff}
     textarea{min-height:90px}
-    .btn{margin-top:14px;padding:10px 12px;border-radius:12px;border:1px solid #2a2a2a;background:#0f0f0f;color:#fff;cursor:pointer}
-    .btn:hover{background:#1a1a1a}
-    .note{opacity:.85;font-size:13px;margin-top:8px;line-height:1.4}
-    pre{background:#111;border:1px solid #222;border-radius:12px;padding:12px;overflow:auto}
-    .smallbtn{padding:8px 10px;border-radius:12px;border:1px solid #2a2a2a;background:#0f0f0f;color:#fff;cursor:pointer}
-    .smallbtn:hover{background:#1a1a1a}
-  .sell-btn {
-    display: inline-block;
-    margin-top: 16px;
-    padding: 14px 22px;
-    background: #25D366;
-    color: white;
-    font-weight: bold;
-    border-radius: 6px;
-    text-decoration: none;
-  }
-  .sell-btn:hover {
-    background: #1ebe5d;
-  }
-  </style>  
-
-  <!-- Password (client-side) -->
-  <script>
-    const PASS = "1234"; // ndrysho password
-    const KEY = "sellnow_ok";
-    if (localStorage.getItem(KEY) !== "1") {
-      const p = prompt("Password:");
-      if (p === PASS) localStorage.setItem(KEY,"1");
-      else { alert("Wrong password"); location.href="index.html"; }
-    }
-  </script>
-
-  <!-- Cloudinary Upload Widget -->
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:820px){.row{grid-template-columns:1fr}}
+    button{margin-top:16px;padding:14px 18px;border-radius:10px;border:none;font-weight:bold;cursor:pointer}
+    #uploadBtn{background:#333;color:#fff}
+    #publishBtn{background:#25D366;color:#000}
+    .note{opacity:.85;font-size:13px;margin-top:10px;line-height:1.4}
+    pre{background:#111;border:1px solid #222;border-radius:12px;padding:12px;overflow:auto;white-space:pre-wrap}
+  </style>
   <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 </head>
-
 <body>
 <div class="wrap">
-
-  <div class="top">
-    <h1 style="margin:0">Sell Now</h1>
-    <button class="smallbtn" id="logout" type="button">Logout</button>
-  </div>
-
-  <div class="note">
-    ✅ Upload Photos ngarkon foto REALISHT nga telefoni/PC dhe i vendos URL-të automatikisht te <b>photos</b>.
-  </div>
-
-  <label>Category</label>
-  <select id="cat">
-    <option value="luxury">Luxury</option>
-    <option value="vintage" selected>Vintage</option>
-    <option value="parts">Parts</option>
-  </select>
+  <h2>Shto orë (Admin)</h2>
 
   <div class="row">
-    <div><label>Brand</label><input id="brand" placeholder="Omega"></div>
-    <div><label>Model</label><input id="model" placeholder="Vintage"></div>
+    <div><label>Brand</label><input id="brand" placeholder="Rolex"></div>
+    <div><label>Model</label><input id="model" placeholder="Datejust"></div>
   </div>
 
   <div class="row">
-    <div><label>Ref</label><input id="ref" placeholder="2400-4"></div>
+    <div><label>Ref</label><input id="ref" placeholder="16233"></div>
     <div><label>Year</label><input id="year" placeholder="1999"></div>
   </div>
 
   <div class="row">
-    <div><label>Material</label><input id="material" placeholder="Steel"></div>
-    <div><label>Case Size (mm)</label><input id="caseSize" placeholder="35"></div>
+    <div>
+      <label>Box & Papers</label>
+      <select id="box">
+        <option value="">Boshe</option>
+        <option>With box & papers</option>
+        <option>Box only</option>
+        <option>Papers only</option>
+        <option>No box & papers</option>
+        <option>I don’t know</option>
+      </select>
+    </div>
+    <div>
+      <label>Working</label>
+      <select id="working">
+        <option value="">Boshe</option>
+        <option>Working</option>
+        <option>Not working</option>
+        <option>I don’t know</option>
+      </select>
+    </div>
   </div>
 
   <div class="row">
-    <div>
-      <label>Condition</label>
+    <div><label>Price (€)</label><input id="price" placeholder="4500"></div>
+    <div><label>Condition</label>
       <select id="condition">
         <option>New</option>
         <option>Like New</option>
@@ -96,106 +68,27 @@
         <option>Used - Fair</option>
       </select>
     </div>
-    <div><label>Price</label><input id="price" placeholder="900 €"></div>
   </div>
 
   <label>Description</label>
-  <textarea id="description" placeholder="Original, serviced"></textarea>
+  <textarea id="description" placeholder="Shkruaj detaje..."></textarea>
 
-  <label>Photos (URLs)</label>
-  <button class="btn" id="uploadBtn" type="button">Upload Photos</button>
-  <textarea id="photos" placeholder="URL-të e fotove do dalin këtu, me presje"></textarea>
-  <a
-    href="https://wa.me/355692408065?text=Hello%20dua%20te%20shes%20nje%20ore"
-    class="sell-btn"
-    target="_blank"
+  <label>Photos</label>
+  <button id="uploadBtn" type="button">Upload Photos</button>
+  <textarea id="photos" placeholder="URL-të dalin këtu" readonly></textarea>
 
-    SELL NOW
-  </a>
-  <div class="note">
-    Nëse s’po hapet widget-i: Cloud name / upload preset janë gabim.
-  </div>
+  <button id="publishBtn" type="button">PUBLISH</button>
 
-  <button class="btn" id="make" type="button">Generate JSON</button>
+  <div class="note">Pasi të shtosh orën, hape <b>watches.html</b> dhe do shfaqet aty.</div>
 
-  <h3 style="margin:18px 0 8px">Copy this into watches.json</h3>
-  <pre id="out">Kliko "Generate JSON"</pre>
-  <button class="btn" id="copy" type="button">Copy</button>
-
+  <h3 style="margin-top:18px">Last saved JSON (opsionale)</h3>
+  <pre id="out">—</pre>
 </div>
 
 <script>
-const $ = id => document.getElementById(id);
-const parse = t => (t||"").split(/[\n,]+/g).map(s=>s.trim()).filter(Boolean);
+const STORAGE_KEY = "oraswiss_watches";
 
-// LOGOUT
-$("logout").onclick = ()=>{
-  localStorage.removeItem("sellnow_ok");
-  location.href="index.html";
-};
-
-// CLOUDINARY CONFIG (zëvendëso këto 2 vlera)
-const CLOUD_NAME = "oraswiss";
-const UPLOAD_PRESET = "sellnow";
-
-// UPLOAD BUTTON
-$("uploadBtn").onclick = ()=>{
-  if (!CLOUD_NAME.includes("PASTE") && !UPLOAD_PRESET.includes("PASTE")) {
-    cloudinary.openUploadWidget(
-      {
-        cloudName: CLOUD_NAME,
-        uploadPreset: UPLOAD_PRESET,
-        multiple: true,
-        sources: ["local","camera"],
-        folder: "products"
-      },
-      (err, result) => {
-        if (err) {
-          alert("Upload error");
-          console.error(err);
-          return;
-        }
-        if (result && result.event === "success") {
-          const ta = $("photos");
-          const urls = parse(ta.value);
-          urls.push(result.info.secure_url);
-          ta.value = urls.join(", ");
-        }
-      }
-    );
-  } else {
-    alert("Vendos CLOUD_NAME dhe UPLOAD_PRESET te kodi.");
-  }
-};
-
-// JSON GENERATOR
-$("make").onclick = ()=>{
-  const item = {
-    id: Date.now(),
-    cat: ($("cat").value||"").toLowerCase().trim(),
-    brand: $("brand").value.trim(),
-    model: $("model").value.trim(),
-    ref: $("ref").value.trim(),
-    year: $("year").value.trim(),
-    material: $("material").value.trim(),
-    caseSize: $("caseSize").value.trim(),
-    condition: $("condition").value,
-    price: $("price").value.trim(),
-    description: $("description").value.trim(),
-    photos: parse($("photos").value)
-  };
-  $("out").textContent = JSON.stringify(item, null, 2);
-};
-
-// COPY
-$("copy").onclick = async ()=>{
-  try { await navigator.clipboard.writeText($("out").textContent); alert("Copied ✅"); }
-  catch { alert("Copy manualisht."); }
-};
-</script>
-<script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
-
-<script>
+// Cloudinary (vendos këto të sakta)
 const widget = cloudinary.createUploadWidget(
   {
     cloudName: "drfjznv52",
@@ -205,42 +98,47 @@ const widget = cloudinary.createUploadWidget(
   },
   (error, result) => {
     if (!error && result && result.event === "success") {
-      const textarea = document.getElementById("photos");
-      textarea.value += result.info.secure_url + "\n";
+      const ta = document.getElementById("photos");
+      ta.value += result.info.secure_url + "\n";
     }
   }
 );
 
-document.getElementById("uploadBtn").addEventListener("click", () => {
-  widget.open();
-});
+document.getElementById("uploadBtn").onclick = () => widget.open();
+
+function loadList(){
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
+  catch { return []; }
+}
+function saveList(list){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+
+document.getElementById("publishBtn").onclick = () => {
+  const photos = document.getElementById("photos").value.trim().split("\n").map(s=>s.trim()).filter(Boolean);
+  if (!photos.length) { alert("Ngarko të paktën 1 foto"); return; }
+
+  const item = {
+    id: Date.now(),
+    brand: document.getElementById("brand").value.trim(),
+    model: document.getElementById("model").value.trim(),
+    ref: document.getElementById("ref").value.trim(),
+    year: document.getElementById("year").value.trim(),
+    price: document.getElementById("price").value.trim(),
+    condition: document.getElementById("condition").value,
+    box: document.getElementById("box").value,
+    working: document.getElementById("working").value,
+    description: document.getElementById("description").value.trim(),
+    photos
+  };
+
+  const list = loadList();
+  list.unshift(item); // e fundit del lart
+  saveList(list);
+
+  document.getElementById("out").textContent = JSON.stringify(item, null, 2);
+  alert("U publikua ✅");
+};
 </script>
-
-<script>
-document.getElementById("sellNow").addEventListener("click", function (e) {
-  const photos = document.getElementById("photos").value.trim();
-
-  if (!photos) {
-    e.preventDefault();
-    alert("Duhet të ngarkosh të paktën një foto para se të shesësh.");
-    return;
-  }
-
-  const brand = document.getElementById("brand").value;
-  const model = document.getElementById("model").value;
-  const price = document.getElementById("price").value;
-
-  const message =
-    Përshëndetje,%0A +
-    Dua të shes një orë:%0A +
-    Brand: ${brand}%0A +
-    Model: ${model}%0A +
-    Çmimi: ${price}€%0A%0A +
-    Fotot:%0A${photos};
-
-  this.href = https://wa.me/355692408065?text=${message};
-});
-</script>
-  
 </body>
 </html>

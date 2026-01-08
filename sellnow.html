@@ -185,6 +185,9 @@ if ("serviceWorker" in navigator) {
         status: "pending"
       };
 
+    msg("Duke dërguar...", true);
+
+    /* ✅ TEST LIDHJEJE – KËTU */
     try {
       const r = await fetch(SUPABASE_URL + "/rest/v1/watches", {
         method: "GET",
@@ -192,21 +195,21 @@ if ("serviceWorker" in navigator) {
       });
       console.log("Ping status:", r.status);
     } catch (e) {
-      msg("S'po lidhet me Supabase (network/SW).", false);
+      msg("S'po lidhet me Supabase (network / SW / CDN).", false);
       return;
     }
-      
-      msg("Duke dërguar...", true);
 
-      const { error } = await supabaseClient.from("watches").insert([data]);
-      if (error) { msg("Gabim Supabase: " + error.message, false); console.error(error); return; }
+    /* 🔴 INSERT – KJO ËSHTË FUTJA */
+    const { error } = await supabaseClient
+      .from("watches")
+      .insert([data]);
 
-      msg("U dërgua ✅ (pending).", true);
-    } catch (e) {
-      msg("Gabim rrjeti/JS: " + (e?.message || String(e)), false);
-      console.error(e);
+    if (error) {
+      msg("Gabim Supabase: " + error.message, false);
+      return;
     }
-  });
+
+    msg("U dërgua ✅ (pending)", true);
 </script>
 
   

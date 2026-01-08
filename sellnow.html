@@ -125,18 +125,15 @@ if ("serviceWorker" in navigator) {
 <script>
   // ✅ Vendos këto 2 vlera
   const SUPABASE_URL = "https://xxxx.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+  const SUPABASE_ANON_KEY = "PASTE_ANON_KEY_KETU";
 
   // ✅ Cloudinary
   const CLOUD_NAME = "drfjznv52";
   const UPLOAD_PRESET = "oraswiss_upload";
 
-  const supabase = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
- 
-  // UI msg
+  // ✅ Supabase client (EMRI: supabase)
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
   function msg(text, ok = true) {
     const el = document.getElementById("msg");
     if (!el) return;
@@ -144,7 +141,6 @@ if ("serviceWorker" in navigator) {
     el.textContent = text;
   }
 
-  // Merr URL e para (nëse të duhet diku)
   function splitUrls(text) {
     return (text || "")
       .split(/\n|,/g)
@@ -167,19 +163,21 @@ if ("serviceWorker" in navigator) {
         msg("Gabim gjatë upload-it.", false);
         return;
       }
+
       if (result && result.event === "success") {
         const ta = document.getElementById("photos");
+        if (!ta) return;
+
         const current = (ta.value || "").trim();
         const url = result.info.secure_url;
 
-        // shto një URL për rresht
         ta.value = current ? (current + "\n" + url) : url;
         msg("Foto u shtua ✅", true);
       }
     }
   );
 
-  // Button upload
+  // Upload button
   document.getElementById("uploadBtn")?.addEventListener("click", (e) => {
     e.preventDefault();
     widget.open();
@@ -198,47 +196,34 @@ if ("serviceWorker" in navigator) {
         return;
       }
 
-      const data = {
-        category: document.getElementById("category")?.value || null,
-        brand: (document.getElementById("brand")?.value || "").trim(),
-        model: (document.getElementById("model")?.value || "").trim(),
-        ref: (document.getElementById("ref")?.value || "").trim(),
-        year: document.getElementById("year")?.value ? Number(document.getElementById("year").value) : null,
-        material: (document.getElementById("material")?.value || "").trim(),
-        condition: document.getElementById("condition")?.value || null,
-        description: (document.getElementById("description")?.value || "").trim(),
-        case_size: document.getElementById("case_size")?.value ? Number(document.getElementById("case_size").value) : null,
-        price: document.getElementById("price")?.value ? Number(document.getElementById("price").value) : null,
-        photos: photos, // ✅ array text[]
-        box: document.getElementById("box")?.value || null,
-        working: document.getElementById("working")?.value || null,
-
-        // ✅ Zgjidh njërën:
-        status: "pending"
-        // status: "approved"
-      };
+      // Merr fields bazë (shto të tjera nëse do)
+      const brand = (document.getElementById("brand")?.value || "").trim();
+      const model = (document.getElementById("model")?.value || "").trim();
+      const description = (document.getElementById("description")?.value || "").trim();
+      const priceRaw = (document.getElementById("price")?.value || "").trim();
+      const price = priceRaw ? Number(priceRaw) : null;
 
       msg("Duke dërguar...", true);
 
-    const { error } = await supabaseClient
-      .from("watches")
-      .insert([{
-        brand: brand,
-        model: model,
-        description: description,
-        photos: photos,
-        price: price ? Number(price) : null,
-        status: "pending"
-      }]);
+      const { error } = await supabase
+        .from("watches")
+        .insert([{
+          brand,
+          model,
+          description,
+          photos,        // ✅ text[]
+          price,         // ✅ numeric ose null
+          status: "pending"
+        }]);
 
-     if (error) {
-      msg("Gabim Supabase: " + error.message, false);
-      return;
-    }
+      if (error) {
+        msg("Gabim Supabase: " + error.message, false);
+        return;
+      }
 
-    msg("U dërgua me sukses ✅ (pending)", true);
+      msg("U dërgua me sukses ✅ (pending)", true);
 
-      // opsionale: boshatis formën
+      // opsionale: boshatis
       // document.querySelector("form")?.reset();
       // document.getElementById("photos").value = "";
 
@@ -249,12 +234,6 @@ if ("serviceWorker" in navigator) {
   });
 </script>
 
- <!-- Supabase (E DETYRUESHME) -->
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
- 
-<script>
-  console.log("Supabase loaded:", window.supabase);
-</script>
 
   
 </body>

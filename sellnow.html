@@ -131,8 +131,11 @@ if ("serviceWorker" in navigator) {
   const CLOUD_NAME = "drfjznv52";
   const UPLOAD_PRESET = "oraswiss_upload";
 
-  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+  const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+ 
   // UI msg
   function msg(text, ok = true) {
     const el = document.getElementById("msg");

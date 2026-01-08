@@ -119,122 +119,84 @@ if ("serviceWorker" in navigator) {
 <!-- Cloudinary Upload Widget -->
 <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 
-<!-- Supabase (v2 UMD) -->
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
+<!-- Supabase (v2) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-  // ✅ Vendos këto 2 vlera
-  const SUPABASE_URL = "https://xxxx.supabase.co";
-  const SUPABASE_ANON_KEY = "PASTE_ANON_KEY_KETU";
+const SUPABASE_URL = "https://xxxx.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
 
-  // ✅ Cloudinary
-  const CLOUD_NAME = "drfjznv52";
-  const UPLOAD_PRESET = "oraswiss_upload";
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
 
-  // ✅ Supabase client (EMRI: supabase)
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const msg = (text, ok = true) => {
+  const el = document.getElementById("msg");
+  el.className = "note " + (ok ? "ok" : "bad");
+  el.textContent = text;
+};
 
-  function msg(text, ok = true) {
-    const el = document.getElementById("msg");
-    if (!el) return;
-    el.className = "note " + (ok ? "ok" : "bad");
-    el.textContent = text;
-  }
+document.getElementById("publishBtn").addEventListener("click", async () => {
+  try {
+    const photosText = document.getElementById("photos").value.trim();
+    if (!photosText) {
+      msg("Ngarko të paktën 1 foto.", false);
+      return;
+    }
 
-  function splitUrls(text) {
-    return (text || "")
+    const photos = photosText
       .split(/\n|,/g)
       .map(s => s.trim())
       .filter(Boolean);
+
+    const data = {
+      category: document.getElementById("category").value,
+      brand: document.getElementById("brand").value.trim(),
+      model: document.getElementById("model").value.trim(),
+      ref: document.getElementById("ref").value.trim(),
+      year: document.getElementById("year").value
+        ? Number(document.getElementById("year").value)
+        : null,
+      material: document.getElementById("material").value.trim(),
+      condition: document.getElementById("condition").value,
+      description: document.getElementById("description").value.trim(),
+      case_size: document.getElementById("case_size").value
+        ? Number(document.getElementById("case_size").value)
+        : null,
+      price: document.getElementById("price").value
+        ? Number(document.getElementById("price").value)
+        : null,
+      photos: photos,
+      box: document.getElementById("box").value || null,
+      working: document.getElementById("working").value || null,
+      status: "pending"
+    };
+
+    msg("Duke dërguar...", true);
+
+    // ✅ test lidhjeje reale
+    const ping = await fetch(SUPABASE_URL + "/rest/v1/watches", {
+      headers: { apikey: SUPABASE_ANON_KEY }
+    });
+    console.log("Ping status:", ping.status);
+
+    const { error } = await supabaseClient
+      .from("watches")
+      .insert([data]);
+
+    if (error) {
+      msg("Gabim Supabase: " + error.message, false);
+      return;
+    }
+
+    msg("U dërgua ✅ (pending)", true);
+
+  } catch (e) {
+    msg("Gabim JS: " + (e.message || e), false);
+    console.error(e);
   }
-
-  // ✅ Cloudinary widget
-  const widget = cloudinary.createUploadWidget(
-    {
-      cloudName: CLOUD_NAME,
-      uploadPreset: UPLOAD_PRESET,
-      folder: "watches",
-      multiple: true,
-      sources: ["local", "camera"]
-    },
-    (error, result) => {
-      if (error) {
-        console.error(error);
-        msg("Gabim gjatë upload-it.", false);
-        return;
-      }
-
-      if (result && result.event === "success") {
-        const ta = document.getElementById("photos");
-        if (!ta) return;
-
-        const current = (ta.value || "").trim();
-        const url = result.info.secure_url;
-
-        ta.value = current ? (current + "\n" + url) : url;
-        msg("Foto u shtua ✅", true);
-      }
-    }
-  );
-
-  // Upload button
-  document.getElementById("uploadBtn")?.addEventListener("click", (e) => {
-    e.preventDefault();
-    widget.open();
-  });
-
-  // ✅ Publish -> INSERT në Supabase
-  document.getElementById("publishBtn")?.addEventListener("click", async (e) => {
-    e.preventDefault();
-
-    try {
-      const photosText = (document.getElementById("photos")?.value || "").trim();
-      const photos = splitUrls(photosText);
-
-      if (photos.length === 0) {
-        msg("Ngarko të paktën 1 foto.", false);
-        return;
-      }
-
-      // Merr fields bazë (shto të tjera nëse do)
-      const brand = (document.getElementById("brand")?.value || "").trim();
-      const model = (document.getElementById("model")?.value || "").trim();
-      const description = (document.getElementById("description")?.value || "").trim();
-      const priceRaw = (document.getElementById("price")?.value || "").trim();
-      const price = priceRaw ? Number(priceRaw) : null;
-
-      msg("Duke dërguar...", true);
-
-      const { error } = await supabase
-        .from("watches")
-        .insert([{
-          brand,
-          model,
-          description,
-          photos,        // ✅ text[]
-          price,         // ✅ numeric ose null
-          status: "pending"
-        }]);
-
-      if (error) {
-        msg("Gabim Supabase: " + error.message, false);
-        return;
-      }
-
-      msg("U dërgua me sukses ✅ (pending)", true);
-
-      // opsionale: boshatis
-      // document.querySelector("form")?.reset();
-      // document.getElementById("photos").value = "";
-
-    } catch (err) {
-      console.error(err);
-      msg("Gabim JS: " + (err?.message || err), false);
-    }
-  });
+});
 </script>
-
-
   
 </body>
 </html>

@@ -1095,14 +1095,14 @@ ul {
 /* =========================
       IMAGE LOGO INDEX
 ========================= */
-header {
+.logo-center {
   display: flex;
-  align-items: center;
-  gap: 20px;
+  justify-content: center;
+  margin-top: 60px;
 }
 
-.logo {
-  height: 50px;
+.logo-center img {
+  height: 180px;   /* rrite nëse do më të madhe */
 }
 
 /* =========================

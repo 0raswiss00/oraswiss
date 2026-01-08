@@ -185,6 +185,17 @@ if ("serviceWorker" in navigator) {
         status: "pending"
       };
 
+    try {
+      const r = await fetch(SUPABASE_URL + "/rest/v1/watches", {
+        method: "GET",
+        headers: { apikey: SUPABASE_ANON_KEY }
+      });
+      console.log("Ping status:", r.status);
+    } catch (e) {
+      msg("S'po lidhet me Supabase (network/SW).", false);
+      return;
+    }
+      
       msg("Duke dërguar...", true);
 
       const { error } = await supabaseClient.from("watches").insert([data]);

@@ -42,7 +42,7 @@ if ("serviceWorker" in navigator) {
   <div class="note">
     1) Kliko <b>Upload Photos</b> (ngarkon fotot dhe mbush automatikisht URL-të)<br/>
     2) Plotëso fushat<br/>
-    3) Kliko <b>PUBLISH</b> → shkon në Supabase me status <b>pending</b>
+    3) Kliko <b>PUBLISH</b> → shkon në Supabase me status <b>approved</b>
   </div>
 
   <label>Category</label>
@@ -192,7 +192,7 @@ document.getElementById("publishBtn").addEventListener("click", async () => {
       photos: photos,
       box: document.getElementById("box").value || null,
       working: document.getElementById("working").value || null,
-      status: "pending"
+      status: "approved"
     };
 
     msg("Duke dërguar...", true);
@@ -212,7 +212,7 @@ document.getElementById("publishBtn").addEventListener("click", async () => {
       return;
     }
 
-    msg("U dërgua ✅ (pending)", true);
+    msg("U dërgua ✅", true);
 
   } catch (e) {
     msg("Gabim JS: " + (e.message || e), false);

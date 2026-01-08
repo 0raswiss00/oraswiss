@@ -1105,6 +1105,32 @@ ul {
   height: 220px;   /* rrite nëse do më të madhe */
 }
 
+/* FIX menu qe pritet ne telefon */
+nav {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  white-space: nowrap;
+}
+
+nav a {
+  display: inline-block;
+}
+
+nav ul {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  gap: 16px;
+  margin: 0;
+  padding: 10px 14px;
+}
+
+nav li {
+  flex: 0 0 auto;
+  list-style: none;
+}
+
+
+
 /* =========================
            INFO BOX
 ========================= */

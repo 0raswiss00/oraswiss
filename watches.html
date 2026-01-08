@@ -1,86 +1,135 @@
 <!doctype html>
 <html lang="sq">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Ora Swiss - Watches</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ora | OraSwiss</title>
 
   <style>
-    body{font-family:Arial,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:20px}
-    .wrap{max-width:1100px;margin:0 auto}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:600px){.grid{grid-template-columns:1fr}}
-    .card{border:1px solid #222;background:#111;border-radius:16px;overflow:hidden}
-    .img{width:100%;aspect-ratio:4/3;object-fit:cover;background:#000}
-    .pad{padding:12px}
-    .title{font-weight:800;margin-bottom:6px}
-    .meta{opacity:.85;font-size:13px;line-height:1.35}
-    .price{margin-top:8px;font-weight:800}
-    .note{opacity:.85;font-size:13px;margin:10px 0}
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b0b0b;
+      color: #fff;
+    }
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .back {
+      margin-bottom: 20px;
+      display: inline-block;
+      color: #c9a24d;
+      text-decoration: none;
+    }
+    .gallery img {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+    h1 {
+      margin: 10px 0;
+    }
+    .price {
+      font-size: 22px;
+      color: #c9a24d;
+      margin: 10px 0;
+    }
+    .meta {
+      opacity: .9;
+      line-height: 1.6;
+    }
   </style>
 </head>
 
 <body>
+
+<script>
+/* ❌ ÇAKTIVIZO SERVICE WORKER (kritike për Safari) */
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations()
+    .then(rs => rs.forEach(r => r.unregister()));
+}
+</script>
+
 <div class="wrap">
-  <h2 style="margin:0 0 8px">Watches</h2>
-  <div class="note" id="status">Po ngarkon...</div>
-  <div id="grid" class="grid"></div>
+  <a class="back" href="index.html">← Kthehu</a>
+
+  <div id="content">Po ngarkohet…</div>
 </div>
 
 <!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = "https://xxxx.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const SUPABASE_URL = "https://XXXX.supabase.co";   // ← VENDOS KËTU
+const SUPABASE_ANON_KEY = "XXXX";                  // ← VENDOS KËTU
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
 
-  const firstPhoto = (photos) => {
-    if (!photos) return "";
-    if (Array.isArray(photos)) return (photos[0] || "").trim();
-    // fallback nëse diku vjen string
-    return String(photos).split(/\n|,/g)[0]?.trim() || "";
-  };
+/* Merr ID nga URL */
+const params = new URLSearchParams(window.location.search);
+const watchId = params.get("id");
 
-  async function loadWatches() {
-    const statusEl = document.getElementById("status");
-    const grid = document.getElementById("grid");
-    statusEl.textContent = "Po ngarkon...";
+const content = document.getElementById("content");
 
-    const { data, error } = await supabaseClient
-      .from("watches")
-      .select("*")
-      .eq("status", "approved")
-      .order("created_at", { ascending: false });
+if (!watchId) {
+  content.textContent = "ID mungon.";
+  throw new Error("Missing ID");
+}
 
-    if (error) {
-      statusEl.textContent = "Gabim: " + error.message;
-      console.error(error);
-      return;
-    }
+/* Ndihmë: foto e parë */
+function photosArray(p) {
+  if (!p) return [];
+  if (Array.isArray(p)) return p;
+  return String(p).split(/\n|,/).map(x => x.trim()).filter(Boolean);
+}
 
-    if (!data || data.length === 0) {
-      statusEl.textContent = "S’ka ora për momentin.";
-      grid.innerHTML = "";
-      return;
-    }
+async function loadWatch() {
+  const { data, error } = await supabase
+    .from("watches")
+    .select("*")
+    .eq("id", watchId)
+    .single();
 
-    statusEl.textContent = "";
-    grid.innerHTML = data.map(w => {
-      const img = firstPhoto(w.photos);
-      return `
-        <a class="card" href="watch.html?id=${w.id}">
-          <div class="thumb">${img ? <img src="${img}" alt=""> : ""}</div>
-          <div class="meta">
-            <div class="t">${(w.brand || "")} ${(w.model || "")}</div>
-            <div class="p">${w.price ? w.price + " €" : ""}</div>
-          </div>
-        </a>
-      `;
-    }).join("");
+  if (error || !data) {
+    content.textContent = "Ora nuk u gjet.";
+    console.error(error);
+    return;
   }
 
-  loadWatches();
+  const photos = photosArray(data.photos);
+
+  content.innerHTML = `
+    <div class="gallery">
+      ${photos.map(p => <img src="${p}" alt="">).join("")}
+    </div>
+
+    <h1>${data.brand || ""} ${data.model || ""}</h1>
+
+    <div class="price">
+      ${data.price ? data.price + " €" : ""}
+    </div>
+
+    <div class="meta">
+      ${data.ref ? "<b>Ref:</b> " + data.ref + "<br>" : ""}
+      ${data.year ? "<b>Year:</b> " + data.year + "<br>" : ""}
+      ${data.material ? "<b>Material:</b> " + data.material + "<br>" : ""}
+      ${data.case_size ? "<b>Case:</b> " + data.case_size + " mm<br>" : ""}
+      ${data.condition ? "<b>Condition:</b> " + data.condition + "<br>" : ""}
+      ${data.box ? "<b>Box & Papers:</b> " + data.box + "<br>" : ""}
+      ${data.working ? "<b>Working:</b> " + data.working + "<br>" : ""}
+    </div>
+
+    <p style="margin-top:15px">
+      ${data.description || ""}
+    </p>
+  `;
+}
+
+loadWatch();
 </script>
 
 </body>

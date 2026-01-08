@@ -217,17 +217,23 @@ if ("serviceWorker" in navigator) {
 
       msg("Duke dërguar...", true);
 
-      const { error } = await supabaseClient
-        .from("watches")
-        .insert([data]);
+    const { error } = await supabaseClient
+      .from("watches")
+      .insert([{
+        brand: brand,
+        model: model,
+        description: description,
+        photos: photos,
+        price: price ? Number(price) : null,
+        status: "pending"
+      }]);
 
-      if (error) {
-        console.error(error);
-        msg("Gabim Supabase: " + error.message, false);
-        return;
-      }
+     if (error) {
+      msg("Gabim Supabase: " + error.message, false);
+      return;
+    }
 
-      msg("U dërgua ✅", true);
+    msg("U dërgua me sukses ✅ (pending)", true);
 
       // opsionale: boshatis formën
       // document.querySelector("form")?.reset();

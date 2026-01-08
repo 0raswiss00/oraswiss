@@ -24,8 +24,13 @@
     .bad{color:#ff6b6b}
   </style>
 </head>
-
-<body>
+</body>
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations()
+    .then(rs => rs.forEach(r => r.unregister()));
+}
+</script>
 <div class="wrap">
 
   <div class="top">
@@ -192,12 +197,6 @@
   });
 </script>
 
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.getRegistrations()
-    .then(rs => rs.forEach(r => r.unregister()));
-}
-</script>
   
 </body>
 </html>

@@ -145,24 +145,23 @@ if ("serviceWorker" in navigator) {
 <!-- Supabase (v2) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-  // 🔥 VENDOS KËTU TË TUAJAT (Settings → API)
+  // ✅ Vendos këtu të tuat (Settings → API)
   const SUPABASE_URL = "https://xxxx.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
 
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const msg = (text, ok=true) => {
+  function msg(text, ok = true) {
     const el = document.getElementById("msg");
     el.className = "note " + (ok ? "ok" : "bad");
     el.textContent = text;
-  };
+  }
 
   document.getElementById("publishBtn").addEventListener("click", async () => {
     try {
       const photosText = document.getElementById("photos").value.trim();
       if (!photosText) { msg("Ngarko të paktën 1 foto.", false); return; }
 
-      // ✅ text[] (një URL për rresht ose me presje)
       const photos = photosText
         .split(/\n|,/g)
         .map(s => s.trim())
@@ -179,37 +178,49 @@ if ("serviceWorker" in navigator) {
         description: document.getElementById("description").value.trim(),
         case_size: document.getElementById("case_size").value ? Number(document.getElementById("case_size").value) : null,
         price: document.getElementById("price").value ? Number(document.getElementById("price").value) : null,
-        photos: photos,                 // ✅ RUHET SI ARRAY (text[])
+        photos: photos,
         box: document.getElementById("box").value || null,
         working: document.getElementById("working").value || null,
         status: "pending"
       };
 
-    msg("Duke dërguar...", true);
+      msg("Duke dërguar...", true);
 
-    /* ✅ TEST LIDHJEJE – KËTU */
-    try {
-      const r = await fetch(SUPABASE_URL + "/rest/v1/watches", {
-        method: "GET",
-        headers: { apikey: SUPABASE_ANON_KEY }
-      });
-      console.log("Ping status:", r.status);
+      // ✅ TEST LIDHJEJE
+      try {
+        const r = await fetch(SUPABASE_URL + "/rest/v1/watches?select=id&limit=1", {
+          method: "GET",
+          headers: { apikey: SUPABASE_ANON_KEY }
+        });
+        console.log("Ping status:", r.status);
+      } catch (e) {
+        console.error("Ping failed:", e);
+        msg("S'po lidhet me Supabase (network / SW / CDN).", false);
+        return;
+      }
+
+      // 🔴 INSERT (futja në databazë)
+      const { error } = await supabaseClient
+        .from("watches")
+        .insert([data]);
+
+      if (error) {
+        console.error(error);
+        msg("Gabim Supabase: " + error.message, false);
+        return;
+      }
+
+      msg("U dërgua ✅ (pending).", true);
+
+      // (opsionale) pastro formën
+      // document.getElementById("photos").value = "";
+      // document.getElementById("brand").value = "";
+      // ...
     } catch (e) {
-      msg("S'po lidhet me Supabase (network / SW / CDN).", false);
-      return;
+      console.error(e);
+      msg("Gabim rrjeti/JS: " + (e?.message || String(e)), false);
     }
-
-    /* 🔴 INSERT – KJO ËSHTË FUTJA */
-    const { error } = await supabaseClient
-      .from("watches")
-      .insert([data]);
-
-    if (error) {
-      msg("Gabim Supabase: " + error.message, false);
-      return;
-    }
-
-    msg("U dërgua ✅ (pending)", true);
+  });
 </script>
 
   

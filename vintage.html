@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ora Swiss -Vintage Shop</title>
+    <title>Ora Swiss - Vintage Shop</title>
     <link rel="stylesheet" href="styles.css">
 
     <!-- Google tag (gtag.js) -->
@@ -82,7 +82,31 @@
 
  </head>
 <body>
- <div id="products"></div>   
+<header class="site-header">
+    <h1>ORA SWISS – WATCH SHOP</h1>
+    <a href="index.html" class="back-button">← Back to Home</a>
+</header>
+
+<input
+    type="text"
+    id="searchBar"
+    placeholder="Search by brand or model..."
+    onkeyup="searchProducts()">
+
+<style>
+#searchBar {
+    width: 90%;
+    max-width: 600px;
+    padding: 12px;
+    margin: 20px auto;
+    display: block;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+</style>
+    
+<main class="products-section">  
     <h1>ORA SWISS – WATCH SHOP</h1>
     <a href="index.html" class="back-button">← Back to Home</a>
 </header>
@@ -1598,12 +1622,12 @@
   </div>
 </article>
     
- <script>
+<script>
 document.addEventListener('DOMContentLoaded', function () {
   // 1. GALERIA – THUMB → FOTO KRYESORE
   document.querySelectorAll('.product').forEach(function (product) {
     const mainImage = product.querySelector('.product-main-image');
-    const thumbs = product.querySelectorAll('.product-gallery .thumb');
+    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
 
     if (!mainImage || !thumbs.length) return;
 
@@ -1693,3 +1717,37 @@ function searchProducts() {
 }
 </script>
 
+<script src="contact-links.js"></script>
+
+<script>
+  // vendos këtu numrin dhe emailin tënd
+  const WHATSAPP_NUMBER = "355692408065";     // pa +
+  const EMAIL_TO = "adice1899@gmail.com";
+  const PAYPAL_LINK = "https://www.paypal.com/ncp/payment/2G6DFL5DHWUS";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".buy-row").forEach(row => {
+      const ref = row.getAttribute("data-ref") || "";
+
+      const paypal = row.querySelector(".paypal-btn");
+      const wa = row.querySelector(".whatsapp-btn");
+      const email = row.querySelector(".email-btn");
+
+      if (paypal) paypal.href = PAYPAL_LINK;
+
+      if (wa) {
+        const text = encodeURIComponent(Hello, I am interested in Ref: ${ref});
+        wa.href = https://wa.me/${WHATSAPP_NUMBER}?text=${text};
+      }
+
+      if (email) {
+        const subject = encodeURIComponent(Watch Request - Ref: ${ref});
+        const body = encodeURIComponent(Hello,\n\nI am interested in this watch.\nRef: ${ref}\n\nThank you.);
+        email.href = mailto:${EMAIL_TO}?subject=${subject}&body=${body};
+      }
+    });
+  });
+</script>
+    
+</body>  
+</html>

@@ -96,9 +96,39 @@
 
       setMsg("");
 
-      data.forEach(w => {
-        const card = document.createElement("div");
-        card.className = "card";
+    data.forEach(w => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const img = document.createElement("img");
+      img.src = (w.photos && w.photos.length)
+        ? w.photos[0]
+        : "https://via.placeholder.com/400x300?text=No+Image";
+
+      card.appendChild(img);
+
+      const specs = document.createElement("div");
+      specs.className = "specs";
+
+      specs.innerHTML = `
+        <div class="spec"><span>Brand</span><strong>${w.brand || "-"}</strong></div>
+        <div class="spec"><span>Model</span><strong>${w.model || "-"}</strong></div>
+        <div class="spec"><span>Ref</span><strong>${w.ref || "-"}</strong></div>
+        <div class="spec"><span>Viti</span><strong>${w.year || "-"}</strong></div>
+        <div class="spec"><span>Material</span><strong>${w.material || "-"}</strong></div>
+        <div class="spec"><span>Gjendje</span><strong>${w.condition || "-"}</strong></div>
+        <div class="spec"><span>Case</span><strong>${w.case_size ? w.case_size + " mm" : "-"}</strong></div>
+  `    ;
+
+      const price = document.createElement("div");
+      price.className = "price";
+      price.textContent = w.price ? w.price + " €" : "";
+
+      card.appendChild(specs);
+      card.appendChild(price);
+
+      grid.appendChild(card);
+    });
 
         const img = document.createElement("img");
         img.src = (w.photos && w.photos.length)

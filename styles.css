@@ -2939,3 +2939,32 @@ body{background:#000!important;color:#E6E6E6!important}
   border: 1px solid #222;
   z-index: 9999;
 }
+
+/* ===== WATCH .HTML ===== */
+.specs {
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+.spec {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #222;
+  padding: 4px 0;
+}
+
+.spec span {
+  color: #aaa;
+}
+
+.spec strong {
+  color: #fff;
+  font-weight: normal;
+}
+
+.price {
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #4caf50;
+}

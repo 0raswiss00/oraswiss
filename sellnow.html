@@ -7,8 +7,6 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="admin.css">
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
 
   <script>
     console.log("supabase =", window.supabase);
@@ -154,9 +152,6 @@ if ("serviceWorker" in navigator) {
   // ✅ Vendos këtu të tuat (Settings → API)
   const SUPABASE_URL = "https://gnwsrmelmeqduhhfmtoa.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
-
-  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  
   
   function msg(text, ok = true) {
     const el = document.getElementById("msg");

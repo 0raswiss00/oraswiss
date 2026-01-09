@@ -3484,78 +3484,132 @@
     
 
 
-    
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', function () {
+  // 1. GALERIA – THUMB → FOTO KRYESORE
+  document.querySelectorAll('.product').forEach(function (product) {
+    const mainImage = product.querySelector('.product-main-image');
+    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
 
-  // Thumb -> ndërron foton e madhe (punon edhe për shumë produkte)
-  document.body.addEventListener("click", (e) => {
-    const thumb = e.target.closest(".product-gallery .thumb");
-    if (thumb) {
-      const product = thumb.closest(".product");
-      const main = product.querySelector(".product-main-image");
-      if (!main) return;
+    if (!mainImage || !thumbs.length) return;
 
-      const full = thumb.getAttribute("data-full") || thumb.src;
-      main.src = full;
-      if (thumb.alt) main.alt = thumb.alt;
+    thumbs.forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        mainImage.src = thumb.src;
+        if (thumb.alt) {
+          mainImage.alt = thumb.alt;
+        }
+      });
+    });
+  });
 
-      product.querySelectorAll(".product-gallery .thumb").forEach(t => t.classList.remove("active"));
-      thumb.classList.add("active");
-      return;
+  // 2. ZOOM – KUR KLIKON FOTON KRYESORE
+  document.querySelectorAll('.product-main-image').forEach(function (img) {
+    img.addEventListener('click', function () {
+      img.classList.toggle('zoomed');
+    });
+  });
+
+  // 3. LIKE PER CDO PRODUKT
+  document.querySelectorAll('.like-btn').forEach(function (btn) {
+    const id = btn.getAttribute('data-id');
+    if (!id) return;
+
+    const storageKey = 'liked_' + id;
+
+    // Nëse është pëlqyer më parë
+    if (localStorage.getItem(storageKey) === 'true') {
+      btn.classList.add('active');
+      btn.innerText = '✓ Liked';
     }
 
-    // Klik te foto e madhe -> ZOOM
-    const mainImg = e.target.closest(".product-main-image");
-    if (mainImg) {
-      mainImg.classList.toggle("zoomed");
-      return;
-    }
+    btn.addEventListener('click', function () {
+      const isLiked = localStorage.getItem(storageKey) === 'true';
 
-    // LIKE (ruhet me localStorage)
-    const likeBtn = e.target.closest(".like-btn");
-    if (likeBtn) {
-      const id = likeBtn.getAttribute("data-id") || likeBtn.closest(".product")?.getAttribute("data-id") || "default";
-      const key = "liked_" + id;
-      const liked = localStorage.getItem(key) === "true";
-
-      localStorage.setItem(key, (!liked).toString());
-      likeBtn.textContent = !liked ? "✓ Liked" : "❤️ Like";
-      return;
-    }
-
-    // SHARE
-    const shareBtn = e.target.closest(".share-btn");
-    if (shareBtn) {
-      if (navigator.share) {
-        navigator.share({ title: document.title, url: location.href }).catch(()=>{});
-      } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(location.href);
-        alert("Link copied!");
+      if (!isLiked) {
+        localStorage.setItem(storageKey, 'true');
+        btn.classList.add('active');
+        btn.innerText = '✓ Liked';
+        alert('U ruajt te Favorites ❤️');
       } else {
-        alert("Copy link from address bar.");
+        localStorage.removeItem(storageKey);
+        btn.classList.remove('active');
+        btn.innerText = '❤️ Like';
+        alert('U hoq nga Favorites.');
       }
-      return;
-    }
+    });
   });
 
-  // Init LIKE buttons on load
-  document.querySelectorAll(".like-btn").forEach(btn => {
-    const id = btn.getAttribute("data-id") || btn.closest(".product")?.getAttribute("data-id") || "default";
-    if (localStorage.getItem("liked_" + id) === "true") {
-      btn.textContent = "✓ Liked";
-    }
-  });
+  // 4. SHARE PER CDO PRODUKT
+  document.querySelectorAll('.share-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const url  = btn.getAttribute('data-url') || window.location.href;
+      const text = btn.getAttribute('data-share-text') || 'Shiko këtë produkt nga ORA SWISS!';
 
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          text: text,
+          url:  url
+        }).catch(function (err) {
+          console.log('Share u anulua:', err);
+        });
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(url);
+        alert('Linku u kopjua! Mund ta ngjitësh kudo për ta shpërndarë.');
+      } else {
+        alert('Kopjo këtë link:\n' + url);
+      }
+    });
+  });
 });
+
+// 5. KERKIMI I PRODUKTEVE
+function searchProducts() {
+  const input = document.getElementById('searchBar');
+  if (!input) return;
+
+  const value = input.value.toLowerCase();
+  const products = document.querySelectorAll('.product');
+
+  products.forEach(function (product) {
+    const text = product.innerText.toLowerCase();
+    product.style.display = text.includes(value) ? '' : 'none';
+  });
+}
 </script>
 
-<div id="lightbox" class="lightbox">
-  <span class="close" onclick="closeLightbox()">×</span>
-  <img id="lightbox-img">
-  <button class="nav prev" onclick="changeSlide(-1)">❮</button>
-  <button class="nav next" onclick="changeSlide(1)">❯</button>
-</div>
+<script src="contact-links.js"></script>
 
+<script>
+  // vendos këtu numrin dhe emailin tënd
+  const WHATSAPP_NUMBER = "355692408065";     // pa +
+  const EMAIL_TO = "adice1899@gmail.com";
+  const PAYPAL_LINK = "https://www.paypal.com/ncp/payment/2G6DFL5DHWUS";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".buy-row").forEach(row => {
+      const ref = row.getAttribute("data-ref") || "";
+
+      const paypal = row.querySelector(".paypal-btn");
+      const wa = row.querySelector(".whatsapp-btn");
+      const email = row.querySelector(".email-btn");
+
+      if (paypal) paypal.href = PAYPAL_LINK;
+
+      if (wa) {
+        const text = encodeURIComponent(Hello, I am interested in Ref: ${ref});
+        wa.href = https://wa.me/${WHATSAPP_NUMBER}?text=${text};
+      }
+
+      if (email) {
+        const subject = encodeURIComponent(Watch Request - Ref: ${ref});
+        const body = encodeURIComponent(Hello,\n\nI am interested in this watch.\nRef: ${ref}\n\nThank you.);
+        email.href = mailto:${EMAIL_TO}?subject=${subject}&body=${body};
+      }
+    });
+  });
+</script>
+    
 </body>  
 </html>

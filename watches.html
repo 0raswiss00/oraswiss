@@ -2,7 +2,7 @@
 <html lang="sq">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ora | OraSwiss</title>
 
   <style>
@@ -11,126 +11,122 @@
       font-family: Arial, sans-serif;
       background: #0b0b0b;
       color: #fff;
-    }
-    .wrap {
-      max-width: 900px;
-      margin: 0 auto;
       padding: 20px;
     }
-    .back {
-      margin-bottom: 20px;
-      display: inline-block;
-      color: #c9a24d;
-      text-decoration: none;
+
+    h2 {
+      margin-bottom: 10px;
     }
-    .gallery img {
+
+    #msg {
+      margin-bottom: 15px;
+      color: #aaa;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    .card {
+      background: #161616;
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .card img {
       width: 100%;
-      border-radius: 12px;
-      margin-bottom: 12px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 8px;
     }
-    h1 {
-      margin: 10px 0;
-    }
+
     .price {
-      font-size: 22px;
-      color: #c9a24d;
-      margin: 10px 0;
-    }
-    .meta {
-      opacity: .9;
-      line-height: 1.6;
+      font-weight: bold;
+      color: #4caf50;
     }
   </style>
 </head>
 
 <body>
 
-<script>
-/* ❌ ÇAKTIVIZO SERVICE WORKER (kritike për Safari) */
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.getRegistrations()
-    .then(rs => rs.forEach(r => r.unregister()));
-}
-</script>
+  <h2>Ora për shitje</h2>
+  <div id="msg">Duke ngarkuar…</div>
+  <div id="grid" class="grid"></div>
 
-<div class="wrap">
-  <a class="back" href="index.html">← Kthehu</a>
+  <!-- Supabase v2 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-  <div id="content">Po ngarkohet…</div>
-</div>
+  <script>
+    // 🔑 SUPABASE
+    const SUPABASE_URL = "https://gnwsrmelmeqduhhfmtoa.supabase.co";
+    const SUPABASE_ANON_KEY = "PASTE_KETU_KEY";
 
-<!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const SUPABASE_URL = "https://XXXX.supabase.co";   // ← VENDOS KËTU
-const SUPABASE_ANON_KEY = "XXXX";                  // ← VENDOS KËTU
-const supabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
 
-/* Merr ID nga URL */
-const params = new URLSearchParams(window.location.search);
-const watchId = params.get("id");
+    const msgEl = document.getElementById("msg");
+    const grid = document.getElementById("grid");
 
-const content = document.getElementById("content");
+    function setMsg(t) {
+      msgEl.textContent = t;
+    }
 
-if (!watchId) {
-  content.textContent = "ID mungon.";
-  throw new Error("Missing ID");
-}
+    async function loadWatches() {
+      const { data, error } = await supabaseClient
+        .from("watches")
+        .select("*")
+        .eq("status", "approved")
+        .order("created_at", { ascending: false });
 
-/* Ndihmë: foto e parë */
-function photosArray(p) {
-  if (!p) return [];
-  if (Array.isArray(p)) return p;
-  return String(p).split(/\n|,/).map(x => x.trim()).filter(Boolean);
-}
+      if (error) {
+        console.error(error);
+        setMsg("Gabim në ngarkim.");
+        return;
+      }
 
-async function loadWatch() {
-  const { data, error } = await supabase
-    .from("watches")
-    .select("*")
-    .eq("id", watchId)
-    .single();
+      if (!data.length) {
+        setMsg("Nuk ka ora për momentin.");
+        return;
+      }
 
-  if (error || !data) {
-    content.textContent = "Ora nuk u gjet.";
-    console.error(error);
-    return;
-  }
+      setMsg("");
 
-  const photos = photosArray(data.photos);
+      data.forEach(w => {
+        const card = document.createElement("div");
+        card.className = "card";
 
-  content.innerHTML = `
-    <div class="gallery">
-      ${photos.map(p => <img src="${p}" alt="">).join("")}
-    </div>
+        const img = document.createElement("img");
+        img.src = (w.photos && w.photos.length)
+          ? w.photos[0]
+          : "https://via.placeholder.com/400x300?text=No+Image";
 
-    <h1>${data.brand || ""} ${data.model || ""}</h1>
+        const title = document.createElement("div");
+        title.textContent = ${w.brand} ${w.model || ""};
 
-    <div class="price">
-      ${data.price ? data.price + " €" : ""}
-    </div>
+        const ref = document.createElement("div");
+        ref.style.color = "#aaa";
+        ref.textContent = w.ref || "";
 
-    <div class="meta">
-      ${data.ref ? "<b>Ref:</b> " + data.ref + "<br>" : ""}
-      ${data.year ? "<b>Year:</b> " + data.year + "<br>" : ""}
-      ${data.material ? "<b>Material:</b> " + data.material + "<br>" : ""}
-      ${data.case_size ? "<b>Case:</b> " + data.case_size + " mm<br>" : ""}
-      ${data.condition ? "<b>Condition:</b> " + data.condition + "<br>" : ""}
-      ${data.box ? "<b>Box & Papers:</b> " + data.box + "<br>" : ""}
-      ${data.working ? "<b>Working:</b> " + data.working + "<br>" : ""}
-    </div>
+        const price = document.createElement("div");
+        price.className = "price";
+        price.textContent = w.price ? w.price + " €" : "";
 
-    <p style="margin-top:15px">
-      ${data.description || ""}
-    </p>
-  `;
-}
+        card.appendChild(img);
+        card.appendChild(title);
+        card.appendChild(ref);
+        card.appendChild(price);
 
-loadWatch();
-</script>
+        grid.appendChild(card);
+      });
+    }
+
+    loadWatches();
+  </script>
 
 </body>
 </html>

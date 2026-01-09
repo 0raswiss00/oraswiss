@@ -82,7 +82,31 @@
 
  </head>
 <body>
-<header class="site-header">
+ <div id="products"></div>   
+    <h1>ORA SWISS – WATCH SHOP</h1>
+    <a href="index.html" class="back-button">← Back to Home</a>
+</header>
+
+<input
+    type="text"
+    id="searchBar"
+    placeholder="Search by brand or model..."
+    onkeyup="searchProducts()">
+
+<style>
+#searchBar {
+    width: 90%;
+    max-width: 600px;
+    padding: 12px;
+    margin: 20px auto;
+    display: block;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+</style>
+
+<header class="site-header">   
     <h1>ORA SWISS – WATCH SHOP</h1>
     <a href="index.html" class="back-button">← Back to Home</a>
 </header>

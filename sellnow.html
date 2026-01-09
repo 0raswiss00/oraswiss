@@ -153,10 +153,11 @@ if ("serviceWorker" in navigator) {
 <script>
   // ✅ Vendos këtu të tuat (Settings → API)
   const SUPABASE_URL = "https://gnwsrmelmeqduhhfmtoa.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_XXXXXXXXXXXXXXXXXXXX";
+  const SUPABASE_ANON_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
 
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+  
+  
   function msg(text, ok = true) {
     const el = document.getElementById("msg");
     el.className = "note " + (ok ? "ok" : "bad");

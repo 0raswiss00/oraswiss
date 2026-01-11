@@ -94,23 +94,7 @@
         console.error(e);
       }
     });
-
-    try {
-      const cred = await createUserWithEmailAndPassword(auth, email, pass);
-
-      // ✅ KËTU E FUT (para redirect)
-      await setDoc(doc(db, "users", cred.user.uid), {
-        email: cred.user.email,
-        createdAt: serverTimestamp()
-      });
-
-      window.location.href = "profile.html";
-
-    } catch (e) {
-      alert(e.message);
-      console.error(e);
-    }
-    
+  
     // LOGIN
     document.getElementById("btnLogin").addEventListener("click", async () => {
       const email = document.getElementById("loginEmail").value.trim();

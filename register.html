@@ -1,35 +1,37 @@
 <!DOCTYPE html>
 <html lang="sq">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Register</title>
-  <link rel="stylesheet" href="styles.css?v=1">
+  <link rel="stylesheet" href="styles.css?v=1" />
 </head>
+
+<body>
   <div class="auth-page">
     <div class="auth-card register-form">
       <button class="back-btn" onclick="history.back()">← Back</button>
-      <h2>Sing Up</h2>
-      
-      <input id="fullName" placeholder="Full Name" autocomplete="name">
-      <input id="phone" placeholder="Phoni" autocomplete="tel">
-      <input id="country" placeholder="Contry" autocomplete="country-name">
-      <input id="email" type="email" placeholder="Email" autocomplete="email" autocapitalize="none">
-      <input id="password" type="password" placeholder="Password" autocomplete="new-password">
+      <h2>Sign Up</h2>
+
+      <input id="fullName" placeholder="Full Name" autocomplete="name" />
+      <input id="phone" placeholder="Phone" autocomplete="tel" />
+      <input id="country" placeholder="Country" autocomplete="country-name" />
+      <input id="email" type="email" placeholder="Email" autocomplete="email" autocapitalize="none" />
+      <input id="password" type="password" placeholder="Password" autocomplete="new-password" />
 
       <button id="btnRegister" type="button" class="auth-btn">Register</button>
 
       <div class="auth-sep"></div>
 
-      <h2>Hyr</h2>
-      <input id="loginEmail" type="email" placeholder="Email" autocomplete="email" autocapitalize="none">
-      <input id="loginPassword" type="password" placeholder="Fjalëkalimi" autocomplete="current-password">
+      <h2>Login</h2>
+      <input id="loginEmail" type="email" placeholder="Email" autocomplete="email" autocapitalize="none" />
+      <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password" />
 
       <button id="btnLogin" type="button" class="auth-btn">Login</button>
     </div>
   </div>
 
-  <!-- ✅ VETËM 1 SCRIPT MODULE -->
+  <!-- ✅ Vetëm 1 script module -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import {
@@ -43,10 +45,10 @@
     import {
       getFirestore,
       doc,
-      setDoc
+      setDoc,
+      serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-    // ✅ SAME CONFIG (mos e ndrysho)
     const firebaseConfig = {
       apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
       authDomain: "oraswiss-27e57.firebaseapp.com",
@@ -61,10 +63,9 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // ✅ Mbaj user-in të kyçur në faqe të tjera
     await setPersistence(auth, browserLocalPersistence);
 
-    // ✅ Nëse është i kyçur, shko në profil
+    // Nëse është i kyçur, shko në profil
     onAuthStateChanged(auth, (user) => {
       if (user) window.location.href = "profile.html";
     });
@@ -86,9 +87,12 @@
         const cred = await createUserWithEmailAndPassword(auth, email, pass);
 
         await setDoc(doc(db, "users", cred.user.uid), {
-          fullName, phone, country, email,
-          createdAt: Date.now()
-        });
+          fullName,
+          phone,
+          country,
+          email,
+          createdAt: serverTimestamp()
+        }, { merge: true });
 
         window.location.href = "profile.html";
       } catch (e) {
@@ -117,87 +121,11 @@
     });
   </script>
 
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/service-worker.js");
-}
-</script>
-
-<script type="module">
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "API_KEY_YT",
-  authDomain: "oraswiss.firebaseapp.com",
-  projectId: "oraswiss",
-  storageBucket: "oraswiss.appspot.com",
-  messagingSenderId: "XXXX",
-  appId: "XXXX"
-};
-
-// 👉 KJO ËSHTË QELËSI
-const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    await setDoc(
-      doc(db, "users", user.uid),
-      {
-        email: user.email || "",
-        createdAt: serverTimestamp()
-      },
-      { merge: true }
-    );
-  }
-});
-</script>
-  
-const auth = getAuth();
-const db = getFirestore();
-
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    await setDoc(
-      doc(db, "users", user.uid),
-      {
-        email: user.email || "",
-        createdAt: serverTimestamp()
-      },
-      { merge: true } // nuk dyfishohet
-    );
-  }
-});
-</script>
-
-<script type="module">
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const auth = getAuth();
-const db = getFirestore();
-
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    await setDoc(
-      doc(db, "users", user.uid),
-      {
-        email: user.email || "",
-        createdAt: serverTimestamp()
-      },
-      { merge: true } // nuk dyfishohet
-    );
-  }
-});
-</script>
-  
-</body>  
+  <!-- Service Worker (ok të jetë veç) -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/service-worker.js");
+    }
+  </script>
+</body>
 </html>

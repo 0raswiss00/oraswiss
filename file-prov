@@ -1977,3 +1977,129 @@ profilehtml i regullet
 </body>
 </html>
 Shkruaj te Ora Swiss
+
+register html i rgullet
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register</title>
+  <link rel="stylesheet" href="styles.css?v=1" />
+</head>
+
+<body>
+  <div class="auth-page">
+    <div class="auth-card register-form">
+      <button class="back-btn" onclick="history.back()">← Back</button>
+
+      <h2>Sign Up</h2>
+      <input id="fullName" placeholder="Full Name" autocomplete="name" />
+      <input id="phone" placeholder="Phone" autocomplete="tel" />
+      <input id="country" placeholder="Country" autocomplete="country-name" />
+      <input id="email" type="email" placeholder="Email" autocomplete="email" autocapitalize="none" />
+      <input id="password" type="password" placeholder="Password" autocomplete="new-password" />
+      <button id="btnRegister" type="button" class="auth-btn">Register</button>
+
+      <div class="auth-sep"></div>
+
+      <h2>Login</h2>
+      <input id="loginEmail" type="email" placeholder="Email" autocomplete="email" autocapitalize="none" />
+      <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password" />
+      <button id="btnLogin" type="button" class="auth-btn">Login</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import {
+      getAuth,
+      setPersistence,
+      browserLocalPersistence,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    // ✅ Config (ky duhet të jetë 100% i projektit që po sheh në console)
+    const firebaseConfig = {
+      apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+      authDomain: "oraswiss-27e57.firebaseapp.com",
+      projectId: "oraswiss-27e57",
+      storageBucket: "oraswiss-27e57.firebasestorage.app",
+      messagingSenderId: "596627676936",
+      appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+      measurementId: "G-VZPKMD67VQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ✅ Mbaje login
+    await setPersistence(auth, browserLocalPersistence);
+
+    // ✅ KONTROLL: shfaq projektin ku po lidhet faqja (shiko Console te browser)
+    console.log("CONNECTED projectId =", app.options.projectId);
+
+    // Nëse është logged-in, dërgo te profile
+    onAuthStateChanged(auth, (user) => {
+      if (user) window.location.href = "profile.html";
+    });
+
+    // REGISTER
+    document.getElementById("btnRegister").addEventListener("click", async () => {
+      const fullName = document.getElementById("fullName").value.trim();
+      const phone    = document.getElementById("phone").value.trim();
+      const country  = document.getElementById("country").value.trim();
+      const email    = document.getElementById("email").value.trim();
+      const pass     = document.getElementById("password").value;
+
+      if (!fullName || !phone || !country || !email || !pass) {
+        alert("Plotëso të gjitha fushat!");
+        return;
+      }
+
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+
+        await setDoc(doc(db, "users", cred.user.uid), {
+          fullName, phone, country, email,
+          createdAt: serverTimestamp()
+        }, { merge: true });
+
+        window.location.href = "profile.html";
+      } catch (e) {
+        alert(e.message);
+        console.error(e);
+      }
+    });
+  
+    // LOGIN
+    document.getElementById("btnLogin").addEventListener("click", async () => {
+      const email = document.getElementById("loginEmail").value.trim();
+      const pass  = document.getElementById("loginPassword").value;
+
+      if (!email || !pass) {
+        alert("Vendos email dhe fjalëkalim.");
+        return;
+      }
+
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        window.location.href = "profile.html";
+      } catch (e) {
+        alert(e.message);
+        console.error(e);
+      }
+    });
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/service-worker.js");
+    }
+  </script>
+</body>
+</html>

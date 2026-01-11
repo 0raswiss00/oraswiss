@@ -1,0 +1,44 @@
+<div style="color:white; font-family:Arial">
+  <h2>Users</h2>
+  <div>Totali: <b id="count">0</b></div>
+  <ul id="list"></ul>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+  // ⬇️ këtu vendos firebaseConfig-in TEND (si në kodin tënd)
+  const firebaseConfig = {
+    apiKey: "...",
+    authDomain: "...",
+    projectId: "...",
+    storageBucket: "...",
+    messagingSenderId: "...",
+    appId: "...",
+    measurementId: "..."
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const listEl = document.getElementById("list");
+  const countEl = document.getElementById("count");
+
+  async function loadUsers() {
+    listEl.innerHTML = "";
+    const q = query(collection(db, "users"), orderBy("createdAt", "desc"));
+    const snap = await getDocs(q);
+
+    countEl.textContent = snap.size;
+
+    snap.forEach(docSnap => {
+      const u = docSnap.data();
+      const li = document.createElement("li");
+      li.textContent = ${u.email || "(pa email)"} ${u.fullName ? " - " + u.fullName : ""};
+      listEl.appendChild(li);
+    });
+  }
+
+  loadUsers();
+</script>

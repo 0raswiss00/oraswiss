@@ -177,10 +177,36 @@ if ("serviceWorker" in navigator) {
 </script>
 
 <script type="module">
-  // kodi yt Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+  authDomain: "oraswiss-27e57.firebaseapp.com",
+  projectId: "oraswiss-27e57",
+  storageBucket: "oraswiss-27e57.firebasestorage.app",
+  messagingSenderId: "596627676936",
+  appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+  measurementId: "G-VZPKMD67VQ"
+};
+
+console.log("✅ script loaded");
+
+const app = initializeApp(firebaseConfig);
+console.log("✅ projectId =", app.options.projectId);
+
+const db = getFirestore(app);
+
+try {
+  const snap = await getDocs(collection(db, "users"));
+  console.log("✅ users size =", snap.size);
+  document.getElementById("userCount").innerText = snap.size;
+} catch (e) {
+  console.error("❌ Firestore error:", e);
+  document.getElementById("userCount").innerText = "ERR";
+}
 </script>
 
-console.log("SCRIPT LOADED ✅");
 
 </body>
 </html>

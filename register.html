@@ -11,14 +11,13 @@
   <div class="auth-page">
     <div class="auth-card register-form">
       <button class="back-btn" onclick="history.back()">← Back</button>
-      <h2>Sign Up</h2>
 
+      <h2>Sign Up</h2>
       <input id="fullName" placeholder="Full Name" autocomplete="name" />
       <input id="phone" placeholder="Phone" autocomplete="tel" />
       <input id="country" placeholder="Country" autocomplete="country-name" />
       <input id="email" type="email" placeholder="Email" autocomplete="email" autocapitalize="none" />
       <input id="password" type="password" placeholder="Password" autocomplete="new-password" />
-
       <button id="btnRegister" type="button" class="auth-btn">Register</button>
 
       <div class="auth-sep"></div>
@@ -26,12 +25,10 @@
       <h2>Login</h2>
       <input id="loginEmail" type="email" placeholder="Email" autocomplete="email" autocapitalize="none" />
       <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password" />
-
       <button id="btnLogin" type="button" class="auth-btn">Login</button>
     </div>
   </div>
 
-  <!-- ✅ Vetëm 1 script module -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import {
@@ -42,13 +39,9 @@
       signInWithEmailAndPassword,
       onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      setDoc,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
+    // ✅ Config (ky duhet të jetë 100% i projektit që po sheh në console)
     const firebaseConfig = {
       apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
       authDomain: "oraswiss-27e57.firebaseapp.com",
@@ -63,9 +56,13 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    // ✅ Mbaje login
     await setPersistence(auth, browserLocalPersistence);
 
-    // Nëse është i kyçur, shko në profil
+    // ✅ KONTROLL: shfaq projektin ku po lidhet faqja (shiko Console te browser)
+    console.log("CONNECTED projectId =", app.options.projectId);
+
+    // Nëse është logged-in, dërgo te profile
     onAuthStateChanged(auth, (user) => {
       if (user) window.location.href = "profile.html";
     });
@@ -87,10 +84,7 @@
         const cred = await createUserWithEmailAndPassword(auth, email, pass);
 
         await setDoc(doc(db, "users", cred.user.uid), {
-          fullName,
-          phone,
-          country,
-          email,
+          fullName, phone, country, email,
           createdAt: serverTimestamp()
         }, { merge: true });
 
@@ -121,7 +115,6 @@
     });
   </script>
 
-  <!-- Service Worker (ok të jetë veç) -->
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/service-worker.js");
@@ -129,3 +122,4 @@
   </script>
 </body>
 </html>
+

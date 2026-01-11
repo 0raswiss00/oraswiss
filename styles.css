@@ -1435,6 +1435,47 @@ nav li {
   cursor:pointer;
 }
 
+  /* =====CATEGORY-MENU-NUMERIMI-ARTIKUJVE ===== */      
+.category-menu {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.category-menu a {
+  text-decoration: none;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.category-menu a.active {
+  text-decoration: underline;
+}
+
+.count-badge {
+  display: inline-block;
+  min-width: 22px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-left: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #111;
+  color: #fff;
+}
+
+/* MENU SI BUTONA */
+.category-menu {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+      
 /* KUTIA KU VENDOS FOTON NË SFOND */
 
 #lightbox{
@@ -1826,48 +1867,6 @@ nav li {
   margin-top: 0;
   margin-bottom: 8px;
 }
-
-  /* =====CATEGORY-MENU-NUMERIMI-ARTIKUJVE ===== */      
-.category-menu {
-  margin-top: 10px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.category-menu a {
-  text-decoration: none;
-  font-weight: 600;
-  padding: 6px 10px;
-  border-radius: 8px;
-}
-
-.category-menu a.active {
-  text-decoration: underline;
-}
-
-.count-badge {
-  display: inline-block;
-  min-width: 22px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  margin-left: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  background: #111;
-  color: #fff;
-}
-
-/* MENU SI BUTONA */
-.category-menu {
-  margin-top: 12px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
       
 /* ===== RESPONSIVE – NË TELEFON ===== */
 

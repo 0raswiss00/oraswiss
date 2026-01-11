@@ -82,17 +82,7 @@
 
  </head>
 <body>
-<header class="site-header">
-  <h1>ORA SWISS - WATCH SHOP</h1>
-
-  <nav class="category-menu">
-    <a href="luxury.html">Luxury (<span id="luxuryCount">0</span>)</a> |
-    <a href="vintage.html">Vintage (<span id="vintageCount">0</span>)</a> |
-    <a href="parts.html">Parts (<span id="partsCount">0</span>)</a>
-  </nav>
-
-  <a href="index.html" class="back-button">← Back to Home</a>
-</header>
+<div id="header"></div>
 
 <input
     type="text"
@@ -4411,21 +4401,32 @@ function searchProducts() {
 </script>
 
 <script>
+  async function loadHeader() {
+    const res = await fetch("header.html", { cache: "no-store" });
+    const html = await res.text();
+    const holder = document.getElementById("header");
+    if (holder) holder.innerHTML = html;
+  }
+
   async function countItems(page, elementId) {
     try {
       const res = await fetch(page, { cache: "no-store" });
       const html = await res.text();
       const doc = new DOMParser().parseFromString(html, "text/html");
       const count = doc.querySelectorAll("h2").length;
-      document.getElementById(elementId).textContent = count;
+      const el = document.getElementById(elementId);
+      if (el) el.textContent = count;
     } catch (e) {
       console.warn("Error:", page);
     }
   }
 
-  countItems("luxury.html", "luxuryCount");
-  countItems("vintage.html", "vintageCount");
-  countItems("parts.html", "partsCount");
+  (async () => {
+    await loadHeader();
+    countItems("luxury.html", "luxuryCount");
+    countItems("vintage.html", "vintageCount");
+    countItems("parts.html", "partsCount");
+  })();
 </script>
      
 </body>  

@@ -72,32 +72,30 @@
    <img src="images/oraswiss-logo.png" alt="OraSwiss Logo">
  </div>
   
+<!-- VETËM 1 script module, para </body> -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
   import { getFirestore, collection, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
-    authDomain: "oraswiss-27e57.firebaseapp.com",
-    projectId: "oraswiss-27e57",
-    storageBucket: "oraswiss-27e57.firebasestorage.app",
-    messagingSenderId: "596627676936",
-    appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-    measurementId: "G-VZPKMD67VQ"
+    apiKey: "...",
+    authDomain: "...",
+    projectId: "...",
+    storageBucket: "...",
+    messagingSenderId: "...",
+    appId: "...",
+    measurementId: "..."
   };
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  async function loadUserCount() {
-    try {
-      const snap = await getCountFromServer(collection(db, "users"));
-      document.getElementById("userCount").textContent = snap.data().count;
-    } catch (e) {
-      console.error("COUNT ERROR:", e);
-      document.getElementById("userCount").textContent = "ERR";
-    }
+  async function loadCount() {
+    const collRef = collection(db, "users"); // KJO është e rëndësishme
+    const snap = await getCountFromServer(collRef);
+    document.getElementById("userCount").textContent = snap.data().count;
   }
 
-  loadUserCount();
+  loadCount();
 </script>
+

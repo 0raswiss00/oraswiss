@@ -1149,25 +1149,27 @@ nav li {
   text-decoration: underline;
 }
 
-.count-badge {
-  display: inline-block;
-  min-width: 22px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  margin-left: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  background: #111;
-  color: #fff;
-}
+.category-menu a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 
-/* MENU SI BUTONA */
-.category-menu {
-  margin-top: 12px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
+    padding: 8px 14px;
+    border-radius: 999px;
+
+    background: #6c5ce7;   /* NGJYRA E BUTONIT */
+    color: #fff;
+
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+Ora
+.category-menu a:hover {
+    background: #5a4bdc;
+    transform: translateY(-1px);
 }
 
 /* =========================

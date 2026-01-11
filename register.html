@@ -29,6 +29,37 @@
     </div>
   </div>
 
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register</title>
+  <link rel="stylesheet" href="styles.css?v=1" />
+</head>
+
+<body>
+  <div class="auth-page">
+    <div class="auth-card register-form">
+      <button class="back-btn" onclick="history.back()">← Back</button>
+
+      <h2>Sign Up</h2>
+      <input id="fullName" placeholder="Full Name" autocomplete="name" />
+      <input id="phone" placeholder="Phone" autocomplete="tel" />
+      <input id="country" placeholder="Country" autocomplete="country-name" />
+      <input id="email" type="email" placeholder="Email" autocomplete="email" autocapitalize="none" />
+      <input id="password" type="password" placeholder="Password" autocomplete="new-password" />
+      <button id="btnRegister" type="button" class="auth-btn">Register</button>
+
+      <div class="auth-sep"></div>
+
+      <h2>Login</h2>
+      <input id="loginEmail" type="email" placeholder="Email" autocomplete="email" autocapitalize="none" />
+      <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password" />
+      <button id="btnLogin" type="button" class="auth-btn">Login</button>
+    </div>
+  </div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import {
@@ -113,6 +144,12 @@
         console.error(e);
       }
     });
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/service-worker.js");
+    }
   </script>
 
   <script>

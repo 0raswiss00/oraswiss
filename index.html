@@ -72,111 +72,32 @@
    <img src="images/oraswiss-logo.png" alt="OraSwiss Logo">
  </div>
   
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/service-worker.js");
-    }
-  </script>
-
-  <!-- ✅ VETËM 1 SCRIPT MODULE -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import {
-      getAuth,
-      setPersistence,
-      browserLocalPersistence,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      setDoc
-    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
-
-    // ✅ SAME CONFIG (mos e ndrysho)
-    const firebaseConfig = {
-      apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
-      authDomain: "oraswiss-27e57.firebaseapp.com",
-      projectId: "oraswiss-27e57",
-      storageBucket: "oraswiss-27e57.firebasestorage.app",
-      messagingSenderId: "596627676936",
-      appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-      measurementId: "G-VZPKMD67VQ"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    // ✅ Mbaj user-in të kyçur në faqe të tjera
-    await setPersistence(auth, browserLocalPersistence);
-
-    // ✅ Nëse është i kyçur, shko në profil
-    onAuthStateChanged(auth, (user) => {
-      if (user) window.location.href = "profile.html";
-    });
-
-    // REGISTER
-    document.getElementById("btnRegister").addEventListener("click", async () => {
-      const fullName = document.getElementById("fullName").value.trim();
-      const phone    = document.getElementById("phone").value.trim();
-      const country  = document.getElementById("country").value.trim();
-      const email    = document.getElementById("email").value.trim();
-      const pass     = document.getElementById("password").value;
-
-      if (!fullName || !phone || !country || !email || !pass) {
-        alert("Plotëso të gjitha fushat!");
-        return;
-      }
-
-      try {
-        const cred = await createUserWithEmailAndPassword(auth, email, pass);
-
-        await setDoc(doc(db, "users", cred.user.uid), {
-          fullName, phone, country, email,
-          createdAt: Date.now()
-        });
-
-        window.location.href = "profile.html";
-      } catch (e) {
-        alert(e.message);
-        console.error(e);
-      }
-    });
-
-    // LOGIN
-    document.getElementById("btnLogin").addEventListener("click", async () => {
-      const email = document.getElementById("loginEmail").value.trim();
-      const pass  = document.getElementById("loginPassword").value;
-
-      if (!email || !pass) {
-        alert("Vendos email dhe fjalëkalim.");
-        return;
-      }
-
-      try {
-        await signInWithEmailAndPassword(auth, email, pass);
-        window.location.href = "profile.html";
-      } catch (e) {
-        alert(e.message);
-        console.error(e);
-      }
-    });
-  </script>
-
-
-
-
-
 <script type="module">
-  // këtu VETËM një herë firebaseConfig + initializeApp + getCountFromServer
-</script>
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import { getFirestore, collection, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-</body>
-</html>
+  const firebaseConfig = {
+    apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+    authDomain: "oraswiss-27e57.firebaseapp.com",
+    projectId: "oraswiss-27e57",
+    storageBucket: "oraswiss-27e57.firebasestorage.app",
+    messagingSenderId: "596627676936",
+    appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+    measurementId: "G-VZPKMD67VQ"
+  };
 
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-</body>
-</html>
+  async function loadUserCount() {
+    try {
+      const snap = await getCountFromServer(collection(db, "users"));
+      document.getElementById("userCount").textContent = snap.data().count;
+    } catch (e) {
+      console.error("COUNT ERROR:", e);
+      document.getElementById("userCount").textContent = "ERR";
+    }
+  }
+
+  loadUserCount();
+</script>kjo ne index ne fund

@@ -1872,3 +1872,108 @@ profile2html
   </script>
 </body>
 </html>
+
+
+profilehtml i regullet
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile - Ora Swiss</title>
+
+  <style>
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
+    .wrap{max-width:520px;margin:30px auto;padding:0 16px}
+    button{padding:10px 14px;border-radius:10px;border:1px solid #777;background:#111;color:#fff;cursor:pointer}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <h2>Profili</h2>
+
+    <p>Email: <b id="userEmail"></b></p>
+    <p>Emri: <b id="userName">-</b></p>
+    <p>Te regjistruar: <b id="userCount">0</b></p>
+
+    <button id="btnLogout" type="button">Logout</button>
+    <p id="msg" style="margin-top:12px;"></p>
+  </div>
+
+  <!-- ✅ VETËM 1 SCRIPT MODULE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      getCountFromServer
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+      authDomain: "oraswiss-27e57.firebaseapp.com",
+      projectId: "oraswiss-27e57",
+      storageBucket: "oraswiss-27e57.firebasestorage.app",
+      messagingSenderId: "596627676936",
+      appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+      measurementId: "G-VZPKMD67VQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const emailEl = document.getElementById("userEmail");
+    const nameEl  = document.getElementById("userName");
+    const countEl = document.getElementById("userCount");
+    const msgEl   = document.getElementById("msg");
+
+    async function loadUserCount() {
+      try {
+        const snap = await getCountFromServer(collection(db, "users"));
+        countEl.textContent = String(snap.data().count);
+      } catch (e) {
+        countEl.textContent = "0";
+        console.error("S'lexoj dot numrin:", e);
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      emailEl.textContent = user.email || "";
+      msgEl.textContent = "Je i kyçur ✅";
+
+      // 🔹 Emri nga Firestore (nëse ekziston)
+      try {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists()) {
+          const data = snap.data();
+          nameEl.textContent = data.fullName || "-";
+        } else {
+          nameEl.textContent = "-";
+        }
+      } catch (e) {
+        nameEl.textContent = "-";
+        console.error("S'lexoj dot profilin:", e);
+      }
+
+      // 🔹 Numri total nga Firestore
+      await loadUserCount();
+    });
+
+    document.getElementById("btnLogout").addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
+Shkruaj te Ora Swiss

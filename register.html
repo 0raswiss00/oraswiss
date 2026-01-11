@@ -127,6 +127,40 @@ if ("serviceWorker" in navigator) {
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "API_KEY_YT",
+  authDomain: "oraswiss.firebaseapp.com",
+  projectId: "oraswiss",
+  storageBucket: "oraswiss.appspot.com",
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
+};
+
+// 👉 KJO ËSHTË QELËSI
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    await setDoc(
+      doc(db, "users", user.uid),
+      {
+        email: user.email || "",
+        createdAt: serverTimestamp()
+      },
+      { merge: true }
+    );
+  }
+});
+</script>
+  
 const auth = getAuth();
 const db = getFirestore();
 

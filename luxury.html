@@ -735,7 +735,7 @@ function searchProducts() {
       const res = await fetch(page, { cache: "no-store" });
       const html = await res.text();
       const doc = new DOMParser().parseFromString(html, "text/html");
-      const count = doc.querySelectorAll("h2").length;
+      const count = doc.querySelectorAll(".product").length;
       const el = document.getElementById(elementId);
       if (el) el.textContent = count;
     } catch (e) {

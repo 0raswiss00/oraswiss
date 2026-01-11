@@ -1716,3 +1716,56 @@ onAuthStateChanged(auth, async (user) => {
   
 </body>  
 </html>
+
+
+profilehtml
+<body>
+  <div class="wrap">
+    <h2>Profili</h2>
+    <p>Email: <b id="userEmail">...</b></p>
+    <button id="btnLogout" type="button">Logout</button>
+    <p id="msg" style="margin-top:12px;"></p>
+  </div>
+
+  <!-- ✅ VETËM 1 SCRIPT MODULE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+
+    // ✅ SAME CONFIG (identik me index.html)
+    const firebaseConfig = {
+      apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+      authDomain: "oraswiss-27e57.firebaseapp.com",
+      projectId: "oraswiss-27e57",
+      storageBucket: "oraswiss-27e57.firebasestorage.app",
+      messagingSenderId: "596627676936",
+      appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+      measurementId: "G-VZPKMD67VQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const emailEl = document.getElementById("userEmail");
+    const msgEl = document.getElementById("msg");
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+      emailEl.textContent = user.email || "";
+      msgEl.textContent = "Je i kyçur ✅";
+    });
+
+    document.getElementById("btnLogout").addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>

@@ -3048,3 +3048,52 @@ body{background:#000!important;color:#E6E6E6!important}
   background: #111;
   color: #fff;
 }
+
+/* MENU SI BUTONA */
+.category-menu {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.category-menu a {
+  background: #ffffff;
+  color: #000000;
+  padding: 8px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 600;
+  border: 1px solid #000;
+  display: inline-flex;
+  align-items: center;
+}
+
+.category-menu a:hover {
+  background: #000000;
+  color: #ffffff;
+}
+
+/* BUTON AKTIV */
+.category-menu a.active {
+  background: #000000;
+  color: #ffffff;
+}
+
+/* BADGE NUMRI */
+.count-badge {
+  background: #000000;
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 2px 8px;
+  margin-left: 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Kur butoni është aktiv, badge bëhet i bardhë */
+.category-menu a.active .count-badge {
+  background: #ffffff;
+  color: #000000;
+}

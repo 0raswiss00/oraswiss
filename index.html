@@ -76,7 +76,11 @@
 <!-- VETËM 1 script module, para </body> -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import { getFirestore, collection, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+  import { 
+    getFirestore, 
+    collection, 
+    getCountFromServer 
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "...",
@@ -85,18 +89,28 @@
     storageBucket: "...",
     messagingSenderId: "...",
     appId: "...",
-    measurementId: "..."
   };
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
   async function loadCount() {
-    const collRef = collection(db, "users"); // KJO është e rëndësishme
-    const snap = await getCountFromServer(collRef);
-    document.getElementById("userCount").textContent = snap.data().count;
+    try {
+      const el = document.getElementById("userCount");
+      if (!el) {
+        console.error("Elementi #userCount nuk ekziston në HTML");
+        return;
+      }
+
+      const collRef = collection(db, "users");
+      const snap = await getCountFromServer(collRef);
+
+      el.textContent = snap.data().count;
+    } catch (err) {
+      console.error("Gabim gjatë leximit nga Firestore:", err);
+    }
   }
 
-  loadCount();
+  // Sigurohemi që DOM është gati
+  window.addEventListener("DOMContentLoaded", loadCount);
 </script>
-

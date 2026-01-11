@@ -140,5 +140,28 @@
 
 </div>
 
+<script>
+  async function countItems(page, elementId) {
+    try {
+      const res = await fetch(page, { cache: "no-store" });
+      const html = await res.text();
+      const doc = new DOMParser().parseFromString(html, "text/html");
+
+      // Numëron produktet sipas titujve (si te parts.html që kanë "##" -> <h2>)
+      const count = doc.querySelectorAll("h2").length;
+
+      const el = document.getElementById(elementId);
+      if (el) el.textContent = count;
+    } catch (e) {
+      console.warn("Nuk u lexua:", page, e);
+    }
+  }
+
+  countItems("luxury.html", "luxuryCount");
+  countItems("vintage.html", "vintageCount");
+  countItems("parts.html", "partsCount");
+</script>
+
+    
 </body>
 </html>

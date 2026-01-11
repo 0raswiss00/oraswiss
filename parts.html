@@ -4408,12 +4408,30 @@ function searchProducts() {
     if (holder) holder.innerHTML = html;
   }
 
+  function setActiveCategory() {
+    const file = window.location.pathname.split("/").pop();
+    const map = {
+      "luxury.html": "luxury",
+      "vintage.html": "vintage",
+      "parts.html": "parts"
+    };
+    const key = map[file];
+    if (!key) return;
+
+    document.querySelectorAll(".category-menu a").forEach(a => {
+      if (a.dataset.page === key) a.classList.add("active");
+    });
+  }
+
   async function countItems(page, elementId) {
     try {
       const res = await fetch(page, { cache: "no-store" });
       const html = await res.text();
       const doc = new DOMParser().parseFromString(html, "text/html");
-      const count = doc.querySelectorAll("h2").length;
+
+      // numëron produktet
+      const count = doc.querySelectorAll("article.product").length;
+
       const el = document.getElementById(elementId);
       if (el) el.textContent = count;
     } catch (e) {
@@ -4423,11 +4441,13 @@ function searchProducts() {
 
   (async () => {
     await loadHeader();
+    setActiveCategory();
     countItems("luxury.html", "luxuryCount");
     countItems("vintage.html", "vintageCount");
     countItems("parts.html", "partsCount");
   })();
 </script>
+
      
 </body>  
 </html>

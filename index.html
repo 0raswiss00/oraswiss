@@ -88,25 +88,19 @@
   console.log("COUNT SCRIPT START ✅", firebaseConfig.projectId, location.href);
 
   // ✅ KRIJO APP + DB PARA SE T'I PËRDORËSH
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-  window.addEventListener("DOMContentLoaded", () => {
-    const el = document.getElementById("userCount");
-    console.log("ELEMENT:", el);
+const el = document.getElementById("userCount");
+console.log("ELEMENT:", el);
 
-    if (!el) {
-      console.error("❌ Nuk u gjet #userCount në HTML");
-      return;
-    }
+onSnapshot(collection(db, "users"), (snapshot) => {
+  console.log("DOCS:", snapshot.size);
+  if (el) el.textContent = snapshot.size;
+}, (err) => {
+  console.error("Firestore error:", err);
+});
 
-    onSnapshot(collection(db, "users"), (snapshot) => {
-      console.log("DOCS ✅:", snapshot.size);
-      el.textContent = snapshot.size;
-    }, (err) => {
-      console.error("Firestore error ❌:", err);
-    });
-  });
 </script>
 
 </body>  

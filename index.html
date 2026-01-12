@@ -43,39 +43,33 @@
     pre{background:#111;border:1px solid #333;padding:12px;border-radius:10px;overflow:auto}
   </style>
 </head>
-
 <body>
 
-  <header class="site-header">
-    <nav class="nav-scroll">
-      <span class="site-title">ORA<br>SWISS</span>
-      <span id="userEMail">0</span>
-      <a href="register.html">Register</a>
-      <a href="sellnow.html">Sell Now</a>
-      <a href="home.html">Home</a>
-      <a href="luxury.html">Luxury</a>
-      <a href="vintage.html">Vintage</a>
-      <a href="parts.html">Parts</a>
-      <a href="separate-parts.html">Separate Parts</a>
-      <a href="service.html">Service</a>
-      <a href="gallery.html">Gallery</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-      <a href="jewelry.html">Jewelry</a>
-      <a href="policy.html">Policy</a>
-      <a href="sell.html">Sell</a>
-    </nav>
-  </header>
-  <!-- ... pjesa tjetër e faqes ... -->
+<header class="site-header">
+  <nav class="nav-scroll">
+    <span class="site-title">ORA<br>SWISS</span>
 
- <div class="logo-center">
-   <img src="images/oraswiss-logo.png" alt="OraSwiss Logo">
- </div>
+    <!-- KJO: email i user-it -->
+    <span id="userEMail">Guest</span>
+
+    <!-- KJO: numri total i dokumenteve /users -->
+    <span>Te regjistruar gjithsej: <span id="totalUsers">0</span></span>
+
+    <a href="register.html">Register</a>
+    <a href="sellnow.html">Sell Now</a>
+    <a href="home.html">Home</a>
+    ...
+  </nav>
+</header>
+
+<!-- (opsionale) lista e user-ave nga Firestore -->
+<ul id="usersList"></ul>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
-  
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+  import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
   const firebaseConfig = {
     apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
     authDomain: "oraswiss-27e57.firebaseapp.com",
@@ -85,21 +79,29 @@ import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/fi
     appId: "1:596627676936:web:0c96cf820fef4e979616bd",
     measurementId: "G-VZPKMD67VQ"
   };
+
   const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
   const db = getFirestore(app);
 
+  // ✅ Shfaq email-in e user-it (nese je logged in)
+  onAuthStateChanged(auth, (user) => {
+    document.getElementById("userEMail").innerText = user?.email || "Guest";
+  });
+
+  // ✅ Numri i dokumenteve te Firestore /users + lista
   onSnapshot(collection(db, "users"), (snap) => {
     document.getElementById("totalUsers").innerText = snap.size;
 
     const ul = document.getElementById("usersList");
     ul.innerHTML = "";
-
-    snap.forEach(doc => {
+    snap.forEach((d) => {
       const li = document.createElement("li");
-      li.textContent = doc.id;
+      li.textContent = d.data().email || d.id; // shfaq email nese ekziston
       ul.appendChild(li);
     });
   });
 </script>
+
 </body>  
 </html>

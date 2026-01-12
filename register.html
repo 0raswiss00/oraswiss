@@ -41,6 +41,25 @@
     } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
     import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
+    import { sendPasswordResetEmail } from
+    "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+    document.getElementById("forgotPass").addEventListener("click", async () => {
+      const email = document.getElementById("loginEmail").value.trim();
+
+      if (!email) {
+        alert("Shkruaj email-in");
+        return;
+      }
+
+      try {
+        await sendPasswordResetEmail(auth, email);
+        alert("Email për reset password u dërgua");
+      } catch (e) {
+        alert(e.message);
+      }
+    });
+    
     // ✅ Config (ky duhet të jetë 100% i projektit që po sheh në console)
     const firebaseConfig = {
       apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
@@ -113,13 +132,17 @@
         console.error(e);
       }
     });
-  </script>
+  <button id="forgotPass" type="button">
+  Keni harruar password-in?
+</button>
+</script>
 
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/service-worker.js");
     }
-  </script>
+</script>
+      
 </body>
 </html>
 

@@ -89,14 +89,20 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // ✅ Real-time total users + list (nga Firestore "users")
-  const usersRef = collection(db, "users");
-
-  onSnapshot(usersRef, (snap) => {
+  onSnapshot(collection(db, "users"), (snap) => {
     document.getElementById("totalUsers").innerText = snap.size;
 
+    const ul = document.getElementById("usersList");
+    ul.innerHTML = "";
 
+    snap.forEach(doc => {
+      const li = document.createElement("li");
+      li.textContent = doc.id;
+      ul.appendChild(li);
+    });
+  });
 </script>
+
 
 
 

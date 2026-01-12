@@ -75,7 +75,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+  import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyACmJj10Gz1gfRUjxz-w3_k94tNBFNyvVg",
@@ -86,21 +86,15 @@
     appId: "1:596627676936:web:ddaa6ac46077f5169616bd"
   };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  // Init Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-  async function loadTotalUsers() {
-    const snap = await getDocs(collection(db, "users"));
+  // 🔴 REAL-TIME total users
+  onSnapshot(collection(db, "users"), (snap) => {
     document.getElementById("totalUsers").innerText = snap.size;
-  }
-
-loadTotalUsers(); // 👈 KJO MUNGONTE
-
-
-
-  loadTotalUsers();
+  });
 </script>
-
 
 
 </body>  

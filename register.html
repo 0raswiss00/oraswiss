@@ -88,6 +88,13 @@
           createdAt: serverTimestamp()
         }, { merge: true });
 
+    import { doc, setDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    // ...
+
+    const statsRef = doc(db, "stats", "global");
+    await setDoc(statsRef, { totalUsers: increment(1) }, { merge: true });
+        
         window.location.href = "profile.html";
       } catch (e) {
         alert(e.message);

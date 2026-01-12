@@ -1494,6 +1494,70 @@ nav li {
   cursor:pointer;
 }
 
+/* HERO – desktop */
+.hero{
+  min-height: 70vh;              /* lartësia që mungon */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 60px 80px;
+  background: 
+    linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)),
+    url("images/oraswiss-bg.jpg"); /* FOTO SFOND */
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-left{
+  flex: 1;
+  color: #fff;
+}
+
+.hero-right{
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.hero-right img{
+  max-width: 360px;
+}
+.hero{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 30px 20px;
+}
+
+.hero-right img{
+  max-width: 220px;
+  width: 100%;
+  height: auto;
+  display:block;
+}
+
+/* Mobile */
+@media (max-width: 768px){
+  .hero{
+    justify-content:center;
+    padding: 20px 14px;
+  }
+  .hero-left{ display:none; }
+  .hero-right img{ max-width: 180px; }
+}
+
+#msg{
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  background: #0b0b0b;
+  color: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #222;
+  z-index: 9999;
+}
 
       
 /* KUTIA KU VENDOS FOTON NË SFOND */
@@ -2182,70 +2246,6 @@ body {
   }
 }
 
-/* HERO – desktop */
-.hero{
-  min-height: 70vh;              /* lartësia që mungon */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 60px 80px;
-  background: 
-    linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)),
-    url("images/oraswiss-bg.jpg"); /* FOTO SFOND */
-  background-size: cover;
-  background-position: center;
-}
-
-.hero-left{
-  flex: 1;
-  color: #fff;
-}
-
-.hero-right{
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.hero-right img{
-  max-width: 360px;
-}
-.hero{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding: 30px 20px;
-}
-
-.hero-right img{
-  max-width: 220px;
-  width: 100%;
-  height: auto;
-  display:block;
-}
-
-/* Mobile */
-@media (max-width: 768px){
-  .hero{
-    justify-content:center;
-    padding: 20px 14px;
-  }
-  .hero-left{ display:none; }
-  .hero-right img{ max-width: 180px; }
-}
-
-#msg{
-  position: fixed;
-  bottom: 12px;
-  left: 12px;
-  right: 12px;
-  background: #0b0b0b;
-  color: #fff;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #222;
-  z-index: 9999;
-}
 
    
 /* ===============================

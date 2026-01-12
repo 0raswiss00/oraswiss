@@ -29,97 +29,82 @@
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-    import {
-      getAuth,
-      setPersistence,
-      browserLocalPersistence,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+import {
+  getAuth,
+  setPersistence,
+  browserLocalPersistence,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-    // ✅ Config (ky duhet të jetë 100% i projektit që po sheh në console)
-  const firebaseConfig = {
-    apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
-    authDomain: "oraswiss-27e57.firebaseapp.com",
-    projectId: "oraswiss-27e57",
-    storageBucket: "oraswiss-27e57.firebasestorage.app",
-    messagingSenderId: "596627676936",
-    appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-    measurementId: "G-VZPKMD67VQ"
-  };
+/* 🔴 CONFIG I SAKTË – NJËSOJ NË ÇDO FAQE */
+const firebaseConfig = {
+  apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+  authDomain: "oraswiss-27e57.firebaseapp.com",
+  projectId: "oraswiss-27e57",
+  storageBucket: "oraswiss-27e57.appspot.com",
+  messagingSenderId: "596627676936",
+  appId: "1:596627676936:web:0c96cf820fef4e979616bd"
+};
 
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+await setPersistence(auth, browserLocalPersistence);
 
-    // ✅ Mbaje login
-    await setPersistence(auth, browserLocalPersistence);
+/* DEBUG – shiko console */
+console.log("CONNECTED TO:", app.options.projectId);
 
-    // ✅ KONTROLL: shfaq projektin ku po lidhet faqja (shiko Console te browser)
-    console.log("CONNECTED projectId =", app.options.projectId);
+/* REDIRECT nëse është logged */
+onAuthStateChanged(auth, user => {
+  if (user && location.pathname.includes("register")) {
+    location.href = "profile.html";
+  }
+});
 
-    // Nëse është logged-in, dërgo te profile
-    onAuthStateChanged(auth, (user) => {
-      if (user) window.location.href = "profile.html";
-    });
+/* REGISTER */
+document.getElementById("btnRegister")?.addEventListener("click", async () => {
+  const fullName = fullName.value.trim();
+  const phone    = phone.value.trim();
+  const country  = country.value.trim();
+  const email    = email.value.trim();
+  const pass     = password.value;
 
-    // REGISTER
-    document.getElementById("btnRegister").addEventListener("click", async () => {
-      const fullName = document.getElementById("fullName").value.trim();
-      const phone    = document.getElementById("phone").value.trim();
-      const country  = document.getElementById("country").value.trim();
-      const email    = document.getElementById("email").value.trim();
-      const pass     = document.getElementById("password").value;
+  if (!fullName || !phone || !country || !email || !pass) {
+    alert("Plotëso të gjitha fushat");
+    return;
+  }
 
-      if (!fullName || !phone || !country || !email || !pass) {
-        alert("Plotëso të gjitha fushat!");
-        return;
-      }
+  const cred = await createUserWithEmailAndPassword(auth, email, pass);
 
-      try {
-        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+  await setDoc(doc(db, "users", cred.user.uid), {
+    fullName, phone, country, email,
+    createdAt: serverTimestamp()
+  });
 
-        await setDoc(doc(db, "users", cred.user.uid), {
-          fullName, phone, country, email,
-          createdAt: serverTimestamp()
-        }, { merge: true });
+  location.href = "profile.html";
+});
 
-        window.location.href = "profile.html";
-      } catch (e) {
-        alert(e.message);
-        console.error(e);
-      }
-    });
-  
-    // LOGIN
-    document.getElementById("btnLogin").addEventListener("click", async () => {
-      const email = document.getElementById("loginEmail").value.trim();
-      const pass  = document.getElementById("loginPassword").value;
-
-      if (!email || !pass) {
-        alert("Vendos email dhe fjalëkalim.");
-        return;
-      }
-
-      try {
-        await signInWithEmailAndPassword(auth, email, pass);
-        window.location.href = "profile.html";
-      } catch (e) {
-        alert(e.message);
-        console.error(e);
-      }
-    });
-  </script>
-
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/service-worker.js");
-    }
-  </script>
+/* LOGIN */
+document.getElementById("btnLogin")?.addEventListener("click", async () => {
+  await signInWithEmailAndPassword(
+    auth,
+    loginEmail.value.trim(),
+    loginPassword.value
+  );
+  location.href = "profile.html";
+});
+</script>
 </body>
 </html>

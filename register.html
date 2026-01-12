@@ -31,37 +31,39 @@
   </div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyACmJj10Gz1gfRUjxz-w3_k94tNBFNyvVg",
-    authDomain: "oraswiss-27e57.firebaseapp.com",
-    projectId: "oraswiss-27e57",
-    storageBucket: "oraswiss-27e57.appspot.com",
-    messagingSenderId: "596627676936",
-    appId: "1:596627676936:web:0c96cf820fef4e97961bd"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+  authDomain: "oraswiss-27e57.firebaseapp.com",
+  projectId: "oraswiss-27e57",
+  storageBucket: "oraswiss-27e57.firebasestorage.app",
+  messagingSenderId: "596627676936",
+  appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+  measurementId: "G-VZPKMD67VQ"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-  document.getElementById("registerForm").addEventListener("submit", (e) => {
-    e.preventDefault();
+document.getElementById("registerForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        alert("U regjistrua me sukses");
-        window.location.href = "profile.html";
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
-  });
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+    alert("U regjistrua me sukses");
+    window.location.href = "profile.html";
+  } catch (err) {
+    alert(err.message);
+    console.error(err);
+  }
+});
 </script>
+
 
 
 </body>

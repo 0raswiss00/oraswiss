@@ -73,32 +73,39 @@
  </div>
 
 
-
 <script type="module">
-  // Imports
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-  // Firebase config (Përdor config-un tënd ekzakt)
   const firebaseConfig = {
-    apiKey: "PASTE_APIKEY",
-    authDomain: "PASTE_AUTHDOMAIN",
-    projectId: "PASTE_PROJECTID",
-    storageBucket: "PASTE_STORAGEBUCKET",
-    messagingSenderId: "PASTE_SENDERID",
-    appId: "PASTE_APPID"
+    apiKey: "API_KEY",
+    authDomain: "oraswiss-27e57.firebaseapp.com",
+    projectId: "oraswiss-27e57",
+    storageBucket: "oraswiss-27e57.appspot.com",
+    messagingSenderId: "596627676936",
+    appId: "APP_ID"
   };
 
-  // Init
   const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // Test write
-  addDoc(collection(db, "test"), { name: "OraSwiss", time: Date.now() })
-    .then(() => console.log("U shkruajt ne Firestore ✅"))
-    .catch((e) => console.log("Gabim ❌", e));
-</script>
+  document.getElementById("registerBtn").onclick = async () => {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+
+    // ✅ NJË USER = NJË DOKUMENT
+    await setDoc(doc(db, "users", cred.user.uid), {
+      email: email,
+      createdAt: serverTimestamp()
+    });
+
+    alert("U regjistrua ✅");
+  };
+</script>
 
 
 

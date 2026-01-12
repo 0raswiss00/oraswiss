@@ -102,7 +102,19 @@
   // ✅ Numri i dokumenteve te Firestore /users + lista
   onSnapshot(collection(db, "users"), (snap) => {
     document.getElementById("totalUsers").innerText = snap.size;
-</script>
+
+const ul = document.getElementById("usersList");
+ul.innerHTML = "";
+
+snap.forEach(doc => {
+  const li = document.createElement("li");
+  li.textContent = doc.id;
+  ul.appendChild(li);
+});
+
+
+    
+</script>  
 
 </body>  
 </html>

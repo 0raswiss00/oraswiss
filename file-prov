@@ -2103,3 +2103,81 @@ register html i rgullet
   </script>
 </body>
 </html>
+
+
+
+
+<span class="nav-stat">
+  👥 <span id="totalUsers">0</span>
+</span>
+
+
+
+
+<header class="site-header">
+  <nav class="nav-scroll">
+    <span class="site-title">ORA<br>SWISS</span>
+
+    <!-- KJO: email i user-it -->
+    <span id="userEMail">Guest</span>
+
+    <!-- KJO: numri total i dokumenteve /users -->
+    <span>Te regjistruar gjithsej: <span id="totalUsers">0</span></span>
+
+    <a href="register.html">Register</a>
+    <a href="sellnow.html">Sell Now</a>
+    <a href="home.html">Home</a>
+    ...
+  </nav>
+</header>
+
+<!-- (opsionale) lista e user-ave nga Firestore -->
+<ul id="usersList"></ul>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+  import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+    authDomain: "oraswiss-27e57.firebaseapp.com",
+    projectId: "oraswiss-27e57",
+    storageBucket: "oraswiss-27e57.firebasestorage.app",
+    messagingSenderId: "596627676936",
+    appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+    measurementId: "G-VZPKMD67VQ"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // ✅ Shfaq email-in e user-it (nese je logged in)
+  onAuthStateChanged(auth, (user) => {
+    document.getElementById("userEMail").innerText = user?.email || "Guest";
+  });
+
+  // ✅ Numri i dokumenteve te Firestore /users + lista
+  onSnapshot(collection(db, "users"), (snap) => {
+    document.getElementById("totalUsers").innerText = snap.size;
+
+    const ul = document.getElementById("usersList");
+    ul.innerHTML = "";
+    snap.forEach((d) => {
+      const li = document.createElement("li");
+      li.textContent = d.data().email || d.id; // shfaq email nese ekziston
+      ul.appendChild(li);
+    });
+  });
+</script>
+Ora
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}

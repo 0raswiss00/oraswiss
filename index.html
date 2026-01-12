@@ -95,17 +95,7 @@
   onSnapshot(usersRef, (snap) => {
     document.getElementById("totalUsers").innerText = snap.size;
 
-    const ul = document.getElementById("usersList");
-    if (!ul) return;
 
-    ul.innerHTML = "";
-    snap.forEach((doc) => {
-      const data = doc.data();
-      const li = document.createElement("li");
-      li.textContent = data.email || data.imeli || doc.id; // shfaq email nëse ekziston
-      ul.appendChild(li);
-    });
-  });
 </script>
 
 

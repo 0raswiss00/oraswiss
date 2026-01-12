@@ -96,6 +96,30 @@
   const analytics = getAnalytics(app);
 </script>
 
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
+  import { getFirestore, collection, addDoc } 
+    from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSy...",
+    authDomain: "oraswiss-27e57.firebaseapp.com",
+    projectId: "oraswiss-27e57",
+    storageBucket: "oraswiss-27e57.firebasestorage.app",
+    messagingSenderId: "596627676936",
+    appId: "1:596627676936:web:ddaa6ac46077f5169616bd"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getFirestore(app);
+</script>
+
+  addDoc(collection(db, "test"), {
+  name: "OraSwiss",
+  time: Date.now()
+});
 
 
 </body>  

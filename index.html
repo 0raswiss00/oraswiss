@@ -97,24 +97,30 @@
 </script>
 
 <script type="module">
+  // Imports
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
-  import { getFirestore, collection, addDoc } 
-    from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
+  // Firebase config (Përdor config-un tënd ekzakt)
   const firebaseConfig = {
-    apiKey: "AIzaSy...",
-    authDomain: "oraswiss-27e57.firebaseapp.com",
-    projectId: "oraswiss-27e57",
-    storageBucket: "oraswiss-27e57.firebasestorage.app",
-    messagingSenderId: "596627676936",
-    appId: "1:596627676936:web:ddaa6ac46077f5169616bd"
+    apiKey: "PASTE_APIKEY",
+    authDomain: "PASTE_AUTHDOMAIN",
+    projectId: "PASTE_PROJECTID",
+    storageBucket: "PASTE_STORAGEBUCKET",
+    messagingSenderId: "PASTE_SENDERID",
+    appId: "PASTE_APPID"
   };
 
+  // Init
   const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
   const db = getFirestore(app);
+
+  // Test write
+  addDoc(collection(db, "test"), { name: "OraSwiss", time: Date.now() })
+    .then(() => console.log("U shkruajt ne Firestore ✅"))
+    .catch((e) => console.log("Gabim ❌", e));
 </script>
+
 
 
 

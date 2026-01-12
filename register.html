@@ -32,16 +32,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-  import {
-    getAuth,
-    createUserWithEmailAndPassword
-  } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-  import {
-    getFirestore,
-    doc,
-    setDoc,
-    serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyACmJj10Gz1gfRUjxz-w3_k94tNBFNyvVg",
@@ -49,40 +40,29 @@
     projectId: "oraswiss-27e57",
     storageBucket: "oraswiss-27e57.appspot.com",
     messagingSenderId: "596627676936",
-    appId: "1:596627676936:web:ddaa6ac46077f5169616bd"
+    appId: "1:596627676936:web:0c96cf820fef4e97961bd"
   };
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const db = getFirestore(app);
 
-  document.getElementById("btnRegister").addEventListener("click", async () => {
-    const fullName = document.getElementById("fullName").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const country = document.getElementById("country").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const pass = document.getElementById("password").value;
+  document.getElementById("registerForm").addEventListener("submit", (e) => {
+    e.preventDefault();
 
-    if (!fullName || !phone || !country || !email || !pass) return alert("Plotëso të gjitha fushat!");
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-    try {
-      const cred = await createUserWithEmailAndPassword(auth, email, pass);
-
-      await setDoc(doc(db, "users", cred.user.uid), {
-        fullName,
-        phone,
-        country,
-        email: cred.user.email,
-        createdAt: serverTimestamp()
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        alert("U regjistrua me sukses");
+        window.location.href = "profile.html";
+      })
+      .catch((error) => {
+        alert(error.message);
       });
-
-      window.location.href = "profile.html";
-    } catch (e) {
-      alert(e.message);
-      console.error(e);
-    }
   });
 </script>
+
 
 </body>
 </html>

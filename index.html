@@ -92,8 +92,18 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-onSnapshot(collection(db, "users"), (snap) => {
-  document.getElementById("totalUsers").innerText = snap.size;
+import {
+  getFirestore,
+  doc,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+const db = getFirestore(app);
+
+const statsRef = doc(db, "stats", "global");
+onSnapshot(statsRef, (snap) => {
+  document.getElementById("totalUsers").innerText =
+    snap.exists() ? (snap.data().totalUsers ?? 0) : 0;
 });
 </script  
 </body>  

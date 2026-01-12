@@ -2286,3 +2286,18 @@ onSnapshot(collection(db, "users"), (snap) => {
 </script  
 </body>  
 </html>
+
+
+rules
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /users/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+  }
+}
+rules

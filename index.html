@@ -41,16 +41,6 @@
     button{padding:10px 14px;border-radius:10px;border:1px solid #777;background:#111;color:#fff;cursor:pointer}
     button:hover{color:gold;border-color:gold}
     pre{background:#111;border:1px solid #333;padding:12px;border-radius:10px;overflow:auto}
-    .stats-box{
-      max-width: 520px;
-      margin: 18px auto;
-      padding: 14px 16px;
-      border: 1px solid #333;
-      border-radius: 12px;
-      background:#111;
-      color:#fff;
-    }
-    #usersList{margin:12px 0 0; padding-left:18px;}
   </style> 
 </head>
 <body>
@@ -90,42 +80,21 @@
 </p>
   
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-  import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
-    authDomain: "oraswiss-27e57.firebaseapp.com",
-    projectId: "oraswiss-27e57",
-    storageBucket: "oraswiss-27e57.firebasestorage.app",
-    messagingSenderId: "596627676936",
-    appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-    measurementId: "G-VZPKMD67VQ"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+  authDomain: "oraswiss-27e57.firebaseapp.com",
+  projectId: "oraswiss-27e57",
+};
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-  // ✅ Shfaq email-in e user-it (nese je logged in)
-  onAuthStateChanged(auth, (user) => {
-    document.getElementById("userEMail").innerText = user?.email || "Guest";
-  });
-
-  // ✅ Numri i dokumenteve te Firestore /users + lista
-  onSnapshot(collection(db, "users"), (snap) => {
-    document.getElementById("totalUsers").innerText = snap.size;
-
-  const ul = document.getElementById("usersList");
-  ul.innerHTML = "";
-
-  snap.forEach(doc => {
-    const li = document.createElement("li");
-    li.textContent = doc.id;
-    ul.appendChild(li);
-  });    
-</script>  
-
+onSnapshot(collection(db, "users"), (snap) => {
+  document.getElementById("totalUsers").innerText = snap.size;
+});
+</script  
 </body>  
 </html>

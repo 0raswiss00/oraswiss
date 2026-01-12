@@ -72,7 +72,6 @@
    <img src="images/oraswiss-logo.png" alt="OraSwiss Logo">
  </div>
 
-
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
   import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
@@ -86,13 +85,13 @@
     appId: "1:596627676936:web:ddaa6ac46077f5169616bd"
   };
 
-  // Init Firebase
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // 🔴 REAL-TIME total users
+  const el = document.getElementById("totalUsers");
+
   onSnapshot(collection(db, "users"), (snap) => {
-    document.getElementById("totalUsers").innerText = snap.size;
+    el.innerText = snap.size;
   });
 </script>
 

@@ -85,6 +85,10 @@
       emailEl.textContent = user.email || "";
       msgEl.textContent = "Je i kyçur ✅";
 
+      await loadUserCount();
+      await loadUserName(user.uid);
+    });
+    
       // 🔥 ngarko të dyja:
       await loadUserCount();
       await loadUserName(user.uid);

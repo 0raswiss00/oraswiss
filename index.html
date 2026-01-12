@@ -86,13 +86,17 @@
     appId: "1:596627676936:web:ddaa6ac46077f5169616bd"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
   async function loadTotalUsers() {
     const snap = await getDocs(collection(db, "users"));
     document.getElementById("totalUsers").innerText = snap.size;
   }
+
+loadTotalUsers(); // 👈 KJO MUNGONTE
+
+
 
   loadTotalUsers();
 </script>

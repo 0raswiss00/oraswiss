@@ -73,45 +73,27 @@
  </div>
 
 <script type="module">
-  // Firebase core
+  // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-
-  // Firestore (KJO TË MUNGONTE)
-  import { 
-    getFirestore, 
-    collection, 
-    onSnapshot 
-  } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
-
-  // Analytics (opsionale)
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   const firebaseConfig = {
-    apiKey: "AIzaSy...",
+    apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
     authDomain: "oraswiss-27e57.firebaseapp.com",
     projectId: "oraswiss-27e57",
     storageBucket: "oraswiss-27e57.firebasestorage.app",
     messagingSenderId: "596627676936",
-    appId: "1:596627676936:web:0c96cf820fef4e97961bd",
-    measurementId: "G-VZPKMD67VQ"
+    appId: "1:596627676936:web:ddaa6ac46077f5169616bd",
+    measurementId: "G-K2KM3LBC1N"
   };
 
-  // Init
+  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  getAnalytics(app);
-
-  // ELEMENTI NË HTML
-  const el = document.getElementById("userCount");
-
-  if (!el) {
-    console.error("❌ Nuk u gjet #userCount");
-  } else {
-    onSnapshot(collection(db, "users"), (snapshot) => {
-      console.log("DOCS:", snapshot.size);
-      el.textContent = snapshot.size;
-    });
-  }
+  const analytics = getAnalytics(app);
 </script>
 
 

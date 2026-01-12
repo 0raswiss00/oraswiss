@@ -30,100 +30,59 @@
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-    import {
-      getAuth,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword
+  } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    setDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-    import {
-      getFirestore,
-      doc,
-      setDoc,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
-    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyACmJj10Gz1gfRUjxz-w3_k94tNBFNyvVg",
+    authDomain: "oraswiss-27e57.firebaseapp.com",
+    projectId: "oraswiss-27e57",
+    storageBucket: "oraswiss-27e57.appspot.com",
+    messagingSenderId: "596627676936",
+    appId: "1:596627676936:web:ddaa6ac46077f5169616bd"
+  };
 
-    // ✅ Config (ky duhet të jetë 100% i projektit që po sheh në console)
-    const firebaseConfig = {
-      apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
-      authDomain: "oraswiss-27e57.firebaseapp.com",
-      projectId: "oraswiss-27e57",
-      storageBucket: "oraswiss-27e57.firebasestorage.app",
-      messagingSenderId: "596627676936",
-      appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-      measurementId: "G-VZPKMD67VQ"
-    };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+  document.getElementById("btnRegister").addEventListener("click", async () => {
+    const fullName = document.getElementById("fullName").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const country = document.getElementById("country").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const pass = document.getElementById("password").value;
 
-    // ✅ Mbaje login
-    await setPersistence(auth, browserLocalPersistence);
+    if (!fullName || !phone || !country || !email || !pass) return alert("Plotëso të gjitha fushat!");
 
-    // ✅ KONTROLL: shfaq projektin ku po lidhet faqja (shiko Console te browser)
-    console.log("CONNECTED projectId =", app.options.projectId);
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
 
+      await setDoc(doc(db, "users", cred.user.uid), {
+        fullName,
+        phone,
+        country,
+        email: cred.user.email,
+        createdAt: serverTimestamp()
+      });
 
-    // REGISTER
-document.getElementById("btnRegister").addEventListener("click", async () => {
-  const fullName = document.getElementById("fullName").value.trim();
-  const phone    = document.getElementById("phone").value.trim();
-  const country  = document.getElementById("country").value.trim();
-  const email    = document.getElementById("email").value.trim();
-  const pass     = document.getElementById("password").value;
-
-  if (!fullName || !phone || !country || !email || !pass) {
-    alert("Plotëso të gjitha fushat!");
-    return;
-  }
-
-  try {
-    const cred = await createUserWithEmailAndPassword(auth, email, pass);
-
-    await setDoc(doc(db, "users", cred.user.uid), {
-      fullName,
-      phone,
-      country,
-      email: cred.user.email,
-      createdAt: serverTimestamp()
-    });
-
-    window.location.href = "profile.html";
-  } catch (e) {
-    alert(e.message);
-  }
-});
-  
-    // LOGIN
-    document.getElementById("btnLogin").addEventListener("click", async () => {
-      const email = document.getElementById("loginEmail").value.trim();
-      const pass  = document.getElementById("loginPassword").value;
-
-      if (!email || !pass) {
-        alert("Vendos email dhe fjalëkalim.");
-        return;
-      }
-
-      try {
-        await signInWithEmailAndPassword(auth, email, pass);
-        window.location.href = "profile.html";
-      } catch (e) {
-        alert(e.message);
-        console.error(e);
-      }
-    });
-  </script>
-
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/service-worker.js");
+      window.location.href = "profile.html";
+    } catch (e) {
+      alert(e.message);
+      console.error(e);
     }
-  </script>
+  });
+</script>
 
 </body>
 </html>

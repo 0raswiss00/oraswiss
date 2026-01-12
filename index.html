@@ -74,13 +74,8 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import { 
-    getFirestore,
-    collection,
-    onSnapshot
-  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+  import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-  // Firebase config
   const firebaseConfig = {
     apiKey: "...",
     authDomain: "...",
@@ -90,15 +85,23 @@
     appId: "..."
   };
 
-  // Init Firebase
+  console.log("COUNT SCRIPT START ✅", firebaseConfig.projectId, location.href);
+
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // Real-time count
   const el = document.getElementById("userCount");
-  const usersRef = collection(db, "users");
-
-  onSnapshot(usersRef, (snapshot) => {
-    el.textContent = snapshot.size;
-  });
+  if (!el) {
+    console.error("Nuk u gjet #userCount");
+  } else {
+    onSnapshot(collection(db, "users"), (snapshot) => {
+      console.log("DOCS ✅:", snapshot.size);
+      el.textContent = snapshot.size;
+    }, (err) => {
+      console.error("Firestore error ❌:", err);
+    });
+  }
 </script>
+
+</body>  
+</html>

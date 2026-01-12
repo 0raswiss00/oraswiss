@@ -50,6 +50,7 @@
     <nav class="nav-scroll">
       <span class="site-title">ORA<br>SWISS</span>
       <span id="totalUsers">0</span>
+      <ul id="usersList"></ul>
       <a href="register.html">Register</a>
       <a href="sellnow.html">Sell Now</a>
       <a href="home.html">Home</a>
@@ -88,12 +89,25 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  const el = document.getElementById("totalUsers");
+  // ✅ Real-time total users + list (nga Firestore "users")
+  const usersRef = collection(db, "users");
 
-  onSnapshot(collection(db, "users"), (snap) => {
-    el.innerText = snap.size;
+  onSnapshot(usersRef, (snap) => {
+    document.getElementById("totalUsers").innerText = snap.size;
+
+    const ul = document.getElementById("usersList");
+    if (!ul) return;
+
+    ul.innerHTML = "";
+    snap.forEach((doc) => {
+      const data = doc.data();
+      const li = document.createElement("li");
+      li.textContent = data.email || data.imeli || doc.id; // shfaq email nëse ekziston
+      ul.appendChild(li);
+    });
   });
 </script>
+
 
 
 </body>  

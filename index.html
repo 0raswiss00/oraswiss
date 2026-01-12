@@ -75,36 +75,26 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "API_KEY",
+    apiKey: "AIzaSyACmJj10Gz1gfRUjxz-w3_k94tNBFNyvVg",
     authDomain: "oraswiss-27e57.firebaseapp.com",
     projectId: "oraswiss-27e57",
     storageBucket: "oraswiss-27e57.appspot.com",
     messagingSenderId: "596627676936",
-    appId: "APP_ID"
+    appId: "1:596627676936:web:ddaa6ac46077f5169616bd"
   };
 
   const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
   const db = getFirestore(app);
 
-  document.getElementById("registerBtn").onclick = async () => {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+  async function loadTotalUsers() {
+    const snap = await getDocs(collection(db, "users"));
+    document.getElementById("totalUsers").innerText = snap.size;
+  }
 
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
-
-    // ✅ NJË USER = NJË DOKUMENT
-    await setDoc(doc(db, "users", cred.user.uid), {
-      email: email,
-      createdAt: serverTimestamp()
-    });
-
-    alert("U regjistrua ✅");
-  };
+  loadTotalUsers();
 </script>
 
 

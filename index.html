@@ -72,45 +72,33 @@
    <img src="images/oraswiss-logo.png" alt="OraSwiss Logo">
  </div>
 
-
-<!-- VETËM 1 script module, para </body> -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
   import { 
-    getFirestore, 
-    collection, 
-    getCountFromServer 
+    getFirestore,
+    collection,
+    onSnapshot
   } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
+  // Firebase config
   const firebaseConfig = {
     apiKey: "...",
     authDomain: "...",
     projectId: "...",
     storageBucket: "...",
     messagingSenderId: "...",
-    appId: "...",
+    appId: "..."
   };
 
+  // Init Firebase
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  async function loadCount() {
-    try {
-      const el = document.getElementById("userCount");
-      if (!el) {
-        console.error("Elementi #userCount nuk ekziston në HTML");
-        return;
-      }
+  // Real-time count
+  const el = document.getElementById("userCount");
+  const usersRef = collection(db, "users");
 
-      const collRef = collection(db, "users");
-      const snap = await getCountFromServer(collRef);
-
-      el.textContent = snap.data().count;
-    } catch (err) {
-      console.error("Gabim gjatë leximit nga Firestore:", err);
-    }
-  }
-
-  // Sigurohemi që DOM është gati
-  window.addEventListener("DOMContentLoaded", loadCount);
+  onSnapshot(usersRef, (snapshot) => {
+    el.textContent = snapshot.size;
+  });
 </script>

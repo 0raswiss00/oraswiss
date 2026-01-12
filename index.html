@@ -81,7 +81,7 @@
   
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
@@ -92,19 +92,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-import {
-  getFirestore,
-  doc,
-  onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
-
-const db = getFirestore(app);
-
+// 🔥 LEXO STATISTIKAT E SAKTA
 const statsRef = doc(db, "stats", "global");
-onSnapshot(statsRef, (snap) => {
-  document.getElementById("totalUsers").innerText =
-    snap.exists() ? (snap.data().totalUsers ?? 0) : 0;
+
+onSnapshot(statsRef, (docSnap) => {
+  if (docSnap.exists()) {
+    document.getElementById("totalUsers").innerText =
+      docSnap.data().totalUsers ?? 0;
+  } else {
+    document.getElementById("totalUsers").innerText = 0;
+  }
 });
-</script  
+</script>
 </body>  
 </html>

@@ -91,46 +91,27 @@
   <strong id="totalUsers">0</strong>
 </p>
   
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
-  authDomain: "oraswiss-27e57.firebaseapp.com",
-  projectId: "oraswiss-27e57",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-onSnapshot(collection(db, "users"), (snap) => {
-  document.getElementById("totalUsers").innerText = snap.size;
-});
-</script  
-
+<!-- Supabase initialization -->
 <script>
-  // Vendos të dhënat e tua nga Supabase
-  const SUPABASE_URL = "https://your-project-ref.supabase.co"; // zëvendëso me URL të Supabase projektit
-  const SUPABASE_ANON_KEY = "your-anon-key"; // zëvendëso me anon key nga Supabase
+  const SUPABASE_URL = "https://your-project-ref.supabase.co"; // zëvendëso me URL të projektit tënd
+  const SUPABASE_ANON_KEY = "your-anon-key"; // zëvendëso me ANON KEY të projektit tënd
 
   const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 </script>
 
+<!-- Form submission -->
 <script>
-  // Kjo lidh form-in me Supabase
   const form = document.getElementById("watchForm");
   const resultDiv = document.getElementById("result");
 
   form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Parandalon rifreskimin e faqes
 
     const watchName = document.getElementById("watchName").value;
 
-    // Dërgo të dhënat në Supabase
     const { data, error } = await supabase
       .from("watches")
-      .insert([{ name: watchName }]);
+      .insert([{ name: watchName }]); // fut watch në tabelën 'watches'
 
     if (error) {
       resultDiv.innerText = "Gabim: " + error.message;

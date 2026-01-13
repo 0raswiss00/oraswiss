@@ -2967,27 +2967,42 @@ body{background:#000!important;color:#E6E6E6!important}
   color: #000000;
 }
       
-/* FIX: menu scroll të duket komplet në tel (mos e centro) */
+/* ===== MENU FIX (Desktop normal, Mobile scroll) ===== */
+
+/* DESKTOP */
+.site-header{
+  overflow: visible;          /* mos e pre menu-n */
+}
+
 .menu{
-  flex-grow: 1;
-  display: flex;
-  gap: 20px;
-
-  justify-content: flex-start !important;  /* jo center */
-  overflow-x: auto;
-  white-space: nowrap;
-
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-x;
+  display:flex;
+  align-items:center;
+  justify-content:center;     /* në qendër në PC */
+  gap:20px;
+  flex-wrap:wrap;             /* në PC lejohet të bjerë rresht tjetër */
 }
 
-.menu::-webkit-scrollbar{
-  height: 0;
-}
-
-/* linkat mos u ngushtojnë */
 .menu a{
-  flex: 0 0 auto;
+  white-space:nowrap;
 }
 
+/* MOBILE (scroll horizontal, mos u pre linku i fundit) */
+@media (max-width: 768px){
+  .menu{
+    justify-content:flex-start;
+    flex-wrap:nowrap;         /* ky është ÇELËSI */
+    overflow-x:auto;          /* scroll vetëm në tel */
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    padding:10px 12px;
+    gap:18px;
+    width:100%;
+  }
 
+  .menu a{
+    flex:0 0 auto;            /* mos i shtrëngo linket */
+  }
+
+  .menu::-webkit-scrollbar{ display:none; } /* fsheh scrollbar */
+  .menu{ scrollbar-width:none; }            /* firefox */
+}

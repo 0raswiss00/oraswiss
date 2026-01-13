@@ -195,7 +195,7 @@ if ("serviceWorker" in navigator) {
 
       // 🔴 INSERT (futja në databazë)
       const { error } = await supabaseClient
-        .from("watches")
+        .from("listings")
         .insert([data]);
 
       if (error) {

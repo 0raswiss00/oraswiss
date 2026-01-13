@@ -1405,88 +1405,6 @@ nav li {
   border:0;
   cursor:pointer;
 }
-
-/* HERO – desktop */
-.hero{
-  min-height: 70vh;              /* lartësia që mungon */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 60px 80px;
-  background: 
-    linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)),
-    url("images/oraswiss-bg.jpg"); /* FOTO SFOND */
-  background-size: cover;
-  background-position: center;
-}
-
-.hero-left{
-  flex: 1;
-  color: #fff;
-}
-
-.hero-right{
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.hero-right img{
-  max-width: 360px;
-}
-.hero{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding: 30px 20px;
-}
-
-.hero-right img{
-  max-width: 220px;
-  width: 100%;
-  height: auto;
-  display:block;
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  .hero {
-    flex-direction: column;
-    justify-content: center;
-    padding: 20px;
-    min-height: 60vh; /* pak më e vogël */
-  }
-
-  .hero-right {
-    justify-content: center;
-    margin-top: 20px;
-  }
-
-  .hero-right img {
-    margin: 0 auto;
-    display: block;
-    max-width: 200px; /* kontroll madhësie */
-  }
-
-  .hero-left {
-    text-align: center;
-  }
-}
-
-
-#msg{
-  position: fixed;
-  bottom: 12px;
-  left: 12px;
-  right: 12px;
-  background: #0b0b0b;
-  color: #fff;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #222;
-  z-index: 9999;
-}
-
       
 /* KUTIA KU VENDOS FOTON NË SFOND */
 
@@ -2919,69 +2837,52 @@ body{background:#000!important;color:#E6E6E6!important}
   background:#fff;
   cursor:pointer;
 }
- 
 
-/* HERO – desktop */
+/* ===== FINAL HERO (fix desktop + mobile) ===== */
 .hero{
-  min-height: 70vh;              /* lartësia që mungon */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  min-height: 70vh;
+  display:flex;
+  align-items:center;
+  justify-content: space-between;   /* desktop */
+  gap: 24px;
   padding: 60px 80px;
-  background: 
+  background:
     linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)),
-    url("images/oraswiss-bg.jpg"); /* FOTO SFOND */
+    url("images/oraswiss-bg.jpg");
   background-size: cover;
   background-position: center;
 }
 
-.hero-left{
-  flex: 1;
-  color: #fff;
-}
-
-.hero-right{
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-}
+.hero-left{ flex:1; color:#fff; }
+.hero-right{ flex:1; display:flex; justify-content:flex-end; }
 
 .hero-right img{
+  width: min(40vw, 360px);   /* nuk bëhet e hollë */
   max-width: 360px;
-}
-.hero{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding: 30px 20px;
-}
-
-.hero-right img{
-  max-width: 220px;
-  width: 100%;
   height: auto;
   display:block;
 }
 
 /* Mobile */
-@media (max-width: 768px){
+@media (max-width:768px){
+  .hero{
+    flex-direction: column;
+    justify-content:center;
+    padding: 20px 16px;
+    min-height: 60vh;
+    text-align:center;
+  }
+  .hero-right{ justify-content:center; }
   .hero-right img{
-    width: min(90vw, 420px);
+    width: min(90vw, 420px);  /* logo e madhe në telefon */
     max-width: 420px;
+  }
+
+  }    
+  .logo-center img{
+    width: min(90vw, 520px);
     height: auto;
   }
-}
-
-.logo-center img{
-  width: min(90vw, 520px);
-  height: auto;
-}
-
-.hero{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
       
 #msg{
   position: fixed;

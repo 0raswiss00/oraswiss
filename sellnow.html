@@ -195,10 +195,16 @@ if ("serviceWorker" in navigator) {
 
       // ✅ TEST LIDHJEJE
       try {
-        const r = await fetch(SUPABASE_URL + "/rest/v1/watches?select=id&limit=1", {
+      const r = await fetch(
+        SUPABASE_URL + "/rest/v1/watches?select=id&limit=1",
+        {
           method: "GET",
-          headers: { apikey: SUPABASE_ANON_KEY }
-        });
+          headers: {
+            apikey: SUPABASE_ANON_KEY,
+            Authorization: "Bearer " + SUPABASE_ANON_KEY
+          }
+        }
+      );
         console.log("Ping status:", r.status);
       } catch (e) {
         console.error("Ping failed:", e);

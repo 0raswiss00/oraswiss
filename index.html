@@ -117,6 +117,30 @@ onSnapshot(collection(db, "users"), (snap) => {
   const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 </script>
 
+<script>
+  // Kjo lidh form-in me Supabase
+  const form = document.getElementById("watchForm");
+  const resultDiv = document.getElementById("result");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const watchName = document.getElementById("watchName").value;
+
+    // Dërgo të dhënat në Supabase
+    const { data, error } = await supabase
+      .from("watches")
+      .insert([{ name: watchName }]);
+
+    if (error) {
+      resultDiv.innerText = "Gabim: " + error.message;
+    } else {
+      resultDiv.innerText = "U shtua me sukses: " + watchName;
+      form.reset();
+    }
+  });
+</script>
+
   
 </body> 
 </html>

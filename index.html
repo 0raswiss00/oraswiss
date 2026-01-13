@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ora Swiss</title>
 
-  <form id="watchForm">
-    <input type="text" id="watchName" placeholder="Emri i watch" required>
-    <button type="submit">Shto watch</button>
-  </form>
+
 
 <div id="result"></div>
 
@@ -25,7 +22,7 @@
   
   <link rel="stylesheet" href="styles.css">
 
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
@@ -91,36 +88,6 @@
   <strong id="totalUsers">0</strong>
 </p>
   
-<!-- Supabase initialization -->
-<script>
-  const SUPABASE_URL = "https://your-project-ref.supabase.co"; // zëvendëso me URL të projektit tënd
-  const SUPABASE_ANON_KEY = "your-anon-key"; // zëvendëso me ANON KEY të projektit tënd
-
-  const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-</script>
-
-<!-- Form submission -->
-<script>
-  const form = document.getElementById("watchForm");
-  const resultDiv = document.getElementById("result");
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault(); // Parandalon rifreskimin e faqes
-
-    const watchName = document.getElementById("watchName").value;
-
-    const { data, error } = await supabase
-      .from("watches")
-      .insert([{ name: watchName }]); // fut watch në tabelën 'watches'
-
-    if (error) {
-      resultDiv.innerText = "Gabim: " + error.message;
-    } else {
-      resultDiv.innerText = "U shtua me sukses: " + watchName;
-      form.reset();
-    }
-  });
-</script>
 
   
 </body> 

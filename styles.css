@@ -2967,5 +2967,27 @@ body{background:#000!important;color:#E6E6E6!important}
   color: #000000;
 }
       
+/* FIX: menu scroll të duket komplet në tel (mos e centro) */
+.menu{
+  flex-grow: 1;
+  display: flex;
+  gap: 20px;
+
+  justify-content: flex-start !important;  /* jo center */
+  overflow-x: auto;
+  white-space: nowrap;
+
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+}
+
+.menu::-webkit-scrollbar{
+  height: 0;
+}
+
+/* linkat mos u ngushtojnë */
+.menu a{
+  flex: 0 0 auto;
+}
 
 

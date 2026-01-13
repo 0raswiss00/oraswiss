@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ora Swiss</title>
 
+  <form id="watchForm">
+    <input type="text" id="watchName" placeholder="Emri i watch" required>
+    <button type="submit">Shto watch</button>
+  </form>
+
+<div id="result"></div>
+
+  
   <link rel="manifest" href="/manifest.webmanifest">
   
   <meta name="theme-color" content="#000000">
@@ -17,6 +25,8 @@
   
   <link rel="stylesheet" href="styles.css">
 
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
   <script>
@@ -98,5 +108,15 @@ onSnapshot(collection(db, "users"), (snap) => {
   document.getElementById("totalUsers").innerText = snap.size;
 });
 </script  
-</body>  
+
+<script>
+  // Vendos të dhënat e tua nga Supabase
+  const SUPABASE_URL = "https://your-project-ref.supabase.co"; // zëvendëso me URL të Supabase projektit
+  const SUPABASE_ANON_KEY = "your-anon-key"; // zëvendëso me anon key nga Supabase
+
+  const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
+
+  
+</body> 
 </html>

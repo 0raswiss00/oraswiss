@@ -107,18 +107,22 @@
     document.getElementById("userEMail").innerText = user?.email || "Guest";
   });
 
-  // ✅ Numri i dokumenteve te Firestore /users + lista
-  onSnapshot(collection(db, "users"), (snap) => {
-    document.getElementById("totalUsers").innerText = snap.size;
+// Numri i dokumenteve te Firestore /users
+onSnapshot(collection(db, "users"), (snap) => {
+  document.getElementById("totalUsers").innerText = snap.size;
 
-    const ul = document.getElementById("usersList");
-    ul.innerHTML = "";
-    snap.forEach((d) => {
+  const ul = document.getElementById("usersList");
+  ul.innerHTML = "";
+
+  snap.forEach((d) => {
+    const data = d.data();
+    if (data.email) { // vetem user-at qe kane email
       const li = document.createElement("li");
-      li.textContent = d.data().email || d.id; // shfaq email nese ekziston
+      li.textContent = data.email;
       ul.appendChild(li);
-    });
+    }
   });
+});
 </script>  
 
   

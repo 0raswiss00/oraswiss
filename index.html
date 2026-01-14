@@ -1,195 +1,149 @@
 <!doctype html>
-<html lang="sq">
+<html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Shto orë (Admin)</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="admin.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ora Swiss</title>
 
+  <link rel="manifest" href="/manifest.webmanifest">
   
+  <meta name="theme-color" content="#000000">
+  
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Ora Swiss">
+
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-KD2ZZ3MJYY');
+  </script> 
   <style>
-    body{font-family:Arial,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:20px}
-    .wrap{max-width:900px;margin:0 auto}
-    .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media(max-width:820px){.row{grid-template-columns:1fr}}
-    label{display:block;margin:12px 0 6px;color:#ddd}
-    input,select,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #333;background:#111;color:#fff}
-    textarea{min-height:90px}
-    .btn{margin-top:14px;padding:12px 14px;border-radius:12px;border:1px solid #2a2a2a;background:#0f0f0f;color:#fff;cursor:pointer}
-    .btn:hover{background:#1a1a1a}
-    .note{opacity:.85;font-size:13px;margin-top:8px;line-height:1.4}
-    .ok{color:#25D366}
-    .bad{color:#ff6b6b}
-  </style>
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
+    .site-header{position:sticky;top:0;z-index:9999;background:#111}
+    .nav-scroll{display:flex;gap:18px;align-items:center;overflow-x:auto;white-space:nowrap;padding:14px 16px}
+    .nav-scroll a{color:#fff;text-decoration:none;padding:6px 10px}
+    .nav-scroll a:hover{color:gold}
+    .site-title{font-weight:700;line-height:1.05;margin-right:10px}
+    .wrap{max-width:1100px;margin:0 auto;padding:30px 16px}
+    .btnRow{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:18px 0 30px}
+    .btnRow a{padding:14px 22px;border:1px solid #888;border-radius:10px;text-decoration:none;color:#fff;background:#111}
+    #guest,#loggedIn{max-width:520px;margin:0 auto}
+    input{width:100%;padding:10px 12px;margin:8px 0;border-radius:8px;border:1px solid #444;background:#fff;color:#000}
+    button{padding:10px 14px;border-radius:10px;border:1px solid #777;background:#111;color:#fff;cursor:pointer}
+    button:hover{color:gold;border-color:gold}
+    pre{background:#111;border:1px solid #333;padding:12px;border-radius:10px;overflow:auto}
+  </style> 
 </head>
-
 <body>
-<div class="wrap">
 
-  <div class="top">
-    <h2 style="margin:0">Shto orë (Admin)</h2>
-    <button class="btn" type="button" onclick="history.back()">← Back</button>
+<header class="site-header">
+  <nav class="nav-scroll">
+    <span class="site-title">ORA<br>SWISS</span>
+
+    <span id="userEMail">👥</span>
+
+    <a href="register.html">Register</a>
+    <a href="sellnow.html">Sell Now</a>
+    <a href="home.html">Home</a>
+    <a href="luxury.html">Luxury</a>
+    <a href="vintage.html">Vintage</a>
+    <a href="parts.html">Parts</a>
+    <a href="separate-parts.html">Separate Parts</a>
+    <a href="service.html">Service</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="jewelry.html">Jewelry</a>
+    <a href="policy.html">Policy</a>
+    <a href="sell.html">Sell</a>
+  </nav>
+</header>
+
+  <div class="hero-right">
+    <img src="images/oraswiss-logo.png" alt="Oraswiss">
   </div>
-
-  <div class="note">
-    1) Kliko <b>Upload Photos</b> (ngarkon fotot dhe mbush automatikisht URL-të)<br/>
-    2) Plotëso fushat<br/>
-    3) Kliko <b>PUBLISH</b> → shkon në Supabase me status <b>pending</b>
-  </div>
-
-  <label>Category</label>
-  <select id="category">
-    <option value="luxury">Luxury</option>
-    <option value="vintage" selected>Vintage</option>
-    <option value="parts">Parts</option>
-  </select>
-
-  <div class="row">
-    <div><label>Brand</label><input id="brand" placeholder="Omega"></div>
-    <div><label>Model</label><input id="model" placeholder="Seamaster"></div>
-  </div>
-
-  <div class="row">
-    <div><label>Ref</label><input id="ref" placeholder="2400-4"></div>
-    <div><label>Year</label><input id="year" type="number" placeholder="1999"></div>
-  </div>
-
-  <div class="row">
-    <div><label>Material</label><input id="material" placeholder="Steel"></div>
-    <div><label>Case Size (mm)</label><input id="case_size" type="number" placeholder="35"></div>
-  </div>
-
-  <div class="row">
-    <div>
-      <label>Condition</label>
-      <select id="condition">
-        <option>New</option>
-        <option>Like New</option>
-        <option selected>Very Good</option>
-        <option>Good</option>
-        <option>Used - Fair</option>
-      </select>
-    </div>
-    <div><label>Price (€)</label><input id="price" type="number" placeholder="900"></div>
-  </div>
-
-  <div class="row">
-    <div>
-      <label>Box & Papers</label>
-      <select id="box">
-        <option value="">Nuk e di</option>
-        <option value="fullset">Box & Papers</option>
-        <option value="box_only">Vetëm Box</option>
-        <option value="papers_only">Vetëm Papers</option>
-        <option value="none">Pa Box / Papers</option>
-      </select>
-    </div>
-    <div>
-      <label>Working</label>
-      <select id="working">
-        <option value="">Nuk e di</option>
-        <option value="working">Working</option>
-        <option value="not_working">Not working</option>
-      </select>
-    </div>
-  </div>
-
-  <label>Description</label>
-  <textarea id="description" placeholder="Shkruaj detaje..."></textarea>
-
-  <label>Photos (URLs)</label>
-  <button class="btn" id="uploadBtn" type="button">Upload Photos</button>
-  <textarea id="photos" placeholder="URL-të dalin këtu (automatikisht)..." readonly></textarea>
-
-  <button class="btn" id="publishBtn" type="button">PUBLISH</button>
-
-  <div id="msg" class="note"></div>
-
 </div>
+  
+<h3>Statistics</h3>
+<p>
+  Total registered users:
+  <strong id="totalUsers">0</strong>
+</p>
+  
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+  import {
+    getFirestore,
+    collection,
+    addDoc,
+    serverTimestamp,
+    onSnapshot
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-<!-- Cloudinary -->
-<script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
-<script>
-  const CLOUD_NAME = "drfjznv52";
-  const UPLOAD_PRESET = "oraswiss_upload";
-
-  const widget = cloudinary.createUploadWidget(
-    {
-      cloudName: CLOUD_NAME,
-      uploadPreset: UPLOAD_PRESET,
-      folder: "watches",
-      multiple: true,
-      sources: ["local", "camera"]
-    },
-    (error, result) => {
-      if (error) { console.error(error); return; }
-      if (result && result.event === "success") {
-        const ta = document.getElementById("photos");
-        const current = ta.value.trim();
-        ta.value = current ? (current + "\n" + result.info.secure_url) : result.info.secure_url;
-      }
-    }
-  );
-
-  document.getElementById("uploadBtn").addEventListener("click", () => widget.open());
-</script>
-
-<!-- Supabase (v2) -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  // 🔥 VENDOS KËTU TË TUAJAT (Settings → API)
-  const SUPABASE_URL = "PASTE_PROJECT_URL_KETU";
-  const SUPABASE_ANON_KEY = "PASTE_ANON_PUBLIC_KEY_KETU";
-
-  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  const msg = (text, ok=true) => {
-    const el = document.getElementById("msg");
-    el.className = "note " + (ok ? "ok" : "bad");
-    el.textContent = text;
+  // 🔹 Firebase config (VENDOS TË TUA REAL)
+  const firebaseConfig = {
+    apiKey: "API_KEY_YT",
+    authDomain: "oraswiss-27e57.firebaseapp.com",
+    projectId: "oraswiss-27e57",
+    storageBucket: "oraswiss-27e57.appspot.com",
+    messagingSenderId: "SENDER_ID_YT",
+    appId: "APP_ID_YT"
   };
 
-  document.getElementById("publishBtn").addEventListener("click", async () => {
-    try {
-      const photosText = document.getElementById("photos").value.trim();
-      if (!photosText) { msg("Ngarko të paktën 1 foto.", false); return; }
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-      // ✅ text[] (një URL për rresht ose me presje)
-      const photos = photosText
-        .split(/\n|,/g)
-        .map(s => s.trim())
-        .filter(Boolean);
+  // 🔹 REGISTER
+  const registerForm = document.getElementById("registerForm");
+  if (registerForm) {
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("registerEmail").value;
+      const password = document.getElementById("registerPassword").value;
 
-      const data = {
-        category: document.getElementById("category").value,
-        brand: document.getElementById("brand").value.trim(),
-        model: document.getElementById("model").value.trim(),
-        ref: document.getElementById("ref").value.trim(),
-        year: document.getElementById("year").value ? Number(document.getElementById("year").value) : null,
-        material: document.getElementById("material").value.trim(),
-        condition: document.getElementById("condition").value,
-        description: document.getElementById("description").value.trim(),
-        case_size: document.getElementById("case_size").value ? Number(document.getElementById("case_size").value) : null,
-        price: document.getElementById("price").value ? Number(document.getElementById("price").value) : null,
-        photos: photos,                 // ✅ RUHET SI ARRAY (text[])
-        box: document.getElementById("box").value || null,
-        working: document.getElementById("working").value || null,
-        status: "pending"
-      };
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      await addDoc(collection(db, "users"), {
+        uid: cred.user.uid,
+        email: cred.user.email,
+        createdAt: serverTimestamp()
+      });
 
-      msg("Duke dërguar...", true);
+      registerForm.reset();
+    });
+  }
 
-      const { error } = await supabaseClient.from("watches").insert([data]);
-      if (error) { msg("Gabim Supabase: " + error.message, false); console.error(error); return; }
+  // 🔹 LOGIN
+  const loginForm = document.getElementById("loginForm");
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+      await signInWithEmailAndPassword(auth, email, password);
+    });
+  }
 
-      msg("U dërgua ✅ (pending).", true);
-    } catch (e) {
-      msg("Gabim rrjeti/JS: " + (e?.message || String(e)), false);
-      console.error(e);
-    }
+  // 🔹 TOTAL USERS (VETËM NUMRI)
+  onSnapshot(collection(db, "users"), (snap) => {
+    const el = document.getElementById("totalUsers");
+    if (el) el.innerText = snap.size;
   });
 </script>
-</body>
+
+</body>  
 </html>

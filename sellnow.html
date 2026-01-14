@@ -171,5 +171,63 @@
     document.getElementById("sellForm")?.reset();
   }
 </script>
+Ora
+<!-- SUPABASE SDK (fallback) -->
+<script>
+  function loadScript(src) {
+    return new Promise((res, rej) => {
+      const s = document.createElement("script");
+      s.src = src;
+      s.onload = res;
+      s.onerror = rej;
+      document.head.appendChild(s);
+    });
+  }
+
+  (async () => {
+    try {
+      await loadScript("https://unpkg.com/@supabase/supabase-js@2");
+    } catch (e1) {
+      await loadScript("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2");
+    }
+
+    // ✅ këtu je 100% i sigurt që supabase u ngarkua
+    const SUPABASE_URL = "https://gnwrsmlmegduhhmfmoa.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Test 1: a ekziston supabase?
+    console.log("Supabase loaded:", !!window.supabase);
+
+    // Test 2: provë e thjeshtë SELECT (trego gabimin në ekran)
+    const el = document.getElementById("msg");
+    const say = (t) => { if (el) el.textContent = t; };
+
+    try {
+      const { data, error } = await supabaseClient.from("products").select("*").limit(1);
+      if (error) say("SELECT error: " + error.message);
+      else say("Supabase OK ✅ (SELECT punon)");
+    } catch (err) {
+      say("JS error: " + err.message);
+    }
+
+    // PUBLISH
+    window.publishProduct = async function publishProduct() {
+      const working = (document.getElementById("working")?.value || "").trim();
+      const description = (document.getElementById("description")?.value || "").trim();
+      const photos = (document.getElementById("photos")?.value || "").trim();
+
+      if (!working || !photos) return say("Plotëso working + photos");
+
+      const { error } = await supabaseClient
+        .from("products")
+        .insert([{ working, description, photos }]);
+
+      if (error) return say("INSERT error: " + error.message);
+      say("U publikua ✅");
+    };
+  })();
+</script>
+
 </body>
 </html>

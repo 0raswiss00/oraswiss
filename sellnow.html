@@ -197,18 +197,7 @@
           console.error(e);
         }
       });
-
-  (function() {
-    var widget = uploadcare.Widget('#uploader');
-
-    widget.onUploadComplete(function(fileInfo) {
-        // fileInfo.cdnUrl = linku direkt i fotos
-        var field = document.getElementById('photosField');
-        field.value = fileInfo.cdnUrl || '';
-    });
-  })();
 </script>
-
  
 </body>
 </html>

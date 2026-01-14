@@ -123,45 +123,28 @@
 
 </div>
 
-<!-- Cloudinary -->
-<script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
-<script>
-  const CLOUD_NAME = "drfjznv52";
-  const UPLOAD_PRESET = "oraswiss_upload";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-  const widget = cloudinary.createUploadWidget(
-    {
-      cloudName: CLOUD_NAME,
-      uploadPreset: UPLOAD_PRESET,
-      folder: "watches",
-      multiple: true,
-      sources: ["local", "camera"]
-    },
-    (error, result) => {
-      if (error) { console.error(error); return; }
-      if (result && result.event === "success") {
-        const ta = document.getElementById("photos");
-        const current = ta.value.trim();
-        ta.value = current ? (current + "\n" + result.info.secure_url) : result.info.secure_url;
-      }
-    }
-  );
+  const firebaseConfig = {
+    apiKey: "…",
+    authDomain: "…",
+    projectId: "…",
+    storageBucket: "…",
+    messagingSenderId: "…",
+    appId: "…"
+  };
 
-  document.getElementById("uploadBtn").addEventListener("click", () => widget.open());
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const SUPABASE_URL = "https://gnwrsmlmegduhhmfmoa.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
-  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
   const msg = (text, ok=true) => {
     const el = document.getElementById("msg");
     el.className = "note " + (ok ? "ok" : "bad");
     el.textContent = text;
   };
-  
+
   document.getElementById("publishBtn").addEventListener("click", async () => {
     try {
       const photosText = document.getElementById("photos").value.trim();
@@ -183,21 +166,21 @@
         photos,
         box: document.getElementById("box").value || null,
         working: document.getElementById("working").value || null,
-        status: "pending"
+        status: "pending",
+        createdAt: serverTimestamp()
       };
 
-       msg("Duke dërguar...", true);
+      msg("Duke dërguar...", true);
+      await addDoc(collection(db, "listings"), data);
+      msg("U dërgua ✅ (pending).", true);
 
-          const { error } = await supabaseClient.from("listings").insert([data]);
-          if (error) { msg("Gabim Supabase: " + error.message, false); console.error(error); return; }
-
-          msg("U dërgua ✅ (pending).", true);
-        } catch (e) {
-          msg("Gabim rrjeti/JS: " + (e?.message || String(e)), false);
-          console.error(e);
-        }
-      });
+    } catch (e) {
+      msg("Gabim Firestore: " + (e?.message || String(e)), false);
+      console.error(e);
+    }
+  });
 </script>
+
  
 </body>
 </html>

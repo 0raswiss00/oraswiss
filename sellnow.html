@@ -161,7 +161,7 @@
     el.className = "note " + (ok ? "ok" : "bad");
     el.textContent = text;
   };
-
+  
   document.getElementById("publishBtn").addEventListener("click", async () => {
     try {
       const photosText = document.getElementById("photos").value.trim();
@@ -186,17 +186,23 @@
         status: "pending"
       };
 
-      msg("Duke dërguar...", true);
+    msg("Duke dërguar...", true);
 
-      const { error } = await supabaseClient.from("watches").insert([data]);
-      if (error) { msg("Gabim Supabase: " + error.message, false); console.error(error); return; }
-
-      msg("U dërgua ✅ (pending).", true);
-    } catch (e) {
-      msg("Gabim rrjeti/JS: " + (e?.message || String(e)), false);
-      console.error(e);
+    // ✅ TEST: a arrin browser te Supabase fare?
+    try {
+      const r = await fetch("https://gnwrsmlmegduhhmfmoa.supabase.co/rest/v1/");
+      console.log("Fetch test status:", r.status);
+   } catch (e) {
+      console.error("Fetch test failed:", e);
+      msg("Bllokohet lidhja me Supabase (CSP/VPN/AdBlock): " + e.message, false);
+      return;
     }
-  });
+
+    // ✅ INSERT (siç e kishe)
+      const { error } = await supabaseClient.from("watches").insert([data]);
+    if (error) { msg("Gabim Supabase: " + error.message, false); console.error(error); return; }
+
+    msg("U dërgua ✅ (pending).", true);
 </script>
 
 </body>

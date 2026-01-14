@@ -123,54 +123,53 @@
 
 </div>
 
-<!-- ================= SUPABASE SDK ================= -->
+<!-- SUPABASE SDK (DUHET te jete para createClient) -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <script>
-/* ================= CONFIG ================= */
-const SUPABASE_URL = "https://gnwrsmlmegd uhhfm oa.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+  // CONFIG (pa hapësira!)
+  const SUPABASE_URL = "https://gnwrsmlmegduhhmfmoa.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
 
-/* ================= CLIENT ================= */
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
+  // CLIENT
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
 
-/* ================= MESSAGE HELPER ================= */
-function msg(text, ok = true){
-  const el = document.getElementById("msg");
-  el.className = "note " + (ok ? "ok" : "bad");
-  el.textContent = text;
-}
-
-/* ================= PUBLISH ================= */
-async function publishProduct(){
-  const working = document.getElementById("working").value.trim();
-  const description = document.getElementById("description").value.trim();
-  const photos = document.getElementById("photos").value.trim();
-
-  if(!working || !photos){
-    msg("Plotëso fushat e detyrueshme", false);
-    return;
+  // Mesazh ne faqe
+  function msg(text, ok = true){
+    const el = document.getElementById("msg");
+    if(!el) return alert(text);
+    el.className = "note " + (ok ? "ok" : "bad");
+    el.textContent = text;
   }
 
-  const { error } = await supabaseClient
-    .from("products")
-    .insert([{
-      working,
-      description,
-      photos
-    }]);
+  // PUBLISH
+  async function publishProduct(){
+    const working = (document.getElementById("working")?.value || "").trim();
+    const description = (document.getElementById("description")?.value || "").trim();
+    const photos = (document.getElementById("photos")?.value || "").trim();
 
-  if(error){
-    console.error(error);
-    msg("Gabim Supabase: " + error.message, false);
-  } else {
-    msg("U publikua me sukses ✅");
-    document.getElementById("sellForm").reset();
+    if(!working || !photos){
+      msg("Plotëso titullin (working) dhe fotot.", false);
+      return;
+    }
+
+    // Ndrysho "products" nese tabela jote quhet ndryshe
+    const { error } = await supabaseClient
+      .from("products")
+      .insert([{ working, description, photos }]);
+
+    if(error){
+      console.error(error);
+      msg("Gabim Supabase: " + error.message, false);
+      return;
+    }
+
+    msg("U publikua me sukses ✅", true);
+    document.getElementById("sellForm")?.reset();
   }
-}
 </script>
 </body>
 </html>

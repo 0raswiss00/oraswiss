@@ -52,7 +52,6 @@
 <header class="site-header">
   <nav class="nav-scroll">
     <span class="site-title">ORA<br>SWISS</span>
-    <span id="totalUsers">0</span></span>
     <a href="register.html">Register</a>
     <a href="sellnow.html">Sell</a>
     <a href="home.html">Home</a>
@@ -80,46 +79,53 @@
 </section>
   
 
-<!-- (opsionale) lista e user-ave nga Firestore -->
+<!-- Lista e user-ave -->
 <ul id="usersList"></ul>
+
+<!-- Numri total i user-ave -->
+<span id="totalUsers">0</span>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
   import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
+  // Konfigurimi i Firebase
   const firebaseConfig = {
-    apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+    apiKey: "ALIZA_SYA_CM...",
     authDomain: "oraswiss-27e57.firebaseapp.com",
     projectId: "oraswiss-27e57",
-    storageBucket: "oraswiss-27e57.firebasestorage.app",
+    storageBucket: "oraswiss-27e57.appspot.com",
     messagingSenderId: "596627676936",
-    appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-    measurementId: "G-VZPKMD67VQ"
+    appId: "1:596627676936:web:0c96cf820fef4e979616bd"
   };
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-// Numri i dokumenteve te Firestore /users
-onSnapshot(collection(db, "users"), (snap) => {
-  document.getElementById("totalUsers").innerText = snap.size;
-
-  const ul = document.getElementById("usersList");
-  ul.innerHTML = "";
-
-  snap.forEach((d) => {
-    const data = d.data();
-    if (data.email) { // vetem user-at qe kane email
-      const li = document.createElement("li");
-      li.textContent = data.email;
-      ul.appendChild(li);
-    }
+  // Shfaq email-in e user-it që është loguar
+  onAuthStateChanged(auth, (user) => {
+    document.getElementById("userEMail").innerText = user?.email || "Guest";
   });
-});
-</script>  
 
+  // Numri i dokumenteve në koleksionin "users"
+  onSnapshot(collection(db, "users"), (snap) => {
+    document.getElementById("totalUsers").innerText = snap.size;
+
+    const ul = document.getElementById("usersList");
+    ul.innerHTML = ""; // pastro listën
+
+    snap.forEach((d) => {
+      const data = d.data();
+      if (data.email) { // vetëm user-at me email
+        const li = document.createElement("li");
+        li.textContent = data.email;
+        ul.appendChild(li);
+      }
+    });
+  });
+</script>
   
 </body> 
 </html>

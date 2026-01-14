@@ -188,7 +188,7 @@
 
        msg("Duke dërguar...", true);
 
-          const { error } = await supabaseClient.from("watches").insert([data]);
+          const { error } = await supabaseClient.from("listings").insert([data]);
           if (error) { msg("Gabim Supabase: " + error.message, false); console.error(error); return; }
 
           msg("U dërgua ✅ (pending).", true);

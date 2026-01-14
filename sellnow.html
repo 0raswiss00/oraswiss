@@ -197,12 +197,6 @@
           console.error(e);
         }
       });
-      
-    // ✅ INSERT (siç e kishe)
-    const { error } = await supabaseClient.from("watches").insert([data]);
-    if (error) { msg("Gabim Supabase: " + error.message, false); console.error(error); return; }
-
-    msg("U dërgua ✅ (pending).", true);
 </script>
 
 </body>

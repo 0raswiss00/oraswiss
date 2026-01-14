@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="sq">
 <head>
@@ -117,116 +118,86 @@
   <button class="btn" id="uploadBtn" type="button">Upload Photos</button>
   <textarea id="photos" placeholder="URL-të dalin këtu (automatikisht)..." readonly></textarea>
 
-  <button onclick="publishProduct()">PUBLISH</button>
+  <button class="btn" id="publishBtn" type="button">PUBLISH</button>
 
   <div id="msg" class="note"></div>
 
 </div>
 
-<!-- SUPABASE SDK (DUHET te jete para createClient) -->
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
+<!-- Cloudinary -->
+<script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 <script>
-  // CONFIG (pa hapësira!)
-  const SUPABASE_URL = "https://gnwrsmlmegduhhmfmoa.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+  const CLOUD_NAME = "drfjznv52";
+  const UPLOAD_PRESET = "oraswiss_upload";
 
-  // CLIENT
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
+  const widget = cloudinary.createUploadWidget(
+    {
+      cloudName: CLOUD_NAME,
+      uploadPreset: UPLOAD_PRESET,
+      folder: "watches",
+      multiple: true,
+      sources: ["local", "camera"]
+    },
+    (error, result) => {
+      if (error) { console.error(error); return; }
+      if (result && result.event === "success") {
+        const ta = document.getElementById("photos");
+        const current = ta.value.trim();
+        ta.value = current ? (current + "\n" + result.info.secure_url) : result.info.secure_url;
+      }
+    }
   );
 
-  // Mesazh ne faqe
-  function msg(text, ok = true){
+  document.getElementById("uploadBtn").addEventListener("click", () => widget.open());
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://gnwrsmlmegduhhmfmoa.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+  const msg = (text, ok=true) => {
     const el = document.getElementById("msg");
-    if(!el) return alert(text);
     el.className = "note " + (ok ? "ok" : "bad");
     el.textContent = text;
-  }
+  };
 
-  // PUBLISH
-  async function publishProduct(){
-    const working = (document.getElementById("working")?.value || "").trim();
-    const description = (document.getElementById("description")?.value || "").trim();
-    const photos = (document.getElementById("photos")?.value || "").trim();
-
-    if(!working || !photos){
-      msg("Plotëso titullin (working) dhe fotot.", false);
-      return;
-    }
-
-    // Ndrysho "products" nese tabela jote quhet ndryshe
-    const { error } = await supabaseClient
-      .from("products")
-      .insert([{ working, description, photos }]);
-
-    if(error){
-      console.error(error);
-      msg("Gabim Supabase: " + error.message, false);
-      return;
-    }
-
-    msg("U publikua me sukses ✅", true);
-    document.getElementById("sellForm")?.reset();
-  }
-</script>
-Ora
-<!-- SUPABASE SDK (fallback) -->
-<script>
-  function loadScript(src) {
-    return new Promise((res, rej) => {
-      const s = document.createElement("script");
-      s.src = src;
-      s.onload = res;
-      s.onerror = rej;
-      document.head.appendChild(s);
-    });
-  }
-
-  (async () => {
+  document.getElementById("publishBtn").addEventListener("click", async () => {
     try {
-      await loadScript("https://unpkg.com/@supabase/supabase-js@2");
-    } catch (e1) {
-      await loadScript("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2");
+      const photosText = document.getElementById("photos").value.trim();
+      if (!photosText) { msg("Ngarko të paktën 1 foto.", false); return; }
+
+      const photos = photosText.split(/\n|,/g).map(s => s.trim()).filter(Boolean);
+
+      const data = {
+        category: document.getElementById("category").value,
+        brand: document.getElementById("brand").value.trim(),
+        model: document.getElementById("model").value.trim(),
+        ref: document.getElementById("ref").value.trim(),
+        year: document.getElementById("year").value ? Number(document.getElementById("year").value) : null,
+        material: document.getElementById("material").value.trim(),
+        condition: document.getElementById("condition").value,
+        description: document.getElementById("description").value.trim(),
+        case_size: document.getElementById("case_size").value ? Number(document.getElementById("case_size").value) : null,
+        price: document.getElementById("price").value ? Number(document.getElementById("price").value) : null,
+        photos,
+        box: document.getElementById("box").value || null,
+        working: document.getElementById("working").value || null,
+        status: "pending"
+      };
+
+      msg("Duke dërguar...", true);
+
+      const { error } = await supabaseClient.from("watches").insert([data]);
+      if (error) { msg("Gabim Supabase: " + error.message, false); console.error(error); return; }
+
+      msg("U dërgua ✅ (pending).", true);
+    } catch (e) {
+      msg("Gabim rrjeti/JS: " + (e?.message || String(e)), false);
+      console.error(e);
     }
-
-    // ✅ këtu je 100% i sigurt që supabase u ngarkua
-    const SUPABASE_URL = "https://gnwrsmlmegduhhmfmoa.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Test 1: a ekziston supabase?
-    console.log("Supabase loaded:", !!window.supabase);
-
-    // Test 2: provë e thjeshtë SELECT (trego gabimin në ekran)
-    const el = document.getElementById("msg");
-    const say = (t) => { if (el) el.textContent = t; };
-
-    try {
-      const { data, error } = await supabaseClient.from("products").select("*").limit(1);
-      if (error) say("SELECT error: " + error.message);
-      else say("Supabase OK ✅ (SELECT punon)");
-    } catch (err) {
-      say("JS error: " + err.message);
-    }
-
-    // PUBLISH
-    window.publishProduct = async function publishProduct() {
-      const working = (document.getElementById("working")?.value || "").trim();
-      const description = (document.getElementById("description")?.value || "").trim();
-      const photos = (document.getElementById("photos")?.value || "").trim();
-
-      if (!working || !photos) return say("Plotëso working + photos");
-
-      const { error } = await supabaseClient
-        .from("products")
-        .insert([{ working, description, photos }]);
-
-      if (error) return say("INSERT error: " + error.message);
-      say("U publikua ✅");
-    };
-  })();
+  });
 </script>
 
 </body>

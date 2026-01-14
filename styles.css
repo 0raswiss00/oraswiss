@@ -2851,7 +2851,11 @@ body{background:#000!important;color:#E6E6E6!important}
 }
 
 /* Mobile */
-@media (min-width: 1024px) { ... }
+@media (min-width: 1024px){
+  .hero{
+    min-height: 75vh;
+  }
+}
 @media (max-width:768px){      
   .hero{
     flex-direction: column;

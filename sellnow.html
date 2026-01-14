@@ -186,18 +186,18 @@
         status: "pending"
       };
 
-    msg("Duke dërguar...", true);
+       msg("Duke dërguar...", true);
 
-    // ✅ TEST: a arrin browser te Supabase fare?
-    try {
-      const r = await fetch("https://gnwrsmlmegduhhmfmoa.supabase.co/rest/v1/");
-      console.log("Fetch test status:", r.status);
-    } catch (e) {
-      console.error("Fetch test failed:", e);
-      msg("Bllokohet lidhja me Supabase (CSP/VPN/AdBlock): " + e.message, false);
-      return;
-    }
+          const { error } = await supabaseClient.from("watches").insert([data]);
+          if (error) { msg("Gabim Supabase: " + error.message, false); console.error(error); return; }
 
+          msg("U dërgua ✅ (pending).", true);
+        } catch (e) {
+          msg("Gabim rrjeti/JS: " + (e?.message || String(e)), false);
+          console.error(e);
+        }
+      });
+      
     // ✅ INSERT (siç e kishe)
     const { error } = await supabaseClient.from("watches").insert([data]);
     if (error) { msg("Gabim Supabase: " + error.message, false); console.error(error); return; }

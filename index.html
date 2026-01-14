@@ -102,11 +102,6 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // ✅ Shfaq email-in e user-it (nese je logged in)
-  onAuthStateChanged(auth, (user) => {
-    document.getElementById("userEMail").innerText = user?.email || "Guest";
-  });
-
 // Numri i dokumenteve te Firestore /users
 onSnapshot(collection(db, "users"), (snap) => {
   document.getElementById("totalUsers").innerText = snap.size;

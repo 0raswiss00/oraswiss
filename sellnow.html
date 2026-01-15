@@ -202,6 +202,18 @@ const fileInput = document.getElementById("photoFiles");
 const photosBox = document.getElementById("photos");
 const photosPreview = document.getElementById("photosPreview");
 const msgEl = document.getElementById("msg");
+const publishBtn = document.getElementById("publishBtn");
+
+/* ✅ 1. MSG FUNCTION – GJITHMONË SIPËR */
+const msg = (t, ok=true) => {
+  msgEl.className = "note " + (ok ? "ok" : "bad");
+  msgEl.textContent = t;
+};
+
+/* ✅ 2. TEST PUBLISH */
+publishBtn.addEventListener("click", () => {
+  msg("Publish u klikua ✅", true);
+});
 
 const msg = (t, ok=true)=>{
   msgEl.className = "note " + (ok ? "ok" : "bad");

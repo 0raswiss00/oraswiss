@@ -126,7 +126,9 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
   import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
+  // ✅ PASTE configun e projektit tënd këtu (nga Firebase)
   const firebaseConfig = {
     apiKey: "…",
     authDomain: "…",
@@ -138,41 +140,110 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  const auth = getAuth(app);
 
-  const msg = (text, ok=true) => {
+  let currentUser = null;
+
+  const msg = (text, ok = true) => {
     const el = document.getElementById("msg");
+    if (!el) return;
     el.className = "note " + (ok ? "ok" : "bad");
     el.textContent = text;
   };
 
+  // ✅ Sigurohu që vetëm user i loguar hyn te sellnow
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      msg("Duhet të jesh i loguar për të publikuar.", false);
+      // ndërron faqen sipas projektit tënd
+      window.location.href = "login.html";
+      return;
+    }
+    currentUser = user;
+  });
+
+  // Helpers
+  const val = (id) => document.getElementById(id)?.value ?? "";
+  const trim = (id) => val(id).trim();
+  const numOrNull = (id) => {
+    const v = trim(id);
+    if (!v) return null;
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  };
+  const pickOrNull = (id) => {
+    const v = val(id);
+    return v === "" ? null : v;
+  };
+
+  // ✅ Publish
   document.getElementById("publishBtn").addEventListener("click", async () => {
     try {
-      const photosText = document.getElementById("photos").value.trim();
-      if (!photosText) { msg("Ngarko të paktën 1 foto.", false); return; }
+      if (!currentUser) {
+        msg("Po kontrolloj login... provo prap.", false);
+        return;
+      }
 
-      const photos = photosText.split(/\n|,/g).map(s => s.trim()).filter(Boolean);
+      // fotos: listë URL-sh (një për rresht ose me presje)
+      const photosText = trim("photos");
+      if (!photosText) {
+        msg("Ngarko të paktën 1 foto (URL).", false);
+        return;
+      }
+      const photos = photosText
+        .split(/\n|,/g)
+        .map((s) => s.trim())
+        .filter(Boolean);
 
+      if (photos.length === 0) {
+        msg("Lista e fotove është bosh.", false);
+        return;
+      }
+
+      const brand = trim("brand");
+      const model = trim("model");
+      const price = numOrNull("price");
+
+      if (!brand || !model) {
+        msg("Brand dhe Model janë të detyrueshme.", false);
+        return;
+      }
+      if (price !== null && price < 0) {
+        msg("Price s'mund të jetë negative.", false);
+        return;
+      }
+
+      // ✅ Struktura jote e njëjtë + shtesat e projektit (seller)
       const data = {
-        category: document.getElementById("category").value,
-        brand: document.getElementById("brand").value.trim(),
-        model: document.getElementById("model").value.trim(),
-        ref: document.getElementById("ref").value.trim(),
-        year: document.getElementById("year").value ? Number(document.getElementById("year").value) : null,
-        material: document.getElementById("material").value.trim(),
-        condition: document.getElementById("condition").value,
-        description: document.getElementById("description").value.trim(),
-        case_size: document.getElementById("case_size").value ? Number(document.getElementById("case_size").value) : null,
-        price: document.getElementById("price").value ? Number(document.getElementById("price").value) : null,
+        // lidhja me user-in (shumë e rëndësishme)
+        sellerId: currentUser.uid,
+        sellerEmail: currentUser.email || null,
+
+        category: val("category"),
+        brand,
+        model,
+        ref: trim("ref"),
+        year: numOrNull("year"),
+        material: trim("material"),
+        condition: val("condition"),
+        description: trim("description"),
+        case_size: numOrNull("case_size"),
+        price,
         photos,
-        box: document.getElementById("box").value || null,
-        working: document.getElementById("working").value || null,
+
+        box: pickOrNull("box"),
+        working: pickOrNull("working"),
+
         status: "pending",
         createdAt: serverTimestamp()
       };
 
       msg("Duke dërguar...", true);
       await addDoc(collection(db, "listings"), data);
+
       msg("U dërgua ✅ (pending).", true);
+      // opsionale: pastro fushat
+      // document.querySelector("form")?.reset();
 
     } catch (e) {
       msg("Gabim Firestore: " + (e?.message || String(e)), false);
@@ -180,7 +251,6 @@
     }
   });
 </script>
-
  
 </body>
 </html>

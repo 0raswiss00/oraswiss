@@ -144,6 +144,11 @@
   style="display:none"
 />
 
+<button id="uploadBtn" type="button">Upload Photos</button>
+<input id="photoFiles" type="file" accept="image/*" multiple style="display:none" />
+<div id="photosPreview"></div>
+<div id="msg"></div>
+ 
 <button class="btn" id="publishBtn" type="button">PUBLISH</button>
 <div id="msg" class="note"></div>
 </div>
@@ -171,7 +176,6 @@
   const storage = getStorage(app);
 
   // ✅ ELEMENTS (vetëm 1 herë)
-// ELEMENTS (VETËM 1 HERË)
 const uploadBtn = document.getElementById("uploadBtn");
 const fileInput = document.getElementById("photoFiles");
 const photosBox = document.getElementById("photos");

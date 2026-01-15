@@ -161,8 +161,10 @@
 
   const setMsg = (t) => (msgEl.textContent = t);
 
-  uploadBtn.addEventListener("click", () => fileInput.click());
-
+  uploadBtn.addEventListener("click", () => {
+  alert("Klik u kap ✅");
+  fileInput.click();
+});
   fileInput.addEventListener("change", async () => {
     const files = Array.from(fileInput.files || []);
     if (!files.length) return;

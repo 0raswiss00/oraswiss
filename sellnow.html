@@ -220,19 +220,43 @@ const msg = document.getElementById("msg");
 
 uploadBtn.onclick = () => fileInput.click();
 
-fileInput.onchange = () => {
-  preview.innerHTML = "";
-  const files = Array.from(fileInput.files || []);
-  msg.textContent = U zgjodhën ${files.length} foto;
+fileInput.onchange = async () => {
+  const files = Array.from(fileInput.files);
+  if (!files.length) return;
 
-  for (const file of files) {
-    const url = URL.createObjectURL(file);
-    const img = document.createElement("img");
-    img.src = url;
-    img.style.width = "120px";
-    img.style.margin = "6px";
-    preview.appendChild(img);
+  preview.innerHTML = "";
+  msg.textContent = "Uploading...";
+
+  try {
+    for (const file of files) {
+      const fileRef = ref(
+        storage,
+        photos/${Date.now()}_${file.name}
+      );
+
+      // ⬆️ UPLOAD REAL
+      await uploadBytes(fileRef, file);
+
+      // 🔗 URL REAL NGA FIREBASE
+      const url = await getDownloadURL(fileRef);
+
+      // 👀 PREVIEW
+      const img = document.createElement("img");
+      img.src = url;
+      img.style.width = "120px";
+      img.style.margin = "6px";
+      preview.appendChild(img);
+
+      console.log("Uploaded:", url);
+    }
+
+    msg.textContent = "Fotot u ngarkuan ✅";
+  } catch (e) {
+    console.error(e);
+    msg.textContent = "Gabim në upload ❌";
   }
+
+  fileInput.value = "";
 };
 </script> 
 </body>

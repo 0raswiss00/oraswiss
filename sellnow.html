@@ -125,24 +125,23 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-  // ✅ PASTE configun e projektit tënd këtu (nga Firebase)
+  // ✅ I NJËJTI CONFIG SI TE register.html (mos vendos "…")
   const firebaseConfig = {
-    apiKey: "…",
-    authDomain: "…",
-    projectId: "…",
-    storageBucket: "…",
-    messagingSenderId: "…",
-    appId: "…"
+    apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+    authDomain: "oraswiss-27e57.firebaseapp.com",
+    projectId: "oraswiss-27e57",
+    storageBucket: "oraswiss-27e57.firebasestorage.app",
+    messagingSenderId: "596627676936",
+    appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+    measurementId: "G-VZPKMD67VQ"
   };
 
   const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
   const auth = getAuth(app);
-
-  let currentUser = null;
+  const db = getFirestore(app);
 
   const msg = (text, ok = true) => {
     const el = document.getElementById("msg");
@@ -151,15 +150,16 @@
     el.textContent = text;
   };
 
-  // ✅ Sigurohu që vetëm user i loguar hyn te sellnow
+  // ✅ vetëm mesazh (jo redirect)
+  let currentUser = null;
   onAuthStateChanged(auth, (user) => {
     if (!user) {
-      msg("Duhet të jesh i loguar për të publikuar.", false);
-      // ndërron faqen sipas projektit tënd
-      window.location.href = "login.html";
+      currentUser = null;
+      msg("Nuk je i loguar. Hape register.html dhe bëj Login.", false);
       return;
     }
     currentUser = user;
+    msg("Je i loguar ✅", true);
   });
 
   // Helpers
@@ -180,22 +180,22 @@
   document.getElementById("publishBtn").addEventListener("click", async () => {
     try {
       if (!currentUser) {
-        msg("Po kontrolloj login... provo prap.", false);
+        msg("Duhet të jesh i loguar për të publikuar.", false);
         return;
       }
 
-      // fotos: listë URL-sh (një për rresht ose me presje)
       const photosText = trim("photos");
       if (!photosText) {
-        msg("Ngarko të paktën 1 foto (URL).", false);
+        msg("Shto të paktën 1 foto (URL).", false);
         return;
       }
+
       const photos = photosText
         .split(/\n|,/g)
-        .map((s) => s.trim())
+        .map(s => s.trim())
         .filter(Boolean);
 
-      if (photos.length === 0) {
+      if (!photos.length) {
         msg("Lista e fotove është bosh.", false);
         return;
       }
@@ -208,14 +208,8 @@
         msg("Brand dhe Model janë të detyrueshme.", false);
         return;
       }
-      if (price !== null && price < 0) {
-        msg("Price s'mund të jetë negative.", false);
-        return;
-      }
 
-      // ✅ Struktura jote e njëjtë + shtesat e projektit (seller)
       const data = {
-        // lidhja me user-in (shumë e rëndësishme)
         sellerId: currentUser.uid,
         sellerEmail: currentUser.email || null,
 
@@ -240,18 +234,13 @@
 
       msg("Duke dërguar...", true);
       await addDoc(collection(db, "listings"), data);
-
       msg("U dërgua ✅ (pending).", true);
-      // opsionale: pastro fushat
-      // document.querySelector("form")?.reset();
 
     } catch (e) {
-      msg("Gabim Firestore: " + (e?.message || String(e)), false);
+      msg("Gabim: " + (e?.message || String(e)), false);
       console.error(e);
     }
   });
-</script>
-
- 
+</script> 
 </body>
 </html>

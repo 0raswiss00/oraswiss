@@ -3053,3 +3053,152 @@ body{background:#000!important;color:#E6E6E6!important}
   width:1px;
   height:1px;
 }
+
+/* RESET I LEHTË */
+* {
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+}
+
+/* CONTAINER I FORMËS */
+.form-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* LABEL */
+label {
+  display: block;
+  margin: 14px 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #eaeaea;
+}
+
+/* INPUT / SELECT / TEXTAREA */
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #333;
+  background: #111;
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* FOCUS */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #caa44d;
+}
+
+/* BUTONA */
+.btn {
+  appearance: none;
+  border: 1px solid #caa44d;
+  background: transparent;
+  color: #caa44d;
+  padding: 12px 18px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.btn:hover {
+  background: #caa44d;
+  color: #000;
+}
+
+/* ZONA E FOTOVE */
+.photos-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+/* INPUT FILE I FSHEHUR (SAFE PER MOBILE) */
+.hiddenFile {
+  position: fixed;
+  top: -1000px;
+  left: -1000px;
+  width: 1px;
+  height: 1px;
+}
+
+/* PREVIEW I FOTOVE */
+.photos-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.photos-preview img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid #333;
+}
+
+/* MESAZHE */
+.note {
+  margin-top: 14px;
+  font-size: 14px;
+}
+
+.note.ok {
+  color: #4caf50;
+}
+
+.note.bad {
+  color: #ff5252;
+}
+
+/* 📱 MOBILE (deri 600px) */
+@media (max-width: 600px) {
+  .form-container {
+    padding: 12px;
+  }
+
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .photos-actions {
+    flex-direction: column;
+  }
+}
+
+/* 💻 DESKTOP (mbi 900px) */
+@media (min-width: 900px) {
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+
+      

@@ -118,7 +118,9 @@
   <input id="photoFiles" type="file" accept="image/*" multiple style="display:none">
   <textarea id="photos" placeholder="URL-të dalin këtu (automatikisht)..." readonly></textarea>
   
-  <button class="btn" id="publishBtn" type="button">PUBLISH</button>
+<button class="btn" type="button" onclick="document.getElementById('photoFiles').click()">
+  Upload Photos
+</button>
 
   <div id="msg" class="note"></div>
 

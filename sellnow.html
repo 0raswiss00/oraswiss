@@ -206,12 +206,24 @@ fileInput.addEventListener("change", async () => {
 
 const uploadBtn = document.getElementById("uploadBtn");
 const fileInput = document.getElementById("photoFiles");
+const preview = document.getElementById("photosPreview");
+const msg = document.getElementById("msg");
 
-console.log("uploadBtn =", uploadBtn);
-console.log("fileInput =", fileInput);
+uploadBtn.onclick = () => fileInput.click();
 
-uploadBtn.onclick = () => {
-  fileInput.click();
+fileInput.onchange = () => {
+  preview.innerHTML = "";
+  const files = Array.from(fileInput.files || []);
+  msg.textContent = U zgjodhën ${files.length} foto;
+
+  for (const file of files) {
+    const url = URL.createObjectURL(file);
+    const img = document.createElement("img");
+    img.src = url;
+    img.style.width = "120px";
+    img.style.margin = "6px";
+    preview.appendChild(img);
+  }
 };
 </script> 
 </body>

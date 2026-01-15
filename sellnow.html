@@ -215,11 +215,6 @@ publishBtn.addEventListener("click", () => {
   msg("Publish u klikua ✅", true);
 });
 
-const msg = (t, ok=true)=>{
-  msgEl.className = "note " + (ok ? "ok" : "bad");
-  msgEl.textContent = t;
-};
-
 // hap file picker
 uploadBtn.addEventListener("click", ()=>{
   fileInput.click();

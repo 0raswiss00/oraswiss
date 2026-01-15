@@ -149,7 +149,7 @@
   const fileInput = document.getElementById("photoFiles");
   const preview = document.getElementById("photosPreview");
   const msgEl = document.getElementById("msg");
-
+alert(fileInput ? "fileInput OK ✅" : "fileInput NULL ❌");
   const setMsg = (t) => (msgEl.textContent = t);
 
   uploadBtn.addEventListener("click", () => {

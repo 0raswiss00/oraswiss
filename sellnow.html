@@ -113,19 +113,26 @@
   <label>Description</label>
  
   
-  <button class="btn" type="button" onclick="document.getElementById('photoFiles').click()">
-    Upload Photos
-  </button>
+<label>Photos</label>
 
-  <input
-    id="photoFiles"
-    type="file"
-    accept="image/*"
-    multiple
-    style="display:none"
-  />
+<button class="btn" id="uploadBtn" type="button">
+  Upload Photos
+</button>
 
-  <textarea id="photos" style="display:none"></textarea>
+<input
+  id="photoFiles"
+  type="file"
+  accept="image/*"
+  multiple
+  style="display:none"
+/>
+
+<!-- Kjo ruan URL-t pas upload (si më parë) -->
+<textarea id="photos" style="display:none"></textarea>
+
+<!-- ✅ XHEPI (preview) -->
+<div id="photosPreview" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;"></div>
+
   
   <button class="btn" id="publishBtn" type="button">PUBLISH</button>
   

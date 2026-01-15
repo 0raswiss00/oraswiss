@@ -119,7 +119,14 @@
   onclick="document.getElementById('photoFiles').click()">
   Upload Photos
 </button>
-
+<input
+  id="photoFiles"
+  type="file"
+  accept="image/*"
+  multiple
+  style="display:none"
+/>
+  
 <input id="photoFiles" type="file" accept="image/*" multiple style="display:none" />
 
 <textarea id="photos" style="display:none"></textarea>
@@ -128,11 +135,6 @@
 <div id="msg" class="note"></div>
 </div>
   
-<div>  
- <button id="publishBtn" ...>PUBLISH</button>
-</div>
-</div>
-
   
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";

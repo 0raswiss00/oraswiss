@@ -152,113 +152,63 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
 
-  // ✅ Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
-  authDomain: "oraswiss-27e57.firebaseapp.com",
-  projectId: "oraswiss-27e57",
-  storageBucket: "oraswiss-27e57.appspot.com",
-  messagingSenderId: "596627676936",
-  appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-  measurementId: "G-VZPKMD67VQ"
-};
-
-
+  const firebaseConfig = {
+    apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+    authDomain: "oraswiss-27e57.firebaseapp.com",
+    projectId: "oraswiss-27e57",
+    storageBucket: "oraswiss-27e57.appspot.com",
+    messagingSenderId: "596627676936",
+    appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+    measurementId: "G-VZPKMD67VQ"
+  };
 
   const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
   const storage = getStorage(app);
 
-  // ✅ ELEMENTS (vetëm 1 herë)
-const uploadBtn = document.getElementById("uploadBtn");
-const fileInput = document.getElementById("photoFiles");
-const photosBox = document.getElementById("photos");
-const photosPreview = document.getElementById("photosPreview");
-const publishBtn = document.getElementById("publishBtn");
-const msgEl = document.getElementById("msg");
+  const uploadBtn = document.getElementById("uploadBtn");
+  const fileInput = document.getElementById("photoFiles");
+  const preview = document.getElementById("photosPreview");
+  const msgEl = document.getElementById("msg");
 
-// MSG
-const msg = (t, ok = true) => {
-  msgEl.className = "note " + (ok ? "ok" : "bad");
-  msgEl.textContent = t;
-};
+  const setMsg = (t) => (msgEl.textContent = t);
 
-// OPEN PICKER
-uploadBtn.addEventListener("click", () => {
-  fileInput.click();
-});
+  uploadBtn.addEventListener("click", () => fileInput.click());
 
-// UPLOAD (vetëm preview + ruan URL-të)
-fileInput.addEventListener("change", async () => {
-  const files = Array.from(fileInput.files || []);
-  if (!files.length) return;
+  fileInput.addEventListener("change", async () => {
+    const files = Array.from(fileInput.files || []);
+    if (!files.length) return;
 
-  photosPreview.innerHTML = "";
-  const urls = [];
+    preview.innerHTML = "";
+    setMsg("Uploading...");
 
-  for (const file of files) {
-    const url = URL.createObjectURL(file);
-    urls.push(url);
-    photosPreview.innerHTML += <img src="${url}" style="max-width:120px;margin:6px;border-radius:8px">;
-  }
+    try {
+      for (const file of files) {
+        const fileRef = ref(storage, photos/${Date.now()}_${file.name});
+        await uploadBytes(fileRef, file);
+        const url = await getDownloadURL(fileRef);
 
-  photosBox.value = urls.join("\n");
-  msg(U zgjodhën ${urls.length} foto ✅, true);
+        const img = document.createElement("img");
+        img.src = url;
+        img.style.width = "120px";
+        img.style.margin = "6px";
+        img.style.borderRadius = "8px";
+        preview.appendChild(img);
 
-  fileInput.value = "";
-});
+        console.log("Uploaded:", url);
+      }
 
-const uploadBtn = document.getElementById("uploadBtn");
-const fileInput = document.getElementById("photoFiles");
-const preview = document.getElementById("photosPreview");
-const msg = document.getElementById("msg");
-
-uploadBtn.onclick = () => fileInput.click();
-
-fileInput.onchange = async () => {
-  const files = Array.from(fileInput.files);
-  if (!files.length) return;
-
-  preview.innerHTML = "";
-  msg.textContent = "Uploading...";
-
-  try {
-    for (const file of files) {
-      const fileRef = ref(
-        storage,
-        photos/${Date.now()}_${file.name}
-      );
-
-      // ⬆️ UPLOAD REAL
-      await uploadBytes(fileRef, file);
-
-      // 🔗 URL REAL NGA FIREBASE
-      const url = await getDownloadURL(fileRef);
-
-      // 👀 PREVIEW
-      const img = document.createElement("img");
-      img.src = url;
-      img.style.width = "120px";
-      img.style.margin = "6px";
-      preview.appendChild(img);
-
-      console.log("Uploaded:", url);
+      setMsg(Fotot u ngarkuan ✅ (${files.length}));
+    } catch (e) {
+      console.error(e);
+      setMsg("Gabim në upload ❌ (shiko Console)");
     }
 
-    msg.textContent = "Fotot u ngarkuan ✅";
-  } catch (e) {
-    console.error(e);
-    msg.textContent = "Gabim në upload ❌";
-  }
+    fileInput.value = "";
+  });
+</script>
 
-  fileInput.value = "";
-};
-</script> 
 </body>
 </html>
 

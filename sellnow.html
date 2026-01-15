@@ -110,27 +110,22 @@
     </div>
   </div>
 
-  <label>Description</label>
- <textarea
-  id="description"
-  placeholder="Përshkruaj orën (gjendja, historia, defekte, shënime)"
-</textarea>
-</div>
-<div>   
+<label>Description</label>
+<textarea id="description" placeholder="Shkruaj përshkrimin..."></textarea>
+
 <label>Photos</label>
 
-<button class="btn" id="uploadBtn" type="button">
-    Upload Photos
+<button class="btn" type="button"
+  onclick="document.getElementById('photoFiles').click()">
+  Upload Photos
 </button>
 
-<input id="photoFiles" class="hiddenFile" type="file" accept="image/*" multiple>
-   
+<input id="photoFiles" type="file" accept="image/*" multiple style="display:none" />
+
 <textarea id="photos" style="display:none"></textarea>
 
-<div class="photos-preview" id="photosPreview"></div>
-
+<button class="btn" id="publishBtn" type="button">PUBLISH</button>
 <div id="msg" class="note"></div>
-
 </div>
   
 <div>  

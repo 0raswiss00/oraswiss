@@ -140,7 +140,6 @@
 <div id="msg"></div>
  
 <button class="btn" id="publishBtn" type="button">PUBLISH</button>
-<div id="msg" class="note"></div>
 </div>
 
 <script type="module">
@@ -150,15 +149,17 @@
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
 
   // ✅ Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
-    authDomain: "oraswiss-27e57.firebaseapp.com",
-    projectId: "oraswiss-27e57",
-    storageBucket: "oraswiss-27e57.firebasestorage.app",
-    messagingSenderId: "596627676936",
-    appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-    measurementId: "G-VZPKMD67VQ"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+  authDomain: "oraswiss-27e57.firebaseapp.com",
+  projectId: "oraswiss-27e57",
+  storageBucket: "oraswiss-27e57.appspot.com",
+  messagingSenderId: "596627676936",
+  appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+  measurementId: "G-VZPKMD67VQ"
+};
+
+
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);

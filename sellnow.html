@@ -115,6 +115,7 @@
 
   <label>Photos (URLs)</label>
   <button class="btn" id="uploadBtn" type="button">Upload Photos</button>
+  <input id="photoFiles" type="file" accept="image/*" multiple style="display:none">
   <textarea id="photos" placeholder="URL-të dalin këtu (automatikisht)..." readonly></textarea>
 
   <button class="btn" id="publishBtn" type="button">PUBLISH</button>
@@ -142,7 +143,8 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
-
+  const storage = getStorage(app);
+  
   const msg = (text, ok = true) => {
     const el = document.getElementById("msg");
     if (!el) return;
@@ -162,6 +164,46 @@
     msg("Je i loguar ✅", true);
   });
 
+    const uploadBtn = document.getElementById("uploadBtn");
+    const fileInput = document.getElementById("photoFiles");
+    const photosBox = document.getElementById("photos");
+
+    uploadBtn.addEventListener("click", () => {
+      fileInput.click(); // hap galerine / file picker
+    });
+
+    fileInput.addEventListener("change", async () => {
+      try {
+        if (!currentUser) {
+          msg("Duhet të jesh i loguar për të ngarkuar foto.", false);
+          return;
+        }
+
+        const files = Array.from(fileInput.files || []);
+        if (!files.length) return;
+
+        msg("Duke ngarkuar fotot...", true);
+
+        const urls = [];
+
+        for (const file of files) {
+          const path = products/${currentUser.uid}/${Date.now()}_${file.name};
+          const fileRef = ref(storage, path);
+
+          await uploadBytes(fileRef, file);
+          const url = await getDownloadURL(fileRef);
+          urls.push(url);
+        }
+
+        photosBox.value = urls.join("\n");
+        msg(U ngarkuan ${urls.length} foto ✅, true);
+
+      } catch (e) {
+        msg("Gabim te upload: " + e.message, false);
+        console.error(e);
+      }
+    });
+  
   // Helpers
   const val = (id) => document.getElementById(id)?.value ?? "";
   const trim = (id) => val(id).trim();

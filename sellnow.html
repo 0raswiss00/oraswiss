@@ -143,70 +143,30 @@
     measurementId: "G-VZPKMD67VQ"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  const storage = getStorage(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
   
-  const msg = (text, ok = true) => {
-    const el = document.getElementById("msg");
-    if (!el) return;
-    el.className = "note " + (ok ? "ok" : "bad");
-    el.textContent = text;
-  };
+    const msg = (text, ok = true) => {
+      const el = document.getElementById("msg");
+      if (!el) return;
+      el.className = "note " + (ok ? "ok" : "bad");
+      el.textContent = text;
+    };
 
-  // ✅ vetëm mesazh (jo redirect)
-  let currentUser = null;
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      currentUser = null;
-      msg("Nuk je i loguar. Hape register.html dhe bëj Login.", false);
-      return;
-    }
-    currentUser = user;
-    msg("Je i loguar ✅", true);
-  });
-
-    const uploadBtn = document.getElementById("uploadBtn");
-    const fileInput = document.getElementById("photoFiles");
-    const photosBox = document.getElementById("photos");
-
-    uploadBtn.addEventListener("click", () => {
-      fileInput.click(); // hap galerine / file picker
-    });
-  
-    fileInput.addEventListener("change", async () => {
-      try {
-        if (!currentUser) {
-          msg("Duhet të jesh i loguar për të ngarkuar foto.", false);
-          return;
-        }
-
-        const files = Array.from(fileInput.files || []);
-        if (!files.length) return;
-
-        msg("Duke ngarkuar fotot...", true);
-
-        const urls = [];
-
-        for (const file of files) {
-          const path = products/${currentUser.uid}/${Date.now()}_${file.name};
-          const fileRef = ref(storage, path);
-
-          await uploadBytes(fileRef, file);
-          const url = await getDownloadURL(fileRef);
-          urls.push(url);
-        }
-
-        photosBox.value = urls.join("\n");
-        msg(U ngarkuan ${urls.length} foto ✅, true);
-
-      } catch (e) {
-        msg("Gabim te upload: " + e.message, false);
-        console.error(e);
+    // ✅ vetëm mesazh (jo redirect)
+    let currentUser = null;
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        currentUser = null;
+        msg("Nuk je i loguar. Hape register.html dhe bëj Login.", false);
+        return;
       }
+      currentUser = user;
+      msg("Je i loguar ✅", true);
     });
-  
+
   // Helpers
   const val = (id) => document.getElementById(id)?.value ?? "";
   const trim = (id) => val(id).trim();

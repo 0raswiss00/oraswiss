@@ -172,6 +172,9 @@
       fileInput.click(); // hap galerine / file picker
     });
 
+    <button class="btn" id="uploadBtn" type="button">Upload Photos</button>
+    <input id="photoFiles" type="file" accept="image/*" multiple style="display:none">
+  
     fileInput.addEventListener("change", async () => {
       try {
         if (!currentUser) {

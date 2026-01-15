@@ -113,7 +113,7 @@
   <label>Description</label>
  
   
-  <label>Photos</label>
+<label>Photos</label>
 
   <button class="btn" id="uploadBtn" type="button">
     Upload Photos
@@ -127,10 +127,11 @@
     multiple
   />
 
+  <!-- Këtu do ruhen URL-t pas upload (përdoret në Publish) -->
   <textarea id="photos" style="display:none"></textarea>
- 
+
   <button class="btn" id="publishBtn" type="button">PUBLISH</button>
-  
+
   <div id="msg" class="note"></div>
 
 </div>
@@ -141,14 +142,7 @@
   import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
 
-  const uploadBtn = document.getElementById("uploadBtn");
-  const fileInput = document.getElementById("photoFiles");
-
-  uploadBtn.addEventListener("click", () => {
-    fileInput.click();
-  });
-  
-  // ✅ I NJËJTI CONFIG SI TE register.html (mos vendos "…")
+  // ✅ Config
   const firebaseConfig = {
     apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
     authDomain: "oraswiss-27e57.firebaseapp.com",
@@ -159,89 +153,102 @@
     measurementId: "G-VZPKMD67VQ"
   };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
-  
-    const msg = (text, ok = true) => {
-      const el = document.getElementById("msg");
-      if (!el) return;
-      el.className = "note " + (ok ? "ok" : "bad");
-      el.textContent = text;
-    };
+  // ✅ Init
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
 
-    // ✅ vetëm mesazh (jo redirect)
-    let currentUser = null;
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        currentUser = null;
-        msg("Nuk je i loguar. Hape register.html dhe bëj Login.", false);
+  // ✅ UI msg
+  const msg = (text, ok = true) => {
+    const el = document.getElementById("msg");
+    if (!el) return;
+    el.className = "note " + (ok ? "ok" : "bad");
+    el.textContent = text;
+  };
+
+  // ✅ Current user
+  let currentUser = null;
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      currentUser = null;
+      msg("Nuk je i loguar. Hape register.html dhe bëj Login.", false);
+      return;
+    }
+    currentUser = user;
+    msg("Je i loguar ✅", true);
+  });
+
+  // ✅ Elements
+  const uploadBtn = document.getElementById("uploadBtn");
+  const fileInput = document.getElementById("photoFiles");
+  const photosBox = document.getElementById("photos");
+  const publishBtn = document.getElementById("publishBtn");
+
+  if (!uploadBtn || !fileInput || !photosBox || !publishBtn) {
+    console.error("Mungon uploadBtn/photoFiles/photos/publishBtn");
+    msg("Mungon uploadBtn/photoFiles/photos/publishBtn", false);
+  }
+
+  // ✅ Open picker (mobile + desktop)
+  uploadBtn.addEventListener("click", () => {
+    fileInput.click();
+  });
+
+  // ✅ Upload photos to Firebase Storage
+  fileInput.addEventListener("change", async () => {
+    try {
+      if (!currentUser) {
+        msg("Bëj login.", false);
         return;
       }
-      currentUser = user;
-      msg("Je i loguar ✅", true);
-    });
 
-        const uploadBtn = document.getElementById("uploadBtn");
-        const fileInput = document.getElementById("photoFiles");
-        const photosBox = document.getElementById("photos");
+      const files = Array.from(fileInput.files || []);
+      if (!files.length) return;
 
-        if (!uploadBtn || !fileInput || !photosBox) {
-          console.error("Mungon uploadBtn/photoFiles/photos");
-          msg("Mungon uploadBtn/photoFiles/photos", false);
-        }
+      msg("Duke ngarkuar fotot...", true);
 
-        uploadBtn.addEventListener("click", () => {
-          msg("Klikova Upload", true);   // <-- nëse s’del ky mesazh, button s’po merret fare
-          fileInput.click();
-        });
+      const urls = [];
 
-    fileInput.addEventListener("change", async () => {
-      try {
-        if (!currentUser) {
-          msg("Bëj login.", false);
-          return;
-        }
+      for (const file of files) {
+        const safeName = file.name.replace(/\s+/g, "_");
+        const path = products/${currentUser.uid}/${Date.now()}_${safeName};
+        const fileRef = ref(storage, path);
 
-        const files = Array.from(fileInput.files || []);
-        if (!files.length) return;
-
-        msg("Duke ngarkuar...", true);
-        const urls = [];
-
-        for (const file of files) {
-          const path = products/${currentUser.uid}/${Date.now()}_${file.name};
-          const fileRef = ref(storage, path);
-          await uploadBytes(fileRef, file);
-          urls.push(await getDownloadURL(fileRef));
-        }
-
-        document.getElementById("photos").value = urls.join("\n");
-        msg(U ngarkuan ${urls.length} foto ✅, true);
-
-      } catch (e) {
-        console.error(e);
-        msg("Gabim upload: " + e.message, false);
+        await uploadBytes(fileRef, file);
+        const url = await getDownloadURL(fileRef);
+        urls.push(url);
       }
-    });
 
-       // Helpers
-      const val = (id) => document.getElementById(id)?.value ?? "";
-      const trim = (id) => val(id).trim();
-      const numOrNull = (id) => {
-        const v = trim(id);
-        if (!v) return null;
-        const n = Number(v);
-        return Number.isFinite(n) ? n : null;
-      };
-      const pickOrNull = (id) => {
-        const v = val(id);
-        return v === "" ? null : v;
-      };
+      // ruaj URL-t për publish
+      photosBox.value = urls.join("\n");
+      msg(U ngarkuan ${urls.length} foto ✅, true);
+
+      // (opsionale) që të mund të zgjedhësh prap të njëjtat foto
+      fileInput.value = "";
+
+    } catch (e) {
+      console.error(e);
+      msg("Gabim upload: " + (e?.message || String(e)), false);
+    }
+  });
+
+  // Helpers
+  const val = (id) => document.getElementById(id)?.value ?? "";
+  const trim = (id) => val(id).trim();
+  const numOrNull = (id) => {
+    const v = trim(id);
+    if (!v) return null;
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  };
+  const pickOrNull = (id) => {
+    const v = val(id);
+    return v === "" ? null : v;
+  };
 
   // ✅ Publish
-  document.getElementById("publishBtn").addEventListener("click", async () => {
+  publishBtn.addEventListener("click", async () => {
     try {
       if (!currentUser) {
         msg("Duhet të jesh i loguar për të publikuar.", false);
@@ -250,13 +257,13 @@
 
       const photosText = trim("photos");
       if (!photosText) {
-        msg("Shto të paktën 1 foto (URL).", false);
+        msg("Shto foto me Upload Photos.", false);
         return;
       }
 
       const photos = photosText
         .split(/\n|,/g)
-        .map(s => s.trim())
+        .map((s) => s.trim())
         .filter(Boolean);
 
       if (!photos.length) {
@@ -301,10 +308,11 @@
       msg("U dërgua ✅ (pending).", true);
 
     } catch (e) {
-      msg("Gabim: " + (e?.message || String(e)), false);
       console.error(e);
+      msg("Gabim: " + (e?.message || String(e)), false);
     }
   });
-</script> 
+</script>
+
 </body>
 </html>

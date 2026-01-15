@@ -117,8 +117,6 @@
   <button class="btn" id="uploadBtn" type="button">Upload Photos</button>
   <input id="photoFiles" type="file" accept="image/*" multiple style="display:none">
   <textarea id="photos" placeholder="URL-të dalin këtu (automatikisht)..." readonly></textarea>
-  <button class="btn" id="uploadBtn" type="button">Upload Photos</button>
-  <input id="photoFiles" type="file" accept="image/*" multiple style="display:none">
   
   <button class="btn" id="publishBtn" type="button">PUBLISH</button>
 
@@ -167,6 +165,27 @@
       msg("Je i loguar ✅", true);
     });
 
+    const uploadBtn = document.getElementById("uploadBtn");
+    const fileInput = document.getElementById("photoFiles");
+    const photosBox = document.getElementById("photos");
+
+    uploadBtn.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", async () => {
+      if (!currentUser) { msg("Bëj login.", false); return; }
+
+      const urls = [];
+      for (const file of fileInput.files) {
+        const path = products/${currentUser.uid}/${Date.now()}_${file.name};
+        const fileRef = ref(storage, path);
+        await uploadBytes(fileRef, file);
+        urls.push(await getDownloadURL(fileRef));
+      }
+
+      photosBox.value = urls.join("\n");
+      msg(U ngarkuan ${urls.length} foto ✅, true);
+    });
+  
   // Helpers
   const val = (id) => document.getElementById(id)?.value ?? "";
   const trim = (id) => val(id).trim();

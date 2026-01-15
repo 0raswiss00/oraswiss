@@ -176,37 +176,37 @@
 
   uploadBtn.addEventListener("click", () => fileInput.click());
 
-  fileInput.addEventListener("change", async () => {
-    const files = Array.from(fileInput.files || []);
-    if (!files.length) return;
+fileInput.addEventListener("change", async () => {
+  const files = Array.from(fileInput.files || []);
+  if (!files.length) return;
 
-    preview.innerHTML = "";
-    setMsg("Uploading...");
+  preview.innerHTML = "";
+  setMsg("Uploading...");
 
-    try {
-      for (const file of files) {
-        const fileRef = ref(storage, photos/${Date.now()}_${file.name});
-        await uploadBytes(fileRef, file);
-        const url = await getDownloadURL(fileRef);
+  try {
+    for (const file of files) {
+      const fileRef = ref(storage, photos/${Date.now()}_${file.name});
+      await uploadBytes(fileRef, file);
+      const url = await getDownloadURL(fileRef);
 
-        const img = document.createElement("img");
-        img.src = url;
-        img.style.width = "120px";
-        img.style.margin = "6px";
-        img.style.borderRadius = "8px";
-        preview.appendChild(img);
+      const img = document.createElement("img");
+      img.src = url;
+      img.style.width = "120px";
+      img.style.margin = "6px";
+      img.style.borderRadius = "8px";
+      preview.appendChild(img);
 
-        console.log("Uploaded:", url);
-      }
-
-      setMsg(Fotot u ngarkuan ✅ (${files.length}));
-    } catch (e) {
-      console.error(e);
-      setMsg("Gabim në upload ❌ (shiko Console)");
+      console.log("Uploaded:", url);
     }
 
-    fileInput.value = "";
-  });
+    setMsg(Fotot u ngarkuan ✅ (${files.length}));
+  } catch (e) {
+    console.error(e);
+    setMsg("Gabim në upload ❌ (shiko Console)");
+  }
+
+  fileInput.value = "";
+});
 </script>
 
 </body>

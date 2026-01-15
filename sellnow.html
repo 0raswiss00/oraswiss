@@ -183,7 +183,7 @@ fileInput.addEventListener("change", async () => {
 
   try {
     for (const file of files) {
-      const fileRef = ref(storage, photos/${Date.now()}_${file.name});
+      ref(storage, photos/${Date.now()}_${file.name})
       await uploadBytes(fileRef, file);
       const url = await getDownloadURL(fileRef);
 

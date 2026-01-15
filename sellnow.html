@@ -246,17 +246,73 @@ publishBtn.addEventListener("click", async () => {
     const photos = photosText.split(/\n|,/g).map(s => s.trim()).filter(Boolean);
     if (!photos.length) { msg("S’ka URL foto.", false); return; }
 
-    // këto duhet të ekzistojnë në formën tënde
+// ✅ Elements
+const uploadBtn = document.getElementById("uploadBtn");
+const fileInput = document.getElementById("photoFiles");
+const photosBox = document.getElementById("photos");
+const publishBtn = document.getElementById("publishBtn");
+
+// ✅ Open picker
+uploadBtn.addEventListener("click", () => {
+  fileInput.click();
+});
+
+// ✅ Upload
+fileInput.addEventListener("change", async () => {
+  try {
+    if (!currentUser) { msg("Bëj login.", false); return; }
+
+    const files = Array.from(fileInput.files || []);
+    if (!files.length) return;
+
+    msg("Po ngarkoj fotot...", true);
+
+    const urls = [];
+    for (const file of files) {
+      const safeName = file.name.replace(/[^\w.\-]+/g, "_");
+      const path = products/${currentUser.uid}/${Date.now()}_${safeName}; // ✅ BACKTICKS
+
+      const fileRef = ref(storage, path);
+      await uploadBytes(fileRef, file);
+      const url = await getDownloadURL(fileRef);
+      urls.push(url);
+    }
+
+    photosBox.value = urls.join("\n");
+    msg(U ngarkuan ${urls.length} foto ✅, true); // ✅ BACKTICKS
+
+    // që të zgjedhësh prap të njëjtën foto
+    fileInput.value = "";
+
+  } catch (e) {
+    console.error(e);
+    msg("Upload dështoi: " + (e?.message || String(e)), false);
+  }
+});
+
+// ✅ Publish (vetëm 1 herë!)
+publishBtn.addEventListener("click", async () => {
+  try {
+    if (!currentUser) { msg("Duhet login.", false); return; }
+
+    const photosText = (photosBox.value || "").trim();
+    if (!photosText) { msg("Së pari ngarko fotot.", false); return; }
+
+    const photos = photosText.split(/\n|,/g).map(s => s.trim()).filter(Boolean);
+    if (!photos.length) { msg("S’ka foto.", false); return; }
+
     const brand = (document.getElementById("brand")?.value || "").trim();
     const model = (document.getElementById("model")?.value || "").trim();
-    const price = Number((document.getElementById("price")?.value || "").trim());
+    const priceStr = (document.getElementById("price")?.value || "").trim();
+    const price = priceStr ? Number(priceStr) : null;
 
     if (!brand || !model) { msg("Brand dhe Model janë të detyrueshme.", false); return; }
 
     const data = {
       sellerId: currentUser.uid,
       sellerEmail: currentUser.email || null,
-      brand, model,
+      brand,
+      model,
       price: Number.isFinite(price) ? price : null,
       photos,
       status: "pending",
@@ -272,87 +328,6 @@ publishBtn.addEventListener("click", async () => {
     msg("Publish dështoi: " + (e?.message || String(e)), false);
   }
 });
-
-  // Helpers
-  const val = (id) => document.getElementById(id)?.value ?? "";
-  const trim = (id) => val(id).trim();
-  const numOrNull = (id) => {
-    const v = trim(id);
-    if (!v) return null;
-    const n = Number(v);
-    return Number.isFinite(n) ? n : null;
-  };
-  const pickOrNull = (id) => {
-    const v = val(id);
-    return v === "" ? null : v;
-  };
-
-  // ✅ Publish
-  publishBtn.addEventListener("click", async () => {
-    try {
-      if (!currentUser) {
-        msg("Duhet të jesh i loguar për të publikuar.", false);
-        return;
-      }
-
-      const photosText = trim("photos");
-      if (!photosText) {
-        msg("Shto foto me Upload Photos.", false);
-        return;
-      }
-
-      const photos = photosText
-        .split(/\n|,/g)
-        .map((s) => s.trim())
-        .filter(Boolean);
-
-      if (!photos.length) {
-        msg("Lista e fotove është bosh.", false);
-        return;
-      }
-
-      const brand = trim("brand");
-      const model = trim("model");
-      const price = numOrNull("price");
-
-      if (!brand || !model) {
-        msg("Brand dhe Model janë të detyrueshme.", false);
-        return;
-      }
-
-      const data = {
-        sellerId: currentUser.uid,
-        sellerEmail: currentUser.email || null,
-
-        category: val("category"),
-        brand,
-        model,
-        ref: trim("ref"),
-        year: numOrNull("year"),
-        material: trim("material"),
-        condition: val("condition"),
-        description: trim("description"),
-        case_size: numOrNull("case_size"),
-        price,
-        photos,
-
-        box: pickOrNull("box"),
-        working: pickOrNull("working"),
-
-        status: "pending",
-        createdAt: serverTimestamp()
-      };
-
-      msg("Duke dërguar...", true);
-      await addDoc(collection(db, "listings"), data);
-      msg("U dërgua ✅ (pending).", true);
-
-    } catch (e) {
-      console.error(e);
-      msg("Gabim: " + (e?.message || String(e)), false);
-    }
-  });
 </script>
-
 </body>
 </html>

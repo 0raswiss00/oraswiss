@@ -113,16 +113,19 @@
   <label>Description</label>
   <textarea id="description" placeholder="Shkruaj detaje..."></textarea>
 
-  <label>Photos (URLs)</label>
+  <label>Photos</label>
 
-  <input id="photoFiles" type="file" accept="image/*" multiple class="hiddenFile">
-
-  <button class="btn" type="button"
-    onclick="document.getElementById('photoFiles').click()">
+  <button class="btn" id="uploadBtn" type="button">
     Upload Photos
   </button>
 
-  <textarea id="photos" placeholder="URL-të dalin këtu..." readonly></textarea>
+  <input
+    id="photoFiles"
+    type="file"
+    accept="image/*"
+    multiple
+    style="display:none"
+  />
 
   <button class="btn" id="publishBtn" type="button">PUBLISH</button>
   

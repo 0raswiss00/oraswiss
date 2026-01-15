@@ -196,42 +196,88 @@
   });
 
   // ✅ Upload photos to Firebase Storage
-  fileInput.addEventListener("change", async () => {
-    try {
-      if (!currentUser) {
-        msg("Bëj login.", false);
-        return;
-      }
+// Elements
+const uploadBtn = document.getElementById("uploadBtn");
+const fileInput = document.getElementById("photoFiles");
+const photosBox = document.getElementById("photos");
+const publishBtn = document.getElementById("publishBtn");
 
-      const files = Array.from(fileInput.files || []);
-      if (!files.length) return;
+uploadBtn.addEventListener("click", () => fileInput.click());
 
-      msg("Duke ngarkuar fotot...", true);
+// UPLOAD
+fileInput.addEventListener("change", async () => {
+  try {
+    if (!currentUser) { msg("Bëj login.", false); return; }
 
-      const urls = [];
+    const files = Array.from(fileInput.files || []);
+    if (!files.length) return;
 
-      for (const file of files) {
-        const safeName = file.name.replace(/\s+/g, "_");
-        const path = products/${currentUser.uid}/${Date.now()}_${safeName};
-        const fileRef = ref(storage, path);
+    msg("Po ngarkoj fotot...", true);
 
-        await uploadBytes(fileRef, file);
-        const url = await getDownloadURL(fileRef);
-        urls.push(url);
-      }
+    const urls = [];
+    for (const file of files) {
+      // ✅ backticks dhe path korrekt
+      const safeName = file.name.replace(/[^\w.\-]+/g, "_");
+      const path = products/${currentUser.uid}/${Date.now()}_${safeName};
 
-      // ruaj URL-t për publish
-      photosBox.value = urls.join("\n");
-      msg(U ngarkuan ${urls.length} foto ✅, true);
-
-      // (opsionale) që të mund të zgjedhësh prap të njëjtat foto
-      fileInput.value = "";
-
-    } catch (e) {
-      console.error(e);
-      msg("Gabim upload: " + (e?.message || String(e)), false);
+      const fileRef = ref(storage, path);
+      await uploadBytes(fileRef, file);
+      const url = await getDownloadURL(fileRef);
+      urls.push(url);
     }
-  });
+
+    photosBox.value = urls.join("\n");
+    msg(U ngarkuan ${urls.length} foto ✅, true);
+
+    // që të mund të zgjedhësh prap të njëjtën foto
+    fileInput.value = "";
+
+  } catch (e) {
+    console.error(e);
+    msg("Upload dështoi: " + (e?.message || String(e)), false);
+  }
+});
+
+// PUBLISH
+publishBtn.addEventListener("click", async () => {
+  try {
+    if (!currentUser) { msg("Duhet login.", false); return; }
+
+    const photosText = (photosBox.value || "").trim();
+    if (!photosText) {
+      msg("Së pari ngarko fotot (Upload Photos).", false);
+      return;
+    }
+
+    const photos = photosText.split(/\n|,/g).map(s => s.trim()).filter(Boolean);
+    if (!photos.length) { msg("S’ka URL foto.", false); return; }
+
+    // këto duhet të ekzistojnë në formën tënde
+    const brand = (document.getElementById("brand")?.value || "").trim();
+    const model = (document.getElementById("model")?.value || "").trim();
+    const price = Number((document.getElementById("price")?.value || "").trim());
+
+    if (!brand || !model) { msg("Brand dhe Model janë të detyrueshme.", false); return; }
+
+    const data = {
+      sellerId: currentUser.uid,
+      sellerEmail: currentUser.email || null,
+      brand, model,
+      price: Number.isFinite(price) ? price : null,
+      photos,
+      status: "pending",
+      createdAt: serverTimestamp()
+    };
+
+    msg("Duke publikuar...", true);
+    await addDoc(collection(db, "listings"), data);
+    msg("U publikua ✅", true);
+
+  } catch (e) {
+    console.error(e);
+    msg("Publish dështoi: " + (e?.message || String(e)), false);
+  }
+});
 
   // Helpers
   const val = (id) => document.getElementById(id)?.value ?? "";

@@ -144,19 +144,13 @@
   style="display:none"
 />
 
-<div id="photosPreview"></div>
 
  
 <input id="photoFiles" type="file" accept="image/*" multiple style="display:none" />
-
-<textarea id="photos" style="display:none"></textarea>
   
 <button class="btn" id="publishBtn" type="button">PUBLISH</button>
 <div id="msg" class="note"></div>
 </div>
-
-import { getStorage, ref, uploadBytes, getDownloadURL }
-from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";

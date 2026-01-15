@@ -3200,5 +3200,75 @@ textarea:focus {
   }
 }
 
+/* ===== SELL PAGE ONLY (override) ===== */
+.sell-page .sell-form{
+  max-width: 520px;
+  width: calc(100% - 24px);
+  margin: 24px auto;
+  padding: 18px;
+  border-radius: 14px;
+  background: #111;
+  box-shadow: 0 12px 30px rgba(0,0,0,.45);
+}
+
+.sell-page .sell-form label{
+  color: #eaeaea;
+  font-weight: 700;
+  margin: 12px 0 6px;
+}
+
+.sell-page .sell-form input[type="text"],
+.sell-page .sell-form input[type="number"],
+.sell-page .sell-form select,
+.sell-page .sell-form textarea{
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #333;
+  background: #0f0f0f;
+  color: #fff;
+  font-size: 15px;
+}
+
+.sell-page .sell-form textarea{
+  min-height: 110px;
+}
+
+.sell-page .sell-form .btn{
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid #caa44d;
+  background: transparent;
+  color: #caa44d;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.sell-page .sell-form .btn:hover{
+  background: #caa44d;
+  color: #000;
+}
+
+/* file input hidden (safe per mobile) */
+.sell-page .hiddenFile{
+  position: fixed !important;
+  top: -1000px !important;
+  left: -1000px !important;
+  width: 1px !important;
+  height: 1px !important;
+}
+Ora
+@media (min-width: 700px){
+  .sell-page .sell-form .photos-actions{
+    display:flex;
+    gap:12px;
+  }
+  .sell-page .sell-form .photos-actions .btn{
+    width:auto;
+    flex:1;
+  }
+}
 
       

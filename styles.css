@@ -3083,3 +3083,8 @@ body{background:#000!important;color:#E6E6E6!important}
 @media(max-width:600px){
   .photos-actions{ flex-direction:column }
 }
+#uploadBtn {
+  position: relative !important;
+  z-index: 99999 !important;
+  pointer-events: auto !important;
+}

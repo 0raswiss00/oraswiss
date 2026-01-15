@@ -174,50 +174,48 @@
       msg("Je i loguar ✅", true);
     });
 
-    const uploadBtn = document.getElementById("uploadBtn");
-    const fileInput = document.getElementById("photoFiles");
-    const photosBox = document.getElementById("photos");
+        const uploadBtn = document.getElementById("uploadBtn");
+        const fileInput = document.getElementById("photoFiles");
+        const photosBox = document.getElementById("photos");
 
-    if (!uploadBtn || !fileInput || !photosBox) {
-      console.error("Mungon uploadBtn/photoFiles/photos");
-      msg("Mungon uploadBtn/photoFiles/photos", false);
-    }
+        if (!uploadBtn || !fileInput || !photosBox) {
+          console.error("Mungon uploadBtn/photoFiles/photos");
+          msg("Mungon uploadBtn/photoFiles/photos", false);
+        }
 
-    uploadBtn.addEventListener("click", () => {
-      msg("Klikova Upload", true);   // <-- nëse s’del ky mesazh, button s’po merret fare
-      fileInput.click();
+        uploadBtn.addEventListener("click", () => {
+          msg("Klikova Upload", true);   // <-- nëse s’del ky mesazh, button s’po merret fare
+          fileInput.click();
+        });
+
+    fileInput.addEventListener("change", async () => {
+      try {
+        if (!currentUser) {
+          msg("Bëj login.", false);
+          return;
+        }
+
+        const files = Array.from(fileInput.files || []);
+        if (!files.length) return;
+
+        msg("Duke ngarkuar...", true);
+        const urls = [];
+
+        for (const file of files) {
+          const path = products/${currentUser.uid}/${Date.now()}_${file.name};
+          const fileRef = ref(storage, path);
+          await uploadBytes(fileRef, file);
+          urls.push(await getDownloadURL(fileRef));
+        }
+
+        document.getElementById("photos").value = urls.join("\n");
+        msg(U ngarkuan ${urls.length} foto ✅, true);
+
+      } catch (e) {
+        console.error(e);
+        msg("Gabim upload: " + e.message, false);
+      }
     });
-
-fileInput.addEventListener("change", async () => {
-  try {
-    if (!currentUser) {
-      msg("Bëj login.", false);
-      return;
-    }
-
-    const files = Array.from(fileInput.files || []);
-    if (!files.length) return;
-
-    msg("Duke ngarkuar...", true);
-    const urls = [];
-
-    for (const file of files) {
-      const path = products/${currentUser.uid}/${Date.now()}_${file.name};
-      const fileRef = ref(storage, path);
-      await uploadBytes(fileRef, file);
-      urls.push(await getDownloadURL(fileRef));
-    }
-
-    document.getElementById("photos").value = urls.join("\n");
-    msg(U ngarkuan ${urls.length} foto ✅, true);
-
-  } catch (e) {
-    console.error(e);
-    msg("Gabim upload: " + e.message, false);
-  }
-});
-Shkruaj te Ora Swiss
-
 
        // Helpers
       const val = (id) => document.getElementById(id)?.value ?? "";

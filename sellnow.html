@@ -117,7 +117,9 @@
   <button class="btn" id="uploadBtn" type="button">Upload Photos</button>
   <input id="photoFiles" type="file" accept="image/*" multiple style="display:none">
   <textarea id="photos" placeholder="URL-të dalin këtu (automatikisht)..." readonly></textarea>
-
+  <button class="btn" id="uploadBtn" type="button">Upload Photos</button>
+  <input id="photoFiles" type="file" accept="image/*" multiple style="display:none">
+  
   <button class="btn" id="publishBtn" type="button">PUBLISH</button>
 
   <div id="msg" class="note"></div>
@@ -172,9 +174,6 @@
     uploadBtn.addEventListener("click", () => {
       fileInput.click(); // hap galerine / file picker
     });
-
-    <button class="btn" id="uploadBtn" type="button">Upload Photos</button>
-    <input id="photoFiles" type="file" accept="image/*" multiple style="display:none">
   
     fileInput.addEventListener("change", async () => {
       try {

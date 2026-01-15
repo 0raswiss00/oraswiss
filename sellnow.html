@@ -113,9 +113,9 @@
   <label>Description</label>
  
   
-<label>Photos</label>
+  <label>Photos</label>
 
-<button class="btn" type="button" onclick="document.getElementById('photoFiles').click()">
+  <button class="btn" id="uploadBtn" type="button">
     Upload Photos
   </button>
 
@@ -128,10 +128,7 @@
   />
 
   <textarea id="photos" style="display:none"></textarea>
-<!-- ✅ XHEPI (preview) -->
-<div id="photosPreview" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;"></div>
-
-  
+ 
   <button class="btn" id="publishBtn" type="button">PUBLISH</button>
   
   <div id="msg" class="note"></div>
@@ -143,6 +140,13 @@
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
   import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+
+  const uploadBtn = document.getElementById("uploadBtn");
+  const fileInput = document.getElementById("photoFiles");
+
+  uploadBtn.addEventListener("click", () => {
+    fileInput.click();
+  });
   
   // ✅ I NJËJTI CONFIG SI TE register.html (mos vendos "…")
   const firebaseConfig = {

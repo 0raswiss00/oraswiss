@@ -115,17 +115,16 @@
   
 <label>Photos</label>
 
-<div class="photos-actions">
-  <button class="btn" id="uploadBtn" type="button">Upload Photos</button>
-</div>
+<button class="btn" id="uploadBtn" type="button">
+    Upload Photos
+</button>
 
 <input
-  id="photoFiles"
-  class="hiddenFile"
-  type="file"
-  accept="image/*"
-  multiple
-
+    id="photoFiles"
+    type="file"
+    accept="image/*"
+    multiple
+    style="display:none;"
 
 <textarea id="photos" style="display:none"></textarea>
 
@@ -134,9 +133,9 @@
 <div id="msg" class="note"></div>
 
 </div>
-
-<button id="publishBtn" ...>PUBLISH</button>
- 
+<div>  
+ <button id="publishBtn" ...>PUBLISH</button>
+</div> 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";

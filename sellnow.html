@@ -115,10 +115,10 @@
 
 <label>Photos</label>
 
-<button class="btn" type="button"
-  onclick="document.getElementById('photoFiles').click()">
+<button class="btn" id="uploadBtn" type="button">
   Upload Photos
 </button>
+
 <input
   id="photoFiles"
   type="file"
@@ -126,16 +126,14 @@
   multiple
   style="display:none"
 />
-  
-<input id="photoFiles" type="file" accept="image/*" multiple style="display:none" />
 
 <textarea id="photos" style="display:none"></textarea>
 
-<button class="btn" id="publishBtn" type="button">PUBLISH</button>
+<div id="photosPreview"></div>
 <div id="msg" class="note"></div>
-</div>
-  
-  
+
+<button class="btn" id="publishBtn" type="button">PUBLISH</button>
+    
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
@@ -159,138 +157,43 @@
   const storage = getStorage(app);
 
   // ✅ ELEMENTS (vetëm 1 herë)
-  const uploadBtn = document.getElementById("uploadBtn");
-  const fileInput = document.getElementById("photoFiles");
-  const photosBox = document.getElementById("photos");
-  const photosPreview = document.getElementById("photosPreview");
-  const publishBtn = document.getElementById("publishBtn");
-  const msgEl = document.getElementById("msg");
+// ELEMENTS (VETËM 1 HERË)
+const uploadBtn = document.getElementById("uploadBtn");
+const fileInput = document.getElementById("photoFiles");
+const photosBox = document.getElementById("photos");
+const photosPreview = document.getElementById("photosPreview");
+const publishBtn = document.getElementById("publishBtn");
+const msgEl = document.getElementById("msg");
 
-  // ✅ MSG (duhet të jetë SIPËR se ta përdorësh)
-  const msg = (t, ok = true) => {
-    if (!msgEl) return;
-    msgEl.className = "note " + (ok ? "ok" : "bad");
-    msgEl.textContent = t;
-  };
+// MSG
+const msg = (t, ok = true) => {
+  msgEl.className = "note " + (ok ? "ok" : "bad");
+  msgEl.textContent = t;
+};
 
-  if (!uploadBtn || !fileInput || !photosBox || !publishBtn || !msgEl) {
-    console.error("Mungon: uploadBtn/photoFiles/photos/publishBtn/msg");
-    msg("Mungon: uploadBtn/photoFiles/photos/publishBtn/msg", false);
+// OPEN PICKER
+uploadBtn.addEventListener("click", () => {
+  fileInput.click();
+});
+
+// UPLOAD (vetëm preview + ruan URL-të)
+fileInput.addEventListener("change", async () => {
+  const files = Array.from(fileInput.files || []);
+  if (!files.length) return;
+
+  photosPreview.innerHTML = "";
+  const urls = [];
+
+  for (const file of files) {
+    const url = URL.createObjectURL(file);
+    urls.push(url);
+    photosPreview.innerHTML += <img src="${url}" style="max-width:120px;margin:6px;border-radius:8px">;
   }
 
-  // ✅ LOGIN status
-  let currentUser = null;
-  onAuthStateChanged(auth, (user) => {
-    currentUser = user || null;
-    if (!currentUser) msg("Nuk je i loguar. Hape register.html dhe bëj Login.", false);
-    else msg("Je i loguar ✅", true);
-  });
+  photosBox.value = urls.join("\n");
+  msg(U zgjodhën ${urls.length} foto ✅, true);
 
-  // ✅ OPEN PICKER
-  uploadBtn?.addEventListener("click", () => {
-    fileInput?.click();
-  });
-
-  // ✅ UPLOAD
-  fileInput?.addEventListener("change", async () => {
-    try {
-      if (!currentUser) return msg("Bëj login.", false);
-
-      const files = Array.from(fileInput.files || []);
-      if (!files.length) return;
-
-      msg("Po ngarkoj fotot...", true);
-
-      const urls = [];
-
-      for (const file of files) {
-        const safeName = file.name.replace(/[^\w.\-]+/g, "_");
-
-        // ✅ KJO DUHET BACKTICKS:
-        const path = products/${currentUser.uid}/${Date.now()}_${safeName};
-
-        const fileRef = ref(storage, path);
-        await uploadBytes(fileRef, file);
-        const url = await getDownloadURL(fileRef);
-        urls.push(url);
-      }
-
-      photosBox.value = urls.join("\n");
-
-      // preview
-      if (photosPreview) {
-        photosPreview.innerHTML = urls
-          .map(u => <img src="${u}" alt="photo">)
-          .join("");
-      }
-
-      msg(U ngarkuan ${urls.length} foto ✅, true);
-
-      // lejon të zgjedhësh të njëjtën foto prap
-      fileInput.value = "";
-
-    } catch (e) {
-      console.error(e);
-      msg("Upload dështoi: " + (e?.message || String(e)), false);
-    }
-  });
-
-  // ✅ PUBLISH
-  publishBtn?.addEventListener("click", async () => {
-    try {
-      if (!currentUser) return msg("Duhet login.", false);
-
-      const photosText = (photosBox.value || "").trim();
-      if (!photosText) return msg("Së pari ngarko fotot (Upload Photos).", false);
-
-      const photos = photosText.split(/\n|,/g).map(s => s.trim()).filter(Boolean);
-      if (!photos.length) return msg("S’ka foto.", false);
-
-      const brand = (document.getElementById("brand")?.value || "").trim();
-      const model = (document.getElementById("model")?.value || "").trim();
-      const priceStr = (document.getElementById("price")?.value || "").trim();
-      const price = priceStr ? Number(priceStr) : null;
-
-      if (!brand || !model) return msg("Brand dhe Model janë të detyrueshme.", false);
-
-      const data = {
-        sellerId: currentUser.uid,
-        sellerEmail: currentUser.email || null,
-
-        category: (document.getElementById("category")?.value || "luxury"),
-        brand,
-        model,
-        ref: (document.getElementById("ref")?.value || "").trim(),
-        year: Number((document.getElementById("year")?.value || "").trim()) || null,
-        material: (document.getElementById("material")?.value || "").trim(),
-        condition: (document.getElementById("condition")?.value || "").trim(),
-        case_size: Number((document.getElementById("case_size")?.value || "").trim()) || null,
-        description: (document.getElementById("description")?.value || "").trim(),
-
-        box: (document.getElementById("box")?.value || null),
-        working: (document.getElementById("working")?.value || null),
-
-        price: Number.isFinite(price) ? price : null,
-        photos,
-
-        status: "pending",
-        createdAt: serverTimestamp()
-      };
-
-      msg("Duke publikuar...", true);
-      await addDoc(collection(db, "listings"), data);
-      msg("U publikua ✅", true);
-
-    } catch (e) {
-      console.error(e);
-      msg("Publish dështoi: " + (e?.message || String(e)), false);
-    }
-  });
-</script>
-
-<script>
-document.getElementById('photoFiles').addEventListener('change', function () {
-    console.log(this.files.length + ' photos selected');
+  fileInput.value = "";
 });
 </script>
   

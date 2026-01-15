@@ -188,31 +188,36 @@
       fileInput.click();
     });
 
-    fileInput.addEventListener("change", async () => {
-      try {
-        if (!currentUser) { msg("Bëj login.", false); return; }
+fileInput.addEventListener("change", async () => {
+  try {
+    if (!currentUser) {
+      msg("Bëj login.", false);
+      return;
+    }
 
-        const files = Array.from(fileInput.files || []);
-        if (!files.length) return;
+    const files = Array.from(fileInput.files || []);
+    if (!files.length) return;
 
-        msg("Duke ngarkuar...", true);
-        const urls = [];
+    msg("Duke ngarkuar...", true);
+    const urls = [];
 
-        for (const file of files) {
-          const path = products/${currentUser.uid}/${Date.now()}_${file.name};
-          const fileRef = ref(storage, path);
-          await uploadBytes(fileRef, file);
-          urls.push(await getDownloadURL(fileRef));
-        }
+    for (const file of files) {
+      const path = products/${currentUser.uid}/${Date.now()}_${file.name};
+      const fileRef = ref(storage, path);
+      await uploadBytes(fileRef, file);
+      urls.push(await getDownloadURL(fileRef));
+    }
 
-        photosBox.value = urls.join("\n");
-        msg(U ngarkuan ${urls.length} foto ✅, true);
+    document.getElementById("photos").value = urls.join("\n");
+    msg(U ngarkuan ${urls.length} foto ✅, true);
 
-      } catch (e) {
-        console.error(e);
-        msg("Gabim upload: " + e.message, false);
-      }
-    });
+  } catch (e) {
+    console.error(e);
+    msg("Gabim upload: " + e.message, false);
+  }
+});
+Shkruaj te Ora Swiss
+
 
        // Helpers
       const val = (id) => document.getElementById(id)?.value ?? "";

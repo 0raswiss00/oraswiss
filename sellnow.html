@@ -165,57 +165,59 @@
       msg("Je i loguar ✅", true);
     });
 
-const uploadBtn = document.getElementById("uploadBtn");
-const fileInput = document.getElementById("photoFiles");
-const photosBox = document.getElementById("photos");
+    const uploadBtn = document.getElementById("uploadBtn");
+    const fileInput = document.getElementById("photoFiles");
+    const photosBox = document.getElementById("photos");
 
-if (!uploadBtn || !fileInput || !photosBox) {
-  console.log("Mungon uploadBtn/photoFiles/photos ne HTML");
-} else {
-  uploadBtn.addEventListener("click", () => fileInput.click());
-
-  fileInput.addEventListener("change", async () => {
-    try {
-      if (!currentUser) { msg("Bëj login.", false); return; }
-
-      const files = Array.from(fileInput.files || []);
-      if (!files.length) return;
-
-      msg("Duke ngarkuar fotot...", true);
-
-      const urls = [];
-      for (const file of files) {
-        const path = products/${currentUser.uid}/${Date.now()}_${file.name};
-        const fileRef = ref(storage, path);
-
-        await uploadBytes(fileRef, file);
-        const url = await getDownloadURL(fileRef);
-        urls.push(url);
-      }
-
-      photosBox.value = urls.join("\n");
-      msg(U ngarkuan ${urls.length} foto ✅, true);
-
-    } catch (e) {
-      console.error(e);
-      msg("Gabim te upload: " + e.message, false);
+    if (!uploadBtn || !fileInput || !photosBox) {
+      console.error("Mungon uploadBtn/photoFiles/photos");
+      msg("Mungon uploadBtn/photoFiles/photos", false);
     }
-  });
-}
 
-  // Helpers
-  const val = (id) => document.getElementById(id)?.value ?? "";
-  const trim = (id) => val(id).trim();
-  const numOrNull = (id) => {
-    const v = trim(id);
-    if (!v) return null;
-    const n = Number(v);
-    return Number.isFinite(n) ? n : null;
-  };
-  const pickOrNull = (id) => {
-    const v = val(id);
-    return v === "" ? null : v;
-  };
+    uploadBtn.addEventListener("click", () => {
+      msg("Klikova Upload ✅", true);   // <-- nëse s’del ky mesazh, button s’po merret fare
+      fileInput.click();
+    });
+
+    fileInput.addEventListener("change", async () => {
+      try {
+        if (!currentUser) { msg("Bëj login.", false); return; }
+
+        const files = Array.from(fileInput.files || []);
+        if (!files.length) return;
+
+        msg("Duke ngarkuar...", true);
+        const urls = [];
+
+        for (const file of files) {
+          const path = products/${currentUser.uid}/${Date.now()}_${file.name};
+          const fileRef = ref(storage, path);
+          await uploadBytes(fileRef, file);
+          urls.push(await getDownloadURL(fileRef));
+        }
+
+        photosBox.value = urls.join("\n");
+        msg(U ngarkuan ${urls.length} foto ✅, true);
+
+      } catch (e) {
+        console.error(e);
+        msg("Gabim upload: " + e.message, false);
+      }
+    });
+
+       // Helpers
+      const val = (id) => document.getElementById(id)?.value ?? "";
+      const trim = (id) => val(id).trim();
+      const numOrNull = (id) => {
+        const v = trim(id);
+        if (!v) return null;
+        const n = Number(v);
+        return Number.isFinite(n) ? n : null;
+      };
+      const pickOrNull = (id) => {
+        const v = val(id);
+        return v === "" ? null : v;
+      };
 
   // ✅ Publish
   document.getElementById("publishBtn").addEventListener("click", async () => {

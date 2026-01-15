@@ -187,7 +187,16 @@ fileInput.addEventListener("change", async () => {
 
   fileInput.value = "";
 });
-</script>
-  
+
+const uploadBtn = document.getElementById("uploadBtn");
+const fileInput = document.getElementById("photoFiles");
+
+console.log("uploadBtn =", uploadBtn);
+console.log("fileInput =", fileInput);
+
+uploadBtn.onclick = () => {
+  fileInput.click();
+};
+</script> 
 </body>
 </html>

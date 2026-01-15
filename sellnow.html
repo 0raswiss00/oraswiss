@@ -117,7 +117,8 @@
   onclick="document.getElementById('photoFiles').click()">
   Upload Photos
 </button>
-<input
+
+<input 
   id="photoFiles"
   type="file"
   accept="image/*"
@@ -137,9 +138,7 @@
 <div id="msg" class="note"></div>
 </div>
 
-<textarea id="photos" style="display:none"></textarea>
-
-    
+  
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";

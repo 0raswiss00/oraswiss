@@ -198,10 +198,10 @@ fileInput.addEventListener("change", async () => {
     }
 
     setMsg(Fotot u ngarkuan ✅ (${files.length}));
-  } catch (e) {
-    console.error(e);
-    setMsg("Gabim në upload ❌ (shiko Console)");
-  }
+   } catch (e) {
+     console.error(e);
+     setMsg("Gabim: " + (e?.code || e?.message || e));
+   }
 
   fileInput.value = "";
 });

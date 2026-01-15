@@ -7,22 +7,36 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="admin.css">
  
-  <style>
-    body{font-family:Arial,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:20px}
-    .wrap{max-width:900px;margin:0 auto}
-    .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media(max-width:820px){.row{grid-template-columns:1fr}}
-    label{display:block;margin:12px 0 6px;color:#ddd}
-    input,select,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #333;background:#111;color:#fff}
-    textarea{min-height:90px}
-    .btn{margin-top:14px;padding:12px 14px;border-radius:12px;border:1px solid #2a2a2a;background:#0f0f0f;color:#fff;cursor:pointer}
-    .btn:hover{background:#1a1a1a}
-    .note{opacity:.85;font-size:13px;margin-top:8px;line-height:1.4}
-    .ok{color:#25D366}
-    .bad{color:#ff6b6b}
+<style>
+  body{font-family:Arial,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:20px}
+  .wrap{max-width:900px;margin:0 auto}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:820px){.row{grid-template-columns:1fr}}
+  label{display:block;margin:12px 0 6px;color:#ddd}
+  input,select,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #333;background:#111;color:#fff}
+  textarea{min-height:90px}
+  .btn{margin-top:14px;padding:12px 14px;border-radius:12px;border:1px solid #2a2a2a;background:#0f0f0f;color:#fff;cursor:pointer}
+  .btn:hover{background:#1a1a1a}
+  .note{opacity:.85;font-size:13px;margin-top:8px;line-height:1.4}
+  .ok{color:#25D366}
+  .bad{color:#ff6b6b}
 
-    <style>
+  /* extra */
+  body { padding: 16px; font-family: system-ui, -apple-system, BlinkMacSystemFont; }
+  .btn { padding: 14px 18px; font-size: 16px; border-radius: 8px; }
+  #photosPreview img { width: 120px; height: auto; margin: 8px; border-radius: 6px; }
+
+  .logo-center{
+    display:flex;
+    justify-content:center;
+    margin: 10px 0 30px;
+  }
+  .logo-center img{
+    height: 200px;
+  }
+</style>
+    
       body {
         padding: 16px;
         font-family: system-ui, -apple-system, BlinkMacSystemFont;

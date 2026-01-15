@@ -143,7 +143,7 @@
   import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
 
-  // ✅ Config
+  // ✅ Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
     authDomain: "oraswiss-27e57.firebaseapp.com",
@@ -154,96 +154,140 @@
     measurementId: "G-VZPKMD67VQ"
   };
 
-  // ✅ Init
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
   const storage = getStorage(app);
 
-  // ✅ UI msg
-  const msg = (text, ok = true) => {
-    const el = document.getElementById("msg");
-    if (!el) return;
-    el.className = "note " + (ok ? "ok" : "bad");
-    el.textContent = text;
-  };
-
-  // ✅ Current user
-  let currentUser = null;
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      currentUser = null;
-      msg("Nuk je i loguar. Hape register.html dhe bëj Login.", false);
-      return;
-    }
-    currentUser = user;
-    msg("Je i loguar ✅", true);
-  });
-
-  // ✅ Elements
+  // ✅ ELEMENTS (vetëm 1 herë)
   const uploadBtn = document.getElementById("uploadBtn");
   const fileInput = document.getElementById("photoFiles");
   const photosBox = document.getElementById("photos");
+  const photosPreview = document.getElementById("photosPreview");
   const publishBtn = document.getElementById("publishBtn");
+  const msgEl = document.getElementById("msg");
 
-  if (!uploadBtn || !fileInput || !photosBox || !publishBtn) {
-    console.error("Mungon uploadBtn/photoFiles/photos/publishBtn");
-    msg("Mungon uploadBtn/photoFiles/photos/publishBtn", false);
+  // ✅ MSG (duhet të jetë SIPËR se ta përdorësh)
+  const msg = (t, ok = true) => {
+    if (!msgEl) return;
+    msgEl.className = "note " + (ok ? "ok" : "bad");
+    msgEl.textContent = t;
+  };
+
+  if (!uploadBtn || !fileInput || !photosBox || !publishBtn || !msgEl) {
+    console.error("Mungon: uploadBtn/photoFiles/photos/publishBtn/msg");
+    msg("Mungon: uploadBtn/photoFiles/photos/publishBtn/msg", false);
   }
 
-  // ✅ Open picker (mobile + desktop)
-  uploadBtn.addEventListener("click", () => {
-    fileInput.click();
+  // ✅ LOGIN status
+  let currentUser = null;
+  onAuthStateChanged(auth, (user) => {
+    currentUser = user || null;
+    if (!currentUser) msg("Nuk je i loguar. Hape register.html dhe bëj Login.", false);
+    else msg("Je i loguar ✅", true);
   });
 
-const uploadBtn = document.getElementById("uploadBtn");
-const fileInput = document.getElementById("photoFiles");
-const photosBox = document.getElementById("photos");
-const photosPreview = document.getElementById("photosPreview");
-const msgEl = document.getElementById("msg");
-const publishBtn = document.getElementById("publishBtn");
-
-/* ✅ 1. MSG FUNCTION – GJITHMONË SIPËR */
-const msg = (t, ok=true) => {
-  msgEl.className = "note " + (ok ? "ok" : "bad");
-  msgEl.textContent = t;
-};
-
-/* ✅ 2. TEST PUBLISH */
-publishBtn.addEventListener("click", () => {
-  msg("Publish u klikua ✅", true);
-});
-
-// hap file picker
-uploadBtn.addEventListener("click", ()=>{
-  fileInput.click();
-});
-
-// kur zgjedh foto
-fileInput.addEventListener("change", ()=>{
-  const files = [...fileInput.files];
-  if(!files.length) return;
-
-  photosPreview.innerHTML = "";
-  const names = [];
-
-  files.forEach(file=>{
-    names.push(file.name);
-
-    const img = document.createElement("img");
-    img.src = URL.createObjectURL(file);
-    photosPreview.appendChild(img);
+  // ✅ OPEN PICKER
+  uploadBtn?.addEventListener("click", () => {
+    fileInput?.click();
   });
 
-  // RUHET LISTA (për publish më vonë)
-  photosBox.value = names.join("\n");
+  // ✅ UPLOAD
+  fileInput?.addEventListener("change", async () => {
+    try {
+      if (!currentUser) return msg("Bëj login.", false);
 
-  msg(U zgjodhën ${files.length} foto ✅, true);
+      const files = Array.from(fileInput.files || []);
+      if (!files.length) return;
 
-  // lejon zgjedhje të re
-  fileInput.value = "";
-});
+      msg("Po ngarkoj fotot...", true);
 
+      const urls = [];
+
+      for (const file of files) {
+        const safeName = file.name.replace(/[^\w.\-]+/g, "_");
+
+        // ✅ KJO DUHET BACKTICKS:
+        const path = products/${currentUser.uid}/${Date.now()}_${safeName};
+
+        const fileRef = ref(storage, path);
+        await uploadBytes(fileRef, file);
+        const url = await getDownloadURL(fileRef);
+        urls.push(url);
+      }
+
+      photosBox.value = urls.join("\n");
+
+      // preview
+      if (photosPreview) {
+        photosPreview.innerHTML = urls
+          .map(u => <img src="${u}" alt="photo">)
+          .join("");
+      }
+
+      msg(U ngarkuan ${urls.length} foto ✅, true);
+
+      // lejon të zgjedhësh të njëjtën foto prap
+      fileInput.value = "";
+
+    } catch (e) {
+      console.error(e);
+      msg("Upload dështoi: " + (e?.message || String(e)), false);
+    }
+  });
+
+  // ✅ PUBLISH
+  publishBtn?.addEventListener("click", async () => {
+    try {
+      if (!currentUser) return msg("Duhet login.", false);
+
+      const photosText = (photosBox.value || "").trim();
+      if (!photosText) return msg("Së pari ngarko fotot (Upload Photos).", false);
+
+      const photos = photosText.split(/\n|,/g).map(s => s.trim()).filter(Boolean);
+      if (!photos.length) return msg("S’ka foto.", false);
+
+      const brand = (document.getElementById("brand")?.value || "").trim();
+      const model = (document.getElementById("model")?.value || "").trim();
+      const priceStr = (document.getElementById("price")?.value || "").trim();
+      const price = priceStr ? Number(priceStr) : null;
+
+      if (!brand || !model) return msg("Brand dhe Model janë të detyrueshme.", false);
+
+      const data = {
+        sellerId: currentUser.uid,
+        sellerEmail: currentUser.email || null,
+
+        category: (document.getElementById("category")?.value || "luxury"),
+        brand,
+        model,
+        ref: (document.getElementById("ref")?.value || "").trim(),
+        year: Number((document.getElementById("year")?.value || "").trim()) || null,
+        material: (document.getElementById("material")?.value || "").trim(),
+        condition: (document.getElementById("condition")?.value || "").trim(),
+        case_size: Number((document.getElementById("case_size")?.value || "").trim()) || null,
+        description: (document.getElementById("description")?.value || "").trim(),
+
+        box: (document.getElementById("box")?.value || null),
+        working: (document.getElementById("working")?.value || null),
+
+        price: Number.isFinite(price) ? price : null,
+        photos,
+
+        status: "pending",
+        createdAt: serverTimestamp()
+      };
+
+      msg("Duke publikuar...", true);
+      await addDoc(collection(db, "listings"), data);
+      msg("U publikua ✅", true);
+
+    } catch (e) {
+      console.error(e);
+      msg("Publish dështoi: " + (e?.message || String(e)), false);
+    }
+  });
 </script>
+
 </body>
 </html>

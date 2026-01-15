@@ -3047,91 +3047,15 @@ body{background:#000!important;color:#E6E6E6!important}
   opacity: 1;
 }
 
+/* actions */
+.photos-actions{
+  display:flex;
+  gap:12px;
+  margin-top:10px;
+}
+
+/* file input – SAFE për mobile */
 .hiddenFile{
-  position:absolute;
-  left:-9999px;
-  width:1px;
-  height:1px;
-}
-
-/* RESET I LEHTË */
-* {
-  box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
-}
-
-/* CONTAINER I FORMËS */
-.form-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 16px;
-}
-
-/* LABEL */
-label {
-  display: block;
-  margin: 14px 0 6px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #eaeaea;
-}
-
-/* INPUT / SELECT / TEXTAREA */
-input[type="text"],
-input[type="number"],
-select,
-textarea {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: 1px solid #333;
-  background: #111;
-  color: #fff;
-  font-size: 15px;
-  outline: none;
-}
-
-textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
-/* FOCUS */
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: #caa44d;
-}
-
-/* BUTONA */
-.btn {
-  appearance: none;
-  border: 1px solid #caa44d;
-  background: transparent;
-  color: #caa44d;
-  padding: 12px 18px;
-  border-radius: 16px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all .2s ease;
-}
-
-.btn:hover {
-  background: #caa44d;
-  color: #000;
-}
-
-/* ZONA E FOTOVE */
-.photos-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 10px;
-  flex-wrap: wrap;
-}
-
-/* INPUT FILE I FSHEHUR (SAFE PER MOBILE) */
-.hiddenFile {
   position: fixed;
   top: -1000px;
   left: -1000px;
@@ -3139,136 +3063,23 @@ textarea:focus {
   height: 1px;
 }
 
-/* PREVIEW I FOTOVE */
-.photos-preview {
-  display: grid;
+/* preview grid */
+.photos-preview{
+  display:grid;
   grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-  gap: 10px;
-  margin-top: 12px;
+  gap:10px;
+  margin-top:12px;
 }
 
-.photos-preview img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  border-radius: 12px;
-  border: 1px solid #333;
+.photos-preview img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  border-radius:10px;
+  border:1px solid #333;
 }
 
-/* MESAZHE */
-.note {
-  margin-top: 14px;
-  font-size: 14px;
+/* mobile */
+@media(max-width:600px){
+  .photos-actions{ flex-direction:column }
 }
-
-.note.ok {
-  color: #4caf50;
-}
-
-.note.bad {
-  color: #ff5252;
-}
-
-/* 📱 MOBILE (deri 600px) */
-@media (max-width: 600px) {
-  .form-container {
-    padding: 12px;
-  }
-
-  .btn {
-    width: 100%;
-    text-align: center;
-  }
-
-  .photos-actions {
-    flex-direction: column;
-  }
-}
-
-/* 💻 DESKTOP (mbi 900px) */
-@media (min-width: 900px) {
-  .grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-
-  .grid-3 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-}
-
-/* ===== SELL PAGE ONLY (override) ===== */
-.sell-page .sell-form{
-  max-width: 520px;
-  width: calc(100% - 24px);
-  margin: 24px auto;
-  padding: 18px;
-  border-radius: 14px;
-  background: #111;
-  box-shadow: 0 12px 30px rgba(0,0,0,.45);
-}
-
-.sell-page .sell-form label{
-  color: #eaeaea;
-  font-weight: 700;
-  margin: 12px 0 6px;
-}
-
-.sell-page .sell-form input[type="text"],
-.sell-page .sell-form input[type="number"],
-.sell-page .sell-form select,
-.sell-page .sell-form textarea{
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1px solid #333;
-  background: #0f0f0f;
-  color: #fff;
-  font-size: 15px;
-}
-
-.sell-page .sell-form textarea{
-  min-height: 110px;
-}
-
-.sell-page .sell-form .btn{
-  width: 100%;
-  margin-top: 10px;
-  padding: 12px 16px;
-  border-radius: 14px;
-  border: 1px solid #caa44d;
-  background: transparent;
-  color: #caa44d;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.sell-page .sell-form .btn:hover{
-  background: #caa44d;
-  color: #000;
-}
-
-/* file input hidden (safe per mobile) */
-.sell-page .hiddenFile{
-  position: fixed !important;
-  top: -1000px !important;
-  left: -1000px !important;
-  width: 1px !important;
-  height: 1px !important;
-}
-Ora
-@media (min-width: 700px){
-  .sell-page .sell-form .photos-actions{
-    display:flex;
-    gap:12px;
-  }
-  .sell-page .sell-form .photos-actions .btn{
-    width:auto;
-    flex:1;
-  }
-}
-
-      

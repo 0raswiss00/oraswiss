@@ -119,19 +119,24 @@
 <label>Description</label>
 <textarea id="description" placeholder="Shkruaj përshkrimin..."></textarea>
   
+
 <button class="btn" type="button" onclick="document.getElementById('photoFiles').click()">
     Upload Photos
   </button>
 
-<!-- input i fshehur që mban fotot -->
-<input id="photoInput" type="file" accept="image/*" multiple style="display:none" />
+  <input
+    id="photoFiles"
+    type="file"
+    accept="image/*"
+    multiple
+    style="display:none"
+  />
 
+  <textarea id="photos" style="display:none"></textarea>
 <div id="photosPreview"></div>
 <div id="msg"></div>
-
-<!-- buton për të hapur file picker -->
-<button id="uploadBtn" type="button">Ngarko fotot</button>
-
+<button id="photoFiles" type="button">Upl Foto</button>
+  
 <!-- buton për të publikuar listing -->
 <button id="publishBtn" type="button">PUBLISH</button>
 

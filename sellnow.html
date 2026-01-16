@@ -139,8 +139,15 @@
 <button id="publishBtn" type="button">PUBLISH</button>
   
 
-  
-<script type="module">
+<script type="module"> 
+window.addEventListener("error", (e) =>
+  setMsg("JS ERROR: " + e.message)
+);
+
+window.addEventListener("unhandledrejection", (e) =>
+  setMsg("PROMISE ERROR: " + (e.reason?.message || e.reason))
+);
+
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
   import {
     getStorage, ref, uploadBytes, getDownloadURL
@@ -161,10 +168,6 @@
   const app = initializeApp(firebaseConfig);
   const storage = getStorage(app);
   const db = getFirestore(app);
-
-// SHFAQ ÇDO ERROR NË EKRAN
-window.addEventListener("error", (e) => setMsg("JS ERROR: " + e.message));
-window.addEventListener("unhandledrejection", (e) => setMsg("PROMISE ERROR: " + (e.reason?.message || e.reason)));
 
 // TEST FIRESTORE (krijon 1 dokument test)
 (async () => {

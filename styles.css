@@ -3100,3 +3100,12 @@ body{background:#000!important;color:#E6E6E6!important}
   bottom: calc(16px + env(safe-area-inset-bottom));
   z-index: 9999;
 }      
+
+/* FIX buttons click (iPhone / overlay bug) */
+#chooseBtn,
+#uploadBtn,
+#publishBtn {
+  position: relative;
+  z-index: 999999;
+  pointer-events: auto;
+}

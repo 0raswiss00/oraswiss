@@ -141,59 +141,53 @@
 <button id="publishBtn" type="button">PUBLISH</button>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
-    authDomain: "oraswiss-27e57.firebaseapp.com",
-    projectId: "oraswiss-27e57",
-    storageBucket: "oraswiss-27e57.appspot.com",
-    messagingSenderId: "596627676936",
-    appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-    measurementId: "G-VZPKMD67VQ"
-  };
+const firebaseConfig = {
+  apiKey: "…",
+  authDomain: "oraswiss-27e57.firebaseapp.com",
+  projectId: "oraswiss-27e57",
+  storageBucket: "oraswiss-27e57.appspot.com",
+  messagingSenderId: "…",
+  appId: "…"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const storage = getStorage(app);
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
 
-  const uploadBtn = document.getElementById("uploadBtn");
-  const fileInput = document.getElementById("photoFiles");
-  const preview = document.getElementById("photosPreview");
-  const msgEl = document.getElementById("msg");
-alert(fileInput ? "fileInput OK ✅" : "fileInput NULL ❌");
-  const setMsg = (t) => (msgEl.textContent = t);
+const fileInput = document.getElementById("photoFiles");
+const publishBtn = document.getElementById("publishBtn");
+const msg = document.getElementById("msg");
 
-  uploadBtn.addEventListener("click", () => {
-  alert("Klik u kap ✅");
-  fileInput.click();
-});
-  fileInput.addEventListener("change", async () => {
-    const files = Array.from(fileInput.files || []);
-    if (!files.length) return;
-
-    preview.innerHTML = "";
-    setMsg("Uploading...");
-
-    try {
-      for (const file of files) {
-        const fileRef = ref(storage, products/${Date.now()}_${file.name});
-        const url = await getDownloadURL(fileRef);
-
-        const img = document.createElement("img");
-        img.src = url;
-        img.style.width = "120px";
-        img.style.margin = "6px";
-        img.style.borderRadius = "8px";
-        preview.appendChild(img);
-      }
-
-      setMsg(Fotot u ngarkuan ✅ (${files.length}));
-    } catch (e) {
-      console.error(e);
-      setMsg("Gabim në upload ❌ (shiko Console)");
+publishBtn.addEventListener("click", async () => {
+  try {
+    if (!fileInput.files || fileInput.files.length === 0) {
+      msg.textContent = "❌ Zgjidh të paktën 1 foto";
+      return;
     }
 
+    msg.textContent = "⏳ Duke u ngarkuar në Firebase...";
+
+    for (const file of fileInput.files) {
+      const fileRef = ref(
+        storage,
+        products/${Date.now()}_${file.name}
+      );
+
+      await uploadBytes(fileRef, file);
+      const url = await getDownloadURL(fileRef);
+
+      console.log("UPLOAD OK:", url);
+    }
+
+    msg.textContent = "✅ Foto u ngarkuan në Firebase";
+
+  } catch (e) {
+    console.error(e);
+    msg.textContent = "❌ Gabim në upload (shiko Console)";
+  }
+});
 </script>
 
 <script>

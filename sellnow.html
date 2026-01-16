@@ -186,18 +186,6 @@ publishBtn.addEventListener('click', async () => {
   }
 });
 
-    const snap = await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(snap.ref);
-    urls.push(url);
-  }
-
-  setMsg(✅ Foto u ngarkuan (${urls.length}));
-  console.log("Download URLs:", urls);
-
-} catch (e) {
-  console.error(e);
-  setMsg("❌ Gabim në upload (shiko Console)");
-}
 </script>
 
 </body>

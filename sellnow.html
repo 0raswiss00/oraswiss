@@ -198,6 +198,12 @@ alert(fileInput ? "fileInput OK ✅" : "fileInput NULL ❌");
   });
 </script>
 
+<script>
+document.getElementById('photoFiles').addEventListener('change', function () {
+  alert("U zgjodhën " + this.files.length + " foto");
+});
+</script>
+  
 </body>
 </html>
 

@@ -142,63 +142,137 @@
   
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import {
-    getStorage, ref, uploadBytes, getDownloadURL
-  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
-  import {
-    getFirestore, collection, addDoc, serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "…",
+    apiKey: "YOUR_API_KEY",
     authDomain: "oraswiss-27e57.firebaseapp.com",
     projectId: "oraswiss-27e57",
     storageBucket: "oraswiss-27e57.appspot.com",
-    messagingSenderId: "…",
-    appId: "…"
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
   };
 
   const app = initializeApp(firebaseConfig);
   const storage = getStorage(app);
   const db = getFirestore(app);
 
-const chooseBtn = document.getElementById("chooseBtn");
-const fileInput = document.getElementById("photoFiles");
-const uploadBtn = document.getElementById("uploadBtn");
-const publishBtn = document.getElementById("publishBtn");
-const msg = document.getElementById("msg");
+  const chooseBtn = document.getElementById("chooseBtn");
+  const fileInput = document.getElementById("photoFiles");
+  const uploadBtn = document.getElementById("uploadBtn");
+  const publishBtn = document.getElementById("publishBtn");
+  const msg = document.getElementById("msg");
 
-function setMsg(t) {
-  msg.textContent = t;
-}
+  // fushat e formës
+  const category = document.getElementById("category");
+  const brand = document.getElementById("brand");
+  const model = document.getElementById("model");
+  const refEl = document.getElementById("ref");
+  const year = document.getElementById("year");
+  const material = document.getElementById("material");
+  const caseSize = document.getElementById("case_size");
+  const condition = document.getElementById("condition");
+  const price = document.getElementById("price");
+  const box = document.getElementById("box");
+  const working = document.getElementById("working");
+  const description = document.getElementById("description");
 
-// HAP FILE PICKER (FUNKSIONON NË IPHONE)
-chooseBtn.addEventListener("click", () => {
-  fileInput.click();
-});
+  let uploadedUrls = [];
+  let uploading = false;
 
-// KUR ZGJIDH FOTO
-fileInput.addEventListener("change", () => {
-  setMsg("📂 U zgjodhën " + fileInput.files.length + " foto");
-});
-
-// NGARKO FOTO (TEST)
-uploadBtn.addEventListener("click", async () => {
-  if (fileInput.files.length === 0) {
-    setMsg("❌ Zgjidh foto fillimisht");
-    return;
+  function setMsg(t) { msg.textContent = t; }
+  function setButtons() {
+    publishBtn.disabled = uploading || uploadedUrls.length === 0;
+    uploadBtn.disabled = uploading;
+    chooseBtn.disabled = uploading;
   }
+  setButtons();
 
-  setMsg("⏳ Duke ngarkuar...");
-  await new Promise(r => setTimeout(r, 1500));
-  setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
-});
+  chooseBtn.addEventListener("click", () => fileInput.click());
 
-// PUBLISH (VETËM TEST)
-publishBtn.addEventListener("click", () => {
-  setMsg("🚀 Publish OK");
-});
+  fileInput.addEventListener("change", () => {
+    uploadedUrls = [];
+    setMsg(📂 U zgjodhën ${fileInput.files.length} foto. Tani shtyp “NGARKO FOTOT”.);
+    setButtons();
+  });
 
+  // ✅ UPLOAD REAL NË FIREBASE STORAGE
+  uploadBtn.addEventListener("click", async () => {
+    const files = Array.from(fileInput.files || []);
+    if (files.length === 0) return setMsg("❌ Zgjidh foto fillimisht");
+
+    try {
+      uploading = true;
+      setButtons();
+      setMsg(⏳ Duke ngarkuar... 0/${files.length});
+
+      const urls = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+
+        const uniqueName = ${Date.now()}_${Math.random().toString(16).slice(2)}_${file.name};
+        const storageRef = ref(storage, photos/${uniqueName});
+
+        await uploadBytes(storageRef, file);
+        const url = await getDownloadURL(storageRef);
+        urls.push(url);
+
+        setMsg(⏳ Duke ngarkuar... ${i + 1}/${files.length});
+      }
+
+      uploadedUrls = urls;
+      setMsg(✅ Foto u ngarkuan: ${uploadedUrls.length}\nTani shtyp “PUBLISH”.);
+    } catch (e) {
+      console.error(e);
+      setMsg("❌ Upload dështoi. Shiko Console për error.");
+    } finally {
+      uploading = false;
+      setButtons();
+    }
+  });
+
+  // ✅ PUBLISH REAL NË FIRESTORE
+  publishBtn.addEventListener("click", async () => {
+    if (uploadedUrls.length === 0) return setMsg("❌ Së pari bëj “NGARKO FOTOT”");
+
+    try {
+      uploading = true;
+      setButtons();
+      setMsg("⏳ Duke publikuar...");
+
+      await addDoc(collection(db, "posts"), {
+        category: category.value,
+        brand: brand.value.trim(),
+        model: model.value.trim(),
+        ref: refEl.value.trim(),
+        year: Number(year.value || 0),
+        material: material.value.trim(),
+        case_size: Number(caseSize.value || 0),
+        condition: condition.value,
+        price: Number(price.value || 0),
+        box: box.value,
+        working: working.value,
+        description: description.value.trim(),
+        photoUrls: uploadedUrls,
+        status: "pending",
+        createdAt: serverTimestamp()
+      });
+
+      setMsg("🚀 Publish OK! U ruajt në Firestore (posts).");
+
+      // reset
+      fileInput.value = "";
+      uploadedUrls = [];
+    } catch (e) {
+      console.error(e);
+      setMsg("❌ Publish dështoi. Shiko Console për error.");
+    } finally {
+      uploading = false;
+      setButtons();
+    }
+  });
 </script>
+
 </body>
 </html>

@@ -185,40 +185,12 @@ publishBtn.addEventListener("click", async () => {
 
   } catch (e) {
     console.error(e);
-    msg.textContent = "❌ Gabim në upload (shiko Console)";
+    setMsg("❌ Firebase: " + (e?.message || e));
   }
 });
 </script>
 
-<script>
-const fileInput = document.getElementById('photoFiles');
-const msg = document.getElementById('msg');
-const publishBtn = document.getElementById('publishBtn');
 
-function setMsg(t) { if (msg) msg.textContent = t; }
-
-// kur zgjedh foto
-fileInput.addEventListener('change', () => {
-  setMsg("📂 U zgjodhën " + fileInput.files.length + " foto");
-});
-
-// kur klikon PUBLISH (test upload)
-publishBtn.addEventListener('click', async () => {
-  if (fileInput.files.length === 0) {
-    setMsg("❌ Zgjidh të paktën 1 foto");
-    return;
-  }
-
-  setMsg("⏳ Duke u ngarkuar...");
-
-  try {
-    // fileInput.value = ""; // vetëm pas suksesit, nëse do reset
-  } catch (e) {
-    console.error(e);
-    setMsg("❌ Gabim në upload (shiko Console)");
-  }
-});
-</script>
 
 </body>
 </html>

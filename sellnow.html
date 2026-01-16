@@ -177,7 +177,7 @@ alert(fileInput ? "fileInput OK ✅" : "fileInput NULL ❌");
 
     try {
       for (const file of files) {
-        await uploadBytes(fileRef, file);
+        const fileRef = ref(storage, products/${Date.now()}_${file.name});
         const url = await getDownloadURL(fileRef);
 
         const img = document.createElement("img");

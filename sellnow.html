@@ -147,6 +147,21 @@ window.addEventListener("error", (e) =>
 window.addEventListener("unhandledrejection", (e) =>
   setMsg("PROMISE ERROR: " + (e.reason?.message || e.reason))
 );
+const chooseBtn = document.getElementById("chooseBtn");
+const fileInput = document.getElementById("photoFiles");
+const uploadBtn  = document.getElementById("uploadBtn");
+const publishBtn = document.getElementById("publishBtn");
+const msg = document.getElementById("msg");
+
+function setMsg(t) {
+  if (!msg) { console.log(t); return; }
+  msg.textContent = t;
+}
+
+window.addEventListener("error", (e) => setMsg("JS ERROR: " + e.message));
+window.addEventListener("unhandledrejection", (e) =>
+  setMsg("PROMISE ERROR: " + (e.reason?.message || e.reason))
+);
 
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
   import {
@@ -219,8 +234,9 @@ uploadBtn.addEventListener("click", async () => {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
 
-      const uniqueName = ${Date.now()}_${Math.random().toString(16).slice(2)}_${file.name};
-      const storageRef = ref(storage, photos/${uniqueName});
+    const uniqueName = ${Date.now()}_${Math.random().toString(16).slice(2)}_${file.name};
+    const storageRef = ref(storage, photos/${uniqueName});
+    setMsg(⏳ Duke ngarkuar në Firebase... 0/${files.length});
 
       await uploadBytes(storageRef, file);
       const url = await getDownloadURL(storageRef);

@@ -130,8 +130,10 @@
   
 
 <!-- BUTONI PËR ZGJEDHJE FOTOSH -->
+<!-- BUTONI QË KLIKOHET -->
 <button id="chooseBtn" type="button">Upload Photos</button>
 
+<!-- INPUT (JO display:none) -->
 <input
   id="photoFiles"
   type="file"
@@ -143,8 +145,8 @@
 <div id="msg"></div>
 
 <button id="uploadBtn" type="button">NGARKO FOTOT</button>
-<button id="publishBtn" type="button">PUBLISH</button>
 
+<button id="publishBtn" type="button">PUBLISH</button>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";

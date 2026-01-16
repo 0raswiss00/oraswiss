@@ -195,7 +195,25 @@ uploadBtn.addEventListener("click", async () => {
 });
 
 // PUBLISH (VETËM TEST)
-publishBtn.addEventListener("click", () => {
+publishBtn.addEventListener("click", async () => {
+
+  const file = photoInput.files[0];
+  if (!file) {
+    setMsg("Zgjidh një foto");
+    return;
+  }
+
+  // 👉 KËTU vendoset (emri unik)
+  const uniqueName = ${Date.now()}_${file.name};
+
+  const storageRef = ref(storage, photos/${uniqueName});
+  await uploadBytes(storageRef, file);
+
+  const url = await getDownloadURL(storageRef);
+
+  // nëse s’do DB tani, vetëm këtë mjafton për test
+  console.log("URL:", url);
+
   setMsg("🚀 Publish OK");
 });
 

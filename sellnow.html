@@ -164,7 +164,7 @@ alert(fileInput ? "fileInput OK ✅" : "fileInput NULL ❌");
 
     try {
       for (const file of files) {
-        const fileRef = ref(storage, photos/${Date.now()}_${file.name});
+        setMsg(Fotot u ngarkuan ✅ (${files.length}));
         await uploadBytes(fileRef, file);
         const url = await getDownloadURL(fileRef);
 

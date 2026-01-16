@@ -160,36 +160,38 @@ const fileInput = document.getElementById("photoFiles");
 const publishBtn = document.getElementById("publishBtn");
 const msg = document.getElementById("msg");
 
+function setMsg(t) { if (msg) msg.textContent = t; }
+
+// kur zgjedh foto
+fileInput.addEventListener("change", () => {
+  setMsg("📂 U zgjodhën " + fileInput.files.length + " foto");
+});
+
+// kur klikon PUBLISH -> upload REAL në Firebase
 publishBtn.addEventListener("click", async () => {
   try {
     if (!fileInput.files || fileInput.files.length === 0) {
-      msg.textContent = "❌ Zgjidh të paktën 1 foto";
+      setMsg("❌ Zgjidh të paktën 1 foto");
       return;
     }
 
-    msg.textContent = "⏳ Duke u ngarkuar në Firebase...";
+    setMsg("⏳ Duke u ngarkuar në Firebase...");
 
     for (const file of fileInput.files) {
-      const fileRef = ref(
-        storage,
-        products/${Date.now()}_${file.name}
-      );
-
+      const fileRef = ref(storage, products/${Date.now()}_${file.name});
       await uploadBytes(fileRef, file);
       const url = await getDownloadURL(fileRef);
-
       console.log("UPLOAD OK:", url);
     }
 
-    msg.textContent = "✅ Foto u ngarkuan në Firebase";
-
+    setMsg("✅ Foto u ngarkuan në Firebase");
+    // fileInput.value = ""; // nëse do reset pas suksesit
   } catch (e) {
     console.error(e);
     setMsg("❌ Firebase: " + (e?.message || e));
   }
 });
 </script>
-
 
 
 </body>

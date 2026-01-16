@@ -176,15 +176,28 @@ publishBtn.addEventListener('click', async () => {
 
   setMsg("⏳ Duke u ngarkuar...");
 
-  try {
-    await new Promise(res => setTimeout(res, 2000)); // simulim
-    setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
-    // fileInput.value = ""; // vetëm pas suksesit, nëse do reset
-  } catch (e) {
-    console.error(e);
-    setMsg("❌ Gabim në upload (shiko Console)");
+try {
+  const storage = getStorage();
+  const urls = [];
+
+  for (const file of fileInput.files) {
+    const storageRef = ref(
+      storage,
+      photos/${Date.now()}_${file.name}
+    );
+
+    const snap = await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(snap.ref);
+    urls.push(url);
   }
-});
+
+  setMsg(✅ Foto u ngarkuan (${urls.length}));
+  console.log("Download URLs:", urls);
+
+} catch (e) {
+  console.error(e);
+  setMsg("❌ Gabim në upload (shiko Console)");
+}
 </script>
 
 </body>

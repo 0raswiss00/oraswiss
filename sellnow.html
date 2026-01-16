@@ -125,6 +125,8 @@
   
 
 <!-- BUTONI QË KLIKOHET -->
+<button id="chooseBtn" type="button">Upload Photos</button>
+
 <!-- INPUT (JO display:none) -->
 <input
   id="photoFiles"
@@ -139,100 +141,68 @@
 <button id="uploadBtn" type="button">NGARKO FOTOT</button>
 
 <button id="publishBtn" type="button">PUBLISH</button>
-
+  
 
   
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import {
+    getStorage, ref, uploadBytes, getDownloadURL
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+  import {
+    getFirestore, collection, addDoc, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-/* ---------- ELEMENTET ---------- */
-const chooseBtn  = document.getElementById("chooseBtn");
-const fileInput  = document.getElementById("photoFiles");
-const uploadBtn  = document.getElementById("uploadBtn");
+  const firebaseConfig = {
+    apiKey: "…",
+    authDomain: "oraswiss-27e57.firebaseapp.com",
+    projectId: "oraswiss-27e57",
+    storageBucket: "oraswiss-27e57.appspot.com",
+    messagingSenderId: "…",
+    appId: "…"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const storage = getStorage(app);
+  const db = getFirestore(app);
+
+const chooseBtn = document.getElementById("chooseBtn");
+const fileInput = document.getElementById("photoFiles");
+const uploadBtn = document.getElementById("uploadBtn");
 const publishBtn = document.getElementById("publishBtn");
-const msg        = document.getElementById("msg");
+const msg = document.getElementById("msg");
 
 function setMsg(t) {
   msg.textContent = t;
 }
 
-/* ---------- FIREBASE ---------- */
-const firebaseConfig = {
-  apiKey: "API_KEY",
-  authDomain: "oraswiss-27e57.firebaseapp.com",
-  projectId: "oraswiss-27e57",
-  storageBucket: "oraswiss-27e57.appspot.com",
-  messagingSenderId: "XXXX",
-  appId: "XXXX"
-};
-
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
-const db = getFirestore(app);
-
-/* ---------- STATE ---------- */
-let uploadedUrls = [];
-let uploading = false;
-
-/* ---------- EVENTS ---------- */
+// HAP FILE PICKER (FUNKSIONON NË IPHONE)
 chooseBtn.addEventListener("click", () => {
   fileInput.click();
 });
 
+// KUR ZGJIDH FOTO
 fileInput.addEventListener("change", () => {
-  setMsg(📂 U zgjodhën ${fileInput.files.length} foto);
+  setMsg("📂 U zgjodhën " + fileInput.files.length + " foto");
 });
 
+// NGARKO FOTO (TEST)
 uploadBtn.addEventListener("click", async () => {
-  const files = Array.from(fileInput.files);
-  if (files.length === 0) {
+  if (fileInput.files.length === 0) {
     setMsg("❌ Zgjidh foto fillimisht");
     return;
   }
 
-  uploadedUrls = [];
-  uploading = true;
-  setMsg(⏳ Upload... 0/${files.length});
-
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    const name = ${Date.now()}_${Math.random().toString(16).slice(2)}_${file.name};
-    const storageRef = ref(storage, photos/${name});
-
-    await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(storageRef);
-    uploadedUrls.push(url);
-
-    setMsg(⏳ Upload... ${i + 1}/${files.length});
-  }
-
-  uploading = false;
-  setMsg(✅ Foto u ngarkuan: ${uploadedUrls.length});
+  setMsg("⏳ Duke ngarkuar...");
+  await new Promise(r => setTimeout(r, 1500));
+  setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
 });
 
-publishBtn.addEventListener("click", async () => {
-  if (uploading) {
-    setMsg("⏳ Prit sa të mbarojë upload-i");
-    return;
-  }
-  if (uploadedUrls.length === 0) {
-    setMsg("❌ Së pari NGARKO FOTOT");
-    return;
-  }
-
-  setMsg("⏳ Duke publikuar...");
-
-  const docRef = await addDoc(collection(db, "posts"), {
-    photoUrls: uploadedUrls,
-    status: "pending",
-    createdAt: serverTimestamp()
-  });
-
-  setMsg("✅ Publish OK. DocID: " + docRef.id);
+// PUBLISH (VETËM TEST)
+publishBtn.addEventListener("click", () => {
+  setMsg("🚀 Publish OK");
 });
+
 </script>
-
 </body>
 </html>

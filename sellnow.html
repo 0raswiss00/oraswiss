@@ -135,7 +135,7 @@
   <textarea id="photos" style="display:none"></textarea>
 <div id="photosPreview"></div>
 <div id="msg"></div>
-<button id="photoFiles" type="button">Upl Foto</button>
+
   
 <!-- buton për të publikuar listing -->
 <button id="publishBtn" type="button">PUBLISH</button>
@@ -197,5 +197,125 @@ setMsg("🚀 Posti u publikua me sukses!");
 </html>
 
 
+<script type="module">
+  // ✅ Firebase (SDK v10)
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    addDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+  import {
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
 
+  // ✅ CONFIG (mbaje si e ke)
+  const firebaseConfig = {
+    apiKey: "...",
+    authDomain: "oraswiss-27e57.firebaseapp.com",
+    projectId: "oraswiss-27e57",
+    storageBucket: "oraswiss-27e57.appspot.com",
+    messagingSenderId: "...",
+    appId: "..."
+  };
+
+  // ✅ INIT
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
+
+  // ✅ ELEMENTET (ID-të duhet të ekzistojnë në HTML)
+  const fileInput = document.getElementById("photoFiles");          // <input type="file" ...>
+  const uploadPhotosBtn = document.getElementById("uploadPhotosBtn"); // butoni "Ngarko fotot"
+  const publishBtn = document.getElementById("publishBtn");          // butoni "PUBLISH"
+  const msg = document.getElementById("msg");
+  const photosPreview = document.getElementById("photosPreview");
+
+  // ✅ INPUTET E FORMËS (ndrysho ID-të këtu NËSE i ke ndryshe)
+  const priceEl = document.getElementById("price");
+  const descEl = document.getElementById("description");
+
+  // ✅ state: URL-të e fotove të ngarkuara
+  let uploadedUrls = [];
+
+  function setMsg(t) {
+    if (msg) msg.textContent = t;
+  }
+
+  // -------------------------
+  // 1) BUTONI: NGARKO FOTOT
+  // -------------------------
+  uploadPhotosBtn.addEventListener("click", () => {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener("change", async () => {
+    if (!fileInput.files || fileInput.files.length === 0) return;
+
+    setMsg("⏳ Duke ngarkuar fotot...");
+    uploadedUrls = [];
+    if (photosPreview) photosPreview.innerHTML = "";
+
+    try {
+      for (const file of fileInput.files) {
+        const fileRef = ref(storage, listings/${Date.now()}-${file.name});
+        await uploadBytes(fileRef, file);
+        const url = await getDownloadURL(fileRef);
+        uploadedUrls.push(url);
+
+        // preview (opsionale)
+        if (photosPreview) {
+          const img = document.createElement("img");
+          img.src = url;
+          img.style.width = "120px";
+          img.style.margin = "6px";
+          photosPreview.appendChild(img);
+        }
+      }
+
+      setMsg(✅ Foto u ngarkuan (${uploadedUrls.length}));
+    } catch (e) {
+      console.error(e);
+      setMsg("❌ Gabim te upload (shiko Console)");
+    }
+  });
+
+  // -------------------------
+  // 2) BUTONI: PUBLISH (vetëm Firestore)
+  // -------------------------
+  publishBtn.addEventListener("click", async () => {
+    const price = priceEl ? priceEl.value : "";
+    const description = descEl ? descEl.value : "";
+
+    if (!price || !description) {
+      setMsg("❌ Plotëso çmimin dhe description");
+      return;
+    }
+
+    if (uploadedUrls.length === 0) {
+      setMsg("❌ Duhet të ngarkosh fotot para PUBLISH");
+      return;
+    }
+
+    try {
+      setMsg("⏳ Duke publikuar...");
+
+      await addDoc(collection(db, "listings"), {
+        price: Number(price),
+        description,
+        photos: uploadedUrls,
+        createdAt: serverTimestamp()
+      });
+
+      setMsg("🚀 Listing u publikua me sukses!");
+    } catch (e) {
+      console.error(e);
+      setMsg("❌ Gabim te publish (shiko Console)");
+    }
+  });
+</script>
 

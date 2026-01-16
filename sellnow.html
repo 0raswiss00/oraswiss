@@ -162,6 +162,25 @@
   const storage = getStorage(app);
   const db = getFirestore(app);
 
+// SHFAQ ÇDO ERROR NË EKRAN
+window.addEventListener("error", (e) => setMsg("JS ERROR: " + e.message));
+window.addEventListener("unhandledrejection", (e) => setMsg("PROMISE ERROR: " + (e.reason?.message || e.reason)));
+
+// TEST FIRESTORE (krijon 1 dokument test)
+(async () => {
+  try {
+    setMsg("🔌 Po testoj lidhjen me Firebase...");
+    const refDoc = await addDoc(collection(db, "_ping"), {
+      ok: true,
+      createdAt: serverTimestamp()
+    });
+    setMsg("✅ Firebase OK. Firestore shkroi: " + refDoc.id);
+  } catch (e) {
+    console.error(e);
+    setMsg("❌ Firebase FAIL: " + (e.code || "") + " " + (e.message || e));
+  }
+})();
+  
 const chooseBtn = document.getElementById("chooseBtn");
 const fileInput = document.getElementById("photoFiles");
 const uploadBtn = document.getElementById("uploadBtn");

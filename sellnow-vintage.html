@@ -80,15 +80,31 @@
   <label>Description</label>
   <textarea id="description" placeholder="Original dial, serviced"></textarea>
 
-  <label>Photos (paths ose URL, me presje)</label>
-  <textarea id="photos" placeholder="img/rolex1.jpg, img/rolex2.jpg"></textarea>
+ <button id="chooseBtn" type="button">Upload Photos</button>
 
-  <button class="btn" id="make" type="button">Generate JSON</button>
+<input
+  id="photoFiles"
+  type="file"
+  accept="image/*"
+  multiple
+  style="display:none"
+/>
 
-  <h3 style="margin:18px 0 8px">Copy this into watches.json</h3>
-  <pre id="out">Kliko "Generate JSON"</pre>
-  <button class="btn" id="copy" type="button">Copy</button>
+<div id="msg"></div>
 
+<script>
+  var chooseBtn = document.getElementById("chooseBtn");
+  var fileInput = document.getElementById("photoFiles");
+  var msg = document.getElementById("msg");
+
+  chooseBtn.onclick = function () {
+    fileInput.click();
+  };
+
+  fileInput.onchange = function () {
+    msg.innerText = "U zgjodhën " + fileInput.files.length + " foto";
+  };
+</script>
 </div>
 
 <script>

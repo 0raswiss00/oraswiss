@@ -2985,10 +2985,6 @@ body{background:#000!important;color:#E6E6E6!important}
 .menu a{
   white-space:nowrap;
 }
-
-body{
-  padding-bottom: calc(120px + env(safe-area-inset-bottom));
-}
       
 /* MOBILE (scroll horizontal, mos u pre linku i fundit) */
 @media (max-width: 768px){
@@ -3092,3 +3088,15 @@ body{
   z-index: 99999 !important;
   pointer-events: auto !important;
 }
+
+
+
+ body{
+  padding-bottom: calc(120px + env(safe-area-inset-bottom));
+}     
+
+#publishBtn{
+  position: sticky;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 9999;
+}      

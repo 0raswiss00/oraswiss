@@ -164,7 +164,6 @@ alert(fileInput ? "fileInput OK ✅" : "fileInput NULL ❌");
 
     try {
       for (const file of files) {
-        setMsg(Fotot u ngarkuan ✅ (${files.length}));
         await uploadBytes(fileRef, file);
         const url = await getDownloadURL(fileRef);
 

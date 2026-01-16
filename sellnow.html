@@ -212,8 +212,6 @@ publishBtn.addEventListener('click', async () => {
   setMsg("⏳ Duke u ngarkuar...");
 
   try {
-    await new Promise(res => setTimeout(res, 2000)); // simulim
-    setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
     // fileInput.value = ""; // vetëm pas suksesit, nëse do reset
   } catch (e) {
     console.error(e);

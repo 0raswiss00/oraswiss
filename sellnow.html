@@ -123,27 +123,17 @@
     Upload Photos
   </button>
 
-  <input
-    id="photoFiles"
-    type="file"
-    accept="image/*"
-    multiple
-    style="display:none"
-  />
+<!-- input i fshehur që mban fotot -->
+<input id="photoInput" type="file" accept="image/*" multiple style="display:none" />
 
-  <textarea id="photos" style="display:none"></textarea>
 <div id="photosPreview"></div>
 <div id="msg"></div>
 
-<!-- 1) Ky eshte input-i i fshehur -->
-<input id="photoFilesInput" type="file" accept="image/*" multiple style="display:none" />
+<!-- buton për të hapur file picker -->
+<button id="uploadBtn" type="button">Ngarko fotot</button>
 
-<!-- 2) Ky eshte butoni qe hap zgjedhjen e fotove -->
-<button id="uploadPhotosBtn" type="button">Ngarko fotot</button>
-
-<!-- 3) Ky eshte publish real -->
+<!-- buton për të publikuar listing -->
 <button id="publishBtn" type="button">PUBLISH</button>
-
 
 <script type="module">
   // ✅ Firebase (SDK v10)

@@ -82,6 +82,18 @@
 
  <button id="chooseBtn" type="button">Upload Photos</button>
 
+ <label for="photoFiles" style="
+  display:block;
+  padding:14px;
+  background:#111;
+  color:#fff;
+  text-align:center;
+  border-radius:8px;
+  cursor:pointer;
+">
+  Upload Photos
+</label>
+
 <input
   id="photoFiles"
   type="file"
@@ -93,6 +105,13 @@
 <div id="msg"></div>
 
 <script>
+  var fileInput = document.getElementById("photoFiles");
+  var msg = document.getElementById("msg");
+
+  fileInput.onchange = function () {
+    msg.innerText = "U zgjodhën " + fileInput.files.length + " foto";
+  };
+</script>
   var chooseBtn = document.getElementById("chooseBtn");
   var fileInput = document.getElementById("photoFiles");
   var msg = document.getElementById("msg");

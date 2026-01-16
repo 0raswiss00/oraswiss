@@ -120,23 +120,26 @@
 <textarea id="description" placeholder="Shkruaj përshkrimin..."></textarea>
   
 
-<!-- 1) ZGJEDH FOTO -->
-<button type="button" id="chooseBtn">Upload Photos</button>
-<input id="photoFiles" type="file" accept="image/*" multiple style="display:none" />
+<!-- BUTONI QË KLIKOHET -->
+<button id="chooseBtn" type="button">Upload Photos</button>
 
-<div id="photosPreview"></div>
-<div id="msg" style="margin-top:10px;"></div>
+<!-- INPUT (JO display:none) -->
+<input
+  id="photoFiles"
+  type="file"
+  accept="image/*"
+  multiple
+  style="position:absolute; left:-9999px;"
+/>
 
-<!-- 2) NGARKO FOTO NE FIREBASE STORAGE -->
+<div id="msg"></div>
+
 <button id="uploadBtn" type="button">NGARKO FOTOT</button>
 
-<!-- Fushat (duhet te ekzistojne vetem 1 here secila) -->
-<input id="price" type="number" placeholder="Price" />
-<textarea id="description" placeholder="Description"></textarea>
-
-<!-- 3) PUBLISH NE FIRESTORE -->
 <button id="publishBtn" type="button">PUBLISH</button>
+  
 
+  
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
   import {
@@ -159,102 +162,43 @@
   const storage = getStorage(app);
   const db = getFirestore(app);
 
-  const chooseBtn = document.getElementById("chooseBtn");
-  const fileInput = document.getElementById("photoFiles");
-  const uploadBtn = document.getElementById("uploadBtn");
-  const publishBtn = document.getElementById("publishBtn");
-  const photosPreview = document.getElementById("photosPreview");
-  const msgEl = document.getElementById("msg");
+const chooseBtn = document.getElementById("chooseBtn");
+const fileInput = document.getElementById("photoFiles");
+const uploadBtn = document.getElementById("uploadBtn");
+const publishBtn = document.getElementById("publishBtn");
+const msg = document.getElementById("msg");
 
-  const priceEl = document.getElementById("price");
-  const descEl = document.getElementById("description");
+function setMsg(t) {
+  msg.textContent = t;
+}
 
-  let uploadedUrls = [];
+// HAP FILE PICKER (FUNKSIONON NË IPHONE)
+chooseBtn.addEventListener("click", () => {
+  fileInput.click();
+});
 
-  function setMsg(t) {
-    if (msgEl) msgEl.textContent = t;
+// KUR ZGJIDH FOTO
+fileInput.addEventListener("change", () => {
+  setMsg("📂 U zgjodhën " + fileInput.files.length + " foto");
+});
+
+// NGARKO FOTO (TEST)
+uploadBtn.addEventListener("click", async () => {
+  if (fileInput.files.length === 0) {
+    setMsg("❌ Zgjidh foto fillimisht");
+    return;
   }
 
-  // Butoni "Upload Photos" -> hap file picker
-  chooseBtn.addEventListener("click", () => fileInput.click());
+  setMsg("⏳ Duke ngarkuar...");
+  await new Promise(r => setTimeout(r, 1500));
+  setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
+});
 
-  // Kur zgjedh foto -> preview + mesazh
-  fileInput.addEventListener("change", () => {
-    const files = Array.from(fileInput.files || []);
-    uploadedUrls = []; // reset URLs sa here zgjedh foto te reja
+// PUBLISH (VETËM TEST)
+publishBtn.addEventListener("click", () => {
+  setMsg("🚀 Publish OK");
+});
 
-    photosPreview.innerHTML = "";
-    for (const f of files) {
-      const img = document.createElement("img");
-      img.src = URL.createObjectURL(f);
-      img.style.width = "120px";
-      img.style.margin = "6px";
-      img.style.borderRadius = "8px";
-      photosPreview.appendChild(img);
-    }
-
-    setMsg(files.length ? 📂 U zgjodhën ${files.length} foto : "❌ S’u zgjodh asnjë foto");
-  });
-
-  // NGARKO FOTOT -> Firebase Storage
-  uploadBtn.addEventListener("click", async () => {
-    const files = Array.from(fileInput.files || []);
-    if (files.length === 0) {
-      setMsg("❌ Zgjidh fotot fillimisht");
-      return;
-    }
-
-    try {
-      setMsg("⏳ Duke ngarkuar fotot në Storage...");
-      uploadedUrls = [];
-
-      for (const f of files) {
-        const safeName = f.name.replace(/\s+/g, "_");
-        const path = listings/${Date.now()}_${safeName};
-        const storageRef = ref(storage, path);
-
-        await uploadBytes(storageRef, f);
-        const url = await getDownloadURL(storageRef);
-        uploadedUrls.push(url);
-      }
-
-      setMsg(✅ Foto u ngarkuan (${uploadedUrls.length}));
-    } catch (e) {
-      console.error(e);
-      setMsg("❌ Gabim në upload (hap Console)");
-    }
-  });
-
-  // PUBLISH -> Firestore (duhet te kesh bere upload fotot)
-  publishBtn.addEventListener("click", async () => {
-    const price = priceEl?.value;
-    const description = descEl?.value?.trim();
-
-    if (!price || !description) {
-      setMsg("❌ Plotëso Price dhe Description");
-      return;
-    }
-    if (uploadedUrls.length === 0) {
-      setMsg("❌ Së pari kliko NGARKO FOTOT (duhet të dalë ✅ Foto u ngarkuan)");
-      return;
-    }
-
-    try {
-      setMsg("⏳ Duke publikuar në Firestore...");
-
-      await addDoc(collection(db, "listings"), {
-        price: Number(price),
-        description,
-        photos: uploadedUrls,
-        createdAt: serverTimestamp()
-      });
-
-      setMsg("🚀 Listing u publikua me sukses!");
-    } catch (e) {
-      console.error(e);
-      setMsg("❌ Gabim te publish (hap Console)");
-    }
-  });
 </script>
 </body>
 </html>

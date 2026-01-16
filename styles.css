@@ -2986,6 +2986,10 @@ body{background:#000!important;color:#E6E6E6!important}
   white-space:nowrap;
 }
 
+body{
+  padding-bottom: calc(120px + env(safe-area-inset-bottom));
+}
+      
 /* MOBILE (scroll horizontal, mos u pre linku i fundit) */
 @media (max-width: 768px){
   .menu{

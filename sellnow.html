@@ -119,9 +119,20 @@
 <label>Description</label>
 <textarea id="description" placeholder="Shkruaj përshkrimin..."></textarea>
   
-<button id="uploadBtn" type="button" style="position:relative; z-index:9999;">
-  Upload Photos
-</button>
+<button class="btn" type="button" onclick="document.getElementById('photoFiles').click()">
+    Upload Photos
+  </button>
+
+  <input
+    id="photoFiles"
+    type="file"
+    accept="image/*"
+    multiple
+    style="display:none"
+  />
+
+  <textarea id="photos" style="display:none"></textarea>
+
 
 <input id="photoFiles" type="file" multiple style="display:none" />
 

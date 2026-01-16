@@ -127,7 +127,6 @@
 <!-- BUTONI PËR ZGJEDHJE FOTOSH -->
 <button id="chooseBtn" type="button">Upload Photos</button>
 
-<!-- INPUT I FSHEHUR -->
 <input
   id="photoFiles"
   type="file"
@@ -136,7 +135,7 @@
   style="position:absolute; left:-9999px;"
 />
 
-<div id="msg" style="margin:10px 0;"></div>
+<div id="msg"></div>
 
 <button id="uploadBtn" type="button">NGARKO FOTOT</button>
 <button id="publishBtn" type="button">PUBLISH</button>
@@ -146,7 +145,7 @@
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
   import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-  /* ✅ VENDOS KONFIGURIMIN REAL (pa “…”) */
+  // ✅ VENDOS KONFIGURIMIN REAL (pa “…")
   const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "oraswiss-27e57.firebaseapp.com",
@@ -160,131 +159,120 @@
   const storage = getStorage(app);
   const db = getFirestore(app);
 
-  const chooseBtn = document.getElementById("chooseBtn");
-  const fileInput = document.getElementById("photoFiles");
-  const uploadBtn = document.getElementById("uploadBtn");
-  const publishBtn = document.getElementById("publishBtn");
-  const msg = document.getElementById("msg");
+  window.addEventListener("DOMContentLoaded", () => {
+    const chooseBtn = document.getElementById("chooseBtn");
+    const fileInput = document.getElementById("photoFiles");
+    const uploadBtn = document.getElementById("uploadBtn");
+    const publishBtn = document.getElementById("publishBtn");
+    const msg = document.getElementById("msg");
 
-  function setMsg(t) {
-    msg.textContent = t;
-  }
+    function setMsg(t) {
+      msg.textContent = t;
+    }
 
-  let uploadedUrls = [];
-  let uploading = false;
+    // --------- STATE ---------
+    let uploadedUrls = [];
+    let uploading = false;
 
-  function getVal(id) {
-    const el = document.getElementById(id);
-    return el ? el.value.trim() : "";
-  }
+    function v(id) {
+      const el = document.getElementById(id);
+      return el ? el.value.trim() : "";
+    }
 
-  function validateRequired() {
-    const required = [
-      ["category", "Category"],
-      ["brand", "Brand"],
-      ["model", "Model"],
-      ["year", "Year"],
-      ["price", "Price"],
-      ["description", "Description"],
-    ];
+    function validate() {
+      // këto i the që i do të detyrueshme
+      const required = [
+        ["category", "Category"],
+        ["brand", "Brand"],
+        ["model", "Model"],
+        ["year", "Year"],
+        ["price", "Price"],
+        ["description", "Description"]
+      ];
 
-    const missing = required.filter(([id]) => !getVal(id)).map(([, label]) => label);
-    if (missing.length) return ❌ Plotëso: ${missing.join(", ")};
-    if (uploadedUrls.length === 0) return "❌ Duhet të ngarkosh të paktën 1 foto (NGARKO FOTOT)";
-    return "";
-  }
+      const missing = required.filter(([id]) => !v(id)).map(([, label]) => label);
+      if (missing.length) return ❌ Plotëso: ${missing.join(", ")};
+      if (uploadedUrls.length === 0) return "❌ Së pari NGARKO FOTOT (që të kemi URL)";
+      return "";
+    }
 
-  function setBusy(isBusy) {
-    uploading = isBusy;
-    chooseBtn.disabled = isBusy;
-    uploadBtn.disabled = isBusy;
-    publishBtn.disabled = isBusy;
-  }
+    // --------- FILE PICKER (si e kishe) ---------
+    chooseBtn.addEventListener("click", () => fileInput.click());
 
-  // ✅ HAP FILE PICKER
-  chooseBtn.addEventListener("click", () => {
-    fileInput.click();
-  });
+    fileInput.addEventListener("change", () => {
+      uploadedUrls = []; // nëse zgjedh foto të reja, fshij URL-të e vjetra
+      setMsg("📂 U zgjodhën " + fileInput.files.length + " foto");
+    });
 
-  // ✅ KUR ZGJIDH FOTO
-  fileInput.addEventListener("change", () => {
-    uploadedUrls = []; // reset nëse zgjedh foto të reja
-    setMsg(📂 U zgjodhën ${fileInput.files.length} foto. Tani shtyp “NGARKO FOTOT”.);
-  });
+    // --------- UPLOAD REAL NË FIREBASE STORAGE ---------
+    uploadBtn.addEventListener("click", async () => {
+      const files = Array.from(fileInput.files || []);
+      if (files.length === 0) return setMsg("❌ Zgjidh foto fillimisht");
 
-  // ✅ NGARKO FOTO REAL NË STORAGE
-  uploadBtn.addEventListener("click", async () => {
-    const files = Array.from(fileInput.files || []);
-    if (files.length === 0) return setMsg("❌ Zgjidh foto fillimisht");
+      try {
+        uploading = true;
+        uploadedUrls = [];
+        setMsg(⏳ Duke ngarkuar në Firebase... 0/${files.length});
 
-    try {
-      setBusy(true);
-      uploadedUrls = [];
-      setMsg(⏳ Duke ngarkuar në Firebase... 0/${files.length});
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
 
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+          const uniqueName = ${Date.now()}_${Math.random().toString(16).slice(2)}_${file.name};
+          const storageRef = ref(storage, photos/${uniqueName});
 
-        const uniqueName = ${Date.now()}_${Math.random().toString(16).slice(2)}_${file.name};
-        const storageRef = ref(storage, photos/${uniqueName});
+          await uploadBytes(storageRef, file);
+          const url = await getDownloadURL(storageRef);
+          uploadedUrls.push(url);
 
-        await uploadBytes(storageRef, file);
-        const url = await getDownloadURL(storageRef);
-        uploadedUrls.push(url);
+          setMsg(⏳ Duke ngarkuar në Firebase... ${i + 1}/${files.length});
+        }
 
-        setMsg(⏳ Duke ngarkuar në Firebase... ${i + 1}/${files.length});
+        setMsg(✅ Foto u ngarkuan: ${uploadedUrls.length}. Tani plotëso fushat dhe shtyp PUBLISH.);
+      } catch (e) {
+        console.error(e);
+        setMsg("❌ Upload dështoi: " + (e.code || e.message));
+      } finally {
+        uploading = false;
       }
+    });
 
-      setMsg(✅ Foto u ngarkuan REAL: ${uploadedUrls.length}. Tani plotëso fushat dhe shtyp PUBLISH.);
-    } catch (e) {
-      console.error(e);
-      setMsg("❌ Upload dështoi: " + (e.code || e.message));
-    } finally {
-      setBusy(false);
-    }
-  });
+    // --------- PUBLISH REAL NË FIRESTORE + VALIDIM ---------
+    publishBtn.addEventListener("click", async () => {
+      if (uploading) return setMsg("⏳ Prit sa të mbarojë upload-i");
 
-  // ✅ PUBLISH REAL NË FIRESTORE (me validim)
-  publishBtn.addEventListener("click", async () => {
-    const err = validateRequired();
-    if (err) return setMsg(err);
-    if (uploading) return setMsg("⏳ Prit sa të mbarojë upload-i");
+      const err = validate();
+      if (err) return setMsg(err);
 
-    try {
-      setBusy(true);
-      setMsg("⏳ Duke publikuar në Firestore...");
+      try {
+        setMsg("⏳ Duke publikuar në Firestore...");
 
-      const docRef = await addDoc(collection(db, "posts"), {
-        category: getVal("category"),
-        brand: getVal("brand"),
-        model: getVal("model"),
-        ref: getVal("ref"),
-        year: Number(getVal("year") || 0),
-        material: getVal("material"),
-        case_size: Number(getVal("case_size") || 0),
-        condition: getVal("condition"),
-        price: Number(getVal("price") || 0),
-        box: getVal("box"),
-        working: getVal("working"),
-        description: getVal("description"),
-        photoUrls: uploadedUrls,
-        status: "pending",
-        createdAt: serverTimestamp()
-      });
+        const docRef = await addDoc(collection(db, "posts"), {
+          category: v("category"),
+          brand: v("brand"),
+          model: v("model"),
+          ref: v("ref"),
+          year: Number(v("year") || 0),
+          material: v("material"),
+          case_size: Number(v("case_size") || 0),
+          condition: v("condition"),
+          price: Number(v("price") || 0),
+          box: v("box"),
+          working: v("working"),
+          description: v("description"),
+          photoUrls: uploadedUrls,
+          status: "pending",
+          createdAt: serverTimestamp()
+        });
 
-      setMsg("✅ Publish REAL OK! DocID: " + docRef.id);
-
-      // reset opsional
-      fileInput.value = "";
-      uploadedUrls = [];
-    } catch (e) {
-      console.error(e);
-      setMsg("❌ Publish dështoi: " + (e.code || e.message));
-    } finally {
-      setBusy(false);
-    }
+        setMsg("✅ Publish REAL OK! DocID: " + docRef.id);
+      } catch (e) {
+        console.error(e);
+        setMsg("❌ Publish dështoi: " + (e.code || e.message));
+      }
+    });
   });
 </script>
+
 
 </body>
 </html>

@@ -140,64 +140,59 @@
   const msg = document.getElementById("msg");
   const photosPreview = document.getElementById("photosPreview");
 
-  if (!chooseBtn || !uploadBtn || !publishBtn || !photoFiles || !msg || !photosPreview) {
-    console.error("❌ Mungon ndonjë element (ID gabim?)");
-    return;
-  }
-
   const setMsg = (t) => { msg.textContent = t; };
 
-  // 1) Zgjidh foto
-  chooseBtn.onclick = () => {
+  // 1) Hap zgjedhjen e fotove
+  chooseBtn.addEventListener("click", () => {
     setMsg("👉 Po hap zgjedhjen e fotove...");
     photoFiles.click();
-  };
+  });
 
-  // 2) Kur zgjidhen foto
-  photoFiles.onchange = () => {
-    const n = photoFiles.files.length;
-    setMsg(📂 U zgjodhën ${n} foto);
+  // 2) Kur zgjidhen fotot (preview)
+  photoFiles.addEventListener("change", () => {
+    const files = [...photoFiles.files];
+    setMsg(`📂 U zgjodhën ${files.length} foto`);
     photosPreview.innerHTML = "";
 
-    [...photoFiles.files].forEach(f => {
+    files.forEach((f) => {
       const img = document.createElement("img");
       img.src = URL.createObjectURL(f);
+      img.style.width = "90px";
+      img.style.height = "90px";
+      img.style.objectFit = "cover";
+      img.style.borderRadius = "10px";
+      img.style.margin = "6px";
       img.onload = () => URL.revokeObjectURL(img.src);
       photosPreview.appendChild(img);
     });
-  };
+  });
 
-  // 3) Ngarko (vetëm mesazh për tani)
-  uploadBtn.onclick = () => {
+  // 3) NGARKO FOTOT (vetëm mesazh)
+  uploadBtn.addEventListener("click", () => {
     if (!photoFiles.files.length) return setMsg("❌ Zgjidh foto fillimisht");
-    setMsg(✅ Gati: ${photoFiles.files.length} foto (PUBLISH kur të duash));
-  };
+    setMsg(`✅ Gati: ${photoFiles.files.length} foto (PUBLISH për upload)`);
+  });
 
-  // 4) Publish (placeholder)
-  publishBtn.onclick = async (e) => {
-  e.preventDefault();     // ✅ ndalon submit/refresh
-  e.stopPropagation();    // ✅ ndalon event-e të tjera
+  // 4) PUBLISH = upload real (te upload.php)
+  publishBtn.addEventListener("click", async () => {
+    if (!photoFiles.files.length) return setMsg("❌ Zgjidh foto fillimisht");
 
-  try {
-    console.log("PUBLISH CLICKED");
-    setMsg("🟡 PUBLISH u klikua...");
+    setMsg("⏳ Duke ngarkuar...");
 
-    if (!photoFiles.files.length) {
-      setMsg("❌ Zgjidh foto fillimisht");
-      return;
+    const fd = new FormData();
+    [...photoFiles.files].forEach((f) => fd.append("photos[]", f));
+
+    try {
+      const res = await fetch("upload.php", { method: "POST", body: fd });
+      const txt = await res.text();
+      setMsg("✅ Upload OK: " + txt);
+    } catch (e) {
+      console.error(e);
+      setMsg("❌ Error upload (shiko Console)");
     }
-
-    // ✅ Këtu fut upload-in real (për moment vetëm test)
-    setMsg(`✅ OK: do publikoja ${photoFiles.files.length} foto`);
-    alert("PUBLISH OK (test)"); // vetëm për ta parë patjetër
-  } catch (err) {
-    console.error("PUBLISH ERROR:", err);
-    setMsg("❌ Error: " + (err?.message || err));
-    alert("ERROR: " + (err?.message || err));
-  }
-};
+  });
+})();
 </script>
-
   
 </body>
 </html>

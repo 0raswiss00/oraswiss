@@ -220,6 +220,16 @@ publishBtn.addEventListener("click", async () => {
 
   setMsg("⏳ Duke publikuar...");
 
+  
+publishBtn.addEventListener("click", async () => {
+
+  if (fileInput.files.length === 0) {
+    setMsg("❌ Duhet të ngarkosh foto");
+    return;
+  }
+
+  setMsg("⏳ Duke publikuar...");
+
   const photoURLs = await uploadPhotos(userId); // ✅ VETËM KËTU
 
   await addDoc(collection(db, "watches"), {
@@ -229,7 +239,7 @@ publishBtn.addEventListener("click", async () => {
     condition,
     price,
     material,
-    photos: photoURLs,   // ✅ E SAKTË
+    photos: photoURLs,
     status: "active",
     userId,
     createdAt: serverTimestamp()
@@ -237,6 +247,7 @@ publishBtn.addEventListener("click", async () => {
 
   setMsg("🚀 Publish OK me foto!");
 });
+
     
 </script>
 </body>

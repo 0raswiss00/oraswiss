@@ -141,64 +141,136 @@
 
   
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import {
-    getStorage, ref, uploadBytes, getDownloadURL
-  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
-  import {
-    getFirestore, collection, addDoc, serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "…",
-    authDomain: "oraswiss-27e57.firebaseapp.com",
-    projectId: "oraswiss-27e57",
-    storageBucket: "oraswiss-27e57.appspot.com",
-    messagingSenderId: "…",
-    appId: "…"
-  };
+const firebaseConfig = {
+  apiKey: "XXX",
+  authDomain: "oraswiss-27e57.firebaseapp.com",
+  projectId: "oraswiss-27e57",
+  storageBucket: "oraswiss-27e57.appspot.com",
+  appId: "XXX"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const storage = getStorage(app);
-  const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
+const db = getFirestore(app);
 
+// BUTONAT / INPUT
 const chooseBtn = document.getElementById("chooseBtn");
 const fileInput = document.getElementById("photoFiles");
 const uploadBtn = document.getElementById("uploadBtn");
 const publishBtn = document.getElementById("publishBtn");
 const msg = document.getElementById("msg");
 
-function setMsg(t) {
-  msg.textContent = t;
-}
+const setMsg = (t) => msg.textContent = t;
 
-// HAP FILE PICKER (FUNKSIONON NË IPHONE)
+// KU RUAHEN URL-TE E FOTOVE
+let uploadedPhotoURLs = [];
+
+/* 1) HAP FILE PICKER */
 chooseBtn.addEventListener("click", () => {
   fileInput.click();
 });
 
-// KUR ZGJIDH FOTO
+/* 2) KUR ZGJIDH FOTO */
 fileInput.addEventListener("change", () => {
+  uploadedPhotoURLs = []; // reset nqs ndryshon fotot
   setMsg("📂 U zgjodhën " + fileInput.files.length + " foto");
 });
 
-// NGARKO FOTO (TEST)
+/* 3) NGARKO FOTO REALISHT NE STORAGE */
 uploadBtn.addEventListener("click", async () => {
-  if (fileInput.files.length === 0) {
+  if (!fileInput.files || fileInput.files.length === 0) {
     setMsg("❌ Zgjidh foto fillimisht");
     return;
   }
 
-  setMsg("⏳ Duke ngarkuar...");
-  await new Promise(r => setTimeout(r, 1500));
-  setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
+  uploadedPhotoURLs = [];
+  setMsg("⏳ Duke ngarkuar fotot...");
+
+  try {
+    for (const file of fileInput.files) {
+      const path = watches/${Date.now()}_${file.name};
+      const storageRef = sRef(storage, path);
+
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+      uploadedPhotoURLs.push(url);
+    }
+
+    setMsg("✅ Foto u ngarkuan (" + uploadedPhotoURLs.length + ")");
+  } catch (e) {
+    console.error(e);
+    setMsg("❌ Gabim gjate upload te fotove");
+  }
 });
 
-// PUBLISH (VETËM TEST)
-publishBtn.addEventListener("click", () => {
-  setMsg("🚀 Publish OK");
-});
+/* 4) PUBLISH -> Shton dokumentin ne Firestore bashke me fotot */
+publishBtn.addEventListener("click", async () => {
+  // ⚠️ nqs do publish me foto
+  if (uploadedPhotoURLs.length === 0) {
+    setMsg("❌ Ngarko fotot (NGARKO FOTOT) para publish");
+    return;
+  }
 
+  // KETU merr vlerat nga input-et e tua (shembull)
+  const brand = document.getElementById("brand")?.value || "";
+  const model = document.getElementById("model")?.value || "";
+  const category = document.getElementById("category")?.value || "";
+  const condition = document.getElementById("condition")?.value || "";
+  const country = document.getElementById("country")?.value || "";
+  const material = document.getElementById("material")?.value || "";
+  const description = document.getElementById("description")?.value || "";
+
+  const price = Number(document.getElementById("price")?.value || 0);
+  const year = Number(document.getElementById("year")?.value || 0);
+  const caseSize = Number(document.getElementById("caseSize")?.value || 0);
+  const refCode = document.getElementById("ref")?.value || "";
+
+  // user info (ti i ke futur manualisht)
+  const userId = "QSFTjh6AddTjxgbTkR47mBpMjX2";
+  const email = "adicelaa899@gmail.com";
+  const fullName = "ardian cela";
+  const phone = "0692408065";
+
+  setMsg("⏳ Duke publikuar...");
+
+  try {
+    await addDoc(collection(db, "watches"), {
+      brand,
+      model,
+      category,
+      condition,
+      country,
+      material,
+      description,
+      price,
+      year,
+      caseSize,
+      ref: refCode,
+
+      photos: uploadedPhotoURLs,   // ✅ KJO ESHTE PIKA QE TE MUNGONTE
+
+      status: "pending",
+      userId,
+      email,
+      fullName,
+      phone,
+      createdAt: serverTimestamp()
+    });
+
+    setMsg("🚀 Publish OK ✅");
+    // reset
+    uploadedPhotoURLs = [];
+    fileInput.value = "";
+  } catch (e) {
+    console.error(e);
+    setMsg("❌ Gabim gjate publish");
+  }
+});
 </script>
+
 </body>
 </html>

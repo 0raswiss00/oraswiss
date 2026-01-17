@@ -3,153 +3,35 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sell Now</title>
+  <title>File Picker Test</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 16px; }
-    button { padding: 10px 14px; margin: 6px 0; }
-    #msg { margin-top: 10px; font-weight: 600; }
+    body { font-family: Arial, sans-serif; padding: 18px; }
+    button { padding: 12px 16px; font-size: 16px; }
+    #msg { margin-top: 12px; font-weight: 700; }
   </style>
 </head>
-
 <body>
 
-  <button id="chooseBtn" type="button">Upload Photos</button>
+  <button id="chooseBtn" type="button">ZGJIDH FOTO</button>
 
-  <!-- INPUT (hidden) -->
-  <input
-    id="photoFiles"
-    type="file"
-    accept="image/*"
-    multiple
-    style="position:absolute; left:-9999px;"
-  />
+  <input id="photoFiles" type="file" accept="image/*" multiple
+         style="position:absolute; left:-9999px;" />
 
   <div id="msg"></div>
 
-  <button id="uploadBtn" type="button">NGARKO FOTOT (TEST)</button>
-  <button id="publishBtn" type="button">PUBLISH</button>
-
-  <!-- SCRIPT NË FUND (SHUMË E RËNDËSISHME) -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
-
-    // ✅ Firebase config (vendos vlerat e tua)
-    const firebaseConfig = {
-      apiKey: "…",
-      authDomain: "oraswiss-27e57.firebaseapp.com",
-      projectId: "oraswiss-27e57",
-      storageBucket: "oraswiss-27e57.appspot.com",
-      messagingSenderId: "…",
-      appId: "…"
-    };
-
-    // ✅ Init
-    const app = initializeApp(firebaseConfig);
-    const storage = getStorage(app);
-    const db = getFirestore(app);
-
-    // ✅ DOM
+  <script>
     const chooseBtn = document.getElementById("chooseBtn");
     const fileInput = document.getElementById("photoFiles");
-    const uploadBtn = document.getElementById("uploadBtn");
-    const publishBtn = document.getElementById("publishBtn");
     const msg = document.getElementById("msg");
 
-    function setMsg(t) {
-      msg.textContent = t;
-    }
-
-    // ✅ TEST userId (më vonë e merr nga auth)
-    const userId = "testUser123";
-
-    // ✅ TEST të dhënat (zëvendëso me ato që merr nga forma)
-    const brand = "Test";
-    const model = "Test";
-    const category = "Test";
-    const condition = "Very Good";
-    const price = 100;
-    const material = "Steel";
-
-    async function uploadPhotos(uid) {
-      const urls = [];
-
-      // Siguri
-      if (!fileInput.files || fileInput.files.length === 0) return urls;
-
-      for (const file of fileInput.files) {
-        // ✅ BACKTICKS (shumë e rëndësishme)
-        const path = watches/${uid}/${Date.now()}_${file.name};
-        const storageRef = ref(storage, path);
-
-        await uploadBytes(storageRef, file);
-        const url = await getDownloadURL(storageRef);
-        urls.push(url);
-      }
-
-      return urls;
-    }
-
-    // ✅ HAP FILE PICKER (iPhone friendly)
     chooseBtn.addEventListener("click", () => {
       fileInput.click();
     });
 
-    // ✅ kur zgjidhen foto
     fileInput.addEventListener("change", () => {
-      setMsg(📂 U zgjodhën ${fileInput.files.length} foto);
+      msg.textContent = "✅ U zgjodhën " + fileInput.files.length + " foto";
     });
-
-    // ✅ TEST upload (vetëm tregon mesazh)
-    uploadBtn.addEventListener("click", async () => {
-      if (fileInput.files.length === 0) {
-        setMsg("❌ Zgjidh foto fillimisht");
-        return;
-      }
-      setMsg("⏳ Duke kontrolluar fotot...");
-      await new Promise(r => setTimeout(r, 400));
-      setMsg(✅ Gati (${fileInput.files.length}) — tani kliko PUBLISH);
-    });
-
-    // ✅ PUBLISH: upload + ruaj në Firestore
-    publishBtn.addEventListener("click", async () => {
-      try {
-        if (fileInput.files.length === 0) {
-          setMsg("❌ Duhet të zgjedhësh foto");
-          return;
-        }
-
-        setMsg("⏳ Duke ngarkuar fotot...");
-        const photoURLs = await uploadPhotos(userId);
-
-        setMsg("⏳ Duke ruajtur në database...");
-        await addDoc(collection(db, "watches"), {
-          brand,
-          model,
-          category,
-          condition,
-          price,
-          material,
-          photos: photoURLs,
-          status: "active",
-          userId,
-          createdAt: serverTimestamp()
-        });
-
-        setMsg("🚀 Publish OK me foto!");
-        // Optional: pastro input-in
-        // fileInput.value = "";
-      } catch (err) {
-        console.error(err);
-        setMsg("❌ Error: " + (err?.message || err));
-      }
-    });
-
-    // Debug i vogël
-    console.log("SCRIPT OK");
   </script>
 
 </body>
 </html>
-

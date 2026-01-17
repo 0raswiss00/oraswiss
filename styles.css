@@ -3099,29 +3099,17 @@ body{background:#000!important;color:#E6E6E6!important}
   z-index: 9999;
 }      
 
-/* ===== FORCE BUTTONS CLICKABLE ===== */
+/* FORCE CLICKS BACK */
+html, body { pointer-events: auto !important; }
+button, a, input, select, textarea { pointer-events: auto !important; }
 
-#chooseBtn,
-#uploadBtn,
-#publishBtn {
-  position: relative !important;
-  z-index: 2147483647 !important;
-  pointer-events: auto !important;
-}
-
-/* ÇAKTIVIZO çdo overlay transparent */
-.overlay,
-.modal,
-.modal-backdrop,
-.product-gallery-overlay,
-.lightbox {
+/* Kill common overlays/loaders that block clicks */
+.overlay, .backdrop, .modal-backdrop, .lightbox, .loader, .loading, .popup-overlay {
   pointer-events: none !important;
 }
 
-/* Sigurohu që forma nuk është e bllokuar */
-form,
-.form,
-.form-wrapper {
-  pointer-events: auto !important;
+/* Nëse overlay po mbulon faqen, bëje të padukshëm */
+.overlay, .modal-backdrop, .popup-overlay, .loader, .loading {
+  display: none !important;
 }
 

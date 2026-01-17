@@ -222,67 +222,40 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+
   const chooseBtn = document.getElementById("chooseBtn");
   const uploadBtn = document.getElementById("uploadBtn");
   const publishBtn = document.getElementById("publishBtn");
-  const fileInput = document.getElementById("photoFiles");
+  const photoFiles = document.getElementById("photoFiles");
   const msg = document.getElementById("msg");
-  const preview = document.getElementById("photosPreview");
+  const photosPreview = document.getElementById("photosPreview");
 
-  const setMsg = (t) => { if (msg) msg.textContent = t; };
-
-  if (!chooseBtn || !uploadBtn || !publishBtn || !fileInput) {
-    console.error("Mungon DOM:", { chooseBtn, uploadBtn, publishBtn, fileInput });
+  if (!chooseBtn || !photoFiles) {
+    console.error("❌ Butoni ose input nuk u gjet");
     return;
   }
 
-  chooseBtn.addEventListener("click", () => fileInput.click());
-
-  fileInput.addEventListener("change", () => {
-    const n = fileInput.files ? fileInput.files.length : 0;
-    setMsg(📂 U zgjodhën ${n} foto);
-
-    // Preview
-    if (preview) preview.innerHTML = "";
-    if (preview && n > 0) {
-      [...fileInput.files].slice(0, 12).forEach((f) => {
-        const img = document.createElement("img");
-        img.style.width = "90px";
-        img.style.height = "90px";
-        img.style.objectFit = "cover";
-        img.style.borderRadius = "10px";
-        img.style.border = "1px solid #333";
-        img.src = URL.createObjectURL(f);
-        img.onload = () => URL.revokeObjectURL(img.src);
-        preview.appendChild(img);
-      });
-      if (n > 12) {
-        const more = document.createElement("div");
-        more.textContent = +${n - 12} më shumë;
-        more.style.opacity = "0.8";
-        more.style.padding = "8px";
-        preview.appendChild(more);
-      }
-    }
+  chooseBtn.addEventListener("click", () => {
+    console.log("👉 Zgjidh Foto klikua");
+    photoFiles.click();
   });
 
-  uploadBtn.addEventListener("click", () => {
-    const n = fileInput.files ? fileInput.files.length : 0;
-    if (n === 0) return setMsg("❌ Zgjidh foto fillimisht");
-    setMsg(✅ Ke zgjedhur ${n} foto. Kliko PUBLISH për t’i ngarkuar.);
+  photoFiles.addEventListener("change", () => {
+    msg.textContent = 📂 U zgjodhën ${photoFiles.files.length} foto;
+    photosPreview.innerHTML = "";
+
+    [...photoFiles.files].forEach(file => {
+      const img = document.createElement("img");
+      img.src = URL.createObjectURL(file);
+      img.style.width = "80px";
+      img.style.borderRadius = "8px";
+      photosPreview.appendChild(img);
+    });
   });
 
-  publishBtn.addEventListener("click", async () => {
-    const n = fileInput.files ? fileInput.files.length : 0;
-    if (n === 0) return setMsg("❌ Zgjidh foto fillimisht");
-
-    // Kjo është vetëm UI; këtu fut upload-in tënd real
-    setMsg("⏳ Duke ngarkuar fotot...");
-    // ... uploadPhotos() ...
-    // setMsg("✅ Fotot u ngarkuan!");
-  });
 });
 </script>
+
   
 
 </body>

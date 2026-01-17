@@ -130,68 +130,96 @@
 
 <input id="photoFiles" type="file" accept="image/*" multiple class="hiddenFile">
 
-<script>
-(() => {
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "…",
+    authDomain: "oraswiss-27e57.firebaseapp.com",
+    projectId: "oraswiss-27e57",
+    storageBucket: "oraswiss-27e57.appspot.com",
+    messagingSenderId: "…",
+    appId: "…"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const storage = getStorage(app);
+  const db = getFirestore(app);
+
+  // DOM
   const chooseBtn = document.getElementById("chooseBtn");
-  const uploadBtn = document.getElementById("uploadBtn");
   const publishBtn = document.getElementById("publishBtn");
-  const photoFiles = document.getElementById("photoFiles");
+  const fileInput = document.getElementById("photoFiles");
   const msg = document.getElementById("msg");
-  const photosPreview = document.getElementById("photosPreview");
+  const preview = document.getElementById("photosPreview");
 
-  const setMsg = (t) => { msg.textContent = t; };
+  const setMsg = (t) => (msg.textContent = t);
 
-  // 1) Hap zgjedhjen e fotove
+  // 1) Zgjidh foto
   chooseBtn.addEventListener("click", () => {
-    setMsg("👉 Po hap zgjedhjen e fotove...");
-    photoFiles.click();
+    fileInput.click();
   });
 
-  // 2) Kur zgjidhen fotot (preview)
-  photoFiles.addEventListener("change", () => {
-    const files = [...photoFiles.files];
-    setMsg(`📂 U zgjodhën ${files.length} foto`);
-    photosPreview.innerHTML = "";
-
-    files.forEach((f) => {
+  // Preview + numri
+  fileInput.addEventListener("change", () => {
+    const n = fileInput.files.length;
+    setMsg(`📂 U zgjodhën ${n} foto`);
+    preview.innerHTML = "";
+    [...fileInput.files].forEach((f) => {
       const img = document.createElement("img");
       img.src = URL.createObjectURL(f);
-      img.style.width = "90px";
-      img.style.height = "90px";
-      img.style.objectFit = "cover";
-      img.style.borderRadius = "10px";
-      img.style.margin = "6px";
       img.onload = () => URL.revokeObjectURL(img.src);
-      photosPreview.appendChild(img);
+      preview.appendChild(img);
     });
   });
 
-  // 3) NGARKO FOTOT (vetëm mesazh)
-  uploadBtn.addEventListener("click", () => {
-    if (!photoFiles.files.length) return setMsg("❌ Zgjidh foto fillimisht");
-    setMsg(`✅ Gati: ${photoFiles.files.length} foto (PUBLISH për upload)`);
-  });
+  async function uploadPhotos(uid) {
+    const urls = [];
+    for (const file of fileInput.files) {
+      const path = `watches/${uid}/${Date.now()}_${file.name}`;
+      const storageRef = ref(storage, path);
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+      urls.push(url);
+    }
+    return urls;
+  }
 
-  // 4) PUBLISH = upload real (te upload.php)
+  // 2) PUBLISH = upload + firestore
   publishBtn.addEventListener("click", async () => {
-    if (!photoFiles.files.length) return setMsg("❌ Zgjidh foto fillimisht");
-
-    setMsg("⏳ Duke ngarkuar...");
-
-    const fd = new FormData();
-    [...photoFiles.files].forEach((f) => fd.append("photos[]", f));
-
     try {
-      const res = await fetch("upload.php", { method: "POST", body: fd });
-      const txt = await res.text();
-      setMsg("✅ Upload OK: " + txt);
-    } catch (e) {
-      console.error(e);
-      setMsg("❌ Error upload (shiko Console)");
+      if (!fileInput.files.length) {
+        setMsg("❌ Zgjidh foto fillimisht");
+        return;
+      }
+
+      publishBtn.disabled = true;
+      setMsg("⏳ Duke ngarkuar fotot në Firebase Storage...");
+
+      const userId = "testUser123"; // më vonë e lidh me auth
+      const photoURLs = await uploadPhotos(userId);
+
+      setMsg("⏳ Duke ruajtur në Firestore...");
+      await addDoc(collection(db, "watches"), {
+        photos: photoURLs,
+        status: "active",
+        userId,
+        createdAt: serverTimestamp()
+      });
+
+      setMsg("✅ Publish OK! Fotot u ngarkuan + u ruajtën në Firestore.");
+      fileInput.value = "";
+    } catch (err) {
+      console.error(err);
+      setMsg("❌ Error: " + (err?.message || err));
+    } finally {
+      publishBtn.disabled = false;
     }
   });
-})();
+
+  console.log("✅ Firebase upload script OK");
 </script>
-  
 </body>
 </html>

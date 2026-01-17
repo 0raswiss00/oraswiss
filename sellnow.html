@@ -127,7 +127,7 @@
   <button id="publishBtn" type="button">PUBLISH</button>
 </div>
 
-<!-- INPUT i fshehur (OK) -->
+
 <input
   id="photoFiles"
   type="file"
@@ -216,6 +216,24 @@
 })();
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const chooseBtn = document.getElementById("chooseBtn");
+  const photoFiles = document.getElementById("photoFiles");
+
+  if (!chooseBtn || !photoFiles) {
+    console.error("❌ chooseBtn ose photoFiles nuk u gjetën");
+    return;
+  }
+
+  chooseBtn.addEventListener("click", () => {
+    console.log("📸 Zgjidh Foto klikua");
+    photoFiles.click();
+  });
+});
+</script>
+
+  
 
 </body>
 </html>

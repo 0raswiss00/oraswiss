@@ -3089,10 +3089,6 @@ body{background:#000!important;color:#E6E6E6!important}
   pointer-events: auto !important;
 }
 
-* {
-  pointer-events: auto !important;
-}
-
  body{
   padding-bottom: calc(120px + env(safe-area-inset-bottom));
 }     
@@ -3111,3 +3107,33 @@ body{background:#000!important;color:#E6E6E6!important}
   z-index: 999999;
   pointer-events: auto;
 }
+
+/* Mos lejo pseudo-elementet të hanë klikime */
+*::before,
+*::after{
+  pointer-events: none !important;
+}
+
+/* Nëse ke ndonjë overlay/backdrop */
+.overlay,
+.modal,
+.modal-backdrop,
+.product-gallery-overlay,
+.lightbox{
+  pointer-events: none !important;
+}
+
+/* Por brenda modal/lightbox lejo klikimet (nëse i përdor) */
+.modal *,
+.lightbox *{
+  pointer-events: auto !important;
+}
+#chooseBtn,
+#uploadBtn,
+#publishBtn{
+  position: relative !important;
+  z-index: 2147483647 !important;
+  pointer-events: auto !important;
+}
+
+      

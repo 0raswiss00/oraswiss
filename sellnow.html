@@ -191,16 +191,29 @@ fileInput.addEventListener("change", () => {
   setMsg("📂 U zgjodhën " + fileInput.files.length + " foto");
 });
 
-// NGARKO FOTO (TEST)
+let photoUrls = [];
+
 uploadBtn.addEventListener("click", async () => {
   if (fileInput.files.length === 0) {
     setMsg("❌ Zgjidh foto fillimisht");
     return;
   }
 
-  setMsg("⏳ Duke ngarkuar...");
-  await new Promise(r => setTimeout(r, 1500));
-  setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
+  setMsg("⏳ Duke ngarkuar fotot...");
+  photoUrls = [];
+
+  for (const file of fileInput.files) {
+    const storageRef = ref(
+      storage,
+      watches/${Date.now()}_${file.name}
+    );
+
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    photoUrls.push(url);
+  }
+
+  setMsg("✅ Foto u ngarkuan (" + photoUrls.length + ")");
 });
 
 publishBtn.addEventListener("click", async () => {

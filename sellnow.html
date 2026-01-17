@@ -210,17 +210,7 @@ uploadBtn.addEventListener("click", async () => {
   await new Promise(r => setTimeout(r, 1500));
   setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
 });
-
-publishBtn.addEventListener("click", async () => {
-
-  if (fileInput.files.length === 0) {
-    setMsg("❌ Duhet të ngarkosh foto");
-    return;
-  }
-
-  setMsg("⏳ Duke publikuar...");
-
-  
+ 
 publishBtn.addEventListener("click", async () => {
 
   if (fileInput.files.length === 0) {
@@ -247,8 +237,7 @@ publishBtn.addEventListener("click", async () => {
 
   setMsg("🚀 Publish OK me foto!");
 });
-
-    
+   
 </script>
 </body>
 </html>

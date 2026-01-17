@@ -3106,12 +3106,13 @@ button, a, input, select, textarea { pointer-events: auto !important; }
 
 .hiddenFile{
   position: fixed;
-  top: -1000px;
-  left: -1000px;
+  left: -9999px;
+  top: -9999px;
   width: 1px;
   height: 1px;
   opacity: 0;
 }
+
 #photosPreview img{
   width: 80px;
   height: 80px;

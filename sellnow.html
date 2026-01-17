@@ -194,10 +194,26 @@ uploadBtn.addEventListener("click", async () => {
   setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
 });
 
-// PUBLISH (VETËM TEST)
-publishBtn.addEventListener("click", () => {
-  setMsg("🚀 Publish OK");
-});
+publishBtn.addEventListener("click", async () => {
+  try {
+    setMsg("⏳ Duke publikuar...");
+
+    await addDoc(collection(db, "watches"), {
+      brand,
+      model,
+      category,
+      ref,
+      year,
+      material,
+      caseSize,
+      condition,
+      price,
+
+      status: "active",
+      userId: "QSFTjh6AddTjxgbTkR47mBpMjX2",
+
+      createdAt: serverTimestamp() // ✅ KJO ËSHTË E SAKTË
+    });
 
 </script>
 </body>

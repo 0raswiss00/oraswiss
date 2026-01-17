@@ -121,7 +121,6 @@
   
 
 <!-- BUTONI QË KLIKOHET -->
-<!-- BUTONI QË KLIKOHET -->
 <button id="chooseBtn" type="button">Upload Photos</button>
 
 <!-- INPUT (JO display:none) -->
@@ -138,7 +137,9 @@
 <button id="uploadBtn" type="button">NGARKO FOTOT</button>
 
 <button id="publishBtn" type="button">PUBLISH</button>
- 
+  
+
+  
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
   import {
@@ -147,7 +148,7 @@
   import {
     getFirestore, collection, addDoc, serverTimestamp
   } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
-  let imageUrls = [];
+
   const firebaseConfig = {
     apiKey: "…",
     authDomain: "oraswiss-27e57.firebaseapp.com",
@@ -188,42 +189,16 @@ uploadBtn.addEventListener("click", async () => {
     return;
   }
 
-for (const file of fileInput.files) {
-  const imageRef = ref(storage, watches/${Date.now()}-${file.name});
-  await uploadBytes(imageRef, file);
-  const url = await getDownloadURL(imageRef);
-  imageUrls.push(url);
-}
-  
   setMsg("⏳ Duke ngarkuar...");
   await new Promise(r => setTimeout(r, 1500));
   setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
 });
 
-publishBtn.addEventListener("click", async () => {
-  if (imageUrls.length === 0) {
-    setMsg("❌ Ngarko fotot para Publish");
-    return;
-  }
-
-  await addDoc(collection(db, "watches"), {
-    brand,
-    model,
-    price,
-    description,
-    material,
-    condition,
-    year,
-    userId,
-    status: "pending",
-    images: imageUrls,
-    createdAt: serverTimestamp()
-  });
-
+// PUBLISH (VETËM TEST)
+publishBtn.addEventListener("click", () => {
   setMsg("🚀 Publish OK");
 });
-  
+
 </script>
 </body>
 </html>
-

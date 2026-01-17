@@ -182,34 +182,21 @@ fileInput.addEventListener("change", () => {
   setMsg("📂 U zgjodhën " + fileInput.files.length + " foto");
 });
 
-  setMsg("✅ Foto u ngarkuan (" + photoUrls.length + ")");
-});
-
-publishBtn.addEventListener("click", async () => {
-  try {
-    setMsg("⏳ Duke publikuar...");
-await addDoc(collection(db, "watches"), {
-  brand,
-  model,
-  category,
-  ref,
-  year,
-  material,
-  caseSize,
-  condition,
-  price,
-
-  status: "active",
-  userId: "QSFTjh6AddTjxgbTkR47mBpMjX2",
-
-  createdAt: serverTimestamp() // ✅ KJO ËSHTË ZGJIDHJA
-});
-
-    setMsg("✅ Publish OK");
-  } catch (err) {
-    console.error(err);
-    setMsg("❌ Gabim gjate publish");
+// NGARKO FOTO (TEST)
+uploadBtn.addEventListener("click", async () => {
+  if (fileInput.files.length === 0) {
+    setMsg("❌ Zgjidh foto fillimisht");
+    return;
   }
+
+  setMsg("⏳ Duke ngarkuar...");
+  await new Promise(r => setTimeout(r, 1500));
+  setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
+});
+
+// PUBLISH (VETËM TEST)
+publishBtn.addEventListener("click", () => {
+  setMsg("🚀 Publish OK");
 });
 
 </script>

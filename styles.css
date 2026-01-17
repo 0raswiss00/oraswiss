@@ -3104,3 +3104,19 @@ button, a, input, select, textarea { pointer-events: auto !important; }
   display: none !important;
 }
 
+.hiddenFile{
+  position: fixed;
+  top: -1000px;
+  left: -1000px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+#photosPreview img{
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #333;
+  margin: 6px 6px 0 0;
+}

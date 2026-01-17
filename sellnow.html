@@ -22,20 +22,11 @@
   .ok{color:#25D366}
   .bad{color:#ff6b6b}
 
-#chooseBtn, #uploadBtn, #publishBtn {
-  position: relative;
-  z-index: 999999;
-  pointer-events: auto;
-}
   /* extra */
   body { padding: 16px; font-family: system-ui, -apple-system, BlinkMacSystemFont; }
   .btn { padding: 14px 18px; font-size: 16px; border-radius: 8px; }
   #photosPreview img { width: 120px; height: auto; margin: 8px; border-radius: 6px; }
 
-  body {
-    padding-bottom: 150px;
-  }
-  
   .logo-center{
     display:flex;
     justify-content:center;
@@ -190,28 +181,6 @@ chooseBtn.addEventListener("click", () => {
 fileInput.addEventListener("change", () => {
   setMsg("📂 U zgjodhën " + fileInput.files.length + " foto");
 });
-
-let photoUrls = [];
-
-uploadBtn.addEventListener("click", async () => {
-  if (fileInput.files.length === 0) {
-    setMsg("❌ Zgjidh foto fillimisht");
-    return;
-  }
-
-  setMsg("⏳ Duke ngarkuar fotot...");
-  photoUrls = [];
-
-  for (const file of fileInput.files) {
-    const storageRef = ref(
-      storage,
-      watches/${Date.now()}_${file.name}
-    );
-
-    await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(storageRef);
-    photoUrls.push(url);
-  }
 
   setMsg("✅ Foto u ngarkuan (" + photoUrls.length + ")");
 });

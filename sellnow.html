@@ -199,6 +199,24 @@ publishBtn.addEventListener("click", () => {
   setMsg("🚀 Publish OK");
 });
 
+await addDoc(collection(db, "watches"), {
+  brand,
+  model,
+  category,
+  ref,
+  year,
+  material,
+  caseSize,
+  condition,
+  price,
+
+  status: "active",
+  userId: "QSFTjh6AddTjxgbTkR47mBpMjX2",
+
+  createdAt: serverTimestamp() // ✅ KJO ËSHTË ZGJIDHJA
+});
+
+  
 </script>
 </body>
 </html>

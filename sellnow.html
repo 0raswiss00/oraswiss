@@ -139,116 +139,83 @@
 <div id="msg" style="margin-top:10px;"></div>
 
 <script>
-/**
- * PUBLISH DEBUG + FIX
- * - logs clicks
- * - detects element covering #publishBtn
- * - forces #publishBtn on top
- * - disables the covering element temporarily
- */
-(function () {
-  const PUBLISH_ID = "publishBtn";
-
-  function cssForcePublish() {
-    const btn = document.getElementById(PUBLISH_ID);
-    if (!btn) return;
-
-    btn.style.position = "fixed";
-    btn.style.bottom = "20px";
-    btn.style.left = "20px";
-    btn.style.zIndex = "2147483647";
-    btn.style.pointerEvents = "auto";
-    btn.style.opacity = "1";
-    btn.style.transform = "translateZ(0)"; // helps on some browsers
+(() => {
+  function desc(el){
+    if(!el) return "null";
+    const id = el.id ? "#"+el.id : "";
+    const cls = el.className ? "."+String(el.className).trim().split(/\s+/).join(".") : "";
+    return el.tagName + id + cls;
   }
 
-  function elementOnTopOfPublish() {
-    const btn = document.getElementById(PUBLISH_ID);
-    if (!btn) return null;
-    const r = btn.getBoundingClientRect();
-    return document.elementFromPoint(r.left + 5, r.top + 5);
+  function isFullScreenBlocker(el){
+    const st = getComputedStyle(el);
+    if (st.pointerEvents === "none") return false;
+    if (st.display === "none" || st.visibility === "hidden") return false;
+
+    const posOk = (st.position === "fixed" || st.position === "absolute");
+    if (!posOk) return false;
+
+    const r = el.getBoundingClientRect();
+    const covers =
+      r.width >= window.innerWidth - 5 &&
+      r.height >= window.innerHeight - 5 &&
+      r.left <= 2 && r.top <= 2;
+
+    if (!covers) return false;
+
+    const z = Number(st.zIndex);
+    if (!Number.isFinite(z)) return true; // z-index:auto por fixed fullscreen prap mund të bllokojë
+    return z >= 10;
   }
 
-  function describeEl(el) {
-    if (!el) return "null";
-    const id = el.id ? #${el.id} : "";
-    const cls = el.className ? .${String(el.className).trim().split(/\s+/).join(".")} : "";
-    return ${el.tagName}${id}${cls};
+  function findBlockers(){
+    const all = Array.from(document.querySelectorAll("body *"));
+    const blockers = all.filter(isFullScreenBlocker);
+
+    blockers.sort((a,b) => {
+      const za = Number(getComputedStyle(a).zIndex); 
+      const zb = Number(getComputedStyle(b).zIndex);
+      return (Number.isFinite(zb)?zb:0) - (Number.isFinite(za)?za:0);
+    });
+
+    console.log("FULLSCREEN BLOCKERS:", blockers.map(desc));
+    return blockers;
   }
 
-  function disableCoveringEl(el) {
-    if (!el) return;
-    // Mos e çaktivizo vet butonin
-    if (el.id === PUBLISH_ID) return;
-
-    console.warn("Disabling covering element:", el);
-    // ruaj vlerat e vjetra
-    el.__oldPointerEvents = el.style.pointerEvents;
-    el.__oldDisplay = el.style.display;
-    el.__oldVisibility = el.style.visibility;
-
-    // mënyra më e sigurt: çaktivizo klikimet mbi të
+  function disable(el){
     el.style.pointerEvents = "none";
+    el.style.display = "none";
+    el.style.visibility = "hidden";
   }
 
-  function runReport() {
-    const btn = document.getElementById(PUBLISH_ID);
-    console.log("publishBtn exists?", !!btn, btn);
-
-    if (!btn) {
-      alert("❌ Nuk u gjet #publishBtn. Kontrollo id-në.");
-      return;
-    }
-
-    cssForcePublish();
-
-    const topEl = elementOnTopOfPublish();
-    console.log("ELEMENT ON TOP OF PUBLISH:", topEl, describeEl(topEl));
-
-    if (topEl && topEl !== btn) {
-      alert("⚠️ Sipër PUBLISH është: " + describeEl(topEl) + "\nPo e çaktivizoj përkohësisht (pointer-events:none).");
-      disableCoveringEl(topEl);
-
-      // kontrollo prap
-      setTimeout(() => {
-        const top2 = elementOnTopOfPublish();
-        console.log("AFTER DISABLE, TOP IS:", top2, describeEl(top2));
-      }, 50);
-    } else {
-      alert("✅ PUBLISH është në krye (s'ka overlay sipër).");
-    }
-  }
-
-  // Log çdo klikim (capture)
-  document.addEventListener(
-    "click",
-    (e) => {
-      // tregojmë target-in e klikimit
-      console.log("CLICK:", e.target, describeEl(e.target));
-    },
-    true
-  );
-
-  // Kur ngarkohet faqja, bëj report
   window.addEventListener("load", () => {
-    // krijo një buton të vogël DEBUG në cep
-    const dbg = document.createElement("button");
-    dbg.type = "button";
-    dbg.textContent = "DEBUG PUBLISH";
-    dbg.style.position = "fixed";
-    dbg.style.bottom = "20px";
-    dbg.style.right = "20px";
-    dbg.style.zIndex = "2147483647";
-    dbg.style.pointerEvents = "auto";
-    dbg.style.padding = "10px";
-    dbg.onclick = runReport;
-    document.body.appendChild(dbg);
+    // 1) Gjej bllokuesit fullscreen
+    const blockers = findBlockers();
 
-    // bëje një herë automatikisht
-    runReport();
+    // 2) Trego çfarë është sipër butonit PUBLISH
+    const btn = document.getElementById("publishBtn");
+    if (btn) {
+      const r = btn.getBoundingClientRect();
+      const topEl = document.elementFromPoint(r.left + 5, r.top + 5);
+      console.log("ON TOP OF #publishBtn:", desc(topEl), topEl);
+
+      // 3) Nëse s’është vet butoni, çaktivizo elementin sipër
+      if (topEl && topEl !== btn) {
+        console.warn("DISABLING TOP ELEMENT:", desc(topEl));
+        disable(topEl);
+        alert("E gjeta çfarë e bllokonte: " + desc(topEl) + " — e çaktivizova. Provo tani butonat.");
+      }
+    }
+
+    // 4) Nëse ka blockers, çaktivizo të parin (më shpesh mjafton)
+    if (blockers.length) {
+      console.warn("DISABLING BLOCKER:", desc(blockers[0]));
+      disable(blockers[0]);
+    }
   });
 })();
 </script>
+
 
 </body>
 </html>

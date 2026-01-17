@@ -138,114 +138,117 @@
 
 <div id="msg" style="margin-top:10px;"></div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+<script>
+/**
+ * PUBLISH DEBUG + FIX
+ * - logs clicks
+ * - detects element covering #publishBtn
+ * - forces #publishBtn on top
+ * - disables the covering element temporarily
+ */
+(function () {
+  const PUBLISH_ID = "publishBtn";
 
-  const firebaseConfig = {
-    apiKey: "…",
-    authDomain: "oraswiss-27e57.firebaseapp.com",
-    projectId: "oraswiss-27e57",
-    storageBucket: "oraswiss-27e57.appspot.com",
-    messagingSenderId: "…",
-    appId: "…"
-  };
+  function cssForcePublish() {
+    const btn = document.getElementById(PUBLISH_ID);
+    if (!btn) return;
 
-  const app = initializeApp(firebaseConfig);
-  const storage = getStorage(app);
-  const db = getFirestore(app);
-
-  const chooseBtn = document.getElementById("chooseBtn");
-  const uploadBtn = document.getElementById("uploadBtn");
-  const publishBtn = document.getElementById("publishBtn");
-  const fileInput = document.getElementById("photoFiles");
-  const msg = document.getElementById("msg");
-
-  const setMsg = (t) => (msg.textContent = t);
-
-  // Merr vlera nga input-at e formës (nëse i ke)
-  const val = (id) => (document.getElementById(id)?.value ?? "").trim();
-
-  // TODO: zëvendësoje me UID real nga auth
-  const userId = "testUser123";
-
-  async function uploadPhotos(uid) {
-    const urls = [];
-    const files = Array.from(fileInput.files || []);
-
-    for (const file of files) {
-      const path = watches/${uid}/${Date.now()}_${file.name};
-      const storageRef = ref(storage, path);
-
-      await uploadBytes(storageRef, file);
-      const url = await getDownloadURL(storageRef);
-      urls.push(url);
-    }
-    return urls;
+    btn.style.position = "fixed";
+    btn.style.bottom = "20px";
+    btn.style.left = "20px";
+    btn.style.zIndex = "2147483647";
+    btn.style.pointerEvents = "auto";
+    btn.style.opacity = "1";
+    btn.style.transform = "translateZ(0)"; // helps on some browsers
   }
 
-  // 1) Zgjidh foto
-  chooseBtn.addEventListener("click", () => fileInput.click());
+  function elementOnTopOfPublish() {
+    const btn = document.getElementById(PUBLISH_ID);
+    if (!btn) return null;
+    const r = btn.getBoundingClientRect();
+    return document.elementFromPoint(r.left + 5, r.top + 5);
+  }
 
-  fileInput.addEventListener("change", () => {
-    const n = fileInput.files?.length ?? 0;
-    setMsg(📂 U zgjodhën ${n} foto);
-  });
+  function describeEl(el) {
+    if (!el) return "null";
+    const id = el.id ? #${el.id} : "";
+    const cls = el.className ? .${String(el.className).trim().split(/\s+/).join(".")} : "";
+    return ${el.tagName}${id}${cls};
+  }
 
-  // 2) Vetëm kontroll
-  uploadBtn.addEventListener("click", () => {
-    const n = fileInput.files?.length ?? 0;
-    if (n === 0) return setMsg("❌ Zgjidh foto fillimisht");
-    setMsg(✅ Gati (${n}) — kliko PUBLISH për upload + ruajtje);
-  });
+  function disableCoveringEl(el) {
+    if (!el) return;
+    // Mos e çaktivizo vet butonin
+    if (el.id === PUBLISH_ID) return;
 
-  // 3) Publish = upload + firestore
-  publishBtn.addEventListener("click", async () => {
-    try {
-      const n = fileInput.files?.length ?? 0;
-      if (n === 0) return setMsg("❌ Duhet të zgjedhësh foto");
+    console.warn("Disabling covering element:", el);
+    // ruaj vlerat e vjetra
+    el.__oldPointerEvents = el.style.pointerEvents;
+    el.__oldDisplay = el.style.display;
+    el.__oldVisibility = el.style.visibility;
 
-      // (opsionale) mos lejo double click
-      publishBtn.disabled = true;
-      publishBtn.textContent = "DUKE PUBLIKUAR...";
+    // mënyra më e sigurt: çaktivizo klikimet mbi të
+    el.style.pointerEvents = "none";
+  }
 
-      setMsg("⏳ Duke ngarkuar fotot...");
-      const photoURLs = await uploadPhotos(userId);
+  function runReport() {
+    const btn = document.getElementById(PUBLISH_ID);
+    console.log("publishBtn exists?", !!btn, btn);
 
-      const brand = val("brand");
-      const model = val("model");
-      const category = val("category");
-      const condition = val("condition");
-      const material = val("material");
-      const priceRaw = val("price");
-      const price = priceRaw ? Number(priceRaw) : null;
-
-      setMsg("⏳ Duke ruajtur në Firestore...");
-      await addDoc(collection(db, "watches"), {
-        brand,
-        model,
-        category,
-        condition,
-        material,
-        price,
-        photos: photoURLs,
-        status: "active",
-        userId,
-        createdAt: serverTimestamp()
-      });
-
-      setMsg("🚀 Publish OK me foto!");
-    } catch (err) {
-      console.error(err);
-      setMsg("❌ Error: " + (err?.message || err));
-    } finally {
-      publishBtn.disabled = false;
-      publishBtn.textContent = "PUBLISH";
+    if (!btn) {
+      alert("❌ Nuk u gjet #publishBtn. Kontrollo id-në.");
+      return;
     }
-  });
 
-  console.log("SCRIPT OK");
+    cssForcePublish();
+
+    const topEl = elementOnTopOfPublish();
+    console.log("ELEMENT ON TOP OF PUBLISH:", topEl, describeEl(topEl));
+
+    if (topEl && topEl !== btn) {
+      alert("⚠️ Sipër PUBLISH është: " + describeEl(topEl) + "\nPo e çaktivizoj përkohësisht (pointer-events:none).");
+      disableCoveringEl(topEl);
+
+      // kontrollo prap
+      setTimeout(() => {
+        const top2 = elementOnTopOfPublish();
+        console.log("AFTER DISABLE, TOP IS:", top2, describeEl(top2));
+      }, 50);
+    } else {
+      alert("✅ PUBLISH është në krye (s'ka overlay sipër).");
+    }
+  }
+
+  // Log çdo klikim (capture)
+  document.addEventListener(
+    "click",
+    (e) => {
+      // tregojmë target-in e klikimit
+      console.log("CLICK:", e.target, describeEl(e.target));
+    },
+    true
+  );
+
+  // Kur ngarkohet faqja, bëj report
+  window.addEventListener("load", () => {
+    // krijo një buton të vogël DEBUG në cep
+    const dbg = document.createElement("button");
+    dbg.type = "button";
+    dbg.textContent = "DEBUG PUBLISH";
+    dbg.style.position = "fixed";
+    dbg.style.bottom = "20px";
+    dbg.style.right = "20px";
+    dbg.style.zIndex = "2147483647";
+    dbg.style.pointerEvents = "auto";
+    dbg.style.padding = "10px";
+    dbg.onclick = runReport;
+    document.body.appendChild(dbg);
+
+    // bëje një herë automatikisht
+    runReport();
+  });
+})();
 </script>
+
 </body>
 </html>

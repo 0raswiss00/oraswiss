@@ -172,6 +172,23 @@ function setMsg(t) {
   msg.textContent = t;
 }
 
+async function uploadPhotos(userId) {
+  const urls = [];
+
+  for (let file of fileInput.files) {
+    const storageRef = ref(
+      storage,
+      watches/${userId}/${Date.now()}_${file.name}
+    );
+
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    urls.push(url);
+  }
+
+  return urls;
+}
+  
 // HAP FILE PICKER (FUNKSIONON NË IPHONE)
 chooseBtn.addEventListener("click", () => {
   fileInput.click();
@@ -194,26 +211,31 @@ uploadBtn.addEventListener("click", async () => {
   setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
 });
 
-// PUBLISH (VETËM TEST)
-publishBtn.addEventListener("click", () => {
-  setMsg("🚀 Publish OK");
-});
- 
-await addDoc(collection(db, "watches"), {
-  brand,
-  model,
-  category,
-  ref,
-  year,
-  material,
-  caseSize,
-  condition,
-  price,
+publishBtn.addEventListener("click", async () => {
 
-  status: "active",
-  userId: "QSFTjh6AddTjxgbTkR47mBpMjX2",
+  if (fileInput.files.length === 0) {
+    setMsg("❌ Duhet të ngarkosh foto");
+    return;
+  }
 
-  createdAt: serverTimestamp() // ✅ KJO ËSHTË ZGJIDHJA
+  setMsg("⏳ Duke publikuar...");
+
+  const photoURLs = await uploadPhotos(userId); // ✅ VETËM KËTU
+
+  await addDoc(collection(db, "watches"), {
+    brand,
+    model,
+    category,
+    condition,
+    price,
+    material,
+    photos: photoURLs,   // ✅ E SAKTË
+    status: "active",
+    userId,
+    createdAt: serverTimestamp()
+  });
+
+  setMsg("🚀 Publish OK me foto!");
 });
     
 </script>

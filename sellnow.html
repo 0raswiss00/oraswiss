@@ -1,276 +1,160 @@
 <!doctype html>
 <html lang="sq">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shto orë (sell now)</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="admin.css">
- 
-<style>
-  body{font-family:Arial,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:20px}
-  .wrap{max-width:900px;margin:0 auto}
-  .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  @media(max-width:820px){.row{grid-template-columns:1fr}}
-  label{display:block;margin:12px 0 6px;color:#ddd}
-  input,select,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #333;background:#111;color:#fff}
-  textarea{min-height:90px}
-  .btn{margin-top:14px;padding:12px 14px;border-radius:12px;border:1px solid #2a2a2a;background:#0f0f0f;color:#fff;cursor:pointer}
-  .btn:hover{background:#1a1a1a}
-  .note{opacity:.85;font-size:13px;margin-top:8px;line-height:1.4}
-  .ok{color:#25D366}
-  .bad{color:#ff6b6b}
-
-  /* extra */
-  body { padding: 16px; font-family: system-ui, -apple-system, BlinkMacSystemFont; }
-  .btn { padding: 14px 18px; font-size: 16px; border-radius: 8px; }
-  #photosPreview img { width: 120px; height: auto; margin: 8px; border-radius: 6px; }
-
-  .logo-center{
-    display:flex;
-    justify-content:center;
-    margin: 10px 0 30px;
-  }
-  .logo-center img{
-    height: 200px;
-  }
-</style>
-    
-     
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sell Now</title>
+  <style>
+    #chooseBtn { cursor: pointer; display: inline-block; padding: 10px 14px; border: 1px solid #ccc; }
+    button { padding: 10px 14px; margin-left: 6px; }
+    #msg { margin-top: 10px; font-family: Arial, sans-serif; }
+  </style>
 </head>
+<body>
 
-<body class="sell-page">
-<div class="wrap">
+  <!-- shembull input-esh (nqs i ke ndryshe, ndrysho vetëm id-të këtu ose poshtë te JS) -->
+  <input id="brand" placeholder="Brand" />
+  <input id="model" placeholder="Model" />
+  <input id="category" placeholder="Category" />
+  <input id="ref" placeholder="Ref" />
+  <input id="year" type="number" placeholder="Year" />
+  <input id="material" placeholder="Material" />
+  <input id="caseSize" type="number" placeholder="Case Size" />
+  <input id="condition" placeholder="Condition" />
+  <input id="price" type="number" placeholder="Price" />
+  <input id="country" placeholder="Country" />
+  <input id="fullName" placeholder="Full Name" />
+  <input id="email" placeholder="Email" />
+  <input id="phone" placeholder="Phone" />
+  <textarea id="description" placeholder="Description"></textarea>
 
-  <!-- ✅ LOGO NË MES (SIPËR) -->
-  <div class="logo-center">
-    <img src="images/oraswiss-logo.png" alt="OraSwiss Logo">
-  </div>
+  <br><br>
 
-  <div class="top">
-    <h2 style="margin:0">Shto orë (sell now)</h2>
-    <button class="btn" type="button" onclick="history.back()">← Back</button>
-  </div>
+  <!-- ✅ KJO E HAP FILE PICKER 100% -->
+  <label id="chooseBtn" for="photoFiles">Upload Photos</label>
+  <input id="photoFiles" type="file" accept="image/*" multiple style="display:none;" />
 
-  <div class="note">
-    1) Kliko <b>Upload Photos</b> (ngarkon fotot dhe mbush automatikisht URL-të)<br/>
-    2) Plotëso fushat<br/>
-    3) Kliko <b>PUBLISH</b> → shkon në Supabase me status <b>pending</b>
-  </div>
+  <button id="uploadBtn" type="button">NGARKO FOTOT</button>
+  <button id="publishBtn" type="button">PUBLISH</button>
 
-  <label>Category</label>
-  <select id="category">
-    <option value="luxury">Luxury</option>
-    <option value="vintage" selected>Vintage</option>
-    <option value="parts">Parts</option>
-  </select>
+  <div id="msg"></div>
 
-  <div class="row">
-    <div><label>Brand</label><input id="brand" placeholder="Omega"></div>
-    <div><label>Model</label><input id="model" placeholder="Seamaster"></div>
-  </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-  <div class="row">
-    <div><label>Ref</label><input id="ref" placeholder="2400-4"></div>
-    <div><label>Year</label><input id="year" type="number" placeholder="1999"></div>
-  </div>
+    const firebaseConfig = {
+      apiKey: "…",
+      authDomain: "oraswiss-27e57.firebaseapp.com",
+      projectId: "oraswiss-27e57",
+      storageBucket: "oraswiss-27e57.appspot.com",
+      messagingSenderId: "…",
+      appId: "…"
+    };
 
-  <div class="row">
-    <div><label>Material</label><input id="material" placeholder="Steel"></div>
-    <div><label>Case Size (mm)</label><input id="case_size" type="number" placeholder="35"></div>
-  </div>
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);
+    const db = getFirestore(app);
 
-  <div class="row">
-    <div>
-      <label>Condition</label>
-      <select id="condition">
-        <option>New</option>
-        <option>Like New</option>
-        <option selected>Very Good</option>
-        <option>Good</option>
-        <option>Used - Fair</option>
-      </select>
-    </div>
-    <div><label>Price (€)</label><input id="price" type="number" placeholder="900"></div>
-  </div>
+    const fileInput = document.getElementById("photoFiles");
+    const uploadBtn = document.getElementById("uploadBtn");
+    const publishBtn = document.getElementById("publishBtn");
+    const msg = document.getElementById("msg");
 
-  <div class="row">
-    <div>
-      <label>Box & Papers</label>
-      <select id="box">
-        <option value="">Nuk e di</option>
-        <option value="fullset">Box & Papers</option>
-        <option value="box_only">Vetëm Box</option>
-        <option value="papers_only">Vetëm Papers</option>
-        <option value="none">Pa Box / Papers</option>
-      </select>
-    </div>
-    <div>
-      <label>Working</label>
-      <select id="working">
-        <option value="">Nuk e di</option>
-        <option value="working">Working</option>
-        <option value="not_working">Not working</option>
-      </select>
-    </div>
-  </div>
+    const el = (id) => document.getElementById(id);
 
-<label>Description</label>
-<textarea id="description" placeholder="Shkruaj përshkrimin..."></textarea>
-  
+    let uploadedPhotoURLs = []; // ruan URL pasi ngarkohen
 
-<!-- BUTONI QË KLIKOHET -->
-<button id="chooseBtn" type="button">Upload Photos</button>
-
-<!-- INPUT (JO display:none) -->
-<input
-  id="photoFiles"
-  type="file"
-  accept="image/*"
-  multiple
-  style="position:absolute; left:-9999px;"
-/>
-
-<div id="msg"></div>
-
-<button id="uploadBtn" type="button">NGARKO FOTOT</button>
-
-<button id="publishBtn" type="button">PUBLISH</button>
-  
-
-  
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "XXX",
-  authDomain: "oraswiss-27e57.firebaseapp.com",
-  projectId: "oraswiss-27e57",
-  storageBucket: "oraswiss-27e57.appspot.com",
-  appId: "XXX"
-};
-
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
-const db = getFirestore(app);
-
-// BUTONAT / INPUT
-const chooseBtn = document.getElementById("chooseBtn");
-const fileInput = document.getElementById("photoFiles");
-const uploadBtn = document.getElementById("uploadBtn");
-const publishBtn = document.getElementById("publishBtn");
-const msg = document.getElementById("msg");
-
-const setMsg = (t) => msg.textContent = t;
-
-// KU RUAHEN URL-TE E FOTOVE
-let uploadedPhotoURLs = [];
-
-/* 1) HAP FILE PICKER */
-chooseBtn.addEventListener("click", () => {
-  fileInput.click();
-});
-
-/* 2) KUR ZGJIDH FOTO */
-fileInput.addEventListener("change", () => {
-  uploadedPhotoURLs = []; // reset nqs ndryshon fotot
-  setMsg("📂 U zgjodhën " + fileInput.files.length + " foto");
-});
-
-/* 3) NGARKO FOTO REALISHT NE STORAGE */
-uploadBtn.addEventListener("click", async () => {
-  if (!fileInput.files || fileInput.files.length === 0) {
-    setMsg("❌ Zgjidh foto fillimisht");
-    return;
-  }
-
-  uploadedPhotoURLs = [];
-  setMsg("⏳ Duke ngarkuar fotot...");
-
-  try {
-    for (const file of fileInput.files) {
-      const path = watches/${Date.now()}_${file.name};
-      const storageRef = sRef(storage, path);
-
-      await uploadBytes(storageRef, file);
-      const url = await getDownloadURL(storageRef);
-      uploadedPhotoURLs.push(url);
+    function setMsg(t) {
+      msg.textContent = t;
     }
 
-    setMsg("✅ Foto u ngarkuan (" + uploadedPhotoURLs.length + ")");
-  } catch (e) {
-    console.error(e);
-    setMsg("❌ Gabim gjate upload te fotove");
-  }
-});
-
-/* 4) PUBLISH -> Shton dokumentin ne Firestore bashke me fotot */
-publishBtn.addEventListener("click", async () => {
-  // ⚠️ nqs do publish me foto
-  if (uploadedPhotoURLs.length === 0) {
-    setMsg("❌ Ngarko fotot (NGARKO FOTOT) para publish");
-    return;
-  }
-
-  // KETU merr vlerat nga input-et e tua (shembull)
-  const brand = document.getElementById("brand")?.value || "";
-  const model = document.getElementById("model")?.value || "";
-  const category = document.getElementById("category")?.value || "";
-  const condition = document.getElementById("condition")?.value || "";
-  const country = document.getElementById("country")?.value || "";
-  const material = document.getElementById("material")?.value || "";
-  const description = document.getElementById("description")?.value || "";
-
-  const price = Number(document.getElementById("price")?.value || 0);
-  const year = Number(document.getElementById("year")?.value || 0);
-  const caseSize = Number(document.getElementById("caseSize")?.value || 0);
-  const refCode = document.getElementById("ref")?.value || "";
-
-  // user info (ti i ke futur manualisht)
-  const userId = "QSFTjh6AddTjxgbTkR47mBpMjX2";
-  const email = "adicelaa899@gmail.com";
-  const fullName = "ardian cela";
-  const phone = "0692408065";
-
-  setMsg("⏳ Duke publikuar...");
-
-  try {
-    await addDoc(collection(db, "watches"), {
-      brand,
-      model,
-      category,
-      condition,
-      country,
-      material,
-      description,
-      price,
-      year,
-      caseSize,
-      ref: refCode,
-
-      photos: uploadedPhotoURLs,   // ✅ KJO ESHTE PIKA QE TE MUNGONTE
-
-      status: "pending",
-      userId,
-      email,
-      fullName,
-      phone,
-      createdAt: serverTimestamp()
+    // kur zgjedh foto
+    fileInput.addEventListener("change", () => {
+      uploadedPhotoURLs = []; // reset nqs zgjedh foto te reja
+      const n = fileInput.files ? fileInput.files.length : 0;
+      setMsg(n ? 📂 U zgjodhën ${n} foto : "❌ S’u zgjodh asnjë foto");
     });
 
-    setMsg("🚀 Publish OK ✅");
-    // reset
-    uploadedPhotoURLs = [];
-    fileInput.value = "";
-  } catch (e) {
-    console.error(e);
-    setMsg("❌ Gabim gjate publish");
-  }
-});
-</script>
+    // ngarko foto ne Storage
+    uploadBtn.addEventListener("click", async () => {
+      try {
+        const files = fileInput.files;
+        if (!files || files.length === 0) {
+          setMsg("❌ Zgjidh foto fillimisht");
+          return;
+        }
+
+        setMsg("⏳ Duke ngarkuar fotot...");
+
+        const userId = "QSFTjh6AddTjxgbTkR47mBpMjX2"; // nqs ke auth, e merr nga auth.uid
+        const uploads = Array.from(files).map(async (file, idx) => {
+          const safeName = (file.name || "photo").replace(/\s+/g, "_");
+          const path = watches/${userId}/${Date.now()}_${idx}_${safeName};
+          const storageRef = sRef(storage, path);
+
+          await uploadBytes(storageRef, file);
+          return await getDownloadURL(storageRef);
+        });
+
+        uploadedPhotoURLs = await Promise.all(uploads);
+
+        setMsg(✅ Foto u ngarkuan (${uploadedPhotoURLs.length}));
+      } catch (err) {
+        console.error(err);
+        setMsg("❌ Gabim gjatë upload fotove (shiko Console)");
+      }
+    });
+
+    // publish -> ruan dokumentin ne Firestore bashke me URL e fotove
+    publishBtn.addEventListener("click", async () => {
+      try {
+        setMsg("⏳ Duke publikuar...");
+
+        // nqs do ta detyrosh me foto:
+        if (!uploadedPhotoURLs || uploadedPhotoURLs.length === 0) {
+          setMsg("❌ Së pari NGARKO FOTOT, pastaj PUBLISH");
+          return;
+        }
+
+        const data = {
+          brand: el("brand")?.value?.trim() || "",
+          model: el("model")?.value?.trim() || "",
+          category: el("category")?.value?.trim() || "",
+          ref: el("ref")?.value?.trim() || "",
+          year: Number(el("year")?.value || 0) || null,
+          material: el("material")?.value?.trim() || "",
+          caseSize: Number(el("caseSize")?.value || 0) || null,
+          condition: el("condition")?.value?.trim() || "",
+          price: Number(el("price")?.value || 0) || null,
+
+          country: el("country")?.value?.trim() || "",
+          fullName: el("fullName")?.value?.trim() || "",
+          email: el("email")?.value?.trim() || "",
+          phone: el("phone")?.value?.trim() || "",
+          description: el("description")?.value?.trim() || "",
+
+          photos: uploadedPhotoURLs,              // ✅ URL-te e fotove
+          status: "pending",                      // ose "active"
+          userId: "QSFTjh6AddTjxgbTkR47mBpMjX2",  // ose auth uid
+          createdAt: serverTimestamp()            // ✅ timestamp nga serveri
+        };
+
+        await addDoc(collection(db, "watches"), data);
+
+        setMsg("🚀 Publish OK");
+
+        // reset
+        uploadedPhotoURLs = [];
+        fileInput.value = "";
+      } catch (err) {
+        console.error(err);
+        setMsg("❌ Gabim gjatë publish (shiko Console)");
+      }
+    });
+  </script>
 
 </body>
 </html>
+

@@ -120,118 +120,58 @@
 <textarea id="description" placeholder="Shkruaj përshkrimin..."></textarea>
   
 
-<!-- BUTONAT -->
 <div id="actions">
   <button id="chooseBtn" type="button">Zgjidh Foto</button>
   <button id="uploadBtn" type="button">NGARKO FOTOT</button>
   <button id="publishBtn" type="button">PUBLISH</button>
 </div>
 
+<div id="msg"></div>
+<div id="photosPreview"></div>
 
-<input
-  id="photoFiles"
-  type="file"
-  accept="image/*"
-  multiple
-  style="display:none"
-/>
-
-<div id="msg" style="margin-top:10px;"></div>
+<input id="photoFiles" type="file" accept="image/*" multiple class="hiddenFile">
 
 <script>
 (() => {
-  function desc(el){
-    if(!el) return "null";
-    const id = el.id ? "#"+el.id : "";
-    const cls = el.className ? "."+String(el.className).trim().split(/\s+/).join(".") : "";
-    return el.tagName + id + cls;
-  }
+  const chooseBtn = document.getElementById("chooseBtn");
+  const uploadBtn = document.getElementById("uploadBtn");
+  const publishBtn = document.getElementById("publishBtn");
+  const photoFiles = document.getElementById("photoFiles");
+  const msg = document.getElementById("msg");
+  const photosPreview = document.getElementById("photosPreview");
 
-  function isFullScreenBlocker(el){
-    const st = getComputedStyle(el);
-    if (st.pointerEvents === "none") return false;
-    if (st.display === "none" || st.visibility === "hidden") return false;
+  const setMsg = (t) => { msg.textContent = t; };
 
-    const posOk = (st.position === "fixed" || st.position === "absolute");
-    if (!posOk) return false;
+  // prova që lidhet
+  chooseBtn.onclick = () => {
+    setMsg("👉 Po hap zgjedhjen e fotove...");
+    photoFiles.click();
+  };
 
-    const r = el.getBoundingClientRect();
-    const covers =
-      r.width >= window.innerWidth - 5 &&
-      r.height >= window.innerHeight - 5 &&
-      r.left <= 2 && r.top <= 2;
-
-    if (!covers) return false;
-
-    const z = Number(st.zIndex);
-    if (!Number.isFinite(z)) return true; // z-index:auto por fixed fullscreen prap mund të bllokojë
-    return z >= 10;
-  }
-
-  function findBlockers(){
-    const all = Array.from(document.querySelectorAll("body *"));
-    const blockers = all.filter(isFullScreenBlocker);
-
-    blockers.sort((a,b) => {
-      const za = Number(getComputedStyle(a).zIndex); 
-      const zb = Number(getComputedStyle(b).zIndex);
-      return (Number.isFinite(zb)?zb:0) - (Number.isFinite(za)?za:0);
+  photoFiles.onchange = () => {
+    const n = photoFiles.files.length;
+    setMsg(📂 U zgjodhën ${n} foto);
+    photosPreview.innerHTML = "";
+    [...photoFiles.files].forEach(f => {
+      const img = document.createElement("img");
+      img.src = URL.createObjectURL(f);
+      img.onload = () => URL.revokeObjectURL(img.src);
+      photosPreview.appendChild(img);
     });
+  };
 
-    console.log("FULLSCREEN BLOCKERS:", blockers.map(desc));
-    return blockers;
-  }
+  uploadBtn.onclick = () => {
+    if (!photoFiles.files.length) return setMsg("❌ Zgjidh foto fillimisht");
+    setMsg(✅ Gati: ${photoFiles.files.length} foto (PUBLISH kur të duash));
+  };
 
-  function disable(el){
-    el.style.pointerEvents = "none";
-    el.style.display = "none";
-    el.style.visibility = "hidden";
-  }
-
-  window.addEventListener("load", () => {
-    // 1) Gjej bllokuesit fullscreen
-    const blockers = findBlockers();
-
-    // 2) Trego çfarë është sipër butonit PUBLISH
-    const btn = document.getElementById("publishBtn");
-    if (btn) {
-      const r = btn.getBoundingClientRect();
-      const topEl = document.elementFromPoint(r.left + 5, r.top + 5);
-      console.log("ON TOP OF #publishBtn:", desc(topEl), topEl);
-
-      // 3) Nëse s’është vet butoni, çaktivizo elementin sipër
-      if (topEl && topEl !== btn) {
-        console.warn("DISABLING TOP ELEMENT:", desc(topEl));
-        disable(topEl);
-        alert("E gjeta çfarë e bllokonte: " + desc(topEl) + " — e çaktivizova. Provo tani butonat.");
-      }
-    }
-
-    // 4) Nëse ka blockers, çaktivizo të parin (më shpesh mjafton)
-    if (blockers.length) {
-      console.warn("DISABLING BLOCKER:", desc(blockers[0]));
-      disable(blockers[0]);
-    }
-  });
+  publishBtn.onclick = () => {
+    if (!photoFiles.files.length) return setMsg("❌ Zgjidh foto fillimisht");
+    setMsg("🚀 PUBLISH u klikua (këtu fut upload-in real)");
+  };
 })();
 </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const chooseBtn = document.getElementById("chooseBtn");
-  const photoFiles = document.getElementById("photoFiles");
-
-  if (!chooseBtn || !photoFiles) {
-    console.error("❌ chooseBtn ose photoFiles nuk u gjetën");
-    return;
-  }
-
-  chooseBtn.addEventListener("click", () => {
-    console.log("📸 Zgjidh Foto klikua");
-    photoFiles.click();
-  });
-});
-</script>
 
 </body>
 </html>

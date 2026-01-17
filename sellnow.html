@@ -267,6 +267,191 @@
     }
   });
 </script>
+Ora
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+  // 🔴 Firebase config (plotëso pjesët me "…")
+  const firebaseConfig = {
+    apiKey: "…",
+    authDomain: "oraswiss-27e57.firebaseapp.com",
+    projectId: "oraswiss-27e57",
+    storageBucket: "oraswiss-27e57.appspot.com",
+    messagingSenderId: "…",
+    appId: "…",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const storage = getStorage(app);
+  const db = getFirestore(app);
+
+  // ✅ Shumë e rëndësishme: mos e prek këtë — garanton që elementët ekzistojnë
+  window.addEventListener("DOMContentLoaded", () => {
+    // Buttons / UI
+    const chooseBtn = document.getElementById("chooseBtn");
+    const fileInput = document.getElementById("photoFiles");
+    const uploadBtn = document.getElementById("uploadBtn");
+    const publishBtn = document.getElementById("publishBtn");
+    const msg = document.getElementById("msg");
+
+    // Form inputs (duhet të ekzistojnë në HTML me këto id)
+    const brandEl = document.getElementById("brand");
+    const modelEl = document.getElementById("model");
+    const categoryEl = document.getElementById("category");
+    const refEl = document.getElementById("ref");
+    const yearEl = document.getElementById("year");
+    const materialEl = document.getElementById("material");
+    const caseSizeEl = document.getElementById("caseSize");
+    const conditionEl = document.getElementById("condition");
+    const priceEl = document.getElementById("price");
+
+    function setMsg(t) {
+      if (msg) msg.textContent = t;
+    }
+
+    // ✅ Kontroll i thjeshtë që mos të bjerë skripti nëse mungon ndonjë id
+    const required = {
+      chooseBtn, fileInput, uploadBtn, publishBtn, msg,
+      brandEl, modelEl, categoryEl, refEl, yearEl, materialEl, caseSizeEl, conditionEl, priceEl
+    };
+    const missing = Object.entries(required).filter(([_, v]) => !v).map(([k]) => k);
+    if (missing.length) {
+      console.error("Missing HTML elements:", missing);
+      setMsg("❌ Mungojnë disa fusha në HTML (shiko Console).");
+      return;
+    }
+
+    // Ruajmë URL-të e fotove pas upload
+    let photoUrls = [];
+
+    // 1) Hap file picker
+    chooseBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      // mos e bëj input-in display:none, ndryshe Safari nganjëherë e bllokon
+      fileInput.click();
+    });
+
+    // 2) Kur zgjidhen fotot
+    fileInput.addEventListener("change", () => {
+      photoUrls = []; // reset sepse u zgjodhën foto të reja
+      setMsg("📂 U zgjodhën " + fileInput.files.length + " foto");
+    });
+
+    // Helper: lexon vlerat nga form
+    function readForm() {
+      const brand = brandEl.value.trim();
+      const model = modelEl.value.trim();
+      const category = categoryEl.value.trim(); // p.sh. Luxury/Vintage/Parts
+      const ref = refEl.value.trim();
+      const material = materialEl.value.trim();
+      const condition = conditionEl.value.trim();
+
+      const yearRaw = yearEl.value.trim();
+      const caseSizeRaw = caseSizeEl.value.trim();
+      const priceRaw = priceEl.value.trim();
+
+      const year = yearRaw ? Number(yearRaw) : null;
+      const caseSize = caseSizeRaw ? Number(caseSizeRaw) : null;
+      const price = priceRaw ? Number(priceRaw) : null;
+
+      return { brand, model, category, ref, material, condition, year, caseSize, price };
+    }
+
+    function validateForm(data) {
+      if (!data.category) return "Zgjidh Category";
+      if (!data.brand) return "Plotëso Brand";
+      if (!data.model) return "Plotëso Model";
+      if (!data.ref) return "Plotëso Ref";
+      if (data.price === null || !Number.isFinite(data.price) || data.price <= 0) return "Vendos Price të saktë";
+      if (data.year !== null && (!Number.isFinite(data.year) || data.year < 1500 || data.year > 2100)) return "Year jo i saktë";
+      if (data.caseSize !== null && (!Number.isFinite(data.caseSize) || data.caseSize <= 0 || data.caseSize > 70)) return "Case size jo i saktë";
+      return null;
+    }
+
+    // 3) Upload fotot REALISHT në Storage
+    uploadBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      const files = fileInput.files;
+      if (!files || files.length === 0) {
+        setMsg("❌ Zgjidh foto fillimisht");
+        return;
+      }
+
+      setMsg("⏳ Duke ngarkuar fotot...");
+      photoUrls = [];
+
+      try {
+        for (const file of files) {
+          // Emër i sigurt
+          const safeName = (file.name || "photo")
+            .replace(/\s+/g, "_")
+            .replace(/[^a-zA-Z0-9._-]/g, "");
+
+          const path = watches/${Date.now()}_${Math.random().toString(16).slice(2)}_${safeName};
+          const storageRef = sRef(storage, path);
+
+          await uploadBytes(storageRef, file);
+          const url = await getDownloadURL(storageRef);
+          photoUrls.push(url);
+        }
+
+        setMsg("✅ Foto u ngarkuan (" + photoUrls.length + ")");
+      } catch (err) {
+        console.error("UPLOAD ERROR:", err);
+        setMsg("❌ Gabim gjatë upload (shiko Console)");
+      }
+    });
+
+    // 4) Publish në Firestore
+    publishBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      const data = readForm();
+      const errMsg = validateForm(data);
+      if (errMsg) {
+        setMsg("❌ " + errMsg);
+        return;
+      }
+
+      if (photoUrls.length === 0) {
+        setMsg("❌ Ngarko fotot para Publish");
+        return;
+      }
+
+      setMsg("⏳ Duke publikuar...");
+
+      try {
+        await addDoc(collection(db, "watches"), {
+          brand: data.brand,
+          model: data.model,
+          category: data.category,
+          ref: data.ref,
+          year: data.year,
+          material: data.material,
+          caseSize: data.caseSize,
+          condition: data.condition,
+          price: data.price,
+
+          photos: photoUrls,
+
+          status: "active", // ose "pending"
+          userId: "QSFTjh6AddTjxgbTkR47mBpMjX2",
+
+          createdAt: serverTimestamp(),
+        });
+
+        setMsg("✅ U publikua me sukses");
+      } catch (err) {
+        console.error("PUBLISH ERROR:", err);
+        setMsg("❌ Gabim gjatë publish (shiko Console)");
+      }
+    });
+  });
+</script>
+
 
 </body>
 </html>

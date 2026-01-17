@@ -174,13 +174,28 @@
   };
 
   // 4) Publish (placeholder)
-  publishBtn.onclick = () => {
-    if (!photoFiles.files.length) return setMsg("❌ Zgjidh foto fillimisht");
-    setMsg("🚀 PUBLISH u klikua (këtu fut upload-in real)");
-  };
+  publishBtn.onclick = async (e) => {
+  e.preventDefault();     // ✅ ndalon submit/refresh
+  e.stopPropagation();    // ✅ ndalon event-e të tjera
 
-  console.log("✅ SCRIPT OK");
-})();
+  try {
+    console.log("PUBLISH CLICKED");
+    setMsg("🟡 PUBLISH u klikua...");
+
+    if (!photoFiles.files.length) {
+      setMsg("❌ Zgjidh foto fillimisht");
+      return;
+    }
+
+    // ✅ Këtu fut upload-in real (për moment vetëm test)
+    setMsg(`✅ OK: do publikoja ${photoFiles.files.length} foto`);
+    alert("PUBLISH OK (test)"); // vetëm për ta parë patjetër
+  } catch (err) {
+    console.error("PUBLISH ERROR:", err);
+    setMsg("❌ Error: " + (err?.message || err));
+    alert("ERROR: " + (err?.message || err));
+  }
+};
 </script>
 
   

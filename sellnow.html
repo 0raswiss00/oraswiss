@@ -207,18 +207,20 @@ publishBtn.addEventListener("click", async () => {
   try {
     setMsg("⏳ Duke publikuar...");
 await addDoc(collection(db, "watches"), {
-  brand,
-  model,
-  category,
-  ref,
-  year,
-  material,
-  caseSize,
-  condition,
-  price,
-
+  brand: "Omega",
+  model: "Seamaster",
+  category: "Luxury",
+  ref: "2400-4",
+  year: 1999,
+  material: "steel",
+  caseSize: 35,
+  condition: "Very Good",
+  price: 100,
   status: "active",
   userId: "QSFTjh6AddTjxgbTkR47mBpMjX2",
+  createdAt: serverTimestamp()
+});
+
 
   createdAt: serverTimestamp() // ✅ KJO ËSHTË ZGJIDHJA
 });

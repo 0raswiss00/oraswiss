@@ -120,10 +120,14 @@
 <textarea id="description" placeholder="Shkruaj përshkrimin..."></textarea>
   
 
-<!-- BUTONI QË KLIKOHET -->
-<button id="chooseBtn" type="button">Upload Photos</button>
+<!-- BUTONAT -->
+<div id="actions">
+  <button id="chooseBtn" type="button">Zgjidh Foto</button>
+  <button id="uploadBtn" type="button">NGARKO FOTOT</button>
+  <button id="publishBtn" type="button">PUBLISH</button>
+</div>
 
-<!-- INPUT (JO display:none) -->
+<!-- INPUT i fshehur (OK) -->
 <input
   id="photoFiles"
   type="file"
@@ -132,14 +136,8 @@
   style="position:absolute; left:-9999px;"
 />
 
-<div id="msg"></div>
+<div id="msg" style="margin-top:10px;"></div>
 
-<button id="uploadBtn" type="button">NGARKO FOTOT</button>
-
-<button id="publishBtn" type="button">PUBLISH</button>
-  
-
-  
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
@@ -158,105 +156,96 @@
   const storage = getStorage(app);
   const db = getFirestore(app);
 
-  // ✅ E bën të sigurt edhe nëse script-i është para body
-  document.addEventListener("DOMContentLoaded", () => {
-    const chooseBtn = document.getElementById("chooseBtn");
-    const fileInput = document.getElementById("photoFiles");
-    const uploadBtn = document.getElementById("uploadBtn");
-    const publishBtn = document.getElementById("publishBtn");
-    const msg = document.getElementById("msg");
+  const chooseBtn = document.getElementById("chooseBtn");
+  const uploadBtn = document.getElementById("uploadBtn");
+  const publishBtn = document.getElementById("publishBtn");
+  const fileInput = document.getElementById("photoFiles");
+  const msg = document.getElementById("msg");
 
-    if (!chooseBtn || !fileInput || !uploadBtn || !publishBtn || !msg) {
-      console.error("Mungon ndonjë element DOM (chooseBtn/photoFiles/uploadBtn/publishBtn/msg).");
-      return;
+  const setMsg = (t) => (msg.textContent = t);
+
+  // Merr vlera nga input-at e formës (nëse i ke)
+  const val = (id) => (document.getElementById(id)?.value ?? "").trim();
+
+  // TODO: zëvendësoje me UID real nga auth
+  const userId = "testUser123";
+
+  async function uploadPhotos(uid) {
+    const urls = [];
+    const files = Array.from(fileInput.files || []);
+
+    for (const file of files) {
+      const path = watches/${uid}/${Date.now()}_${file.name};
+      const storageRef = ref(storage, path);
+
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+      urls.push(url);
     }
+    return urls;
+  }
 
-    const setMsg = (t) => { msg.textContent = t; };
+  // 1) Zgjidh foto
+  chooseBtn.addEventListener("click", () => fileInput.click());
 
-    // ✅ Merr vlera nga input-at nëse ekzistojnë (nuk bën crash nëse s’janë)
-    const val = (id) => (document.getElementById(id)?.value ?? "").trim();
-
-    // ✅ Për test (më vonë e ndërron me auth UID)
-    const userId = "testUser123";
-
-    async function uploadPhotos(uid) {
-      const urls = [];
-
-      for (const file of fileInput.files) {
-        const path = watches/${uid}/${Date.now()}_${file.name}; // ✅ BACKTICKS
-        const storageRef = ref(storage, path);
-
-        await uploadBytes(storageRef, file);
-        const url = await getDownloadURL(storageRef);
-        urls.push(url);
-      }
-
-      return urls;
-    }
-
-    // 1) HAP FILE PICKER
-    chooseBtn.addEventListener("click", () => {
-      fileInput.click();
-    });
-
-    // 2) KUR ZGJIDH FOTO
-    fileInput.addEventListener("change", () => {
-      setMsg(📂 U zgjodhën ${fileInput.files.length} foto);
-    });
-
-    // 3) NGARKO FOTO (opsionale: vetëm kontroll / mesazh)
-    uploadBtn.addEventListener("click", () => {
-      if (fileInput.files.length === 0) {
-        setMsg("❌ Zgjidh foto fillimisht");
-        return;
-      }
-      setMsg(✅ Gati (${fileInput.files.length}) — kliko PUBLISH për upload + ruajtje);
-    });
-
-    // 4) PUBLISH (UPLOAD + FIRESTORE)
-    publishBtn.addEventListener("click", async () => {
-      try {
-        if (fileInput.files.length === 0) {
-          setMsg("❌ Duhet të zgjedhësh foto");
-          return;
-        }
-
-        setMsg("⏳ Duke ngarkuar fotot...");
-        const photoURLs = await uploadPhotos(userId);
-
-        // 🔧 Këtu vendos ID-të e input-ave të formës tënde NËSE i ke
-        // Nëse nuk i ke këto ids, s’prish punë—thjesht dalin bosh.
-        const brand = val("brand");
-        const model = val("model");
-        const category = val("category");
-        const condition = val("condition");
-        const material = val("material");
-        const priceRaw = val("price");
-        const price = priceRaw ? Number(priceRaw) : null;
-
-        setMsg("⏳ Duke ruajtur në Firestore...");
-        await addDoc(collection(db, "watches"), {
-          brand,
-          model,
-          category,
-          condition,
-          material,
-          price,
-          photos: photoURLs,
-          status: "active",
-          userId,
-          createdAt: serverTimestamp()
-        });
-
-        setMsg("🚀 Publish OK me foto!");
-      } catch (err) {
-        console.error(err);
-        setMsg("❌ Error: " + (err?.message || err));
-      }
-    });
-
-    console.log("SCRIPT OK");
+  fileInput.addEventListener("change", () => {
+    const n = fileInput.files?.length ?? 0;
+    setMsg(📂 U zgjodhën ${n} foto);
   });
+
+  // 2) Vetëm kontroll
+  uploadBtn.addEventListener("click", () => {
+    const n = fileInput.files?.length ?? 0;
+    if (n === 0) return setMsg("❌ Zgjidh foto fillimisht");
+    setMsg(✅ Gati (${n}) — kliko PUBLISH për upload + ruajtje);
+  });
+
+  // 3) Publish = upload + firestore
+  publishBtn.addEventListener("click", async () => {
+    try {
+      const n = fileInput.files?.length ?? 0;
+      if (n === 0) return setMsg("❌ Duhet të zgjedhësh foto");
+
+      // (opsionale) mos lejo double click
+      publishBtn.disabled = true;
+      publishBtn.textContent = "DUKE PUBLIKUAR...";
+
+      setMsg("⏳ Duke ngarkuar fotot...");
+      const photoURLs = await uploadPhotos(userId);
+
+      const brand = val("brand");
+      const model = val("model");
+      const category = val("category");
+      const condition = val("condition");
+      const material = val("material");
+      const priceRaw = val("price");
+      const price = priceRaw ? Number(priceRaw) : null;
+
+      setMsg("⏳ Duke ruajtur në Firestore...");
+      await addDoc(collection(db, "watches"), {
+        brand,
+        model,
+        category,
+        condition,
+        material,
+        price,
+        photos: photoURLs,
+        status: "active",
+        userId,
+        createdAt: serverTimestamp()
+      });
+
+      setMsg("🚀 Publish OK me foto!");
+    } catch (err) {
+      console.error(err);
+      setMsg("❌ Error: " + (err?.message || err));
+    } finally {
+      publishBtn.disabled = false;
+      publishBtn.textContent = "PUBLISH";
+    }
+  });
+
+  console.log("SCRIPT OK");
 </script>
 </body>
 </html>

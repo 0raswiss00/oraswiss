@@ -199,23 +199,27 @@ for (const file of fileInput.files) {
   setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
 });
 
-// PUBLISH (VETËM TEST)
-publishBtn.addEventListener("click", () => {
-  setMsg("🚀 Publish OK");
-});
+publishBtn.addEventListener("click", async () => {
+  if (imageUrls.length === 0) {
+    setMsg("❌ Ngarko fotot para Publish");
+    return;
+  }
 
-await addDoc(collection(db, "watches"), {
-  brand,
-  model,
-  price,
-  description,
-  material,
-  condition,
-  year,
-  userId,
-  status: "pending",
-  images: imageUrls,
-  createdAt: serverTimestamp()
+  await addDoc(collection(db, "watches"), {
+    brand,
+    model,
+    price,
+    description,
+    material,
+    condition,
+    year,
+    userId,
+    status: "pending",
+    images: imageUrls,
+    createdAt: serverTimestamp()
+  });
+
+  setMsg("🚀 Publish OK");
 });
   
 </script>

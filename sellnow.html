@@ -138,122 +138,66 @@
 
 <button id="publishBtn" type="button">PUBLISH</button>
  
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import {
+    getStorage, ref, uploadBytes, getDownloadURL
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+  import {
+    getFirestore, collection, addDoc, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "…",
-      authDomain: "oraswiss-27e57.firebaseapp.com",
-      projectId: "oraswiss-27e57",
-      storageBucket: "oraswiss-27e57.appspot.com",
-      messagingSenderId: "…",
-      appId: "…"
-    };
+  const firebaseConfig = {
+    apiKey: "…",
+    authDomain: "oraswiss-27e57.firebaseapp.com",
+    projectId: "oraswiss-27e57",
+    storageBucket: "oraswiss-27e57.appspot.com",
+    messagingSenderId: "…",
+    appId: "…"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const storage = getStorage(app);
-    const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const storage = getStorage(app);
+  const db = getFirestore(app);
 
-    const fileInput = document.getElementById("photoFiles");
-    const uploadBtn = document.getElementById("uploadBtn");
-    const publishBtn = document.getElementById("publishBtn");
-    const msg = document.getElementById("msg");
+const chooseBtn = document.getElementById("chooseBtn");
+const fileInput = document.getElementById("photoFiles");
+const uploadBtn = document.getElementById("uploadBtn");
+const publishBtn = document.getElementById("publishBtn");
+const msg = document.getElementById("msg");
 
-    const el = (id) => document.getElementById(id);
+function setMsg(t) {
+  msg.textContent = t;
+}
 
-    let uploadedPhotoURLs = []; // ruan URL pasi ngarkohen
+// HAP FILE PICKER (FUNKSIONON NË IPHONE)
+chooseBtn.addEventListener("click", () => {
+  fileInput.click();
+});
 
-    function setMsg(t) {
-      msg.textContent = t;
-    }
+// KUR ZGJIDH FOTO
+fileInput.addEventListener("change", () => {
+  setMsg("📂 U zgjodhën " + fileInput.files.length + " foto");
+});
 
-    // kur zgjedh foto
-    fileInput.addEventListener("change", () => {
-      uploadedPhotoURLs = []; // reset nqs zgjedh foto te reja
-      const n = fileInput.files ? fileInput.files.length : 0;
-      setMsg(n ? 📂 U zgjodhën ${n} foto : "❌ S’u zgjodh asnjë foto");
-    });
+// NGARKO FOTO (TEST)
+uploadBtn.addEventListener("click", async () => {
+  if (fileInput.files.length === 0) {
+    setMsg("❌ Zgjidh foto fillimisht");
+    return;
+  }
 
-    // ngarko foto ne Storage
-    uploadBtn.addEventListener("click", async () => {
-      try {
-        const files = fileInput.files;
-        if (!files || files.length === 0) {
-          setMsg("❌ Zgjidh foto fillimisht");
-          return;
-        }
+  setMsg("⏳ Duke ngarkuar...");
+  await new Promise(r => setTimeout(r, 1500));
+  setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
+});
 
-        setMsg("⏳ Duke ngarkuar fotot...");
+// PUBLISH (VETËM TEST)
+publishBtn.addEventListener("click", () => {
+  setMsg("🚀 Publish OK");
+});
 
-        const userId = "QSFTjh6AddTjxgbTkR47mBpMjX2"; // nqs ke auth, e merr nga auth.uid
-        const uploads = Array.from(files).map(async (file, idx) => {
-          const safeName = (file.name || "photo").replace(/\s+/g, "_");
-          const path = watches/${userId}/${Date.now()}_${idx}_${safeName};
-          const storageRef = sRef(storage, path);
-
-          await uploadBytes(storageRef, file);
-          return await getDownloadURL(storageRef);
-        });
-
-        uploadedPhotoURLs = await Promise.all(uploads);
-
-        setMsg(✅ Foto u ngarkuan (${uploadedPhotoURLs.length}));
-      } catch (err) {
-        console.error(err);
-        setMsg("❌ Gabim gjatë upload fotove (shiko Console)");
-      }
-    });
-
-    // publish -> ruan dokumentin ne Firestore bashke me URL e fotove
-    publishBtn.addEventListener("click", async () => {
-      try {
-        setMsg("⏳ Duke publikuar...");
-
-        // nqs do ta detyrosh me foto:
-        if (!uploadedPhotoURLs || uploadedPhotoURLs.length === 0) {
-          setMsg("❌ Së pari NGARKO FOTOT, pastaj PUBLISH");
-          return;
-        }
-
-        const data = {
-          brand: el("brand")?.value?.trim() || "",
-          model: el("model")?.value?.trim() || "",
-          category: el("category")?.value?.trim() || "",
-          ref: el("ref")?.value?.trim() || "",
-          year: Number(el("year")?.value || 0) || null,
-          material: el("material")?.value?.trim() || "",
-          caseSize: Number(el("caseSize")?.value || 0) || null,
-          condition: el("condition")?.value?.trim() || "",
-          price: Number(el("price")?.value || 0) || null,
-
-          country: el("country")?.value?.trim() || "",
-          fullName: el("fullName")?.value?.trim() || "",
-          email: el("email")?.value?.trim() || "",
-          phone: el("phone")?.value?.trim() || "",
-          description: el("description")?.value?.trim() || "",
-
-          photos: uploadedPhotoURLs,              // ✅ URL-te e fotove
-          status: "pending",                      // ose "active"
-          userId: "QSFTjh6AddTjxgbTkR47mBpMjX2",  // ose auth uid
-          createdAt: serverTimestamp()            // ✅ timestamp nga serveri
-        };
-
-        await addDoc(collection(db, "watches"), data);
-
-        setMsg("🚀 Publish OK");
-
-        // reset
-        uploadedPhotoURLs = [];
-        fileInput.value = "";
-      } catch (err) {
-        console.error(err);
-        setMsg("❌ Gabim gjatë publish (shiko Console)");
-      }
-    });
-  </script>
-
+</script>
 </body>
 </html>
 

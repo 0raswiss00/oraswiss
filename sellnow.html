@@ -203,9 +203,32 @@ uploadBtn.addEventListener("click", async () => {
   setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
 });
 
-// PUBLISH (VETËM TEST)
-publishBtn.addEventListener("click", () => {
-  setMsg("🚀 Publish OK");
+publishBtn.addEventListener("click", async () => {
+  try {
+    setMsg("⏳ Duke publikuar...");
+
+    await addDoc(collection(db, "watches"), {
+      brand: "Omega",
+      caseSize: 35,
+      category: "Luxury",
+      condition: "Very Good",
+      material: "steel",
+      model: "Seamaster",
+      price: 100,
+      ref: "2400-4",
+      status: "active",
+      userId: "QSF", // ose auth uid
+      year: 1999,
+
+      // ✅ KJO ËSHTË E GJITHA QË KËRKOJE
+      createdAt: serverTimestamp(),
+    });
+
+    setMsg("✅ Publish OK");
+  } catch (err) {
+    console.error(err);
+    setMsg("❌ Gabim gjate publish");
+  }
 });
 
 </script>

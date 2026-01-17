@@ -218,41 +218,20 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-
   const chooseBtn = document.getElementById("chooseBtn");
-  const uploadBtn = document.getElementById("uploadBtn");
-  const publishBtn = document.getElementById("publishBtn");
   const photoFiles = document.getElementById("photoFiles");
-  const msg = document.getElementById("msg");
-  const photosPreview = document.getElementById("photosPreview");
 
   if (!chooseBtn || !photoFiles) {
-    console.error("❌ Butoni ose input nuk u gjet");
+    console.error("❌ chooseBtn ose photoFiles nuk u gjetën");
     return;
   }
 
   chooseBtn.addEventListener("click", () => {
-    console.log("👉 Zgjidh Foto klikua");
+    console.log("📸 Zgjidh Foto klikua");
     photoFiles.click();
   });
-
-  photoFiles.addEventListener("change", () => {
-    msg.textContent = 📂 U zgjodhën ${photoFiles.files.length} foto;
-    photosPreview.innerHTML = "";
-
-    [...photoFiles.files].forEach(file => {
-      const img = document.createElement("img");
-      img.src = URL.createObjectURL(file);
-      img.style.width = "80px";
-      img.style.borderRadius = "8px";
-      photosPreview.appendChild(img);
-    });
-  });
-
 });
 </script>
-
-  
 
 </body>
 </html>

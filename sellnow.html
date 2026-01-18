@@ -141,15 +141,21 @@
 
   
 <script type="module">
-  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import {
-    getStorage, ref, uploadBytes, getDownloadURL
-  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
-  import {
-    getFirestore, collection, addDoc, serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+import { 
+  getAuth, 
+  onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
+import { 
+  getFirestore, collection, addDoc, serverTimestamp 
+} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+import { 
+  getStorage, ref, uploadBytes, getDownloadURL 
+} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+
+  
   const firebaseConfig = {
     apiKey: "…",
     authDomain: "oraswiss-27e57.firebaseapp.com",
@@ -161,8 +167,25 @@
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const storage = getStorage(app); 
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // ✅ KËTU VENDOSET
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      setMsg("❌ Duhet të jesh i loguar për të shitur");
+      publishBtn.disabled = true;
+      uploadBtn.disabled = true;
+    } else {
+      setMsg("✅ I loguar si: " + user.email);
+      publishBtn.disabled = false;
+      uploadBtn.disabled = false;
+    }
+  });
+
+  const storage = getStorage(app);
   const db = getFirestore(app);
+
 
 const chooseBtn = document.getElementById("chooseBtn");
 const fileInput = document.getElementById("photoFiles");

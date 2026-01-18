@@ -206,6 +206,40 @@ publishBtn.addEventListener("click", async () => {
     setMsg("❌ " + e.message);
   }
 });
-</script>
+</script> 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "API_KEY",
+  authDomain: "oraswiss-27e57.firebaseapp.com",
+  projectId: "oraswiss-27e57",
+  storageBucket: "oraswiss-27e57.appspot.com",
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// ELEMENTET
+const uploadBtn = document.getElementById("uploadBtn");
+const publishBtn = document.getElementById("publishBtn");
+const msg = document.getElementById("msg");
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    msg.textContent = "❌ Duhet të jesh i loguar për të shitur";
+    uploadBtn.disabled = true;
+    publishBtn.disabled = true;
+  } else {
+    msg.textContent = "✅ I loguar si: " + user.email;
+    uploadBtn.disabled = false;
+    publishBtn.disabled = false;
+  }
+});
+</script>  
+  
 </body>
 </html>

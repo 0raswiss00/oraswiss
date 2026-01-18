@@ -142,121 +142,70 @@
   
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-import { 
-  getAuth, 
-  onAuthStateChanged 
-} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-import { 
-  getFirestore, collection, addDoc, serverTimestamp 
-} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
-
-import { 
-  getStorage, ref, uploadBytes, getDownloadURL 
-} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
-
-  
-  const firebaseConfig = {
-    apiKey: "…",
-    authDomain: "oraswiss-27e57.firebaseapp.com",
-    projectId: "oraswiss-27e57",
-    storageBucket: "oraswiss-27e57.appspot.com",
-    messagingSenderId: "…",
-    appId: "…"
-  };
+const firebaseConfig = {
+  apiKey: "…",
+  authDomain: "oraswiss-27e57.firebaseapp.com",
+  projectId: "oraswiss-27e57",
+  storageBucket: "oraswiss-27e57.appspot.com",
+  messagingSenderId: "…",
+  appId: "…"
+};
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const storage = getStorage(app);
 const db = getFirestore(app);
 
-// elementet (duhet të jenë para onAuthStateChanged që të mos dalin undefined)
-const chooseBtn = document.getElementById("chooseBtn");
 const fileInput = document.getElementById("photoFiles");
 const uploadBtn = document.getElementById("uploadBtn");
 const publishBtn = document.getElementById("publishBtn");
 const msg = document.getElementById("msg");
 
-function setMsg(t) {
-  msg.textContent = t;
-}
+let currentUser = null;
+function setMsg(t){ msg.textContent = t; }
 
-setMsg("⏳ Po kontrolloj login...");
-
+publishBtn.disabled = true;
+uploadBtn.disabled = true;
 setMsg("⏳ Po kontrolloj login...");
 
 onAuthStateChanged(auth, (user) => {
+  currentUser = user;
   if (!user) {
-    setMsg("❌ Duhet të jesh i loguar për të shitur");
+    setMsg("❌ Duhet të jesh i loguar");
     publishBtn.disabled = true;
     uploadBtn.disabled = true;
-
-    // opsionale redirect
-    // window.location.href = "register.html";
   } else {
-    setMsg("✅ I loguar si: " + user.email);
+    setMsg("✅ I loguar si: " + (user.email || user.uid));
     publishBtn.disabled = false;
     uploadBtn.disabled = false;
   }
 });
 
-// HAP FILE PICKER (FUNKSIONON NË IPHONE)
-chooseBtn.addEventListener("click", () => {
-  fileInput.click();
-});
-
-// KUR ZGJIDH FOTO
-fileInput.addEventListener("change", () => {
-  setMsg("📂 U zgjodhën " + fileInput.files.length + " foto");
-});
-
-// NGARKO FOTO (TEST)
+// TEST upload (vetëm UI)
 uploadBtn.addEventListener("click", async () => {
-  if (fileInput.files.length === 0) {
-    setMsg("❌ Zgjidh foto fillimisht");
-    return;
-  }
-
+  if (!fileInput.files.length) return setMsg("❌ Zgjidh foto");
   setMsg("⏳ Duke ngarkuar...");
-  await new Promise(r => setTimeout(r, 1500));
-  setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
+  await new Promise(r => setTimeout(r, 600));
+  setMsg("✅ Foto gati");
 });
 
+// PUBLISH
 publishBtn.addEventListener("click", async () => {
-  publishBtn.disabled = true;
-
   try {
+    if (!currentUser) throw new Error("User jo i loguar");
     setMsg("⏳ Duke publikuar...");
-
-    if (!auth.currentUser) throw new Error("User jo i loguar");
-    if (!fileInput.files.length) throw new Error("Zgjidh të paktën 1 foto");
-
-    const uid = auth.currentUser.uid;
-
-    // 1) ngarko fotot (këtu thirre funksionin tënd real)
-    const photoUrls = await uploadPhotos(uid);
-
-    if (!photoUrls || !photoUrls.length) {
-      throw new Error("Fotot nuk u ngarkuan");
-    }
-
-    // 2) krijo postimin në Firestore
     await addDoc(collection(db, "sellnow"), {
-      userId: uid,
-      photos: photoUrls,
+      userId: currentUser.uid,
       createdAt: serverTimestamp(),
-      status: "active",
+      status: "active"
     });
-
-    setMsg("✅ Postimi u publikua!");
-  } catch (err) {
-    console.error("❌ ERROR:", err);
-    setMsg("❌ Gabim: " + err.message);
-  } finally {
-    publishBtn.disabled = false;
+    setMsg("✅ Publikuar");
+  } catch (e) {
+    setMsg("❌ " + e.message);
   }
 });
-
 </script>
 </body>
 </html>

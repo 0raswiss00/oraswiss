@@ -33,38 +33,47 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
 import {
   getAuth,
+  signInWithEmailAndPassword,
   setPersistence,
-  browserLocalPersistence,
-  signInWithEmailAndPassword
+  browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "…",
+  apiKey: "API_KEY",
   authDomain: "oraswiss-27e57.firebaseapp.com",
   projectId: "oraswiss-27e57",
   storageBucket: "oraswiss-27e57.appspot.com",
-  messagingSenderId: "…",
-  appId: "…"
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
-// ruaj sesionin në browser
 await setPersistence(auth, browserLocalPersistence);
 
-const email = document.getElementById("email");
-const password = document.getElementById("password");
+/* ⚠️ ID-të e SAKTA */
+const email = document.getElementById("loginEmail");
+const password = document.getElementById("loginPassword");
 const btnLogin = document.getElementById("btnLogin");
-const msg = document.getElementById("msg");
 
 btnLogin.addEventListener("click", async () => {
+  if (!email.value || !password.value) {
+    alert("Plotëso email & password");
+    return;
+  }
+
   try {
-    msg.textContent = "⏳ Duke u loguar...";
-    await signInWithEmailAndPassword(auth, email.value.trim(), password.value);
+    await signInWithEmailAndPassword(
+      auth,
+      email.value.trim(),
+      password.value
+    );
+
     window.location.href = "sellnow.html";
+
   } catch (e) {
-    msg.textContent = "❌ " + e.message;
+    alert(e.message);
+    console.error(e);
   }
 });
 </script>

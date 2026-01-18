@@ -196,15 +196,6 @@ uploadBtn.addEventListener("click", async () => {
   setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
 });
 
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    setMsg("❌ Duhet të jesh i loguar për të publikuar");
-    publishBtn.disabled = true;
-  } else {
-    publishBtn.disabled = false;
-  }
-});
-  
 publishBtn.addEventListener("click", async () => {
   publishBtn.disabled = true;
 
@@ -243,4 +234,3 @@ publishBtn.addEventListener("click", async () => {
 </script>
 </body>
 </html>
-

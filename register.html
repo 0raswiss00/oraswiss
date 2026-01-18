@@ -51,6 +51,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+import { getAuth, setPersistence, browserLocalPersistence, signInWithEmailAndPassword } 
+from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+
+const auth = getAuth(app);
+
+// vendose para login
+await setPersistence(auth, browserLocalPersistence);
+
+// pastaj login
+await signInWithEmailAndPassword(auth, email, pass);
+  
 // RUAN LOGIN
 await setPersistence(auth, browserLocalPersistence);
 

@@ -197,19 +197,6 @@ onAuthStateChanged(auth, (user) => {
     uploadBtn.disabled = false;
   }
 });
-  
-// ✅ KËTU vendoset (pas elementëve)
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    setMsg("❌ Duhet të jesh i loguar për të shitur");
-    publishBtn.disabled = true;
-    uploadBtn.disabled = true;
-  } else {
-    setMsg("✅ I loguar si: " + user.email);
-    publishBtn.disabled = false;
-    uploadBtn.disabled = false;
-  }
-});
 
 // HAP FILE PICKER (FUNKSIONON NË IPHONE)
 chooseBtn.addEventListener("click", () => {

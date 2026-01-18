@@ -26,79 +26,58 @@
   </div>
 
   <!-- ✅ VETËM 1 SCRIPT MODULE -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+import { getCountFromServer } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-    // ✅ Firestore imports
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      collection,
-      getCountFromServer
-    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+const firebaseConfig = { /* config i saktë */ };
 
-    // ✅ CONFIG (i njëjti si kudo)
-  const firebaseConfig = {
-    apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
-    authDomain: "oraswiss-27e57.firebaseapp.com",
-    projectId: "oraswiss-27e57",
-    storageBucket: "oraswiss-27e57.firebasestorage.app",
-    messagingSenderId: "596627676936",
-    appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-    measurementId: "G-VZPKMD67VQ"
-  };
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+// ✅ elementet (IDs në HTML)
+const nameEl = document.getElementById("userName");
+const countEl = document.getElementById("userCount");
+const msgEl = document.getElementById("msg");
+const logoutBtn = document.getElementById("logoutBtn");
 
-    const emailEl = document.getElementById("userEmail");
-    const nameEl  = document.getElementById("userName");
-    const msgEl   = document.getElementById("msg");
-    const countEl = document.getElementById("userCount");
+// ✅ KËTU vendoset kodi i fotos (FUNKSIONET)
+async function loadUserCount() {
+  const snap = await getCountFromServer(collection(db, "users"));
+  countEl.innerText = snap.data().count;
+}
 
-    // ✅ Numri i të regjistruarve (users collection)
-    async function loadUserCount() {
-      const snap = await getCountFromServer(collection(db, "users"));
-      countEl.innerText = snap.data().count;
-    }
+async function loadUserName(uid) {
+  const snap = await getDoc(doc(db, "users", uid));
+  if (snap.exists()) {
+    const data = snap.data();
+    nameEl.textContent = data.fullName || data.name || "-";
+  } else {
+    nameEl.textContent = "-";
+  }
+}
 
-    // ✅ Merr emrin nga Firestore: users/{uid}
-    async function loadUserName(uid) {
-      const snap = await getDoc(doc(db, "users", uid));
-      if (snap.exists()) {
-        const data = snap.data();
-        nameEl.textContent = data.fullName || data.name || "-";
-      } else {
-        nameEl.textContent = "-";
-      }
-    }
+// ✅ kontrollo user-in
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = "index.html"; // ose register.html
+    return;
+  }
 
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "index.html";
-        return;
-      }
-    
-      emailEl.textContent = user.email || "";
-      msgEl.textContent = "Je i kyçur ✅";
+  msgEl.textContent = user.email;
+  await loadUserName(user.uid);
+  await loadUserCount();
+});
 
-      await loadUserCount();
-      await loadUserName(user.uid);
-    });
-    
-      // 🔥 ngarko të dyja:
-      await loadUserCount();
-      await loadUserName(user.uid);
-    });
-
-    document.getElementById("btnLogout").addEventListener("click", async () => {
-      await signOut(auth);
-      window.location.href = "index.html";
-    });
-  </script>
+// ✅ logout → index
+logoutBtn.addEventListener("click", async () => {
+  await signOut(auth);
+  window.location.href = "index.html";
+});
+</script>
 
 <script type="module">
   console.log("PROFILE projectId =", app.options.projectId);

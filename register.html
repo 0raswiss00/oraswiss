@@ -33,9 +33,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
 import {
   getAuth,
-  signInWithEmailAndPassword,
   setPersistence,
-  browserLocalPersistence
+  browserLocalPersistence,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
 const firebaseConfig = {
@@ -49,31 +50,25 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
+// RUAN LOGIN
 await setPersistence(auth, browserLocalPersistence);
 
-/* ⚠️ ID-të e SAKTA */
-const email = document.getElementById("loginEmail");
-const password = document.getElementById("loginPassword");
+// ELEMENTET
+const loginEmail = document.getElementById("loginEmail");
+const loginPassword = document.getElementById("loginPassword");
 const btnLogin = document.getElementById("btnLogin");
 
 btnLogin.addEventListener("click", async () => {
-  if (!email.value || !password.value) {
-    alert("Plotëso email & password");
-    return;
-  }
-
   try {
     await signInWithEmailAndPassword(
       auth,
-      email.value.trim(),
-      password.value
+      loginEmail.value.trim(),
+      loginPassword.value
     );
-
     window.location.href = "sellnow.html";
-
   } catch (e) {
     alert(e.message);
-    console.error(e);
   }
 });
 </script>

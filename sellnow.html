@@ -201,8 +201,9 @@ publishBtn.addEventListener("click", async () => {
     }
 
     const uid = auth.currentUser.uid;
+    const photoUrls = await uploadPhotos(uid);
 
-    if (!photoUrls.length) {
+    if (!photoUrls || !photoUrls.length) {
       throw new Error("Fotot nuk u ngarkuan");
     }
 
@@ -214,14 +215,14 @@ publishBtn.addEventListener("click", async () => {
     });
 
     setMsg("✅ Postimi u publikua!");
-    publishBtn.disabled = false;
-
   } catch (err) {
     console.error(err);
     setMsg("❌ Gabim: " + err.message);
-    publishBtn.disabled = false; // 🔴 SHUMË E RËNDËSISHME
+  } finally {
+    publishBtn.disabled = false; // 🔑 SHPËTON GJITHMONË
   }
 });
+
 </script>
 </body>
 </html>

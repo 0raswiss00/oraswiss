@@ -187,39 +187,43 @@
     return urls;
   }
 
-  // 2) PUBLISH = upload + firestore
-  publishBtn.addEventListener("click", async () => {
-    try {
-      if (!fileInput.files.length) {
-        setMsg("❌ Zgjidh foto fillimisht");
-        return;
-      }
+publishBtn.addEventListener("click", async () => {
+  try {
+    publishBtn.disabled = true;
+    setMsg("⏳ Duke publikuar...");
 
-      publishBtn.disabled = true;
-      setMsg("⏳ Duke ngarkuar fotot në Firebase Storage...");
-
-      const userId = "testUser123"; // më vonë e lidh me auth
-      const photoURLs = await uploadPhotos(userId);
-
-      setMsg("⏳ Duke ruajtur në Firestore...");
-      await addDoc(collection(db, "watches"), {
-        photos: photoURLs,
-        status: "active",
-        userId,
-        createdAt: serverTimestamp()
-      });
-
-      setMsg("✅ Publish OK! Fotot u ngarkuan + u ruajtën në Firestore.");
-      fileInput.value = "";
-    } catch (err) {
-      console.error(err);
-      setMsg("❌ Error: " + (err?.message || err));
-    } finally {
-      publishBtn.disabled = false;
+    if (!auth.currentUser) {
+      throw new Error("User jo i loguar");
     }
-  });
 
-  console.log("✅ Firebase upload script OK");
+    if (!fileInput.files.length) {
+      throw new Error("Zgjidh të paktën 1 foto");
+    }
+
+    const uid = auth.currentUser.uid;
+
+    const photoUrls = await uploadPhotos(uid);
+
+    if (!photoUrls.length) {
+      throw new Error("Fotot nuk u ngarkuan");
+    }
+
+    await addDoc(collection(db, "sellnow"), {
+      userId: uid,
+      photos: photoUrls,
+      createdAt: serverTimestamp(),
+      status: "active"
+    });
+
+    setMsg("✅ Postimi u publikua!");
+    publishBtn.disabled = false;
+
+  } catch (err) {
+    console.error(err);
+    setMsg("❌ Gabim: " + err.message);
+    publishBtn.disabled = false; // 🔴 SHUMË E RËNDËSISHME
+  }
+});
 </script>
 </body>
 </html>

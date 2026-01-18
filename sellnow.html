@@ -183,14 +183,16 @@ function setMsg(t) {
 
 setMsg("⏳ Po kontrolloj login...");
 
+setMsg("⏳ Po kontrolloj login...");
+
 onAuthStateChanged(auth, (user) => {
   if (!user) {
     setMsg("❌ Duhet të jesh i loguar për të shitur");
     publishBtn.disabled = true;
     uploadBtn.disabled = true;
 
-    // opsionale: çoje te login
-    // window.location.href = "login.html?next=sellnow.html";
+    // opsionale redirect
+    // window.location.href = "register.html";
   } else {
     setMsg("✅ I loguar si: " + user.email);
     publishBtn.disabled = false;

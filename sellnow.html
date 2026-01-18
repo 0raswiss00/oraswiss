@@ -194,9 +194,39 @@ uploadBtn.addEventListener("click", async () => {
   setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
 });
 
-// PUBLISH (VETËM TEST)
-publishBtn.addEventListener("click", () => {
-  setMsg("🚀 Publish OK");
+publishBtn.addEventListener("click", async () => {
+  publishBtn.disabled = true;
+
+  try {
+    setMsg("⏳ Duke publikuar...");
+
+    if (!auth.currentUser) throw new Error("User jo i loguar");
+    if (!fileInput.files.length) throw new Error("Zgjidh të paktën 1 foto");
+
+    const uid = auth.currentUser.uid;
+
+    // 1) ngarko fotot (këtu thirre funksionin tënd real)
+    const photoUrls = await uploadPhotos(uid);
+
+    if (!photoUrls || !photoUrls.length) {
+      throw new Error("Fotot nuk u ngarkuan");
+    }
+
+    // 2) krijo postimin në Firestore
+    await addDoc(collection(db, "sellnow"), {
+      userId: uid,
+      photos: photoUrls,
+      createdAt: serverTimestamp(),
+      status: "active",
+    });
+
+    setMsg("✅ Postimi u publikua!");
+  } catch (err) {
+    console.error("❌ ERROR:", err);
+    setMsg("❌ Gabim: " + err.message);
+  } finally {
+    publishBtn.disabled = false;
+  }
 });
 
 </script>

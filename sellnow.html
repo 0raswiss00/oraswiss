@@ -165,26 +165,12 @@ import {
     appId: "…"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const storage = getStorage(app);
+const db = getFirestore(app);
 
-  // ✅ KËTU VENDOSET
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      setMsg("❌ Duhet të jesh i loguar për të shitur");
-      publishBtn.disabled = true;
-      uploadBtn.disabled = true;
-    } else {
-      setMsg("✅ I loguar si: " + user.email);
-      publishBtn.disabled = false;
-      uploadBtn.disabled = false;
-    }
-  });
-
-  const storage = getStorage(app);
-  const db = getFirestore(app);
-
-
+// elementet (duhet të jenë para onAuthStateChanged që të mos dalin undefined)
 const chooseBtn = document.getElementById("chooseBtn");
 const fileInput = document.getElementById("photoFiles");
 const uploadBtn = document.getElementById("uploadBtn");
@@ -194,6 +180,19 @@ const msg = document.getElementById("msg");
 function setMsg(t) {
   msg.textContent = t;
 }
+
+// ✅ KËTU vendoset (pas elementëve)
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    setMsg("❌ Duhet të jesh i loguar për të shitur");
+    publishBtn.disabled = true;
+    uploadBtn.disabled = true;
+  } else {
+    setMsg("✅ I loguar si: " + user.email);
+    publishBtn.disabled = false;
+    uploadBtn.disabled = false;
+  }
+});
 
 // HAP FILE PICKER (FUNKSIONON NË IPHONE)
 chooseBtn.addEventListener("click", () => {

@@ -181,6 +181,23 @@ function setMsg(t) {
   msg.textContent = t;
 }
 
+setMsg("⏳ Po kontrolloj login...");
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    setMsg("❌ Duhet të jesh i loguar për të shitur");
+    publishBtn.disabled = true;
+    uploadBtn.disabled = true;
+
+    // opsionale: çoje te login
+    // window.location.href = "login.html?next=sellnow.html";
+  } else {
+    setMsg("✅ I loguar si: " + user.email);
+    publishBtn.disabled = false;
+    uploadBtn.disabled = false;
+  }
+});
+  
 // ✅ KËTU vendoset (pas elementëve)
 onAuthStateChanged(auth, (user) => {
   if (!user) {

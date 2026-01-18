@@ -178,7 +178,7 @@
   async function uploadPhotos(uid) {
     const urls = [];
     for (const file of fileInput.files) {
-      const path = watches/${uid}/${Date.now()}_${file.name};
+      const path = sellnow/${uid}/${Date.now()}_${file.name};
       const storageRef = ref(storage, path);
       await uploadBytes(storageRef, file);
       const url = await getDownloadURL(storageRef);

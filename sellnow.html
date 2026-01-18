@@ -120,20 +120,34 @@
 <textarea id="description" placeholder="Shkruaj përshkrimin..."></textarea>
   
 
-<div id="actions">
-  <button id="chooseBtn" type="button">Zgjidh Foto</button>
-  <button id="publishBtn">PUBLISH</button>
-</div>
+<!-- BUTONI QË KLIKOHET -->
+<button id="chooseBtn" type="button">Upload Photos</button>
+
+<!-- INPUT (JO display:none) -->
+<input
+  id="photoFiles"
+  type="file"
+  accept="image/*"
+  multiple
+  style="position:absolute; left:-9999px;"
+/>
 
 <div id="msg"></div>
-<div id="photosPreview"></div>
 
-<input id="photoFiles" type="file" accept="image/*" multiple class="hiddenFile">
+<button id="uploadBtn" type="button">NGARKO FOTOT</button>
 
+<button id="publishBtn" type="button">PUBLISH</button>
+  
+
+  
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+  import {
+    getStorage, ref, uploadBytes, getDownloadURL
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+  import {
+    getFirestore, collection, addDoc, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "…",
@@ -148,81 +162,44 @@
   const storage = getStorage(app);
   const db = getFirestore(app);
 
-  // DOM
-  const chooseBtn = document.getElementById("chooseBtn");
-  const publishBtn = document.getElementById("publishBtn");
-  const fileInput = document.getElementById("photoFiles");
-  const msg = document.getElementById("msg");
-  const preview = document.getElementById("photosPreview");
+const chooseBtn = document.getElementById("chooseBtn");
+const fileInput = document.getElementById("photoFiles");
+const uploadBtn = document.getElementById("uploadBtn");
+const publishBtn = document.getElementById("publishBtn");
+const msg = document.getElementById("msg");
 
-  const setMsg = (t) => (msg.textContent = t);
+function setMsg(t) {
+  msg.textContent = t;
+}
 
-  // 1) Zgjidh foto
-  chooseBtn.addEventListener("click", () => {
-    fileInput.click();
-  });
+// HAP FILE PICKER (FUNKSIONON NË IPHONE)
+chooseBtn.addEventListener("click", () => {
+  fileInput.click();
+});
 
-  // Preview + numri
-  fileInput.addEventListener("change", () => {
-    const n = fileInput.files.length;
-    setMsg(`📂 U zgjodhën ${n} foto`);
-    preview.innerHTML = "";
-    [...fileInput.files].forEach((f) => {
-      const img = document.createElement("img");
-      img.src = URL.createObjectURL(f);
-      img.onload = () => URL.revokeObjectURL(img.src);
-      preview.appendChild(img);
-    });
-  });
+// KUR ZGJIDH FOTO
+fileInput.addEventListener("change", () => {
+  setMsg("📂 U zgjodhën " + fileInput.files.length + " foto");
+});
 
-  async function uploadPhotos(uid) {
-    const urls = [];
-    for (const file of fileInput.files) {
-      const path = sellnow/${uid}/${Date.now()}_${file.name};
-      const storageRef = ref(storage, path);
-      await uploadBytes(storageRef, file);
-      const url = await getDownloadURL(storageRef);
-      urls.push(url);
-    }
-    return urls;
+// NGARKO FOTO (TEST)
+uploadBtn.addEventListener("click", async () => {
+  if (fileInput.files.length === 0) {
+    setMsg("❌ Zgjidh foto fillimisht");
+    return;
   }
 
-publishBtn.addEventListener("click", async () => {
-  try {
-    publishBtn.disabled = true;
-    setMsg("⏳ Duke publikuar...");
+  setMsg("⏳ Duke ngarkuar...");
+  await new Promise(r => setTimeout(r, 1500));
+  setMsg("✅ Foto u ngarkuan (" + fileInput.files.length + ")");
+});
 
-    if (!auth.currentUser) {
-      throw new Error("User jo i loguar");
-    }
-
-    if (!fileInput.files.length) {
-      throw new Error("Zgjidh të paktën 1 foto");
-    }
-
-    const uid = auth.currentUser.uid;
-    const photoUrls = await uploadPhotos(uid);
-
-    if (!photoUrls || !photoUrls.length) {
-      throw new Error("Fotot nuk u ngarkuan");
-    }
-
-    await addDoc(collection(db, "sellnow"), {
-      userId: uid,
-      photos: photoUrls,
-      createdAt: serverTimestamp(),
-      status: "active"
-    });
-
-    setMsg("✅ Postimi u publikua!");
-  } catch (err) {
-    console.error(err);
-    setMsg("❌ Gabim: " + err.message);
-  } finally {
-    publishBtn.disabled = false; // 🔑 SHPËTON GJITHMONË
-  }
+// PUBLISH (VETËM TEST)
+publishBtn.addEventListener("click", () => {
+  setMsg("🚀 Publish OK");
 });
 
 </script>
 </body>
 </html>
+

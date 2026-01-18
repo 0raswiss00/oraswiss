@@ -35,14 +35,8 @@ import {
   getAuth,
   setPersistence,
   browserLocalPersistence,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged
+  signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-
-import {
-  getFirestore
-} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "…",
@@ -55,37 +49,22 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 
-// ✅ VETËM NJË HERË
+// ruaj sesionin në browser
 await setPersistence(auth, browserLocalPersistence);
 
-// 🔍 Kontroll (shiko console)
-console.log("CONNECTED projectId =", app.options.projectId);
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+const btnLogin = document.getElementById("btnLogin");
+const msg = document.getElementById("msg");
 
-// Nëse user është i loguar, çoje te sellnow
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    window.location.href = "sellnow.html";
-  }
-});
-
-// LOGIN
-document.getElementById("btnLogin").addEventListener("click", async () => {
-  const email = document.getElementById("loginEmail").value.trim();
-  const pass = document.getElementById("loginPassword").value;
-
-  if (!email || !pass) {
-    alert("Vendos email dhe fjalëkalim");
-    return;
-  }
-
+btnLogin.addEventListener("click", async () => {
   try {
-    await signInWithEmailAndPassword(auth, email, pass);
+    msg.textContent = "⏳ Duke u loguar...";
+    await signInWithEmailAndPassword(auth, email.value.trim(), password.value);
     window.location.href = "sellnow.html";
   } catch (e) {
-    alert(e.message);
-    console.error(e);
+    msg.textContent = "❌ " + e.message;
   }
 });
 </script>

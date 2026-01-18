@@ -122,7 +122,7 @@
 
 <div id="actions">
   <button id="chooseBtn" type="button">Zgjidh Foto</button>
-  <button id="publishBtn" type="button">PUBLISH</button>
+  <button id="publishBtn">PUBLISH</button>
 </div>
 
 <div id="msg"></div>
@@ -201,8 +201,6 @@ publishBtn.addEventListener("click", async () => {
     }
 
     const uid = auth.currentUser.uid;
-
-    const photoUrls = await uploadPhotos(uid);
 
     if (!photoUrls.length) {
       throw new Error("Fotot nuk u ngarkuan");

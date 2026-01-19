@@ -50,7 +50,8 @@ const firebaseConfig = { ... };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
+window.addEventListener("DOMContentLoaded", () => {
+  
 // REGISTER
 document.getElementById("btnRegister").addEventListener("click", async () => {
   const email = document.getElementById("email").value.trim();

@@ -57,15 +57,20 @@ document.getElementById("btnRegister").addEventListener("click", async () => {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
 
+  if (!email || !password) {
+    alert("Plotëso email dhe password");
+    return;
+  }
+
   try {
     await createUserWithEmailAndPassword(auth, email, password);
-    window.location.href = "sellnow.html"; // ose index.html
+    alert("Regjistrimi u krye");
   } catch (e) {
     alert(e.message);
   }
 });
 
-// LOGIN
+// LOGIN  
 document.getElementById("btnLogin").addEventListener("click", async () => {
   const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value;

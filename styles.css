@@ -3081,6 +3081,39 @@ body {
   margin: 18px 0;
 }
 
+/* INPUT STYLE – clean & premium */
+.register-form input{
+  width: 100%;
+  padding: 14px 16px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 2px solid #d4a017;
+  background: #fffaf0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+  transition: all 0.2s ease;
+}
+
+/* placeholder */
+.register-form input::placeholder{
+  color: #8b8b8b;
+  font-weight: 500;
+}
+
+/* focus */
+.register-form input:focus{
+  outline: none;
+  background: #ffffff;
+  border-color: #c19312;
+  box-shadow: 0 0 0 4px rgba(212,160,23,0.25);
+}
+
+/* autofill fix (chrome) */
+input:-webkit-autofill{
+  -webkit-box-shadow: 0 0 0 1000px #fffaf0 inset;
+  -webkit-text-fill-color: #222;
+}
 
 
 

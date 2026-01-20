@@ -143,72 +143,39 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "…",
-  authDomain: "oraswiss-27e57.firebaseapp.com",
-  projectId: "oraswiss-27e57",
-  storageBucket: "oraswiss-27e57.appspot.com",
-  messagingSenderId: "…",
-  appId: "…"
-};
+    const firebaseConfig = {
+      apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+      authDomain: "oraswiss-27e57.firebaseapp.com",
+      projectId: "oraswiss-27e57",
+      storageBucket: "oraswiss-27e57.firebasestorage.app",
+      messagingSenderId: "596627676936",
+      appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+      measurementId: "G-VZPKMD67VQ"
+    };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 
-const fileInput = document.getElementById("photoFiles");
+console.log("AUTH DOMAIN:", firebaseConfig.authDomain);
+  
+// ELEMENTET
 const uploadBtn = document.getElementById("uploadBtn");
 const publishBtn = document.getElementById("publishBtn");
 const msg = document.getElementById("msg");
 
-let currentUser = null;
-function setMsg(t){ msg.textContent = t; }
-
-publishBtn.disabled = true;
-uploadBtn.disabled = true;
-setMsg("⏳ Po kontrolloj login...");
-
 onAuthStateChanged(auth, (user) => {
   if (!user) {
-    window.location.href = "register.html";
-    return;
-    }
     msg.textContent = "❌ Duhet të jesh i loguar për të shitur";
     uploadBtn.disabled = true;
     publishBtn.disabled = true;
   } else {
-    msg.textContent = "✅ I loguar si: " + (user.email || user.uid);
+    msg.textContent = "✅ I loguar si: " + user.email;
     uploadBtn.disabled = false;
     publishBtn.disabled = false;
   }
 });
-
-// TEST upload (vetëm UI)
-uploadBtn.addEventListener("click", async () => {
-  if (!fileInput.files.length) return setMsg("❌ Zgjidh foto");
-  setMsg("⏳ Duke ngarkuar...");
-  await new Promise(r => setTimeout(r, 600));
-  setMsg("✅ Foto gati");
-});
-
-// PUBLISH
-publishBtn.addEventListener("click", async () => {
-  try {
-    if (!currentUser) throw new Error("User jo i loguar");
-    setMsg("⏳ Duke publikuar...");
-    await addDoc(collection(db, "sellnow"), {
-      userId: currentUser.uid,
-      createdAt: serverTimestamp(),
-      status: "active"
-    });
-    setMsg("✅ Publikuar");
-  } catch (e) {
-    setMsg("❌ " + e.message);
-  }
-});
-</script> 
+</script>  
 
   
 </body>

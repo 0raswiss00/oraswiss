@@ -2988,63 +2988,98 @@ button, a, input, select, textarea { pointer-events: auto !important; }
 }
 
 
-.register-form button {
-  width: 100%;
-  padding: 12px;
-  background-color: #d4a017;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  position: relative;
-  z-index: 11;
+/* Reset i lehtë */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
 }
 
-.register-form button:hover {
-  background-color: #f2b91e;
-}
-      
-.register-form input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 6px;
-  border: 1px solid #444;
-  background-color: #111;
-  color: white;
-}
-
-.register-form {
-  width: 100%;
-  max-width: 420px;
-  margin: 40px auto;
+/* Qendra e faqes */
+.auth-page{
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  position: relative;
-  z-index: 10;
-}
-
-.register-btn:hover {
-  background: white;
-  color: black;
-}
-
-.register-btn {
-  margin-left: auto;
-  color: white;
-  font-weight: bold;
-  padding: 8px 14px;
-  border: 1px solid white;
-  border-radius: 6px;
-  text-decoration: none;
-}
-
-.menu {
-  display: flex;
-  gap: 25px;
   align-items: center;
+  justify-content: center;
+  padding: 24px;
 }
 
+/* Karta */
+.auth-card{
+  width: 100%;
+  max-width: 460px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 22px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  position: relative;
+}
+
+/* Butoni back */
+.back-btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  background: #2b2b2b;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 14px;
+}
+.back-btn:hover{
+  opacity: 0.92;
+}
+
+/* Titujt */
+.auth-card h2{
+  margin: 14px 0 10px;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+/* Input-et (pasi i ke brenda .register-form) */
+.register-form input{
+  width: 100%;
+  padding: 12px 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid #cfcfcf;
+  font-size: 15px;
+  background: #fff;
+  color: #111;
+}
+.register-form input:focus{
+  outline: none;
+  border-color: #d4a017;
+  box-shadow: 0 0 0 3px rgba(212,160,23,0.18);
+}
+
+/* Butonat kryesor */
+.auth-btn{
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background: #d4a017;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.auth-btn:hover{
+  background: #c19312;
+}
+
+/* Ndarësi mes Register / Login */
+.auth-sep{
+  height: 1px;
+  background: #e7e7e7;
+  margin: 18px 0;
+}
 
 
 

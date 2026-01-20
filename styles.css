@@ -454,13 +454,6 @@ ul {
   border-radius: 10px;
 }
 
-/* Move Register / Login button to the right */
-.menu {
-    display: flex;
-    gap: 25px;
-    align-items: center;
-}
-
 /* Logo majtas */
 .site-title {
     font-size: 26px;
@@ -474,18 +467,6 @@ ul {
     gap: 20px;
     flex-grow: 1;
     justify-content: center;
-}
-
-/* Move Register / Login button to the right */
-/* Inputet */
-.register-form input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 6px;
-  border: 1px solid #444;
-  background-color: #111;
-  color: white;
-  font-size: 14px;
 }
 
 /* Input kur klikon mbi të */
@@ -1515,36 +1496,7 @@ nav li {
     justify-content: center;
 }
 
-/* Move Register / Login button to the right */
-.menu {
-    display: flex;
-    gap: 25px;
-    align-items: center;
-}
 
-.register-btn {
-    margin-left: auto;
-    color: white;
-    font-weight: bold;
-    padding: 8px 14px;
-    border: 1px solid white;
-    border-radius: 6px;
-    text-decoration: none;
-}
-
-.register-btn:hover {
-    background: white;
-    color: black;
-}
-
-/* Kutia e formularit */
-.register-form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;       /* hapësirë midis inputeve */
-  margin-bottom: 20px;
-}
 
 /* Inputet */
 .register-form input {

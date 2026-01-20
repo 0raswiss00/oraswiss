@@ -1086,11 +1086,6 @@ nav li {
     border-radius: 12px;
 }
 
-.register-btn:hover {
-    background: white;
-    color: black;
-}
-
 /* =========================
           BUTTONS
 ========================= */
@@ -1257,29 +1252,6 @@ nav li {
   height:auto;
   border-radius:10px;
   border:1px solid #e5e7eb;
-}
-
-.register-btn{
-  margin-left: auto;
-  color: #fff !important;
-  font-weight: bold;
-  padding: 8px 14px;
-  border: 1px solid #fff !important;
-  border-radius: 6px;
-  text-decoration: none;
-  background: transparent !important;
-}
-
-.register-btn:hover{
-  background: #fff !important;
-  color: #000 !important;
-}
-
-.register-btn{ border: 5px solid red !important; }
-.register-btn:focus,
-.register-btn:active {
-  outline: none;
-  box-shadow: none;
 }
       
 /* FIX I FOTOVE – BËJI HORIZONTAL NË TË GJITHA: LUXURY / VINTAGE / PARTS */
@@ -1458,21 +1430,6 @@ nav li {
     align-items: center;
 }
 
-.register-btn {
-    margin-left: auto;
-    color: white;
-    font-weight: bold;
-    padding: 8px 14px;
-    border: 1px solid white;
-    border-radius: 6px;
-    text-decoration: none;
-}
-
-.register-btn:hover {
-    background: white;
-    color: black;
-}
-
 /* Header i rregulluar në 3 pjesë: majtas – qendër – djathtas */
 .site-header {
     display: flex;
@@ -1526,11 +1483,6 @@ nav li {
   font-weight: bold;
   cursor: pointer;
   font-size: 15px;
-}
-
-/* Butoni kur e prek */
-.register-form button:hover {
-  background-color: #f2b91e;
 }
 
 .product-row {
@@ -1827,45 +1779,6 @@ nav li {
 
 .sell-form button[type="submit"]:active {
     transform: translateY(0);
-}
-
-.register-btn{
-  margin-left:auto;
-  color:#fff;
-  font-weight:700;
-  padding:8px 14px;
-  border:1px solid #fff;
-  border-radius:6px;
-  text-decoration:none;
-  background:transparent;
-  -webkit-tap-highlight-color:transparent;
-}
-
-.register-btn:hover{
-  background:#fff;
-  color:#000;
-}
-
-.register-btn:focus,
-.register-btn:active{
-  outline:none;
-  box-shadow:none;
-}
-     
-/* ====== NAV SCROLL – REGISTER / LOGIN ====== */
-.nav-scroll {
-    display: flex;
-    overflow-x: auto;
-    white-space: nowrap;
-    gap: 25px;
-    padding: 10px 15px;
-    scroll-behavior: smooth;
-}
-
-.nav-scroll a {
-    color: white;
-    font-size: 18px;
-    text-decoration: none;
 }
 
 .nav-scroll::-webkit-scrollbar {
@@ -3073,3 +2986,112 @@ button, a, input, select, textarea { pointer-events: auto !important; }
   border: 1px solid #333;
   margin: 6px 6px 0 0;
 }
+
+
+.register-form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #d4a017;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+  z-index: 11;
+}
+
+.register-form button:hover {
+  background-color: #f2b91e;
+}
+      
+.register-form input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background-color: #111;
+  color: white;
+}
+
+.register-form {
+  width: 100%;
+  max-width: 420px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  z-index: 10;
+}
+
+.register-btn:hover {
+  background: white;
+  color: black;
+}
+
+.register-btn {
+  margin-left: auto;
+  color: white;
+  font-weight: bold;
+  padding: 8px 14px;
+  border: 1px solid white;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.menu {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+      
+
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+      

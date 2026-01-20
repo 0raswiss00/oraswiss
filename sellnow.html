@@ -172,6 +172,9 @@ setMsg("⏳ Po kontrolloj login...");
 
 onAuthStateChanged(auth, (user) => {
   if (!user) {
+    window.location.href = "register.html";
+    return;
+    }
     msg.textContent = "❌ Duhet të jesh i loguar për të shitur";
     uploadBtn.disabled = true;
     publishBtn.disabled = true;
@@ -206,42 +209,7 @@ publishBtn.addEventListener("click", async () => {
   }
 });
 </script> 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
-      authDomain: "oraswiss-27e57.firebaseapp.com",
-      projectId: "oraswiss-27e57",
-      storageBucket: "oraswiss-27e57.firebasestorage.app",
-      messagingSenderId: "596627676936",
-      appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-      measurementId: "G-VZPKMD67VQ"
-    };
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-console.log("AUTH DOMAIN:", firebaseConfig.authDomain);
-  
-// ELEMENTET
-const uploadBtn = document.getElementById("uploadBtn");
-const publishBtn = document.getElementById("publishBtn");
-const msg = document.getElementById("msg");
-
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    msg.textContent = "❌ Duhet të jesh i loguar për të shitur";
-    uploadBtn.disabled = true;
-    publishBtn.disabled = true;
-  } else {
-    msg.textContent = "✅ I loguar si: " + user.email;
-    uploadBtn.disabled = false;
-    publishBtn.disabled = false;
-  }
-});
-</script>  
   
 </body>
 </html>

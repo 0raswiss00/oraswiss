@@ -2988,148 +2988,97 @@ button, a, input, select, textarea { pointer-events: auto !important; }
 }
 
 
-/* Reset i lehtë */
-* { box-sizing: border-box; }
-body {
+/* RESET */
+* {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Qendra e faqes */
-.auth-page{
+/* BACKGROUND */
+body {
+  background: #ececec;
+}
+
+/* CENTER PAGE */
+.auth-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
 }
 
-/* Karta */
-.auth-card{
+/* CARD */
+.auth-card {
+  background: #ffffff;
   width: 100%;
-  max-width: 460px;
-  background: #fff;
-  border-radius: 12px;
-  padding: 22px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-  position: relative;
+  max-width: 480px;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
-/* Butoni back */
-.back-btn{
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border: 1px solid #ddd;
-  background: #2b2b2b;
+/* BACK BUTTON */
+.back-btn {
+  background: #222;
   color: #fff;
+  border: none;
+  padding: 10px 14px;
   border-radius: 8px;
   cursor: pointer;
-  margin-bottom: 14px;
-}
-.back-btn:hover{
-  opacity: 0.92;
+  margin-bottom: 20px;
 }
 
-/* Titujt */
-.auth-card h2{
-  margin: 14px 0 10px;
-  font-size: 34px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-}
-
-/* Input-et (pasi i ke brenda .register-form) */
-.register-form input{
-  width: 100%;
-  padding: 12px 12px;
-  margin: 8px 0;
-  border-radius: 8px;
-  border: 1px solid #cfcfcf;
-  font-size: 15px;
-  background: #fff;
+/* TITLES */
+.auth-card h2 {
+  font-size: 28px;
+  margin-bottom: 12px;
   color: #111;
 }
-.register-form input:focus{
-  outline: none;
-  border-color: #d4a017;
-  box-shadow: 0 0 0 3px rgba(212,160,23,0.18);
+
+/* INPUTS */
+.register-form input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 2px solid #d4a017;
+  background: #fffdf6;
+  font-size: 16px;
+  color: #111;
 }
 
-/* Butonat kryesor */
-.auth-btn{
+.register-form input:focus {
+  outline: none;
+  border-color: #b88b10;
+  box-shadow: 0 0 0 3px rgba(212,160,23,0.25);
+}
+
+/* BUTTONS */
+.auth-btn {
   width: 100%;
-  padding: 12px;
-  margin-top: 10px;
+  padding: 14px;
+  margin-top: 8px;
   background: #d4a017;
   border: none;
   border-radius: 8px;
-  font-size: 16px;
-  font-weight: 800;
+  font-size: 17px;
+  font-weight: bold;
   cursor: pointer;
-}
-.auth-btn:hover{
-  background: #c19312;
+  color: #111;
 }
 
-/* Ndarësi mes Register / Login */
-.auth-sep{
+.auth-btn:hover {
+  background: #b88b10;
+}
+
+/* SEPARATOR */
+.auth-sep {
   height: 1px;
-  background: #e7e7e7;
-  margin: 18px 0;
+  background: #ddd;
+  margin: 22px 0;
 }
-
-/* INPUT STYLE – clean & premium */
-.register-form input{
-  width: 100%;
-  padding: 14px 16px;
-  margin: 10px 0;
-  border-radius: 10px;
-  border: 2px solid #d4a017;
-  background: #fffaf0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #222;
-  transition: all 0.2s ease;
-}
-
-/* placeholder */
-.register-form input::placeholder{
-  color: #8b8b8b;
-  font-weight: 500;
-}
-
-/* focus */
-.register-form input:focus{
-  outline: none;
-  background: #ffffff;
-  border-color: #c19312;
-  box-shadow: 0 0 0 4px rgba(212,160,23,0.25);
-}
-
-/* autofill fix (chrome) */
-input:-webkit-autofill{
-  -webkit-box-shadow: 0 0 0 1000px #fffaf0 inset;
-  -webkit-text-fill-color: #222;
-}
-
-.auth-card { background: #fff !important; }
-.register-form input { border: 2px solid #d4a017 !important; }
-.auth-btn { background: #d4a017 !important; }
-
-
-
-
-
-
-
-
-
-      
-
-      
 
 
 

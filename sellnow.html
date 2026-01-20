@@ -184,19 +184,37 @@ fileInput.addEventListener("change", () => {
   }
 });
   
+// gjendje fillestare
 uploadBtn.disabled = true;
 publishBtn.disabled = true;
-msg.textContent = "⏳ Po kontrolloj login...";
 
+// kur klikon Upload Photos -> hap file picker
+chooseBtn.addEventListener("click", () => {
+  fileInput.click();
+});
 
- onAuthStateChanged(auth, (user) => {
+// kur zgjidhen fotot
+fileInput.addEventListener("change", () => {
+  const n = fileInput.files.length;
+
+  if (n > 0) {
+    msg.textContent = "✅ Zgjodhe " + n + " foto";
+    uploadBtn.disabled = false;   // ✅ aktivizohet këtu
+  } else {
+    msg.textContent = "❌ S'ke zgjedhur foto";
+    uploadBtn.disabled = true;
+  }
+});
+
+// pastaj vjen onAuthStateChanged poshtë
+onAuthStateChanged(auth, (user) => {
   if (!user) {
     msg.textContent = "❌ Duhet të jesh i loguar për të shitur";
     uploadBtn.disabled = true;
     publishBtn.disabled = true;
   } else {
     msg.textContent = "✅ I loguar si: " + (user.email || user.uid);
-    uploadBtn.disabled = false;
+    // mos e bëj uploadBtn=false këtu nëse s’ka foto akoma
     publishBtn.disabled = false;
   }
 });

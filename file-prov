@@ -849,3 +849,104 @@ publishBtn.addEventListener("click", async () => {
 </script>
 </body>
 </html>
+
+
+
+
+register
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="auth-page">
+    <div class="auth-card register-form">
+      <button class="back-btn" onclick="history.back()">← Back</button>
+
+      <h2>Sign Up</h2>
+      <input id="fullName" placeholder="Full Name" autocomplete="name" />
+      <input id="phone" placeholder="Phone" autocomplete="tel" />
+      <input id="country" placeholder="Country" autocomplete="country-name" />
+      <input id="email" type="email" placeholder="Email" autocomplete="email" autocapitalize="none" />
+      <input id="password" type="password" placeholder="Password" autocomplete="new-password" />
+      <button id="btnRegister" type="button" class="auth-btn">Register</button>
+
+      <div class="auth-sep"></div>
+
+      <h2>Login</h2>
+      <input id="loginEmail" type="email" placeholder="Email" autocomplete="email" autocapitalize="none" />
+      <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password" />
+      <button id="btnLogin" type="button" class="auth-btn">Login</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+
+    // ✅ Vendos konfigurimin tënd këtu (si objekt i vetëm)
+    const firebaseConfig = {
+      apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+      authDomain: "oraswiss-27e57.firebaseapp.com",
+      projectId: "oraswiss-27e57",
+      storageBucket: "oraswiss-27e57.firebasestorage.app",
+      messagingSenderId: "596627676936",
+      appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+      measurementId: "G-VZPKMD67VQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.addEventListener("DOMContentLoaded", () => {
+
+      // REGISTER
+      document.getElementById("btnRegister").addEventListener("click", async () => {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        if (!email || !password) {
+          alert("Plotëso email dhe password");
+          return;
+        }
+
+        try {
+          await createUserWithEmailAndPassword(auth, email, password);
+          alert("Regjistrimi u krye");
+        } catch (e) {
+          alert(e.message);
+        }
+      });
+
+      // LOGIN
+      document.getElementById("btnLogin").addEventListener("click", async () => {
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+          window.location.href = "sellnow.html";
+        } catch (e) {
+          alert(e.message);
+        }
+      });
+
+    });
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/service-worker.js");
+    }
+  </script>
+</body>
+</html>

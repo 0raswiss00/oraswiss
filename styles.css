@@ -3110,7 +3110,13 @@ body {
 
 .hidden { display: none !important; }
 
+.minions-loader {
+  pointer-events: all;
+}
 
+.minions-loader.hidden {
+  pointer-events: none;
+}
 
 
 

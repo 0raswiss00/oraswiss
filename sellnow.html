@@ -171,24 +171,12 @@ chooseBtn.addEventListener("click", () => {
   fileInput.click();
 });
 
+  // Kur zgjidhen fotot
 fileInput.addEventListener("change", () => {
   const n = fileInput.files.length;
 
   if (n > 0) {
     msg.textContent = "✅ Zgjodhe " + n + " foto";
-    uploadBtn.disabled = false;
-  } else {
-    msg.textContent = "❌ S’ke zgjedhur foto";
-    uploadBtn.disabled = true;
-  }
-});
-  
-// Kur zgjidhen fotot
-fileInput.addEventListener("change", () => {
-  const n = fileInput.files.length;
-
-  if (n > 0) {
-    msg.textContent = ✅ Zgjodhe ${n} foto;
     uploadBtn.disabled = false;
   } else {
     msg.textContent = "❌ S’ke zgjedhur foto";

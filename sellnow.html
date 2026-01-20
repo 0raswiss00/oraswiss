@@ -143,37 +143,39 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
-      authDomain: "oraswiss-27e57.firebaseapp.com",
-      projectId: "oraswiss-27e57",
-      storageBucket: "oraswiss-27e57.firebasestorage.app",
-      messagingSenderId: "596627676936",
-      appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-      measurementId: "G-VZPKMD67VQ"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+  authDomain: "oraswiss-27e57.firebaseapp.com",
+  projectId: "oraswiss-27e57",
+  storageBucket: "oraswiss-27e57.appspot.com",
+  messagingSenderId: "596627676936",
+  appId: "1:596627676936:web:0c96cf820fef4e979616bd"
+};
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
-console.log("AUTH DOMAIN:", firebaseConfig.authDomain);
-  
 // ELEMENTET
 const uploadBtn = document.getElementById("uploadBtn");
 const publishBtn = document.getElementById("publishBtn");
 const msg = document.getElementById("msg");
 
+uploadBtn.disabled = true;
+publishBtn.disabled = true;
+msg.textContent = "⏳ Po kontrolloj login...";
+
 onAuthStateChanged(auth, (user) => {
   if (!user) {
-    msg.textContent = "❌ Duhet të jesh i loguar për të shitur";
-    uploadBtn.disabled = true;
-    publishBtn.disabled = true;
-  } else {
-    msg.textContent = "✅ I loguar si: " + user.email;
-    uploadBtn.disabled = false;
-    publishBtn.disabled = false;
+    window.location.href = "register.html"; // ⬅️ KJO ËSHTË FIX-i
+    return;
   }
+
+  msg.textContent = "✅ I loguar si: " + user.email;
+  uploadBtn.disabled = false;
+  publishBtn.disabled = false;
 });
 </script>  
 

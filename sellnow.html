@@ -224,6 +224,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+console.log("AUTH DOMAIN:", firebaseConfig.authDomain);
+  
 // ELEMENTET
 const uploadBtn = document.getElementById("uploadBtn");
 const publishBtn = document.getElementById("publishBtn");

@@ -145,7 +145,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
-
+import { getStorage, ref, uploadBytes, getDownloadURL } 
+from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+  
 const firebaseConfig = {
   apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
   authDomain: "oraswiss-27e57.firebaseapp.com",
@@ -159,7 +161,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
+const storage = getStorage(app);
+  
 // ELEMENTET
 const uploadBtn = document.getElementById("uploadBtn");
 const publishBtn = document.getElementById("publishBtn");
@@ -219,6 +222,33 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+uploadBtn.addEventListener("click", async () => {
+  try {
+    if (!currentUser) throw new Error("Duhet të jesh i loguar");
+    if (!fileInput.files.length) throw new Error("Zgjidh foto");
+
+    setMsg("⏳ Duke ngarkuar...");
+
+    const urls = [];
+    for (const file of fileInput.files) {
+      const path = sellnow/${currentUser.uid}/${Date.now()}_${file.name};
+      const fileRef = ref(storage, path);
+
+      await uploadBytes(fileRef, file);
+      const url = await getDownloadURL(fileRef);
+      urls.push(url);
+    }
+
+    setMsg("✅ Foto u ngarkuan: " + urls.length);
+
+    // nëse do t’i ruash për Publish:
+    window.uploadedPhotoUrls = urls;
+
+  } catch (e) {
+    setMsg("❌ " + e.message);
+  }
+});
+  
 </script>  
 
   

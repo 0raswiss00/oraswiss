@@ -29,60 +29,62 @@
     </div>
   </div>
 
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-<!-- ✅ KËTU POSHTË -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    // ✅ Vendos konfigurimin tënd këtu (si objekt i vetëm)
+    const firebaseConfig = {
+      apiKey: "AIzaSyA....",
+      authDomain: "oraswiss-27e57.firebaseapp.com",
+      projectId: "oraswiss-27e57",
+      storageBucket: "oraswiss-27e57.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abcd1234"
+    };
 
-const firebaseConfig = { ... };
-  apiKey: "AIzaSyA....",
-  authDomain: "oraswiss-27e57.firebaseapp.com",
-  projectId: "oraswiss-27e57",
-  storageBucket: "oraswiss-27e57.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcd1234"
-};
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-window.addEventListener("DOMContentLoaded", () => {
-  
-// REGISTER
-document.getElementById("btnRegister").addEventListener("click", async () => {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
+    window.addEventListener("DOMContentLoaded", () => {
 
-  if (!email || !password) {
-    alert("Plotëso email dhe password");
-    return;
-  }
+      // REGISTER
+      document.getElementById("btnRegister").addEventListener("click", async () => {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
 
-  try {
-    await createUserWithEmailAndPassword(auth, email, password);
-    alert("Regjistrimi u krye");
-  } catch (e) {
-    alert(e.message);
-  }
-});
+        if (!email || !password) {
+          alert("Plotëso email dhe password");
+          return;
+        }
 
-// LOGIN  
-document.getElementById("btnLogin").addEventListener("click", async () => {
-  const email = document.getElementById("loginEmail").value.trim();
-  const password = document.getElementById("loginPassword").value;
+        try {
+          await createUserWithEmailAndPassword(auth, email, password);
+          alert("Regjistrimi u krye");
+        } catch (e) {
+          alert(e.message);
+        }
+      });
 
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    window.location.href = "sellnow.html";
-  } catch (e) {
-    alert(e.message);
-  }
-});
-</script>
+      // LOGIN
+      document.getElementById("btnLogin").addEventListener("click", async () => {
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+          window.location.href = "sellnow.html";
+        } catch (e) {
+          alert(e.message);
+        }
+      });
+
+    });
+  </script>
 
   <script>
     if ("serviceWorker" in navigator) {

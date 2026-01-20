@@ -171,15 +171,14 @@ uploadBtn.disabled = true;
 setMsg("⏳ Po kontrolloj login...");
 
 onAuthStateChanged(auth, (user) => {
-  currentUser = user;
   if (!user) {
-    setMsg("❌ Duhet të jesh i loguar");
-    publishBtn.disabled = true;
+    msg.textContent = "❌ Duhet të jesh i loguar për të shitur";
     uploadBtn.disabled = true;
+    publishBtn.disabled = true;
   } else {
-    setMsg("✅ I loguar si: " + (user.email || user.uid));
-    publishBtn.disabled = false;
+    msg.textContent = "✅ I loguar si: " + (user.email || user.uid);
     uploadBtn.disabled = false;
+    publishBtn.disabled = false;
   }
 });
 

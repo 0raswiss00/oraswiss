@@ -1203,3 +1203,183 @@ onAuthStateChanged(auth, (user) => {
   
 </body>
 </html>
+
+
+sell.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sell Your Watch</title>
+
+<!-- UPLOADCARE SCRIPT -->
+<script>
+  UPLOADCARE_PUBLIC_KEY = "demopublickey"; /* kur të hapësh llogari tënde, e zëvendëson */
+</script>
+<script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    color: #fff;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+.sell-form {
+    background: #111;
+    padding: 30px 25px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 420px;
+    margin-top: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+}
+
+.sell-form h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 20px;
+    border-bottom: 1px solid #222;
+    padding-bottom: 5px;
+}
+
+.sell-form label {
+    display: block;
+    font-size: 14px;
+    margin-top: 12px;
+    margin-bottom: 5px;
+}
+
+.sell-form input,
+.sell-form textarea,
+.sell-form select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background: #1b1b1b;
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.sell-form textarea {
+    resize: vertical;
+}
+
+.sell-form button {
+    width: 100%;
+    padding: 12px;
+    background: #0099ff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.sell-form button:hover {
+    background: #0077cc;
+}
+</style>
+</head>
+
+<body>
+
+<form action="https://api.web3forms.com/submit"
+      method="POST"
+      class="sell-form">
+
+    <!-- Web3Forms settings -->
+    <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
+    <input type="hidden" name="subject" value="New Sell Your Watch Request">
+    <input type="hidden" name="from_name" value="OraSwiss Website">
+    <input type="hidden" name="botcheck">
+
+    <!-- Këtu do ruajmë linkun e fotos -->
+    <input type="hidden" name="photos" id="photosField">
+
+    <h3>Your Details</h3>
+
+    <label>First name:</label>
+    <input type="text" name="first_name" placeholder="Your first name" required>
+
+    <label>Last name:</label>
+    <input type="text" name="last_name" placeholder="Your last name" required>
+
+    <label>Email:</label>
+    <input type="email" name="email" placeholder="Your email address" required>
+
+    <label>Phone:</label>
+    <input type="text" name="phone" placeholder="+355..., +30..." required>
+
+    <h3>Watch Details</h3>
+
+    <label>Brand:</label>
+    <input type="text" name="brand" placeholder="Rolex, Omega, etc." required>
+
+    <label>Model / Reference:</label>
+    <input type="text" name="model" placeholder="Model / Reference">
+
+    <label>Movement type:</label>
+    <select name="movement">
+        <option>Automatic</option>
+        <option>Manual</option>
+        <option>Quartz</option>
+        <option>Other</option>
+    </select>
+
+    <label>Year (approx.):</label>
+    <input type="text" name="year" placeholder="Approximate year">
+
+    <label>Condition / Notes:</label>
+    <textarea name="notes" rows="4"
+              placeholder="Condition, box & papers, service history..."></textarea>
+
+    <label>Upload Photos:</label>
+    <input
+      type="hidden"
+      role="uploadcare-uploader"
+      data-multiple="false"
+      data-clearable="true"
+      id="uploader"
+    />
+
+    <button type="submit">Send Offer</button>
+
+    <a href="index.html"
+       style="color:#ccc; text-align:center; display:block; margin-top:10px;">
+       ← Back to Home
+    </a>
+
+</form>
+
+<!-- SCRIPT që kopjon linkun e fotos te photosField -->
+<script>
+  (function() {
+    var widget = uploadcare.Widget('#uploader');
+
+    widget.onUploadComplete(function(fileInfo) {
+        // fileInfo.cdnUrl = linku direkt i fotos
+        var field = document.getElementById('photosField');
+        field.value = fileInfo.cdnUrl || '';
+    });
+  })();
+</script>
+
+</body>
+
+
+
+
+
+

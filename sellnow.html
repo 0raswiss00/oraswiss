@@ -158,10 +158,15 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+const chooseBtn = document.getElementById("chooseBtn");
 const fileInput = document.getElementById("photoFiles");
 const uploadBtn = document.getElementById("uploadBtn");
 const publishBtn = document.getElementById("publishBtn");
 const msg = document.getElementById("msg");
+
+chooseBtn.addEventListener("click", () => {
+  fileInput.click();
+});
   
 let currentUser = null;
 function setMsg(t){ msg.textContent = t; }

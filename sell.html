@@ -188,7 +188,11 @@ const storage = getStorage(app);
 const chooseBtn = document.getElementById("chooseBtn");
 const fileInput = document.getElementById("photoFiles");
 
-chooseBtn.addEventListener("click", () => fileInput.click());
+chooseBtn.addEventListener("click", (e) => {
+  e.preventDefault();      // ndalon formën
+  e.stopPropagation();     // mos e le të “kapet” nga form-a
+  fileInput.click();       // hap zgjedhjen e fotove
+});
 
 const uploadBtn = document.getElementById("uploadBtn");
 const publishBtn = document.getElementById("publishBtn");
@@ -256,5 +260,8 @@ uploadBtn.addEventListener("click", async () => {
 });
 </script>
 
+
+
+  
 </body>
 </html>

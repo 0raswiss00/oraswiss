@@ -136,15 +136,10 @@ body {
     <textarea name="notes" rows="4"
               placeholder="Condition, box & papers, service history..."></textarea>
 
-  <button id="chooseBtn" type="button">Upload Photos</button>
+<button id="chooseBtn" type="button">Upload Photos</button>
 
-<input
-  id="photoFiles"
-  type="file"
-  accept="image/*"
-  multiple
-  style="display:none"
-/>
+<input id="photoFiles" type="file" accept="image/*" multiple style="display:none">
+
     <button type="submit">Send Offer</button>
 
     <a href="index.html"
@@ -166,9 +161,10 @@ const firebaseConfig = {
   apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
   authDomain: "oraswiss-27e57.firebaseapp.com",
   projectId: "oraswiss-27e57",
-  storageBucket: "oraswiss-27e57.appspot.com",
+  storageBucket: "oraswiss-27e57.firebasestorage.app",
   messagingSenderId: "596627676936",
-  appId: "1:596627676936:web:0c96cf820fef4e979616bd"
+  appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+  measurementId: "G-VZPKMD67VQ"
 };
 
 /* ===== INIT ===== */
@@ -177,8 +173,11 @@ const auth = getAuth(app);
 const storage = getStorage(app);
 
 /* ===== ELEMENTS ===== */
-const chooseBtn  = document.getElementById("chooseBtn");
+const chooseBtn = document.getElementById("chooseBtn");
 const fileInput = document.getElementById("photoFiles");
+
+chooseBtn.addEventListener("click", () => fileInput.click());
+
 const uploadBtn = document.getElementById("uploadBtn");
 const publishBtn = document.getElementById("publishBtn");
 const msg = document.getElementById("msg");

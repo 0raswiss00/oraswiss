@@ -3119,7 +3119,11 @@ body {
   cursor: pointer !important;
 }
 
-
+#chooseBtn{
+  position: relative;
+  z-index: 999999;
+  pointer-events: auto !important;
+}
 
 
 

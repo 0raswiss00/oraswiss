@@ -173,7 +173,9 @@ uploadBtn.disabled = true;
 setMsg("⏳ Po kontrolloj login...");
 
 onAuthStateChanged(auth, (user) => {
-  currentUser = user;
+  currentuser = user;
+  console.log("AUTH USER:", user); // ✅ KËTU
+
   if (!user) {
     setMsg("❌ Duhet të jesh i loguar");
     publishBtn.disabled = true;

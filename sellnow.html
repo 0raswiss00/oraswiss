@@ -157,7 +157,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const chooseBtn = document.getElementById("chooseBtn");
 
+chooseBtn.addEventListener("click", () => {
+  fileInput.click();
+});
+  
 const fileInput = document.getElementById("photoFiles");
 const uploadBtn = document.getElementById("uploadBtn");
 const publishBtn = document.getElementById("publishBtn");

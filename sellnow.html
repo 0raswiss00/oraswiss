@@ -154,23 +154,29 @@ const storage = getStorage(app);
 /* ===== ELEMENTS ===== */
 const chooseBtn = document.getElementById("chooseBtn");
 const fileInput = document.getElementById("photoFiles");
-
-chooseBtn.addEventListener("click", (e) => {
-  e.preventDefault();      // ndalon formën
-  e.stopPropagation();     // mos e le të “kapet” nga form-a
-  fileInput.click();       // hap zgjedhjen e fotove
-});
-
 const uploadBtn = document.getElementById("uploadBtn");
 const publishBtn = document.getElementById("publishBtn");
 const msg = document.getElementById("msg");
 
-/* ===== STATE ===== */
 let currentUser = null;
 uploadBtn.disabled = true;
 publishBtn.disabled = true;
 
-/* ===== AUTH ===== */
+chooseBtn.addEventListener("click", () => {
+  fileInput.click();
+});
+
+fileInput.addEventListener("change", () => {
+  const n = fileInput.files.length;
+  if (n > 0) {
+    msg.textContent = ✅ Zgjodhe ${n} foto;
+    uploadBtn.disabled = false;
+  } else {
+    msg.textContent = "❌ S’ke zgjedhur foto";
+    uploadBtn.disabled = true;
+  }
+});
+
 onAuthStateChanged(auth, (user) => {
   currentUser = user;
   if (!user) {
@@ -183,7 +189,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-/* ===== UPLOAD ===== */
 uploadBtn.addEventListener("click", async () => {
   try {
     if (!currentUser) throw new Error("Duhet të jesh i loguar");
@@ -194,7 +199,7 @@ uploadBtn.addEventListener("click", async () => {
 
     const urls = [];
     for (const file of fileInput.files) {
-      const path = sellnow/${currentUser.uid}/${Date.now()}_${file.name};
+      const path = sellnow/${currentUser.uid}/${Date.now()}_${file.name}; // ✅ FIX
       const fileRef = ref(storage, path);
       await uploadBytes(fileRef, file);
       const url = await getDownloadURL(fileRef);

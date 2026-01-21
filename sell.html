@@ -178,7 +178,9 @@ uploadBtn.disabled = true;
 publishBtn.disabled = true;
 
 chooseBtn.addEventListener("click", () => {
-  fileInput.click();
+  msg.textContent = "✅ Klikove Upload Photos";
+  console.log("CLICK OK", fileInput);
+  try { fileInput.click(); } catch (err) { console.log("CLICK ERROR", err); }
 });
 
 fileInput.addEventListener("change", () => {

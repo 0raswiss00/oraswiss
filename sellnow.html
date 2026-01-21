@@ -122,9 +122,18 @@
 
 <!-- BUTONI QË KLIKOHET -->
 <button id="chooseBtn" type="button">Upload Photos</button>
-<input id="photoFiles" type="file" accept="image/*" multiple style="display:none">
-<button id="uploadBtn" type="button" disabled>NGARKO FOTOT</button>
+
+<input
+  id="photoFiles"
+  type="file"
+  accept="image/*"
+  multiple
+  style="display:none"
+/>
+
+<button id="uploadBtn" type="button" disabled>NGARKO FOTO</button>
 <div id="msg"></div>
+
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
@@ -150,25 +159,24 @@ const fileInput = document.getElementById("photoFiles");
 const uploadBtn = document.getElementById("uploadBtn");
 const msg = document.getElementById("msg");
 
-let currentUser = null;
-
-onAuthStateChanged(auth, (user) => {
-  currentUser = user;
-  msg.textContent = user ? ✅ I loguar si: ${user.email || user.uid} : "❌ Duhet të jesh i loguar";
-});
-
-chooseBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  msg.textContent = "✅ Po hap zgjedhjen e fotove...";
+chooseBtn.addEventListener("click", () => {
+  console.log("OPEN FILE PICKER");
   fileInput.click();
 });
 
 fileInput.addEventListener("change", () => {
+  console.log("FILES:", fileInput.files);
   const n = fileInput.files.length;
-  msg.textContent = n ? ✅ Zgjodhe ${n} foto : "❌ S’ke zgjedhur foto";
-  uploadBtn.disabled = !n;
+
+  if (n > 0) {
+    msg.textContent = ✅ Zgjodhe ${n} foto;
+    uploadBtn.disabled = false;
+  } else {
+    msg.textContent = "❌ S’ke zgjedhur foto";
+    uploadBtn.disabled = true;
+  }
 });
+
 
 uploadBtn.addEventListener("click", async () => {
   try {

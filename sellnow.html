@@ -121,63 +121,77 @@
   
 
 <!-- BUTONI QË KLIKOHET -->
-<button id="chooseBtn" type="button" class="btn">
-  Upload Photos
-</button>
-
-<input
-  id="photoFiles"
-  type="file"
-  accept="image/*"
-  multiple
-  style="display:none"
-/>
-
+<button id="chooseBtn" type="button">Upload Photos</button>
+<input id="photoFiles" type="file" accept="image/*" multiple style="display:none">
+<button id="uploadBtn" type="button" disabled>NGARKO FOTOT</button>
 <div id="msg"></div>
-<div id="photosPreview"></div>
-  
-<button id="uploadBtn" type="button">NGARKO FOTOT</button>
 
-<button id="publishBtn" type="button">PUBLISH</button>
-  
-
-  
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
   authDomain: "oraswiss-27e57.firebaseapp.com",
   projectId: "oraswiss-27e57",
-  storageBucket: "oraswiss-27e57.appspot.com",
+  storageBucket: "oraswiss-27e57.firebasestorage.app",
   messagingSenderId: "596627676936",
-  appId: "1:596627676936:web:0c96cf820fef4e979616bd"
+  appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+  measurementId: "G-VZPKMD67VQ"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
+const storage = getStorage(app);
 
-// ELEMENTET
+const chooseBtn = document.getElementById("chooseBtn");
+const fileInput = document.getElementById("photoFiles");
 const uploadBtn = document.getElementById("uploadBtn");
-const publishBtn = document.getElementById("publishBtn");
 const msg = document.getElementById("msg");
 
-uploadBtn.disabled = true;
-publishBtn.disabled = true;
-msg.textContent = "⏳ Po kontrolloj login...";
+let currentUser = null;
 
 onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = "register.html"; // ⬅️ KJO ËSHTË FIX-i
-    return;
-  }
+  currentUser = user;
+  msg.textContent = user ? ✅ I loguar si: ${user.email || user.uid} : "❌ Duhet të jesh i loguar";
+});
 
-  msg.textContent = "✅ I loguar si: " + user.email;
-  uploadBtn.disabled = false;
-  publishBtn.disabled = false;
+chooseBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  msg.textContent = "✅ Po hap zgjedhjen e fotove...";
+  fileInput.click();
+});
+
+fileInput.addEventListener("change", () => {
+  const n = fileInput.files.length;
+  msg.textContent = n ? ✅ Zgjodhe ${n} foto : "❌ S’ke zgjedhur foto";
+  uploadBtn.disabled = !n;
+});
+
+uploadBtn.addEventListener("click", async () => {
+  try {
+    if (!currentUser) throw new Error("Duhet të jesh i loguar");
+    if (!fileInput.files.length) throw new Error("Zgjidh foto");
+
+    msg.textContent = "⏳ Duke ngarkuar fotot...";
+    uploadBtn.disabled = true;
+
+    const urls = [];
+    for (const file of fileInput.files) {
+      const path = sellnow/${currentUser.uid}/${Date.now()}_${file.name};
+      const fileRef = ref(storage, path);
+      await uploadBytes(fileRef, file);
+      urls.push(await getDownloadURL(fileRef));
+    }
+
+    window.uploadedPhotoUrls = urls;
+    msg.textContent = ✅ Foto u ngarkuan: ${urls.length};
+  } catch (e) {
+    msg.textContent = "❌ " + e.message;
+    uploadBtn.disabled = false;
+  }
 });
 </script>
 

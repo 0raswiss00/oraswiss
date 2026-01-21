@@ -4,234 +4,168 @@
 <meta charset="UTF-8">
 <title>Sell Your Watch</title>
 
-<!-- UPLOADCARE SCRIPT -->
-<script>
-  UPLOADCARE_PUBLIC_KEY = "demopublickey"; /* kur të hapësh llogari tënde, e zëvendëson */
-</script>
-<script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
-
 <style>
 body {
-    margin: 0;
-    padding: 0;
-    background: #000;
-    color: #fff;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #000;
+  color: #fff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
 }
 
 .sell-form {
-    background: #111;
-    padding: 30px 25px;
-    border-radius: 10px;
-    width: 100%;
-    max-width: 420px;
-    margin-top: 40px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+  background: #111;
+  padding: 30px 25px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 420px;
+  margin-top: 40px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.7);
 }
 
 .sell-form h3 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 20px;
-    border-bottom: 1px solid #222;
-    padding-bottom: 5px;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 20px;
+  border-bottom: 1px solid #222;
+  padding-bottom: 5px;
 }
 
 .sell-form label {
-    display: block;
-    font-size: 14px;
-    margin-top: 12px;
-    margin-bottom: 5px;
+  display: block;
+  font-size: 14px;
+  margin-top: 12px;
+  margin-bottom: 5px;
 }
 
 .sell-form input,
 .sell-form textarea,
 .sell-form select {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 6px;
-    border: 1px solid #333;
-    background: #1b1b1b;
-    color: #fff;
-    font-size: 14px;
-    margin-bottom: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #1b1b1b;
+  color: #fff;
+  font-size: 14px;
+  margin-bottom: 10px;
 }
 
 .sell-form textarea {
-    resize: vertical;
+  resize: vertical;
 }
 
 .sell-form button {
-    width: 100%;
-    padding: 12px;
-    background: #0099ff;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 15px;
-}
-
-.sell-form button:hover {
-    background: #0077cc;
+  width: 100%;
+  padding: 12px;
+  background: #0099ff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<form action="https://api.web3forms.com/submit"
-      method="POST"
-      class="sell-form">
+<form class="sell-form">
 
-    <!-- Web3Forms settings -->
-    <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
-    <input type="hidden" name="subject" value="New Sell Your Watch Request">
-    <input type="hidden" name="from_name" value="OraSwiss Website">
-    <input type="hidden" name="botcheck">
-
-    <!-- Këtu do ruajmë linkun e fotos -->
-    <input type="hidden" name="photos" id="photosField">
-
-    <h3>Your Details</h3>
-
-    <label>First name:</label>
-    <input type="text" name="first_name" placeholder="Your first name" required>
-
-    <label>Last name:</label>
-    <input type="text" name="last_name" placeholder="Your last name" required>
-
-    <label>Email:</label>
-    <input type="email" name="email" placeholder="Your email address" required>
-
-    <label>Phone:</label>
-    <input type="text" name="phone" placeholder="+355..., +30..." required>
-
-    <h3>Watch Details</h3>
-
-    <label>Brand:</label>
-    <input type="text" name="brand" placeholder="Rolex, Omega, etc." required>
-
-    <label>Model / Reference:</label>
-    <input type="text" name="model" placeholder="Model / Reference">
-
-    <label>Movement type:</label>
-    <select name="movement">
-        <option>Automatic</option>
-        <option>Manual</option>
-        <option>Quartz</option>
-        <option>Other</option>
-    </select>
-
-    <label>Year (approx.):</label>
-    <input type="text" name="year" placeholder="Approximate year">
-
-    <label>Condition / Notes:</label>
-    <textarea name="notes" rows="4"
-              placeholder="Condition, box & papers, service history..."></textarea>
+  <h3>Watch Details</h3>
 
   <label>Description</label>
-<textarea id="description" placeholder="Shkruaj përshkrimin..."></textarea>
+  <textarea id="description" placeholder="Shkruaj përshkrimin..."></textarea>
 
-<!-- ... krejt faqja jote ... -->
+  <!-- FOTO -->
+  <button id="chooseBtn" type="button">Upload Photos</button>
+  <input id="photoFiles" type="file" accept="image/*" multiple
+         style="position:absolute; left:-9999px; opacity:0;">
 
-<button id="chooseBtn" type="button">Upload Photos</button>
-<input id="photoFiles" type="file" accept="image/*" multiple hidden>
-<button id="uploadBtn" type="button">NGARKO FOTOT</button>
+  <button id="uploadBtn" type="button" disabled>NGARKO FOTOT</button>
 
-<div id="msg"></div>
-<button id="publishBtn" type="button">PUBLISH</button>
+  <div id="msg"></div>
 
-<!-- SCRIPT NË FUND FARE -->
+</form>
+
+<!-- SCRIPT POSHTË FARE -->
 <script type="module">
-/* ===== IMPORTS ===== */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
 
-/* ===== FIREBASE CONFIG ===== */
 const firebaseConfig = {
   apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
   authDomain: "oraswiss-27e57.firebaseapp.com",
   projectId: "oraswiss-27e57",
   storageBucket: "oraswiss-27e57.firebasestorage.app",
   messagingSenderId: "596627676936",
-  appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-  measurementId: "G-VZPKMD67VQ"
+  appId: "1:596627676936:web:0c96cf820fef4e979616bd"
 };
 
-/* ===== INIT ===== */
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const storage = getStorage(app);
+
 const chooseBtn = document.getElementById("chooseBtn");
 const fileInput = document.getElementById("photoFiles");
 const uploadBtn = document.getElementById("uploadBtn");
-const publishBtn = document.getElementById("publishBtn");
 const msg = document.getElementById("msg");
 
 let currentUser = null;
-uploadBtn.disabled = true;
-publishBtn.disabled = true;
 
-chooseBtn.addEventListener("click", () => {
-  msg.textContent = "✅ Klikove Upload Photos";
-  console.log("CLICK OK", fileInput);
-  try { fileInput.click(); } catch (err) { console.log("CLICK ERROR", err); }
+/* AUTH */
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
 });
 
-fileInput.addEventListener("change", () => {
+/* OPEN FILE PICKER */
+chooseBtn.onclick = () => {
+  fileInput.click();
+};
+
+/* FILE SELECT */
+fileInput.onchange = () => {
   const n = fileInput.files.length;
   if (n > 0) {
     msg.textContent = ✅ Zgjodhe ${n} foto;
     uploadBtn.disabled = false;
   } else {
-    msg.textContent = "❌ S’ke zgjedhur foto";
     uploadBtn.disabled = true;
   }
-});
+};
 
-onAuthStateChanged(auth, (user) => {
-  currentUser = user;
-  if (!user) {
-    msg.textContent = "❌ Duhet të jesh i loguar për të shitur";
-    uploadBtn.disabled = true;
-    publishBtn.disabled = true;
-  } else {
-    msg.textContent = "✅ I loguar si: " + (user.email || user.uid);
-    publishBtn.disabled = false;
-  }
-});
-
-uploadBtn.addEventListener("click", async () => {
+/* UPLOAD */
+uploadBtn.onclick = async () => {
   try {
     if (!currentUser) throw new Error("Duhet të jesh i loguar");
     if (!fileInput.files.length) throw new Error("Zgjidh foto");
 
-    msg.textContent = "⏳ Duke ngarkuar fotot...";
-    uploadBtn.disabled = true;
+    msg.textContent = "⏳ Duke ngarkuar...";
 
     const urls = [];
     for (const file of fileInput.files) {
-      const path = sellnow/${currentUser.uid}/${Date.now()}_${file.name}; // ✅ FIX
+      const path = sellnow/${currentUser.uid}/${Date.now()}_${file.name};
       const fileRef = ref(storage, path);
       await uploadBytes(fileRef, file);
       const url = await getDownloadURL(fileRef);
       urls.push(url);
     }
 
-    window.uploadedPhotoUrls = urls;
     msg.textContent = "✅ Foto u ngarkuan: " + urls.length;
+    console.log("PHOTO URLS:", urls);
+
   } catch (e) {
     msg.textContent = "❌ " + e.message;
-    uploadBtn.disabled = false;
   }
-});
+};
 </script>
 
-  
 </body>
 </html>

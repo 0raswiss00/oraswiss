@@ -122,24 +122,20 @@
 
 <!-- BUTONI QË KLIKOHET -->
 <button id="chooseBtn" type="button">Upload Photos</button>
+<input id="photoFiles" type="file" accept="image/*" multiple hidden>
+<button id="uploadBtn" type="button">NGARKO FOTOT</button>
 
-<input
-  id="photoFiles"
-  type="file"
-  accept="image/*"
-  multiple
-  style="display:none"
-/>
-
-<button id="uploadBtn" type="button" disabled>NGARKO FOTO</button>
 <div id="msg"></div>
+<button id="publishBtn" type="button">PUBLISH</button>
 
-
+<!-- SCRIPT NË FUND FARE -->
 <script type="module">
+/* ===== IMPORTS ===== */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
 
+/* ===== FIREBASE CONFIG ===== */
 const firebaseConfig = {
   apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
   authDomain: "oraswiss-27e57.firebaseapp.com",
@@ -150,34 +146,44 @@ const firebaseConfig = {
   measurementId: "G-VZPKMD67VQ"
 };
 
+/* ===== INIT ===== */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const storage = getStorage(app);
 
+/* ===== ELEMENTS ===== */
 const chooseBtn = document.getElementById("chooseBtn");
 const fileInput = document.getElementById("photoFiles");
-const uploadBtn = document.getElementById("uploadBtn");
-const msg = document.getElementById("msg");
 
-chooseBtn.addEventListener("click", () => {
-  console.log("OPEN FILE PICKER");
-  fileInput.click();
+chooseBtn.addEventListener("click", (e) => {
+  e.preventDefault();      // ndalon formën
+  e.stopPropagation();     // mos e le të “kapet” nga form-a
+  fileInput.click();       // hap zgjedhjen e fotove
 });
 
-fileInput.addEventListener("change", () => {
-  console.log("FILES:", fileInput.files);
-  const n = fileInput.files.length;
+const uploadBtn = document.getElementById("uploadBtn");
+const publishBtn = document.getElementById("publishBtn");
+const msg = document.getElementById("msg");
 
-  if (n > 0) {
-    msg.textContent = ✅ Zgjodhe ${n} foto;
-    uploadBtn.disabled = false;
-  } else {
-    msg.textContent = "❌ S’ke zgjedhur foto";
+/* ===== STATE ===== */
+let currentUser = null;
+uploadBtn.disabled = true;
+publishBtn.disabled = true;
+
+/* ===== AUTH ===== */
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+  if (!user) {
+    msg.textContent = "❌ Duhet të jesh i loguar për të shitur";
     uploadBtn.disabled = true;
+    publishBtn.disabled = true;
+  } else {
+    msg.textContent = "✅ I loguar si: " + (user.email || user.uid);
+    publishBtn.disabled = false;
   }
 });
 
-
+/* ===== UPLOAD ===== */
 uploadBtn.addEventListener("click", async () => {
   try {
     if (!currentUser) throw new Error("Duhet të jesh i loguar");
@@ -191,19 +197,18 @@ uploadBtn.addEventListener("click", async () => {
       const path = sellnow/${currentUser.uid}/${Date.now()}_${file.name};
       const fileRef = ref(storage, path);
       await uploadBytes(fileRef, file);
-      urls.push(await getDownloadURL(fileRef));
+      const url = await getDownloadURL(fileRef);
+      urls.push(url);
     }
 
     window.uploadedPhotoUrls = urls;
-    msg.textContent = ✅ Foto u ngarkuan: ${urls.length};
+    msg.textContent = "✅ Foto u ngarkuan: " + urls.length;
   } catch (e) {
     msg.textContent = "❌ " + e.message;
     uploadBtn.disabled = false;
   }
 });
 </script>
-
-
   
 </body>
 </html>

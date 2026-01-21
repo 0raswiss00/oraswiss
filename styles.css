@@ -3114,9 +3114,11 @@ body {
   pointer-events: all;
 }
 
-.minions-loader.hidden {
-  pointer-events: none;
+#chooseBtn {
+  pointer-events: auto !important;
+  cursor: pointer !important;
 }
+
 
 
 

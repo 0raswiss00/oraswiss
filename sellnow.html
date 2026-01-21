@@ -1,3 +1,4 @@
+sellnow
 <!doctype html>
 <html lang="sq">
 <head>
@@ -122,98 +123,92 @@
 
 <!-- BUTONI QË KLIKOHET -->
 <button id="chooseBtn" type="button">Upload Photos</button>
-<input id="photoFiles" type="file" accept="image/*" multiple hidden>
-<button id="uploadBtn" type="button">NGARKO FOTOT</button>
+
+<!-- INPUT (JO display:none) -->
+<input
+  id="photoFiles"
+  type="file"
+  accept="image/*"
+  multiple
+  style="position:absolute; left:-9999px;"
+/>
 
 <div id="msg"></div>
-<button id="publishBtn" type="button">PUBLISH</button>
 
-<!-- SCRIPT NË FUND FARE -->
+<button id="uploadBtn" type="button">NGARKO FOTOT</button>
+
+<button id="publishBtn" type="button">PUBLISH</button>
+  
+
+  
 <script type="module">
-/* ===== IMPORTS ===== */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-/* ===== FIREBASE CONFIG ===== */
 const firebaseConfig = {
-  apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
+  apiKey: "…",
   authDomain: "oraswiss-27e57.firebaseapp.com",
   projectId: "oraswiss-27e57",
-  storageBucket: "oraswiss-27e57.firebasestorage.app",
-  messagingSenderId: "596627676936",
-  appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-  measurementId: "G-VZPKMD67VQ"
+  storageBucket: "oraswiss-27e57.appspot.com",
+  messagingSenderId: "…",
+  appId: "…"
 };
 
-/* ===== INIT ===== */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const storage = getStorage(app);
+const db = getFirestore(app);
 
-/* ===== ELEMENTS ===== */
-const chooseBtn = document.getElementById("chooseBtn");
 const fileInput = document.getElementById("photoFiles");
 const uploadBtn = document.getElementById("uploadBtn");
 const publishBtn = document.getElementById("publishBtn");
 const msg = document.getElementById("msg");
 
 let currentUser = null;
-uploadBtn.disabled = true;
+function setMsg(t){ msg.textContent = t; }
+
 publishBtn.disabled = true;
-
-chooseBtn.addEventListener("click", () => {
-  fileInput.click();
-});
-
-fileInput.addEventListener("change", () => {
-  const n = fileInput.files.length;
-  if (n > 0) {
-    msg.textContent = ✅ Zgjodhe ${n} foto;
-    uploadBtn.disabled = false;
-  } else {
-    msg.textContent = "❌ S’ke zgjedhur foto";
-    uploadBtn.disabled = true;
-  }
-});
+uploadBtn.disabled = true;
+setMsg("⏳ Po kontrolloj login...");
 
 onAuthStateChanged(auth, (user) => {
   currentUser = user;
   if (!user) {
-    msg.textContent = "❌ Duhet të jesh i loguar për të shitur";
-    uploadBtn.disabled = true;
+    setMsg("❌ Duhet të jesh i loguar");
     publishBtn.disabled = true;
-  } else {
-    msg.textContent = "✅ I loguar si: " + (user.email || user.uid);
-    publishBtn.disabled = false;
-  }
-});
-
-uploadBtn.addEventListener("click", async () => {
-  try {
-    if (!currentUser) throw new Error("Duhet të jesh i loguar");
-    if (!fileInput.files.length) throw new Error("Zgjidh foto");
-
-    msg.textContent = "⏳ Duke ngarkuar fotot...";
     uploadBtn.disabled = true;
-
-    const urls = [];
-    for (const file of fileInput.files) {
-      const path = sellnow/${currentUser.uid}/${Date.now()}_${file.name}; // ✅ FIX
-      const fileRef = ref(storage, path);
-      await uploadBytes(fileRef, file);
-      const url = await getDownloadURL(fileRef);
-      urls.push(url);
-    }
-
-    window.uploadedPhotoUrls = urls;
-    msg.textContent = "✅ Foto u ngarkuan: " + urls.length;
-  } catch (e) {
-    msg.textContent = "❌ " + e.message;
+  } else {
+    setMsg("✅ I loguar si: " + (user.email || user.uid));
+    publishBtn.disabled = false;
     uploadBtn.disabled = false;
   }
 });
-</script>
+
+// TEST upload (vetëm UI)
+uploadBtn.addEventListener("click", async () => {
+  if (!fileInput.files.length) return setMsg("❌ Zgjidh foto");
+  setMsg("⏳ Duke ngarkuar...");
+  await new Promise(r => setTimeout(r, 600));
+  setMsg("✅ Foto gati");
+});
+
+// PUBLISH
+publishBtn.addEventListener("click", async () => {
+  try {
+    if (!currentUser) throw new Error("User jo i loguar");
+    setMsg("⏳ Duke publikuar...");
+    await addDoc(collection(db, "sellnow"), {
+      userId: currentUser.uid,
+      createdAt: serverTimestamp(),
+      status: "active"
+    });
+    setMsg("✅ Publikuar");
+  } catch (e) {
+    setMsg("❌ " + e.message);
+  }
+});
+</script> 
+
   
 </body>
 </html>

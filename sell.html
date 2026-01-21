@@ -139,22 +139,16 @@ body {
   <label>Description</label>
 <textarea id="description" placeholder="Shkruaj përshkrimin..."></textarea>
 
-<form>
-<!-- JASHTË FORMËS -->
-<button id="chooseBtn" type="button">Upload Photos</button>
+<!-- ... krejt faqja jote ... -->
 
+<button id="chooseBtn" type="button">Upload Photos</button>
 <input id="photoFiles" type="file" accept="image/*" multiple hidden>
 <button id="uploadBtn" type="button">NGARKO FOTOT</button>
-  
 
-    <a href="index.html"
-       style="color:#ccc; text-align:center; display:block; margin-top:10px;">
-       ← Back to Home
-    </a>
+<div id="msg"></div>
+<button id="publishBtn" type="button">PUBLISH</button>
 
-</form>
-
-
+<!-- SCRIPT NË FUND FARE -->
 <script type="module">
 /* ===== IMPORTS ===== */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
@@ -212,18 +206,6 @@ onAuthStateChanged(auth, (user) => {
 /* ===== OPEN FILE PICKER ===== */
 chooseBtn.addEventListener("click", () => {
   fileInput.click();
-});
-
-/* ===== FILE SELECT ===== */
-fileInput.addEventListener("change", () => {
-  const n = fileInput.files.length;
-  if (n > 0) {
-    msg.textContent = "✅ Zgjodhe " + n + " foto";
-    uploadBtn.disabled = false;
-  } else {
-    msg.textContent = "❌ S’ke zgjedhur foto";
-    uploadBtn.disabled = true;
-  }
 });
 
 /* ===== UPLOAD ===== */

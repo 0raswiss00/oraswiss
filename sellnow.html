@@ -211,12 +211,13 @@ uploadBtn.addEventListener("click", async () => {
 publishBtn.addEventListener("click", async () => {
   try {
     if (!currentUser) throw new Error("User jo i loguar");
-    setMsg("⏳ Duke publikuar...");
+
     await addDoc(collection(db, "sellnow"), {
       userId: currentUser.uid,
       createdAt: serverTimestamp(),
       status: "active"
     });
+
     setMsg("✅ Publikuar");
   } catch (e) {
     setMsg("❌ " + e.message);

@@ -132,7 +132,8 @@
   style="position:fixed; left:-9999px;"
 />
 <div id="msg"></div>
-
+<div id="preview"></div>
+  
 <button id="uploadBtn" type="button">NGARKO FOTOT</button>
 
 <button id="publishBtn" type="button">PUBLISH</button>
@@ -249,5 +250,22 @@ document.getElementById("chooseBtn").onclick = function () {
 };
 </script>
 
+<script>
+const photos = document.getElementById("photos");
+const preview = document.getElementById("preview");
+
+photos.addEventListener("change", () => {
+  preview.innerHTML = "";
+
+  Array.from(photos.files).forEach(file => {
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    img.style.width = "100px";
+    img.style.margin = "5px";
+    preview.appendChild(img);
+  });
+});
+</script>
+  
 </body>
 </html>

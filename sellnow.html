@@ -179,9 +179,17 @@ const msg = document.getElementById("msg");
 chooseBtn.addEventListener("click", () => {
   fileInput.click();
 });
+
+fileInput.addEventListener("change", () => {
+  if (fileInput.files.length > 0) {
+    photoSelected = true;
+    setMsg("📸 Foto u zgjodh");
+  }
+});
   
 let currentUser = null;
-
+let photoSelected = false;
+  
 // gjithmonë fillo disabled
 publishBtn.disabled = true;
 uploadBtn.disabled = true;
@@ -205,7 +213,7 @@ onAuthStateChanged(auth, (user) => {
 
 // TEST upload (vetëm UI)
 uploadBtn.addEventListener("click", async () => {
-  if (!fileInput.files.length) return setMsg("❌ Zgjidh foto");
+  if (!photoSelected) return setMsg("❌ Zgjidh foto");
   setMsg("⏳ Duke ngarkuar...");
   await new Promise(r => setTimeout(r, 600));
   setMsg("✅ Foto gati");
@@ -215,7 +223,8 @@ uploadBtn.addEventListener("click", async () => {
 publishBtn.addEventListener("click", async () => {
   try {
     if (!currentUser) throw new Error("User jo i loguar");
-
+    if (!photoSelected) throw new Error("Nuk ke ngarkuar foto");
+   
     await addDoc(collection(db, "sellnow"), {
       userId: currentUser.uid,
       createdAt: serverTimestamp(),

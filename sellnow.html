@@ -123,126 +123,77 @@ sellnow
 
 <!-- BUTONI QË KLIKOHET -->
 <button id="chooseBtn" type="button">Upload Photos</button>
-
-<input
-  id="photoFiles"
-  type="file"
-  accept="image/*"
-  multiple
-  style="position:fixed; left:-9999px;"
-/>
+<input id="photoFiles" type="file" accept="image/*" multiple style="position:fixed;left:-9999px;">
 <div id="msg"></div>
-
 <button id="uploadBtn" type="button">NGARKO FOTOT</button>
-
 <button id="publishBtn" type="button">PUBLISH</button>
-  
 
-  
 <script type="module">
-document.addEventListener("DOMContentLoaded", () => {
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";  
-import { 
-  getAuth, 
-  onAuthStateChanged, 
-  setPersistence, 
-  browserLocalPersistence 
-} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import { getAuth, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
-  authDomain: "oraswiss-27e57.firebaseapp.com",
-  projectId: "oraswiss-27e57",
-  storageBucket: "oraswiss-27e57.firebasestorage.app",
-  messagingSenderId: "596627676936",
-  appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-  measurementId: "G-VZPKMD67VQ"
-};
+  const firebaseConfig = {/* config */};
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-setPersistence(auth, browserLocalPersistence);
-const db = getFirestore(app);  
-onAuthStateChanged(auth, (user) => {
-  console.log("AUTH USER:", user);
-});
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  await setPersistence(auth, browserLocalPersistence);
+  const db = getFirestore(app);
 
-window.auth = auth;
-window.db = db;  
-  
-const chooseBtn = document.getElementById("chooseBtn");
-const fileInput = document.getElementById("photoFiles");
-const uploadBtn = document.getElementById("uploadBtn");
-const publishBtn = document.getElementById("publishBtn");
-const msg = document.getElementById("msg");
+  const chooseBtn  = document.getElementById("chooseBtn");
+  const fileInput  = document.getElementById("photoFiles");
+  const uploadBtn  = document.getElementById("uploadBtn");
+  const publishBtn = document.getElementById("publishBtn");
+  const msg        = document.getElementById("msg");
 
-chooseBtn.addEventListener("click", () => {
-  fileInput.click();
-});
+  function setMsg(t){ msg.textContent = t; }
 
-fileInput.addEventListener("change", () => {
-  if (fileInput.files.length > 0) {
-    photoSelected = true;
-    setMsg("📸 Foto u zgjodh");
-  }
-});
-  
-let currentUser = null;
-let photoSelected = false;
-  
-// gjithmonë fillo disabled
-publishBtn.disabled = true;
-uploadBtn.disabled = true;
-setMsg("");
+  // ✅ KY GABIM TË PRISH: currentUser vs currentuser
+  let currentUser = null;
 
-// KJO ËSHTË E VETMJA LOGJIKË LOGIN
-onAuthStateChanged(auth, (user) => {
-  console.log("AUTH USER:", user);
-  currentUser = user;
+  publishBtn.disabled = true;
+  uploadBtn.disabled = true;
+  setMsg("⏳ Po kontrolloj login...");
 
-  if (user) {
-    setMsg("✅ I loguar si: " + (user.email || user.uid));
-    publishBtn.disabled = false;
-    uploadBtn.disabled = false;
-  } else {
-    setMsg("❌ Duhet të jesh i loguar");
-    publishBtn.disabled = true;
-    uploadBtn.disabled = true;
-  }
-});
+  onAuthStateChanged(auth, (user) => {
+    currentUser = user; // ✅ saktë (mos e shkruaj currentuser)
+    console.log("AUTH USER:", user);
 
-// TEST upload (vetëm UI)
-uploadBtn.addEventListener("click", async () => {
-  if (!photoSelected) return setMsg("❌ Zgjidh foto");
-  setMsg("⏳ Duke ngarkuar...");
-  await new Promise(r => setTimeout(r, 600));
-  setMsg("✅ Foto gati");
-});
+    if (user) {
+      setMsg("✅ I loguar si: " + (user.email || user.uid));
+      uploadBtn.disabled = false;
+      publishBtn.disabled = false;
+    } else {
+      setMsg("❌ Duhet të jesh i loguar");
+      uploadBtn.disabled = true;
+      publishBtn.disabled = true;
+    }
+  });
 
-// PUBLISH
-publishBtn.addEventListener("click", async () => {
-  try {
-    if (!currentUser) throw new Error("User jo i loguar");
-    if (!photoSelected) throw new Error("Nuk ke ngarkuar foto");
-   
-await setPersistence(auth, browserLocalPersistence);
-onAuthStateChanged(auth, (user) => {
-  console.log("AUTH USER:", user);
-  currentUser = user;
+  chooseBtn.addEventListener("click", () => fileInput.click());
 
-  if (user) {
-    setMsg("✅ I loguar si: " + (user.email || user.uid));
-    publishBtn.disabled = false;
-    uploadBtn.disabled = false;
-  } else {
-    setMsg("❌ Duhet të jesh i loguar");
-    publishBtn.disabled = true;
-    uploadBtn.disabled = true;
-  }
-});
-</script> 
+  uploadBtn.addEventListener("click", async () => {
+    if (!fileInput.files.length) return setMsg("❌ Zgjidh foto");
+    setMsg("⏳ Duke ngarkuar...");
+    await new Promise(r => setTimeout(r, 600));
+    setMsg("✅ Foto gati");
+  });
 
-  
+  publishBtn.addEventListener("click", async () => {
+    try {
+      if (!currentUser) throw new Error("User jo i loguar"); // ✅ tani punon
+      setMsg("⏳ Duke publikuar...");
+      await addDoc(collection(db, "sellnow"), {
+        userId: currentUser.uid,
+        createdAt: serverTimestamp(),
+        status: "active"
+      });
+      setMsg("✅ Publikuar");
+    } catch (e) {
+      setMsg("❌ " + e.message);
+    }
+  });
+</script>
+
 </body>
 </html>

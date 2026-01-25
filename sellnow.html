@@ -225,15 +225,19 @@ publishBtn.addEventListener("click", async () => {
     if (!currentUser) throw new Error("User jo i loguar");
     if (!photoSelected) throw new Error("Nuk ke ngarkuar foto");
    
-    await addDoc(collection(db, "sellnow"), {
-      userId: currentUser.uid,
-      createdAt: serverTimestamp(),
-      status: "active"
-    });
+await setPersistence(auth, browserLocalPersistence);
+onAuthStateChanged(auth, (user) => {
+  console.log("AUTH USER:", user);
+  currentUser = user;
 
-    setMsg("✅ Publikuar");
-  } catch (e) {
-    setMsg("❌ " + e.message);
+  if (user) {
+    setMsg("✅ I loguar si: " + (user.email || user.uid));
+    publishBtn.disabled = false;
+    uploadBtn.disabled = false;
+  } else {
+    setMsg("❌ Duhet të jesh i loguar");
+    publishBtn.disabled = true;
+    uploadBtn.disabled = true;
   }
 });
 </script> 

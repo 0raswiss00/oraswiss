@@ -181,24 +181,25 @@ chooseBtn.addEventListener("click", () => {
 });
   
 let currentUser = null;
-function setMsg(t){ msg.textContent = t; }
 
+// gjithmonë fillo disabled
 publishBtn.disabled = true;
 uploadBtn.disabled = true;
-setMsg("⏳ Po kontrolloj login...");
+setMsg("");
 
+// KJO ËSHTË E VETMJA LOGJIKË LOGIN
 onAuthStateChanged(auth, (user) => {
-  currentuser = user;
-  console.log("AUTH USER:", user); // ✅ KËTU
+  console.log("AUTH USER:", user);
+  currentUser = user;
 
-  if (!user) {
-    setMsg("❌ Duhet të jesh i loguar");
-    publishBtn.disabled = true;
-    uploadBtn.disabled = true;
-  } else {
+  if (user) {
     setMsg("✅ I loguar si: " + (user.email || user.uid));
     publishBtn.disabled = false;
     uploadBtn.disabled = false;
+  } else {
+    setMsg("❌ Duhet të jesh i loguar");
+    publishBtn.disabled = true;
+    uploadBtn.disabled = true;
   }
 });
 

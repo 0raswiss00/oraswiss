@@ -131,7 +131,6 @@
   multiple
   style="position:fixed; left:-9999px;"
 />
-<div id="msg"></div>
 <div id="preview"></div>
   
 <button id="uploadBtn" type="button">NGARKO FOTOT</button>
@@ -251,7 +250,7 @@ document.getElementById("chooseBtn").onclick = function () {
 </script>
 
 <script>
-const photos = document.getElementById("photos");
+const photos = document.getElementById("photoFiles");
 const preview = document.getElementById("preview");
 
 photos.addEventListener("change", () => {
@@ -266,6 +265,7 @@ photos.addEventListener("change", () => {
   });
 });
 </script>
+
   
 </body>
 </html>

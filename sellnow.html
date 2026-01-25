@@ -166,6 +166,9 @@ const db = getFirestore(app);
 onAuthStateChanged(auth, (user) => {
   console.log("AUTH USER:", user);
 });
+
+window.auth = auth;
+window.db = db;  
   
 const chooseBtn = document.getElementById("chooseBtn");
 const fileInput = document.getElementById("photoFiles");

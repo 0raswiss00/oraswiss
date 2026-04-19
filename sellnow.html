@@ -150,6 +150,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
+import { 
+  getStorage, 
+  ref, 
+  uploadBytes, 
+  getDownloadURL 
+} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+  
 const firebaseConfig = {
   apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
   authDomain: "oraswiss-27e57.firebaseapp.com",
@@ -160,8 +167,9 @@ const firebaseConfig = {
   measurementId: "G-VZPKMD67VQ"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const app = initializeApp(firebaseConfig); 
+const storage = getStorage(app);
+const auth = getAuth(app);  
 setPersistence(auth, browserLocalPersistence);
 const db = getFirestore(app);  
 onAuthStateChanged(auth, (user) => {
@@ -213,34 +221,43 @@ onAuthStateChanged(auth, (user) => {
 });
 
 // TEST upload (vetëm UI)
-uploadBtn.addEventListener("click", async () => {
-  if (!photoSelected) return setMsg("❌ Zgjidh foto");
-  setMsg("⏳ Duke ngarkuar...");
-  await new Promise(r => setTimeout(r, 600));
-  setMsg("✅ Foto gati");
-});
+uploadBtn.onclick = async () => {
+  if (!fileInput.files.length) {
+    alert("❌ Zgjidh foto");
+    return;
+  }
+
+  uploadedUrls = await uploadPhotos(fileInput.files);
+
+  alert("✅ Fotot u ngarkuan!");
+};
+
 
 // PUBLISH
-publishBtn.addEventListener("click", async () => {
+publishBtn.onclick = async () => {
   try {
-    if (!currentUser) throw new Error("User jo i loguar");
-    if (!photoSelected) throw new Error("Nuk ke ngarkuar foto");
-   
-await setPersistence(auth, browserLocalPersistence);
-onAuthStateChanged(auth, (user) => {
-  console.log("AUTH USER:", user);
-  currentUser = user;
+    if (!currentUser) throw new Error("Nuk je i loguar");
+    if (!uploadedUrls.length) throw new Error("Ngarko fotot më parë");
 
-  if (user) {
-    setMsg("✅ I loguar si: " + (user.email || user.uid));
-    publishBtn.disabled = false;
-    uploadBtn.disabled = false;
-  } else {
-    setMsg("❌ Duhet të jesh i loguar");
-    publishBtn.disabled = true;
-    uploadBtn.disabled = true;
+    const data = {
+      brand: document.getElementById("brand").value,
+      model: document.getElementById("model").value,
+      price: Number(document.getElementById("price").value),
+      description: document.getElementById("description").value,
+      category: document.getElementById("category").value,
+      images: uploadedUrls,
+      user_id: currentUser.uid,
+      status: "pending",
+      created_at: serverTimestamp()
+    };
+
+    await addDoc(collection(db, "watches"), data);
+
+    alert("✅ U publikua me sukses!");
+  } catch (e) {
+    alert("❌ " + e.message);
   }
-});
+};
 </script> 
 
 <script>

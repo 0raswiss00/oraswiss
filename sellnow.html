@@ -153,10 +153,26 @@ async function uploadPhotos(files){
 
 /* UPLOAD BUTTON */
 uploadBtn.onclick = async () => {
-  if (!fileInput.files.length) return alert("Zgjidh foto");
+  try {
+    if (!fileInput.files.length) {
+      alert("Zgjidh foto");
+      return;
+    }
 
-  uploadedUrls = await uploadPhotos(fileInput.files);
-  alert("✅ Uploaded");
+    uploadedUrls = await uploadPhotos(fileInput.files);
+
+    console.log("Uploaded URLs:", uploadedUrls);
+
+    if (!uploadedUrls.length) {
+      throw new Error("Upload failed");
+    }
+
+    alert("✅ Uploaded");
+
+  } catch (e) {
+    console.error("UPLOAD ERROR:", e);
+    alert("❌ Upload error: " + e.message);
+  }
 };
 
 /* PUBLISH */

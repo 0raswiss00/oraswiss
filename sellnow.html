@@ -123,7 +123,7 @@ chooseBtn.addEventListener("click", () => {
 });
 
 /* PREVIEW */
-fileInput.addEventListener("change", () => {
+fileInput.addEventListener("change", async () => {
   preview.innerHTML = "";
 
   Array.from(fileInput.files).forEach(file => {
@@ -132,7 +132,11 @@ fileInput.addEventListener("change", () => {
     preview.appendChild(img);
   });
 
-  setMsg("📸 Foto u zgjodh");
+  setMsg("📸 Uploading...");
+
+  uploadedUrls = await uploadPhotos(fileInput.files);
+
+  setMsg("✅ Upload done");
 });
 
 /* UPLOAD PHOTOS */

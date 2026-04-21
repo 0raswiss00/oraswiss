@@ -57,7 +57,7 @@
 
   <div id="preview"></div>
 
-  
+  <button type="button" id="chooseBtn" class="btn">Choose Photos</button>
   <button type="button" id="publishBtn" class="btn-primary">PUBLISH</button>
 
 
@@ -123,7 +123,7 @@ chooseBtn.addEventListener("click", () => {
 });
 
 /* PREVIEW */
-fileInput.addEventListener("change", async () => {
+fileInput.addEventListener("change", () => {
   preview.innerHTML = "";
 
   Array.from(fileInput.files).forEach(file => {
@@ -132,11 +132,7 @@ fileInput.addEventListener("change", async () => {
     preview.appendChild(img);
   });
 
-  setMsg("📸 Uploading...");
-
-  uploadedUrls = await uploadPhotos(fileInput.files);
-
-  setMsg("✅ Upload done");
+  setMsg("📸 Foto u zgjodh");
 });
 
 /* UPLOAD PHOTOS */
@@ -164,6 +160,9 @@ uploadBtn.onclick = async () => {
     uploadedUrls = await uploadPhotos(fileInput.files);
 
     console.log("Uploaded URLs:", uploadedUrls);
+
+    if (!uploadedUrls.length) {
+      throw new Error("Upload failed");
     }
 
     alert("✅ Uploaded");
@@ -206,4 +205,3 @@ publishBtn.onclick = async () => {
 
 </body>
 </html>
-

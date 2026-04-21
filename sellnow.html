@@ -75,11 +75,10 @@ const firebaseConfig = {
   apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
   authDomain: "oraswiss-27e27.firebaseapp.com",
   projectId: "oraswiss-27e27",
-  storageBucket: "oraswiss-27e27.firebasestorage.app",
+  storageBucket: "oraswiss-27e27.appspot.com", // ✅ FIX
   messagingSenderId: "596627676936",
   appId: "1:596627676936:web:0c96cf820fef4e979616bd"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);

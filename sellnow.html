@@ -164,9 +164,6 @@ uploadBtn.onclick = async () => {
     uploadedUrls = await uploadPhotos(fileInput.files);
 
     console.log("Uploaded URLs:", uploadedUrls);
-
-    if (!uploadedUrls.length) {
-      throw new Error("Upload failed");
     }
 
     alert("✅ Uploaded");

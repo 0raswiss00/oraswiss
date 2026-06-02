@@ -8,7 +8,7 @@
     form { max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border-radius: 10px; }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
     input, select, textarea { width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px; box-sizing: border-box;}
-    button { width: 100%; padding: 15px; background: gold; color: #000; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; }
+    button { width: 100%; padding: 15px; background: gold; color: #000; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -17,7 +17,7 @@
   <h2>Shto orë të re</h2>
   <div class="row">
     <input type="text" id="brand" placeholder="Brand" required>
-    <input type="text" id="model" placeholder="Model">
+    <input type="text" id="model" placeholder="Model" required>
   </div>
   <div class="row">
     <input type="text" id="reference" placeholder="Reference">
@@ -28,13 +28,13 @@
     <input type="number" id="year" placeholder="Year">
   </div>
   
-  <select id="movement">
+  <select id="movement" style="margin-bottom: 15px;">
     <option value="Automatic">Automatic</option>
     <option value="Manual">Manual</option>
     <option value="Quartz">Quartz</option>
   </select>
 
-  <select id="function">
+  <select id="function" style="margin-bottom: 15px;">
     <option value="Date">Date</option>
     <option value="Chronometer">Chronometer</option>
     <option value="Chronograph">Chronograph</option>
@@ -48,9 +48,11 @@
   </div>
 
   <textarea id="description" placeholder="Description..." rows="4"></textarea>
+  
   <div class="row" style="margin-top:15px">
-    <input type="text" id="image_url" placeholder="Foto URL">
-</div>
+    <input type="text" id="image_url" placeholder="Foto URL (linku i fotos)">
+  </div>
+  
   <button type="submit">Shto orën</button>
 </form>
 
@@ -61,7 +63,6 @@
   document.getElementById('sellForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    // Grumbullimi i vlerave nga formulari
     const oraData = {
       brand: document.getElementById('brand').value,
       model: document.getElementById('model').value,
@@ -74,17 +75,19 @@
       service: document.getElementById('service').checked,
       box_papers: document.getElementById('box_papers').checked,
       description: document.getElementById('description').value,
-      image_url: document.getElementById('image_url').value, // Kjo është fusha e fotos
+      image_url: document.getElementById('image_url').value,
       category: 'luxury'
     };
 
+    console.log("Duke dërguar:", oraData);
 
     const { error } = await supabase.from('oras').insert([oraData]);
 
-    if (error) alert("Gabim: " + error.message);
-    else {
-      alert("Ora u shtua me sukses në bazën e të dhënave!");
-      location.reload();
+    if (error) {
+      alert("Gabim: " + error.message);
+    } else {
+      alert("Ora u shtua me sukses!");
+      document.getElementById('sellForm').reset();
     }
   });
 </script>

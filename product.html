@@ -2,61 +2,45 @@
 <html lang="sq">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ora Swiss - Koleksioni Luxury</title>
+  <title>Detajet e Orës - Ora Swiss</title>
   <style>
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; margin: 0; }
-    h1 { text-align: center; margin-bottom: 30px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: auto; }
-    .card { background: #161616; padding: 15px; border-radius: 12px; border: 1px solid #333; cursor: pointer; transition: 0.3s; }
-    .card:hover { transform: scale(1.03); border-color: #555; }
-    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; background: #000; }
-    .card h3 { margin: 15px 0 5px; font-size: 1.2em; }
-    .price { color: #25D366; font-weight: bold; font-size: 1.1em; }
+    body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; margin: 0; }
+    nav { padding: 20px; border-bottom: 1px solid #333; background: #0b0b0b; }
+    nav a { color: #fff; text-decoration: none; margin-right: 20px; font-weight: bold; }
+    .container { max-width: 800px; margin: 40px auto; padding: 20px; background: #161616; border-radius: 15px; }
+    img { width: 100%; border-radius: 10px; }
+    .btn-buy { background: #25D366; color: #000; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 20px; }
   </style>
 </head>
 <body>
 
-  <h1>Koleksioni Luxury</h1>
-  <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
+  <nav>
+    <a href="index.html">ORA SWISS</a>
+    <a href="index.html">Home</a>
+  </nav>
+
+  <div class="container" id="product-details">Duke ngarkuar...</div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
   <script>
-    const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ";
-    
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const supabase = window.supabase.createClient("https://gnwsrmelmeqduhhmfmoa.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ");
 
-    async function loadOras() {
-      const container = document.getElementById("oras-container");
+    async function loadDetails() {
+      const id = new URLSearchParams(window.location.search).get('id');
+      const { data } = await supabase.from('oras').select('*').eq('id', id).single();
       
-      const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .eq('category', 'luxury');
-
-      if (error) {
-        container.innerHTML = "Gabim gjatë ngarkimit: " + error.message;
-        return;
-      }
-
-      container.innerHTML = ""; // Pastro tekstin "Duke ngarkuar"
+      const imgUrl = https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/${data.image_url};
       
-      data.forEach(ora => {
-        const imageUrl = ${SUPABASE_URL}/storage/v1/object/public/${ora.image_url};
-
-        // Këtu ndodh lidhja me faqen tjetër: product.html?id=${ora.id}
-        container.innerHTML += `
-          <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
-            <img src="${imageUrl}" alt="${ora.model}" onerror="this.style.display='none'">
-            <h3>${ora.brand} - ${ora.model}</h3>
-            <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-          </div>
-        `;
-      });
+      document.getElementById("product-details").innerHTML = `
+        <h1>${data.brand} - ${data.model}</h1>
+        <img src="${imgUrl}">
+        <p><strong>Referenca:</strong> ${data.ref || 'N/A'}</p>
+        <p><strong>Materiali:</strong> ${data.material || 'N/A'}</p>
+        <h2>${data.price} €</h2>
+        <button class="btn-buy" onclick="window.open('https://wa.me/3556XXXXXXXX', '_blank')">Bli Tani</button>
+      `;
     }
-
-    loadOras();
+    loadDetails();
   </script>
 </body>
 </html>

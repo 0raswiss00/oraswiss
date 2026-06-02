@@ -61,16 +61,18 @@
 
 </div>
 
-<!-- Libraria e re e Supabase (Versioni UMD që nuk bllokohet) -->
+<!-- Libraria e sigurt e Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 
 <script>
 /* CONFIGURIMI I SUPABASE */
 const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-const SUPABASE_KEY = "VENDO_KETU_CELLESIN_QE_KOPJOVE"; 
 
-// Thirrja e re e sigurt që nuk bllokon script-in
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// !!! VENDO PËRSËRI ÇELËSIN TËND SB_PUBLISHABLE_... QË KOPJOVE TE IMAGE_37 KËTU !!!
+const SUPABASE_KEY = "VENDO_KETU_CELLESIN"; 
+
+// KORRIGJIM: Përdorim dritaren globale që të mos ketë konflikt emrash
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /* ELEMENTET */
 const chooseBtn = document.getElementById("chooseBtn");
@@ -83,7 +85,7 @@ function setMsg(text){
   msg.textContent = text;
 }
 
-setMsg("✅ Çelësi u lidh! Gati për punë.");
+setMsg("✅ Çelësi u lidh saktë! Gati për punë.");
 
 /* LOGJIKA E FOTOVE */
 chooseBtn.onclick = function() {
@@ -97,7 +99,7 @@ fileInput.onchange = function() {
     img.src = URL.createObjectURL(file);
     preview.appendChild(img);
   });
-  setMsg("📸 Foto u zgjodh me sukses!");
+  setMsg("📸 Foto u zgjodh! Tani plotëso të dhënat dhe shtyp Publish.");
 };
 
 /* PUBLIKIMI */
@@ -107,7 +109,7 @@ publishBtn.onclick = async () => {
 
     const mainImageUrl = "images/oraswiss-logo.png"; 
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('oras')
       .insert([
         {
@@ -125,7 +127,7 @@ publishBtn.onclick = async () => {
     setMsg("🎉 Sukses! Ora u regjistrua në databazë!");
     alert("✅ U publikua me sukses!");
 
-    // Pastrimi
+    // Pastrimi i fushave
     preview.innerHTML = "";
     fileInput.value = "";
     document.getElementById("brand").value = "";
@@ -143,6 +145,5 @@ publishBtn.onclick = async () => {
 
 </body>
 </html>
-
 
 

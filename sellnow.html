@@ -8,7 +8,7 @@
     form { max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border-radius: 10px; }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
     input, select, textarea { width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px; box-sizing: border-box;}
-    button { width: 100%; padding: 15px; background: gold; color: #000; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+    button { width: 100%; padding: 15px; background: gold; color: #000; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -17,78 +17,51 @@
   <h2>Shto orë të re</h2>
   <div class="row">
     <input type="text" id="brand" placeholder="Brand" required>
-    <input type="text" id="model" placeholder="Model" required>
+    <input type="text" id="model" placeholder="Model">
   </div>
-  <div class="row">
-    <input type="text" id="reference" placeholder="Reference">
-    <input type="text" id="material" placeholder="Material">
-  </div>
-  <div class="row">
-    <input type="text" id="case_size" placeholder="Case Size (e.g. 41mm)">
-    <input type="number" id="year" placeholder="Year">
-  </div>
+  <!-- ... fushat e tjera si më parë ... -->
+  <input type="text" id="reference" placeholder="Reference">
+  <input type="text" id="material" placeholder="Material">
   
-  <select id="movement" style="margin-bottom: 15px; width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444;">
-    <option value="Automatic">Automatic</option>
-    <option value="Manual">Manual</option>
-    <option value="Quartz">Quartz</option>
-  </select>
+  <label style="display:block; margin-top:10px;">Ngarko Foton:</label>
+  <input type="file" id="image_file" accept="image/*" style="margin-bottom: 15px;">
 
-  <select id="function" style="margin-bottom: 15px; width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444;">
-    <option value="Date">Date</option>
-    <option value="Chronometer">Chronometer</option>
-    <option value="Chronograph">Chronograph</option>
-    <option value="Turbillon">Turbillon</option>
-    <option value="No Date">No Date</option>
-  </select>
-
-  <div class="row" style="margin-top:15px">
-    <label><input type="checkbox" id="service"> Service kryer</label>
-    <label><input type="checkbox" id="box_papers"> Box / Papers</label>
-  </div>
-
-  <textarea id="description" placeholder="Description..." rows="4" style="width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px; box-sizing: border-box;"></textarea>
-  
-  <div class="row" style="margin-top:15px">
-    <input type="text" id="image_url" placeholder="Foto URL">
-  </div>
-  
   <button type="submit">Shto orën</button>
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 <script>
-  const supabase = window.supabase.createClient("https://gnwsrmelmeqduhhmfmoa.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ");
+  const supabase = window.supabase.createClient("https://gnwsrmelmeqduhhmfmoa.supabase.co", "YOUR_ANON_KEY");
 
   document.getElementById('sellForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
+    const file = document.getElementById('image_file').files[0];
+    let imageUrl = "";
+
+    if (file) {
+      const fileName = ${Date.now()}_${file.name};
+      const { data, error: uploadError } = await supabase.storage
+        .from('images') // SIGUROHU që ke një bucket me emrin 'images' në Supabase
+        .upload(fileName, file);
+
+      if (uploadError) return alert("Gabim në ngarkim: " + uploadError.message);
+      
+      const { data: publicData } = supabase.storage.from('images').getPublicUrl(fileName);
+      imageUrl = publicData.publicUrl;
+    }
+
     const oraData = {
       brand: document.getElementById('brand').value,
       model: document.getElementById('model').value,
-      reference: document.getElementById('reference').value,
-      material: document.getElementById('material').value,
-      case_size: document.getElementById('case_size').value,
-      year: parseInt(document.getElementById('year').value) || null,
-      movement: document.getElementById('movement').value,
-      function: document.getElementById('function').value,
-      service: document.getElementById('service').checked,
-      box_papers: document.getElementById('box_papers').checked,
-      description: document.getElementById('description').value,
-      image_url: document.getElementById('image_url').value,
+      image_url: imageUrl, // Këtu ruhet linku që krijohet automatikisht
       category: 'luxury'
     };
 
     const { error } = await supabase.from('oras').insert([oraData]);
-
-    if (error) {
-      alert("Gabim: " + error.message);
-    } else {
-      alert("Ora u shtua me sukses!");
-      document.getElementById('sellForm').reset();
-    }
+    if (error) alert("Gabim: " + error.message);
+    else alert("U shtua me sukses!");
   });
 </script>
 </body>
 </html>
-

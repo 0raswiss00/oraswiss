@@ -29,7 +29,7 @@
       const id = new URLSearchParams(window.location.search).get('id');
       const { data } = await supabase.from('oras').select('*').eq('id', id).single();
       // Rreshti 31: Përdor backticks (``) dhe jo thonjëza të thjeshta
-      const imgUrl = https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/${data.image_url};
+      const imgUrl = https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/${data.image_url};
 
       
       document.getElementById("product-details").innerHTML = `

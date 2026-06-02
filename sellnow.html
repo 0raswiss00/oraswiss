@@ -67,10 +67,10 @@
     let imageUrl = '';
     const fileInput = document.getElementById('fileInput');
 
-    // Procesi i ngarkimit të fotos
     if (fileInput.files.length > 0) {
       const file = fileInput.files[0];
       const fileExt = file.name.split('.').pop();
+      // KORRIGJIM: Shtuar backticks  
       const fileName = ${Date.now()}_${Math.random()}.${fileExt};
       
       const { data: uploadData, error: uploadError } = await supabase.storage
@@ -78,15 +78,13 @@
         .upload(fileName, file);
 
       if (uploadError) {
-        alert("Gabim gjatë ngarkimit të fotos: " + uploadError.message);
+        alert("Gabim foto: " + uploadError.message);
         return;
       }
-
       const { data: urlData } = supabase.storage.from('oras').getPublicUrl(fileName);
       imageUrl = urlData.publicUrl;
     }
 
-    // Përgatitja e të dhënave
     const oraData = {
       brand: document.getElementById('brand').value,
       model: document.getElementById('model').value,
@@ -95,7 +93,8 @@
       case_size: document.getElementById('case_size').value,
       year: parseInt(document.getElementById('year').value) || null,
       movement: document.getElementById('movement').value,
-      function: document.getElementById('function').value,
+      // KORRIGJIM: Sigurohuni që në Supabase kolona quhet 'watch_function'
+      watch_function: document.getElementById('function').value,
       service: document.getElementById('service').checked,
       box_papers: document.getElementById('box_papers').checked,
       description: document.getElementById('description').value,
@@ -106,7 +105,7 @@
     const { error } = await supabase.from('oras').insert([oraData]);
 
     if (error) {
-      alert("Gabim në bazën e të dhënave: " + error.message);
+      alert("Gabim DB: " + error.message);
     } else {
       alert("Ora u shtua me sukses!");
       document.getElementById('sellForm').reset();

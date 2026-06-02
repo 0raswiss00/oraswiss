@@ -44,17 +44,18 @@
         return;
       }
 
-      container.innerHTML = "";
+     container.innerHTML = "";
       data.forEach(ora => {
         container.innerHTML += `
           <div class="card">
+            <img src="${ora.image_url}" alt="${ora.model}">
+            
             <h3>${ora.brand} - ${ora.model}</h3>
             <p>${ora.description}</p>
-            <div class="price">${ora.price} €</div>
+            <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
           </div>
         `;
       });
-    }
 
     loadOras();
   </script>

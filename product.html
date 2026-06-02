@@ -29,7 +29,24 @@
       const id = new URLSearchParams(window.location.search).get('id');
       const { data } = await supabase.from('oras').select('*').eq('id', id).single();
       // Rreshti 31: Përdor backticks (``) dhe jo thonjëza të thjeshta
-      const imgUrl = https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/${data.image_url};
+      const id = new URLSearchParams(window.location.search).get('id');
+console.log("Duke kërkuar për ID:", id); // Shto këtë
+
+const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+
+if (error) {
+    console.error("Gabim nga Supabase:", error); // Shto këtë
+    document.getElementById("product-details").innerHTML = "Gabim: " + error.message;
+} else {
+    console.log("Të dhënat e gjetura:", data); // Shto këtë
+    if (!data) {
+        document.getElementById("product-details").innerHTML = "Produkti nuk u gjet.";
+    } else {
+        // KËTU VAZHDON KODI YT PËR TË SHFAQUR FOTON DHE TË DHËNAT
+    }
+}
+Compose
+
       
       document.getElementById("product-details").innerHTML = `
         <h1>${data.brand} - ${data.model}</h1>

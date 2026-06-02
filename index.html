@@ -6,11 +6,11 @@
   <title>Ora Swiss</title>
   <style>
     body{margin:0;font-family:Arial,sans-serif;background:#000;color:#fff}
-    .site-header{position:sticky;top:0;z-index:9999;background:#111}
-    .nav-scroll{display:flex;gap:18px;align-items:center;overflow-x:auto;padding:14px 16px}
-    .nav-scroll a{color:#fff;text-decoration:none;padding:6px 10px}
+    .site-header{position:sticky;top:0;z-index:9999;background:#111;border-bottom: 1px solid #333}
+    .nav-scroll{display:flex;gap:15px;align-items:center;overflow-x:auto;padding:14px 16px}
+    .nav-scroll a{color:#fff;text-decoration:none;padding:6px 10px;white-space:nowrap}
     .nav-scroll a:hover{color:gold}
-    .site-title{font-weight:700;line-height:1.05;margin-right:10px}
+    .site-title{font-weight:700;line-height:1.05;margin-right:10px;cursor:pointer}
     .grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));gap:20px;padding:30px 16px}
     .card{background:#111;padding:15px;border-radius:10px;border:1px solid #333;cursor:pointer;transition:0.3s}
     .card:hover{border-color:gold}
@@ -23,19 +23,20 @@
 
 <header class="site-header">
   <nav class="nav-scroll">
-      <span class="site-title">ORA<br>SWISS</span>
-      <a href="home.html">Home</a>
-      <a href="register.html">Register</a>
-      <a href="sellnow.html">Sell Now</a>
-      <a href="separate-parts.html">Separate Parts</a>
-      <a href="service.html">Service</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-      <a href="jewelry.html">Jewelry</a>
-      <a href="policy.html">Policy</a>
-      <a href="sell.html">Sell</a>
-      <a href="luxury.html">Luxury</a>
+    <span class="site-title" onclick="location.reload()">ORA<br>SWISS</span>
+    <a href="register.html">Register</a>
+    <a href="sellnow.html">Sell Now</a>
+    <a href="home.html">Home</a>
+    <a href="luxury.html">Luxury</a>
     <a href="vintage.html">Vintage</a>
+    <a href="parts.html">Parts</a>
+    <a href="separate-parts.html">Separate Parts</a>
+    <a href="service.html">Service</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="jewelry.html">Jewelry</a>
+    <a href="policy.html">Policy</a>
+    <a href="sell.html">Sell</a>
   </nav>
 </header>
 
@@ -44,6 +45,9 @@
 
 <h2>Vintage Collection</h2>
 <div id="vintage-container" class="grid">Loading...</div>
+
+<h2>Parts Collection</h2>
+<div id="parts-container" class="grid">Loading...</div>
 
 <script>
   const supabase = window.supabase.createClient(
@@ -72,9 +76,8 @@
 
   loadCategory('luxury', 'luxury-container');
   loadCategory('vintage', 'vintage-container');
+  loadCategory('parts', 'parts-container');
 </script>
 
 </body>  
 </html>
-
-

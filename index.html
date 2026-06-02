@@ -4,54 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ora Swiss</title>
-
-  <link rel="manifest" href="/manifest.webmanifest">
-  
-  <meta name="theme-color" content="#000000">
-  
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Ora Swiss">
-
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  
-  <link rel="stylesheet" href="styles.css">
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17807539079"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'AW-17807539079');
-  </script>
-  
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-KD2ZZ3MJYY');
-  </script> 
   <style>
     body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
     .site-header{position:sticky;top:0;z-index:9999;background:#111}
-    .nav-scroll{display:flex;gap:18px;align-items:center;overflow-x:auto;white-space:nowrap;padding:14px 16px}
+    .nav-scroll{display:flex;gap:18px;align-items:center;overflow-x:auto;padding:14px 16px}
     .nav-scroll a{color:#fff;text-decoration:none;padding:6px 10px}
     .nav-scroll a:hover{color:gold}
     .site-title{font-weight:700;line-height:1.05;margin-right:10px}
-    .wrap{max-width:1100px;margin:0 auto;padding:30px 16px}
-    .btnRow{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:18px 0 30px}
-    .btnRow a{padding:14px 22px;border:1px solid #888;border-radius:10px;text-decoration:none;color:#fff;background:#111}
-    #guest,#loggedIn{max-width:520px;margin:0 auto}
-    input{width:100%;padding:10px 12px;margin:8px 0;border-radius:8px;border:1px solid #444;background:#fff;color:#000}
-    button{padding:10px 14px;border-radius:10px;border:1px solid #777;background:#111;color:#fff;cursor:pointer}
-    button:hover{color:gold;border-color:gold}
-    pre{background:#111;border:1px solid #333;padding:12px;border-radius:10px;overflow:auto}
-  </style> 
+    .grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));gap:20px;padding:30px 16px}
+    .card{background:#111;padding:15px;border-radius:10px;border:1px solid #333}
+    .price{color:#25D366;font-weight:bold;margin-top:10px}
+    h2{padding:20px 16px 0;margin:0}
+  </style>
+  <!-- Supabase Script -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 </head>
 <body>
 
@@ -74,81 +40,40 @@
   </nav>
 </header>
 
-  <div class="hero-right">
-    <img src="images/oraswiss-logo.png" alt="Oraswiss">
-  </div>
-</div>
+<!-- Seksionet Dinamike -->
+<h2>Luxury Collection</h2>
+<div id="luxury-container" class="grid">Loading...</div>
 
+<h2>Vintage Collection</h2>
+<div id="vintage-container" class="grid">Loading...</div>
 
-<div id="statsBox">
-  <h3>Statistics👥</h3>
-  <p>Total registered users: <strong id="totalUsers">0</strong></p>
-</div>
+<h2>Parts Collection</h2>
+<div id="parts-container" class="grid">Loading...</div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword
-  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-  import {
-    getFirestore,
-    collection,
-    addDoc,
-    serverTimestamp,
-    onSnapshot
-  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+<script>
+  const supabase = window.supabase.createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
+  );
 
-  // 🔹 Firebase config (VENDOS TË TUA REAL)
-  const firebaseConfig = {
-    apiKey: "API_KEY_YT",
-    authDomain: "oraswiss-27e57.firebaseapp.com",
-    projectId: "oraswiss-27e57",
-    storageBucket: "oraswiss-27e57.appspot.com",
-    messagingSenderId: "SENDER_ID_YT",
-    appId: "APP_ID_YT"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  // 🔹 REGISTER
-  const registerForm = document.getElementById("registerForm");
-  if (registerForm) {
-    registerForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("registerEmail").value;
-      const password = document.getElementById("registerPassword").value;
-
-      const cred = await createUserWithEmailAndPassword(auth, email, password);
-      await addDoc(collection(db, "users"), {
-        uid: cred.user.uid,
-        email: cred.user.email,
-        createdAt: serverTimestamp()
-      });
-
-      registerForm.reset();
-    });
+  async function loadCategory(cat, containerId) {
+    const { data } = await supabase.from('oras').select('*').eq('category', cat);
+    const container = document.getElementById(containerId);
+    if (!data || data.length === 0) {
+      container.innerHTML = "No items in this category.";
+      return;
+    }
+    container.innerHTML = data.map(ora => `
+      <div class="card">
+        <h3>${ora.brand || 'No Brand'} - ${ora.model || 'No Model'}</h3>
+        <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
+      </div>
+    `).join('');
   }
 
-  // 🔹 LOGIN
-  const loginForm = document.getElementById("loginForm");
-  if (loginForm) {
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("loginEmail").value;
-      const password = document.getElementById("loginPassword").value;
-      await signInWithEmailAndPassword(auth, email, password);
-    });
-  }
-
-  // 🔹 TOTAL USERS (VETËM NUMRI)
-  onSnapshot(collection(db, "users"), (snap) => {
-    const el = document.getElementById("totalUsers");
-    if (el) el.innerText = snap.size;
-  });
+  loadCategory('luxury', 'luxury-container');
+  loadCategory('vintage', 'vintage-container');
+  loadCategory('parts', 'parts-container');
 </script>
 
 </body>  

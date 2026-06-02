@@ -5,25 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ora Swiss</title>
   <style>
-    body{margin:0;font-family:Arial,sans-serif;background:#000;color:#fff}
-    .site-header{position:sticky;top:0;z-index:9999;background:#111;border-bottom: 1px solid #333}
-    .nav-scroll{display:flex;gap:15px;align-items:center;overflow-x:auto;padding:14px 16px}
-    .nav-scroll a{color:#fff;text-decoration:none;padding:6px 10px;white-space:nowrap}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
+    .site-header{position:sticky;top:0;z-index:9999;background:#111}
+    .nav-scroll{display:flex;gap:18px;align-items:center;overflow-x:auto;padding:14px 16px}
+    .nav-scroll a{color:#fff;text-decoration:none;padding:6px 10px}
     .nav-scroll a:hover{color:gold}
-    .site-title{font-weight:700;line-height:1.05;margin-right:10px;cursor:pointer}
+    .site-title{font-weight:700;line-height:1.05;margin-right:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));gap:20px;padding:30px 16px}
-    .card{background:#111;padding:15px;border-radius:10px;border:1px solid #333;cursor:pointer;transition:0.3s}
-    .card:hover{border-color:gold}
+    .card{background:#111;padding:15px;border-radius:10px;border:1px solid #333}
     .price{color:#25D366;font-weight:bold;margin-top:10px}
     h2{padding:20px 16px 0;margin:0}
+    <section>
+  <h2>Luxury Watches</h2>
+  <div id="luxury-container" class="grid"></div>
+</section>
+
+  <section>
+    <h2>Vintage Watches</h2>
+    <div id="vintage-container" class="grid"></div>
+  </section>
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Supabase Script -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 </head>
 <body>
 
 <header class="site-header">
   <nav class="nav-scroll">
-    <span class="site-title" onclick="location.reload()">ORA<br>SWISS</span>
+    <span class="site-title">ORA<br>SWISS</span>
     <a href="register.html">Register</a>
     <a href="sellnow.html">Sell Now</a>
     <a href="home.html">Home</a>
@@ -40,6 +49,7 @@
   </nav>
 </header>
 
+<!-- Seksionet Dinamike -->
 <h2>Luxury Collection</h2>
 <div id="luxury-container" class="grid">Loading...</div>
 
@@ -58,19 +68,18 @@
   async function loadCategory(cat, containerId) {
     const { data } = await supabase.from('oras').select('*').eq('category', cat);
     const container = document.getElementById(containerId);
-    
     if (!data || data.length === 0) {
       container.innerHTML = "No items in this category.";
       return;
     }
-
     container.innerHTML = data.map(ora => `
-      <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
-        <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/${ora.image_url}" style="width:100%; border-radius:5px;">
-        <h3>${ora.brand || 'No Brand'} - ${ora.model || 'No Model'}</h3>
-        <p>Ref: ${ora.reference || 'N/A'}</p>
-        <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-      </div>
+          <div class="card" onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">
+            <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/${ora.image_url}" ...>
+            <h3>${ora.brand || 'No Brand'} - ${ora.model || 'No Model'}</h3>
+            <p>Ref: ${ora.reference || 'N/A'}</p>
+            <p>Material: ${ora.material || 'N/A'}</p>
+          <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
+        </div>
     `).join('');
   }
 

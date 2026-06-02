@@ -27,19 +27,39 @@
 
     async function loadDetails() {
       const id = new URLSearchParams(window.location.search).get('id');
-      const { data } = await supabase.from('oras').select('*').eq('id', id).single();
-      // Rreshti 31: Përdor backticks (``) dhe jo thonjëza të thjeshta
-      const id = new URLSearchParams(window.location.search).get('id');
-console.log("Duke kërkuar për ID:", id); // Shto këtë
+  
+      // 1. Kjo siguresë të tregon në Console nëse ID-ja po lexohet mirë
+      console.log("Duke kërkuar ID:", id);
 
-const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+      const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+  
+      // 2. Kjo siguresë ndalon nëse ka gabim nga baza e të dhënave
+      if (error) {
+        console.error("Gabim nga Supabase:", error);
+        document.getElementById("product-details").innerHTML = "Gabim: Nuk u gjet produkti.";
+        return;
+      }
 
-if (error) {
-    console.error("Gabim nga Supabase:", error); // Shto këtë
-    document.getElementById("product-details").innerHTML = "Gabim: " + error.message;
-} else {
-    console.log("Të dhënat e gjetura:", data); // Shto këtë
-    if (!data) {
+  // 3. Kjo siguresë ndalon nëse nuk ka të dhëna për atë ID
+  if (!data) {
+    document.getElementById("product-details").innerHTML = "Ky produkt nuk ekziston.";
+    return;
+  }
+
+  // Rreshti 32 që ti ke vendosur tani (sigurohu të ketë backticks)
+  const imgUrl = https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/${data.image_url};
+  
+  document.getElementById("product-details").innerHTML = `
+    <h1>${data.brand || 'No Brand'} - ${data.model || 'No Model'}</h1>
+    <img src="${imgUrl}" alt="Ora">
+    <p><strong>Referenca:</strong> ${data.ref || 'N/A'}</p>
+    <p><strong>Materiali:</strong> ${data.material || 'N/A'}</p>
+    <h2>${data.price ? data.price + ' €' : 'Contact for price'}</h2>
+    <button class="btn-buy" onclick="window.open('https://wa.me/3556XXXXXXXX', '_blank')">Bli Tani</button>
+  `;
+}
+
+
         document.getElementById("product-details").innerHTML = "Produkti nuk u gjet.";
     } else {
         // KËTU VAZHDON KODI YT PËR TË SHFAQUR FOTON DHE TË DHËNAT

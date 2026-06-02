@@ -66,7 +66,9 @@
 <script>
 /* CONFIGURIMI I SUPABASE */
 const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXicY9"; 
+
+// Çelësi yt i ri përfundimtar Legacy Anon
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"; 
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -81,7 +83,7 @@ function setMsg(text){
   msg.textContent = text;
 }
 
-setMsg("✅ Çelësi u lidh saktë! Gati për punë.");
+setMsg("✅ Çelësi i saktë u lidh! Gati për punë.");
 
 /* LOGJIKA E FOTOVE */
 chooseBtn.onclick = function() {
@@ -95,7 +97,7 @@ fileInput.onchange = function() {
     img.src = URL.createObjectURL(file);
     preview.appendChild(img);
   });
-  setMsg("📸 Foto u zgjodh! Tani plotëso të dhënat dhe shtyp Publish.");
+  setMsg("📸 Foto u zgjodh!");
 };
 
 /* PUBLIKIMI DIRECT NË SUPABASE */

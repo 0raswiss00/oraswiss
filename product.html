@@ -79,5 +79,12 @@ Compose
     }
     loadDetails();
   </script>
-</body>
+  <script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const myId = urlParams.get('id');
+  alert("ID-ja që po kërkoj është: " + myId); // Kjo do të nxjerrë një dritare në ekran
+  
+  // ... pjesa tjetër e kodit
+</script>
+</body> 
 </html>

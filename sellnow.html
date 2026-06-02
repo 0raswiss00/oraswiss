@@ -71,7 +71,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
 
-/* FIREBASE CONFIG (Për fotot) */
+/* FIREBASE CONFIG */
 const firebaseConfig = {
   apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
   authDomain: "oraswiss-27e27.firebaseapp.com",
@@ -83,10 +83,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 
-/* SUPABASE CONFIG (Lidhja me databazën e re) */
+/* SUPABASE CONFIG - RREGULLUAR ME ÇELËSIN E PLOTË */
 const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsYWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY4ODg4MDAsImV4cCI6MjAzMjQ2NDgwMH0.xxxxxxxxxxxxxxx"; // Shënim: Vendos Key-in tënd Anon nëse ky nuk bën
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsYWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY4ODg4MDAsImV4cCI6MjAzMjQ2NDgwMH0.xxxxxxxxxxxxxxx"; // Shënim: Nëse prapë nuk bën, këtu duhet të vendosësh saktë "anon public key" nga settings e Supabase.
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /* STATE */
 let uploadedUrls = [];
@@ -171,7 +171,6 @@ publishBtn.onclick = async () => {
 
     setMsg("⏳ Duke publikuar të dhënat në Supabase...");
 
-    // Ruajmë linkun e parë të fotos te kolona image_url
     const mainImageUrl = uploadedUrls[0] || "";
 
     const { data, error } = await supabase
@@ -192,7 +191,6 @@ publishBtn.onclick = async () => {
     setMsg("✅ U publikua me sukses në databazë!");
     alert("✅ U publikua me sukses!");
 
-    // Pastrim i formularit
     uploadedUrls = [];
     preview.innerHTML = "";
     fileInput.value = "";

@@ -46,8 +46,11 @@
     <label><input type="checkbox" id="service"> Service kryer</label>
     <label><input type="checkbox" id="box_papers"> Box / Papers</label>
   </div>
-  
+
   <textarea id="description" placeholder="Description..." rows="4"></textarea>
+  <div class="row" style="margin-top:15px">
+    <input type="text" id="image_url" placeholder="Foto URL">
+</div>
   <button type="submit">Shto orën</button>
 </form>
 
@@ -71,8 +74,10 @@
       service: document.getElementById('service').checked,
       box_papers: document.getElementById('box_papers').checked,
       description: document.getElementById('description').value,
-      category: 'luxury' // Mund ta ndryshosh sipas nevojës
+      image_url: document.getElementById('image_url').value, // Kjo është fusha e fotos
+      category: 'luxury'
     };
+
 
     const { error } = await supabase.from('oras').insert([oraData]);
 

@@ -8,7 +8,7 @@
     form { max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border-radius: 10px; }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
     input, select, textarea { width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px; box-sizing: border-box;}
-    button { width: 100%; padding: 15px; background: gold; color: #000; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; }
+    button { width: 100%; padding: 15px; background: gold; color: #000; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -17,28 +17,44 @@
   <h2>Shto orë të re</h2>
   <div class="row">
     <input type="text" id="brand" placeholder="Brand" required>
-    <input type="text" id="model" placeholder="Model">
+    <input type="text" id="model" placeholder="Model" required>
   </div>
   <div class="row">
     <input type="text" id="reference" placeholder="Reference">
     <input type="text" id="material" placeholder="Material">
   </div>
   <div class="row">
-    <input type="text" id="case_size" placeholder="Case Size">
+    <input type="text" id="case_size" placeholder="Case Size (e.g. 41mm)">
     <input type="number" id="year" placeholder="Year">
   </div>
   
-  <select id="movement"><option value="Automatic">Automatic</option><option value="Manual">Manual</option></select>
-  <select id="function" style="margin-top:10px;"><option value="Date">Date</option><option value="Chronometer">Chronometer</option></select>
+  <select id="movement" style="margin-bottom: 15px; width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444;">
+    <option value="Automatic">Automatic</option>
+    <option value="Manual">Manual</option>
+    <option value="Quartz">Quartz</option>
+  </select>
 
-  <textarea id="description" placeholder="Description..." rows="3" style="margin-top:10px;"></textarea>
-  
-  <div style="margin-top:15px">
-    <label>Ngarko Foton:</label>
-    <input type="text" id="image_url" placeholder="Vendos URL-në e fotos këtu">
+  <select id="function" style="margin-bottom: 15px; width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444;">
+    <option value="Date">Date</option>
+    <option value="Chronometer">Chronometer</option>
+    <option value="Chronograph">Chronograph</option>
+    <option value="Turbillon">Turbillon</option>
+    <option value="No Date">No Date</option>
+  </select>
+
+  <div class="row" style="margin-top:15px">
+    <label><input type="checkbox" id="service"> Service kryer</label>
+    <label><input type="checkbox" id="box_papers"> Box / Papers</label>
   </div>
 
-  <button type="submit" style="margin-top:15px;">Shto orën</button>
+  <textarea id="description" placeholder="Description..." rows="4" style="width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px; box-sizing: border-box;"></textarea>
+  
+  <div style="margin-top:15px">
+    <label style="color:#aaa; font-size:14px;">Ngarko Foton e Orës:</label>
+    <input type="file" id="fileInput" accept="image/*" style="margin-top: 5px;">
+  </div>
+  
+  <button type="submit">Shto orën</button>
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
@@ -47,6 +63,30 @@
 
   document.getElementById('sellForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    
+    let imageUrl = '';
+    const fileInput = document.getElementById('fileInput');
+
+    // Procesi i ngarkimit të fotos
+    if (fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      const fileExt = file.name.split('.').pop();
+      const fileName = ${Date.now()}_${Math.random()}.${fileExt};
+      
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('oras')
+        .upload(fileName, file);
+
+      if (uploadError) {
+        alert("Gabim gjatë ngarkimit të fotos: " + uploadError.message);
+        return;
+      }
+
+      const { data: urlData } = supabase.storage.from('oras').getPublicUrl(fileName);
+      imageUrl = urlData.publicUrl;
+    }
+
+    // Përgatitja e të dhënave
     const oraData = {
       brand: document.getElementById('brand').value,
       model: document.getElementById('model').value,
@@ -56,17 +96,22 @@
       year: parseInt(document.getElementById('year').value) || null,
       movement: document.getElementById('movement').value,
       function: document.getElementById('function').value,
+      service: document.getElementById('service').checked,
+      box_papers: document.getElementById('box_papers').checked,
       description: document.getElementById('description').value,
-      image_url: document.getElementById('image_url').value,
+      image_url: imageUrl,
       category: 'luxury'
     };
 
     const { error } = await supabase.from('oras').insert([oraData]);
-    if (error) alert("Gabim: " + error.message);
-    else { alert("U shtua!"); location.reload(); }
+
+    if (error) {
+      alert("Gabim në bazën e të dhënave: " + error.message);
+    } else {
+      alert("Ora u shtua me sukses!");
+      document.getElementById('sellForm').reset();
+    }
   });
 </script>
 </body>
 </html>
-Compose
-Shkruaj te Ora Swiss

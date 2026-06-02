@@ -61,16 +61,19 @@
 
 </div>
 
-<!-- Libraria e Supabase -->
+<!-- Libraria zyrtare e Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-/* SUPABASE CONFIG */
+/* CONFIGURIMI I SUPABASE */
 const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsYWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY4ODg4MDAsImV4cCI6MjAzMjQ2NDgwMH0.xxxxxxxxxxxxxxx"; // Shënim: Vendos Key-in tënd Anon të plotë këtu nëse ky nuk bën
+
+// !!! BËJ PASTE ÇELËSIN TËND TË KOPJUAR BRENDA THONJËZAVE ME POSHTË !!!
+const SUPABASE_KEY = "VENDO_KETU_CELLESIN_QE_KOPJOVE"; 
+
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-/* ELEMENTS */
+/* ELEMENTET */
 const chooseBtn = document.getElementById("chooseBtn");
 const fileInput = document.getElementById("photoFiles");
 const publishBtn = document.getElementById("publishBtn");
@@ -81,14 +84,13 @@ function setMsg(text){
   msg.textContent = text;
 }
 
-setMsg("✅ Gati për të shtuar orë");
+setMsg("✅ Çelësi u lidh! Gati për të hedhur orën e parë.");
 
-/* ZGJIDH FOTOT */
+/* LOGJIKA E FOTOVE */
 chooseBtn.addEventListener("click", () => {
   fileInput.click();
 });
 
-/* PREVIEW I FOTOS */
 fileInput.addEventListener("change", () => {
   preview.innerHTML = "";
   Array.from(fileInput.files).forEach(file => {
@@ -96,15 +98,15 @@ fileInput.addEventListener("change", () => {
     img.src = URL.createObjectURL(file);
     preview.appendChild(img);
   });
-  setMsg("📸 Foto u zgjodh me sukses");
+  setMsg("📸 Foto u zgjodh! Tani plotëso të dhënat dhe shtyp Publish.");
 });
 
-/* PUBLISH DIRECT TO SUPABASE */
+/* PUBLIKIMI NE DATABAZË */
 publishBtn.onclick = async () => {
   try {
-    setMsg("⏳ Duke publikuar të dhënat në Supabase...");
+    setMsg("⏳ Duke dërguar të dhënat në Supabase...");
 
-    // Për momentin, meqë po heqim Firebase, po vendosim një link default për foton që të mos bllokohet databaza
+    // Për momentin imazhi default
     const mainImageUrl = "images/oraswiss-logo.png"; 
 
     const { data, error } = await supabase
@@ -122,10 +124,10 @@ publishBtn.onclick = async () => {
 
     if (error) throw error;
 
-    setMsg("✅ U publikua me sukses në databazë!");
+    setMsg("🎉 Sukses! Ora u regjistrua në databazën Supabase!");
     alert("✅ U publikua me sukses!");
 
-    // Pastrim i formularit
+    // Pastrimi i fushave
     preview.innerHTML = "";
     fileInput.value = "";
     document.getElementById("brand").value = "";
@@ -134,8 +136,8 @@ publishBtn.onclick = async () => {
     document.getElementById("description").value = "";
 
   } catch (e) {
-    console.error("PUBLISH ERROR:", e);
-    alert("❌ Gabim: " + e.message);
+    console.error("GABIM:", e);
+    alert("❌ Ndodhi një gabim: " + e.message);
     setMsg("❌ Gabim: " + e.message);
   }
 };
@@ -143,3 +145,4 @@ publishBtn.onclick = async () => {
 
 </body>
 </html>
+

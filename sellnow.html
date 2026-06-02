@@ -1,145 +1,80 @@
 <!doctype html>
-<html lang="sq">
+<html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shto orë</title>
-
+  <meta charset="UTF-8">
+  <title>Sell Your Watch</title>
   <style>
-    body{font-family:Arial;background:#0b0b0b;color:#fff;margin:0;padding:20px}
-    .wrap{max-width:900px;margin:0 auto}
-    label{display:block;margin-top:10px}
-    input,select,textarea{width:100%;padding:10px;margin-top:5px;background:#111;color:#fff;border:1px solid #333;border-radius:8px}
-    button{margin-top:10px;padding:12px;border-radius:8px;border:0;cursor:pointer}
-    button:hover{opacity:.9}
-    #preview img{width:100px;margin:5px;border-radius:6px}
-    .logo-center{display:flex;justify-content:center;margin:10px 0 20px}
-    .logo-center img{height:120px}
-    .btn{background:#222;color:#fff}
-    .btn-primary{background:#25D366;color:#000;font-weight:bold}
+    body { font-family: Arial; background: #000; color: #fff; padding: 20px; }
+    form { max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border-radius: 10px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+    input, select, textarea { width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px; box-sizing: border-box;}
+    button { width: 100%; padding: 15px; background: gold; color: #000; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; }
   </style>
 </head>
-
 <body>
 
-<div class="wrap">
-
-  <div class="logo-center">
-    <img src="images/oraswiss-logo.png">
+<form id="sellForm">
+  <h2>Shto orë të re</h2>
+  <div class="row">
+    <input type="text" id="brand" placeholder="Brand (e.g. IWC)" required>
+    <input type="text" id="model" placeholder="Model (e.g. Portuguese)">
   </div>
-
-  <h2>Shto orë (Sell now)</h2>
-
-  <div id="msg"></div>
-
-  <label>Category</label>
-  <select id="category">
-    <option value="luxury">Luxury</option>
-    <option value="vintage">Vintage</option>
-    <option value="parts">Parts</option>
+  <div class="row">
+    <input type="text" id="reference" placeholder="Reference">
+    <input type="text" id="material" placeholder="Material">
+  </div>
+  <div class="row">
+    <input type="text" id="case_size" placeholder="Case Size (e.g. 41mm)">
+    <input type="number" id="year" placeholder="Year">
+  </div>
+  
+  <select id="movement">
+    <option value="Automatic">Automatic</option>
+    <option value="Manual">Manual</option>
+    <option value="Quartz">Quartz</option>
   </select>
 
-  <label>Brand</label>
-  <input id="brand">
+  <select id="function">
+    <option value="Date">Date</option>
+    <option value="Chronometer">Chronometer</option>
+    <option value="Chronograph">Chronograph</option>
+    <option value="Turbillon">Turbillon</option>
+    <option value="No Date">No Date</option>
+  </select>
 
-  <label>Model</label>
-  <input id="model">
-
-  <label>Price (€)</label>
-  <input id="price" type="number">
-
-  <label>Description</label>
-  <textarea id="description"></textarea>
-
-  <label>Photos</label>
-  <button id="chooseBtn" class="btn">Choose Photos</button>
-  <input type="file" id="photoFiles" multiple accept="image/*" hidden>
-
-  <div id="preview"></div>
-
-  <button type="button" id="publishBtn" class="btn-primary" style="margin-top: 30px; padding: 15px; width: 100%;">PUBLISH</button>
-
-</div>
+  <div class="row" style="margin-top:15px">
+    <label><input type="checkbox" id="service"> Service kryer</label>
+    <label><input type="checkbox" id="box_papers"> Box / Papers</label>
+  </div>
+  
+  <textarea id="description" placeholder="Description..." rows="4"></textarea>
+  <button type="submit">Shto orën</button>
+</form>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-
 <script>
-/* CONFIGURIMI I SUPABASE */
-const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+  const supabase = window.supabase.createClient("https://gnwsrmelmeqduhhmfmoa.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ");
 
-// Çelësi yt i ri përfundimtar Legacy Anon
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"; 
+  document.getElementById('sellForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const { error } = await supabase.from('oras').insert([{
+      brand: document.getElementById('brand').value,
+      model: document.getElementById('model').value,
+      reference: document.getElementById('reference').value,
+      material: document.getElementById('material').value,
+      movement: document.getElementById('movement').value,
+      function: document.getElementById('function').value,
+      service: document.getElementById('service').checked,
+      box_papers: document.getElementById('box_papers').checked,
+      description: document.getElementById('description').value
+    }]);
 
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-/* ELEMENTET */
-const chooseBtn = document.getElementById("chooseBtn");
-const fileInput = document.getElementById("photoFiles");
-const publishBtn = document.getElementById("publishBtn");
-const preview = document.getElementById("preview");
-const msg = document.getElementById("msg");
-
-function setMsg(text){
-  msg.textContent = text;
-}
-
-setMsg("✅ Çelësi i saktë u lidh! Gati për punë.");
-
-/* LOGJIKA E FOTOVE */
-chooseBtn.onclick = function() {
-  fileInput.click();
-};
-
-fileInput.onchange = function() {
-  preview.innerHTML = "";
-  Array.from(fileInput.files).forEach(file => {
-    const img = document.createElement("img");
-    img.src = URL.createObjectURL(file);
-    preview.appendChild(img);
+    if (error) alert("Gabim: " + error.message);
+    else {
+      alert("Ora u shtua me sukses!");
+      location.reload();
+    }
   });
-  setMsg("📸 Foto u zgjodh!");
-};
-
-/* PUBLIKIMI DIRECT NË SUPABASE */
-publishBtn.onclick = async () => {
-  try {
-    setMsg("⏳ Duke dërguar të dhënat në Supabase...");
-
-    const mainImageUrl = "images/oraswiss-logo.png"; 
-
-    const { data, error } = await supabaseClient
-      .from('oras')
-      .insert([
-        {
-          category: document.getElementById("category").value,
-          brand: document.getElementById("brand").value,
-          model: document.getElementById("model").value,
-          price: Number(document.getElementById("price").value),
-          description: document.getElementById("description").value,
-          image_url: mainImageUrl
-        }
-      ]);
-
-    if (error) throw error;
-
-    setMsg("🎉 Sukses! Ora u regjistrua në databazë!");
-    alert("✅ U publikua me sukses në Supabase!");
-
-    // Pastrimi i fushave
-    preview.innerHTML = "";
-    fileInput.value = "";
-    document.getElementById("brand").value = "";
-    document.getElementById("model").value = "";
-    document.getElementById("price").value = "";
-    document.getElementById("description").value = "";
-
-  } catch (e) {
-    console.error("GABIM:", e);
-    alert("❌ Gabim gjatë publikimit: " + e.message);
-    setMsg("❌ Gabim: " + e.message);
-  }
-};
 </script>
-
 </body>
 </html>

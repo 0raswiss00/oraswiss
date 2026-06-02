@@ -16,8 +16,8 @@
 <form id="sellForm">
   <h2>Shto orë të re</h2>
   <div class="row">
-    <input type="text" id="brand" placeholder="Brand (e.g. IWC)" required>
-    <input type="text" id="model" placeholder="Model (e.g. Portuguese)">
+    <input type="text" id="brand" placeholder="Brand" required>
+    <input type="text" id="model" placeholder="Model">
   </div>
   <div class="row">
     <input type="text" id="reference" placeholder="Reference">
@@ -57,21 +57,28 @@
 
   document.getElementById('sellForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const { error } = await supabase.from('oras').insert([{
+    
+    // Grumbullimi i vlerave nga formulari
+    const oraData = {
       brand: document.getElementById('brand').value,
       model: document.getElementById('model').value,
       reference: document.getElementById('reference').value,
       material: document.getElementById('material').value,
+      case_size: document.getElementById('case_size').value,
+      year: parseInt(document.getElementById('year').value) || null,
       movement: document.getElementById('movement').value,
       function: document.getElementById('function').value,
       service: document.getElementById('service').checked,
       box_papers: document.getElementById('box_papers').checked,
-      description: document.getElementById('description').value
-    }]);
+      description: document.getElementById('description').value,
+      category: 'luxury' // Mund ta ndryshosh sipas nevojës
+    };
+
+    const { error } = await supabase.from('oras').insert([oraData]);
 
     if (error) alert("Gabim: " + error.message);
     else {
-      alert("Ora u shtua me sukses!");
+      alert("Ora u shtua me sukses në bazën e të dhënave!");
       location.reload();
     }
   });

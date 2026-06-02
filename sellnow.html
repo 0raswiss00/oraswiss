@@ -57,38 +57,38 @@
 
   <div id="preview"></div>
 
- <button style="display:block;background:red;color:white;padding:20px" id="uploadBtn">
-UPLOAD TEST
-</button>
+  <button style="display:block;background:red;color:white;padding:20px" id="uploadBtn">
+    UPLOAD TEST
+  </button>
   <button type="button" id="publishBtn" class="btn-primary">PUBLISH</button>
-
 
 </div>
 
+<!-- Shtohet libraria e Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-import { getAuth, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
 
-/* FIREBASE */
+/* FIREBASE CONFIG (Për fotot) */
 const firebaseConfig = {
   apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
   authDomain: "oraswiss-27e27.firebaseapp.com",
   projectId: "oraswiss-27e27",
-  storageBucket: "oraswiss-27e27.appspot.com", // ✅ FIX
+  storageBucket: "oraswiss-27e27.appspot.com",
   messagingSenderId: "596627676936",
   appId: "1:596627676936:web:0c96cf820fef4e979616bd"
 };
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
 const storage = getStorage(app);
 
-setPersistence(auth, browserLocalPersistence);
+/* SUPABASE CONFIG (Lidhja me databazën e re) */
+const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsYWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY4ODg4MDAsImV4cCI6MjAzMjQ2NDgwMH0.xxxxxxxxxxxxxxx"; // Shënim: Vendos Key-in tënd Anon nëse ky nuk bën
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /* STATE */
-let currentUser = null;
 let uploadedUrls = [];
 
 /* ELEMENTS */
@@ -104,20 +104,7 @@ function setMsg(text){
   msg.textContent = text;
 }
 
-/* AUTH (ONLY ONCE) */
-onAuthStateChanged(auth, (user) => {
-  currentUser = user;
-
-  if (user) {
-    setMsg("✅ Logged in: " + (user.email || user.uid));
-    uploadBtn.disabled = false;
-    publishBtn.disabled = false;
-  } else {
-    setMsg("❌ Duhet login");
-    uploadBtn.disabled = true;
-    publishBtn.disabled = true;
-  }
-});
+setMsg("✅ Gati për të shtuar orë");
 
 /* OPEN FILE PICKER */
 chooseBtn.addEventListener("click", () => {
@@ -137,7 +124,7 @@ fileInput.addEventListener("change", () => {
   setMsg("📸 Foto u zgjodh");
 });
 
-/* UPLOAD PHOTOS */
+/* UPLOAD PHOTOS TO FIREBASE */
 async function uploadPhotos(files){
   const urls = [];
 
@@ -159,6 +146,7 @@ uploadBtn.onclick = async () => {
       return;
     }
 
+    setMsg("⏳ Duke ngarkuar fotot...");
     uploadedUrls = await uploadPhotos(fileInput.files);
 
     console.log("Uploaded URLs:", uploadedUrls);
@@ -167,6 +155,7 @@ uploadBtn.onclick = async () => {
       throw new Error("Upload failed");
     }
 
+    setMsg("✅ Fotot u ngarkuan me sukses!");
     alert("✅ Uploaded");
 
   } catch (e) {
@@ -175,32 +164,47 @@ uploadBtn.onclick = async () => {
   }
 };
 
-/* PUBLISH */
+/* PUBLISH TO SUPABASE */
 publishBtn.onclick = async () => {
   try {
-    if (!currentUser) throw new Error("Nuk je i loguar");
-    if (!uploadedUrls.length) throw new Error("Ngarko fotot më parë");
+    if (!uploadedUrls.length) throw new Error("Ngarko fotot më parë duke shtypur butonin e kuq (UPLOAD TEST)");
 
-    await addDoc(collection(db, "watches"), {
-      brand: document.getElementById("brand").value,
-      model: document.getElementById("model").value,
-      price: Number(document.getElementById("price").value),
-      description: document.getElementById("description").value,
-      category: document.getElementById("category").value,
-      images: uploadedUrls,
-      user_id: currentUser.uid,
-      status: "pending",
-      created_at: serverTimestamp()
-    });
+    setMsg("⏳ Duke publikuar të dhënat në Supabase...");
 
-    alert("✅ U publikua!");
+    // Ruajmë linkun e parë të fotos te kolona image_url
+    const mainImageUrl = uploadedUrls[0] || "";
 
+    const { data, error } = await supabase
+      .from('oras')
+      .insert([
+        {
+          category: document.getElementById("category").value,
+          brand: document.getElementById("brand").value,
+          model: document.getElementById("model").value,
+          price: Number(document.getElementById("price").value),
+          description: document.getElementById("description").value,
+          image_url: mainImageUrl
+        }
+      ]);
+
+    if (error) throw error;
+
+    setMsg("✅ U publikua me sukses në databazë!");
+    alert("✅ U publikua me sukses!");
+
+    // Pastrim i formularit
     uploadedUrls = [];
     preview.innerHTML = "";
     fileInput.value = "";
+    document.getElementById("brand").value = "";
+    document.getElementById("model").value = "";
+    document.getElementById("price").value = "";
+    document.getElementById("description").value = "";
 
   } catch (e) {
-    alert("❌ " + e.message);
+    console.error("PUBLISH ERROR:", e);
+    alert("❌ Gabim gjatë publikimit: " + e.message);
+    setMsg("❌ Gabim: " + e.message);
   }
 };
 </script>

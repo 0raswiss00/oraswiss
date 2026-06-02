@@ -19,49 +19,54 @@
     <input type="text" id="brand" placeholder="Brand" required>
     <input type="text" id="model" placeholder="Model">
   </div>
-  <!-- ... fushat e tjera si më parë ... -->
-  <input type="text" id="reference" placeholder="Reference">
-  <input type="text" id="material" placeholder="Material">
+  <div class="row">
+    <input type="text" id="reference" placeholder="Reference">
+    <input type="text" id="material" placeholder="Material">
+  </div>
+  <div class="row">
+    <input type="text" id="case_size" placeholder="Case Size">
+    <input type="number" id="year" placeholder="Year">
+  </div>
   
-  <label style="display:block; margin-top:10px;">Ngarko Foton:</label>
-  <input type="file" id="image_file" accept="image/*" style="margin-bottom: 15px;">
+  <select id="movement"><option value="Automatic">Automatic</option><option value="Manual">Manual</option></select>
+  <select id="function" style="margin-top:10px;"><option value="Date">Date</option><option value="Chronometer">Chronometer</option></select>
 
-  <button type="submit">Shto orën</button>
+  <textarea id="description" placeholder="Description..." rows="3" style="margin-top:10px;"></textarea>
+  
+  <div style="margin-top:15px">
+    <label>Ngarko Foton:</label>
+    <input type="text" id="image_url" placeholder="Vendos URL-në e fotos këtu">
+  </div>
+
+  <button type="submit" style="margin-top:15px;">Shto orën</button>
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 <script>
-  const supabase = window.supabase.createClient("https://gnwsrmelmeqduhhmfmoa.supabase.co", "YOUR_ANON_KEY");
+  const supabase = window.supabase.createClient("https://gnwsrmelmeqduhhmfmoa.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ");
 
   document.getElementById('sellForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    
-    const file = document.getElementById('image_file').files[0];
-    let imageUrl = "";
-
-    if (file) {
-      const fileName = ${Date.now()}_${file.name};
-      const { data, error: uploadError } = await supabase.storage
-        .from('images') // SIGUROHU që ke një bucket me emrin 'images' në Supabase
-        .upload(fileName, file);
-
-      if (uploadError) return alert("Gabim në ngarkim: " + uploadError.message);
-      
-      const { data: publicData } = supabase.storage.from('images').getPublicUrl(fileName);
-      imageUrl = publicData.publicUrl;
-    }
-
     const oraData = {
       brand: document.getElementById('brand').value,
       model: document.getElementById('model').value,
-      image_url: imageUrl, // Këtu ruhet linku që krijohet automatikisht
+      reference: document.getElementById('reference').value,
+      material: document.getElementById('material').value,
+      case_size: document.getElementById('case_size').value,
+      year: parseInt(document.getElementById('year').value) || null,
+      movement: document.getElementById('movement').value,
+      function: document.getElementById('function').value,
+      description: document.getElementById('description').value,
+      image_url: document.getElementById('image_url').value,
       category: 'luxury'
     };
 
     const { error } = await supabase.from('oras').insert([oraData]);
     if (error) alert("Gabim: " + error.message);
-    else alert("U shtua me sukses!");
+    else { alert("U shtua!"); location.reload(); }
   });
 </script>
 </body>
 </html>
+Compose
+Shkruaj te Ora Swiss

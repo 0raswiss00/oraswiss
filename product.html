@@ -29,7 +29,7 @@
       const id = new URLSearchParams(window.location.search).get('id');
   
       // 1. Kjo siguresë të tregon në Console nëse ID-ja po lexohet mirë
-      console.log("Duke kërkuar ID:", id);
+     const imgUrl = https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/${data.image_url}
 
       const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
   

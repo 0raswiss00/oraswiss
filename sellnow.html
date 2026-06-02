@@ -57,121 +57,55 @@
 
   <div id="preview"></div>
 
-  <button style="display:block;background:red;color:white;padding:20px" id="uploadBtn">
-    UPLOAD TEST
-  </button>
-  <button type="button" id="publishBtn" class="btn-primary">PUBLISH</button>
+  <button type="button" id="publishBtn" class="btn-primary" style="margin-top: 30px; padding: 15px; width: 100%;">PUBLISH</button>
 
 </div>
 
-<!-- Shtohet libraria e Supabase -->
+<!-- Libraria e Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
-
-/* FIREBASE CONFIG */
-const firebaseConfig = {
-  apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
-  authDomain: "oraswiss-27e27.firebaseapp.com",
-  projectId: "oraswiss-27e27",
-  storageBucket: "oraswiss-27e27.appspot.com",
-  messagingSenderId: "596627676936",
-  appId: "1:596627676936:web:0c96cf820fef4e979616bd"
-};
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
-
-/* SUPABASE CONFIG - RREGULLUAR ME ÇELËSIN E PLOTË */
+<script>
+/* SUPABASE CONFIG */
 const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsYWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY4ODg4MDAsImV4cCI6MjAzMjQ2NDgwMH0.xxxxxxxxxxxxxxx"; // Shënim: Nëse prapë nuk bën, këtu duhet të vendosësh saktë "anon public key" nga settings e Supabase.
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsYWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY4ODg4MDAsImV4cCI6MjAzMjQ2NDgwMH0.xxxxxxxxxxxxxxx"; // Shënim: Vendos Key-in tënd Anon të plotë këtu nëse ky nuk bën
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-/* STATE */
-let uploadedUrls = [];
 
 /* ELEMENTS */
 const chooseBtn = document.getElementById("chooseBtn");
 const fileInput = document.getElementById("photoFiles");
-const uploadBtn = document.getElementById("uploadBtn");
 const publishBtn = document.getElementById("publishBtn");
 const preview = document.getElementById("preview");
 const msg = document.getElementById("msg");
 
-/* MSG */
 function setMsg(text){
   msg.textContent = text;
 }
 
 setMsg("✅ Gati për të shtuar orë");
 
-/* OPEN FILE PICKER */
+/* ZGJIDH FOTOT */
 chooseBtn.addEventListener("click", () => {
   fileInput.click();
 });
 
-/* PREVIEW */
+/* PREVIEW I FOTOS */
 fileInput.addEventListener("change", () => {
   preview.innerHTML = "";
-
   Array.from(fileInput.files).forEach(file => {
     const img = document.createElement("img");
     img.src = URL.createObjectURL(file);
     preview.appendChild(img);
   });
-
-  setMsg("📸 Foto u zgjodh");
+  setMsg("📸 Foto u zgjodh me sukses");
 });
 
-/* UPLOAD PHOTOS TO FIREBASE */
-async function uploadPhotos(files){
-  const urls = [];
-
-  for (let file of files) {
-    const storageRef = ref(storage, "watches/" + Date.now() + "-" + file.name);
-    const snap = await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(snap.ref);
-    urls.push(url);
-  }
-
-  return urls;
-}
-
-/* UPLOAD BUTTON */
-uploadBtn.onclick = async () => {
-  try {
-    if (!fileInput.files.length) {
-      alert("Zgjidh foto");
-      return;
-    }
-
-    setMsg("⏳ Duke ngarkuar fotot...");
-    uploadedUrls = await uploadPhotos(fileInput.files);
-
-    console.log("Uploaded URLs:", uploadedUrls);
-
-    if (!uploadedUrls.length) {
-      throw new Error("Upload failed");
-    }
-
-    setMsg("✅ Fotot u ngarkuan me sukses!");
-    alert("✅ Uploaded");
-
-  } catch (e) {
-    console.error("UPLOAD ERROR:", e);
-    alert("❌ Upload error: " + e.message);
-  }
-};
-
-/* PUBLISH TO SUPABASE */
+/* PUBLISH DIRECT TO SUPABASE */
 publishBtn.onclick = async () => {
   try {
-    if (!uploadedUrls.length) throw new Error("Ngarko fotot më parë duke shtypur butonin e kuq (UPLOAD TEST)");
-
     setMsg("⏳ Duke publikuar të dhënat në Supabase...");
 
-    const mainImageUrl = uploadedUrls[0] || "";
+    // Për momentin, meqë po heqim Firebase, po vendosim një link default për foton që të mos bllokohet databaza
+    const mainImageUrl = "images/oraswiss-logo.png"; 
 
     const { data, error } = await supabase
       .from('oras')
@@ -191,7 +125,7 @@ publishBtn.onclick = async () => {
     setMsg("✅ U publikua me sukses në databazë!");
     alert("✅ U publikua me sukses!");
 
-    uploadedUrls = [];
+    // Pastrim i formularit
     preview.innerHTML = "";
     fileInput.value = "";
     document.getElementById("brand").value = "";
@@ -201,7 +135,7 @@ publishBtn.onclick = async () => {
 
   } catch (e) {
     console.error("PUBLISH ERROR:", e);
-    alert("❌ Gabim gjatë publikimit: " + e.message);
+    alert("❌ Gabim: " + e.message);
     setMsg("❌ Gabim: " + e.message);
   }
 };

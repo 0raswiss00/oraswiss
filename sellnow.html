@@ -61,17 +61,16 @@
 
 </div>
 
-<!-- Libraria zyrtare e Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Libraria e re e Supabase (Versioni UMD që nuk bllokohet) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 
 <script>
 /* CONFIGURIMI I SUPABASE */
 const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-
-// !!! BËJ PASTE ÇELËSIN TËND TË KOPJUAR BRENDA THONJËZAVE ME POSHTË !!!
 const SUPABASE_KEY = "VENDO_KETU_CELLESIN_QE_KOPJOVE"; 
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// Thirrja e re e sigurt që nuk bllokon script-in
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /* ELEMENTET */
 const chooseBtn = document.getElementById("chooseBtn");
@@ -84,29 +83,28 @@ function setMsg(text){
   msg.textContent = text;
 }
 
-setMsg("✅ Çelësi u lidh! Gati për të hedhur orën e parë.");
+setMsg("✅ Çelësi u lidh! Gati për punë.");
 
 /* LOGJIKA E FOTOVE */
-chooseBtn.addEventListener("click", () => {
+chooseBtn.onclick = function() {
   fileInput.click();
-});
+};
 
-fileInput.addEventListener("change", () => {
+fileInput.onchange = function() {
   preview.innerHTML = "";
   Array.from(fileInput.files).forEach(file => {
     const img = document.createElement("img");
     img.src = URL.createObjectURL(file);
     preview.appendChild(img);
   });
-  setMsg("📸 Foto u zgjodh! Tani plotëso të dhënat dhe shtyp Publish.");
-});
+  setMsg("📸 Foto u zgjodh me sukses!");
+};
 
-/* PUBLIKIMI NE DATABAZË */
+/* PUBLIKIMI */
 publishBtn.onclick = async () => {
   try {
     setMsg("⏳ Duke dërguar të dhënat në Supabase...");
 
-    // Për momentin imazhi default
     const mainImageUrl = "images/oraswiss-logo.png"; 
 
     const { data, error } = await supabase
@@ -124,10 +122,10 @@ publishBtn.onclick = async () => {
 
     if (error) throw error;
 
-    setMsg("🎉 Sukses! Ora u regjistrua në databazën Supabase!");
+    setMsg("🎉 Sukses! Ora u regjistrua në databazë!");
     alert("✅ U publikua me sukses!");
 
-    // Pastrimi i fushave
+    // Pastrimi
     preview.innerHTML = "";
     fileInput.value = "";
     document.getElementById("brand").value = "";
@@ -137,7 +135,7 @@ publishBtn.onclick = async () => {
 
   } catch (e) {
     console.error("GABIM:", e);
-    alert("❌ Ndodhi një gabim: " + e.message);
+    alert("❌ Gabim gjatë publikimit: " + e.message);
     setMsg("❌ Gabim: " + e.message);
   }
 };
@@ -145,4 +143,6 @@ publishBtn.onclick = async () => {
 
 </body>
 </html>
+
+
 

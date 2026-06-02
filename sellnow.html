@@ -61,17 +61,13 @@
 
 </div>
 
-<!-- Libraria e sigurt e Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 
 <script>
 /* CONFIGURIMI I SUPABASE */
 const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXicY9"; 
 
-// !!! VENDO PËRSËRI ÇELËSIN TËND SB_PUBLISHABLE_... QË KOPJOVE TE IMAGE_37 KËTU !!!
-const SUPABASE_KEY = "VENDO_KETU_CELLESIN"; 
-
-// KORRIGJIM: Përdorim dritaren globale që të mos ketë konflikt emrash
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /* ELEMENTET */
@@ -102,7 +98,7 @@ fileInput.onchange = function() {
   setMsg("📸 Foto u zgjodh! Tani plotëso të dhënat dhe shtyp Publish.");
 };
 
-/* PUBLIKIMI */
+/* PUBLIKIMI DIRECT NË SUPABASE */
 publishBtn.onclick = async () => {
   try {
     setMsg("⏳ Duke dërguar të dhënat në Supabase...");
@@ -125,7 +121,7 @@ publishBtn.onclick = async () => {
     if (error) throw error;
 
     setMsg("🎉 Sukses! Ora u regjistrua në databazë!");
-    alert("✅ U publikua me sukses!");
+    alert("✅ U publikua me sukses në Supabase!");
 
     // Pastrimi i fushave
     preview.innerHTML = "";
@@ -145,5 +141,3 @@ publishBtn.onclick = async () => {
 
 </body>
 </html>
-
-

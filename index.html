@@ -64,10 +64,13 @@
       return;
     }
     container.innerHTML = data.map(ora => `
-      <div class="card">
-        <h3>${ora.brand || 'No Brand'} - ${ora.model || 'No Model'}</h3>
-        <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-      </div>
+          <div class="card">
+            <img src="${ora.image_url}" alt="${ora.model}" style="width:100%; border-radius:5px;">
+            <h3>${ora.brand || 'No Brand'} - ${ora.model || 'No Model'}</h3>
+            <p>Ref: ${ora.reference || 'N/A'}</p>
+            <p>Material: ${ora.material || 'N/A'}</p>
+          <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
+        </div>
     `).join('');
   }
 

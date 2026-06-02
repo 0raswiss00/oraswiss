@@ -64,27 +64,7 @@
   document.getElementById('sellForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    let imageUrl = '';
-    const fileInput = document.getElementById('fileInput');
-
-    if (fileInput.files.length > 0) {
-      const file = fileInput.files[0];
-      const fileExt = file.name.split('.').pop();
-      // KORRIGJIM: Shtuar backticks  
-      const fileName = ${Date.now()}_${Math.random()}.${fileExt};
-      
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('oras')
-        .upload(fileName, file);
-
-      if (uploadError) {
-        alert("Gabim foto: " + uploadError.message);
-        return;
-      }
-      const { data: urlData } = supabase.storage.from('oras').getPublicUrl(fileName);
-      imageUrl = urlData.publicUrl;
-    }
-
+    // Mbledhja e të dhënave
     const oraData = {
       brand: document.getElementById('brand').value,
       model: document.getElementById('model').value,
@@ -93,19 +73,15 @@
       case_size: document.getElementById('case_size').value,
       year: parseInt(document.getElementById('year').value) || null,
       movement: document.getElementById('movement').value,
-      // KORRIGJIM: Sigurohuni që në Supabase kolona quhet 'watch_function'
-      watch_function: document.getElementById('function').value,
-      service: document.getElementById('service').checked,
-      box_papers: document.getElementById('box_papers').checked,
       description: document.getElementById('description').value,
-      image_url: imageUrl,
       category: 'luxury'
     };
 
+    // Dërgimi te tabela 'oras'
     const { error } = await supabase.from('oras').insert([oraData]);
 
     if (error) {
-      alert("Gabim DB: " + error.message);
+      alert("Gabim: " + error.message);
     } else {
       alert("Ora u shtua me sukses!");
       document.getElementById('sellForm').reset();

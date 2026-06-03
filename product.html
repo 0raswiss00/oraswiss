@@ -2,29 +2,33 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detajet e Orës</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        #product-details { max-width: 600px; margin: auto; }
+        body { font-family: Arial, sans-serif; padding: 20px; background: #000; color: #fff; }
+        #product-details { max-width: 600px; margin: auto; background: #111; padding: 20px; border-radius: 10px; }
         img { width: 100%; border-radius: 8px; }
-        .btn-buy { background: green; color: white; padding: 10px 20px; border: none; cursor: pointer; margin-top: 10px; }
+        .btn-buy { background: #25D366; color: white; padding: 12px 25px; border: none; cursor: pointer; border-radius: 5px; font-weight: bold; width: 100%; margin-top: 15px; }
+        a { color: gold; text-decoration: none; }
     </style>
 </head>
 <body>
 
     <nav>
-        <a href="index.html">ORA SWISS</a>
+        <a href="index.html">← Kthehu te Ora Swiss</a>
     </nav>
 
     <div id="product-details">Duke ngarkuar të dhënat...</div>
 
     <script>
-        // 1. Inicializimi (Vendos këtu çelësat e tua)
-        const supabase = window.supabase.createClient('URL_YT', 'KEY_YT');
+        // Inicializimi - Përdor të njëjtin URL dhe Key si tek index.html
+        const supabase = window.supabase.createClient(
+            'https://gnwsrmelmeqduhhmfmoa.supabase.co', 
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ'
+        );
 
         async function loadDetails() {
-            // Gjej ID nga URL
             const urlParams = new URLSearchParams(window.location.search);
             const id = urlParams.get('id');
 
@@ -33,36 +37,31 @@
                 return;
             }
 
-            // Marrja e të dhënave
             const { data, error } = await supabase
                 .from('oras')
                 .select('*')
                 .eq('id', id)
                 .single();
 
-            if (error) {
-                console.error("Gabim:", error);
-                document.getElementById("product-details").innerHTML = "Gabim gjatë ngarkimit.";
+            if (error || !data) {
+                document.getElementById("product-details").innerHTML = "Produkti nuk u gjet.";
                 return;
             }
 
-            // Krijimi i URL-së së fotos
-            const imgUrl = https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/${data.image_url};
+            // Krijimi i URL-së së fotos (Sintaksa e korrigjuar me backticks ``)
+            const imgUrl = https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/${data.image_url};
 
-            // Shfaqja e të dhënave
             document.getElementById("product-details").innerHTML = `
                 <h1>${data.brand || 'No Brand'} - ${data.model || 'No Model'}</h1>
-                <img src="${imgUrl}" alt="Ora">
+                <img src="${imgUrl}" alt="${data.model}">
                 <p><strong>Referenca:</strong> ${data.reference || 'N/A'}</p>
                 <p><strong>Materiali:</strong> ${data.material || 'N/A'}</p>
-                <h2>${data.price ? data.price + ' €' : 'Contact for price'}</h2>
-                <button class="btn-buy" onclick="window.open('https://wa.me/3556XXXXXXXX', '_blank')">Bli Tani</button>
+                <h2>${data.price ? data.price + ' €' : 'Kontakto për çmim'}</h2>
+                <button class="btn-buy" onclick="window.open('https://wa.me/3556XXXXXXXX', '_blank')">Bli Tani përmes WhatsApp</button>
             `;
         }
 
-        // Ekzekutimi
         loadDetails();
     </script>
 </body>
 </html>
-

@@ -3125,6 +3125,13 @@ body {
   pointer-events: auto !important;
 }
 
+ora-contanier
+.product-card img {
+    width: 100%;       /* E bën imazhin të marrë gjerësinë e kornizës */
+    height: 300px;     /* Ose një lartësi fikse që dëshiron */
+    object-fit: cover; /* Kjo është kyçe: e pret foton që të mos deformohet */
+    border-radius: 8px; /* Opsionale: për t'i bërë cepat të rrumbullakosur */
+}
 
 
 

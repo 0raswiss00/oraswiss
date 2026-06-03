@@ -66,10 +66,8 @@
   );
 
   async function loadCategory(cat, containerId) {
-    const { data, error } = await supabase
-  .from('oras')
-  .select('*')
-  .eq('category', category); // Kjo siguron që merren vetëm orët e kategorisë së duhur
+// Ndrysho rreshtin 69 në këtë formë për të testuar:
+const { data, error } = await supabase.from('oras').select('*');
     const container = document.getElementById(containerId);
     if (!data || data.length === 0) {
       container.innerHTML = "No items in this category.";

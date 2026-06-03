@@ -3147,6 +3147,22 @@ body {
 }
 
       
+.product-box {
+    border: 1px solid #333;
+    background: #1a1a1a;
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    height: auto; /* Lejon kutinë të përshtatet sipas përmbajtjes */
+}
+
+.product-box img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover; /* E rregullon imazhin që të mos dalë deformuar */
+    background: #333; /* Ngjyra gri nëse imazhi nuk ngarkohet */
+}
 
 
 

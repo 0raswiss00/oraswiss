@@ -66,7 +66,7 @@
   );
 
   async function loadCategory(cat, containerId) {
-    const { data } = await supabase.from('oras').select('*').eq('category', cat);
+    const { data, error } = await supabase.from('oras').select('*');
     const container = document.getElementById(containerId);
     if (!data || data.length === 0) {
       container.innerHTML = "No items in this category.";

@@ -63,8 +63,27 @@
 
   document.getElementById('sellForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    
-    // Mbledhja e të dhënave
+
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+
+    if (!file) {
+      alert("Ju lutem zgjidhni një foto!");
+      return;
+    }
+
+    // 1. Ngarkimi i fotos në bucket-in 'images'
+    const fileName = ${Date.now()}_${file.name};
+    const { error: uploadError } = await supabase.storage
+      .from('images')
+      .upload(fileName, file);
+
+    if (uploadError) {
+      alert("Gabim te fotoja: " + uploadError.message);
+      return;
+    }
+
+    // 2. Mbledhja e të dhënave (përfshirë emrin e fotos për kolonën image_url)
     const oraData = {
       brand: document.getElementById('brand').value,
       model: document.getElementById('model').value,
@@ -74,14 +93,15 @@
       year: parseInt(document.getElementById('year').value) || null,
       movement: document.getElementById('movement').value,
       description: document.getElementById('description').value,
+      image_url: fileName, // Kjo ruan emrin e skedarit që është ngarkuar
       category: 'luxury'
     };
 
-    // Dërgimi te tabela 'oras'
+    // 3. Dërgimi te tabela 'oras'
     const { error } = await supabase.from('oras').insert([oraData]);
 
     if (error) {
-      alert("Gabim: " + error.message);
+      alert("Gabim te baza: " + error.message);
     } else {
       alert("Ora u shtua me sukses!");
       document.getElementById('sellForm').reset();

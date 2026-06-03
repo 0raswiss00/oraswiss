@@ -3125,15 +3125,13 @@ body {
   pointer-events: auto !important;
 }
 
-/* Shto këtë në fund të skedarit tënd CSS */
-.container img, .product-card img, .ora-container img {
-    width: 250px !important;    /* E forcon gjerësinë */
-    height: 250px !important;   /* E forcon lartësinë */
-    object-fit: cover !important; /* Siguron që nuk shtrembërohet */
+/* Shto ose ndrysho këtë pjesë në CSS */
+.card img {
+    width: 100% !important;   /* Përshtatet me gjerësinë e kartës */
+    height: 250px !important; /* Lartësi fikse për uniformitet */
+    object-fit: cover !important;
     display: block;
-    margin: 0 auto;
 }
-
 
 
 

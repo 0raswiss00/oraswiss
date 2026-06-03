@@ -77,6 +77,27 @@ ul {
     padding: 0 16px;
 }
 
+
+.card-img {
+  width: 100px;        /* Vendosni gjerësinë që dëshironi për listën */
+  height: 100px;       /* Përdorni të njëjtën vlerë për të pasur katror */
+  object-fit: cover;
+  display: block;
+  margin: 0 auto 10px; /* Qendërzimi dhe hapësira poshtë fotos */
+}
+
+@media (max-width: 600px) {
+  .card {
+    width: 90%;          /* Karta zë pjesën më të madhe të ekranit */
+    margin: 10px auto;
+  }
+  .card-img {
+    width: 80px;         /* Edhe më e vogël për celular */
+    height: 80px;
+  }
+}
+
+
 /* =========================
         PRODUCT CARD
 ========================= */

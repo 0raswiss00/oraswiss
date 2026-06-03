@@ -34,6 +34,19 @@
     <option value="Quartz">Quartz</option>
   </select>
 
+  <select id="function" style="margin-bottom: 15px; width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444;">
+    <option value="Date">Date</option>
+    <option value="Chronometer">Chronometer</option>
+    <option value="Chronograph">Chronograph</option>
+    <option value="Turbillon">Turbillon</option>
+    <option value="No Date">No Date</option>
+  </select>
+
+  <div class="row" style="margin-top:15px">
+    <label><input type="checkbox" id="service"> Service kryer</label>
+    <label><input type="checkbox" id="box_papers"> Box / Papers</label>
+  </div>
+
   <textarea id="description" placeholder="Description..." rows="4" style="width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px; box-sizing: border-box;"></textarea>
   
   <div style="margin-top:15px">
@@ -44,32 +57,14 @@
   <button type="submit">Shto orën</button>
 </form>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 <script>
-  const supabase = window.supabase.createClient("URL_JUAJ_SUPABASE", "KEY_JUAJ_ANON");
+  const supabase = window.supabase.createClient("https://gnwsrmelmeqduhhmfmoa.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ");
 
   document.getElementById('sellForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    const fileInput = document.getElementById('fileInput');
-    const file = fileInput.files[0];
-    let imageUrl = null;
-
-    if (file) {
-        const fileExt = file.name.split('.').pop();
-        // KORRIGJIM KRYESOR: Përdorimi i backticks  
-        const fileName = ${Date.now()}.${fileExt};
-    
-        const { error: uploadError } = await supabase.storage
-            .from('images')
-            .upload(fileName, file);
-
-        if (uploadError) return alert("Gabim foto: " + uploadError.message);
-        
-        const { data } = supabase.storage.from('images').getPublicUrl(fileName);
-        imageUrl = data.publicUrl;
-    }
-
+    // Mbledhja e të dhënave
     const oraData = {
       brand: document.getElementById('brand').value,
       model: document.getElementById('model').value,
@@ -79,15 +74,14 @@
       year: parseInt(document.getElementById('year').value) || null,
       movement: document.getElementById('movement').value,
       description: document.getElementById('description').value,
-      category: 'luxury',
-      image_url: imageUrl
+      category: 'luxury'
     };
 
+    // Dërgimi te tabela 'oras'
     const { error } = await supabase.from('oras').insert([oraData]);
 
     if (error) {
-      console.error(error);
-      alert("Gabim DB: " + error.message);
+      alert("Gabim: " + error.message);
     } else {
       alert("Ora u shtua me sukses!");
       document.getElementById('sellForm').reset();

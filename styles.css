@@ -3125,14 +3125,12 @@ body {
   pointer-events: auto !important;
 }
 
-/* Shto ose ndrysho këtë pjesë në CSS */
-.card img {
-    width: 100% !important;   /* Përshtatet me gjerësinë e kartës */
-    height: 250px !important; /* Lartësi fikse për uniformitet */
-    object-fit: cover !important;
+.card-img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
     display: block;
 }
-
 
 
 

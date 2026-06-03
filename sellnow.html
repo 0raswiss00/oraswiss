@@ -14,11 +14,19 @@
 <body>
 
 <form id="sellForm">
-  <h2>Shto orë të re</h2>
+ <h2>Shto orë të re</h2>
+ <label>Kategoria:</label>
+  <select id="category" style="width: 100%; margin-bottom: 15px;">
+    <option value="luxury">Luxury</option>
+    <option value="vintage">Vintage</option>
+    <option value="parts">Parts</option>
+  </select>
   <div class="row">
     <input type="text" id="brand" placeholder="Brand" required>
     <input type="text" id="model" placeholder="Model" required>
   </div>
+   <label>Çmimi:</label>
+   <input type="number" id="price" placeholder="Çmimi në €" style="width: 100%; margin-bottom: 15px; padding: 10px;">   
   <div class="row">
     <input type="text" id="reference" placeholder="Reference">
     <input type="text" id="material" placeholder="Material">
@@ -64,19 +72,25 @@
   document.getElementById('sellForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    // Mbledhja e të dhënave
-    const oraData = {
-      brand: document.getElementById('brand').value,
-      model: document.getElementById('model').value,
-      reference: document.getElementById('reference').value,
-      material: document.getElementById('material').value,
-      case_size: document.getElementById('case_size').value,
-      year: parseInt(document.getElementById('year').value) || null,
-      movement: document.getElementById('movement').value,
-      description: document.getElementById('description').value,
-      category: 'luxury'
-    };
-
+   // Mbledhja e të dhënave nga formulari
+   const oraData = {
+     brand: document.getElementById('brand').value,
+     model: document.getElementById('model').value,
+     reference: document.getElementById('reference').value,
+     material: document.getElementById('material').value,
+     case_size: document.getElementById('case_size').value,
+     year: parseInt(document.getElementById('year').value) || null,
+     movement: document.getElementById('movement').value,
+     function: document.getElementById('function').value,
+     service: document.getElementById('service').checked,
+     box_papers: document.getElementById('box_papers').checked,
+     description: document.getElementById('description').value,
+  
+     // SHTO KËTO TË DYJA KËTU:
+     category: document.getElementById('category').value,
+     price: parseInt(document.getElementById('price').value) || 0
+   };
+  
     // Dërgimi te tabela 'oras'
     const { error } = await supabase.from('oras').insert([oraData]);
 

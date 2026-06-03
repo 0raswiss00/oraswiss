@@ -58,55 +58,36 @@
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-<script>
+
   const supabase = window.supabase.createClient("https://gnwsrmelmeqduhhmfmoa.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ");
 
-  document.getElementById('sellForm').addEventListener('submit', async (e) => {
+  const form = document.getElementById('sellForm');
+  
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    console.log("Submit u klikua!"); // 1. SHIKO NËSE KJO DEL TE CONSOLE
 
-    const fileInput = document.getElementById('fileInput');
-    const file = fileInput.files[0];
+    const brandVal = document.getElementById('brand').value;
+    console.log("Brand është:", brandVal); // 2. SHIKO NËSE PO E LEXON BRAND-IN
 
-    if (!file) {
-      alert("Ju lutem zgjidhni një foto!");
-      return;
-    }
-
-    // 1. Ngarkimi i fotos në bucket-in 'images'
-    const fileName = ${Date.now()}_${file.name};
-    const { error: uploadError } = await supabase.storage
-      .from('images')
-      .upload(fileName, file);
-
-    if (uploadError) {
-      alert("Gabim te fotoja: " + uploadError.message);
-      return;
-    }
-
-    // 2. Mbledhja e të dhënave (përfshirë emrin e fotos për kolonën image_url)
+    // Për momentin, provojmë të dërgojmë vetëm tekstin
     const oraData = {
-      brand: document.getElementById('brand').value,
+      brand: brandVal,
       model: document.getElementById('model').value,
-      reference: document.getElementById('reference').value,
-      material: document.getElementById('material').value,
-      case_size: document.getElementById('case_size').value,
-      year: parseInt(document.getElementById('year').value) || null,
-      movement: document.getElementById('movement').value,
-      description: document.getElementById('description').value,
-      image_url: fileName, // Kjo ruan emrin e skedarit që është ngarkuar
       category: 'luxury'
     };
 
-    // 3. Dërgimi te tabela 'oras'
-    const { error } = await supabase.from('oras').insert([oraData]);
+    const { data, error } = await supabase.from('oras').insert([oraData]);
 
     if (error) {
-      alert("Gabim te baza: " + error.message);
+      console.error("GABIM SUPABASE:", error); // 3. KËTU DO DALË ARSYEJA E VËRTETË
+      alert("Gabim: " + error.message);
     } else {
-      alert("Ora u shtua me sukses!");
-      document.getElementById('sellForm').reset();
+      console.log("Sukses:", data);
+      alert("Ora u shtua!");
     }
   });
 </script>
+
 </body>
 </html>

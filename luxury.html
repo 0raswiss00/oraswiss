@@ -23,10 +23,12 @@
 </main>
 
 <script>
-    const supabase = window.supabase.createClient(
-    "https://kodi_yt_i_projektit.supabase.co", 
-    "eyJh... (API KEY)"
+    // Vendos URL-në tënde brenda thonjëzave të para dhe KEY-në tek të dytat
+const supabase = window.supabase.createClient(
+    "https://tua_projekti.supabase.co", 
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." 
 );
+
 
     async function loadProducts() {
         const { data, error } = await supabase.from('oras').select('*').eq('category', 'luxury');

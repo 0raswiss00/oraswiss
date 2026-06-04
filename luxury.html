@@ -25,7 +25,7 @@
 <script>
     const supabase = window.supabase.createClient(
     "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-    "KËTU_VENDOS_ÇELËSIN_E_KOPJUAR_ME_KUJDES"
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
 );
     async function loadProducts() {
         const { data, error } = await supabase.from('oras').select('*').eq('category', 'luxury');

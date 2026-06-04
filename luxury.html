@@ -24,10 +24,15 @@
 
 <script>
     // Vendos URL-në tënde brenda thonjëzave të para dhe KEY-në tek të dytat
-const supabase = window.supabase.createClient(
-    "https://tua_projekti.supabase.co", 
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." 
+    const supabase = window.supabase.createClient(
+    "VENDOS_URL_KËTU", 
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
 );
+
+async function loadProducts() {
+    // Rreshti 31: Kjo pjesë merr të dhënat
+    const { data, error } = await supabase.from('oras').select('*').eq('category', 'luxury');
+    // ... rest of your code
 
 
     async function loadProducts() {

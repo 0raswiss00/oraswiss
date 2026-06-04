@@ -23,7 +23,10 @@
 </main>
 
 <script>
-    const supabase = window.supabase.createClient("KËTU_VENDOS_URL_E_SUPABASE", "KËTU_VENDOS_API_KEY");
+    const supabase = window.supabase.createClient(
+    "https://kodi_yt_i_projektit.supabase.co", 
+    "eyJh... (API KEY)"
+);
 
     async function loadProducts() {
         const { data, error } = await supabase.from('oras').select('*').eq('category', 'luxury');

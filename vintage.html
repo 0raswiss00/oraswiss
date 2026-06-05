@@ -23,18 +23,29 @@
     
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    async function loadOras() {
-      const container = document.getElementById("oras-container");
-      
-      const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .eq('category', 'vintage');
+    console.log("Po filloj ngarkimin..."); // E shtuam këtë
+  const container = document.getElementById("oras-container");
+  
+  const { data, error } = await supabase
+    .from('oras')
+    .select('*')
+    .eq('category', 'vintage');
 
-      if (error) {
-        container.innerHTML = "Gabim: " + error.message;
-        return;
-      }
+  if (error) {
+    console.error("Gabim Supabase:", error); // E shtuam këtë për të parë gabimin
+    container.innerHTML = "Gabim: " + error.message;
+    return;
+  }
+
+  console.log("Të dhënat e marra:", data); // E shtuam këtë
+  
+  if (!data || data.length === 0) {
+    container.innerHTML = "Nuk ka ende orë në këtë kategori.";
+    return;
+  }
+  // ... pjesa tjetër
+}
+
 
       if (!data || data.length === 0) {
         container.innerHTML = "Nuk ka ende orë në këtë kategori.";

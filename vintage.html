@@ -39,44 +39,49 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 <script>
-  // ... ( Supabase URL dhe KEY mbeten njëlloj ) ...
+  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ";
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   async function loadOras() {
     const container = document.getElementById("oras-container");
-    
-    // 1. Shkarkojmë të gjitha orët njëherë për të gjitha kategoritë
-    const { data, error } = await supabase.from('oras').select('*');
+    console.log("Duke u lidhur me Supabase...");
 
-    if (error) {
-      container.innerHTML = "Gabim: " + error.message;
-      return;
+    try {
+      const { data, error } = await supabase.from('oras').select('*');
+
+      if (error) throw error;
+
+      console.log("Të dhëna të marra:", data);
+
+      if (!data || data.length === 0) {
+        container.innerHTML = "Baza e të dhënave është bosh.";
+        return;
+      }
+
+      // Filtro vetëm ato që janë 'vintage'
+      const filtered = data.filter(item => item.category && item.category.toLowerCase() === 'vintage');
+      
+      if (filtered.length === 0) {
+        container.innerHTML = "Nuk ka artikuj në kategorinë 'vintage'.";
+        return;
+      }
+
+      container.innerHTML = "";
+      filtered.forEach(ora => {
+        container.innerHTML += `
+          <div class="card">
+            <img src="${ora.image_url || 'placeholder.png'}" alt="${ora.model}">
+            <h3>${ora.brand} - ${ora.model}</h3>
+            <p>${ora.price ? ora.price + ' €' : 'Contact for price'}</p>
+          </div>
+        `;
+      });
+    } catch (err) {
+      console.error("Gabim kritik:", err);
+      container.innerHTML = "Gabim: " + err.message;
     }
-
-    // 2. Këtu numërojmë artikujt për secilën kategori nga të dhënat e marra
-    const counts = {
-      luxury: data.filter(i => i.category?.toLowerCase() === 'luxury').length,
-      vintage: data.filter(i => i.category?.toLowerCase() === 'vintage').length,
-      parts: data.filter(i => i.category?.toLowerCase() === 'parts').length
-    };
-
-    // 3. Përditësojmë numrat te menaxhimi (Nav Bar)
-    document.getElementById('count-luxury').innerText = Luxury ${counts.luxury};
-    document.getElementById('count-vintage').innerText = Vintage ${counts.vintage};
-    document.getElementById('count-parts').innerText = Parts ${counts.parts};
-
-    // 4. Shfaqim vetëm orët për faqen ku jemi (p.sh. Vintage)
-    const filtered = data.filter(i => i.category?.toLowerCase() === 'vintage');
-    
-    container.innerHTML = "";
-    filtered.forEach(ora => {
-      container.innerHTML += `
-        <div class="card">
-          <img src="${ora.image_url || 'placeholder.png'}" alt="${ora.model}">
-          <h3>${ora.brand} - ${ora.model}</h3>
-          <p>${ora.price ? ora.price + ' €' : 'Contact for price'}</p>
-        </div>
-      `;
-    });
   }
 
   loadOras();

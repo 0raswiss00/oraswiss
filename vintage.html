@@ -1,81 +1,60 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="sq">
 <head>
-  <meta charset="utf-8"/>
+  <meta charset="UTF-8">
   <title>Vintage - Ora Swiss</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
-    .nav-filters { margin-bottom: 30px; }
-    .nav-filters a { background: #2a2a8e; color: #fff; padding: 8px 15px; border-radius: 20px; text-decoration: none; margin-right: 10px; font-weight: bold; }
+    body { background: #0b0b0b; color: white; font-family: sans-serif; padding: 20px; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-    .card { background: #111; padding: 15px; border-radius: 10px; border: 1px solid #333; }
-    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
-    .price { color: #25D366; font-weight: bold; margin-top: 10px; font-size: 1.2em; }
+    .card { background: #1a1a1a; padding: 15px; border-radius: 10px; border: 1px solid #333; }
+    img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
+    .price { color: #25D366; font-weight: bold; margin: 10px 0; }
   </style>
 </head>
 <body>
 
-  <div class="nav-filters">
-    <a href="luxury.html">Luxury</a>
-    <a href="vintage.html">Vintage</a>
-    <a href="parts.html">Parts</a>
-  </div>
-
   <h1>Vintage Collection</h1>
-  <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
+  <div id="oras-container" class="grid">Duke ngarkuar...</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    // 1. Inicializimi (Vetëm një herë!)
     const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-    const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
+    const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     async function loadOras() {
       const container = document.getElementById("oras-container");
       
+      // 2. Marrja e të dhënave
       const { data, error } = await supabase
         .from('oras')
         .select('*')
-        .eq('category', 'vintage'); 
+        .eq('category', 'vintage');
 
       if (error) {
         container.innerHTML = "Gabim: " + error.message;
+        console.error(error);
         return;
       }
 
       if (!data || data.length === 0) {
-        container.innerHTML = "Nuk ka ende orë në këtë kategori.";
+        container.innerHTML = "Nuk ka orë në këtë kategori.";
         return;
       }
 
+      // 3. Shfaqja e të dhënave
       container.innerHTML = "";
       data.forEach(ora => {
-        const imageUrl = ora.image_url 
-          ? SUPABASE_URL + "/storage/v1/object/public/" + ora.image_url 
-          : 'placeholder.png';
-
-        let card = '<div class="card">' +
-          '<img src="' + imageUrl + '" alt="' + ora.model + '" onerror="this.style.display=\'none\'">' +
-          '<h3>' + ora.brand + ' - ' + ora.model + '</h3>' +
-          '<p><strong>Reference:</strong> ' + (ora.reference || 'N/A') + '</p>' +
-          '<div class="price">Price: ' + (ora.price ? ora.price + ' €' : 'Contact for price') + '</div>' +
-          
-          '<form action="https://api.web3forms.com/submit" method="POST">' +
-            '<input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">' +
-            '<input type="hidden" name="subject" value="New Watch Request">' +
-            '<input type="hidden" name="watch_name" value="' + ora.brand + ' ' + ora.model + '">' +
-            '<input type="text" name="full_name" placeholder="Full Name" required style="width:100%; margin-bottom:5px;">' +
-            '<input type="email" name="email" placeholder="Email" required style="width:100%; margin-bottom:5px;">' +
-            '<button type="submit" style="width:100%;">Send Request</button>' +
-          '</form>' +
-          
-          '<div class="actions" style="margin-top: 10px; display:flex; justify-content:space-between;">' +
-            '<a href="https://wa.me/35569xxxxxxx" target="_blank" style="color: #25D366; text-decoration:none;">Buy Now WhatsApp</a>' +
-            '<button onclick="alert(\'Added to favorites!\')">❤️ Like</button>' +
-          '</div>' +
-        '</div>';
-        
-        container.innerHTML += card;
+        container.innerHTML += `
+          <div class="card">
+            <img src="${SUPABASE_URL}/storage/v1/object/public/${ora.image_url}" alt="${ora.model}">
+            <h3>${ora.brand} - ${ora.model}</h3>
+            <p>Ref: ${ora.reference || 'N/A'}</p>
+            <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+            <a href="https://wa.me/35569XXXXXXX" target="_blank">WhatsApp</a>
+          </div>
+        `;
       });
     }
 

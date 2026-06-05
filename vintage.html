@@ -32,11 +32,11 @@
 async function loadOras() {
   const container = document.getElementById("oras-container");
   
-  // Marrja e të dhënave nga Supabase
+  // Nese nuk shfaqen, hiq .eq('category', 'vintage') per te testuar nese i merr te gjitha
   const { data, error } = await supabase
     .from('oras')
     .select('*')
-    .eq('category', 'vintage');
+    .eq('category', 'vintage'); 
 
   if (error) {
     container.innerHTML = "Gabim: " + error.message;
@@ -44,7 +44,7 @@ async function loadOras() {
   }
 
   if (!data || data.length === 0) {
-    container.innerHTML = "Nuk ka ende orë në këtë kategori.";
+    container.innerHTML = "Nuk ka ende orë në këtë kategori. Kontrolloni kolonën 'category' në Supabase.";
     return;
   }
 
@@ -54,25 +54,26 @@ async function loadOras() {
       ? SUPABASE_URL + "/storage/v1/object/public/" + ora.image_url 
       : 'placeholder.png';
 
-    // Ndërtimi i kartës së plotë
+    // Këtu janë të gjitha opsionet që kërkuat
     let card = '<div class="card">' +
       '<img src="' + imageUrl + '" alt="' + ora.model + '" onerror="this.style.display=\'none\'">' +
       '<h3>' + ora.brand + ' - ' + ora.model + '</h3>' +
-      '<p>Reference: ' + (ora.reference || 'N/A') + '</p>' +
+      '<p><strong>Reference:</strong> ' + (ora.reference || 'N/A') + '</p>' +
       '<div class="price">Price: ' + (ora.price ? ora.price + ' €' : 'Contact for price') + '</div>' +
       
       // Formulari Web3Forms
       '<form action="https://api.web3forms.com/submit" method="POST">' +
         '<input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">' +
+        '<input type="hidden" name="subject" value="New Watch Request">' +
         '<input type="hidden" name="watch_name" value="' + ora.brand + ' ' + ora.model + '">' +
-        '<input type="text" name="full_name" placeholder="Full Name" required>' +
-        '<input type="email" name="email" placeholder="Email" required>' +
-        '<button type="submit">Send Request</button>' +
+        '<input type="text" name="full_name" placeholder="Full Name" required style="width:100%; margin-bottom:5px;">' +
+        '<input type="email" name="email" placeholder="Email" required style="width:100%; margin-bottom:5px;">' +
+        '<button type="submit" style="width:100%;">Send Request</button>' +
       '</form>' +
       
       // Butonat WhatsApp dhe Like
-      '<div class="actions" style="margin-top: 10px;">' +
-        '<a href="https://wa.me/35569xxxxxxx" target="_blank" style="text-decoration:none; margin-right:10px;">Buy Now WhatsApp</a>' +
+      '<div class="actions" style="margin-top: 10px; display:flex; justify-content:space-between;">' +
+        '<a href="https://wa.me/35569xxxxxxx" target="_blank" style="color: #25D366; text-decoration:none;">Buy Now WhatsApp</a>' +
         '<button onclick="alert(\'Added to favorites!\')">❤️ Like</button>' +
       '</div>' +
     '</div>';
@@ -81,9 +82,7 @@ async function loadOras() {
   });
 }
 
-// Thirrja e funksionit
 loadOras();
 </script>
-
 </body>
 </html>

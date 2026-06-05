@@ -49,13 +49,28 @@
           : 'placeholder.png'; // Foto default nëse mungon
 
         container.innerHTML += `
-          <div class="card">
-            <img src="${imageUrl}" alt="${ora.model}" onerror="this.style.display='none'">
-            <h3>${ora.brand} - ${ora.model}</h3>
-            <p>${ora.description || ''}</p>
-            <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-          </div>
-        `;
+  <div class="card">
+    <img src="${imageUrl}" alt="${ora.model}" onerror="this.style.display='none'">
+    <h3>${ora.brand} - ${ora.model}</h3>
+    <p>${ora.description || ''}</p>
+    <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
+    
+    <!-- SHTONI FORMULARIN KETU -->
+    <form class="request-form">
+      <input type="hidden" name="watch_name" value="${ora.brand} ${ora.model}">
+      <input type="text" name="full_name" placeholder="Full Name" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="text" name="country" placeholder="Country" required>
+      <textarea name="message" placeholder="Message"></textarea>
+      <button type="submit">Send Request</button>
+    </form>
+    <!-- FUNDI I FORMULARIT -->
+    
+  </div>
+`;
+Compose
+Shkruaj te Ora Swiss
+
       });
     }
 

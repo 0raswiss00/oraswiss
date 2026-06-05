@@ -39,12 +39,11 @@
   async function loadOras() {
     const container = document.getElementById("oras-container");
     
-    // Përdor 'client' këtu për të marrë të dhënat
-    const { data, error } = await client
+// Kërkesa e re që merr edhe të dhënat, edhe numërimin (count)
+    const { data, error, count } = await client
       .from('oras')
-      .select('*')
+      .select('*', { count: 'exact' })
       .eq('category', 'vintage');
-
     if (error) {
       container.innerHTML = "Gabim: " + error.message;
       return;

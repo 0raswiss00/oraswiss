@@ -49,36 +49,11 @@ if (error) {
       return;
     }
 
-    // Përditëso tekstin e linkut "Parts 0" me numrin real
-    // Thjesht kërkesa bazë për të shfaqur pjesët
-    // 54: Kërkesa për të marrë pjesët
-    // Përdor 'dataParts' në vend të 'data'
-    const { data: dataParts, error } = await client
-        .from('oras')
-        .select('*')
-        .eq('category', 'parts');
-
-// Pastaj përdor 'dataParts' te forEach
-dataParts.forEach(ora => {
-    // ... kodi yt ...
-});
-
-    // 59: Kontrolli i gabimit
-    if (error) {
-        container.innerHTML = "Gabim: " + error.message;
-    } else {
-        // 62: Pastrojmë kontejnerin dhe shfaqim pjesët
-        container.innerHTML = "";
-        data.forEach(ora => {
-            container.innerHTML += `
-                <div class="card">
-                    <h3>${ora.model}</h3>
-                    <p>${ora.price} €</p>
-                </div>
-        `    ;
-        });
+    // Përditëso tekstin e linkut "Vintage 0" me numrin real
+    const partsLink = document.querySelector('a[href="parts.html"]');
+    if (partrsLink && count !== null) {
+      partsLink.innerText = "Parts " + count;
     }
-
 
     container.innerHTML = "";
     data.forEach(ora => {

@@ -53,7 +53,7 @@ async function loadOras() {
   document.querySelectorAll('.nav-filters a').forEach(link => {
     if(link.href.includes('vintage')) {
         // Këtu duhen backticks (``)
-        link.innerText = Vintage ${count || 0}; 
+        link.innerText = "Vintage " + (count || 0); 
     }
   });
 
@@ -71,7 +71,9 @@ async function loadOras() {
 
     container.innerHTML += `
       <div class="card">
-        <img src="${imageUrl}" alt="${ora.model}" onerror="this.style.display='none'">
+        const imageUrl = ora.image_url 
+  ? SUPABASE_URL + "/storage/v1/object/public/" + ora.image_url 
+  : 'placeholder.png';
         <h3>${ora.brand} - ${ora.model}</h3>
         <p>${ora.description || ''}</p>
         <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>

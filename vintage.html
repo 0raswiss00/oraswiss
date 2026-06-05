@@ -39,26 +39,26 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 <script>
-  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ";
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// Funksioni kryesor
 async function loadOras() {
   const container = document.getElementById("oras-container");
   
-  // Marrja e te dhenave
+  // Marrja e të dhënave
   const { data, error } = await supabase
     .from('oras')
     .select('*');
 
   if (error) {
-    console.error("Gabim:", error);
-    container.innerHTML = "Gabim gjatë ngarkimit.";
+    container.innerHTML = "Gabim: " + error.message;
     return;
   }
 
-  // Filtrojme vetem ato qe jane 'vintage'
+  // Filtrojmë për kategorinë vintage
   const filtered = data.filter(item => item.category?.toLowerCase() === 'vintage');
 
   if (filtered.length === 0) {
@@ -66,7 +66,7 @@ async function loadOras() {
     return;
   }
 
-  container.innerHTML = ""; // Pastrojme "Duke ngarkuar..."
+  container.innerHTML = "";
   filtered.forEach(ora => {
     container.innerHTML += `
       <div class="card">
@@ -78,7 +78,26 @@ async function loadOras() {
   });
 }
 
+// Funksioni për numërimin (SHTESA E RE)
+async function updateCounts() {
+  const categories = ['luxury', 'vintage', 'parts'];
+  for (const cat of categories) {
+    const { count, error } = await supabase
+      .from('oras')
+      .select('*', { count: 'exact', head: true })
+      .eq('category', cat);
+    if (!error) {
+      const link = document.getElementById(count-${cat});
+      if (link) {
+        link.innerText = ${cat.charAt(0).toUpperCase() + cat.slice(1)} ${count};
+      }
+    }
+  }
+}
+
+// Ekzekutimi
 loadOras();
+updateCounts();
 </script>
 
 </body>

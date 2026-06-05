@@ -44,9 +44,15 @@
       .from('oras')
       .select('*', { count: 'exact' })
       .eq('category', 'vintage');
-    if (error) {
+if (error) {
       container.innerHTML = "Gabim: " + error.message;
       return;
+    }
+
+    // Përditëso tekstin e linkut "Vintage 0" me numrin real
+    const vintageLink = document.querySelector('a[href="vintage.html"]');
+    if (vintageLink && count !== null) {
+      vintageLink.innerText = "Vintage " + count;
     }
 
     container.innerHTML = "";

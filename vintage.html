@@ -27,34 +27,28 @@
   <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // Përcaktoni URL dhe KEY vetëm një herë
+  // 1. Përcaktoni variablat URL dhe KEY
   const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
   const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
 
-  // Inicializoni supabase vetëm një herë
+  // 2. Inicializoni klientin SAKTË (vetëm një herë)
   const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   async function loadOras() {
     const container = document.getElementById("oras-container");
     
-    // Merr të dhënat dhe numrin total (count)
-    const { data, error, count } = await supabase
+    // 3. Përdorimi i saktë i supabase.from()
+    const { data, error } = await supabase
       .from('oras')
-      .select('*', { count: 'exact' })
+      .select('*')
       .eq('category', 'vintage');
 
     if (error) {
       container.innerHTML = "Gabim: " + error.message;
       return;
     }
-
-    // Përditëso numrin tek butoni "Vintage"
-    document.querySelectorAll('.nav-filters a').forEach(link => {
-      if(link.getAttribute('href') === 'vintage.html') {
-          link.innerText = "Vintage " + (count || 0);
-      }
-    });
 
     if (!data || data.length === 0) {
       container.innerHTML = "Nuk ka ende orë në këtë kategori.";
@@ -63,29 +57,8 @@
 
     container.innerHTML = "";
     data.forEach(ora => {
-      const imageUrl = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/" + ora.image_url : 'placeholder.png';
-      
-      let card = `
-        <div class="card">
-          <img src="${imageUrl}" alt="${ora.model}" onerror="this.style.display='none'">
-          <h3>${ora.brand} - ${ora.model}</h3>
-          <p>Ref: ${ora.reference || 'N/A'}</p>
-          <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-          
-          <form action="https://api.web3forms.com/submit" method="POST" style="margin-top:10px;">
-            <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
-            <input type="email" name="email" placeholder="Emaili juaj" required style="width:90%">
-            <button type="submit" style="width:100%; margin-top:5px;">Send Request</button>
-          </form>
-
-          <div style="margin-top:10px; display:flex; gap:5px;">
-            <a href="https://wa.me/35569XXXXXXX" target="_blank" style="color:#25D366; text-decoration:none;">WhatsApp</a>
-            <button onclick="alert('U pëlqye!')">❤️ Like</button>
-            <button onclick="navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
-          </div>
-        </div>
-      `;
-      container.innerHTML += card;
+      // ... kodi juaj për të krijuar kartën vazhdon këtu
+      // (sigurohuni që pjesa e kodit pas këtij rreshti të jetë e njëjtë me atë që keni dërguar)
     });
   }
 

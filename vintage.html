@@ -1,90 +1,66 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="sq">
 <head>
-  <meta charset="utf-8"/>
-  <title>Vintage - Ora Swiss</title>
-  <style>
-    body { font-family: 'Segoe UI', sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
-    
-    /* Navigimi stili Chrono24 */
-    .nav-bar { background: #fff; padding: 15px 20px; border-bottom: 2px solid #ddd; display: flex; gap: 10px; }
-    .nav-link { text-decoration: none; color: #333; font-weight: 600; padding: 10px 20px; border-radius: 4px; transition: 0.3s; }
-    .nav-link.active { background: #002d72; color: #fff; }
-    .nav-link:hover { background: #e0e0e0; }
-
-    .container { max-width: 1200px; margin: 20px auto; padding: 20px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-    
-    /* Kartat stili Chrono24 */
-    .card { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 8px; transition: 0.3s; }
-    .card:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-    .card img { width: 100%; height: 250px; object-fit: cover; border-radius: 4px; }
-    .brand { color: #666; text-transform: uppercase; font-size: 0.8em; margin-top: 10px; }
-    .model { font-size: 1.2em; font-weight: bold; margin: 5px 0; }
-    .price { color: #002d72; font-size: 1.3em; font-weight: bold; }
-  </style>
+    <meta charset="UTF-8">
+    <title>Vintage Collection</title>
+    <style>
+        body { font-family: sans-serif; background: #0b0b0b; color: #fff; margin: 0; padding: 20px; }
+        .nav-bar { background: #1a1a1a; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 20px; }
+        .nav-link { color: #ccc; text-decoration: none; font-weight: bold; }
+        .nav-link.active { color: #fff; border-bottom: 2px solid #2a2a8e; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .card { background: #1a1a1a; padding: 15px; border-radius: 10px; }
+        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
+    </style>
 </head>
 <body>
 
-  <div class="nav-bar">
-    <a href="luxury.html" class="nav-link">Luxury</a>
-    <a href="vintage.html" class="nav-link active">Vintage</a>
-    <a href="parts.html" class="nav-link">Parts</a>
-  </div>
+    <div class="nav-bar">
+        <a href="luxury.html" class="nav-link" id="count-luxury">Luxury 0</a>
+        <a href="vintage.html" class="nav-link active" id="count-vintage">Vintage 0</a>
+        <a href="parts.html" class="nav-link" id="count-parts">Parts 0</a>
+    </div>
 
-  <div class="container">
     <h1>Vintage Collection</h1>
-    <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
-  </div>
+    <div id="oras-container" class="grid">Duke ngarkuar...</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-<script>
-  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ";
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
+    <script>
+        const supabase = window.supabase.createClient(
+            "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
+        );
 
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        async function loadAll() {
+            const container = document.getElementById("oras-container");
+            const { data, error } = await supabase.from('oras').select('*');
 
-  async function loadOras() {
-    const container = document.getElementById("oras-container");
-    console.log("Duke u lidhur me Supabase...");
+            if (error) {
+                container.innerHTML = "Gabim gjatë lidhjes.";
+                return;
+            }
 
-    try {
-      const { data, error } = await supabase.from('oras').select('*');
+            // Përditëso numrat në menu
+            document.getElementById('count-luxury').innerText = Luxury ${data.filter(i => i.category === 'luxury').length};
+            document.getElementById('count-vintage').innerText = Vintage ${data.filter(i => i.category === 'vintage').length};
+            document.getElementById('count-parts').innerText = Parts ${data.filter(i => i.category === 'parts').length};
 
-      if (error) throw error;
+            // Shfaq orët për këtë faqe
+            const filtered = data.filter(i => i.category === 'vintage');
+            container.innerHTML = filtered.length > 0 ? "" : "Nuk ka orë.";
+            
+            filtered.forEach(ora => {
+                container.innerHTML += `
+                    <div class="card">
+                        <img src="${ora.image_url || 'placeholder.png'}">
+                        <h3>${ora.brand} - ${ora.model}</h3>
+                        <p>${ora.price ? ora.price + ' €' : 'Contact'}</p>
+                    </div>
+                `;
+            });
+        }
 
-      console.log("Të dhëna të marra:", data);
-
-      if (!data || data.length === 0) {
-        container.innerHTML = "Baza e të dhënave është bosh.";
-        return;
-      }
-
-      // Filtro vetëm ato që janë 'vintage'
-      const filtered = data.filter(item => item.category && item.category.toLowerCase() === 'vintage');
-      
-      if (filtered.length === 0) {
-        container.innerHTML = "Nuk ka artikuj në kategorinë 'vintage'.";
-        return;
-      }
-
-      container.innerHTML = "";
-      filtered.forEach(ora => {
-        container.innerHTML += `
-          <div class="card">
-            <img src="${ora.image_url || 'placeholder.png'}" alt="${ora.model}">
-            <h3>${ora.brand} - ${ora.model}</h3>
-            <p>${ora.price ? ora.price + ' €' : 'Contact for price'}</p>
-          </div>
-        `;
-      });
-    } catch (err) {
-      console.error("Gabim kritik:", err);
-      container.innerHTML = "Gabim: " + err.message;
-    }
-  }
-
-  loadOras();
-</script>
+        loadAll();
+    </script>
 </body>
 </html>

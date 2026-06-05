@@ -49,11 +49,11 @@ async function loadOras() {
     return;
   }
 
-  // 2. Përditëso numrin te butonat e navigimit
+// 2. Përditëso numrin te butonat e navigimit
   document.querySelectorAll('.nav-filters a').forEach(link => {
-    // Kjo logjikë supozon që linku përmban emrin e kategorisë
     if(link.href.includes('vintage')) {
-        link.innerText = Vintage ${count || 0};
+        // Këtu duhen backticks (``)
+        link.innerText = Vintage ${count || 0}; 
     }
   });
 
@@ -64,7 +64,7 @@ async function loadOras() {
 
   container.innerHTML = "";
   data.forEach(ora => {
-    // KORRIGJIM: Përdor backticks `` për template literals
+    // Këtu duhen backticks (``)
     const imageUrl = ora.image_url 
       ? ${SUPABASE_URL}/storage/v1/object/public/${ora.image_url} 
       : 'placeholder.png';
@@ -86,7 +86,6 @@ async function loadOras() {
       </div>
     `;
   });
-}
 
 loadOras();
 </script>

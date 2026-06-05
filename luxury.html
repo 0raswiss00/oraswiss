@@ -36,27 +36,18 @@
   // Përdor 'window.supabase' për të shmangur konfliktin me librarinë
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-async function loadOras() {
+  async function loadOras() {
     const container = document.getElementById("oras-container");
-    container.innerHTML = "Duke ngarkuar koleksionin...";
-
-    // Kërkesa vetëm për 'luxury'
-    const { data, error } = await client
-        .from('oras')
-        .select('*')
-        .eq('category', 'luxury'); // Sigurohu që këtu shkruan 'luxury'
-
-    if (error) { container.innerHTML = "Gabim: " + error.message; return; }
-
-    container.innerHTML = ""; // Pastro tekstin e ngarkimit
     
-    // Këtu shto pjesën që krijon kartat (forEach)
-    data.forEach(ora => {
-        // ... kodi yt për krijimin e HTML-së ...
-    });
-}
-
-loadOras();
+// Kërkesa e re që merr edhe të dhënat, edhe numërimin (count)
+    const { data, error, count } = await client
+      .from('oras')
+      .select('*', { count: 'exact' })
+      .eq('category', 'luxury');
+if (error) {
+      container.innerHTML = "Gabim: " + error.message;
+      return;
+    }
 
     // Përditëso tekstin e linkut "Luxury 0" me numrin real
     // 53: Kërkojmë linkun për luxury.html

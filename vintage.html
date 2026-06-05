@@ -1,74 +1,177 @@
-<!DOCTYPE html>
-<html lang="sq">
-<head>
-    <meta charset="UTF-8">
-    <title>Ora Swiss - Vintage</title>
-    <style>
-        body { font-family: sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
-        .nav-bar { display: flex; gap: 15px; margin-bottom: 20px; }
-        .card { background: #1a1a1a; padding: 15px; border-radius: 8px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-    </style>
-</head>
-<body>
+document.addEventListener('DOMContentLoaded', function () {
+  // 1. GALERIA – THUMB → FOTO KRYESORE
+  document.querySelectorAll('.product').forEach(function (product) {
+    const mainImage = product.querySelector('.product-main-image');
+    const thumbs = product.querySelectorAll('.product-gallery img.thumb');
 
-    <div class="nav-bar">
-        <a href="luxury.html" id="count-luxury">Luxury 0</a>
-        <a href="vintage.html" id="count-vintage">Vintage 0</a>
-        <a href="parts.html" id="count-parts">Parts 0</a>
-    </div>
+    if (!mainImage || !thumbs.length) return;
 
-    <h1>Vintage Collection</h1>
-    <div id="oras-container" class="grid">Duke ngarkuar...</div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const supabase = window.supabase.createClient(
-    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
-  );
-
-  async function loadOras() {
-    const container = document.getElementById("oras-container");
-    console.log("Duke u lidhur...");
-
-    try {
-      const { data, error } = await supabase.from('oras').select('*');
-      if (error) throw error;
-
-      console.log("Te dhenat:", data);
-
-      if (!data || data.length === 0) {
-        container.innerHTML = "Baza eshte bosh.";
-        return;
-      }
-
-      // Filtro vetem vintage
-      const filtered = data.filter(i => i.category && i.category.toLowerCase() === 'vintage');
-      
-      if (filtered.length === 0) {
-        container.innerHTML = "Nuk ka artikuj vintage.";
-        return;
-      }
-
-      container.innerHTML = "";
-      filtered.forEach(ora => {
-        // perdorim metoda te thjeshta per te shtuar HTML qe te mos kemi gabime sintaksore
-        const div = document.createElement('div');
-        div.className = 'card';
-        div.innerHTML = '<h3>' + ora.brand + ' - ' + ora.model + '</h3>' +
-                        '<p>' + (ora.price ? ora.price + ' €' : 'Contact') + '</p>';
-        container.appendChild(div);
+    thumbs.forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        mainImage.src = thumb.src;
+        if (thumb.alt) {
+          mainImage.alt = thumb.alt;
+        }
       });
-    } catch (err) {
-      console.error("Gabim:", err);
-      container.innerHTML = "Gabim: " + err.message;
+    });
+  });
+
+  // 2. ZOOM – KUR KLIKON FOTON KRYESORE
+  document.querySelectorAll('.product-main-image').forEach(function (img) {
+    img.addEventListener('click', function () {
+      img.classList.toggle('zoomed');
+    });
+  });
+
+  // 3. LIKE PER CDO PRODUKT
+  document.querySelectorAll('.like-btn').forEach(function (btn) {
+    const id = btn.getAttribute('data-id');
+    if (!id) return;
+
+    const storageKey = 'liked_' + id;
+
+    // Nëse është pëlqyer më parë
+    if (localStorage.getItem(storageKey) === 'true') {
+      btn.classList.add('active');
+      btn.innerText = '✓ Liked';
+    }
+
+    btn.addEventListener('click', function () {
+      const isLiked = localStorage.getItem(storageKey) === 'true';
+
+      if (!isLiked) {
+        localStorage.setItem(storageKey, 'true');
+        btn.classList.add('active');
+        btn.innerText = '✓ Liked';
+        alert('U ruajt te Favorites ❤️');
+      } else {
+        localStorage.removeItem(storageKey);
+        btn.classList.remove('active');
+        btn.innerText = '❤️ Like';
+        alert('U hoq nga Favorites.');
+      }
+    });
+  });
+
+  // 4. SHARE PER CDO PRODUKT
+  document.querySelectorAll('.share-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const url  = btn.getAttribute('data-url') || window.location.href;
+      const text = btn.getAttribute('data-share-text') || 'Shiko këtë produkt nga ORA SWISS!';
+
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          text: text,
+          url:  url
+        }).catch(function (err) {
+          console.log('Share u anulua:', err);
+        });
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(url);
+        alert('Linku u kopjua! Mund ta ngjitësh kudo për ta shpërndarë.');
+      } else {
+        alert('Kopjo këtë link:\n' + url);
+      }
+    });
+  });
+});
+
+// 5. KERKIMI I PRODUKTEVE
+function searchProducts() {
+  const input = document.getElementById('searchBar');
+  if (!input) return;
+
+  const value = input.value.toLowerCase();
+  const products = document.querySelectorAll('.product');
+
+  products.forEach(function (product) {
+    const text = product.innerText.toLowerCase();
+    product.style.display = text.includes(value) ? '' : 'none';
+  });
+}
+</script>
+
+<script src="contact-links.js"></script>
+
+<script>
+  // vendos këtu numrin dhe emailin tënd
+  const WHATSAPP_NUMBER = "355692408065";     // pa +
+  const EMAIL_TO = "adice1899@gmail.com";
+  const PAYPAL_LINK = "https://www.paypal.com/ncp/payment/2G6DFL5DHWUS";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".buy-row").forEach(row => {
+      const ref = row.getAttribute("data-ref") || "";
+
+      const paypal = row.querySelector(".paypal-btn");
+      const wa = row.querySelector(".whatsapp-btn");
+      const email = row.querySelector(".email-btn");
+
+      if (paypal) paypal.href = PAYPAL_LINK;
+
+      if (wa) {
+        const text = encodeURIComponent(Hello, I am interested in Ref: ${ref});
+        wa.href = https://wa.me/${WHATSAPP_NUMBER}?text=${text};
+      }
+
+      if (email) {
+        const subject = encodeURIComponent(Watch Request - Ref: ${ref});
+        const body = encodeURIComponent(Hello,\n\nI am interested in this watch.\nRef: ${ref}\n\nThank you.);
+        email.href = mailto:${EMAIL_TO}?subject=${subject}&body=${body};
+      }
+    });
+  });
+</script>
+
+<script>
+  async function loadHeader() {
+    const res = await fetch("header.html", { cache: "no-store" });
+    const html = await res.text();
+    const holder = document.getElementById("header");
+    if (holder) holder.innerHTML = html;
+  }
+
+  function setActiveCategory() {
+    const file = window.location.pathname.split("/").pop();
+    const map = {
+      "luxury.html": "luxury",
+      "vintage.html": "vintage",
+      "parts.html": "parts"
+    };
+    const key = map[file];
+    if (!key) return;
+
+    document.querySelectorAll(".category-menu a").forEach(a => {
+      if (a.dataset.page === key) a.classList.add("active");
+    });
+  }
+
+  async function countItems(page, elementId) {
+    try {
+      const res = await fetch(page, { cache: "no-store" });
+      const html = await res.text();
+      const doc = new DOMParser().parseFromString(html, "text/html");
+
+      // numëron produktet
+      const count = doc.querySelectorAll("article.product").length;
+
+      const el = document.getElementById(elementId);
+      if (el) el.textContent = count;
+    } catch (e) {
+      console.warn("Error:", page);
     }
   }
 
-  loadOras();
+  (async () => {
+    await loadHeader();
+    setActiveCategory();
+    countItems("luxury.html", "luxuryCount");
+    countItems("vintage.html", "vintageCount");
+    countItems("parts.html", "partsCount");
+  })();
 </script>
 
-
-</body>
+     
+</body>  
 </html>

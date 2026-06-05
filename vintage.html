@@ -54,6 +54,7 @@ async function loadOras() {
 
   container.innerHTML = "";
   data.forEach(ora => {
+    // Shto thonjëzat e duhura te URL-ja
     const imageUrl = ora.image_url 
       ? ${SUPABASE_URL}/storage/v1/object/public/${ora.image_url} 
       : 'placeholder.png';
@@ -64,6 +65,15 @@ async function loadOras() {
         <h3>${ora.brand} - ${ora.model}</h3>
         <p>${ora.description || ''}</p>
         <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
+        
+        <form class="request-form">
+          <input type="hidden" name="watch_name" value="${ora.brand} ${ora.model}">
+          <input type="text" name="full_name" placeholder="Full Name" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="text" name="country" placeholder="Country" required>
+          <textarea name="message" placeholder="Message"></textarea>
+          <button type="submit">Send Request</button>
+        </form>
       </div>
     `;
   });

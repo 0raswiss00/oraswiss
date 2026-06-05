@@ -30,7 +30,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 <script>
 const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-// Përdorni "Project API Key" (anon) nga Dashboard i Supabase (Settings -> API)
 const SUPABASE_KEY = "SHTO_KEY-IN_TUAJ_TE_SAJTE_KETU"; 
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -38,7 +37,6 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 async function loadOras() {
   const container = document.getElementById("oras-container");
   
-  // 1. Merr të dhënat dhe numërimin në të njëjtën kohë
   const { data, error, count } = await supabase
     .from('oras')
     .select('*', { count: 'exact' })
@@ -49,11 +47,10 @@ async function loadOras() {
     return;
   }
 
-// 2. Përditëso numrin te butonat e navigimit
+  // Përditëso numrin pa përdorur template literals
   document.querySelectorAll('.nav-filters a').forEach(link => {
     if(link.href.includes('vintage')) {
-        // Këtu duhen backticks (``)
-        link.innerText = "Vintage " + (count || 0); 
+        link.innerText = "Vintage " + (count || 0);
     }
   });
 
@@ -64,30 +61,21 @@ async function loadOras() {
 
   container.innerHTML = "";
   data.forEach(ora => {
-    // Këtu duhen backticks (``)
     const imageUrl = ora.image_url 
-      ? ${SUPABASE_URL}/storage/v1/object/public/${ora.image_url} 
+      ? SUPABASE_URL + "/storage/v1/object/public/" + ora.image_url 
       : 'placeholder.png';
 
-    container.innerHTML += `
-      <div class="card">
-        const imageUrl = ora.image_url 
-  ? SUPABASE_URL + "/storage/v1/object/public/" + ora.image_url 
-  : 'placeholder.png';
-        <h3>${ora.brand} - ${ora.model}</h3>
-        <p>${ora.description || ''}</p>
-        <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-        
-        <form action="https://api.web3forms.com/submit" method="POST">
-          <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
-          <input type="hidden" name="watch_name" value="${ora.brand} ${ora.model}">
-          <input type="text" name="full_name" placeholder="Full Name" required>
-          <input type="email" name="email" placeholder="Email" required>
-          <button type="submit">Send Request</button>
-        </form>
-      </div>
-    `;
+    // Ndërtimi i kartës pa backticks
+    let card = '<div class="card">' +
+      '<img src="' + imageUrl + '" alt="' + ora.model + '" onerror="this.style.display=\'none\'">' +
+      '<h3>' + ora.brand + ' - ' + ora.model + '</h3>' +
+      '<p>' + (ora.description || '') + '</p>' +
+      '<div class="price">' + (ora.price ? ora.price + ' €' : 'Contact for price') + '</div>' +
+      '</div>';
+    
+    container.innerHTML += card;
   });
+}
 
 loadOras();
 </script>

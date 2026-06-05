@@ -5,10 +5,8 @@
   <title>Vintage - Ora Swiss</title>
   <style>
     body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
-    /* Stili për butonat si te image_19.png */
     .nav-filters { margin-bottom: 30px; }
     .nav-filters a { background: #2a2a8e; color: #fff; padding: 8px 15px; border-radius: 20px; text-decoration: none; margin-right: 10px; font-weight: bold; }
-    
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
     .card { background: #111; padding: 15px; border-radius: 10px; border: 1px solid #333; }
     .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
@@ -17,72 +15,71 @@
 </head>
 <body>
 
-  <!-- Butonat e navigimit -->
   <div class="nav-filters">
-    <a href="luxury.html">Luxury 0</a>
-    <a href="vintage.html">Vintage 0</a>
-    <a href="parts.html">Parts 59</a>
+    <a href="luxury.html">Luxury</a>
+    <a href="vintage.html">Vintage</a>
+    <a href="parts.html">Parts</a>
   </div>
 
   <h1>Vintage Collection</h1>
   <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-<script>
-async function loadOras() {
-  const container = document.getElementById("oras-container");
-  
-  // Nese nuk shfaqen, hiq .eq('category', 'vintage') per te testuar nese i merr te gjitha
-  const { data, error } = await supabase
-    .from('oras')
-    .select('*')
-    .eq('category', 'vintage'); 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  if (error) {
-    container.innerHTML = "Gabim: " + error.message;
-    return;
-  }
-
-  if (!data || data.length === 0) {
-    container.innerHTML = "Nuk ka ende orë në këtë kategori. Kontrolloni kolonën 'category' në Supabase.";
-    return;
-  }
-
-  container.innerHTML = "";
-  data.forEach(ora => {
-    const imageUrl = ora.image_url 
-      ? SUPABASE_URL + "/storage/v1/object/public/" + ora.image_url 
-      : 'placeholder.png';
-
-    // Këtu janë të gjitha opsionet që kërkuat
-    let card = '<div class="card">' +
-      '<img src="' + imageUrl + '" alt="' + ora.model + '" onerror="this.style.display=\'none\'">' +
-      '<h3>' + ora.brand + ' - ' + ora.model + '</h3>' +
-      '<p><strong>Reference:</strong> ' + (ora.reference || 'N/A') + '</p>' +
-      '<div class="price">Price: ' + (ora.price ? ora.price + ' €' : 'Contact for price') + '</div>' +
+    async function loadOras() {
+      const container = document.getElementById("oras-container");
       
-      // Formulari Web3Forms
-      '<form action="https://api.web3forms.com/submit" method="POST">' +
-        '<input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">' +
-        '<input type="hidden" name="subject" value="New Watch Request">' +
-        '<input type="hidden" name="watch_name" value="' + ora.brand + ' ' + ora.model + '">' +
-        '<input type="text" name="full_name" placeholder="Full Name" required style="width:100%; margin-bottom:5px;">' +
-        '<input type="email" name="email" placeholder="Email" required style="width:100%; margin-bottom:5px;">' +
-        '<button type="submit" style="width:100%;">Send Request</button>' +
-      '</form>' +
-      
-      // Butonat WhatsApp dhe Like
-      '<div class="actions" style="margin-top: 10px; display:flex; justify-content:space-between;">' +
-        '<a href="https://wa.me/35569xxxxxxx" target="_blank" style="color: #25D366; text-decoration:none;">Buy Now WhatsApp</a>' +
-        '<button onclick="alert(\'Added to favorites!\')">❤️ Like</button>' +
-      '</div>' +
-    '</div>';
-    
-    container.innerHTML += card;
-  });
-}
+      const { data, error } = await supabase
+        .from('oras')
+        .select('*')
+        .eq('category', 'vintage'); 
 
-loadOras();
-</script>
+      if (error) {
+        container.innerHTML = "Gabim: " + error.message;
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        container.innerHTML = "Nuk ka ende orë në këtë kategori.";
+        return;
+      }
+
+      container.innerHTML = "";
+      data.forEach(ora => {
+        const imageUrl = ora.image_url 
+          ? SUPABASE_URL + "/storage/v1/object/public/" + ora.image_url 
+          : 'placeholder.png';
+
+        let card = '<div class="card">' +
+          '<img src="' + imageUrl + '" alt="' + ora.model + '" onerror="this.style.display=\'none\'">' +
+          '<h3>' + ora.brand + ' - ' + ora.model + '</h3>' +
+          '<p><strong>Reference:</strong> ' + (ora.reference || 'N/A') + '</p>' +
+          '<div class="price">Price: ' + (ora.price ? ora.price + ' €' : 'Contact for price') + '</div>' +
+          
+          '<form action="https://api.web3forms.com/submit" method="POST">' +
+            '<input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">' +
+            '<input type="hidden" name="subject" value="New Watch Request">' +
+            '<input type="hidden" name="watch_name" value="' + ora.brand + ' ' + ora.model + '">' +
+            '<input type="text" name="full_name" placeholder="Full Name" required style="width:100%; margin-bottom:5px;">' +
+            '<input type="email" name="email" placeholder="Email" required style="width:100%; margin-bottom:5px;">' +
+            '<button type="submit" style="width:100%;">Send Request</button>' +
+          '</form>' +
+          
+          '<div class="actions" style="margin-top: 10px; display:flex; justify-content:space-between;">' +
+            '<a href="https://wa.me/35569xxxxxxx" target="_blank" style="color: #25D366; text-decoration:none;">Buy Now WhatsApp</a>' +
+            '<button onclick="alert(\'Added to favorites!\')">❤️ Like</button>' +
+          '</div>' +
+        '</div>';
+        
+        container.innerHTML += card;
+      });
+    }
+
+    loadOras();
+  </script>
 </body>
 </html>

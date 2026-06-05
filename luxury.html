@@ -36,18 +36,33 @@
   // Përdor 'window.supabase' për të shmangur konfliktin me librarinë
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  async function loadOras() {
+async function loadOras() {
     const container = document.getElementById("oras-container");
     
-// Kërkesa e re që merr edhe të dhënat, edhe numërimin (count)
-    const { data, error, count } = await client
-      .from('oras')
-      .select('*', { count: 'exact' })
-      .eq('category', 'luxury');
-if (error) {
-      container.innerHTML = "Gabim: " + error.message;
-      return;
-    }
+    // 1. Marrim numërimet për çdo kategori
+    const [lux, vint, parts] = await Promise.all([
+        client.from('oras').select('*', { count: 'exact', head: true }).eq('category', 'luxury'),
+        client.from('oras').select('*', { count: 'exact', head: true }).eq('category', 'vintage'),
+        client.from('oras').select('*', { count: 'exact', head: true }).eq('category', 'parts')
+    ]);
+
+    // 2. Përditësojmë tekstin e të gjitha linqeve
+    document.querySelector('a[href="luxury.html"]').innerText = "Luxury " + (lux.count || 0);
+    document.querySelector('a[href="vintage.html"]').innerText = "Vintage " + (vint.count || 0);
+    document.querySelector('a[href="parts.html"]').innerText = "Parts " + (parts.count || 0);
+
+    // 3. Tani ngarkojmë orët për kategorinë aktuale
+    // (Sigurohu që këtu ke ndryshuar kategorinë sipas faqes: 'luxury', 'vintage' ose 'parts')
+    const { data, error } = await client
+        .from('oras')
+        .select('*')
+        .eq('category', 'vintage'); // NDRYSHO KËTU SIPAS FAQES!
+
+    if (error) { container.innerHTML = "Gabim: " + error.message; return; }
+    
+    // ... pjesa tjetër e kodit për të shfaqur kartat ...
+}
+
 
     // Përditëso tekstin e linkut "Luxury 0" me numrin real
     // 53: Kërkojmë linkun për luxury.html

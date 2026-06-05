@@ -29,55 +29,38 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 <script>
-const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
-
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-async function loadOras() {
-  const container = document.getElementById("oras-container");
+  // 1. Sigurohu që këto rreshta janë të vetmet për Supabase
+  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+  const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
   
-  const { data, error, count } = await supabase
-    .from('oras')
-    .select('*', { count: 'exact' })
-    .eq('category', 'vintage');
+  // NËSE KY RRESHT TË JEP GABIM, NDROJE NË: const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  if (error) {
-    container.innerHTML = "Gabim: " + error.message;
-    return;
-  }
+  async function loadOras() {
+    const container = document.getElementById("oras-container");
+    const { data, error } = await client.from('oras').select('*').eq('category', 'vintage');
 
-  // Përditëso numrin pa përdorur template literals
-  document.querySelectorAll('.nav-filters a').forEach(link => {
-    if(link.href.includes('vintage')) {
-        link.innerText = "Vintage " + (count || 0);
-    }
-  });
-
-  if (!data || data.length === 0) {
-    container.innerHTML = "Nuk ka ende orë në këtë kategori.";
-    return;
-  }
-
-  container.innerHTML = "";
-  data.forEach(ora => {
-    const imageUrl = ora.image_url 
-      ? SUPABASE_URL + "/storage/v1/object/public/" + ora.image_url 
-      : 'placeholder.png';
-
-    // Ndërtimi i kartës pa backticks
-    let card = '<div class="card">' +
-      '<img src="' + imageUrl + '" alt="' + ora.model + '" onerror="this.style.display=\'none\'">' +
-      '<h3>' + ora.brand + ' - ' + ora.model + '</h3>' +
-      '<p>' + (ora.description || '') + '</p>' +
-      '<div class="price">' + (ora.price ? ora.price + ' €' : 'Contact for price') + '</div>' +
-      '</div>';
+    if (error) { container.innerHTML = "Gabim: " + error.message; return; }
     
-    container.innerHTML += card;
-  });
-}
-
-loadOras();
+    container.innerHTML = "";
+    data.forEach(ora => {
+      const img = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/" + ora.image_url : 'placeholder.png';
+      
+      // Këtu i ke butonat të shtuara sigurt, pa prishur strukturën
+      container.innerHTML += `
+        <div class="card">
+          <img src="${img}" alt="${ora.model}">
+          <h3>${ora.brand} - ${ora.model}</h3>
+          <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+          
+          <a href="https://wa.me/35569XXXXXXX" target="_blank" style="display:block; background:#25D366; color:white; padding:8px; margin-top:5px; text-align:center; text-decoration:none; border-radius:5px;">WhatsApp</a>
+          <button onclick="alert('U pëlqye!')" style="width:100%; margin-top:5px;">❤️ Like</button>
+          <button onclick="navigator.clipboard.writeText(window.location.href); alert('Linku u kopjua!')" style="width:100%; margin-top:5px;">🔗 Share</button>
+        </div>
+      `;
+    });
+  }
+  loadOras();
 </script>
 
 </body>

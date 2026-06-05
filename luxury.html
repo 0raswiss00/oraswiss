@@ -1,88 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="sq">
 <head>
-    <meta charset="UTF-8">
-    <title>Ora Swiss - Luxury Shop</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-    <style>
-        /* Shto këtu CSS-në që kishe te image.png */
-        .products-section { max-width: 1100px; margin: 40px auto; padding: 0 16px; }
-        .product { background: #fff; border-radius: 12px; margin-bottom: 40px; padding: 16px; box-shadow: 0 0 12px rgba(0,0,0,0.08); }
-        .product-box { display: flex; flex-wrap: wrap; gap: 16px; }
-        .product-main-image { width: 100%; max-width: 380px; border-radius: 8px; }
-        .thumb { width: 60px; height: 60px; cursor: pointer; object-fit: cover; }
-    </style>
+  <meta charset="utf-8"/>
+  <title>Luxury - Ora Swiss</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
+    /* Stili për butonat si te image_19.png */
+    .nav-filters { margin-bottom: 30px; }
+    .nav-filters a { background: #2a2a8e; color: #fff; padding: 8px 15px; border-radius: 20px; text-decoration: none; margin-right: 10px; font-weight: bold; }
+    
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+    .card { background: #111; padding: 15px; border-radius: 10px; border: 1px solid #333; }
+    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
+    .price { color: #25D366; font-weight: bold; margin-top: 10px; font-size: 1.2em; }
+  </style>
 </head>
 <body>
 
-<div id="header"></div>
-<input type="text" id="searchBar" placeholder="Search by brand or model..." onkeyup="searchProducts()">
+  <!-- Butonat e navigimit -->
+  <div class="nav-filters">
+    <a href="luxury.html">Luxury 0</a>
+    <a href="vintage.html">Vintage 0</a>
+    <a href="parts.html">Parts 59</a>
+  </div>
 
-<main class="products-section" id="products-container">
-    <!-- Këtu do të ngarkohen produktet -->
-</main>
+  <h1>Vintage Collection</h1>
+  <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 <script>
-    const supabase = window.supabase.createClient(
-    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-);
-    async function loadProducts() {
-        const { data, error } = await supabase.from('oras').select('*').eq('category', 'luxury');
-        if (error) { console.error(error); return; }
+  // Inicializo Supabase vetëm një herë
+  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+  const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
 
-        const container = document.getElementById('products-container');
-        container.innerHTML = data.map(ora => `
-            <article class="product" id="${ora.id}">
-                <div class="product-box">
-                    <div class="product-left">
-                        <img class="product-main-image" src="${ora.image_url}" alt="${ora.model}">
-                    </div>
-                    <div class="product-right">
-                        <h3>Request this watch</h3>
-                        <form action="https://api.web3forms.com/submit" method="POST">
-                            <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
-                            <input type="hidden" name="Product" value="${ora.brand} ${ora.model}">
-                            <input type="text" name="Full Name" placeholder="Full Name" required>
-                            <input type="email" name="Email" placeholder="Email" required>
-                            <button type="submit">Send Request</button>
-                        </form>
-                        <div class="buy-row" data-ref="${ora.id}">
-                            <a href="${ora.paypal_link}" class="buy-btn" target="_blank">Buy Now</a>
-                            <a href="https://wa.me/355692408065" class="whatsapp-btn">WhatsApp</a>
-                            <button class="like-btn" data-id="${ora.id}">♥️ Like</button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>${ora.brand} - ${ora.model}</h3>
-                        <p><strong>Reference:</strong> ${ora.reference}</p>
-                        <p><strong>Price:</strong> €${ora.price}</p>
-                    </div>
-                </div>
-            </article>
-        `).join('');
+  // Përdor 'window.supabase' për të shmangur konfliktin me librarinë
+  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        initFeatures();
+  async function loadOras() {
+    const container = document.getElementById("oras-container");
+    
+// Kërkesa e re që merr edhe të dhënat, edhe numërimin (count)
+    const { data, error, count } = await client
+      .from('oras')
+      .select('*', { count: 'exact' })
+      .eq('category', 'luxury');
+if (error) {
+      container.innerHTML = "Gabim: " + error.message;
+      return;
     }
 
-    function initFeatures() {
-        // Funksioni i Kërkimit
-        window.searchProducts = function() {
-            const val = document.getElementById('searchBar').value.toLowerCase();
-            document.querySelectorAll('.product').forEach(p => {
-                p.style.display = p.innerText.toLowerCase().includes(val) ? '' : 'none';
-            });
-        };
+    // Përditëso tekstin e linkut "Luxury 0" me numrin real
+    // 53: Kërkojmë linkun për luxury.html
+    const luxuryLink = document.querySelector('a[href="luxury.html"]');
 
-        // Funksioni Like (LocalStorage)
-        document.querySelectorAll('.like-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                alert('U ruajt te Favorites ❤️');
-            });
-        });
+    // 54: (Këtë lëre siç është)
+    if (luxuryLink && count !== null) {
+
+    // 55: Përditësojmë tekstin
+      luxuryLink.innerText = "Luxury " + count;
     }
 
-    loadProducts();
+
+    container.innerHTML = "";
+    data.forEach(ora => {
+      const img = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/" + ora.image_url : '';
+      container.innerHTML += `
+        <div class="card">
+          <img src="${img}" alt="${ora.model}">
+          <h3>${ora.brand} - ${ora.model}</h3>
+          <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+          
+          <form action="https://api.web3forms.com/submit" method="POST" style="margin-top:10px;">
+            <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
+            <input type="email" name="email" placeholder="Emaili yt" required style="width:90%">
+            <button type="submit" style="width:100%; margin-top:5px;">Send Request</button>
+          </form>
+
+          <a href="https://wa.me/35569XXXXXXX" target="_blank" style="display:block; background:#25D366; color:white; padding:8px; margin-top:5px; text-align:center; text-decoration:none; border-radius:5px;">WhatsApp</a>
+          <button onclick="window.location.href='checkout.html'" 
+        style="width:100%; margin-top:5px; padding:8px; background:#007bff; color:white; border:none; border-radius:5px; cursor:pointer;">
+  🛒 Buy Now
+</button>
+          <button onclick="alert('Liked!')" style="width:100%; margin-top:5px;">❤️ Like</button>
+          <button onclick="navigator.clipboard.writeText(window.location.href); alert('Linku u kopjua!')" style="width:100%; margin-top:5px;">🔗 Share</button>
+        </div>
+      `;
+    });
+  }
+
+  loadOras();
 </script>
 
 </body>

@@ -29,7 +29,7 @@
       const { data, error } = await supabase
         .from('oras')
         .select('*')
-        .eq('category', 'Vintage');
+        .eq('category', 'vintage');
 
       if (error) {
         container.innerHTML = "Gabim: " + error.message;

@@ -3141,6 +3141,25 @@ body {
 
 
 
+.collection-grid {
+  display: grid;
+  /* 4 kolona në desktop */
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Kur klikohet karta, merr gjithë hapësirën (të bëhet full width) */
+.product-card.active {
+  grid-column: span 4;
+}
+
+/* Përshtatje për celular (1 kolonë) */
+@media (max-width: 768px) {
+  .collection-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
 
 

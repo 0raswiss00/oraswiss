@@ -38,31 +38,25 @@
 
 async function loadOras() {
     const container = document.getElementById("oras-container");
-    
-    // 1. Marrim numërimet për çdo kategori
-    const [lux, vint, parts] = await Promise.all([
-        client.from('oras').select('*', { count: 'exact', head: true }).eq('category', 'luxury'),
-        client.from('oras').select('*', { count: 'exact', head: true }).eq('category', 'vintage'),
-        client.from('oras').select('*', { count: 'exact', head: true }).eq('category', 'parts')
-    ]);
+    container.innerHTML = "Duke ngarkuar koleksionin...";
 
-    // 2. Përditësojmë tekstin e të gjitha linqeve
-    document.querySelector('a[href="luxury.html"]').innerText = "Luxury " + (lux.count || 0);
-    document.querySelector('a[href="vintage.html"]').innerText = "Vintage " + (vint.count || 0);
-    document.querySelector('a[href="parts.html"]').innerText = "Parts " + (parts.count || 0);
-
-    // 3. Tani ngarkojmë orët për kategorinë aktuale
-    // (Sigurohu që këtu ke ndryshuar kategorinë sipas faqes: 'luxury', 'vintage' ose 'parts')
+    // Kërkesa vetëm për 'luxury'
     const { data, error } = await client
         .from('oras')
         .select('*')
-        .eq('category', 'vintage'); // NDRYSHO KËTU SIPAS FAQES!
+        .eq('category', 'luxury'); // Sigurohu që këtu shkruan 'luxury'
 
     if (error) { container.innerHTML = "Gabim: " + error.message; return; }
+
+    container.innerHTML = ""; // Pastro tekstin e ngarkimit
     
-    // ... pjesa tjetër e kodit për të shfaqur kartat ...
+    // Këtu shto pjesën që krijon kartat (forEach)
+    data.forEach(ora => {
+        // ... kodi yt për krijimin e HTML-së ...
+    });
 }
 
+loadOras();
 
     // Përditëso tekstin e linkut "Luxury 0" me numrin real
     // 53: Kërkojmë linkun për luxury.html

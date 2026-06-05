@@ -18,66 +18,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
   <script>
-    const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ";
-    
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    console.log("Po filloj ngarkimin..."); // E shtuam këtë
-  const container = document.getElementById("oras-container");
-  
-  const { data, error } = await supabase
-    .from('oras')
-    .select('*')
-    .eq('category', 'vintage');
-
-  if (error) {
-    console.error("Gabim Supabase:", error); // E shtuam këtë për të parë gabimin
-    container.innerHTML = "Gabim: " + error.message;
-    return;
-  }
-
-  console.log("Të dhënat e marra:", data); // E shtuam këtë
-  
-  if (!data || data.length === 0) {
-    container.innerHTML = "Nuk ka ende orë në këtë kategori.";
-    return;
-  }
-  // ... pjesa tjetër
-}
-
-
-      if (!data || data.length === 0) {
-        container.innerHTML = "Nuk ka ende orë në këtë kategori.";
-        return;
-      }
-
-      container.innerHTML = "";
-      data.forEach(ora => {
-        // Ndërtojmë linkun automatik: URL e Supabase + path-i i fotos
-        const imageUrl = ora.image_url 
-          ? ${SUPABASE_URL}/storage/v1/object/public/${ora.image_url} 
-          : 'placeholder.png'; // Foto default nëse mungon
-
-        container.innerHTML += `
-  <div class="card">
-    <img src="${imageUrl}" alt="${ora.model}" onerror="this.style.display='none'">
-    <h3>${ora.brand} - ${ora.model}</h3>
-    <p>${ora.description || ''}</p>
-    <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-    
-    <!-- SHTONI FORMULARIN KETU -->
-    <form class="request-form">
-      <input type="hidden" name="watch_name" value="${ora.brand} ${ora.model}">
-      <input type="text" name="full_name" placeholder="Full Name" required>
-      <input type="email" name="email" placeholder="Email" required>
-      <input type="text" name="country" placeholder="Country" required>
-      <textarea name="message" placeholder="Message"></textarea>
-      <button type="submit">Send Request</button>
-    </form>
-    <!-- FUNDI I FORMULARIT -->
-    
-  </div>
 const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ";
 

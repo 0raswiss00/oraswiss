@@ -33,8 +33,13 @@
   const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
   const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
   
-  // NËSE KY RRESHT TË JEP GABIM, NDROJE NË: const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// Sigurohuni që kjo të jetë e vetmja pjesë për inicializimin
+const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
+
+// Përdorni window.supabase për të shmangur konfliktin e emrit
+const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+Compose
 
   async function loadOras() {
     const container = document.getElementById("oras-container");

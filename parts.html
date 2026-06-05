@@ -52,10 +52,16 @@ if (error) {
     // Përditëso tekstin e linkut "Parts 0" me numrin real
     // Thjesht kërkesa bazë për të shfaqur pjesët
     // 54: Kërkesa për të marrë pjesët
-    const { data, error } = await client
+    // Përdor 'dataParts' në vend të 'data'
+    const { data: dataParts, error } = await client
         .from('oras')
         .select('*')
         .eq('category', 'parts');
+
+// Pastaj përdor 'dataParts' te forEach
+dataParts.forEach(ora => {
+    // ... kodi yt ...
+});
 
     // 59: Kontrolli i gabimit
     if (error) {

@@ -3,88 +3,60 @@
 <head>
   <meta charset="utf-8"/>
   <title>Vintage - Ora Swiss</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
-    .nav-filters { margin-bottom: 30px; }
-    .nav-filters a { background: #2a2a8e; color: #fff; padding: 8px 15px; border-radius: 20px; text-decoration: none; margin-right: 10px; font-weight: bold; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
     .card { background: #111; padding: 15px; border-radius: 10px; border: 1px solid #333; }
-    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
-    .price { color: #25D366; font-weight: bold; margin-top: 10px; font-size: 1.2em; }
-    .btn-container { margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
-    .action-btn { background: #222; border: 1px solid #444; color: white; padding: 8px; border-radius: 5px; text-decoration: none; text-align: center; cursor: pointer; }
+    .btn { background: #2a2a8e; color: #fff; padding: 10px; border: none; border-radius: 5px; cursor: pointer; display: block; width: 100%; margin-top: 10px; text-align: center; text-decoration: none; }
   </style>
 </head>
 <body>
 
-  <div class="nav-filters">
-    <a href="luxury.html">Luxury</a>
-    <a href="vintage.html">Vintage</a>
-    <a href="parts.html">Parts</a>
-  </div>
-
   <h1>Vintage Collection</h1>
-  <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
+  <div id="oras-container" class="grid">Duke ngarkuar...</div>
 
+  <script>
+    // Inicializimi i saktë - vetëm një herë
+    const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  // 1. Inicializimi (këtu përcaktohet supabase vetëm një herë)
-  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-  const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    async function loadOras() {
+      const container = document.getElementById("oras-container");
+      
+      const { data, error } = await supabase
+        .from('oras')
+        .select('*')
+        .eq('category', 'vintage');
 
-  async function loadOras() {
-    const container = document.getElementById("oras-container");
-    
-    // 2. Marrja e të dhënave nga tabela 'oras'
-    const { data, error } = await supabase
-      .from('oras')
-      .select('*')
-      .eq('category', 'vintage');
+      if (error) {
+        container.innerHTML = "Gabim: " + error.message;
+        return;
+      }
 
-    if (error) {
-      container.innerHTML = "Gabim: " + error.message;
-      return;
-    }
+      container.innerHTML = "";
+      data.forEach(ora => {
+        const card = `
+          <div class="card">
+            <h3>${ora.brand} - ${ora.model}</h3>
+            <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+            
+            <form action="https://api.web3forms.com/submit" method="POST">
+              <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
+              <input type="email" name="email" placeholder="Email-i juaj" required style="width:100%; padding:5px;">
+              <button type="submit" class="btn">Send Request</button>
+            </form>
 
-    if (!data || data.length === 0) {
-      container.innerHTML = "Nuk ka ende orë në këtë kategori.";
-      return;
-    }
-
-    container.innerHTML = "";
-    data.forEach(ora => {
-      const imageUrl = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/" + ora.image_url : 'placeholder.png';
-
-      // 3. Karta me të gjitha butonat e kërkuar
-      container.innerHTML += `
-        <div class="card">
-          <img src="${imageUrl}" alt="${ora.model}" onerror="this.style.display='none'">
-          <h3>${ora.brand} - ${ora.model}</h3>
-          <p><strong>Ref:</strong> ${ora.reference || 'N/A'}</p>
-          <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-          
-          <form action="https://api.web3forms.com/submit" method="POST" style="margin-top:10px;">
-            <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
-            <input type="hidden" name="watch_name" value="${ora.brand} ${ora.model}">
-            <input type="email" name="email" placeholder="Emaili juaj" required style="width:90%; padding:5px; margin-bottom:5px;">
-            <button type="submit" style="width:100%; cursor:pointer;">Send Request</button>
-          </form>
-
-          <div style="margin-top:10px; display:flex; gap:5px; flex-wrap:wrap;">
-            <a href="https://wa.me/35569XXXXXXX" target="_blank" style="background:#25D366; color:white; padding:5px 10px; border-radius:5px; text-decoration:none;">WhatsApp</a>
-            <button onclick="alert('U shtua te të preferuarat!')" style="cursor:pointer;">❤️ Like</button>
-            <button onclick="navigator.clipboard.writeText(window.location.href); alert('Linku u kopjua!')" style="cursor:pointer;">🔗 Share</button>
+            <a href="https://wa.me/35569XXXXXXX" class="btn" style="background:#25D366;">WhatsApp</a>
+            <button class="btn" style="background:#555;" onclick="alert('Like')">❤️ Like</button>
           </div>
-        </div>
-      `;
-    });
-  }
+        `;
+        container.innerHTML += card;
+      });
+    }
 
-  loadOras();
-</script>
-
+    loadOras();
+  </script>
 </body>
 </html>

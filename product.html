@@ -1,65 +1,45 @@
 <!DOCTYPE html>
 <html>
-<body>
-    <div id="product-details">Duke ngarkuar...</div>
-
+<head>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div id="product-details">Duke kërkuar produktin...</div>
 
     <script>
-        console.log("Skripti ka filluar!"); // Kjo duhet të shfaqet në Console
+        const supabase = supabase.createClient('URL_JOTE_KETU', 'KEY_JOTE_KETU');
 
-        const supabase = window.supabase.createClient('URL_JOTE', 'KEY_JOTE');
-        
-        async function testSupabase() {
-            console.log("Duke u lidhur me Supabase...");
-            
-            const { data, error } = await supabase.from('oras').select('id').limit(1);
-            
+        async function loadProduct() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            const container = document.getElementById('product-details');
+
+            if (!id) {
+                container.innerText = "Nuk u gjet ID në URL!";
+                return;
+            }
+
+            // Këtu po e kërkojmë orën me ID-në që vjen nga URL-ja
+            const { data, error } = await supabase
+                .from('oras')
+                .select('*')
+                .eq('id', id)
+                .single(); // .single() merr vetëm një rresht
+
             if (error) {
-                console.error("GABIM NGA SUPABASE:", error);
+                container.innerText = "Gabim Supabase: " + error.message;
+            } else if (data) {
+                container.innerHTML = `
+                    <h1>${data.brand}</h1>
+                    <p>Modeli: ${data.model}</p>
+                    <p>Çmimi: ${data.price} €</p>
+                `;
             } else {
-                console.log("Lidhja funksionoi! Data:", data);
+                container.innerText = "Produkti me këtë ID nuk ekziston.";
             }
         }
 
-        testSupabase();
+        loadProduct();
     </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html>
-<body>
-    <div id="product-details">Duke ngarkuar...</div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<div id="product-details">Duke u lidhur...</div>
-
-<script>
-    // Sigurohuni që Supabase është instancuar
-    const supabaseUrl = 'URL_JOTE_KETU'; 
-    const supabaseKey = 'KEY_JOTE_KETU';
-    
-    // Test i menjëhershëm i Supabase
-    try {
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-        console.log("Supabase Client është krijuar!");
-
-        async function testConnection() {
-            const { data, error } = await supabase.from('oras').select('id').limit(1);
-            if (error) {
-                console.error("GABIM NË LIDHJE:", error);
-                document.getElementById('product-details').innerText = "Gabim lidhje: " + error.message;
-            } else {
-                console.log("Lidhja sukses! Të dhënat:", data);
-                document.getElementById('product-details').innerText = "Lidhja sukses!";
-            }
-        }
-        testConnection();
-    } catch (e) {
-        console.error("GABIM KRITIK:", e);
-        document.getElementById('product-details').innerText = "Gabim sistem: " + e.message;
-    }
-</script>
 </body>
 </html>

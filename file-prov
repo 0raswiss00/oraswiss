@@ -6877,3 +6877,64 @@ if (error) {
   loadOras();
 </script>
 
+parts html script
+
+<script>
+  // Inicializo Supabase vetëm një herë
+  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+  const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
+
+  // Përdor 'window.supabase' për të shmangur konfliktin me librarinë
+  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  async function loadOras() {
+    const container = document.getElementById("oras-container");
+    
+// Kërkesa e re që merr edhe të dhënat, edhe numërimin (count)
+    const { data, error, count } = await client
+      .from('oras')
+      .select('*', { count: 'exact' })
+      .eq('category', 'parts');
+if (error) {
+      container.innerHTML = "Gabim: " + error.message;
+      return;
+    }
+
+    // Përditëso tekstin e linkut "Vintage 0" me numrin real
+    const partsLink = document.querySelector('a[href="parts.html"]');
+    if (partsLink && count !== null) {
+      partsLink.innerText = "Parts " + count;
+    }
+
+    container.innerHTML = "";
+    data.forEach(ora => {
+      const img = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/" + ora.image_url : '';
+      container.innerHTML += `
+        <div class="card">
+          <img src="${img}" alt="${ora.model}">
+          <h3>${ora.brand} - ${ora.model}</h3>
+          <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+          
+          <form action="https://api.web3forms.com/submit" method="POST" style="margin-top:10px;">
+            <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
+            <input type="email" name="email" placeholder="Emaili yt" required style="width:90%">
+            <button type="submit" style="width:100%; margin-top:5px;">Send Request</button>
+          </form>
+
+          <a href="https://wa.me/35569XXXXXXX" target="_blank" style="display:block; background:#25D366; color:white; padding:8px; margin-top:5px; text-align:center; text-decoration:none; border-radius:5px;">WhatsApp</a>
+          <button onclick="window.location.href='checkout.html'" 
+        style="width:100%; margin-top:5px; padding:8px; background:#007bff; color:white; border:none; border-radius:5px; cursor:pointer;">
+  🛒 Buy Now
+</button>
+          <button onclick="alert('Liked!')" style="width:100%; margin-top:5px;">❤️ Like</button>
+          <button onclick="navigator.clipboard.writeText(window.location.href); alert('Linku u kopjua!')" style="width:100%; margin-top:5px;">🔗 Share</button>
+        </div>
+      `;
+    });
+  }
+
+  loadOras();
+</script>
+
+
+

@@ -3161,16 +3161,13 @@ body {
   }
 }
 
-.card { 
-    background: #111; 
-    padding: 15px; 
-    border-radius: 10px; 
-    border: 1px solid #333;
-    display: flex;
-    flex-direction: column;
-    gap: 8px; /* Hapësira mes elementeve */
+.card img { 
+    width: 100%; 
+    height: 150px; /* E fiksojmë lartësinë që të jenë të gjitha njësoj */
+    object-fit: cover; /* Pret foton që të mos deformohet */
+    border-radius: 5px;
+    cursor: pointer;
 }
-
 .price { color: #25D366; font-weight: bold; font-size: 1.2em; }
 
 /* Butonat e stilit image.png */

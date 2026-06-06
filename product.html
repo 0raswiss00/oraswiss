@@ -4,42 +4,39 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <div id="product-details">Duke kërkuar produktin...</div>
+    <div id="debug" style="padding: 20px; font-family: monospace;">Duke filluar...</div>
 
     <script>
-        const supabase = supabase.createClient('URL_JOTE_KETU', 'KEY_JOTE_KETU');
+        const div = document.getElementById('debug');
+        const URL = 'URL_JOTE_KETU';
+        const KEY = 'KEY_JOTE_KETU';
 
-        async function loadProduct() {
-            const params = new URLSearchParams(window.location.search);
-            const id = params.get('id');
-            const container = document.getElementById('product-details');
-
-            if (!id) {
-                container.innerText = "Nuk u gjet ID në URL!";
-                return;
-            }
-
-            // Këtu po e kërkojmë orën me ID-në që vjen nga URL-ja
-            const { data, error } = await supabase
-                .from('oras')
-                .select('*')
-                .eq('id', id)
-                .single(); // .single() merr vetëm një rresht
-
-            if (error) {
-                container.innerText = "Gabim Supabase: " + error.message;
-            } else if (data) {
-                container.innerHTML = `
-                    <h1>${data.brand}</h1>
-                    <p>Modeli: ${data.model}</p>
-                    <p>Çmimi: ${data.price} €</p>
-                `;
+        div.innerText = "Duke u lidhur...";
+        
+        try {
+            const supabase = supabase.createClient(URL, KEY);
+            
+            // Kontrollojmë ID-në
+            const id = new URLSearchParams(window.location.search).get('id');
+            if(!id) {
+                div.innerText = "GABIM: Nuk ka ID në URL (p.sh. product.html?id=11)";
             } else {
-                container.innerText = "Produkti me këtë ID nuk ekziston.";
+                div.innerText = "Duke kërkuar ID: " + id;
+                
+                supabase.from('oras').select('*').eq('id', id).single()
+                .then(({data, error}) => {
+                    if(error) {
+                        div.innerText = "GABIM SUPABASE: " + JSON.stringify(error);
+                    } else if (!data) {
+                        div.innerText = "Nuk u gjet asnjë rresht me këtë ID.";
+                    } else {
+                        div.innerText = "SUKSES! Marka: " + data.brand + " | Modeli: " + data.model;
+                    }
+                });
             }
+        } catch(e) {
+            div.innerText = "GABIM KRITIK: " + e.message;
         }
-
-        loadProduct();
     </script>
 </body>
 </html>

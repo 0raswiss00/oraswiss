@@ -6,12 +6,57 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <h1 id="test">Po testoj nëse faqja punon...</h1>
-    <div id="product-details"></div>
 
-    <script>
-        document.getElementById('test').innerText = "JavaScript po ekzekutohet!";
-    </script>
+    <main id="product-details">
+        Duke ngarkuar detajet e orës...
+    </main>
+
+<div id="product-details">Duke ngarkuar...</div>
+
+<script>
+    // 1. Inicializimi
+    const supabase = window.supabase.createClient('URL_JOTE', 'KEY_JOTE');
+
+    async function loadProduct() {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        const container = document.getElementById('product-details');
+
+        if (!id) {
+            container.innerHTML = "Nuk u gjet asnjë produkt.";
+            return;
+        }
+
+        // 2. Kërkimi në Supabase
+        const { data, error } = await supabase
+            .from('oras')
+            .select('*')
+            .eq('id', id)
+            .single();
+
+        // 3. Trajtimi i gabimeve
+        if (error) {
+            console.error("Gabim Supabase:", error);
+            container.innerHTML = "Gabim gjatë lidhjes: " + error.message;
+            return;
+        }
+
+        // 4. Shfaqja e të dhënave
+        if (data) {
+            container.innerHTML = `
+                <h1>${data.brand} - ${data.model}</h1>
+                <p>Çmimi: ${data.price} €</p>
+                <p>Përshkrimi: ${data.description || 'Nuk ka përshkrim'}</p>
+                <a href="${data.paypal_link}" target="_blank">Blej Tani</a>
+            `;
+        } else {
+            container.innerHTML = "Produkti nuk u gjet.";
+        }
+    }
+
+    loadProduct();
+</script>
+
 </body>
 
 </html>

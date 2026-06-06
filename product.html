@@ -1,14 +1,65 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Testimi</title>
-</head>
-<body style="background-color: yellow;">
-    <h1 id="test">Nëse kjo faqe është e verdhë, faqja po hapet.</h1>
+<body>
+    <div id="product-details">Duke ngarkuar...</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script>
-        alert("JavaScript po funksionon!");
-        console.log("JavaScript po funksionon 100%");
+        console.log("Skripti ka filluar!"); // Kjo duhet të shfaqet në Console
+
+        const supabase = window.supabase.createClient('URL_JOTE', 'KEY_JOTE');
+        
+        async function testSupabase() {
+            console.log("Duke u lidhur me Supabase...");
+            
+            const { data, error } = await supabase.from('oras').select('id').limit(1);
+            
+            if (error) {
+                console.error("GABIM NGA SUPABASE:", error);
+            } else {
+                console.log("Lidhja funksionoi! Data:", data);
+            }
+        }
+
+        testSupabase();
     </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<body>
+    <div id="product-details">Duke ngarkuar...</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<div id="product-details">Duke u lidhur...</div>
+
+<script>
+    // Sigurohuni që Supabase është instancuar
+    const supabaseUrl = 'URL_JOTE_KETU'; 
+    const supabaseKey = 'KEY_JOTE_KETU';
+    
+    // Test i menjëhershëm i Supabase
+    try {
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        console.log("Supabase Client është krijuar!");
+
+        async function testConnection() {
+            const { data, error } = await supabase.from('oras').select('id').limit(1);
+            if (error) {
+                console.error("GABIM NË LIDHJE:", error);
+                document.getElementById('product-details').innerText = "Gabim lidhje: " + error.message;
+            } else {
+                console.log("Lidhja sukses! Të dhënat:", data);
+                document.getElementById('product-details').innerText = "Lidhja sukses!";
+            }
+        }
+        testConnection();
+    } catch (e) {
+        console.error("GABIM KRITIK:", e);
+        document.getElementById('product-details').innerText = "Gabim sistem: " + e.message;
+    }
+</script>
 </body>
 </html>

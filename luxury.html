@@ -60,28 +60,22 @@
       return;
     }
 
-    data.forEach(ora => {
-      const img = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url : '';
-      
-      container.innerHTML += `
-        <div class="card">
-          <img src="${img}" alt="${ora.model}">
-          <h3>${ora.brand} - ${ora.model}</h3>
-          <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
-          
-          <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;">
-          <button class="btn-main btn-secondary">Send Request</button>
-          
-          <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
-            <button class="btn-main btn-buy" style="margin-top:5px;">🛒 Buy Now</button>
-          </a>
-          
-          <button class="btn-main btn-secondary" onclick="alert('Liked!')">❤️ Like</button>
-          <button class="btn-main btn-secondary" onclick="navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
+data.forEach(ora => {
+    const img = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url : '';
+    
+    // Karta tani ka një klikim që të çon te faqja 'product.html' me ID-në e saktë
+    container.innerHTML += `
+        <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
+            <img src="${img}" alt="${ora.model}" style="cursor:pointer;">
+            <h3>${ora.brand} - ${ora.model}</h3>
+            <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+            
+            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')">❤️ Like</button>
+            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
         </div>
-      `;
-    });
-  }
+    `;
+});
+
 
   loadOras();
 </script>

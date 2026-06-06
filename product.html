@@ -6,52 +6,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+    <h1 id="test">Po testoj nëse faqja punon...</h1>
+    <div id="product-details"></div>
 
-    <main id="product-details">
-        Duke ngarkuar detajet e orës...
-    </main>
-
-<script>
-    // 1. Inicializimi i Supabase (Sigurohu që ke vendosur URL-në dhe KEY-në tënde)
-    const supabase = window.supabase.createClient('URL_JOTE', 'KEY_JOTE');
-
-    async function loadProduct() {
-        // Merr ID-në nga URL
-        const params = new URLSearchParams(window.location.search);
-        const id = params.get('id');
-
-        if (!id) {
-            document.getElementById('product-details').innerHTML = "Nuk ka ID të produktit.";
-            return;
-        }
-
-        // Merr të dhënat nga Supabase
-        const { data, error } = await supabase
-            .from('oras')
-            .select('*')
-            .eq('id', id)
-            .single();
-
-        if (error) {
-            console.error("Gabim:", error);
-            document.getElementById('product-details').innerHTML = "Gabim: " + error.message;
-            return;
-        }
-
-        // Shfaq të dhënat nëse gjithçka është në rregull
-        if (data) {
-            document.getElementById('product-details').innerHTML = `
-                <h1>${data.brand} - ${data.model}</h1>
-                <p>Çmimi: ${data.price} €</p>
-                <a href="${data.paypal_link}" target="_blank">Blej Tani</a>
-            `;
-        }
-    }
-
-    // THIRRJA E FUNKSIONIT (Kjo është ajo që ndoshta po të mungon)
-    loadProduct();
-</script>
-
+    <script>
+        document.getElementById('test').innerText = "JavaScript po ekzekutohet!";
+    </script>
 </body>
+
 </html>
 

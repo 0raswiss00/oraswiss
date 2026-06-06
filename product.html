@@ -1,49 +1,56 @@
 <!DOCTYPE html>
 <html>
 <body>
-    <div id="product-details">Duke ngarkuar detajet...</div>
+    <div id="product-details">Duke ngarkuar...</div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script>
-        // 2. Inicializo (Vendos URL dhe KEY këtu)
-        const supabase = supabase.createClient('URL_JOTE_SUPABASE', 'KEY_JOTE_SUPABASE');
+        console.log("Skripti ka filluar!"); // Kjo duhet të shfaqet në Console
 
-        async function loadProduct() {
-            const params = new URLSearchParams(window.location.search);
-            const id = params.get('id');
-            const container = document.getElementById('product-details');
-
-            if (!id) {
-                container.innerHTML = "Gabim: Nuk u gjet ID.";
-                return;
-            }
-
-            try {
-                // 3. Kërkesa te Supabase
-                const { data, error } = await supabase
-                    .from('oras')
-                    .select('*')
-                    .eq('id', id)
-                    .single();
-
-                if (error) throw error;
-
-                if (data) {
-                    container.innerHTML = `
-                        <h1>${data.brand} - ${data.model}</h1>
-                        <p>Çmimi: ${data.price} €</p>
-                        <a href="${data.paypal_link}" target="_blank">Blej Tani</a>
-                    `;
-                }
-            } catch (err) {
-                console.error("Gabim:", err);
-                container.innerHTML = "Gabim në lidhje me bazën: " + err.message;
+        const supabase = window.supabase.createClient('URL_JOTE', 'KEY_JOTE');
+        
+        async function testSupabase() {
+            console.log("Duke u lidhur me Supabase...");
+            
+            const { data, error } = await supabase.from('oras').select('id').limit(1);
+            
+            if (error) {
+                console.error("GABIM NGA SUPABASE:", error);
+            } else {
+                console.log("Lidhja funksionoi! Data:", data);
             }
         }
 
-        // 4. THIRRJA E FUNKSIONIT (Kjo duhet të jetë jashtë funksionit)
-        loadProduct();
+        testSupabase();
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<body>
+    <div id="product-details">Duke ngarkuar...</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        console.log("Skripti ka filluar!"); // Kjo duhet të shfaqet në Console
+
+        const supabase = window.supabase.createClient('URL_JOTE', 'KEY_JOTE');
+        
+        async function testSupabase() {
+            console.log("Duke u lidhur me Supabase...");
+            
+            const { data, error } = await supabase.from('oras').select('id').limit(1);
+            
+            if (error) {
+                console.error("GABIM NGA SUPABASE:", error);
+            } else {
+                console.log("Lidhja funksionoi! Data:", data);
+            }
+        }
+
+        testSupabase();
     </script>
 </body>
 </html>

@@ -12,47 +12,36 @@
     </main>
 
 <script>
-    // Sigurohu që klienti është i inicializuar (Supabase client)
-    const supabase = window.supabase.createClient("URL_JOTE", "KEY_JOTE");
+    // 1. Merr ID
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    
+    // 2. Kontrollo nëse ID ekziston
+    if (!id) {
+        document.body.innerHTML = "<h1>Gabim: Nuk është zgjedhur asnjë produkt.</h1>";
+    } else {
+        // 3. Nëse ka ID, thirr funksionin për të marrë të dhënat
+        loadProductData(id);
+    }
 
-    async function loadProduct() {
-        const params = new URLSearchParams(window.location.search);
-        const id = params.get('id');
-
-        if (!id) {
-            document.getElementById('product-details').innerHTML = "Ora nuk u gjet (ID mungon).";
-            return;
-        }
-
-        // Përdorim .eq për të gjetur orën
+    async function loadProductData(productId) {
         const { data, error } = await supabase
             .from('oras')
             .select('*')
-            .eq('id', id)
+            .eq('id', productId)
             .single();
 
         if (error) {
-            console.error("Gabim Supabase:", error);
-            document.getElementById('product-details').innerHTML = "Gabim në lidhje: " + error.message;
+            console.error("Gabim:", error);
             return;
         }
-
-        if (!data) {
-            document.getElementById('product-details').innerHTML = "Ora nuk ekziston.";
-            return;
-        }
-
-        // Shfaq të dhënat (SIGUROHU që emrat e kolonave si brand, model, price përputhen me Supabase)
+        
+        // Këtu shfaq të dhënat (sigurohu që ke një div me id="product-details")
         document.getElementById('product-details').innerHTML = `
             <h1>${data.brand} - ${data.model}</h1>
-            <img src="${data.image_url}" style="width:300px">
-            <p>Çmimi: €${data.price}</p>
-            <a href="${data.paypal_link}" target="_blank">🛒 Blej tani</a>
+            <p>Çmimi: ${data.price} €</p>
         `;
     }
-
-    // Kjo është shumë e rëndësishme: THIRRJA E FUNKSIONIT
-    loadProduct();
 </script>
 </body>
 </html>

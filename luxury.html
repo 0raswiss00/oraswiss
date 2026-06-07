@@ -2,86 +2,81 @@
 <html lang="sq">
 <head>
   <meta charset="utf-8"/>
-  <title>Luxury - Ora Swiss</title>
+  <title>Luxury Collection - Ora Swiss</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
-    /* Stili për butonat si te image_19.png */
-    .nav-filters { margin-bottom: 30px; }
-    .nav-filters a { background: #2a2a8e; color: #fff; padding: 8px 15px; border-radius: 20px; text-decoration: none; margin-right: 10px; font-weight: bold; }
+    body { font-family: 'Segoe UI', sans-serif; background: #050505; color: #fff; margin: 0; padding: 20px; }
+    .nav-filters { margin-bottom: 30px; text-align: center; }
+    .nav-filters a { background: #1a1a1a; color: #fff; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin: 0 5px; border: 1px solid #333; transition: 0.3s; }
+    .nav-filters a:hover { background: #2a2a8e; }
     
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-    .card { background: #111; padding: 15px; border-radius: 10px; border: 1px solid #333; }
-    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
-    .price { color: #25D366; font-weight: bold; margin-top: 10px; font-size: 1.2em; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
+    .card { background: #111; padding: 15px; border-radius: 12px; border: 1px solid #222; transition: transform 0.2s; }
+    .card:hover { transform: translateY(-5px); border-color: #444; }
+    .card img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
+    .card h3 { margin: 10px 0; font-size: 1.2em; }
+    .price { color: #00ff88; font-weight: bold; font-size: 1.3em; margin: 10px 0; }
+    .btn-main { width: 100%; padding: 10px; border: none; border-radius: 5px; cursor: pointer; margin-top: 5px; font-weight: bold; }
+    .btn-buy { background: #2a2a8e; color: white; }
   </style>
 </head>
 <body>
 
-  <!-- Butonat e navigimit -->
   <div class="nav-filters">
-    <a href="luxury.html">Luxury 3</a>
-    <a href="vintage.html">Vintage 2</a>
-    <a href="parts.html">Parts 1</a>
+    <a href="luxury.html">Luxury</a>
+    <a href="vintage.html">Vintage</a>
+    <a href="parts.html">Parts</a>
   </div>
 
-  <h1>Vintage Collection</h1>
+  <h1 style="text-align:center;">Luxury Collection</h1>
   <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-<script>
-  // 1. Lidhja me Supabase
-  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-  const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
-  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  async function loadOras() {
-    const container = document.getElementById("oras-container");
-    container.innerHTML = "Po lidhem me bazën e të dhënave...";
+  <script>
+    const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    try {
-      const { data, error } = await client
-        .from('oras')
-        .select('*')
-        .eq('category', 'luxury');
+    async function loadOras() {
+      const container = document.getElementById("oras-container");
+      
+      try {
+        const { data, error } = await client
+          .from('oras')
+          .select('*')
+          .eq('category', 'luxury');
 
-      if (error) {
-        container.innerHTML = "GABIM NË BAZË: " + error.message;
-        console.error("Gabim Supabase:", error);
-        return;
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          container.innerHTML = "<p style='text-align:center;'>Nuk ka artikuj në këtë kategori.</p>";
+          return;
+        }
+
+        container.innerHTML = "";
+        
+        data.forEach(ora => {
+          // Krijimi i rrugës së imazhit
+          const img = ora.image_url ? ${SUPABASE_URL}/storage/v1/object/public/or-images/${ora.image_url} : 'https://via.placeholder.com/220';
+          
+          container.innerHTML += `
+            <div class="card">
+              <img src="${img}" alt="${ora.brand}">
+              <h3>${ora.brand} - ${ora.model}</h3>
+              <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+              <a href="${ora.paypal_link || '#'}" target="_blank" style="text-decoration:none;">
+                <button class="btn-main btn-buy">🛒 Buy Now</button>
+              </a>
+            </div>
+          `;
+        });
+      } catch (err) {
+        console.error("Gabim:", err);
+        container.innerHTML = "Ndodhi një gabim gjatë ngarkimit.";
       }
-
-      if (!data || data.length === 0) {
-        container.innerHTML = "Baza është lidhur, por nuk ka asnjë orë në kategorinë 'luxury'.";
-        return;
-      }
-
-      // Nëse gjithçka është OK:
-      container.innerHTML = ""; 
-      data.forEach(ora => {
-        // Ensure the URL path matches your Supabase bucket name exactly. 
-        // Based on your storage settings, this should be 'or-images'.
-        const img = ora.image_url ? ${SUPABASE_URL}/storage/v1/object/public/or-images/${ora.image_url} : '';
-  
-        container.innerHTML += `
-          <div class="card">
-            <img src="${img}" alt="${ora.brand}" style="width:100%; border-radius: 5px;">
-            <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">${ora.brand} - ${ora.model}</h3>
-            <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
-            <button class="btn-main btn-secondary" onclick="alert('Liked!')">❤️ Like</button>
-          </div>
-  `      ;
-     });
-
-
-    } catch (err) {
-      container.innerHTML = "GABIM KRITIK: " + err.message;
     }
-  }
 
-  // Thirrja e funksionit
-  window.onload = loadOras;
-</script>
-
+    loadOras();
+  </script>
 </body>
-</html>
+</html

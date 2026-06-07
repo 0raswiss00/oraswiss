@@ -80,12 +80,13 @@
             <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')">❤️ Like</button>
             <button class="btn-main btn-secondary" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
         </div>
-      `;
-    });
-  }
+// Këtu mbyllet thonjëza (backtick) e HTML-së
+    `;
+  }); // Mbyll forEach-in
+} // Mbyll funksionin loadOras()
 
-  loadOras();
+// Thirr funksionin që të ngarkojë orët
+loadOras();
 </script>
-
 </body>
 </html>

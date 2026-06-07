@@ -60,29 +60,25 @@
       return;
     }
 
-    data.forEach(ora => {
-      const img = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url : '';
+data.forEach(ora => {
+  // Kontrolloni nëse ora.image_url ose ora.brand janë të pranishme
+  container.innerHTML += `
+    <div class="card">
+      <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">
+        ${ora.brand || 'Pa emër'} - ${ora.model || 'Pa model'}
+      </h3>
+      <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
       
-      container.innerHTML += `
-        <div class="card">
-
-<h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">${ora.brand} - ${ora.model}</h3>
-
-          <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
-          
-          <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;">
-          <button class="btn-main btn-secondary">Send Request</button>
-          
-          <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
-            <button class="btn-main btn-buy" style="margin-top:5px;">🛒 Buy Now</button>
-          </a>
-          
-            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')">❤️ Like</button>
-            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
-        </div>
-      `;
-    });
-  }
+      <!-- Inputi dhe butoni -->
+      <input type="email" id="email-${ora.id}" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;">
+      <button onclick="dergoKerkesen('${ora.id}', 'email-${ora.id}')">Send Request</button>
+      
+      <a href="${ora.paypal_link || '#'}" target="_blank">
+        <button>🛒 Buy Now</button>
+      </a>
+    </div>
+  `;
+});
 
   loadOras();
 </script>

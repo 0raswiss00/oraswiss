@@ -46,10 +46,8 @@
 
     const { data, error } = await client
       .from('oras')
-      .select('*');
-
-    console.log("ALL DATA:", data);
-    console.log("ERROR:", error);
+      .select('*')
+      .eq('category', category);
 
     if (error) {
       container.innerHTML = "Gabim: " + error.message;

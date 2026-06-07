@@ -1,17 +1,132 @@
 <!doctype html>
-<html>
+<html lang="sq">
 <head>
-  <meta charset="utf-8">
-  <title>TEST</title>
+  <meta charset="utf-8"/>
+  <title>luxury - Ora Swiss</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b0b0b;
+      color: #fff;
+      padding: 20px;
+    }
+
+    .nav-filters {
+      margin-bottom: 30px;
+    }
+
+    .nav-filters a {
+      background: #2a2a8e;
+      color: #fff;
+      padding: 8px 15px;
+      border-radius: 20px;
+      text-decoration: none;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #111;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #333;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .price {
+      color: #25D366;
+      font-weight: bold;
+    }
+  </style>
 </head>
+
 <body>
 
-<h1>TEST PAGE</h1>
+  <div class="nav-filters">
+    <a href="luxury.html">Luxury</a>
+    <a href="vintage.html">Vintage</a>
+    <a href="parts.html">Parts</a>
+  </div>
 
-<script>
-  alert("JS WORKS");
-  console.log("JS OK");
-</script>
+  <h1>Luxury Collection</h1>
+
+  <div id="oras-container" class="grid">Duke ngarkuar...</div>
+
+  <!-- SUPABASE -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+  <script>
+    console.log("PAGE STARTED");
+
+    const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function loadOras() {
+      const container = document.getElementById("oras-container");
+
+      try {
+        const { data, error } = await client
+          .from('oras')
+          .select('*')
+          .eq('category', 'luxury');
+
+        if (error) throw error;
+
+        container.innerHTML = "";
+
+        if (!data || data.length === 0) {
+          container.innerHTML = "<p>Nuk ka artikuj.</p>";
+          return;
+        }
+
+        data.forEach(ora => {
+
+          const img = ora.image_url
+            ? SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url
+            : "https://via.placeholder.com/300x200?text=No+Image";
+
+          container.innerHTML += `
+            <div class="card">
+              <img src="${img}">
+              
+              <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">
+                ${ora.brand} - ${ora.model}
+              </h3>
+
+              <div class="price">
+                ${ora.price ? ora.price + " €" : "Contact"}
+              </div>
+            </div>
+          `;
+        });
+
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = "Gabim: " + err.message;
+      }
+    }
+
+    loadOras();
+  </script>
 
 </body>
 </html>
+

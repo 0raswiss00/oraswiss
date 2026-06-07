@@ -30,63 +30,32 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <script>
-  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-  const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+    console.log("1. Skripti ka filluar!"); // <--- KËTU
 
-  const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const SUPABASE_URL = "https://gnwsrmelmeqduhhfmoa.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1..."; // (çelësi yt këtu)
+    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  async function loadOras() {
-    const container = document.getElementById("oras-container");
+    async function loadOras() {
+        console.log("2. Po fillon funksioni loadOras"); // <--- KËTU
+        
+        const category = 'luxury';
+        
+        const { data, error } = await client
+            .from('oras')
+            .select('*')
+            .eq('category', category);
 
-    try {
-      console.log("Loading data...");
-
-      const { data, error } = await client
-        .from('oras')
-        .select('*')
-        .eq('category', 'luxury');
-
-      if (error) throw error;
-
-      console.log("DATA:", data);
-
-      container.innerHTML = "";
-
-      if (!data || data.length === 0) {
-        container.innerHTML = "<p>Nuk ka artikuj në këtë kategori.</p>";
-        return;
-      }
-
-      data.forEach(ora => {
-
-        const img = ora.image_url
-          ? SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url
-          : "https://via.placeholder.com/300x200?text=No+Image";
-
-        container.innerHTML += `
-          <div class="card">
-            <img src="${img}" alt="${ora.brand}">
-
-            <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">
-              ${ora.brand} - ${ora.model}
-            </h3>
-
-            <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
-
-            <button onclick="alert('Liked!')">❤️ Like</button>
-            <button onclick="navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
-          </div>
-        `;
-      });
-
-    } catch (err) {
-      console.error("ERROR:", err);
-      container.innerHTML = "Gabim: " + err.message;
+        if (error) {
+            console.error("3. Gabim nga Supabase:", error); // <--- KËTU
+        } else {
+            console.log("4. Të dhëna të marra:", data); // <--- KËTU
+        }
     }
-  }
 
-  loadOras();
-</script>
+    loadOras();
+    console.log("5. Skripti ka përfunduar!"); // <--- KËTU
+</scrip>
 
 </body>
 </html>

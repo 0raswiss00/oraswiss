@@ -32,60 +32,10 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 
-  <script>
-    const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-    const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
-    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-async function loadOras() {
-      const container = document.getElementById("oras-container");
-      console.log("Po filloj kërkesën në Supabase...");
-
-      const { data, error } = await client
-        .from('oras')
-        .select('*'); // E hoqa .eq për të parë nëse kthen gjë fare
-
-      if (error) {
-        console.error("GABIM NGA SUPABASE:", error);
-        container.innerHTML = "Gabim: " + error.message;
-        return;
-      }
-
-      console.log("TË DHËNAT E MARRA:", data); // SHIKO KËTU NË KONSOLË
-
-      if (!data || data.length === 0) {
-        container.innerHTML = "Baza ktheu 0 rezultate. Sigurohu që tabela 'oras' ka të dhëna!";
-        return;
-      }
-
-      container.innerHTML = "U gjetën " + data.length + " orë. Po i shfaq...";
-      // ... vazhdo me forEach ...
-    }
-
-        container.innerHTML = "";
-        
-        data.forEach(ora => {
-          // Krijimi i rrugës së imazhit
-          const img = ora.image_url ? ${SUPABASE_URL}/storage/v1/object/public/or-images/${ora.image_url} : 'https://via.placeholder.com/220';
-          
-          container.innerHTML += `
-            <div class="card">
-              <img src="${img}" alt="${ora.brand}">
-              <h3>${ora.brand} - ${ora.model}</h3>
-              <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
-              <a href="${ora.paypal_link || '#'}" target="_blank" style="text-decoration:none;">
-                <button class="btn-main btn-buy">🛒 Buy Now</button>
-              </a>
-            </div>
-          `;
-        });
-      } catch (err) {
-        console.error("Gabim:", err);
-        container.innerHTML = "Ndodhi një gabim gjatë ngarkimit.";
-      }
-    }
-
-    loadOras();
-  </script>
+<script>
+  // Kjo pjesë do të ekzekutohet direkt kur faqja të hapet
+  console.log("TESTI FINAL: Skripti po lexohet...");
+  alert("Skripti po funksionon!");
+</script>
 </body>
 </html

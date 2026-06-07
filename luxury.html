@@ -40,7 +40,7 @@
     const { data, error } = await client
       .from('oras')
       .select('*')
-      .eq('category', category);
+      .eq('category', luxury);
 
     if (error) {
       container.innerHTML = "Gabim: " + error.message;

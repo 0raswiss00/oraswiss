@@ -1,36 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="sq">
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="UTF-8">
+    <title>Luxury Collection</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-  <div id="oras-container">Duke ngarkuar...</div>
- 
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <h1>Luxury Collection</h1>
+    <div id="oras-container">Duke ngarkuar...</div>
 
-<script>
-  // Kjo pjesë do të na tregojë nëse Supabase po ngarkohet
-  console.log("Supabase libraria:", window.supabase);
+    <script>
+        // 1. Inicializimi
+        const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+        const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const supabase = window.supabase.createClient(
-    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-  );
+        // 2. Funksioni
+        async function loadLuxury() {
+            const container = document.getElementById("oras-container");
+            
+            const { data, error } = await supabase
+                .from('oras')
+                .select('*')
+                .eq('category', 'luxury');
 
-  async function loadData() {
-    console.log("Duke u lidhur me Supabase...");
-    const { data, error } = await supabase.from('oras').select('*').eq('category', 'luxury');
-    
-    if (error) {
-      console.error("GABIM SUPABASE:", error);
-      return;
-    }
-    console.log("TE DHENAT:", data);
-  }
+            if (error) {
+                container.innerHTML = "Gabim: " + error.message;
+                return;
+            }
 
-  loadData();
-</script>
+            if (!data || data.length === 0) {
+                container.innerHTML = "Nuk ka artikuj.";
+                return;
+            }
 
+            container.innerHTML = data.map(ora => `
+                <div style="border:1px solid #ccc; margin:10px; padding:10px;">
+                    <h3>${ora.brand} - ${ora.model}</h3>
+                    <p>Çmimi: ${ora.price} €</p>
+                </div>
+            `).join('');
+        }
+
+        // 3. Ekzekutimi
+        loadLuxury();
+    </script>
 </body>
 </html>

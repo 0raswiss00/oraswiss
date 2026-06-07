@@ -28,51 +28,54 @@
   <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 <script>
+  // 1. Lidhja me Supabase
   const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-  const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
+  const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   async function loadOras() {
     const container = document.getElementById("oras-container");
-    const category = 'luxury'; 
+    container.innerHTML = "Po lidhem me bazën e të dhënave...";
 
-    const { data, error } = await client
-      .from('oras')
-      .select('*')
-      .eq('category', luxury);
+    try {
+      const { data, error } = await client
+        .from('oras')
+        .select('*')
+        .eq('category', 'luxury');
 
-    if (error) {
-      container.innerHTML = "Gabim: " + error.message;
-      return;
+      if (error) {
+        container.innerHTML = "GABIM NË BAZË: " + error.message;
+        console.error("Gabim Supabase:", error);
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        container.innerHTML = "Baza është lidhur, por nuk ka asnjë orë në kategorinë 'luxury'.";
+        return;
+      }
+
+      // Nëse gjithçka është OK:
+      container.innerHTML = ""; 
+      data.forEach(ora => {
+        const img = ora.image_url ? ${SUPABASE_URL}/storage/v1/object/public/or-images/${ora.image_url} : '';
+        container.innerHTML += `
+          <div class="card">
+            <img src="${img}" alt="Ora" onerror="this.style.display='none'">
+            <h3>${ora.brand} - ${ora.model}</h3>
+            <p>${ora.price ? ora.price + ' €' : 'Contact'}</p>
+          </div>
+        `;
+      });
+
+    } catch (err) {
+      container.innerHTML = "GABIM KRITIK: " + err.message;
     }
-
-    if (!data || data.length === 0) {
-      container.innerHTML = "<p>Nuk ka artikuj në këtë kategori.</p>";
-      return;
-    }
-
-    container.innerHTML = "";
-    
-    data.forEach(ora => {
-      const img = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/or-images/" + ora.image_url : '';
-      
-      container.innerHTML += `
-        <div class="card">
-          <img src="${img}" alt="${ora.brand}" style="width:100%; border-radius: 5px;">
-          <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">${ora.brand} - ${ora.model}</h3>
-          <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
-          <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;">
-          <button class="btn-main btn-secondary">Send Request</button>
-          <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
-            <button class="btn-main btn-buy" style="margin-top:5px;">🛒 Buy Now</button>
-          </a>
-        </div>
-      `;
-    });
   }
 
-  loadOras();
+  // Thirrja e funksionit
+  window.onload = loadOras;
 </script>
 
 </body>

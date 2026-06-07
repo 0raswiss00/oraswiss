@@ -30,32 +30,9 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <script>
-    console.log("1. Skripti ka filluar!"); // <--- KËTU
+  console.log("JS STARTED");
+</script>
 
-    const SUPABASE_URL = "https://gnwsrmelmeqduhhfmoa.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1..."; // (çelësi yt këtu)
-    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    async function loadOras() {
-        console.log("2. Po fillon funksioni loadOras"); // <--- KËTU
-        
-        const category = 'luxury';
-        
-        const { data, error } = await client
-            .from('oras')
-            .select('*')
-            .eq('category', category);
-
-        if (error) {
-            console.error("3. Gabim nga Supabase:", error); // <--- KËTU
-        } else {
-            console.log("4. Të dhëna të marra:", data); // <--- KËTU
-        }
-    }
-
-    loadOras();
-    console.log("5. Skripti ka përfunduar!"); // <--- KËTU
-</scrip>
 
 </body>
 </html>

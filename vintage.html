@@ -28,50 +28,28 @@
   <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-  const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
+  console.log("HAPI 1: Skripti filloi");
+
+  const SUPABASE_URL = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_AkK_Z7lhtkvukN6Fy1cAQ_KBTXicY9';
+
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  console.log("HAPI 2: Klienti Supabase u krijua");
 
-async function loadOras() {
-  const container = document.getElementById("oras-container");
-  const category = 'vintage';
-
-  const { data, error } = await client
-    .from('oras')
-    .select('*')
-    .eq('category', category);
-
-  if (error) {
-    container.innerHTML = "Gabim: " + error.message;
-    return;
+  async function testLidhjen() {
+    console.log("HAPI 3: Duke provuar lidhjen...");
+    try {
+      const { data, error } = await client.from('oras').select('*').limit(1);
+      if (error) throw error;
+      console.log("HAPI 4: SUKSES! Të dhënat u morën:", data);
+    } catch (err) {
+      console.error("HAPI 4: GABIM! Ja pse:", err);
+    }
   }
 
-  container.innerHTML = "";
-
-  if (data.length === 0) {
-    container.innerHTML = "<p>Nuk ka artikuj në këtë kategori.</p>";
-    return;
-  }
-
-  data.forEach(ora => {
-    container.innerHTML += `
-      <div class="card">
-        <h3>${ora.brand} - ${ora.model}</h3>
-        <p>Ref: ${ora.reference}</p>
-        <p class="price">${ora.price} €</p>
-        <input type="email" placeholder="Emaili yt">
-        <button class="btn-main btn-secondary">Send Request</button>
-        <a href="${ora.paypal_link}" target="_blank">
-          <button class="btn-main btn-buy" style="margin-top:5px;">🛒</button>
-        </a>
-      </div>
-    `;
-  });
-}
-
-loadOras();
+  testLidhjen();
 </script>
-
 </body>
 </html>

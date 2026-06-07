@@ -1,45 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <title>Ora Swiss</title>
+    <title>Ora Swiss - Detajet</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-    <h1 id="status">Duke u lidhur...</h1>
-    <div id="container"></div>
+    <div id="app-container">Duke ngarkuar...</div>
 
     <script>
-        // 1. Deklarimi i Supabase
         const supabase = window.supabase.createClient(
             "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
         );
 
-        async function start() {
-            try {
-                document.getElementById('status').innerText = "Duke kërkuar të dhëna...";
-                
-                const { data, error } = await supabase.from('oras').select('*').limit(5);
+        async function init() {
+            const container = document.getElementById("app-container");
+            const params = new URLSearchParams(window.location.search);
+            const productId = params.get('id');
 
-                if (error) {
-                    document.getElementById('status').innerText = "GABIM: " + error.message;
-                    console.error(error);
+            try {
+                // Nëse kemi ID, kërkojmë produktin specifik
+                if (productId) {
+                    const { data, error } = await supabase.from('oras').select('*').eq('id', productId).single();
+                    if (error) throw error;
+                    container.innerHTML = <h1>${data.brand}</h1><p>Çmimi: ${data.price} €</p>;
                 } else {
-                    document.getElementById('status').innerText = "Sukses! U gjetën: " + data.length + " ora.";
-                    document.getElementById('container').innerHTML = JSON.stringify(data);
+                    // Nëse jemi në faqe kategorie, kërkojmë sipas kategorisë
+                    const category = window.location.pathname.includes('luxury') ? 'luxury' : 'vintage';
+                    const { data, error } = await supabase.from('oras').select('*').eq('category', category);
+                    if (error) throw error;
+                    container.innerHTML = data.map(item => <p>${item.brand}</p>).join('');
                 }
             } catch (err) {
-                document.getElementById('status').innerText = "FATAL ERROR: " + err.message;
+                container.innerHTML = "Gabim: " + err.message;
             }
         }
-
-        // Kjo siguron që kodi fillon vetëm kur faqja është gati
-        window.onload = start;
+        init();
     </script>
 </body>
 </html>
-
-
 

@@ -6,40 +6,9 @@
 <body>
     <div id="debug" style="padding: 20px; font-family: monospace;">Duke filluar...</div>
 
-    <script>
-        const div = document.getElementById('debug');
-        const URL = 'URL_JOTE_KETU';
-        const KEY = 'KEY_JOTE_KETU';
-
-        div.innerText = "Duke u lidhur...";
-        
-try {
-    const supabase = supabase.createClient(URL, KEY);
-    
-    // RREGULLIMI KRYESOR: 
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id'); // Tani id-ja do të jetë numri 17
-
-    if (!id) {
-        div.innerText = "GABIM: Nuk ka ID në URL!";
-    } else {
-        div.innerText = "Duke kërkuar ID: " + id;
-        
-        // Kujdes: Sigurohu që tabela jote quhet 'oras'
-        supabase.from('oras').select('*').eq('id', id)
-        .then(({data, error}) => {
-            if (error) {
-                div.innerText = "GABIM NË BAZË TË DHËNAVE: " + error.message;
-                console.error(error);
-            } else {
-                div.innerText = "Suksese! Të dhënat: " + JSON.stringify(data);
-            }
-        });
-    }
-} catch (err) {
-    div.innerText = "GABIM KRITIK: " + err.message;
-    console.error(err);
-}
-    </script>
+<script>
+    alert("Kodi po lexohet!");
+    console.log("Kodi po lexohet!");
+</script>
 </body>
 </html>

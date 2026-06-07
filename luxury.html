@@ -1,87 +1,37 @@
-<!doctype html>
-<html lang="sq">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8"/>
-  <title>Luxury - Ora Swiss</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
-    /* Stili për butonat si te image_19.png */
-    .nav-filters { margin-bottom: 30px; }
-    .nav-filters a { background: #2a2a8e; color: #fff; padding: 8px 15px; border-radius: 20px; text-decoration: none; margin-right: 10px; font-weight: bold; }
-    
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-    .card { background: #111; padding: 15px; border-radius: 10px; border: 1px solid #333; }
-    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
-    .price { color: #25D366; font-weight: bold; margin-top: 10px; font-size: 1.2em; }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-  <!-- Butonat e navigimit -->
-  <div class="nav-filters">
-    <a href="luxury.html">Luxury 3</a>
-    <a href="vintage.html">Vintage 2</a>
-    <a href="parts.html">Parts 1</a>
-  </div>
+  <div id="oras-container">Duke ngarkuar...</div>
 
-  <h1>Luxury Collection</h1>
-  <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
+  <script>
+    // Tani kjo do të funksionojë sepse e lidhëm skriptin lart
+    const supabase = window.supabase.createClient(
+      "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+      "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+    );
 
-  
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-<script>
-  // Konfigurimi bazë
-  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-  const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
-  
-  // Sigurohemi që Supabase është instancuar saktë
-  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-  async function loadOras() {
-    const container = document.getElementById("oras-container");
-    if (!container) return;
-
-    try {
-      container.innerHTML = "Duke ngarkuar...";
-
-      const { data, error } = await client
-        .from('oras')
-        .select('*')
-        .eq('category', 'luxury');
-
-      if (error) throw error;
-
-      if (!data || data.length === 0) {
-        container.innerHTML = "<p>Nuk ka produkte.</p>";
+    async function loadData() {
+      const container = document.getElementById("oras-container");
+      const { data, error } = await supabase.from('oras').select('*').eq('category', 'luxury');
+      
+      if (error) {
+        container.innerHTML = "Gabim: " + error.message;
         return;
       }
-
-      container.innerHTML = "";
-      data.forEach(ora => {
-        const imgUrl = ora.image_url ? ${SUPABASE_URL}/storage/v1/object/public/images/${ora.image_url} : '';
-        
-        container.innerHTML += `
-          <div class="card">
-            ${imgUrl ? <img src="${imgUrl}" style="width:100%; border-radius:8px;"> : ''}
-            <h3>${ora.brand || 'No Brand'} - ${ora.model || 'No Model'}</h3>
-            <div class="price">${ora.price || '0'} €</div>
-            <button class="btn-main" onclick="alert('Kodi u dërgua!')">Send Request</button>
-          </div>
-        `;
-      });
-    } catch (err) {
-      console.error("Gabim:", err);
-      container.innerHTML = "Gabim gjatë lidhjes. Kontrollo Console.";
+      
+      container.innerHTML = data.map(ora => `
+        <div class="card">
+          <h3>${ora.brand} ${ora.model}</h3>
+          <p>${ora.price} €</p>
+        </div>
+      `).join('');
     }
-  }
 
-  // E ekzekutojmë pasi faqja të jetë gati
-  window.addEventListener('DOMContentLoaded', loadOras);
-</script>
-
-<script>
-  console.log("HELLO CONSOLE");
-</script>
-  
+    loadData();
+  </script>
 </body>
 </html>

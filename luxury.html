@@ -36,12 +36,28 @@
   
   const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   
-  async function test() {
-    console.log("Po provoj lidhjen...");
-    const { data, error } = await client.from('oras').select('*').limit(1);
-    if (error) console.error("Gabim:", error);
-    else console.log("Lidhja OK, të dhënat:", data);
-  }
+ async function dergoKerkesen(butoni, oraId) {
+    // Merr e-mailin nga inputi që është pranë butonit
+    const inputEmaili = butoni.previousElementSibling; 
+    const email = inputEmaili.value;
+
+    if (!email) {
+        alert("Ju lutem shkruani e-mailin.");
+        return;
+    }
+
+    const { data, error } = await client
+        .from('kerkesat') // Këtu duhet të jetë emri i tabelës ku ruan kërkesat
+        .insert([{ ora_id: oraId, email: email }]);
+
+    if (error) {
+        console.error("Gabim:", error);
+        alert("Gabim në dërgim.");
+    } else {
+        alert("Kërkesa u dërgua me sukses!");
+        inputEmaili.value = ""; // Pastro kutinë
+    }
+}
   
   test();
 </script>

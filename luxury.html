@@ -1,17 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <title>Ora Swiss - Luxury Shop</title>
+    <title>Luxury Collection</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  
-<script>
-    alert("Dritarja po del?");
-    console.log("Nëse e sheh këtë, Console nuk është bosh!");
-</script>
 
+    <h1 id="status">Duke u lidhur...</h1>
+    <div id="oras-list"></div>
 
+    <script>
+        const supabase = window.supabase.createClient(
+            "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+            "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+        );
+
+        async function shfaqOrat() {
+            const status = document.getElementById("status");
+            const list = document.getElementById("oras-list");
+            
+            const { data, error } = await supabase.from('oras').select('*').eq('category', 'luxury');
+            
+            if (error) {
+                status.innerText = "Gabim: " + error.message;
+                return;
+            }
+
+            status.innerText = "Orat Luxury:";
+            list.innerHTML = data.map(ora => `
+                <div style="border:1px solid black; margin:10px; padding:10px;">
+                    <h3>${ora.brand} - ${ora.model}</h3>
+                    <p>Çmimi: ${ora.price} €</p>
+                </div>
+            `).join('');
+        }
+
+        shfaqOrat();
+    </script>
 </body>
 </html>
+

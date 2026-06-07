@@ -2,52 +2,76 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <title>Ora Swiss - Detajet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ora Swiss - Detajet e Produktit</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: sans-serif; background: #000; color: #fff; padding: 20px; line-height: 1.5; }
+        .product-container { max-width: 700px; margin: auto; background: #111; padding: 30px; border-radius: 15px; border: 1px solid #333; }
+        .product-image { width: 100%; border-radius: 10px; margin-bottom: 20px; }
+        h1 { font-size: 28px; margin-bottom: 5px; }
+        .price { font-size: 32px; color: #d4af37; font-weight: bold; margin: 20px 0; }
+        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .btn-whatsapp { display: block; background: #25D366; color: #fff; padding: 18px; text-align: center; text-decoration: none; font-weight: bold; border-radius: 8px; font-size: 18px; }
+    </style>
 </head>
 <body>
 
-    <div id="container">Duke ngarkuar...</div>
+    <div id="app">Po ngarkoj të dhënat...</div>
 
     <script>
-        // Përdorim 'var' dhe një kontroll që të mos prishet nëse është deklaruar diku tjetër
-        if (typeof window.supabaseClient === 'undefined') {
+        // Inicializimi i sigurt: Kontrollon nëse supabase ekziston për të mos shkaktuar gabim
+        if (!window.supabaseClient) {
             window.supabaseClient = window.supabase.createClient(
                 "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
             );
         }
-        var supabase = window.supabaseClient;
+        const supabase = window.supabaseClient;
 
-        async function loadProduct() {
-            const id = new URLSearchParams(window.location.search).get('id');
-            const container = document.getElementById("container");
+        async function initProduct() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            const app = document.getElementById("app");
 
             if (!id) {
-                container.innerHTML = "Asnjë ID u gjet.";
+                app.innerHTML = "Produkti nuk u gjet.";
                 return;
             }
 
             try {
                 const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+                
                 if (error) throw error;
 
-                container.innerHTML = `
-                    <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">
+                app.innerHTML = `
+                    <div class="product-container">
+                        <img src="${data.image_url || 'https://via.placeholder.com/600x400'}" class="product-image" alt="Ora">
                         <h1>${data.brand} ${data.model}</h1>
-                        <p><strong>Çmimi:</strong> ${data.price} €</p>
-                        <a href="https://wa.me/35569XXXXXXX?text=Dua të blej: ${data.brand}" 
-                           style="background:#25D366; color:white; padding:10px; display:block; text-align:center;">
-                           POROSIT NE WHATSAPP
-                        </a>
+                        <p>Kategoria: ${data.category || 'N/A'}</p>
+                        <div class="price">${data.price} €</div>
+                        
+                        <div class="details-grid">
+                            <p><strong>Referenca:</strong> ${data.reference || 'N/A'}</p>
+                            <p><strong>Materiali:</strong> ${data.material || 'N/A'}</p>
+                            <p><strong>Viti:</strong> ${data.year || 'N/A'}</p>
+                            <p><strong>Lëvizja:</strong> ${data.movement || 'N/A'}</p>
+                            <p><strong>Kutia/Letrat:</strong> ${data.box_paper || 'N/A'}</p>
+                            <p><strong>Servis:</strong> ${data.Service || 'N/A'}</p>
+                        </div>
+                        
+                        <p><strong>Përshkrimi:</strong><br>${data.description || 'Nuk ka përshkrim.'}</p>
+                        
+                        <a href="https://wa.me/35569XXXXXXX?text=Përshëndetje, dua të porosis orën: ${data.brand} ${data.model}" 
+                           class="btn-whatsapp" target="_blank">POROSIT NE WHATSAPP</a>
                     </div>
                 `;
             } catch (err) {
-                container.innerHTML = "GABIM: " + err.message;
+                app.innerHTML = "Gabim gjatë ngarkimit: " + err.message;
             }
         }
-        loadProduct();
+
+        initProduct();
     </script>
 </body>
 </html>
-

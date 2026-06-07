@@ -35,32 +35,34 @@
   const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // 2. Funksioni kryesor për të ngarkuar të dhënat
+  // 2. Funksioni për ngarkimin e produkteve
   async function loadOras() {
     const container = document.getElementById("oras-container");
-    if (!container) return; // Nëse elementi nuk ekziston, ndalo
+    if (!container) return;
 
-    container.innerHTML = "Duke ngarkuar..."; // Feedback vizual
+    container.innerHTML = "Duke ngarkuar koleksionin...";
 
+    // Marrja e të dhënave
     const { data, error } = await client
       .from('oras')
       .select('*')
-      .eq('category', 'luxury'); // Filtri
+      .eq('category', 'luxury');
 
     if (error) {
-      container.innerHTML = "Gabim në lidhje: " + error.message;
+      console.error("Gabim:", error);
+      container.innerHTML = "Gabim gjatë ngarkimit.";
       return;
     }
 
     if (!data || data.length === 0) {
-      container.innerHTML = "<p>Nuk ka artikuj për momentin.</p>";
+      container.innerHTML = "<p>Nuk ka artikuj në këtë kategori.</p>";
       return;
     }
 
-    // 3. Gjenerimi i HTML
-    container.innerHTML = ""; // Pastro "Duke ngarkuar..."
+    // Pastrimi i kontenierit dhe shfaqja e produkteve
+    container.innerHTML = "";
     data.forEach(ora => {
-      // Formati i fotos
+      // Krijimi i URL-së së fotos
       const img = ora.image_url ? ${SUPABASE_URL}/storage/v1/object/public/images/${ora.image_url} : '';
       
       container.innerHTML += `
@@ -68,20 +70,14 @@
           ${img ? <img src="${img}" style="width:100%; border-radius:8px;"> : ''}
           <h3>${ora.brand} - ${ora.model}</h3>
           <div class="price">${ora.price} €</div>
-          <button class="btn-main" onclick="dergoKerkesen('${ora.model}')">Send Request</button>
+          <button class="btn-main" onclick="alert('Kodi po lexohet!')">Send Request</button>
         </div>
       `;
     });
   }
 
-  // 4. Funksioni për butonin Send Request
-  async function dergoKerkesen(modeli) {
-    alert("Kodi po lexohet për: " + modeli);
-    // Këtu shto logjikën e dërgimit (nëse ke një funksion tjetër)
-  }
-
-  // Ekzekutoje sapo të ngarkohet faqja
-  window.onload = loadOras;
+  // Thirrja e funksionit
+  loadOras();
 </script>
   
 </body>

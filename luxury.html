@@ -1,67 +1,96 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="sq">
 <head>
-    <meta charset="UTF-8">
-    <title>Ora Swiss - Luxury</title>
-    <!-- Supabase Library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        body { font-family: sans-serif; background: #f9f9f9; padding: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
-        .btn { display: inline-block; background: #25d366; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-top: 10px; }
-    </style>
+  <meta charset="utf-8"/>
+  <title>Luxury - Ora Swiss</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
+    /* Stili për butonat si te image_19.png */
+    .nav-filters { margin-bottom: 30px; }
+    .nav-filters a { background: #2a2a8e; color: #fff; padding: 8px 15px; border-radius: 20px; text-decoration: none; margin-right: 10px; font-weight: bold; }
+    
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+    .card { background: #111; padding: 15px; border-radius: 10px; border: 1px solid #333; }
+    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
+    .price { color: #25D366; font-weight: bold; margin-top: 10px; font-size: 1.2em; }
+  </style>
 </head>
 <body>
 
-    <h1 style="text-align: center;">Koleksioni Luxury</h1>
-    <div id="oras-list" class="grid">Duke ngarkuar...</div>
+  <!-- Butonat e navigimit -->
+  <div class="nav-filters">
+    <a href="luxury.html">Luxury 3</a>
+    <a href="vintage.html">Vintage 2</a>
+    <a href="parts.html">Parts 1</a>
+  </div>
 
-    <script>
-        const supabase = window.supabase.createClient(
-            "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-            "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-        );
+  <h1>Luxury Collection</h1>
+  <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
 
-async function loadData() {
-            const container = document.getElementById("oras-list");
-            console.log("Po tentoj lidhjen me Supabase...");
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
+<script>
+  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+  const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
+  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            try {
-                const { data, error } = await supabase
-                    .from('oras')
-                    .select('*')
-                    .eq('category', 'luxury');
+  async function loadOras() {
+    const container = document.getElementById("oras-container");
+    
+    // --- KËTU ËSHTË NDRYSHIMI PËR ÇDO FAQE ---
+    // Në luxury.html shkruaj 'luxury'
+    // Në vintage.html shkruaj 'vintage'
+    // Në parts.html shkruaj 'parts'
+    const category = 'vintage'; 
+    // ----------------------------------------
 
-                if (error) {
-                    console.error("Gabim nga Supabase:", error);
-                    container.innerHTML = "Gabim: " + error.message;
-                    return;
-                }
+    const { data, error } = await client
+      .from('oras')
+      .select('*')
+      .eq('category', category);
 
-                console.log("Te dhenat e marra:", data);
-                if (data.length === 0) {
-                    container.innerHTML = "Nuk u gjet asnje ore.";
-                } else {
-                    container.innerHTML = data.map(ora => <div>${ora.brand}</div>).join('');
-                }
-            } catch (err) {
-                console.error("Gabim fatal:", err);
-                container.innerHTML = "Gabim fatal: " + err.message;
-            }
-        }
+    if (error) {
+      container.innerHTML = "Gabim: " + error.message;
+      return;
+    }
 
+    container.innerHTML = "";
+    
+    if (data.length === 0) {
+      container.innerHTML = "<p>Nuk ka artikuj në këtë kategori.</p>";
+      return;
+    }
 
-            container.innerHTML = data.map(ora => `
-                <div class="card">
-                    <h3>${ora.brand} ${ora.model}</h3>
-                    <p>Çmimi: <b>${ora.price} €</b></p>
-                    <a href="https://wa.me/35569XXXXXXX?text=Dua te porosis oren ${ora.brand} ${ora.model}" class="btn">WhatsApp</a>
-                </div>
-            `).join('');
-        }
+    data.forEach(ora => {
+      const img = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url : '';
+      
+      container.innerHTML += `
+        <div class="card">
 
-        loadData();
-    </script>
+<h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">${ora.brand} - ${ora.model}</h3>
+
+          <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+          
+          <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;">
+          <button class="btn-main btn-secondary">Send Request</button>
+          
+          <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
+            <button class="btn-main btn-buy" style="margin-top:5px;">🛒 Buy Now</button>
+          </a>
+          
+            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')">❤️ Like</button>
+            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
+        </div>
+      `;
+    });
+  }
+
+  loadOras();
+</script>
+
+<script>
+  console.log("HELLO CONSOLE");
+</script>
+  
 </body>
 </html>

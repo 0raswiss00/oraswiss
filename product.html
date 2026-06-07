@@ -1,26 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="UTF-8">
+    <title>Ora Swiss</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <div id="output">Duke u lidhur me Supabase...</div>
-  <script>
-    const supabase = window.supabase.createClient(
-      "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
-    );
 
-    async function testLidhjen() {
-      const { data, error } = await supabase.from('oras').select('*').limit(1);
-      if (error) {
-        document.getElementById('output').innerText = "GABIM SUPABASE: " + error.message;
-      } else {
-        document.getElementById('output').innerText = "Lidhja OK! Ora e pare: " + data[0].brand;
-      }
-    }
-    testLidhjen();
-  </script>
+    <h1 id="status">Duke u lidhur...</h1>
+    <div id="container"></div>
+
+    <script>
+        // 1. Deklarimi i Supabase
+        const supabase = window.supabase.createClient(
+            "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
+        );
+
+        async function start() {
+            try {
+                document.getElementById('status').innerText = "Duke kërkuar të dhëna...";
+                
+                const { data, error } = await supabase.from('oras').select('*').limit(5);
+
+                if (error) {
+                    document.getElementById('status').innerText = "GABIM: " + error.message;
+                    console.error(error);
+                } else {
+                    document.getElementById('status').innerText = "Sukses! U gjetën: " + data.length + " ora.";
+                    document.getElementById('container').innerHTML = JSON.stringify(data);
+                }
+            } catch (err) {
+                document.getElementById('status').innerText = "FATAL ERROR: " + err.message;
+            }
+        }
+
+        // Kjo siguron që kodi fillon vetëm kur faqja është gati
+        window.onload = start;
+    </script>
 </body>
 </html>
+
+
 

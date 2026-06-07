@@ -34,15 +34,22 @@
   const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-async function dergoKerkesen() {
-    // 1. Shfaq loading
-    document.getElementById("status").innerText = "Duke filluar...";
+async function merrProduktetLuxury() {
+  const { data, error } = await supabase
+    .from('oras') // Sigurohu që tabela quhet 'oras'
+    .select('model, price, image_url') // Merr vetëm këto kolona
+    .eq('category', 'luxury'); // FILTRI: Merr vetëm ato që janë 'luxury'
 
-    try {
-        let response = await fetch('url-i-yt-i-serverit', {
-            method: 'POST',
-            body: JSON.stringify(data)
-        });
+  if (error) {
+    console.error("Gabim:", error);
+    return;
+  }
+
+  console.log("Produktet e gjetura:", data);
+  
+  // Këtu duhet të kesh kodin që i shton këto të dhëna në HTML
+  // Shembull: data.forEach(item => { ... shfaq në HTML ... });
+}
         
         if (response.ok) {
             alert("Kodi u lexua me sukses!"); // Ose ndrysho UI-në

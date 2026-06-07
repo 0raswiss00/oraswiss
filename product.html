@@ -16,42 +16,61 @@
 <div id="container">Duke ngarkuar...</div>
 
 <script>
-    const supabase = window.supabase.createClient(
-        'https://gnwsrmelmeqduhhmfmoa.supabase.co',
-        'sb_publishable__AkK_Z7lhtkvukN6FylcAQ_KBTXlcy9'
-    );
+    // Fshije rreshtin 'const supabase = ...' që kishit më parë.
+    // Përdorim drejtpërdrejt 'window.supabase' për të shmangur konfliktet.
 
     async function loadProduct() {
         const id = new URLSearchParams(window.location.search).get('id');
         const container = document.getElementById("container");
 
-        if (!id) { container.innerHTML = "Asnjë ID nuk u gjet."; return; }
+        if (!id) { 
+            container.innerHTML = "ID mungon."; 
+            return; 
+        }
 
-        // Marrja e të dhënave
-        const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+        // Përdorim 'window.supabase' që vjen nga biblioteka që ke importuar lart
+        const { data, error } = await window.supabase
+            .from('oras')
+            .select('*')
+            .eq('id', id)
+            .single();
 
         if (error) {
-            container.innerHTML = "Gabim lidhjeje: " + error.message;
-            console.error(error);
+            container.innerHTML = "Gabim: " + error.message;
+            console.error("Gabim Supabase:", error);
+            return;
+        }
+
+        if (!data) {
+            container.innerHTML = "Produkti nuk u gjet.";
             return;
         }
 
         // Shfaqja e të dhënave
         container.innerHTML = `
             <div class="product-container">
-                <h1>${data.brand || ''} ${data.model || ''}</h1>
+                <h1>${data.brand || ''} - ${data.model || ''}</h1>
+                <p><strong>Kategoria:</strong> ${data.category || ''}</p>
                 <p class="price">Çmimi: ${data.price || '0'} €</p>
                 <ul>
                     <li>Referenca: ${data.reference || '-'}</li>
                     <li>Materiali: ${data.material || '-'}</li>
+                    <li>Madhësia: ${data.case_size || '-'}</li>
                     <li>Viti: ${data.year || '-'}</li>
+                    <li>Lëvizja: ${data.movement || '-'}</li>
+                    <li>Funksionet: ${data.function || '-'}</li>
+                    <li>Shërbimi: ${data.service || '-'}</li>
+                    <li>Kuti/Dokumenta: ${data.box_papers || '-'}</li>
+                    <li>PayPal: ${data.PayPal || '-'}</li>
                 </ul>
-                <a href="https://wa.me/35569XXXXXXX" class="button">Porosit</a>
             </div>
         `;
     }
-    loadProduct();
+
+    // Sigurohemi që funksioni thirret pasi faqja të jetë gati
+    window.addEventListener('DOMContentLoaded', loadProduct);
 </script>
+
 </body>
 </html>
 Compose

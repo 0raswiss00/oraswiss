@@ -2,13 +2,20 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <title>Luxury Collection</title>
+    <title>Ora Swiss - Luxury</title>
+    <!-- Supabase Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: sans-serif; background: #f9f9f9; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
+        .btn { display: inline-block; background: #25d366; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-top: 10px; }
+    </style>
 </head>
 <body>
 
-    <h1 id="status">Duke u lidhur...</h1>
-    <div id="oras-list"></div>
+    <h1 style="text-align: center;">Koleksioni Luxury</h1>
+    <div id="oras-list" class="grid">Duke ngarkuar...</div>
 
     <script>
         const supabase = window.supabase.createClient(
@@ -16,28 +23,30 @@
             "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
         );
 
-        async function shfaqOrat() {
-            const status = document.getElementById("status");
-            const list = document.getElementById("oras-list");
+        async function loadData() {
+            const container = document.getElementById("oras-list");
             
-            const { data, error } = await supabase.from('oras').select('*').eq('category', 'luxury');
-            
+            // Tërheqim vetëm orat e kategorisë luxury
+            const { data, error } = await supabase
+                .from('oras')
+                .select('*')
+                .eq('category', 'luxury');
+
             if (error) {
-                status.innerText = "Gabim: " + error.message;
+                container.innerHTML = "Gabim: " + error.message;
                 return;
             }
 
-            status.innerText = "Orat Luxury:";
-            list.innerHTML = data.map(ora => `
-                <div style="border:1px solid black; margin:10px; padding:10px;">
-                    <h3>${ora.brand} - ${ora.model}</h3>
-                    <p>Çmimi: ${ora.price} €</p>
+            container.innerHTML = data.map(ora => `
+                <div class="card">
+                    <h3>${ora.brand} ${ora.model}</h3>
+                    <p>Çmimi: <b>${ora.price} €</b></p>
+                    <a href="https://wa.me/35569XXXXXXX?text=Dua te porosis oren ${ora.brand} ${ora.model}" class="btn">WhatsApp</a>
                 </div>
             `).join('');
         }
 
-        shfaqOrat();
+        loadData();
     </script>
 </body>
 </html>
-

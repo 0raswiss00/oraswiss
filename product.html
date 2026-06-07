@@ -13,30 +13,33 @@
 
         div.innerText = "Duke u lidhur...";
         
-        try {
-            const supabase = supabase.createClient(URL, KEY);
-            
-            // Kontrollojmë ID-në
-            const id = new URLSearchParams(window.location.search).get('id');
-            if(!id) {
-                div.innerText = "GABIM: Nuk ka ID në URL (p.sh. product.html?id=11)";
+try {
+    const supabase = supabase.createClient(URL, KEY);
+    
+    // RREGULLIMI KRYESOR: 
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id'); // Tani id-ja do të jetë numri 17
+
+    if (!id) {
+        div.innerText = "GABIM: Nuk ka ID në URL!";
+    } else {
+        div.innerText = "Duke kërkuar ID: " + id;
+        
+        // Kujdes: Sigurohu që tabela jote quhet 'oras'
+        supabase.from('oras').select('*').eq('id', id)
+        .then(({data, error}) => {
+            if (error) {
+                div.innerText = "GABIM NË BAZË TË DHËNAVE: " + error.message;
+                console.error(error);
             } else {
-                div.innerText = "Duke kërkuar ID: " + id;
-                
-                supabase.from('oras').select('*').eq('id', id).single()
-                .then(({data, error}) => {
-                    if(error) {
-                        div.innerText = "GABIM SUPABASE: " + JSON.stringify(error);
-                    } else if (!data) {
-                        div.innerText = "Nuk u gjet asnjë rresht me këtë ID.";
-                    } else {
-                        div.innerText = "SUKSES! Marka: " + data.brand + " | Modeli: " + data.model;
-                    }
-                });
+                div.innerText = "Suksese! Të dhënat: " + JSON.stringify(data);
             }
-        } catch(e) {
-            div.innerText = "GABIM KRITIK: " + e.message;
-        }
+        });
+    }
+} catch (err) {
+    div.innerText = "GABIM KRITIK: " + err.message;
+    console.error(err);
+}
     </script>
 </body>
 </html>

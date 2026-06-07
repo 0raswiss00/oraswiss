@@ -6,41 +6,12 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <script>
-        console.log("TESTI I PARË: Skripti u aktivizua!");
-        alert("Nëse e sheh këtë, skripti po punon.");
-    </script>
-
-    <!-- Pjesa tjetër e faqes... -->
-    
-   <div id="oras-container">Duke u lidhur...</div>
-
+  
 <script>
-    // Përdorim 'setTimeout' për të siguruar që faqja të mos ngrirë
-    setTimeout(async function() {
-        try {
-            const supabase = window.supabase.createClient(
-                "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-                "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-            );
-
-            const { data, error } = await supabase.from('oras').select('*').eq('category', 'luxury');
-            
-            if (error) {
-                document.getElementById("oras-container").innerText = "Gabim lidhjeje.";
-                return;
-            }
-
-            document.getElementById("oras-container").innerHTML = data.map(item => `
-                <div style="border:1px solid #ccc; padding:10px;">${item.brand}</div>
-            `).join('');
-            
-            console.log("Sukses!");
-        } catch (e) {
-            console.log("Kodi u bllokua nga browseri");
-        }
-    }, 1000); // Prit 1 sekondë para se të provosh lidhjen, që të mos bllokosh ngarkimin e faqes
+    alert("Dritarja po del?");
+    console.log("Nëse e sheh këtë, Console nuk është bosh!");
 </script>
+
 
 </body>
 </html>

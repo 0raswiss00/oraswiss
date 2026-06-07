@@ -1,89 +1,109 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ora Swiss</title>
   <style>
-    body { margin: 0; font-family: Arial, sans-serif; background: #000; color: #fff; }
-    .site-header { position: sticky; top: 0; z-index: 9999; background: #111; padding: 10px; }
-    .nav-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 10px; }
-    .nav-scroll a { color: #fff; text-decoration: none; font-size: 14px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 20px; }
-    .card { background: #111; padding: 10px; border-radius: 8px; border: 1px solid #333; text-align: center; }
-    .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 4px; }
-    h2 { padding: 20px 20px 0; margin: 0; color: gold; }
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
+    .site-header{position:sticky;top:0;z-index:9999;background:#111}
+    .nav-scroll{display:flex;gap:18px;align-items:center;overflow-x:auto;padding:14px 16px}
+    .nav-scroll a{color:#fff;text-decoration:none;padding:6px 10px}
+    .nav-scroll a:hover{color:gold}
+    .site-title{font-weight:700;line-height:1.05;margin-right:10px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));gap:20px;padding:30px 16px}
+    .card{background:#111;padding:15px;border-radius:10px;border:1px solid #333}
+    .price{color:#25D366;font-weight:bold;margin-top:10px}
+    h2{padding:20px 16px 0;margin:0}
+    <section>
+  <h2>Luxury Watches</h2>
+  <div id="luxury-container" class="grid"></div>
+</section>
+
+  <section>
+    <h2>Vintage Watches</h2>
+    <div id="vintage-container" class="grid"></div>
+  </section>
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Supabase Script -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 </head>
 <body>
 
 <header class="site-header">
   <nav class="nav-scroll">
-    <strong>ORA SWISS</strong>
+    <span class="site-title">ORA<br>SWISS</span>
+    <a href="register.html">Register</a>
+    <a href="sellnow.html">Sell Now</a>
     <a href="home.html">Home</a>
     <a href="luxury.html">Luxury</a>
     <a href="vintage.html">Vintage</a>
     <a href="parts.html">Parts</a>
+    <a href="separate-parts.html">Separate Parts</a>
+    <a href="service.html">Service</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="jewelry.html">Jewelry</a>
+    <a href="policy.html">Policy</a>
+    <a href="sell.html">Sell</a>
   </nav>
 </header>
 
+<!-- Seksionet Dinamike -->
 <h2>Luxury Collection</h2>
-<div id="luxury-container" class="grid">Duke u lidhur...</div>
+<div id="luxury-container" class="grid">Loading...</div>
 
 <h2>Vintage Collection</h2>
-<div id="vintage-container" class="grid">Duke u lidhur...</div>
+<div id="vintage-container" class="grid">Loading...</div>
 
 <h2>Parts Collection</h2>
-<div id="parts-container" class="grid">Duke u lidhur...</div>
+<div id="parts-container" class="grid">Loading...</div>
+
 
 <script>
-  // Inicializimi
   const supabase = window.supabase.createClient(
     "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
   );
 
-  async function loadCategory(cat, containerId) {
+async function loadCategory(cat, containerId) {
     const container = document.getElementById(containerId);
-    try {
-      const { data, error } = await supabase
+    
+    // Filtri këtu siguron që të merren vetëm orët e kategorisë së kërkuar
+    const { data, error } = await supabase
         .from('oras')
         .select('*')
-        .eq('category', cat);
+        .eq('category', cat); 
 
-      if (error) {
-        container.innerHTML = "Gabim Supabase: " + error.message;
+    if (error) {
+        console.error("Gabim:", error);
         return;
-      }
-
-      if (!data || data.length === 0) {
-        container.innerHTML = "No items in " + cat;
-        return;
-      }
-
-      container.innerHTML = data.map(ora => `
-        <div class="card">
-            <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/${ora.image_url}" 
-                 onerror="this.src='https://via.placeholder.com/150'">
-            <div style="font-size:14px; margin-top:10px;">${ora.brand} ${ora.model}</div>
-            <div style="color:gold; font-weight:bold;">${ora.price} €</div>
-        </div>
-      `).join('');
-    } catch (e) {
-      container.innerHTML = "Error: " + e.message;
     }
-  }
 
-  // Thirrjet per te gjitha kategorite
-  loadCategory('luxury', 'luxury-container');
-  loadCategory('vintage', 'vintage-container');
-  loadCategory('parts', 'parts-container');
+    if (!data || data.length === 0) {
+        container.innerHTML = "No items in this category.";
+        return;
+    }
+
+    // Vizatimi i kartave
+    container.innerHTML = data.map(ora => `
+        <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
+            <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/${ora.image_url}">
+            <h3>${ora.brand} - ${ora.model}</h3>
+            <p>Ref: ${ora.reference}</p>
+            <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
+        </div>
+    `).join('');
+}
+
+
+    // Këto janë thirrjet e vetme që duhet të kesh
+    loadCategory('luxury', 'luxury-container');
+    loadCategory('vintage', 'vintage-container');
+    loadCategory('parts', 'parts-container');
 </script>
-
-</body>
+</body>  
 </html>
-
 
 
  

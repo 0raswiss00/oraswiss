@@ -34,6 +34,30 @@
   const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+async function dergoKerkesen() {
+    // 1. Shfaq loading
+    document.getElementById("status").innerText = "Duke filluar...";
+
+    try {
+        let response = await fetch('url-i-yt-i-serverit', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            alert("Kodi u lexua me sukses!"); // Ose ndrysho UI-në
+        } else {
+            throw new Error('Gabim në server');
+        }
+    } catch (error) {
+        console.error("Gabim:", error);
+        alert("Ndodhi një problem, provo përsëri.");
+    } finally {
+        // 2. Fshi mesazhin e loading
+        document.getElementById("status").innerText = "";
+    }
+}
+  
   async function loadOras() {
     const container = document.getElementById("oras-container");
     

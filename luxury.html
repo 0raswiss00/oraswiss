@@ -42,7 +42,7 @@
 
     container.innerHTML = "Duke ngarkuar koleksionin...";
 
-    // Marrja e të dhënave
+    // Marrja e të dhënave nga Supabase për kategorinë 'luxury'
     const { data, error } = await client
       .from('oras')
       .select('*')
@@ -62,7 +62,6 @@
     // Pastrimi i kontenierit dhe shfaqja e produkteve
     container.innerHTML = "";
     data.forEach(ora => {
-      // Krijimi i URL-së së fotos
       const img = ora.image_url ? ${SUPABASE_URL}/storage/v1/object/public/images/${ora.image_url} : '';
       
       container.innerHTML += `
@@ -70,15 +69,16 @@
           ${img ? <img src="${img}" style="width:100%; border-radius:8px;"> : ''}
           <h3>${ora.brand} - ${ora.model}</h3>
           <div class="price">${ora.price} €</div>
-          <button class="btn-main" onclick="alert('Kodi po lexohet!')">Send Request</button>
+          <button class="btn-main" onclick="alert('Kodi u lexua!')">Send Request</button>
         </div>
       `;
     });
   }
 
-  // Thirrja e funksionit
+  // Ekzekutimi i funksionit
   loadOras();
 </script>
+
   
 </body>
 </html>

@@ -1,50 +1,16 @@
 <!DOCTYPE html>
-<html lang="sq">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Luxury Collection</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <title>Testi</title>
 </head>
 <body>
+  <h1 id="test">Testimi...</h1>
 
-    <h1>Luxury Collection</h1>
-    <div id="oras-container">Duke ngarkuar...</div>
-
-    <script>
-        // 1. Inicializimi
-        const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-        const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        // 2. Funksioni
-        async function loadLuxury() {
-            const container = document.getElementById("oras-container");
-            
-            const { data, error } = await supabase
-                .from('oras')
-                .select('*')
-                .eq('category', 'luxury');
-
-            if (error) {
-                container.innerHTML = "Gabim: " + error.message;
-                return;
-            }
-
-            if (!data || data.length === 0) {
-                container.innerHTML = "Nuk ka artikuj.";
-                return;
-            }
-
-            container.innerHTML = data.map(ora => `
-                <div style="border:1px solid #ccc; margin:10px; padding:10px;">
-                    <h3>${ora.brand} - ${ora.model}</h3>
-                    <p>Çmimi: ${ora.price} €</p>
-                </div>
-            `).join('');
-        }
-
-        // 3. Ekzekutimi
-        loadLuxury();
-    </script>
+  <script>
+    console.log("KODI PO EKZEKUTOHET!");
+    document.getElementById("test").innerText = "KODI PO PUNON!";
+    alert("Kodi po punon!");
+  </script>
 </body>
 </html>
+

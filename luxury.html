@@ -1,24 +1,4 @@
-<!doctype html>
-<html lang="sq">
-<head>
-  <meta charset="utf-8"/>
-  <title>luxury - Ora Swiss</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
-    /* Stili për butonat si te image_19.png */
-    .nav-filters { margin-bottom: 30px; }
-    .nav-filters a { background: #2a2a8e; color: #fff; padding: 8px 15px; border-radius: 20px; text-decoration: none; margin-right: 10px; font-weight: bold; }
-    
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-    .card { background: #111; padding: 15px; border-radius: 10px; border: 1px solid #333; }
-    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
-    .price { color: #25D366; font-weight: bold; margin-top: 10px; font-size: 1.2em; }
-  </style>
-</head>
-<body>
-
-  <!-- Butonat e navigimit -->
-  <div class="nav-filters">
+ <div class="nav-filters">
     <a href="luxury.html">Luxury 3</a>
     <a href="vintage.html">Vintage 2</a>
     <a href="parts.html">Parts 1</a>
@@ -59,11 +39,10 @@
       container.innerHTML = "<p>Nuk ka artikuj në këtë kategori.</p>";
       return;
     }
+
     data.forEach(ora => {
-    <div class="card">
-    <img src="${img}" alt="${ora.brand}"> 
-  const img = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url : '';
-                 
+      const img = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url : '';
+      
       container.innerHTML += `
         <div class="card">
 

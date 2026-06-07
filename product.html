@@ -2,57 +2,62 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <title>Ora Swiss - Detaje</title>
+    <title>Ora Swiss - Detajet e Produktit</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: auto; padding: 20px; }
+        .product-container { border: 1px solid #ddd; padding: 20px; border-radius: 8px; }
+        .price { color: green; font-size: 1.5em; font-weight: bold; }
+        .button { background: #25D366; color: white; padding: 15px; text-decoration: none; display: inline-block; border-radius: 5px; margin-top: 20px; }
+        img { max-width: 100%; height: auto; }
+    </style>
 </head>
 <body>
 
 <div id="container">Duke ngarkuar të dhënat...</div>
 
 <script>
-    // 1. Krijo klientin (kjo bëhet vetëm një herë)
-    const _supabase = supabase.createClient(
-        'https://gnwsrmelmeqduhhmfmoa.supabase.co',
-        'sb_publishable__AkK_Z7lhtkvukN6FylcAQ_KBTXlcy9'
-    );
+    // Kujdes: Përdorni një çelës anonim të kufizuar nga RLS në Supabase
+const supabase = window.supabase.createClient(
+    'https://gnwsrmelmeqduhhmfmoa.supabase.co',
+    'sb_publishable__AkK_Z7lhtkvukN6FylcAQ_KBTXlcy9'
+);
+
 
     async function loadProduct() {
-        const params = new URLSearchParams(window.location.search);
-        const id = params.get('id');
+        const id = new URLSearchParams(window.location.search).get('id');
         const container = document.getElementById("container");
 
-        if (!id) {
-            container.innerHTML = "Gabim: Nuk është gjetur asnjë ID në adresë.";
-            return;
-        }
+        if (!id) { container.innerHTML = "Produkti nuk u gjet."; return; }
 
-        // 2. Kërko të dhënat nga tabela 'oras'
-        const { data, error } = await _supabase
-            .from('oras')
-            .select('*')
-            .eq('id', id)
-            .single();
+        const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
 
-        if (error) {
-            container.innerHTML = "Gabim nga Supabase: " + error.message;
-            console.error(error);
-            return;
-        }
+        if (error) { container.innerHTML = "Gabim: " + error.message; return; }
 
-        // 3. Shfaq të dhënat
         container.innerHTML = `
-            <h1>${data.brand || 'Pa emër'} - ${data.model || 'Pa model'}</h1>
-            <p>Çmimi: ${data.price || '0'} €</p>
-            <ul>
-                <li>Referenca: ${data.reference || '-'}</li>
-                <li>Materiali: ${data.material || '-'}</li>
-                <li>Madhësia: ${data.case_size || '-'}</li>
-            </ul>
+            <div class="product-container">
+                <img src="${data.image_url}" alt="${data.model}">
+                <h1>${data.brand} - ${data.model}</h1>
+                <p><strong>Kategoria:</strong> ${data.category}</p>
+                <p class="price">Çmimi: ${data.price} €</p>
+                <p>${data.description}</p>
+                <ul>
+                    <li>Referenca: ${data.reference}</li>
+                    <li>Materiali: ${data.material}</li>
+                    <li>Madhësia: ${data.case_size}</li>
+                    <li>Viti: ${data.year}</li>
+                    <li>Lëvizja: ${data.movement}</li>
+                    <li>Funksionet: ${data.function}</li>
+                    <li>Shërbimi: ${data.service}</li>
+                    <li>Kuti/Dokumenta: ${data.box_papers}</li>
+                    <li>PayPal: ${data.PayPal}</li>
+                </ul>
+                <a href="https://wa.me/35569XXXXXXX?text=Përshëndetje, dua të blej orën: ${data.brand} ${data.model}" class="button">POROSIT NE WHATSAPP</a>
+            </div>
         `;
     }
-
     loadProduct();
 </script>
+
 </body>
 </html>
-

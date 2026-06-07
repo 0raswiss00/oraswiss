@@ -33,9 +33,44 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 
 <script>
-  // Kjo pjesë do të ekzekutohet direkt kur faqja të hapet
-  console.log("TESTI FINAL: Skripti po lexohet...");
-  alert("Skripti po funksionon!");
+  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+  const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  async function loadOras() {
+    const container = document.getElementById("oras-container");
+    
+    // Merr të dhënat nga Supabase
+    const { data, error } = await client
+      .from('oras')
+      .select('*')
+      .eq('category', 'luxury');
+
+    if (error) {
+      container.innerHTML = "Gabim: " + error.message;
+      return;
+    }
+
+    container.innerHTML = ""; // Pastro tekstin "Duke ngarkuar..."
+
+    if (data.length === 0) {
+      container.innerHTML = "<p>Nuk ka artikuj në këtë kategori.</p>";
+      return;
+    }
+
+    // Shfaq artikujt
+    data.forEach(ora => {
+      container.innerHTML += `
+        <div class="card">
+          <h3>${ora.brand} - ${ora.model}</h3>
+          <p class="price">${ora.price} €</p>
+        </div>
+      `;
+    });
+  }
+
+  loadOras();
 </script>
+
 </body>
 </html

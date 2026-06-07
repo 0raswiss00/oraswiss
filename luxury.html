@@ -31,8 +31,11 @@
 <script>
   const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
   const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
-  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const { createClient } = supabase;
+  const client = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+  console.log("Supabase loaded");
+  
   async function loadOras() {
     const container = document.getElementById("oras-container");
 

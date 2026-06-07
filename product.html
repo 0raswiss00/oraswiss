@@ -2,12 +2,19 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <title>Ora Swiss - Detajet</title>
+    <title>Detajet e Orës</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { background: #000; color: #fff; font-family: sans-serif; padding: 20px; }
+        .card { max-width: 600px; margin: auto; background: #111; padding: 25px; border-radius: 15px; border: 1px solid #333; }
+        .price { color: gold; font-size: 28px; font-weight: bold; margin: 15px 0; }
+        .grid-details { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; font-size: 14px; }
+        .btn-buy { display: block; background: #25D366; color: #fff; padding: 15px; text-align: center; text-decoration: none; border-radius: 8px; font-weight: bold; }
+    </style>
 </head>
 <body>
 
-    <div id="app-container">Duke ngarkuar...</div>
+    <div id="container">Duke ngarkuar...</div>
 
     <script>
         const supabase = window.supabase.createClient(
@@ -15,30 +22,33 @@
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
         );
 
-        async function init() {
-            const container = document.getElementById("app-container");
-            const params = new URLSearchParams(window.location.search);
-            const productId = params.get('id');
+        async function load() {
+            const id = new URLSearchParams(window.location.search).get('id');
+            const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
 
-            try {
-                // Nëse kemi ID, kërkojmë produktin specifik
-                if (productId) {
-                    const { data, error } = await supabase.from('oras').select('*').eq('id', productId).single();
-                    if (error) throw error;
-                    container.innerHTML = <h1>${data.brand}</h1><p>Çmimi: ${data.price} €</p>;
-                } else {
-                    // Nëse jemi në faqe kategorie, kërkojmë sipas kategorisë
-                    const category = window.location.pathname.includes('luxury') ? 'luxury' : 'vintage';
-                    const { data, error } = await supabase.from('oras').select('*').eq('category', category);
-                    if (error) throw error;
-                    container.innerHTML = data.map(item => <p>${item.brand}</p>).join('');
-                }
-            } catch (err) {
-                container.innerHTML = "Gabim: " + err.message;
+            if (error) {
+                document.getElementById('container').innerHTML = "Gabim: " + error.message;
+                return;
             }
+
+            document.getElementById('container').innerHTML = `
+                <div class="card">
+                    <h1>${data.brand} ${data.model}</h1>
+                    <div class="price">${data.price} €</div>
+                    <div class="grid-details">
+                        <p><strong>Referenca:</strong> ${data.reference}</p>
+                        <p><strong>Materiali:</strong> ${data.material}</p>
+                        <p><strong>Lëvizja:</strong> ${data.movement}</p>
+                        <p><strong>Viti:</strong> ${data.year}</p>
+                        <p><strong>Kutia/Letrat:</strong> ${data.box_paper}</p>
+                        <p><strong>Servis:</strong> ${data.Service}</p>
+                    </div>
+                    <p>${data.description}</p>
+                    <a href="https://wa.me/35569XXXXXXX?text=Dua të blej: ${data.brand} ${data.model}" class="btn-buy">POROSIT NE WHATSAPP</a>
+                </div>
+            `;
         }
-        init();
+        load();
     </script>
 </body>
 </html>
-

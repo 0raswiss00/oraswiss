@@ -48,7 +48,10 @@
       .select('*')
       .eq('category', category);
 
-    if (error) {
+    console.log("Data:", data); // SHTO KËTË
+    console.log("Error:", error); // SHTO KËTË
+
+    if (error) { ... }
       container.innerHTML = "Gabim: " + error.message;
       return;
     }

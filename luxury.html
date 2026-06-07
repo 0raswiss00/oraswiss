@@ -37,21 +37,30 @@
     const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
     const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    async function loadOras() {
+async function loadOras() {
       const container = document.getElementById("oras-container");
-      
-      try {
-        const { data, error } = await client
-          .from('oras')
-          .select('*')
-          .eq('category', 'luxury');
+      console.log("Po filloj kërkesën në Supabase...");
 
-        if (error) throw error;
+      const { data, error } = await client
+        .from('oras')
+        .select('*'); // E hoqa .eq për të parë nëse kthen gjë fare
 
-        if (!data || data.length === 0) {
-          container.innerHTML = "<p style='text-align:center;'>Nuk ka artikuj në këtë kategori.</p>";
-          return;
-        }
+      if (error) {
+        console.error("GABIM NGA SUPABASE:", error);
+        container.innerHTML = "Gabim: " + error.message;
+        return;
+      }
+
+      console.log("TË DHËNAT E MARRA:", data); // SHIKO KËTU NË KONSOLË
+
+      if (!data || data.length === 0) {
+        container.innerHTML = "Baza ktheu 0 rezultate. Sigurohu që tabela 'oras' ka të dhëna!";
+        return;
+      }
+
+      container.innerHTML = "U gjetën " + data.length + " orë. Po i shfaq...";
+      // ... vazhdo me forEach ...
+    }
 
         container.innerHTML = "";
         

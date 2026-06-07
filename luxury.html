@@ -58,19 +58,20 @@
 
       // Nëse gjithçka është OK:
       container.innerHTML = ""; 
-data.forEach(ora => {
-      // Sigurohuni që rruga është e saktë për bucket-in tuaj 'or-images'
-      const img = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/or-images/" + ora.image_url : '';
-      
-      container.innerHTML += `
-        <div class="card">
-          <img src="${img}" alt="${ora.brand}" style="width:100%; border-radius: 5px;">
-          <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">${ora.brand} - ${ora.model}</h3>
-          <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
-          <button class="btn-main btn-secondary" onclick="alert('Liked!')">❤️ Like</button>
-        </div>
-      `;
-    });
+      data.forEach(ora => {
+        // Ensure the URL path matches your Supabase bucket name exactly. 
+        // Based on your storage settings, this should be 'or-images'.
+        const img = ora.image_url ? ${SUPABASE_URL}/storage/v1/object/public/or-images/${ora.image_url} : '';
+  
+        container.innerHTML += `
+          <div class="card">
+            <img src="${img}" alt="${ora.brand}" style="width:100%; border-radius: 5px;">
+            <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">${ora.brand} - ${ora.model}</h3>
+            <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+            <button class="btn-main btn-secondary" onclick="alert('Liked!')">❤️ Like</button>
+          </div>
+  `      ;
+     });
 
 
     } catch (err) {

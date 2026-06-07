@@ -35,31 +35,30 @@
   const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // 2. Funksioni për ngarkimin e produkteve
+  // 2. Funksioni kryesor
   async function loadOras() {
     const container = document.getElementById("oras-container");
     if (!container) return;
 
     container.innerHTML = "Duke ngarkuar koleksionin...";
 
-    // Marrja e të dhënave nga Supabase për kategorinë 'luxury'
+    // 3. Marrja e të dhënave
     const { data, error } = await client
       .from('oras')
       .select('*')
       .eq('category', 'luxury');
 
     if (error) {
-      console.error("Gabim:", error);
-      container.innerHTML = "Gabim gjatë ngarkimit.";
+      container.innerHTML = "Gabim: " + error.message;
       return;
     }
 
     if (!data || data.length === 0) {
-      container.innerHTML = "<p>Nuk ka artikuj në këtë kategori.</p>";
+      container.innerHTML = "<p>Nuk ka artikuj për momentin.</p>";
       return;
     }
 
-    // Pastrimi i kontenierit dhe shfaqja e produkteve
+    // 4. Shfaqja e të dhënave
     container.innerHTML = "";
     data.forEach(ora => {
       const img = ora.image_url ? ${SUPABASE_URL}/storage/v1/object/public/images/${ora.image_url} : '';
@@ -67,18 +66,17 @@
       container.innerHTML += `
         <div class="card">
           ${img ? <img src="${img}" style="width:100%; border-radius:8px;"> : ''}
-          <h3>${ora.brand} - ${ora.model}</h3>
-          <div class="price">${ora.price} €</div>
+          <h3>${ora.brand || 'No Brand'} - ${ora.model || 'No Model'}</h3>
+          <div class="price">${ora.price || 'Contact'} €</div>
           <button class="btn-main" onclick="alert('Kodi u lexua!')">Send Request</button>
         </div>
       `;
     });
   }
 
-  // Ekzekutimi i funksionit
+  // Ekzekutimi
   loadOras();
 </script>
-
   
 </body>
 </html>

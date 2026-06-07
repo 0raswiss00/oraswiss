@@ -6,32 +6,31 @@
 <body>
 
   <div id="oras-container">Duke ngarkuar...</div>
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-  <script>
-    // Tani kjo do të funksionojë sepse e lidhëm skriptin lart
-    const supabase = window.supabase.createClient(
-      "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-      "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-    );
+ 
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    async function loadData() {
-      const container = document.getElementById("oras-container");
-      const { data, error } = await supabase.from('oras').select('*').eq('category', 'luxury');
-      
-      if (error) {
-        container.innerHTML = "Gabim: " + error.message;
-        return;
-      }
-      
-      container.innerHTML = data.map(ora => `
-        <div class="card">
-          <h3>${ora.brand} ${ora.model}</h3>
-          <p>${ora.price} €</p>
-        </div>
-      `).join('');
+<script>
+  // Kjo pjesë do të na tregojë nëse Supabase po ngarkohet
+  console.log("Supabase libraria:", window.supabase);
+
+  const supabase = window.supabase.createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+  );
+
+  async function loadData() {
+    console.log("Duke u lidhur me Supabase...");
+    const { data, error } = await supabase.from('oras').select('*').eq('category', 'luxury');
+    
+    if (error) {
+      console.error("GABIM SUPABASE:", error);
+      return;
     }
+    console.log("TE DHENAT:", data);
+  }
 
-    loadData();
-  </script>
+  loadData();
+</script>
+
 </body>
 </html>

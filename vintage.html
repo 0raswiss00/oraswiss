@@ -30,26 +30,8 @@
   
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  console.log("HAPI 1: Skripti filloi");
-
-  const SUPABASE_URL = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_AkK_Z7lhtkvukN6Fy1cAQ_KBTXicY9';
-
-  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  console.log("HAPI 2: Klienti Supabase u krijua");
-
-  async function testLidhjen() {
-    console.log("HAPI 3: Duke provuar lidhjen...");
-    try {
-      const { data, error } = await client.from('oras').select('*').limit(1);
-      if (error) throw error;
-      console.log("HAPI 4: SUKSES! Të dhënat u morën:", data);
-    } catch (err) {
-      console.error("HAPI 4: GABIM! Ja pse:", err);
-    }
-  }
-
-  testLidhjen();
+  alert("Po lexohet!");
+  console.log("Nëse e sheh këtë, lidhja është OK");
 </script>
 </body>
 </html>

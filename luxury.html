@@ -13,45 +13,34 @@
 
     <!-- Pjesa tjetër e faqes... -->
     
-    <div id="oras-container">Duke ngarkuar koleksionin...</div>
+   <div id="oras-container">Duke u lidhur...</div>
 
-    <script>
-        // Inicializimi i Supabase
-        const supabase = window.supabase.createClient(
-            "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-            "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-        );
+<script>
+    // Përdorim 'setTimeout' për të siguruar që faqja të mos ngrirë
+    setTimeout(async function() {
+        try {
+            const supabase = window.supabase.createClient(
+                "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+                "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+            );
 
-        async function loadLuxury() {
-            const container = document.getElementById("oras-container");
+            const { data, error } = await supabase.from('oras').select('*').eq('category', 'luxury');
             
-            const { data, error } = await supabase
-                .from('oras')
-                .select('*')
-                .eq('category', 'luxury');
-
             if (error) {
-                container.innerHTML = "Gabim gjatë lidhjes: " + error.message;
+                document.getElementById("oras-container").innerText = "Gabim lidhjeje.";
                 return;
             }
 
-            if (!data || data.length === 0) {
-                container.innerHTML = "Nuk ka produkte në këtë kategori.";
-                return;
-            }
-
-            // Gjenerimi i listës pa shkaktuar gabime sintaksore
-            container.innerHTML = data.map(function(ora) {
-                return `
-                <div class="card" style="border:1px solid #ccc; padding:10px; margin:10px;">
-                    <h3>${ora.brand || 'N/A'} ${ora.model || ''}</h3>
-                    <p>Çmimi: ${ora.price || 0} €</p>
-                </div>`;
-            }).join('');
+            document.getElementById("oras-container").innerHTML = data.map(item => `
+                <div style="border:1px solid #ccc; padding:10px;">${item.brand}</div>
+            `).join('');
+            
+            console.log("Sukses!");
+        } catch (e) {
+            console.log("Kodi u bllokua nga browseri");
         }
+    }, 1000); // Prit 1 sekondë para se të provosh lidhjen, që të mos bllokosh ngarkimin e faqes
+</script>
 
-        loadLuxury();
-        console.log("Kodi u ekzekutua me sukses!");
-    </script>
 </body>
 </html>

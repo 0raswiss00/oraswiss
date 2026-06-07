@@ -10,8 +10,6 @@
     <div id="container">Duke ngarkuar...</div>
 
     <script>
-        // Kjo është e vetmja deklaratë e supabase. 
-        // Nëse ke një tjetër "const supabase = ..." diku tjetër, fshije!
         const supabase = window.supabase.createClient(
             "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
@@ -30,15 +28,17 @@
                 const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
                 if (error) throw error;
 
-                // Këtu shfaqen të dhënat me emrat e kolonave që më dhe:
+                // Këtu po shtojmë foton (image_url) dhe të gjitha detajet:
                 container.innerHTML = `
-                    <div style="max-width:500px; margin:auto; border:1px solid #333; padding:20px;">
+                    <div style="max-width:500px; margin:auto; border:1px solid #333; padding:20px; background:#111; color:#fff;">
+                        <img src="${data.image_url}" alt="${data.brand}" style="width:100%; border-radius:10px;">
                         <h1>${data.brand} ${data.model}</h1>
                         <p><strong>Referenca:</strong> ${data.reference}</p>
                         <p><strong>Çmimi:</strong> ${data.price} €</p>
                         <p><strong>Përshkrimi:</strong> ${data.description}</p>
+                        <p><strong>Materiali:</strong> ${data.material} | <strong>Viti:</strong> ${data.year}</p>
                         <a href="https://wa.me/35569XXXXXXX?text=Dua te blej: ${data.brand}" 
-                           style="background:#25D366; color:white; padding:10px; display:block; text-align:center;">
+                           style="background:#25D366; color:white; padding:15px; display:block; text-align:center; text-decoration:none; font-weight:bold;">
                            POROSIT NE WHATSAPP
                         </a>
                     </div>
@@ -51,3 +51,4 @@
     </script>
 </body>
 </html>
+

@@ -30,52 +30,96 @@
   
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 <script>
-  // 1. Konfigurimi
   const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
   const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // 2. Funksioni kryesor
+async function merrProduktetLuxury() {
+  const { data, error } = await supabase
+    .from('oras') // Sigurohu që tabela quhet 'oras'
+    .select('model, price, image_url') // Merr vetëm këto kolona
+    .eq('category', 'luxury'); // FILTRI: Merr vetëm ato që janë 'luxury'
+
+  if (error) {
+    console.error("Gabim:", error);
+    return;
+  }
+
+  console.log("Produktet e gjetura:", data);
+  
+  // Këtu duhet të kesh kodin që i shton këto të dhëna në HTML
+  // Shembull: data.forEach(item => { ... shfaq në HTML ... });
+}
+        
+        if (response.ok) {
+            alert("Kodi u lexua me sukses!"); // Ose ndrysho UI-në
+        } else {
+            throw new Error('Gabim në server');
+        }
+    } catch (error) {
+        console.error("Gabim:", error);
+        alert("Ndodhi një problem, provo përsëri.");
+    } finally {
+        // 2. Fshi mesazhin e loading
+        document.getElementById("status").innerText = "";
+    }
+}
+  
   async function loadOras() {
     const container = document.getElementById("oras-container");
-    if (!container) return;
+    
+    // --- KËTU ËSHTË NDRYSHIMI PËR ÇDO FAQE ---
+    // Në luxury.html shkruaj 'luxury'
+    // Në vintage.html shkruaj 'vintage'
+    // Në parts.html shkruaj 'parts'
+    const category = 'luxury'; 
+    // ----------------------------------------
 
-    container.innerHTML = "Duke ngarkuar koleksionin...";
-
-    // 3. Marrja e të dhënave
     const { data, error } = await client
       .from('oras')
       .select('*')
-      .eq('category', 'luxury');
+      .eq('category', category);
 
     if (error) {
       container.innerHTML = "Gabim: " + error.message;
       return;
     }
 
-    if (!data || data.length === 0) {
-      container.innerHTML = "<p>Nuk ka artikuj për momentin.</p>";
+    container.innerHTML = "";
+    
+    if (data.length === 0) {
+      container.innerHTML = "<p>Nuk ka artikuj në këtë kategori.</p>";
       return;
     }
 
-    // 4. Shfaqja e të dhënave
-    container.innerHTML = "";
     data.forEach(ora => {
-      const img = ora.image_url ? ${SUPABASE_URL}/storage/v1/object/public/images/${ora.image_url} : '';
+      const img = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url : '';
       
       container.innerHTML += `
         <div class="card">
-          ${img ? <img src="${img}" style="width:100%; border-radius:8px;"> : ''}
-          <h3>${ora.brand || 'No Brand'} - ${ora.model || 'No Model'}</h3>
-          <div class="price">${ora.price || 'Contact'} €</div>
-          <button class="btn-main" onclick="alert('Kodi u lexua!')">Send Request</button>
+
+<h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">${ora.brand} - ${ora.model}</h3>
+
+          <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+          
+          <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;">
+          <button class="btn-main btn-secondary">Send Request</button>
+          
+          <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
+            <button class="btn-main btn-buy" style="margin-top:5px;">🛒 Buy Now</button>
+          </a>
+          
+            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')">❤️ Like</button>
+            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
         </div>
       `;
     });
   }
 
-  // Ekzekutimi
   loadOras();
+</script>
+<script>
+  console.log("HELLO CONSOLE");
 </script>
   
 </body>

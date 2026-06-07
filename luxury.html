@@ -35,13 +35,8 @@
 
   async function loadOras() {
     const container = document.getElementById("oras-container");
-    
-    // --- KËTU ËSHTË NDRYSHIMI PËR ÇDO FAQE ---
-    // Në luxury.html shkruaj 'luxury'
-    // Në vintage.html shkruaj 'vintage'
-    // Në parts.html shkruaj 'parts'
-    const category = 'luxury'; 
-    // ----------------------------------------
+
+    const category = 'luxury';
 
     const { data, error } = await client
       .from('oras')
@@ -53,32 +48,45 @@
       return;
     }
 
-    container.innerHTML = "";
-    
-    if (data.length === 0) {
+    if (!data || data.length === 0) {
       container.innerHTML = "<p>Nuk ka artikuj në këtë kategori.</p>";
       return;
     }
 
+    container.innerHTML = "";
+
     data.forEach(ora => {
-      const img = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url : '';
-      
+
+      const img = ora.image_url
+        ? SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url
+        : "https://via.placeholder.com/300x200?text=No+Image";
+
       container.innerHTML += `
         <div class="card">
+          <img src="${img}" alt="${ora.brand}">
 
-<h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">${ora.brand} - ${ora.model}</h3>
+          <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">
+            ${ora.brand} - ${ora.model}
+          </h3>
 
           <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
-          
-          <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;">
+
+          <input type="email" placeholder="Emaili yt"
+            style="width:100%; margin:5px 0; padding:8px; box-sizing:border-box;">
+
           <button class="btn-main btn-secondary">Send Request</button>
-          
+
           <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
             <button class="btn-main btn-buy" style="margin-top:5px;">🛒 Buy Now</button>
           </a>
-          
-            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')">❤️ Like</button>
-            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
+
+          <button class="btn-main btn-secondary"
+            onclick="event.stopPropagation(); alert('Liked!')">❤️ Like</button>
+
+          <button class="btn-main btn-secondary"
+            onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.href)">
+            🔗 Share
+          </button>
         </div>
       `;
     });
@@ -86,6 +94,5 @@
 
   loadOras();
 </script>
-
 </body>
 </html>

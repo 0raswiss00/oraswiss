@@ -23,19 +23,34 @@
             "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
         );
 
-        async function loadData() {
+async function loadData() {
             const container = document.getElementById("oras-list");
-            
-            // Tërheqim vetëm orat e kategorisë luxury
-            const { data, error } = await supabase
-                .from('oras')
-                .select('*')
-                .eq('category', 'luxury');
+            console.log("Po tentoj lidhjen me Supabase...");
 
-            if (error) {
-                container.innerHTML = "Gabim: " + error.message;
-                return;
+            try {
+                const { data, error } = await supabase
+                    .from('oras')
+                    .select('*')
+                    .eq('category', 'luxury');
+
+                if (error) {
+                    console.error("Gabim nga Supabase:", error);
+                    container.innerHTML = "Gabim: " + error.message;
+                    return;
+                }
+
+                console.log("Te dhenat e marra:", data);
+                if (data.length === 0) {
+                    container.innerHTML = "Nuk u gjet asnje ore.";
+                } else {
+                    container.innerHTML = data.map(ora => <div>${ora.brand}</div>).join('');
+                }
+            } catch (err) {
+                console.error("Gabim fatal:", err);
+                container.innerHTML = "Gabim fatal: " + err.message;
             }
+        }
+
 
             container.innerHTML = data.map(ora => `
                 <div class="card">

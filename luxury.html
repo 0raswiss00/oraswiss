@@ -27,10 +27,64 @@
   <h1>luxury Collection</h1>
   <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 <script>
-  console.log("JS STARTED");
+  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+  const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
+  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  async function loadOras() {
+    const container = document.getElementById("oras-container");
+    
+    // --- KËTU ËSHTË NDRYSHIMI PËR ÇDO FAQE ---
+    // Në luxury.html shkruaj 'luxury'
+    // Në vintage.html shkruaj 'vintage'
+    // Në parts.html shkruaj 'parts'
+    const category = 'luxury'; 
+    // ----------------------------------------
+
+    const { data, error } = await client
+      .from('oras')
+      .select('*')
+      .eq('category', category);
+
+    if (error) {
+      container.innerHTML = "Gabim: " + error.message;
+      return;
+    }
+
+    container.innerHTML = "";
+    
+    if (data.length === 0) {
+      container.innerHTML = "<p>Nuk ka artikuj në këtë kategori.</p>";
+      return;
+    }
+
+    data.forEach(ora => {
+      const img = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url : '';
+      
+      container.innerHTML += `
+        <div class="card">
+
+<h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">${ora.brand} - ${ora.model}</h3>
+
+          <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+          
+          <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;">
+          <button class="btn-main btn-secondary">Send Request</button>
+          
+          <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
+            <button class="btn-main btn-buy" style="margin-top:5px;">🛒 Buy Now</button>
+          </a>
+          
+            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')">❤️ Like</button>
+            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
+        </div>
+      `;
+    });
+  }
+
+  loadOras();
 </script>
 <script>
   alert("JS PO FUNKSIONON");

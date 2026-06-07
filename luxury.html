@@ -33,30 +33,25 @@
   const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-async function dergoKerkesen(oraId, butoni) {
-  // Gjen inputin që ndodhet në të njëjtën "card" me butonin
-  const inputEmaili = butoni.previousElementSibling;
-  const email = inputEmaili.value;
+  async function loadOras() {
+    const container = document.getElementById("oras-container");
+    
+    // --- KËTU ËSHTË NDRYSHIMI PËR ÇDO FAQE ---
+    // Në luxury.html shkruaj 'luxury'
+    // Në vintage.html shkruaj 'vintage'
+    // Në parts.html shkruaj 'parts'
+    const category = 'luxury'; 
+    // ----------------------------------------
 
-  if (!email) {
-    alert("Ju lutem shkruani e-mailin tuaj!");
-    return;
-  }
+    const { data, error } = await client
+      .from('oras')
+      .select('*')
+      .eq('category', category);
 
-  // Dërgimi i të dhënave në Supabase
-  const { data, error } = await client
-    .from('kerkesat') // Sigurohuni që keni një tabelë me emrin 'kerkesat'
-    .insert([
-      { ora_id: oraId, email: email, data_kerkeses: new Date() }
-    ]);
-
-  if (error) {
-    alert("Gabim gjatë dërgimit: " + error.message);
-  } else {
-    alert("Kërkesa u dërgua me sukses!");
-    inputEmaili.value = ""; // Pastron kutinë pas dërgimit
-  }
-}
+    if (error) {
+      container.innerHTML = "Gabim: " + error.message;
+      return;
+    }
 
     container.innerHTML = "";
     
@@ -76,7 +71,7 @@ async function dergoKerkesen(oraId, butoni) {
           <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
           
           <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;">
-          <button class="btn-main btn-secondary" onclick="dergoKerkesen('${ora.id}', this)">Send Request</button>
+          <button class="btn-main btn-secondary">Send Request</button>
           
           <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
             <button class="btn-main btn-buy" style="margin-top:5px;">🛒 Buy Now</button>

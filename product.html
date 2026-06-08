@@ -9,47 +9,50 @@
 
     <div id="container">Duke ngarkuar...</div>
 
-<script>
-  // 1. Këtu po i deklarojmë variablat që mungonin
-  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ";
+    <script>
+        // Përdorim 'var' dhe një kontroll që të mos prishet nëse është deklaruar diku tjetër
+        if (typeof window.supabaseClient === 'undefined') {
+            window.supabaseClient = window.supabase.createClient(
+                "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
+            );
+        }
+        var supabase = window.supabaseClient;
 
-  // 2. Inicializimi i sigurt
-  const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        async function loadProduct() {
+            const id = new URLSearchParams(window.location.search).get('id');
+            const container = document.getElementById("container");
 
-  async function loadProduct() {
-    const id = new URLSearchParams(window.location.search).get('id');
-    const container = document.getElementById("container");
+            if (!id) {
+                container.innerHTML = "Asnjë ID u gjet.";
+                return;
+            }
 
-    if (!id) {
-        container.innerHTML = "Asnjë ID u gjet.";
-        return;
-    }
+            try {
+                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+                if (error) throw error;
 
-    try {
-        const { data, error } = await client.from('oras').select('*').eq('id', id).single();
-        if (error) throw error;
-
-        // 3. Shfaqja e të dhënave (duke përdorur SUPABASE_URL direkt këtu)
-        container.innerHTML = `
-            <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">
-                <img src="${SUPABASE_URL}/storage/v1/object/public/images/${data.image_url}" style="width:100%; border-radius:10px;">
-                <h1>${data.brand} ${data.model}</h1>
-                <p><strong>Price:</strong> ${data.price} €</p>
-                <hr>
-                <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
-                <p><strong>Case Size:</strong> ${data.case_size || 'N/A'} mm</p>
-                <p><strong>Movement:</strong> ${data.movement || 'N/A'}</p>
-                <a href="https://wa.me/35569XXXXXXX?text=I%20am%20interested%20in:%20${data.brand}" 
-                   style="background:#25D366; color:white; padding:15px; display:block; text-align:center;">ORDER ON WHATSAPP</a>
-            </div>
-        `;
-    } catch (err) {
-        container.innerHTML = "GABIM: " + err.message;
-    }
-  }
-  loadProduct();
-</script>
-
+                container.innerHTML = `
+                        <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">
+                        <h1>${data.brand} ${data.model}</h1>
+                        <p><strong>Referenca:</strong> ${data.reference || 'N/A'}</p>
+                        <p><strong>Madhësia e kasës:</strong> ${data.case_size || 'N/A'} mm</p>
+                        <p><strong>Mekanizmi:</strong> ${data.movement || 'N/A'}</p>
+                        <p><strong>Çmimi:</strong> ${data.price} €</p>
+                        <hr>
+                        <p>${data.description || ''}</p>
+        
+                        <a href="https://wa.me/35569XXXXXXX?text=Dua%20të%20blej:%20${data.brand}%20${data.model}" 
+                           style="background:#25D366; color:white; padding:15px; display:block; text-align:center; text-decoration:none; font-weight:bold; border-radius:5px;">
+                           POROSIT NE WHATSAPP
+                        </a>
+                    </div>
+`                ;
+            } catch (err) {
+                container.innerHTML = "GABIM: " + err.message;
+            }
+        }
+        loadProduct();
+    </script>
 </body>
 </html>

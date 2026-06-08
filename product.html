@@ -2,51 +2,62 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <title>Ora Swiss - Detajet</title>
+    <title>Ora Swiss - Detajet e Produktit</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: auto; padding: 20px; }
+        .product-container { border: 1px solid #ddd; padding: 20px; border-radius: 8px; }
+        .price { color: green; font-size: 1.5em; font-weight: bold; }
+        .button { background: #25D366; color: white; padding: 15px; text-decoration: none; display: inline-block; border-radius: 5px; margin-top: 20px; }
+        img { max-width: 100%; height: auto; }
+    </style>
 </head>
 <body>
 
-    <div id="container">Duke ngarkuar...</div>
+<div id="container">Duke ngarkuar të dhënat...</div>
 
-    <script>
-        // Përdorim 'var' dhe një kontroll që të mos prishet nëse është deklaruar diku tjetër
-        if (typeof window.supabaseClient === 'undefined') {
-            window.supabaseClient = window.supabase.createClient(
-                "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
-            );
-        }
-        var supabase = window.supabaseClient;
+<script>
+    // Kujdes: Përdorni një çelës anonim të kufizuar nga RLS në Supabase
+const supabase = window.supabase.createClient(
+    'https://gnwsrmelmeqduhhmfmoa.supabase.co',
+    'sb_publishable__AkK_Z7lhtkvukN6FylcAQ_KBTXlcy9'
+);
 
-        async function loadProduct() {
-            const id = new URLSearchParams(window.location.search).get('id');
-            const container = document.getElementById("container");
 
-            if (!id) {
-                container.innerHTML = "Asnjë ID u gjet.";
-                return;
-            }
+    async function loadProduct() {
+        const id = new URLSearchParams(window.location.search).get('id');
+        const container = document.getElementById("container");
 
-            try {
-                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-                if (error) throw error;
+        if (!id) { container.innerHTML = "Produkti nuk u gjet."; return; }
 
-                container.innerHTML = `
-                    <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">
-                        <h1>${data.brand} ${data.model}</h1>
-                        <p><strong>Çmimi:</strong> ${data.price} €</p>
-                        <a href="https://wa.me/35569XXXXXXX?text=Dua të blej: ${data.brand}" 
-                           style="background:#25D366; color:white; padding:10px; display:block; text-align:center;">
-                           POROSIT NE WHATSAPP
-                        </a>
-                    </div>
-                `;
-            } catch (err) {
-                container.innerHTML = "GABIM: " + err.message;
-            }
-        }
-        loadProduct();
-    </script>
+        const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+
+        if (error) { container.innerHTML = "Gabim: " + error.message; return; }
+
+        container.innerHTML = `
+            <div class="product-container">
+                <img src="${data.image_url}" alt="${data.model}">
+                <h1>${data.brand} - ${data.model}</h1>
+                <p><strong>Kategoria:</strong> ${data.category}</p>
+                <p class="price">Çmimi: ${data.price} €</p>
+                <p>${data.description}</p>
+                <ul>
+                    <li>Referenca: ${data.reference}</li>
+                    <li>Materiali: ${data.material}</li>
+                    <li>Madhësia: ${data.case_size}</li>
+                    <li>Viti: ${data.year}</li>
+                    <li>Lëvizja: ${data.movement}</li>
+                    <li>Funksionet: ${data.function}</li>
+                    <li>Shërbimi: ${data.service}</li>
+                    <li>Kuti/Dokumenta: ${data.box_papers}</li>
+                    <li>PayPal: ${data.PayPal}</li>
+                </ul>
+                <a href="https://wa.me/35569XXXXXXX?text=Përshëndetje, dua të blej orën: ${data.brand} ${data.model}" class="button">POROSIT NE WHATSAPP</a>
+            </div>
+        `;
+    }
+    loadProduct();
+</script>
+
 </body>
 </html>

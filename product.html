@@ -1,41 +1,76 @@
-<div id="product-container">
-    <h1 id="title">Duke ngarkuar...</h1>
-    <div id="options-container" style="display: flex; gap: 10px; margin: 20px 0;">
-        </div>
-    <div id="details"></div>
-</div>
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <title>Ora Swiss - Detajet</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
 
-<script>
-    async function loadProduct() {
-        const params = new URLSearchParams(window.location.search);
-        const id = params.get('id');
+    <nav>
+        <a href="luxury.html">Luxury</a> | 
+        <a href="vintage.html">Vintage</a> | 
+        <a href="parts.html">Parts</a>
+    </nav>
+    
+    <div id="container">Duke ngarkuar...</div>
 
-        // 1. Marrim orën kryesore
-        const { data: product, error } = await client.from('oras').select('*').eq('id', id).single();
-        
-        // 2. Marrim të gjitha variantet e këtij modeli (p.sh. 2974.1 dhe 2974.2)
-        const { data: variants } = await client.from('oras')
-            .select('*')
-            .eq('brand', product.brand)
-            .eq('model', product.model);
+    <script>
+        // Përdorim 'var' dhe një kontroll që të mos prishet nëse është deklaruar diku tjetër
+        if (typeof window.supabaseClient === 'undefined') {
+            window.supabaseClient = window.supabase.createClient(
+                "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
+            );
+        }
+        var supabase = window.supabaseClient;
 
-        document.getElementById('title').innerText = ${product.brand} ${product.model};
+        async function loadProduct() {
+            const id = new URLSearchParams(window.location.search).get('id');
+            const container = document.getElementById("container");
 
-        // 3. Shfaqim opsionet (fotot e vogla)
-        const optContainer = document.getElementById('options-container');
-        optContainer.innerHTML = variants.map(v => `
-            <a href="product.html?id=${v.id}">
-                <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/${v.image}" 
-                     style="width: 80px; height: 80px; border: ${v.id == id ? '2px solid red' : '1px solid #ccc'}; cursor: pointer;">
-            </a>
-        `).join('');
+            if (!id) {
+                container.innerHTML = "Asnjë ID u gjet.";
+                return;
+            }
 
-        // 4. Shfaqim detajet
-        document.getElementById('details').innerHTML = `
-            <p>Çmimi: ${product.price} €</p>
-            <p>Referenca: ${product.reference}</p>
-            <a href="${product.paypal_link}">Bli Tani</a>
-        `;
-    }
-    loadProduct();
-</script>
+            try {
+                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+                if (error) throw error;
+
+                container.innerHTML = `
+                    <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">
+                        <p>Kategoria: ${data.category}</p>
+                        <h1>${data.brand} ${data.model}</h1>
+                        <p><strong>Çmimi:</strong> ${data.price} €</p>
+                        <p>Përshkrimi: ${data.description || 'Nuk ka përshkrim për këtë orë.'}</p>
+                        <img src="${imgUrl}" style="width:300px;">
+                        <p>Ref: ${data.reference}</p>
+                        <p>Madhësia e kasës: ${data.case_size ? data.case_size + ' mm' : 'N/A'}unksioni: ${data.function || 'N/A'}</p>
+
+                        <p>Viti i prodhimit: <strong>${data.year || 'Nuk disponohet'}</strong></p>
+                        <p><strong>Mekanizmi:</strong> ${data.movement}</p>
+                        <p>Funksioni: ${data.function || 'N/A'}</p>
+                        <p>Shërbimi (Service History): ${data.service_history || 'Nuk ka të dhëna për shërbimin'}</p>
+                        
+                        <p>Kutia dhe Dokumentet: <strong>${data.box_papers ? 'Po (Full Set)' : 'Jo'}</strong></p>
+
+                        <a href="${data.paypal_link ? data.paypal_link : '#'}" 
+                           target="_blank" 
+                           style="display: inline-block; margin-bottom: 10px; color: blue;">
+                           Bli Tani
+                        </a>
+                        <a href="https://wa.me/35569XXXXXXX?text=Dua të blej: ${data.brand}" 
+                           style="background:#25D366; color:white; padding:10px; display:block; text-align:center;">
+                           POROSIT NE WHATSAPP
+                        </a>
+                    </div>
+                `;
+            } catch (err) {
+                container.innerHTML = "GABIM: " + err.message;
+            }
+        }
+        loadProduct();
+    </script>
+</body>
+</html>

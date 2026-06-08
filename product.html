@@ -1,36 +1,57 @@
 <!DOCTYPE html>
 <html lang="sq">
-<body>
-    <div id="product-container">Duke ngarkuar detajet...</div>
+<head>
+    <meta charset="UTF-8">
+    <title>Ora Swiss - Detajet</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const client = supabase.createClient(
-    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
-  );
+</head>
+<body>
 
-  async function shfaqOra() {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
+    <nav>
+        <a href="luxury.html">Luxury</a> | 
+        <a href="vintage.html">Vintage</a> | 
+        <a href="parts.html">Parts</a>
+    </nav>
     
-    // Marrim të dhënat për ID-në e caktuar
-    const { data, error } = await client.from('oras').select('*').eq('id', id).single();
+    <div id="container">Duke ngarkuar...</div>
 
-    if (error) {
-      document.body.innerHTML = "Gabim: Nuk gjendet ora. " + error.message;
-      return;
-    }
+    <script>
+        // Përdorim 'var' dhe një kontroll që të mos prishet nëse është deklaruar diku tjetër
+        if (typeof window.supabaseClient === 'undefined') {
+            window.supabaseClient = window.supabase.createClient(
+                "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
+            );
+        }
+        var supabase = window.supabaseClient;
 
-    // Shfaqim detajet thjesht
-    document.body.innerHTML = `
-      <h1>${data.brand} ${data.model}</h1>
-      <p>Çmimi: ${data.price} €</p>
-      <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/${data.image}" style="width:300px;">
-    `;
-  }
+        async function loadProduct() {
+            const id = new URLSearchParams(window.location.search).get('id');
+            const container = document.getElementById("container");
 
-  shfaqOra();
-</script>
+            if (!id) {
+                container.innerHTML = "Asnjë ID u gjet.";
+                return;
+            }
+
+            try {
+                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+                if (error) throw error;
+
+                container.innerHTML = `
+ <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/${data.image}" style="width:300px;">
+                <h1>${data.brand} ${data.model}</h1>
+                <p>Kategoria: ${data.category}</p>
+                <p>Çmimi: ${data.price} €</p>
+                <p>Referenca: ${data.reference}</p>
+                <p>Madhësia: ${data.case_size}</p>
+                <p>Viti: ${data.year}</p>
+                <p>Lëvizja: ${data.movement}</p>
+                <p>Funksioni: ${data.function}</p>
+                <a href="${data.paypal_link}">Bli me PayPal</a>
+            `;
+        }
+        loadProduct();
+    </script>
 </body>
 </html>

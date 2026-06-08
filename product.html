@@ -3,41 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <title>Ora Swiss - Detajet</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
     <nav>
         <a href="luxury.html">Luxury</a> | 
         <a href="vintage.html">Vintage</a> | 
         <a href="parts.html">Parts</a>
     </nav>
+    
+    <div id="container">Duke ngarkuar...</div>
 
-    <div id="product-container">Duke ngarkuar...</div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const client = supabase.createClient("https://gnwsrmelmeqduhhmfmoa.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ");
+        // Përdorim 'var' dhe një kontroll që të mos prishet nëse është deklaruar diku tjetër
+        if (typeof window.supabaseClient === 'undefined') {
+            window.supabaseClient = window.supabase.createClient(
+                "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
+            );
+        }
+        var supabase = window.supabaseClient;
 
         async function loadProduct() {
             const id = new URLSearchParams(window.location.search).get('id');
-            const { data, error } = await client.from('oras').select('*').eq('id', id).single();
+            const container = document.getElementById("container");
 
-            if (error || !data) {
-                document.getElementById('product-container').innerHTML = "Artikulli nuk u gjet.";
+            if (!id) {
+                container.innerHTML = "Asnjë ID u gjet.";
                 return;
             }
 
-            const imgUrl = https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/${data.image};
-            
-            document.getElementById('product-container').innerHTML = `
-                <img src="${imgUrl}" style="width:300px;">
-                <h1>${data.brand} ${data.model}</h1>
-                <p>Kategoria: ${data.category}</p>
-                <p>Çmimi: ${data.price} €</p>
-                <p>Ref: ${data.reference}</p>
-                <a href="${data.paypal_link || '#'}">Bli Tani</a>
-            `;
+            try {
+                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+                if (error) throw error;
+
+                container.innerHTML = `
+                    <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">
+                        <h1>${data.brand} ${data.model}</h1>
+                        <p><strong>Çmimi:</strong> ${data.price} €</p>
+                        <img src="${imgUrl}" style="width:300px;">
+                        <h1>${data.brand} ${data.model}</h1>
+                        <p>Kategoria: ${data.category}</p>
+                        <p>Çmimi: ${data.price} €</p>
+                        <p>Ref: ${data.reference}</p>
+                        <a href="${data.paypal_link || '#'}">Bli Tani</a>
+                        <a href="https://wa.me/35569XXXXXXX?text=Dua të blej: ${data.brand}" 
+                           style="background:#25D366; color:white; padding:10px; display:block; text-align:center;">
+                           POROSIT NE WHATSAPP
+                        </a>
+                    </div>
+                `;
+            } catch (err) {
+                container.innerHTML = "GABIM: " + err.message;
+            }
         }
         loadProduct();
     </script>
 </body>
 </html>
+
+
+

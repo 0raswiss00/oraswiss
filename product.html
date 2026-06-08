@@ -16,48 +16,41 @@
 
 <div id="container">Duke ngarkuar të dhënat...</div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    // Kujdes: Përdorni një çelës anonim të kufizuar nga RLS në Supabase
-const supabase = window.supabase.createClient(
-    'https://gnwsrmelmeqduhhmfmoa.supabase.co',
-    'sb_publishable__AkK_Z7lhtkvukN6FylcAQ_KBTXlcy9'
-);
+  const supabase = supabase.createClient("URL_YT", "KEY_YT");
 
+  async function getProduct() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    const container = document.getElementById('oras-container');
 
-    async function loadProduct() {
-        const id = new URLSearchParams(window.location.search).get('id');
-        const container = document.getElementById("container");
+    console.log("Duke kërkuar ID:", id); // Shiko këtë në Console (F12)
 
-        if (!id) { container.innerHTML = "Produkti nuk u gjet."; return; }
+    const { data, error } = await supabase
+      .from('oras')
+      .select('*')
+      .eq('id', id)
+      .single(); // Kërkon vetëm një rresht
 
-        const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-
-        if (error) { container.innerHTML = "Gabim: " + error.message; return; }
-
-        container.innerHTML = `
-            <div class="product-container">
-                <img src="${data.image_url}" alt="${data.model}">
-                <h1>${data.brand} - ${data.model}</h1>
-                <p><strong>Kategoria:</strong> ${data.category}</p>
-                <p class="price">Çmimi: ${data.price} €</p>
-                <p>${data.description}</p>
-                <ul>
-                    <li>Referenca: ${data.reference}</li>
-                    <li>Materiali: ${data.material}</li>
-                    <li>Madhësia: ${data.case_size}</li>
-                    <li>Viti: ${data.year}</li>
-                    <li>Lëvizja: ${data.movement}</li>
-                    <li>Funksionet: ${data.function}</li>
-                    <li>Shërbimi: ${data.service}</li>
-                    <li>Kuti/Dokumenta: ${data.box_papers}</li>
-                    <li>PayPal: ${data.PayPal}</li>
-                </ul>
-                <a href="https://wa.me/35569XXXXXXX?text=Përshëndetje, dua të blej orën: ${data.brand} ${data.model}" class="button">POROSIT NE WHATSAPP</a>
-            </div>
-        `;
+    if (error) {
+      container.innerHTML = "Gabim databaze: " + error.message;
+      return;
     }
-    loadProduct();
-</script>
 
+    if (!data) {
+      container.innerHTML = "Asnjë orë me këtë ID nuk u gjet në databazë.";
+      return;
+    }
+
+    // Shfaq të dhënat nëse i gjeti
+    container.innerHTML = `
+      <h1>${data.brand}</h1>
+      <p>Kutia: ${data.box_papers ? 'Po' : 'Jo'}</p>
+    `;
+  }
+
+  getProduct();
+</script>
 </body>
 </html>

@@ -3,28 +3,34 @@
 <body>
     <div id="product-container">Duke ngarkuar detajet...</div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const supabase = supabase.createClient("https://gnwsrmelmeqduhhmfmoa.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ");
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const client = supabase.createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
+  );
 
-        async function loadProduct() {
-            const id = new URLSearchParams(window.location.search).get('id');
-            const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-            if (error) { document.getElementById('product-container').innerHTML = "Gabim."; return; }
+  async function shfaqOra() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    
+    // Marrim të dhënat për ID-në e caktuar
+    const { data, error } = await client.from('oras').select('*').eq('id', id).single();
 
-            document.getElementById('product-container').innerHTML = `
-                <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/${data.image}" style="width:300px;">
-                <h1>${data.brand} ${data.model}</h1>
-                <p>Kategoria: ${data.category}</p>
-                <p>Çmimi: ${data.price} €</p>
-                <p>Referenca: ${data.reference}</p>
-                <p>Madhësia: ${data.case_size}</p>
-                <p>Viti: ${data.year}</p>
-                <p>Lëvizja: ${data.movement}</p>
-                <p>Funksioni: ${data.function}</p>
-                <a href="${data.paypal_link}">Bli me PayPal</a>
-            `;
-        }
-        loadProduct();
-    </script>
+    if (error) {
+      document.body.innerHTML = "Gabim: Nuk gjendet ora. " + error.message;
+      return;
+    }
+
+    // Shfaqim detajet thjesht
+    document.body.innerHTML = `
+      <h1>${data.brand} ${data.model}</h1>
+      <p>Çmimi: ${data.price} €</p>
+      <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/${data.image}" style="width:300px;">
+    `;
+  }
+
+  shfaqOra();
+</script>
 </body>
 </html>

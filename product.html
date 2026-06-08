@@ -17,40 +17,13 @@
 <div id="container">Duke ngarkuar të dhënat...</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const supabase = supabase.createClient("URL_YT", "KEY_YT");
-
-  async function getProduct() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-    const container = document.getElementById('oras-container');
-
-    console.log("Duke kërkuar ID:", id); // Shiko këtë në Console (F12)
-
-    const { data, error } = await supabase
-      .from('oras')
-      .select('*')
-      .eq('id', id)
-      .single(); // Kërkon vetëm një rresht
-
-    if (error) {
-      container.innerHTML = "Gabim databaze: " + error.message;
-      return;
-    }
-
-    if (!data) {
-      container.innerHTML = "Asnjë orë me këtë ID nuk u gjet në databazë.";
-      return;
-    }
-
-    // Shfaq të dhënat nëse i gjeti
-    container.innerHTML = `
-      <h1>${data.brand}</h1>
-      <p>Kutia: ${data.box_papers ? 'Po' : 'Jo'}</p>
-    `;
-  }
-
-  getProduct();
+  // Deklarim i sigurt: krijon klientin vetëm nëse nuk ekziston
+  window.supabase = window.supabase || supabase.createClient(
+    "URL_YT_KETU", 
+    "KEY_YT_KETU"
+  );
 </script>
 </body>
 </html>

@@ -33,18 +33,26 @@
                 if (error) throw error;
 
                 container.innerHTML = `
-                        <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">
+                   <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">
                         <h1>${data.brand} ${data.model}</h1>
-                        <p><strong>Referenca:</strong> ${data.reference || 'N/A'}</p>
-                        <p><strong>Madhësia e kasës:</strong> ${data.case_size || 'N/A'} mm</p>
-                        <p><strong>Mekanizmi:</strong> ${data.movement || 'N/A'}</p>
-                        <p><strong>Çmimi:</strong> ${data.price} €</p>
-                        <hr>
-                        <p>${data.description || ''}</p>
+                        <p><strong>Price:</strong> ${data.price} €</p>
         
-                        <a href="https://wa.me/35569XXXXXXX?text=Dua%20të%20blej:%20${data.brand}%20${data.model}" 
+                        <hr>
+                        <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
+                        <p><strong>Case Size:</strong> ${data.case_size || 'N/A'} mm</p>
+                        <p><strong>Movement:</strong> ${data.movement || 'N/A'}</p>
+                        <p><strong>Function:</strong> ${data.function || 'N/A'}</p>
+                        <p><strong>Service:</strong> ${data.service ? 'Yes (Serviced)' : 'No'}</p>
+                        <p><strong>Box & Papers:</strong> ${data.box_papers ? 'Full Set' : 'Watch Only'}</p>
+        
+                        <br>
+                        <a href="https://wa.me/35569XXXXXXX?text=I%20am%20interested%20in:%20${data.brand}%20${data.model}" 
                            style="background:#25D366; color:white; padding:15px; display:block; text-align:center; text-decoration:none; font-weight:bold; border-radius:5px;">
-                           POROSIT NE WHATSAPP
+                           ORDER ON WHATSAPP
+                       </a>
+                         <a href="${data.paypal_link}" target="_blank" 
+                            style="background:#0070ba; color:white; padding:15px; display:block; text-align:center; text-decoration:none; font-weight:bold; border-radius:5px; margin-top:10px;">
+                            BUY NOW (PayPal)
                         </a>
                     </div>
 `                ;

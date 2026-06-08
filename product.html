@@ -7,12 +7,6 @@
 </head>
 <body>
 
-    <nav>
-        <a href="luxury.html">Luxury</a> | 
-        <a href="vintage.html">Vintage</a> | 
-        <a href="parts.html">Parts</a>
-    </nav>
-    
     <div id="container">Duke ngarkuar...</div>
 
     <script>
@@ -40,26 +34,8 @@
 
                 container.innerHTML = `
                     <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">
-                        <p>Kategoria: ${data.category}</p>
                         <h1>${data.brand} ${data.model}</h1>
                         <p><strong>Çmimi:</strong> ${data.price} €</p>
-                        <p>Përshkrimi: ${data.description || 'Nuk ka përshkrim për këtë orë.'}</p>
-                        <img src="${imgUrl}" style="width:300px;">
-                        <p>Ref: ${data.reference}</p>
-                        <p>Madhësia e kasës: ${data.case_size ? data.case_size + ' mm' : 'N/A'}unksioni: ${data.function || 'N/A'}</p>
-
-                        <p>Viti i prodhimit: <strong>${data.year || 'Nuk disponohet'}</strong></p>
-                        <p><strong>Mekanizmi:</strong> ${data.movement}</p>
-                        <p>Funksioni: ${data.function || 'N/A'}</p>
-                        <p>Shërbimi (Service History): ${data.service_history || 'Nuk ka të dhëna për shërbimin'}</p>
-                        
-                        <p>Kutia dhe Dokumentet: <strong>${data.box_papers ? 'Po (Full Set)' : 'Jo'}</strong></p>
-
-                        <a href="${data.paypal_link ? data.paypal_link : '#'}" 
-                           target="_blank" 
-                           style="display: inline-block; margin-bottom: 10px; color: blue;">
-                           Bli Tani
-                        </a>
                         <a href="https://wa.me/35569XXXXXXX?text=Dua të blej: ${data.brand}" 
                            style="background:#25D366; color:white; padding:10px; display:block; text-align:center;">
                            POROSIT NE WHATSAPP

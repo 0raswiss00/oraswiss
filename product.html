@@ -28,24 +28,31 @@
                 return;
             }
 
-            try {
-                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-                if (error) throw error;
+// ... brenda funksionit loadProduct() ...
+try {
+    const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+    if (error) throw error;
 
-                container.innerHTML = `
-                    <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">
-                        <h1>${data.brand} ${data.model}</h1>
-                        <p><strong>Çmimi:</strong> ${data.price} €</p>
-                        <a href="https://wa.me/35569XXXXXXX?text=Dua të blej: ${data.brand}" 
-                           style="background:#25D366; color:white; padding:10px; display:block; text-align:center;">
-                           POROSIT NE WHATSAPP
-                        </a>
-                    </div>
-                `;
-            } catch (err) {
-                container.innerHTML = "GABIM: " + err.message;
-            }
-        }
+    // Ndërtimi i URL-së duke përdorur bucket-in e saktë "or-images"
+    const imageUrl = data.image ? https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/${data.image} : '';
+
+    container.innerHTML = `
+        <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">
+            ${imageUrl ? <img src="${imageUrl}" style="width:100%; height:auto; margin-bottom:15px;" alt="Ora"> : '<p>Nuk ka imazh.</p>'}
+            
+            <h1>${data.brand} ${data.model}</h1>
+            <p><strong>Çmimi:</strong> ${data.price} €</p>
+            <p><strong>Ref:</strong> ${data.reference || 'Nuk ka'}</p>
+            
+            <a href="https://wa.me/35569XXXXXXX?text=Dua të blej: ${data.brand} ${data.model}" 
+               style="background:#25D366; color:white; padding:10px; display:block; text-align:center; text-decoration:none; border-radius:5px;">
+               POROSIT NE WHATSAPP
+            </a>
+        </div>
+    `;
+} catch (err) {
+    container.innerHTML = "Gabim gjatë ngarkimit: " + err.message;
+}
         loadProduct();
     </script>
 </body>

@@ -32,6 +32,8 @@
                 const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
                 if (error) throw error;
 
+              const { data: { publicUrl } } = supabase.storage.from('or-images').getPublicUrl(data.image_url);
+                
                container.innerHTML = `
                    <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">
                        <img src="${publicUrl}" alt="${data.model}" style="width:100%; height:auto; margin-bottom:20px;">

@@ -1,38 +1,4 @@
-<!DOCTYPE html>
-<html lang="sq">
-<head>
-    <meta charset="UTF-8">
-    <title>Ora Swiss - Detajet</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-</head>
-<body>
 
-    <div id="container">Duke ngarkuar...</div>
-
-    <script>
-        // Përdorim 'var' dhe një kontroll që të mos prishet nëse është deklaruar diku tjetër
-        if (typeof window.supabaseClient === 'undefined') {
-            window.supabaseClient = window.supabase.createClient(
-                "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
-            );
-        }
-        var supabase = window.supabaseClient;
-
-        async function loadProduct() {
-            const id = new URLSearchParams(window.location.search).get('id');
-            const container = document.getElementById("container");
-
-            if (!id) {
-                container.innerHTML = "Asnjë ID u gjet.";
-                return;
-            }
-
-            try {
-                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-                if (error) throw error;
-
-                container.innerHTML = `
 <!doctype html>
 <html lang="sq">
 <head>

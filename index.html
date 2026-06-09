@@ -1,4 +1,6 @@
-<!doctype html>
+
+
+ <!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -85,26 +87,18 @@ async function loadCategory(cat, containerId) {
         return;
     }
 
-// Vizatimi i kartave
-container.innerHTML = data.map(ora => `
-    <div class="card">
-        <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">${ora.brand}</h3>
-        <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/${ora.image}" style="width:100%; height:200px; object-fit:cover;">
-        <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
-        
-        <div class="card-actions">
-            <input type="email" placeholder="Email-i yt" style="width:100%; box-sizing:border-box; padding:8px; margin:5px 0;">
-            <button class="btn-main btn-secondary">Send Request</button>
-            <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
-                <button class="btn-main btn-buy" style="margin-top:5px; width:100%;">🛒 Buy Now</button>
-            </a>
-            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')">❤️ Like</button>
-            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
+    // Vizatimi i kartave
+    container.innerHTML = data.map(ora => `
+        <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
+            <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/${ora.image_url}">
+            <h3>${ora.brand} - ${ora.model}</h3>
+            <p>Ref: ${ora.reference}</p>
+            <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
         </div>
-    </div>
-`).join('');
+    `).join('');
+}
 
-  
+
     // Këto janë thirrjet e vetme që duhet të kesh
     loadCategory('luxury', 'luxury-container');
     loadCategory('vintage', 'vintage-container');
@@ -114,4 +108,3 @@ container.innerHTML = data.map(ora => `
 </html>
 
 
- 

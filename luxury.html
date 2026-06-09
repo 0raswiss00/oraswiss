@@ -63,7 +63,7 @@
 
     data.forEach(ora => {
       const img = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/or-images/" + ora.image_url : "path/to/placeholder.jpg";
-      console.log("URL e fotos:", img);
+      
       container.innerHTML += `
         <div class="card">
 

@@ -3182,7 +3182,13 @@ body {
 }
 
 
-      
+ .ora-img {
+    width: 100%;       /* Përshtatet me gjerësinë e kartës */
+    height: 250px;     /* Fikson lartësinë */
+    object-fit: cover; /* Pret foton që të mos duket e shtypur */
+    border-radius: 8px; /* Shton kënde të rrumbullakëta */
+}
+
 
 
 

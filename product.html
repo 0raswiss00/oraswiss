@@ -28,12 +28,24 @@
                 return;
             }
 
-            try {
-                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-                if (error) throw error;
+               try {
+                   // 1. Marrim të dhënat e orës
+                   const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+                   if (error) throw error;
 
-                const { data: publicUrlData } = supabase.storage.from('or-images').getPublicUrl(data.image_url || '');
-                const fullImageUrl = publicUrlData.publicUrl;
+                   // 2. Logjika e re: Nëse image_url është bosh, provo ta gjesh foton 
+                   // duke përdorur referencën (reference.jpg)
+                   const fileName = data.image_url ? data.image_url : ${data.reference}.jpg;
+    
+                    // 3. Gjenerojmë URL-në
+                    const { data: publicUrlData } = supabase.storage.from('or-images').getPublicUrl(fileName);
+                    const fullImageUrl = publicUrlData.publicUrl;
+
+                   // ... pjesa tjetër e kodit (container.innerHTML) mbetet e njëjtë
+                } catch (err) {
+                    console.error("Gabim:", err);
+                }
+
                 
                container.innerHTML = `
                    <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">

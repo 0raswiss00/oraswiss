@@ -86,22 +86,22 @@ async function loadCategory(cat, containerId) {
     }
 
     // Vizatimi i kartave
-container.innerHTML = data.map(ora => `
-    <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">${ora.brand}</h3>
-    <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/${ora.image}">
-    <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
-
-    <input type="email" placeholder="Email-i yt" style="width:100%; margin: 5px 0; padding:8px;">
-    <button class="btn-main btn-secondary">Send Request</button>
-
-    <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
-        <button class="btn-main btn-buy" style="margin-top:5px;">🛒 Buy Now</button>
-    </a>
-
-    <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')">❤️ Like</button>
-    <button class="btn-main btn-secondary" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
-`).join('');
-
+         <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/${ora.image_url}">
+          <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+          
+          <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;">
+          <button class="btn-main btn-secondary">Send Request</button>
+          
+          <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
+            <button class="btn-main btn-buy" style="margin-top:5px;">🛒 Buy Now</button>
+          </a>
+          
+            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')">❤️ Like</button>
+            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
+        </div>
+      `;
+    });
+  }
 
 
 

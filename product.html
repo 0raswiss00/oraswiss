@@ -28,23 +28,39 @@
                 return;
             }
 
-               try {
-                   // 1. Marrim të dhënat e orës
-                   const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-                   if (error) throw error;
+try {
+    // 1. Marrim të dhënat
+    const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+    if (error) throw error;
 
-                   // 2. Logjika e re: Nëse image_url është bosh, provo ta gjesh foton 
-                   // duke përdorur referencën (reference.jpg)
-                   const fileName = data.image_url ? data.image_url : ${data.reference}.jpg;
+    // 2. Logjikë e sigurt për foton:
+    // Përdor image_url nëse ekziston, përndryshe përdor referencën + .jpg
+    let fileName = data.image_url;
+    if (!fileName) {
+        fileName = ${data.reference}.jpg; 
+    }
+
+    // 3. Gjenerojmë URL-në
+    const { data: publicUrlData } = supabase.storage.from('or-images').getPublicUrl(fileName);
     
-                    // 3. Gjenerojmë URL-në
-                    const { data: publicUrlData } = supabase.storage.from('or-images').getPublicUrl(fileName);
-                    const fullImageUrl = publicUrlData.publicUrl;
+    // 4. Mbrojtje: Nëse URL-ja dështon, përdorim një foto rezervë
+    const fullImageUrl = (publicUrlData && publicUrlData.publicUrl) ? publicUrlData.publicUrl : 'https://placeholder.co/400x400?text=No+Image';
 
-                   // ... pjesa tjetër e kodit (container.innerHTML) mbetet e njëjtë
-                } catch (err) {
-                    console.error("Gabim:", err);
-                }
+    // 5. Ndërtojmë HTML-në (këtu përdorim fullImageUrl që krijuam lart)
+    container.innerHTML = `
+        <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">
+            <img src="${fullImageUrl}" alt="Ora" style="width:100%;">
+            <h1>${data.brand || ''} ${data.model || ''}</h1>
+            <p><strong>Price:</strong> ${data.price || 'N/A'} €</p>
+            <hr>
+            <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
+            ... (shto pjesët e tjera që ke) ...
+        </div>
+    `;
+} catch (err) {
+    console.error("Gabim kritik:", err);
+    container.innerHTML = "<p>Gabim gjatë ngarkimit të produktit.</p>";
+}
 
                 
                container.innerHTML = `

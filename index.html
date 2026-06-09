@@ -87,7 +87,7 @@ async function loadCategory(cat, containerId) {
 
     // Vizatimi i kartave
     container.innerHTML = data.map(ora => `
-        <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
+        <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">${ora.brand} - ${ora.model}</h3>
           <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/${ora.image_url}">
           <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
           

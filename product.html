@@ -32,7 +32,7 @@
                 const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
                 if (error) throw error;
 
-                const { data: publicUrlData } = supabase.storage.from('images').getPublicUrl(data.image_url || '');
+                const { data: publicUrlData } = supabase.storage.from('or-images').getPublicUrl(data.image_url || '');
                 const fullImageUrl = publicUrlData.publicUrl;
                 
                container.innerHTML = `

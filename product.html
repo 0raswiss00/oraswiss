@@ -32,9 +32,11 @@
                 const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
                 if (error) throw error;
 
-                const { data: publicUrlData } = supabase.storage.from('or-images').getPublicUrl(data.image_url || '');
-                const fullImageUrl = publicUrlData.publicUrl;
-                
+                // Përdor këtë rresht për të qenë i sigurt që e gjen foton
+                const { data: publicUrlData } = supabase.storage
+                  .from('images') // emri i saktë i bucket-it
+                  .getPublicUrl('Untitled folder/' + data.image_url); // shtojmë folderin manualisht
+           
                container.innerHTML = `
                    <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">
                        <img src="${data.image_url ? fullImageUrl : 'https://placehold.co/400x400?text=No+Image'}" alt="${data.model}" style="width:100%; height:auto; margin-bottom:20px;">

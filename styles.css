@@ -22,53 +22,7 @@ ul {
 }
 
 
-/* =========================
-           HEADER
-========================= */
-.site-header {
-    position: sticky;
-    top: 0;
-    background: #000;
-    color: #fff;
-    padding: 16px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 999;
-}
 
-.label {
-    font-weight: bold;
-}
-
-.back-button {
-    color: #fff;
-    text-decoration: none;
-    font-size: 14px;
-    padding: 6px 12px;
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 999px;
-    transition: all 0.2s ease;
-}
-
-.back-button:hover {
-    background: #fff;
-    color: #000;
-}
-.black-bar {
-    background: black;
-    color: white;
-    width: 100%;
-    padding: 20px;
-    text-align: center;     /* E mban shiritin në qendër */
-    position: sticky;       /* Ky e bën të rrijë në vend */
-    top: 0;                 /* Vendoset lart ose ku të duash */
-    z-index: 10;            /* Që të mos ngjitet me sfondin */
-}
-
-.black-bar span {
-    display: inline-block;
-}
 /* =========================
       PRODUCTS SECTION
 ========================= */

@@ -314,10 +314,6 @@ ul {
 
 
 
-.container img {
-    display: inline-block;
-    margin-right: 10px;
-}
 
 .container {
     display: flex;
@@ -377,26 +373,13 @@ ul {
         height: auto;
     }
 }
-/* FIX I FOTOVE – BËJI HORIZONTAL NË TË GJITHA: LUXURY / VINTAGE / PARTS */
-.product-images {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: wrap;
-    gap: 15px;
-}
+
 
 .product-images img {
     height: 200px;
     width: auto;
 }
-/* KUTIA KU VENDOS FOTON NË SFOND */
-.foto-bg {
-  width: 300px;
-  height: 200px;
-  background-image: url('foto/rolex-sfondi.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-}
+
 
 /* OPSIONET E LËVIZJES SË SFONDIT */
 /* Dropdown container */
@@ -526,19 +509,6 @@ ul {
   gap: 20px;
 }
 
-/* Kolonat majtas + djathtas */
-.product-left,
-.product-right {
-  flex: 1;
-}
-
-/* Fotoja */
-.product-left img {
-  width: 100%;
-  border-radius: 12px;
-  display: block;
-  margin-bottom: 15px;
-}
 
 /* Teksti i informacionit */
 .product-info p {
@@ -552,25 +522,8 @@ ul {
   font-size: 16px;
 }
 
-/* ===== PRODUKTI – OMEGA BOX ===== */
-.product {
-  margin: 40px auto;
-  max-width: 1100px;
-}
 
-/* Kolona majtas + djathtas */
-.product-left,
-.product-right {
-  flex: 1 1 340px;              /* madhësi të ngjashme */
-}
 
-/* FOTO E MADHE MAJTAS */
-.product-left img {
-  width: 100%;
-  display: block;
-  border-radius: 16px;
-  object-fit: cover;
-}
 
 /* FORMULARI DJATHTAS */
 .product-right {

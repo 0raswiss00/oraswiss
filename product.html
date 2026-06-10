@@ -28,12 +28,35 @@
                 return;
             }
 
-            try {
-                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-                if (error) throw error;
+try {
+    const { data, error } = await supabase
+        .from('oras')
+        .select('*')
+        .eq('id', id)
+        .single();
 
-                const { data: publicUrlData } = supabase.storage.from('or-images').getPublicUrl(data.image_url || '');
-                const fullImageUrl = publicUrlData.publicUrl;
+    if (error) throw error;
+
+    console.log("DATA:", data);
+    console.log("IMAGE_URL:", data.image_url);
+
+    let fullImageUrl = '';
+
+    // nëse është URL e plotë
+    if (data.image_url && data.image_url.startsWith('http')) {
+        fullImageUrl = data.image_url;
+    } 
+    // nëse është vetëm emër file
+    else {
+        const { data: publicUrlData } =
+            supabase.storage
+                .from('or-images')
+                .getPublicUrl(data.image_url || '');
+
+        fullImageUrl = publicUrlData.publicUrl;
+    }
+
+    console.log("FULL IMAGE URL:", fullImageUrl);
                 
                container.innerHTML = `
                    <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">

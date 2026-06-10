@@ -174,9 +174,9 @@ ul {
 
 /* Foto kryesore */
 .product-main-image {
-    width: 100%;
-    max-width: 380px;
-    border-radius: 12px;
+    width: 50%;
+    max-width: 180px;
+    border-radius: 8px;
     object-fit: contain;
     cursor: pointer;
     transition: 0.3s;
@@ -303,23 +303,8 @@ ul {
     height: 200px;    /* shembull */
 }
 
-.luxury, 
-.vintage, 
-.parts {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;   /* që fotot të mos dalin jashtë ekranit */
-    gap: 15px;         /* hapësirë midis fotove */
-}
 
 
-
-
-.container {
-    display: flex;
-    flex-direction: row; /* i vendos horizontalisht */
-    gap: 10px; /* opsionale, hapësirë mes fotove */
-}
 
 .product-main-image:hover:not(.zoomed) {
     transform: scale(1.03);
@@ -360,19 +345,7 @@ ul {
         max-width: 90%;
     }
 
-    .product-gallery {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        width: 90%;
-        margin-top: 10px;
-    }
 
-    .product-gallery img.thumb {
-        width: 28%;
-        height: auto;
-    }
-}
 
 
 .product-images img {
@@ -497,17 +470,6 @@ ul {
     }
 }
 
-/* Kutia kryesore me dy kolona */
-.product-box {
-  max-width: 1100px;
-  margin: 20px auto;
-  padding: 20px;
-  background: #f7f7f7;
-  border-radius: 18px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-  display: flex;
-  gap: 20px;
-}
 
 
 /* Teksti i informacionit */
@@ -525,11 +487,6 @@ ul {
 
 
 
-/* FORMULARI DJATHTAS */
-.product-right {
-  display: flex;
-  flex-direction: column;
-}
 
 .product-right h3 {
     text-align: center;
@@ -826,15 +783,6 @@ ul {
 }
 
 
-/* Thumbnails poshte produktit Omega */
-.product-gallery img.thumb {
-  margin-right: 6px;   /* hapësira midis fotove */
-  border-radius: 6px;  /* thjesht i bën pak më të buta qoshet */
-}
-
-.product-gallery img.thumb:last-child {
-  margin-right: 0;     /* pa hapësirë pas fotos së fundit */
-}
 
 /* ===== 2-column layout ===== */
 .parts-layout{
@@ -935,18 +883,6 @@ ul {
     font-weight: 600;
 }
 
-/* =========================
-      IMAGE LOGO INDEX
-========================= */
-.logo-center {
-  display: flex;
-  justify-content: center;
-  margin-top: 60px;
-}
-
-.logo-center img {
-  height: 220px;   /* rrite nëse do më të madhe */
-}
 
 /* FIX menu qe pritet ne telefon */
 nav {
@@ -1120,54 +1056,7 @@ nav li {
     object-fit: cover;
 }
 
-/* =========================
-     CATEGORY COLORS
-========================= */
 
-/* Luxury – default */
-.product.luxury h2 {
-    color: #1f2937;
-}
-
-/* Vintage */
-.product.vintage h2 {
-    color: #8B5E3C;
-}
-
-/* Parts */
-.product.part h2 {
-    color: #333;
-}
-
-
-.luxury-vintage-parts-photos img {
-    width: auto;      /* ose vendos gjerësinë që do */
-    height: 200px;    /* shembull */
-}
-
-.luxury, 
-.vintage, 
-.parts {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;   /* që fotot të mos dalin jashtë ekranit */
-    gap: 15px;         /* hapësirë midis fotove */
-}
-
-.container img {
-    display: inline-block;
-    margin-right: 10px;
-}
-
-.container {
-    display: flex;
-    flex-direction: row; /* i vendos horizontalisht */
-    gap: 10px; /* opsionale, hapësirë mes fotove */
-}
-
-.product-main-image:hover:not(.zoomed) {
-    transform: scale(1.03);
-}
 
 /* =========================
           RESPONSIVE
@@ -1303,64 +1192,6 @@ nav li {
   cursor:pointer;
 }
       
-/* KUTIA KU VENDOS FOTON NË SFOND */
-
-#lightbox{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.85);
-  justify-content:center;
-  align-items:center;
-  z-index:9999;
-}
-
-#lightboxImg{
-  max-width:92vw;
-  max-height:85vh;
-  border-radius:12px;
-}
-
-/* Dropdown container */
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-/* Dropdown content */
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: white;
-    min-width: 180px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-    z-index: 10;
-    border-radius: 6px;
-}
-
-.dropdown-content a {
-    color: #333;
-    padding: 10px 14px;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown-content a:hover {
-    background-color: #f2f2f2;
-}
-
-/* Show menu on hover */
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-/* Logo Text Style */
-.site-title {
-    font-size: 32px;
-    font-weight: bold;
-    color: white;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
 
 /* Kuti përshkrimi me scroll për Ora Swiss */
 .description-scroll {

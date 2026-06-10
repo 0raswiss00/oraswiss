@@ -1,126 +1,115 @@
-<!doctype html>
-<html lang="sq">
+ <!doctype html>
+<html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <title>Home - Ora Swiss</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ora Swiss</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
-    
-    /* Navigation Bar */
-    .nav-header { margin-bottom: 50px; text-align: center; }
-    .nav-header a { background: #2a2a8e; color: #fff; padding: 10px 20px; border-radius: 20px; text-decoration: none; margin: 0 10px; font-weight: bold; }
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
+    .site-header{position:sticky;top:0;z-index:9999;background:#111}
+    .nav-scroll{display:flex;gap:18px;align-items:center;overflow-x:auto;padding:14px 16px}
+    .nav-scroll a{color:#fff;text-decoration:none;padding:6px 10px}
+    .nav-scroll a:hover{color:gold}
+    .site-title{font-weight:700;line-height:1.05;margin-right:10px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));gap:20px;padding:30px 16px}
+    .card{background:#111;padding:15px;border-radius:10px;border:1px solid #333}
+    .price{color:#25D366;font-weight:bold;margin-top:10px}
+    h2{padding:20px 16px 0;margin:0}
+    <section>
+  <h2>Luxury Watches</h2>
+  <div id="luxury-container" class="grid"></div>
+</section>
 
-    /* Single Large Featured Product Styling */
-    .hero-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      max-width: 800px; /* Limits overall width for better layout */
-      margin: 0 auto;
-      background: #111;
-      padding: 30px;
-      border-radius: 15px;
-      border: 1px solid #333;
-    }
-
-    .hero-image {
-      width: 100%; /* Spans full container width */
-      height: 600px; /* Sets a fixed, large height */
-      object-fit: cover; /* Ensures the image fills without distorting */
-      border-radius: 10px;
-      margin-bottom: 25px;
-    }
-
-    .hero-details { text-align: center; width: 100%; }
-    .hero-title { font-size: 2.5em; margin: 10px 0; cursor: pointer; color: #fff; }
-    .hero-title:hover { color: #aaa; }
-    .hero-ref { color: #ccc; font-size: 1.1em; margin-bottom: 15px; }
-    .price { color: #25D366; font-weight: bold; font-size: 2em; margin-bottom: 25px; }
-
-    /* Forms and Buttons */
-    .btn-main { border-radius: 20px; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; }
-    .btn-secondary { background: #ccc; color: #000; }
-    .btn-buy { background: #f0c14b; color: #000; width: 100%; font-size: 1.2em; }
-    
-    .contact-form { width: 100%; max-width: 400px; margin: 0 auto 30px auto; text-align: center; }
-    .input-email { width: 100%; margin: 5px 0 15px 0; padding: 12px; box-sizing: border-box; border-radius: 5px; border: 1px solid #333; background: #222; color: #fff; }
+  <section>
+    <h2>Vintage Watches</h2>
+    <div id="vintage-container" class="grid"></div>
+  </section>
   </style>
+  <!-- Supabase Script -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 </head>
 <body>
 
-  <div class="nav-header">
-    <a href="index.html">Home</a>
-    <a href="luxury.html">Luxury 3</a>
-    <a href="vintage.html">Vintage 2</a>
-    <a href="parts.html">Parts 1</a>
-  </div>
+<header class="site-header">
+  <nav class="nav-scroll">
+    <span class="site-title">ORA<br>SWISS</span>
+    <a href="register.html">Register</a>
+    <a href="sellnow.html">Sell Now</a>
+    <a href="home.html">Home</a>
+    <a href="luxury.html">Luxury</a>
+    <a href="vintage.html">Vintage</a>
+    <a href="parts.html">Parts</a>
+    <a href="separate-parts.html">Separate Parts</a>
+    <a href="service.html">Service</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="jewelry.html">Jewelry</a>
+    <a href="policy.html">Policy</a>
+    <a href="sell.html">Sell</a>
+  </nav>
+</header>
 
-  <div id="featured-ora-container">
-    <p style="text-align:center;">Duke ngarkuar koleksionin e veçantë...</p>
-  </div>
+<!-- Seksionet Dinamike -->
+<h2>Luxury Collection</h2>
+<div id="luxury-container" class="grid">Loading...</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
+<h2>Vintage Collection</h2>
+<div id="vintage-container" class="grid">Loading...</div>
+
+<h2>Parts Collection</h2>
+<div id="parts-container" class="grid">Loading...</div>
+
+
 <script>
-  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-  const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
-  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const supabase = window.supabase.createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
+  );
 
-  async function loadFeaturedOra() {
-    const container = document.getElementById("featured-ora-container");
+async function loadCategory(cat, containerId) {
+    const container = document.getElementById(containerId);
     
-    // --- THIS FETCHES ONLY ONE ITEM FROM 'oras' TABLE ---
-    const { data, error } = await client
-      .from('oras')
-      .select('*')
-      .limit(1) // Only get the first item
-      .single(); // Simplify result to single object, not array
+    // Filtri këtu siguron që të merren vetëm orët e kategorisë së kërkuar
+    const { data, error } = await supabase
+        .from('oras')
+        .select('*')
+        .eq('category', cat); 
 
     if (error) {
-      container.innerHTML = "<p style='text-align:center;'>Gabim: " + error.message + "</p>";
-      return;
+        console.error("Gabim:", error);
+        return;
     }
 
-    if (!data) {
-      container.innerHTML = "<p style='text-align:center;'>Nuk ka artikuj për të shfaqur.</p>";
-      return;
+    if (!data || data.length === 0) {
+        container.innerHTML = "No items in this category.";
+        return;
     }
 
-    const ora = data;
-
-    // Use the reliable SDK method to get the final image URL
-    const { data: publicUrlData } = client.storage
-      .from('or-images') 
-      .getPublicUrl(ora.image_url);
-
-    const finalImageUrl = publicUrlData.publicUrl;
-
-    // --- GENERATE SINGLE HERO LAYOUT ---
-    container.innerHTML = `
-      <div class="hero-container">
-        <img src="${finalImageUrl}" alt="${ora.model}" class="hero-image">
-        
-        <div class="hero-details">
-          <h1 class="hero-title" onclick="window.location.href='product.html?id=${ora.id}'">
-            ${ora.brand} - ${ora.model}
-          </h1>
-          <p class="hero-ref">Ref: ${ora.reference || 'N/A'}</p>
-          <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-          
-          <div class="contact-form">
-            <input type="email" placeholder="Emaili yt për interesim" class="input-email">
+    // Vizatimi i kartave
+    container.innerHTML = data.map(ora => `
+        <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
+            <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/${ora.image_url}">
+            <h3>${ora.brand} - ${ora.model}</h3>
+            <p>Ref: ${ora.reference}</p>
+            <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
+            <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;">
             <button class="btn-main btn-secondary">Send Request</button>
-          </div>
           
-          <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
-            <button class="btn-main btn-buy">🛒 Buy Now</button>
-          </a>
+            <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
+              <button class="btn-main btn-buy" style="margin-top:5px;">🛒 Buy Now</button>
+            </a>
+          
+            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')">❤️ Like</button>
+            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
         </div>
-      </div>
-    `;
-  }
+    `).join('');
+}
 
-  loadFeaturedOra();
+
+    // Këto janë thirrjet e vetme që duhet të kesh
+    loadCategory('luxury', 'luxury-container');
+    loadCategory('vintage', 'vintage-container');
+    loadCategory('parts', 'parts-container');
 </script>
-
-</body>
+</body>  
 </html>

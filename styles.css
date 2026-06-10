@@ -116,52 +116,6 @@ ul {
   color:#f1e2b6;
 }
 
-/* =========================
-      IMAGE LAYOUT (ALL)
-========================= */
-.product-images {
-    display: flex;
-    gap: 18px;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-/* Foto kryesore */
-.product-main-image {
-    width: 50%;
-    max-width: 180px;
-    border-radius: 8px;
-    object-fit: contain;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-/* Zoom image */
-.product-main-image.zoomed {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1.5);
-    z-index: 9999;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-    background: white;
-}
-
-/* Gallery thumbnails */
-.product-gallery {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-}
-
-.product-gallery img.thumb {
-    width: 90px;
-    height: 90px;
-    object-fit: cover;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.2s;
-}
 
 /* VIDEO thumbnail – same size as images */
 .product-gallery video.thumb {

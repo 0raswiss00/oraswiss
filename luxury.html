@@ -61,21 +61,14 @@
       return;
     }
 
-data.forEach(ora => {
-      // 1. Merr URL-në e saktë përmes Supabase SDK
-      const { data: publicUrlData } = client.storage
-        .from('or-images') // Emri i bucket-it tuaj
-        .getPublicUrl(ora.image_url);
-
-      const finalImageUrl = publicUrlData.publicUrl;
+    data.forEach(ora => {
+      const img = ora.image_url ? SUPABASE_URL + "/storage/v1/object/public/or-images/" + ora.image_url : "path/to/placeholder.jpg";
       
-      // 2. Shto kartën në container
       container.innerHTML += `
         <div class="card">
-          <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">${ora.brand} - ${ora.model}</h3>
-          
-          <img src="${finalImageUrl}" alt="${ora.model}">
-          
+
+<h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">${ora.brand} - ${ora.model}</h3>
+          <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/${ora.image_url}" ... >
           <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
           
           <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;">
@@ -85,11 +78,12 @@ data.forEach(ora => {
             <button class="btn-main btn-buy" style="margin-top:5px;">🛒 Buy Now</button>
           </a>
           
-          <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')">❤️ Like</button>
-          <button class="btn-main btn-secondary" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
+            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')">❤️ Like</button>
+            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
         </div>
       `;
     });
+  }
 
   loadOras();
 </script>

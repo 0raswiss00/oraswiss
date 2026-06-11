@@ -67,7 +67,7 @@
         <div class="card">
 
 <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">${ora.brand} - ${ora.model}</h3>
-          <img src="${data.image_url}" style="width:100%; border-radius:8px;">
+          <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/${ora.image_url}">
           <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
           
           <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;">

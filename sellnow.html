@@ -73,33 +73,7 @@
     e.preventDefault();
     
    // Mbledhja e të dhënave nga formulari
-// 1. Kapim foton dhe të dhënat
-  const fileInput = document.getElementById('fileInput');
-  const file = fileInput.files[0];
-  
-  if (!file) {
-      alert("Ju lutem zgjidhni një foto!");
-      return;
-  }
-
-  // 2. Ngarkojmë foton në 'or-images'
-  const fileName = ${Date.now()}_${file.name};
-  const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('or-images')
-      .upload(fileName, file);
-
-  if (uploadError) {
-      alert("Gabim në ngarkim: " + uploadError.message);
-      return;
-  }
-
-  // 3. Marrim linkun publik
-  const { data: publicUrlData } = supabase.storage
-      .from('or-images')
-      .getPublicUrl(fileName);
-
-  // 4. Mbledhim të dhënat dhe shtojmë image_url
-  const oraData = {
+   const oraData = {
      brand: document.getElementById('brand').value,
      model: document.getElementById('model').value,
      reference: document.getElementById('reference').value,
@@ -111,10 +85,15 @@
      service: document.getElementById('service').checked,
      box_papers: document.getElementById('box_papers').checked,
      description: document.getElementById('description').value,
+  
+     // SHTO KËTO TË DYJA KËTU:
      category: document.getElementById('category').value,
-     price: parseInt(document.getElementById('price').value) || 0,
-     image_url: publicUrlData.publicUrl // <--- Kjo e ruan foton që të shfaqet pastaj
-  };
+     price: parseInt(document.getElementById('price').value) || 0
+   };
+  
+    // Dërgimi te tabela 'oras'
+    const { error } = await supabase.from('oras').insert([oraData]);
+
     if (error) {
       alert("Gabim: " + error.message);
     } else {

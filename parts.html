@@ -44,10 +44,10 @@ async function loadOras() {
   // ----------------------------------------
 
   // Marrim të dhënat nga Supabase (duke i filtruara sipas kategorisë nëse dëshiron)
-// Marrim të dhënat nga Supabase (pa filtrim që të shohim nëse punojnë fotot)
   const { data, error } = await client
     .from('oras')
-    .select('*'); // Rreshti .eq(...) u hoq këtu
+    .select('*')
+    .eq('category', category); // Kjo i filtron që të shfaqen vetëm pjesët (parts)
 
   if (error) {
     console.error("Gabim gjatë marrjes së të dhënave:", error);
@@ -60,27 +60,22 @@ async function loadOras() {
   // KËTU FILLON LOOP-I I RREGULLUAR ME FOTOT:
   data.forEach(ora => {
     
-// 1. Logjika e fotos e rregulluar saktë me linkun e Supabase
-    let imgUrl = "placeholder.jpg"; 
-    if (ora.image_url && ora.image_url !== 'null' && ora.image_url !== '') {
-      if (ora.image_url.startsWith('http')) {
-        imgUrl = ora.image_url;
-      } else {
-        imgUrl = SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url;
-      }
-    }
+    // 1. Logjika e fotos llogaritet jashtë thonjëzave të HTML-së
+    const imgUrl = ora.image_url 
+      ? (ora.image_url.startsWith('http') ? ora.image_url : SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url) 
+      : "placeholder.jpg"; // Imazh default nëse është NULL
       
-    // 2. Krijojmë linkun për butonin Share (Kujdes thonjëzat e pjerrëta  )
+    // 2. Krijojmë linkun për butonin Share
     const productUrl = ${window.location.origin}/product.html?id=${ora.id};
 
-    // 3. Injektojmë HTML-në
+    // 3. Injektojmë HTML-në e pastër pa shkrime kodi në ekran
     container.innerHTML += `
       <div class="card">
         <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">
           ${ora.brand} - ${ora.model}
         </h3>
         
-        <img src="${imgUrl}" alt="${ora.brand}" style="width:100%; height:200px; object-fit:cover;">
+        <img src="${imgUrl}" alt="${ora.brand}" style="width:100%; height:200px; object-fit:cover; border-radius:8px;">
         
         <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
         

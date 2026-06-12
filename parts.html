@@ -60,15 +60,20 @@ async function loadOras() {
   // KËTU FILLON LOOP-I I RREGULLUAR ME FOTOT:
   data.forEach(ora => {
     
-    // 1. Logjika e fotos llogaritet jashtë thonjëzave të HTML-së
-    const imgUrl = ora.image_url 
-      ? (ora.image_url.startsWith('http') ? ora.image_url : SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url) 
-      : "placeholder.jpg"; // Imazh default nëse është NULL
+// 1. Logjika e fotos e rregulluar saktë me linkun e Supabase
+    let imgUrl = "placeholder.jpg"; 
+    if (ora.image_url && ora.image_url !== 'null' && ora.image_url !== '') {
+      if (ora.image_url.startsWith('http')) {
+        imgUrl = ora.image_url;
+      } else {
+        imgUrl = SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url;
+      }
+    }
       
-    // 2. Krijojmë linkun për butonin Share
+    // 2. Krijojmë linkun për butonin Share (Kujdes thonjëzat e pjerrëta  )
     const productUrl = ${window.location.origin}/product.html?id=${ora.id};
 
-    // 3. Injektojmë HTML-në e pastër pa shkrime kodi në ekran
+    // 3. Injektojmë HTML-në
     container.innerHTML += `
       <div class="card">
         <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">

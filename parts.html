@@ -44,10 +44,10 @@ async function loadOras() {
   // ----------------------------------------
 
   // Marrim të dhënat nga Supabase (duke i filtruara sipas kategorisë nëse dëshiron)
+// Marrim të dhënat nga Supabase (pa filtrim që të shohim nëse punojnë fotot)
   const { data, error } = await client
     .from('oras')
-    .select('*')
-    .eq('category', category); // Kjo i filtron që të shfaqen vetëm pjesët (parts)
+    .select('*'); // Rreshti .eq(...) u hoq këtu
 
   if (error) {
     console.error("Gabim gjatë marrjes së të dhënave:", error);

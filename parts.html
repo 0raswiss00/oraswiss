@@ -67,24 +67,32 @@
         <div class="card">
 
 <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">${ora.brand} - ${ora.model}</h3>
-          const img = ora.image_url 
-           ? (ora.image_url.startsWith('http') ? ora.image_url : SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url) 
-           : "placeholder.jpg"; // Vendosni një imazh default nëse është NULL
-          <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
-          
-          <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;">
-          <button class="btn-main btn-secondary">Send Request</button>
-          
-          <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
-            <button class="btn-main btn-buy" style="margin-top:5px;">🛒 Buy Now</button>
-          </a>
-          
-            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')">❤️ Like</button>
-            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
-        </div>
-      `;
-    });
-  }
+// 1. Logjika e fotos ekzekutohet fillimisht KËTU (jashtë HTML-së)
+const imgUrl = ora.image_url 
+  ? (ora.image_url.startsWith('http') ? ora.image_url : SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url) 
+  : "placeholder.jpg"; // Vendosni një imazh default nëse është NULL
+
+// 2. Tani fillon injektimi në HTML
+container.innerHTML += `
+  <div class="card">
+    <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">
+      ${ora.brand} - ${ora.model}
+    </h3>
+    
+    <img src="${imgUrl}" alt="${ora.brand}" style="width:100%; object-fit:cover;">
+    
+    <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+    
+    <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;">
+    <button class="btn-main btn-secondary">Send Request</button>
+    
+    ${ora.paypal_link ? `
+      <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
+        <button class="btn-main btn-buy" style="margin-top:5px;">🛒 Buy Now</button>
+      </a>
+    ` : ''}
+  </div>
+`;
 
   loadOras();
 </script>

@@ -85,25 +85,50 @@ async function loadCategory(cat, containerId) {
         return;
     }
 
+// ========================================================
+    // ZËVENDËSO NGA RRESHTI 88 DERI TE 105 ME KËTË KOD:
+    // ========================================================
+    
     // Vizatimi i kartave
-    container.innerHTML = data.map(ora => `
-        <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
-            <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/${ora.image_url}">
-            <h3>${ora.brand} - ${ora.model}</h3>
-            <p>Ref: ${ora.reference}</p>
-            <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-            <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;">
-            <button class="btn-main btn-secondary">Send Request</button>
-          
-            <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
-              <button class="btn-main btn-buy" style="margin-top:5px;">🛒 Buy Now</button>
-            </a>
-          
-            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')">❤️ Like</button>
-            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
-        </div>
-    `).join('');
-}
+    container.innerHTML = data.map(ora => {
+        
+        // 1. Përcaktojmë imazhin rezervë nëse produkti nuk ka foto
+        let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+
+        // 2. Lexojmë kolonën e saktë 'image-url' me vizë në mes
+        if (ora['image-url']) {
+            // Nëse është listë (Array) me shumë foto, merr të parën
+            if (Array.isArray(ora['image-url']) && ora['image-url'].length > 0) {
+                imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/" + ora['image-url'][0];
+            } 
+            // Nëse është thjesht një tekst string (format i vjetër)
+            else if (typeof ora['image-url'] === 'string' && ora['image-url'] !== 'null' && ora['image-url'].trim() !== '') {
+                if (ora['image-url'].startsWith('http')) {
+                    imgUrl = ora['image-url'];
+                } else {
+                    imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/" + ora['image-url'];
+                }
+            }
+        }
+
+        // 3. Kthejmë HTML-në e kartës me linkun e saktë të fotos
+        return `
+            <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
+                <img src="${imgUrl}" alt="${ora.brand || 'Ora'}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 4px;">
+                <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
+                <p>Ref: ${ora.reference || '/'}</p>
+                <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
+                <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;" onclick="event.stopPropagation();">
+                <button class="btn-main btn-secondary" onclick="event.stopPropagation();">Send Request</button>
+                
+                ${ora.paypal_link ? `
+                <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;" onclick="event.stopPropagation();">
+                    <button class="btn-main btn-buy" style="margin-top:5px;">🛒 Buy Now</button>
+                </a>
+                ` : ''}
+            </div>
+        `;
+    }).join('');
 
 
     // Këto janë thirrjet e vetme që duhet të kesh

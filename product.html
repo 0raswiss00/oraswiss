@@ -32,12 +32,26 @@
                 const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
                 if (error) throw error;
 
-                const { data: publicUrlData } = supabase.storage.from('or-images').getPublicUrl(data.image_url || '');
-                const fullImageUrl = publicUrlData.publicUrl;
+      let fotoHTML = '';
+      if (data.image_url && data.image_url !== 'null' && data.image_url !== '') {
+          // Ndajmë emrat e fotove në një listë
+          const fotoList = data.image_url.split(',');
+    
+          fotoList.forEach(fotoEmri => {
+              // Marrim URL-në publike nga Supabase për secilin emër fotoje
+              const { data: publicUrlData } = supabase.storage.from('or-images').getPublicUrl(fotoEmri.trim());
+              const fullImageUrl = publicUrlData.publicUrl;
+        
+              // Shtojmë tagun e fotos në listë
+              fotoHTML += <img src="${fullImageUrl}" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 10px;">;
+          });
+      } else {
+          fotoHTML = <img src="https://placeholder.co/600x400/222/fff?text=No+Image" style="width: 100%; height: auto; border-radius: 10px;">;
+      }
                 
                container.innerHTML = `
                    <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">
-                       <img src="${data.image_url ? fullImageUrl : '...'}" style="width: 100%; height: auto; border-radius: 10px;">
+                       ${fotoHTML}
                        <h1>${data.brand} ${data.model}</h1>
                        <p><strong>Price:</strong> ${data.price} €</p>
         

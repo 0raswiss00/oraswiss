@@ -62,14 +62,21 @@
 
     data.forEach(ora => {
 // Rreshti 64 e poshtë: Logjika e fotos me if/else (Zëvendëson rreshtat 64 dhe 65)
-    let imgUrl = "https://placehold.co/600x400/222/fff?text=No+Image"; 
-    if (ora.image_url && ora.image_url !== 'null' && ora.image_url !== '') {
-      if (ora.image_url.startsWith('http')) {
-        imgUrl = ora.image_url;
-      } else {
-        imgUrl = SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url;
-      }
-    }
+let fotoHTML = '';
+if (ora.image_url && ora.image_url !== 'null' && ora.image_url !== '') {
+    const fotoList = ora.image_url.split(',');
+    fotoList.forEach(fotoEmri => {
+        let singelImgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+        if (fotoEmri.trim().startsWith('http')) {
+            singelImgUrl = fotoEmri.trim();
+        } else {
+            singelImgUrl = SUPABASE_URL + "/storage/v1/object/public/images/" + fotoEmri.trim();
+        }
+        fotoHTML += <img src="${singelImgUrl}" alt="${ora.brand || 'Ora'}" style="width: 100%; height: 200px; object-fit: cover; margin-bottom: 5px;">;
+    });
+} else {
+    fotoHTML = <img src="https://placeholder.co/600x400/222/fff?text=No+Image" style="width: 100%; height: 200px; object-fit: cover;">;
+}
 
     // Rreshti 66: Injektimi në HTML
     container.innerHTML += `

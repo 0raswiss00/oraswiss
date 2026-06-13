@@ -82,56 +82,56 @@ data.forEach(ora => {
         : ''; 
 
     // 3. Rreshti 66: Injektimi i plotë në HTML
-  container.innerHTML = data.map(ora => {
+container.innerHTML = data.map(ora => {
 
-      // 1. Ndërtimi i linkut të fotos
-      let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-      if (ora['image-url']) {
-          if (Array.isArray(ora['image-url']) && ora['image-url'].length > 0) {
-              imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/" + ora['image-url'][0];
-          } else if (typeof ora['image-url'] === 'string' && ora['image-url'].trim() !== '') {
-              if (ora['image-url'].startsWith('http')) {
-                  imgUrl = ora['image-url'];
-              } else {
-                  imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/" + ora['image-url'];
-              }
-          }
-      }
+    // 1. Ndërtimi i linkut të fotos
+    let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+    if (ora['image-url']) {
+        if (Array.isArray(ora['image-url']) && ora['image-url'].length > 0) {
+            imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/" + ora['image-url'][0];
+        } else if (typeof ora['image-url'] === 'string' && ora['image-url'].trim() !== '') {
+            if (ora['image-url'].startsWith('http')) {
+                imgUrl = ora['image-url'];
+            } else {
+                imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/" + ora['image-url'];
+            }
+        }
+    }
 
-      // 2. Kthimi i HTML-së së saktësuar
-      return `
-      <div class="card" onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">
-          <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
-          <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
-          <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>
-          <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+    // 2. Kthimi i HTML-së së saktësuar
+    return `
+    <div class="card" onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">
+        <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
+        <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
+        <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>
+        <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
 
-          <input type="email" id="email_${ora.id}" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:10px; box-sizing:border-box;" onclick="event.stopPropagation();">
+        <input type="email" id="email_${ora.id}" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:10px; box-sizing:border-box;" onclick="event.stopPropagation();">
         
-          <button class="btn-main btn-secondary" style="width:100%; margin-top:5px;" onclick="event.stopPropagation(); const emailVal = document.getElementById('email_${ora.id}').value; if(!emailVal){ alert('Ju lutem vendosni email-in tuaj!'); return; } alert('Kërkesa u dërgua për email-in: ' + emailVal);">
-              Send Request
-          </button>
+        <button class="btn-main btn-secondary" style="width:100%; margin-top:5px;" onclick="event.stopPropagation(); const emailVal = document.getElementById('email_${ora.id}').value; if(!emailVal){ alert('Ju lutem vendosni email-in tuaj!'); return; } alert('Kërkesa u dërgua për email-in: ' + emailVal);">
+            Send Request
+        </button>
 
-          ${ora.price && ora.paypal_link ? `
-          <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;" onclick="event.stopPropagation();">
-              <button class="btn-main btn-buy" style="width:100%; margin-top:5px; background-color:#ffeb00; color:#000; font-weight:bold; padding:10px; border:none; border-radius:5px; cursor:pointer;">
-                  🛒 Buy Now
-              </button>
-          </a>
-          ` : ''}
+        ${ora.price && ora.paypal_link ? `
+        <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;" onclick="event.stopPropagation();">
+            <button class="btn-main btn-buy" style="width:100%; margin-top:5px; background-color:#ffeb00; color:#000; font-weight:bold; padding:10px; border:none; border-radius:5px; cursor:pointer;">
+                🛒 Buy Now
+            </button>
+        </a>
+        ` : ''}
 
-          <div style="display: flex; gap: 5px; margin-top: 5px;">
-              <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #333; cursor:pointer;" onclick="event.stopPropagation(); this.style.background = '#444'; alert('Liked!')">
-                  ❤️ Like
-              </button>
+        <div style="display: flex; gap: 5px; margin-top: 5px;">
+            <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #333; cursor:pointer;" onclick="event.stopPropagation(); this.style.background = '#444'; alert('Liked!')">
+                ❤️ Like
+            </button>
             
-              <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #333; cursor:pointer;" onclick="event.stopPropagation(); const productUrl = window.location.origin + '/product.html?id=${ora.id}'; navigator.clipboard.writeText(productUrl).then(() => { alert('Linku i produktit u kopjua!'); }).catch(err => { alert('Gabim gjatë kopjimit!'); });">
-                  🔗 Share
-              </button>
-          </div>
-      </div>
-      `;
-  }).join('');
+            <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #333; cursor:pointer;" onclick="event.stopPropagation(); const productUrl = window.location.origin + '/product.html?id=${ora.id}'; navigator.clipboard.writeText(productUrl).then(() => { alert('Linku i produktit u kopjua!'); }).catch(err => { alert('Gabim gjatë kopjimit!'); });">
+                🔗 Share
+            </button>
+        </div>
+    </div>
+    `;
+}).join('');
 }
 
   loadOras();

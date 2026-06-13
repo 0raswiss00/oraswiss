@@ -1,99 +1,85 @@
-<!doctype html>
-<html lang="sq">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <title>Parts - Ora Swiss</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
-    /* Stili për butonat si te image_19.png */
-    .nav-filters { margin-bottom: 30px; }
-    .nav-filters a { background: #2a2a8e; color: #fff; padding: 8px 15px; border-radius: 20px; text-decoration: none; margin-right: 10px; font-weight: bold; }
-    
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-    .card { background: #111; padding: 15px; border-radius: 10px; border: 1px solid #333; }
-    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
-    .price { color: #25D366; font-weight: bold; margin-top: 10px; font-size: 1.2em; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OraSwiss</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #111; color: #fff; padding: 20px; }
+        .container { display: flex; flex-wrap: wrap; gap: 20px; }
+        .card { border: 1px solid #333; padding: 15px; border-radius: 8px; width: 250px; background: #222; cursor: pointer; }
+        .card img { border-radius: 4px; }
+        .price { font-weight: bold; color: #00ff00; margin-top: 10px; }
+        .btn-main { width: 100%; padding: 8px; margin-top: 5px; border: none; cursor: pointer; }
+        .btn-secondary { background: #555; color: #fff; }
+        .btn-buy { background: #ff9900; color: #000; font-weight: bold; }
+    </style>
 </head>
 <body>
 
-  <!-- Butonat e navigimit -->
-  <div class="nav-filters">
-    <a href="luxury.html">Luxury 3</a>
-    <a href="vintage.html">Vintage 2</a>
-    <a href="parts.html">Parts 1</a>
-  </div>
+    <h2>Ora Collection</h2>
+    <div id="oras-container" class="container">Duke ngarkuar...</div>
 
-  <h1>Parts Collection</h1>
-  <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
+    <script>
+    async function loadCategory(cat, containerId) {
+        const container = document.getElementById(containerId);
+        
+        const { data, error } = await supabase
+            .from('oras')
+            .select('*')
+            .eq('category', cat);
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-<script>
-  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-  const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
-  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-  async function loadOras() {
-    const container = document.getElementById("oras-container");
-    
-    // --- KËTU ËSHTË NDRYSHIMI PËR ÇDO FAQE ---
-    // Në luxury.html shkruaj 'luxury'
-    // Në vintage.html shkruaj 'vintage'
-    // Në parts.html shkruaj 'parts'
-    const category = 'parts'; 
-    // ----------------------------------------
-
-    const { data, error } = await client
-      .from('oras')
-      .select('*')
-      .eq('category', category);
-
-    if (error) {
-      container.innerHTML = "Gabim: " + error.message;
-      return;
-    }
-
-    container.innerHTML = "";
-    
-    if (data.length === 0) {
-      container.innerHTML = "<p>Nuk ka artikuj në këtë kategori.</p>";
-      return;
-    }
-
-data.forEach(ora => {
-        let fotoHTML = '';
-        let fushaFotos = ora.image_url || ora['image-url'] || '';
-
-        if (fushaFotos && fushaFotos !== 'null' && fushaFotos !== '') {
-            const fotoList = String(fushaFotos).split(',');
-            fotoList.forEach(fotoEmri => {
-                let singleImgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-                if (fotoEmri.trim().startsWith('http')) {
-                    singleImgUrl = fotoEmri.trim();
-                } else {
-                    singleImgUrl = SUPABASE_URL + "/storage/v1/object/public/images/" + fotoEmri.trim();
-                }
-                fotoHTML += <img src="${singleImgUrl}" alt="${ora.brand || 'Ora'}" style="width: 100%; height: 200px; object-fit: cover; margin-bottom: 5px;">;
-            });
-        } else {
-            fotoHTML = <img src="https://placeholder.co/600x400/222/fff?text=No+Image" style="width: 100%; height: 200px; object-fit: cover;">;
+        if (error) {
+            console.error("Gabim gjatë marrjes së të dhënave:", error);
+            container.innerHTML = "Error loading items.";
+            return;
         }
 
-        container.innerHTML += `
-            <div class="card">
-                <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">
-                    ${ora.brand} - ${ora.model}
-                </h3>
-                
+        if (!data || data.length === 0) {
+            container.innerHTML = "No items in this category.";
+            return;
+        }
+
+        const html = data.map(ora => {
+            let fotoHTML = '';
+            let fushaFotos = ora.image_url || ora['image-url'] || '';
+
+            if (fushaFotos && fushaFotos !== 'null' && fushaFotos !== '') {
+                const fotoList = String(fushaFotos).split(',');
+                fotoList.forEach(fotoEmri => {
+                    let singleImgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+                    if (fotoEmri.trim().startsWith('http')) {
+                        singleImgUrl = fotoEmri.trim();
+                    } else {
+                        singleImgUrl = "https://gnwsrmelmeqduhmhfmoa.supabase.co/storage/v1/object/public/images/" + fotoEmri.trim();
+                    }
+                    fotoHTML += <img src="${singleImgUrl}" alt="${ora.brand || 'Ora'}" style="width: 100%; height: 200px; object-fit: cover; margin-bottom: 5px;">;
+                });
+            } else {
+                fotoHTML = <img src="https://placeholder.co/600x400/222/fff?text=No+Image" style="width: 100%; height: 200px; object-fit: cover;">;
+            }
+
+            return `
+            <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
                 ${fotoHTML}
+                <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
+                <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>
+                <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
                 
-                <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+                <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding: 5px;" onclick="event.stopPropagation();">
+                <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Request Sent!');">Send Request</button>
+                
+                ${ora.paypal_link ? `
+                <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;" onclick="event.stopPropagation();">
+                    <button class="btn-main btn-buy">🛒 Buy Now</button>
+                </a>
+                ` : ''}
             </div>
-        `;
-    });
+            `;
+        }).join('');
 
-  loadOras();
-</script>
-
+        container.innerHTML = html;
+    }
+    </script>
 </body>
 </html>

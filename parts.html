@@ -1,85 +1,151 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OraSwiss</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #111; color: #fff; padding: 20px; }
-        .container { display: flex; flex-wrap: wrap; gap: 20px; }
-        .card { border: 1px solid #333; padding: 15px; border-radius: 8px; width: 250px; background: #222; cursor: pointer; }
-        .card img { border-radius: 4px; }
-        .price { font-weight: bold; color: #00ff00; margin-top: 10px; }
-        .btn-main { width: 100%; padding: 8px; margin-top: 5px; border: none; cursor: pointer; }
-        .btn-secondary { background: #555; color: #fff; }
-        .btn-buy { background: #ff9900; color: #000; font-weight: bold; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ora Swiss</title>
+  <style>
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
+    .site-header{position:sticky;top:0;z-index:9999;background:#111}
+    .nav-scroll{display:flex;gap:18px;align-items:center;overflow-x:auto;padding:14px 16px}
+    .nav-scroll a{color:#fff;text-decoration:none;padding:6px 10px}
+    .nav-scroll a:hover{color:gold}
+    .site-title{font-weight:700;line-height:1.05;margin-right:10px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));gap:20px;padding:30px 16px}
+    .card{background:#111;padding:15px;border-radius:10px;border:1px solid #333}
+    .price{color:#25D366;font-weight:bold;margin-top:10px}
+    h2{padding:20px 16px 0;margin:0}
+
+        .card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      border-radius: 8px;
+    }
+
+  </style>
+  <!-- Supabase Script -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 </head>
 <body>
 
-    <h2>Ora Collection</h2>
-    <div id="oras-container" class="container">Duke ngarkuar...</div>
+<header class="site-header">
+  <nav class="nav-scroll">
+    <span class="site-title">ORA<br>SWISS</span>
+    <a href="register.html">Register</a>
+    <a href="sellnow.html">Sell Now</a>
+    <a href="home.html">Home</a>
+    <a href="luxury.html">Luxury</a>
+    <a href="vintage.html">Vintage</a>
+    <a href="parts.html">Parts</a>
+    <a href="separate-parts.html">Separate Parts</a>
+    <a href="service.html">Service</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="jewelry.html">Jewelry</a>
+    <a href="policy.html">Policy</a>
+    <a href="sell.html">Sell</a>
+  </nav>
+</header>
 
-    <script>
-    async function loadCategory(cat, containerId) {
-        const container = document.getElementById(containerId);
+<!-- Seksionet Dinamike -->
+<!-- Seksionet Dinamike -->
+<h2>Luxury Collection</h2>
+<div id="luxury-container" class="grid">Loading...</div>
+
+<h2>Vintage Collection</h2>
+<div id="vintage-container" class="grid">Loading...</div>
+
+<h2>Parts Collection</h2>
+<div id="parts-container" class="grid">Loading...</div>
+
+<script>
+  const supabase = window.supabase.createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
+  );
+
+async function loadCategory(cat, containerId) {
+    const container = document.getElementById(containerId);
+    
+    // Filtri këtu siguron që të merren vetëm orët e kategorisë së kërkuar
+    const { data, error } = await supabase
+        .from('oras')
+        .select('*')
+        .eq('category', cat); 
+
+    if (error) {
+        console.error("Gabim:", error);
+        return;
+    }
+
+    if (!data || data.length === 0) {
+        container.innerHTML = "No items in this category.";
+        return;
+    }
+
+    // Vizatimi i kartave
+    container.innerHTML = data.map(ora => {
         
-        const { data, error } = await supabase
-            .from('oras')
-            .select('*')
-            .eq('category', cat);
+        // Imazhi standard rezervë
+        let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
 
-        if (error) {
-            console.error("Gabim gjatë marrjes së të dhënave:", error);
-            container.innerHTML = "Error loading items.";
-            return;
-        }
-
-        if (!data || data.length === 0) {
-            container.innerHTML = "No items in this category.";
-            return;
-        }
-
-        const html = data.map(ora => {
-            let fotoHTML = '';
-            let fushaFotos = ora.image_url || ora['image-url'] || '';
-
-            if (fushaFotos && fushaFotos !== 'null' && fushaFotos !== '') {
-                const fotoList = String(fushaFotos).split(',');
-                fotoList.forEach(fotoEmri => {
-                    let singleImgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-                    if (fotoEmri.trim().startsWith('http')) {
-                        singleImgUrl = fotoEmri.trim();
-                    } else {
-                        singleImgUrl = "https://gnwsrmelmeqduhmhfmoa.supabase.co/storage/v1/object/public/images/" + fotoEmri.trim();
-                    }
-                    fotoHTML += <img src="${singleImgUrl}" alt="${ora.brand || 'Ora'}" style="width: 100%; height: 200px; object-fit: cover; margin-bottom: 5px;">;
-                });
-            } else {
-                fotoHTML = <img src="https://placeholder.co/600x400/222/fff?text=No+Image" style="width: 100%; height: 200px; object-fit: cover;">;
+        // Kontrollojmë kolonën 'image-url' (me vizë në mes)
+        if (ora['image-url']) {
+            if (Array.isArray(ora['image-url']) && ora['image-url'].length > 0) {
+                imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co" + "/storage/v1/object/public/images/" + ora['image-url'][0];
+            } 
+            else if (typeof ora['image-url'] === 'string' && ora['image-url'] !== 'null' && ora['image-url'].trim() !== '') {
+                if (ora['image-url'].startsWith('http')) {
+                    imgUrl = ora['image-url'];
+                } else {
+                    imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/" + ora['image-url'];
+                }
             }
+        }
 
-            return `
+        // Kthejmë HTML-në e kartës
+return `
             <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
-                ${fotoHTML}
+                <img src="${imgUrl}" alt="${ora.brand || 'Ora'}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 4px;">
                 <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
-                <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>
+                <p>Ref: ${ora.reference || '/'}</p>
                 <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
                 
-                <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding: 5px;" onclick="event.stopPropagation();">
-                <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Request Sent!');">Send Request</button>
+                <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;" onclick="event.stopPropagation();">
                 
+                <!-- Butoni Send Request -->
+                <button class="btn-main btn-secondary" style="width:100%; margin-top:5px;" onclick="event.stopPropagation();">Send Request</button>
+                
+                <!-- Butoni Buy Now (Nëse ka link) -->
                 ${ora.paypal_link ? `
                 <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;" onclick="event.stopPropagation();">
-                    <button class="btn-main btn-buy">🛒 Buy Now</button>
+                    <button class="btn-main btn-buy" style="width:100%; margin-top:5px;">🛒 Buy Now</button>
                 </a>
                 ` : ''}
-            </div>
-            `;
-        }).join('');
 
-        container.innerHTML = html;
-    }
-    </script>
-</body>
+                <!-- Rreshti për Like & Share -->
+                <div style="display: flex; gap: 5px; margin-top: 5px;">
+                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" 
+                        onclick="event.stopPropagation(); this.style.background = this.style.background === 'rgb(220, 53, 69)' ? '#222' : '#dc3545';">
+                        ❤️ Like
+                    </button>
+                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" 
+                        onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.origin + '/product.html?id=${ora.id}'); alert('Link copied to clipboard!');">
+                        🔗 Share
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+    // Thirrjet e funksioneve
+    loadCategory('luxury', 'luxury-container');
+    loadCategory('vintage', 'vintage-container');
+    loadCategory('parts', 'parts-container');
+</script>
+
+</body>  
 </html>

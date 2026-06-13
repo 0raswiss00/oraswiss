@@ -127,14 +127,6 @@ const html = data.map(ora => {
         }
 
         return `
-        <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
-            ${fotoHTML}
-            <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
-            <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>
-            <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-            
-            <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding: 5px;">
-            <button class="btn-main btn-secondary" style="width:100%; margin-top:5px;" onclick="event.stopPropagation();">Send Request</button>
             
             ${ora.paypal_link ? `
             <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">

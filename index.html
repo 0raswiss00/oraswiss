@@ -96,8 +96,7 @@ async function loadCategory(cat, containerId) {
         .eq('category', cat); 
 
     if (error) {
-        console.error("Gabim gjatë marrjes së të dhënave:", error);
-        container.innerHTML = "Error loading items.";
+        console.error("Gabim:", error);
         return;
     }
 
@@ -106,18 +105,14 @@ async function loadCategory(cat, containerId) {
         return;
     }
 
-    // Ndërtimi i kartave dinamike
     container.innerHTML = data.map(ora => {
-        
-        // Imazhi standard nëse nuk ka foto
         let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
 
-        // Kontrolli dhe ndërtimi i saktë i linkut të fotos
         if (ora['image-url']) {
             if (Array.isArray(ora['image-url']) && ora['image-url'].length > 0) {
                 imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/" + ora['image-url'][0];
             } 
-            else if (typeof ora['image-url'] === 'string' && ora['image-url'].trim() !== '' && ora['image-url'] !== 'null') {
+            else if (typeof ora['image-url'] === 'string' && ora['image-url'] !== 'null' && ora['image-url'].trim() !== '') {
                 if (ora['image-url'].startsWith('http')) {
                     imgUrl = ora['image-url'];
                 } else {
@@ -128,20 +123,20 @@ async function loadCategory(cat, containerId) {
 
         return `
             <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
-                <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
+                <img src="${imgUrl}" alt="${ora.brand || 'Ora'}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 4px;">
                 <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
-                <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>
+                <p>Ref: ${ora.reference || '/'}</p>
                 <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
                 
-                <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:10px; background:#222; color:#fff; border:1px solid #444; border-radius:4px; box-sizing:border-box;" onclick="event.stopPropagation();">
+                <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;" onclick="event.stopPropagation();">
                 
-                <button class="btn-main btn-secondary" style="width:100%; margin-top:5px;" onclick="event.stopPropagation();">Send Request</button>
-                
-                ${ora.paypal_link ? `
-                <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;" onclick="event.stopPropagation();">
-                    <button class="btn-main btn-buy" style="width:100%; margin-top:5px;">🛒 Buy Now</button>
-                </a>
-                ` : ''}
+                <div style="display: flex; gap: 5px; margin-top: 5px;">
+                    <button class="btn-main btn-secondary" style="flex: 1; padding: 8px; font-size: 14px;" onclick="event.stopPropagation();">Send Request</button>
+                    
+                    <a href="${ora.paypal_link || 'product.html?id=' + ora.id}" target="_blank" style="flex: 1; text-decoration:none;" onclick="event.stopPropagation();">
+                        <button class="btn-main btn-buy" style="width:100%; padding: 8px; font-size: 14px;">🛒 Buy Now</button>
+                    </a>
+                </div>
 
                 <div style="display: flex; gap: 5px; margin-top: 5px;">
                     <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" 

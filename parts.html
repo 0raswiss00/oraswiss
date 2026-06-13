@@ -60,48 +60,37 @@
       return;
     }
 
-    data.forEach(ora => {
-// Rreshti 64 e poshtë: Logjika e fotos me if/else (Zëvendëson rreshtat 64 dhe 65)
-let fotoHTML = '';
-if (ora.image_url && ora.image_url !== 'null' && ora.image_url !== '') {
-    const fotoList = ora.image_url.split(',');
-    fotoList.forEach(fotoEmri => {
-        let singelImgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-        if (fotoEmri.trim().startsWith('http')) {
-            singelImgUrl = fotoEmri.trim();
-        } else {
-            singelImgUrl = SUPABASE_URL + "/storage/v1/object/public/images/" + fotoEmri.trim();
-        }
-        fotoHTML += <img src="${singelImgUrl}" alt="${ora.brand || 'Ora'}" style="width: 100%; height: 200px; object-fit: cover; margin-bottom: 5px;">;
-    });
-} else {
-    fotoHTML = <img src="https://placeholder.co/600x400/222/fff?text=No+Image" style="width: 100%; height: 200px; object-fit: cover;">;
-}
+data.forEach(ora => {
+        let fotoHTML = '';
+        let fushaFotos = ora.image_url || ora['image-url'] || '';
 
-    // Rreshti 66: Injektimi në HTML
-    container.innerHTML += `
-      <div class="card">
-        <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">
-          ${ora.brand} - ${ora.model}
-        </h3>
-        
-        ${fotoHTML}
-        
-        <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
-          
-          <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:8px; box-sizing:border-box;">
-          <button class="btn-main btn-secondary">Send Request</button>
-          
-          <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
-            <button class="btn-main btn-buy" style="margin-top:5px;">🛒 Buy Now</button>
-          </a>
-          
-            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')">❤️ Like</button>
-            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.href)">🔗 Share</button>
-        </div>
-      `;
+        if (fushaFotos && fushaFotos !== 'null' && fushaFotos !== '') {
+            const fotoList = String(fushaFotos).split(',');
+            fotoList.forEach(fotoEmri => {
+                let singleImgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+                if (fotoEmri.trim().startsWith('http')) {
+                    singleImgUrl = fotoEmri.trim();
+                } else {
+                    singleImgUrl = SUPABASE_URL + "/storage/v1/object/public/images/" + fotoEmri.trim();
+                }
+                fotoHTML += <img src="${singleImgUrl}" alt="${ora.brand || 'Ora'}" style="width: 100%; height: 200px; object-fit: cover; margin-bottom: 5px;">;
+            });
+        } else {
+            fotoHTML = <img src="https://placeholder.co/600x400/222/fff?text=No+Image" style="width: 100%; height: 200px; object-fit: cover;">;
+        }
+
+        container.innerHTML += `
+            <div class="card">
+                <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">
+                    ${ora.brand} - ${ora.model}
+                </h3>
+                
+                ${fotoHTML}
+                
+                <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+            </div>
+        `;
     });
-  }
 
   loadOras();
 </script>

@@ -61,15 +61,33 @@
     }
 
     data.forEach(ora => {
-// Rreshti 64 e poshtë: Logjika e fotos me if/else (Zëvendëson rreshtat 64 dhe 65)
-    let imgUrl = "https://placehold.co/600x400/222/fff?text=No+Image"; 
-    if (ora.image_url && ora.image_url !== 'null' && ora.image_url !== '') {
-      if (ora.image_url.startsWith('http')) {
-        imgUrl = ora.image_url;
-      } else {
-        imgUrl = SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url;
-      }
+// === LOGJIKA E RE PËR MARRJEN E FOTOS (Rreshtat 65-72) ===
+    let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+
+    if (ora.image_url) {
+        // Kontrollojmë nëse është listë (Array) me shumë foto
+        if (Array.isArray(ora.image_url) && ora.image_url.length > 0) {
+            const fotojaEParë = ora.image_url[0];
+            imgUrl = SUPABASE_URL + "/storage/v1/object/public/images/" + fotojaEParë;
+        } 
+        // Kontrollojmë nëse ka mbetur ndonjë tekst i thjeshtë i vjetër (Link i plotë ose emër fote)
+        else if (typeof ora.image_url === 'string' && ora.image_url !== 'null' && ora.image_url.trim() !== '') {
+            if (ora.image_url.startsWith('http')) {
+                imgUrl = ora.image_url;
+            } else {
+                imgUrl = SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url;
+            }
+        }
     }
+
+    // Rreshti 74 yti ekzistues: Injektimi në HTML
+    container.innerHTML += `
+        <div class="card">
+            <h3 onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">
+                ${ora.brand} - ${ora.model}
+            </h3>
+            <img src="${imgUrl}" alt="${ora.brand}" ... >
+    `;
 
     // Rreshti 66: Injektimi në HTML
     container.innerHTML += `
@@ -78,7 +96,7 @@
           ${ora.brand} - ${ora.model}
         </h3>
         
-        <img src="${imgUrl}" alt="${ora.brand}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
+        <img src="${imgUrl}" alt="${ora.brand}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 4px;">
         
         <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
           

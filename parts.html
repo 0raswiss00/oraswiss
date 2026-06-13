@@ -60,57 +60,56 @@
       return;
     }
 
-container.innerHTML = data.map(ora => {
-
-    // 1. Ndërtimi i linkut të fotos
+data.forEach(ora => {
+    // 1. Logjika e saktë e fotos sate
     let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-    if (ora['image-url']) {
-        if (Array.isArray(ora['image-url']) && ora['image-url'].length > 0) {
-            imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/" + ora['image-url'][0];
-        } else if (typeof ora['image-url'] === 'string' && ora['image-url'].trim() !== '') {
-            if (ora['image-url'].startsWith('http')) {
-                imgUrl = ora['image-url'];
-            } else {
-                imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/" + ora['image-url'];
-            }
+    let primaryImage = ora.image_url;
+    if (ora.images && ora.images.length > 0) {
+        primaryImage = Array.isArray(ora.images) ? ora.images[0] : ora.images.split(',')[0];
+    }
+    if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
+        if (primaryImage.startsWith('http')) {
+            imgUrl = primaryImage;
+        } else {
+            imgUrl = SUPABASE_URL + "/storage/v1/object/public/or-images/" + primaryImage;
         }
     }
 
-    // 2. Kthimi i HTML-së së saktësuar
-    return `
+    // 2. Kushti për butonin e verdhë Buy Now
+    const buyNowButton = ora.price 
+        ? `<a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;" onclick="event.stopPropagation();">
+             <button class="btn-main btn-buy" style="margin-top:5px; width:100%; background-color:#ffeb00; color:#000; font-weight:bold; padding:10px; border:none; border-radius:5px; cursor:pointer;">
+                 🛒 Buy Now
+             </button>
+           </a>` 
+        : ''; 
+
+    // 3. Injektimi i HTML me ID unike për Email dhe Share të rregulluar
+    container.innerHTML += `
     <div class="card" onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">
-        <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
-        <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
-        <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>
+        <h3>${ora.brand} - ${ora.model}</h3>
+        <img src="${imgUrl}" style="width:100%; height:auto; border-radius:10px; margin-top:5px;">
         <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
 
-        <input type="email" id="email_${ora.id}" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:10px; box-sizing:border-box;" onclick="event.stopPropagation();">
+        <input type="email" id="email_parts_${ora.id}" placeholder="Emaili yt" style="width:100%; margin:5px 0; padding:8px; box-sizing:border-box; background:#222; border:1px solid #444; color:#fff; border-radius:5px;" onclick="event.stopPropagation();">
         
-        <button class="btn-main btn-secondary" style="width:100%; margin-top:5px;" onclick="event.stopPropagation(); const emailVal = document.getElementById('email_${ora.id}').value; if(!emailVal){ alert('Ju lutem vendosni email-in tuaj!'); return; } alert('Kërkesa u dërgua për email-in: ' + emailVal);">
+        <button class="btn-main btn-secondary" style="width:100%; padding:10px; margin-bottom:5px; border-radius:5px; border:1px solid #555; background:#333; color:#fff; cursor:pointer;" onclick="event.stopPropagation(); const emailVal = document.getElementById('email_parts_${ora.id}').value; if(!emailVal){ alert('Ju lutem vendosni email-in!'); return; } alert('Kërkesa u dërgua: ' + emailVal);">
             Send Request
         </button>
 
-        ${ora.price && ora.paypal_link ? `
-        <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;" onclick="event.stopPropagation();">
-            <button class="btn-main btn-buy" style="width:100%; margin-top:5px; background-color:#ffeb00; color:#000; font-weight:bold; padding:10px; border:none; border-radius:5px; cursor:pointer;">
-                🛒 Buy Now
-            </button>
-        </a>
-        ` : ''}
+        ${buyNowButton}
 
-        <div style="display: flex; gap: 5px; margin-top: 5px;">
-            <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #333; cursor:pointer;" onclick="event.stopPropagation(); this.style.background = '#444'; alert('Liked!')">
+        <div style="display: flex; gap:5px; margin-top:5px;">
+            <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')" style="flex:1; padding:8px; background:#222; color:#fff; border:1px solid #444; border-radius:5px; cursor:pointer;">
                 ❤️ Like
             </button>
-            
-            <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #333; cursor:pointer;" onclick="event.stopPropagation(); const productUrl = window.location.origin + '/product.html?id=${ora.id}'; navigator.clipboard.writeText(productUrl).then(() => { alert('Linku i produktit u kopjua!'); }).catch(err => { alert('Gabim gjatë kopjimit!'); });">
+            <button class="btn-main btn-secondary" style="flex:1; padding:8px; background:#222; color:#fff; border:1px solid #444; border-radius:5px; cursor:pointer;" onclick="event.stopPropagation(); const productUrl = window.location.origin + '/product.html?id=${ora.id}'; navigator.clipboard.writeText(productUrl).then(() => { alert('Linku u kopjua!'); }).catch(() => { alert('Gabim!'); });">
                 🔗 Share
             </button>
         </div>
     </div>
     `;
-}).join('');
-
+});
   loadOras();
 </script>
 

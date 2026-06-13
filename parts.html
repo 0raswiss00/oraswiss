@@ -60,28 +60,6 @@
       return;
     }
 
-data.forEach(ora => {
-    // 1. Logjika e fotos me if/else (Zëvendëson rreshtat 64 dhe poshtë)
-    let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-    
-    if (ora.image_url && ora.image_url !== 'null' && ora.image_url !== '') {
-        if (ora.image_url.startsWith('http')) {
-            imgUrl = ora.image_url;
-        } else {
-            imgUrl = SUPABASE_URL + "/storage/v1/object/public/images/" + ora.image_url;
-        }
-    }
-
-    // 2. KUSHTI: Nëse ka çmim, krijojmë butonin e verdhë Buy Now. Nëse s'ka, mbetet bosh.
-    const buyNowButton = ora.price 
-        ? `<a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;">
-             <button class="btn-main btn-buy" style="margin-top:5px; width:100%; background-color: #ffeb00; color: #000; font-weight: bold; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">
-                 🛒 Buy Now
-             </button>
-           </a>` 
-        : ''; 
-
-    // 3. Rreshti 66: Injektimi i plotë në HTML
 container.innerHTML = data.map(ora => {
 
     // 1. Ndërtimi i linkut të fotos

@@ -127,7 +127,8 @@
     }
 
     // 3. Shto listën e fotove te objekti 'oraData' përpara se ta dërgosh
-    oraData.image_url = listaEEmraveTeFotove; 
+    oraData['image-url'] = listaEEmraveTeFotove;
+
 
     // 4. Dërgimi te tabela 'oras'
     const { error } = await supabase.from('oras').insert([oraData]);

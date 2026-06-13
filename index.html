@@ -50,6 +50,7 @@
 </header>
 
 <!-- Seksionet Dinamike -->
+<!-- Seksionet Dinamike -->
 <h2>Luxury Collection</h2>
 <div id="luxury-container" class="grid">Loading...</div>
 
@@ -58,7 +59,6 @@
 
 <h2>Parts Collection</h2>
 <div id="parts-container" class="grid">Loading...</div>
-
 
 <script>
   const supabase = window.supabase.createClient(
@@ -85,7 +85,7 @@ async function loadCategory(cat, containerId) {
         return;
     }
 
-// Vizatimi i kartave
+    // Vizatimi i kartave
     container.innerHTML = data.map(ora => {
         
         // Imazhi standard rezervë
@@ -94,13 +94,13 @@ async function loadCategory(cat, containerId) {
         // Kontrollojmë kolonën 'image-url' (me vizë në mes)
         if (ora['image-url']) {
             if (Array.isArray(ora['image-url']) && ora['image-url'].length > 0) {
-                imgUrl = SUPABASE_URL + "/storage/v1/object/public/images/" + ora['image-url'][0];
+                imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co" + "/storage/v1/object/public/images/" + ora['image-url'][0];
             } 
             else if (typeof ora['image-url'] === 'string' && ora['image-url'] !== 'null' && ora['image-url'].trim() !== '') {
                 if (ora['image-url'].startsWith('http')) {
                     imgUrl = ora['image-url'];
                 } else {
-                    imgUrl = SUPABASE_URL + "/storage/v1/object/public/images/" + ora['image-url'];
+                    imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/" + ora['image-url'];
                 }
             }
         }
@@ -124,12 +124,13 @@ async function loadCategory(cat, containerId) {
             </div>
         `;
     }).join('');
+}
 
- 
-    // Këto janë thirrjet e vetme që duhet të kesh
+    // Thirrjet e funksioneve
     loadCategory('luxury', 'luxury-container');
     loadCategory('vintage', 'vintage-container');
     loadCategory('parts', 'parts-container');
 </script>
+
 </body>  
 </html>

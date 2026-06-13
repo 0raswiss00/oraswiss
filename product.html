@@ -4,13 +4,22 @@
     <meta charset="UTF-8">
     <title>Ora Swiss - Detajet</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
+        .product-card { background: #111; border: 1px solid #333; padding: 20px; max-width: 500px; margin: auto; border-radius: 10px; }
+        .product-img { width: 100%; height: auto; border-radius: 10px; margin-bottom: 15px; object-fit: cover; }
+        .price { color: #25D366; font-weight: bold; font-size: 1.4em; margin: 10px 0; }
+        hr { border: 0; border-top: 1px solid #333; margin: 15px 0; }
+        .btn { display: block; text-align: center; text-decoration: none; font-weight: bold; border-radius: 5px; padding: 15px; margin-top: 10px; }
+        .btn-whatsapp { background: #25D366; color: white; }
+        .btn-paypal { background: #ffeb00; color: black; } /* Bërë i verdhë si te lista kryesore */
+    </style>
 </head>
 <body>
 
     <div id="container">Duke ngarkuar...</div>
 
     <script>
-        // Përdorim 'var' dhe një kontroll që të mos prishet nëse është deklaruar diku tjetër
         if (typeof window.supabaseClient === 'undefined') {
             window.supabaseClient = window.supabase.createClient(
                 "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
@@ -18,6 +27,7 @@
             );
         }
         var supabase = window.supabaseClient;
+        const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
 
         async function loadProduct() {
             const id = new URLSearchParams(window.location.search).get('id');
@@ -32,18 +42,39 @@
                 const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
                 if (error) throw error;
 
-                const { data: publicUrlData } = supabase.storage.from('or-images').getPublicUrl(data.image_url || '');
-                const fullImageUrl = publicUrlData.publicUrl;
+                // --- LOGJIKA E SAKTË E FOTOS (E njëjtë si te lista kryesore) ---
+                let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+                let primaryImage = data.image_url;
+                
+                if (data.images && data.images.length > 0) {
+                    primaryImage = Array.isArray(data.images) ? data.images[0] : data.images.split(',')[0];
+                }
+                
+                if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
+                    if (primaryImage.startsWith('http')) {
+                        imgUrl = primaryImage;
+                    } else {
+                        imgUrl = SUPABASE_URL + "/storage/v1/object/public/or-images/" + primaryImage;
+                    }
+                }
+
+                // Kushti për butonin PayPal (shfaqet vetëm nëse ka çmim dhe link)
+                const paypalButton = (data.price && data.paypal_link) 
+                    ? `<a href="${data.paypal_link}" target="_blank" class="btn btn-paypal">
+                           🛒 BUY NOW (PayPal)
+                       </a>` 
+                    : '';
                 
                container.innerHTML = `
-                   <div style="border:1px solid #333; padding:20px; max-width:500px; margin:auto;">
-                       <input type="file" id="fileInput" name="images[]" accept="image/*" multiple style="margin-top: 5px;">
-                       <h1>${data.brand} ${data.model}</h1>
-                       <p><strong>Price:</strong> ${data.price} €</p>
+                   <div class="product-card">
+                       <img src="${imgUrl}" class="product-img" alt="${data.brand}">
+                       
+                       <h1>${data.brand} - ${data.model}</h1>
+                       <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>
         
                        <hr>
                        <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
-                       <p><strong>Case Size:</strong> ${data.case_size || 'N/A'} mm</p>
+                       <p><strong>Case Size:</strong> ${data.case_size || 'N/A'}</p>
                        <p><strong>Movement:</strong> ${data.movement || 'N/A'}</p>
                        <p><strong>Function:</strong> ${data.function || 'N/A'}</p>
                        <p><strong>Service:</strong> ${data.service ? 'Yes (Serviced)' : 'No'}</p>
@@ -51,19 +82,13 @@
                        <p><strong>Description:</strong> ${data.description || 'N/A'}</p>
         
                        <br>
-                       <a href="https://wa.me/35569XXXXXXX?text=I%20am%20interested%20in:%20${data.brand}%20${data.model}" 
-                           style="background:#25D366; color:white; padding:15px; display:block; text-align:center; text-decoration:none; font-weight:bold; border-radius:5px;">
-                          ORDER ON WHATSAPP
-                        </a>
+                       <a href="https://wa.me/35569XXXXXXX?text=I%20am%20interested%20in:%20${encodeURIComponent(data.brand + ' ' + data.model)}" class="btn btn-whatsapp">
+                          💬 ORDER ON WHATSAPP
+                       </a>
 
-                        <a href="${data.paypal_link}" target="_blank" 
-                            style="background:#0070ba; color:white; padding:15px; display:block; text-align:center; text-decoration:none; font-weight:bold; border-radius:5px; margin-top:10px;">
-                           BUY NOW (PayPal)
-                        </a>
-
-
+                       ${paypalButton}
                     </div>
-`                ;
+               `;
             } catch (err) {
                 container.innerHTML = "GABIM: " + err.message;
             }

@@ -109,26 +109,28 @@ async function loadCategory(cat, containerId) {
     // Ndërtimi i kartave dinamike
     container.innerHTML = data.map(ora => {
         
-        // Imazhi standard nëse nuk ka foto
-        let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-
-        // Kontrolli dhe ndërtimi i saktë i linkut të fotos
-        if (ora['image-url']) {
-            if (Array.isArray(ora['image-url']) && ora['image-url'].length > 0) {
-                imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/" + ora['image-url'][0];
-            } 
-            else if (typeof ora['image-url'] === 'string' && ora['image-url'].trim() !== '' && ora['image-url'] !== 'null') {
-                if (ora['image-url'].startsWith('http')) {
-                    imgUrl = ora['image-url'];
+let fotoHTML = '';
+        if (ora['image-url'] && ora['image-url'] !== 'null' && ora['image-url'] !== '') {
+            // Kthejmë vlerën në string nëse nuk është e tillë dhe e ndajmë me presje
+            const fotoList = String(ora['image-url']).split(',');
+            
+            fotoList.forEach(fotoEmri => {
+                let singleImgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+                if (fotoEmri.trim().startsWith('http')) {
+                    singleImgUrl = fotoEmri.trim();
                 } else {
-                    imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/" + ora['image-url'];
+                    singleImgUrl = "https://gnwsrmelmeqduhmhfmoa.supabase.co/storage/v1/object/public/images/" + fotoEmri.trim();
                 }
-            }
+                fotoHTML += <img src="${singleImgUrl}" alt="${ora.brand || 'Ora'}" style="width: 100%; height: 200px; object-fit: cover; margin-bottom: 5px;">;
+            });
+        } else {
+            fotoHTML = <img src="https://placeholder.co/600x400/222/fff?text=No+Image" style="width: 100%; height: 200px; object-fit: cover;">;
         }
-
         return `
             <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
-                <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
+
+                ${fotoHTML}
+               
                 <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
                 <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>
                 <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>

@@ -93,14 +93,50 @@
      price: parseInt(document.getElementById('price').value) || 0
    };
   
-    // Dërgimi te tabela 'oras'
+// SHTO KËTO TË DYJA KËTU:
+        category: document.getElementById('category').value,
+        price: parseInt(document.getElementById('price').value) || 0
+    }; // Ky është rreshti 94 yti aktual
+
+    // ========================================================
+    // ZËVENDËSO RRESHTAT 96-104 ME KËTË KOD POSHTË:
+    // ========================================================
+    
+    // 1. Merr fotot nga inputi
+    const fileInput = document.getElementById('imageInput');
+    const files = fileInput.files;
+    let listaEEmraveTeFotove = [];
+
+    // 2. Ngarko fotot në Storage nëse ka të tilla
+    if (files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const emriUnik = Date.now() + "" + i + "" + file.name;
+
+            // Kujdes: Përdor 'supabase' pasi kështu e ke emërtuar klientin te rreshti 97
+            const { data: storageData, error: storageError } = await supabase.storage
+                .from('images')
+                .upload(emriUnik, file);
+
+            if (!storageError) {
+                listaEEmraveTeFotove.push(emriUnik);
+            } else {
+                console.error("Gabim te ngarkimi i fotos:", file.name, storageError);
+            }
+        }
+    }
+
+    // 3. Shto listën e fotove te objekti 'oraData' përpara se ta dërgosh
+    oraData.image_url = listaEEmraveTeFotove; 
+
+    // 4. Dërgimi te tabela 'oras'
     const { error } = await supabase.from('oras').insert([oraData]);
 
     if (error) {
-      alert("Gabim: " + error.message);
+        alert("Gabim: " + error.message);
     } else {
-      alert("Ora u shtua me sukses!");
-      document.getElementById('sellForm').reset();
+        alert(Ora u shtua me sukses bashkë me ${listaEEmraveTeFotove.length} foto!);
+        document.getElementById('sellForm').reset();
     }
   });
 </script>

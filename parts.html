@@ -62,14 +62,21 @@
 
     data.forEach(ora => {
 // === LOGJIKA E RE PËR MARRJEN E FOTOS (Rreshtat 65-72) ===
-    let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
 
-    if (ora.image_url) {
-        // Kontrollojmë nëse është listë (Array) me shumë foto
-        if (Array.isArray(ora.image_url) && ora.image_url.length > 0) {
-            const fotojaEParë = ora.image_url[0];
-            imgUrl = SUPABASE_URL + "/storage/v1/object/public/images/" + fotojaEParë;
+    // Përdorim vizën në mes ['image-url'] sepse ashtu është në databazën tënde
+    if (ora['image-url']) {
+        if (Array.isArray(ora['image-url']) && ora['image-url'].length > 0) {
+            imgUrl = SUPABASE_URL + "/storage/v1/object/public/images/" + ora['image-url'][0];
         } 
+        else if (typeof ora['image-url'] === 'string' && ora['image-url'] !== 'null' && ora['image-url'].trim() !== '') {
+            if (ora['image-url'].startsWith('http')) {
+                imgUrl = ora['image-url'];
+            } else {
+                imgUrl = SUPABASE_URL + "/storage/v1/object/public/images/" + ora['image-url'];
+            }
+        }
+    }
         // Kontrollojmë nëse ka mbetur ndonjë tekst i thjeshtë i vjetër (Link i plotë ose emër fote)
         else if (typeof ora.image_url === 'string' && ora.image_url !== 'null' && ora.image_url.trim() !== '') {
             if (ora.image_url.startsWith('http')) {

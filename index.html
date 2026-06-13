@@ -12,20 +12,43 @@
     .nav-scroll a:hover{color:gold}
     .site-title{font-weight:700;line-height:1.05;margin-right:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));gap:20px;padding:30px 16px}
-    .card{background:#111;padding:15px;border-radius:10px;border:1px solid #333}
-    .price{color:#25D366;font-weight:bold;margin-top:10px}
+    .card{background:#111;padding:15px;border-radius:10px;border:1px solid #333;cursor:pointer;}
+    .price{color:#25D366;font-weight:bold;margin-top:10px;margin-bottom:10px;}
     h2{padding:20px 16px 0;margin:0}
-    <section>
-  <h2>Luxury Watches</h2>
-  <div id="luxury-container" class="grid"></div>
-</section>
 
-  <section>
-    <h2>Vintage Watches</h2>
-    <div id="vintage-container" class="grid"></div>
-  </section>
+    .card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      border-radius: 8px;
+    }
+
+    /* Stilet për butonat që mungonin */
+    .btn-main {
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .btn-secondary {
+      background: #333;
+      color: #fff;
+      border: 1px solid #555;
+    }
+    .btn-secondary:hover {
+      background: #444;
+    }
+    .btn-buy {
+      background: gold;
+      color: #000;
+    }
+    .btn-buy:hover {
+      background: #e6c200;
+    }
   </style>
-  <!-- Supabase Script -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 </head>
 <body>
@@ -49,7 +72,6 @@
   </nav>
 </header>
 
-<!-- Seksionet Dinamike -->
 <h2>Luxury Collection</h2>
 <div id="luxury-container" class="grid">Loading...</div>
 
@@ -58,7 +80,6 @@
 
 <h2>Parts Collection</h2>
 <div id="parts-container" class="grid">Loading...</div>
-
 
 <script>
   const supabase = window.supabase.createClient(
@@ -69,14 +90,14 @@
 async function loadCategory(cat, containerId) {
     const container = document.getElementById(containerId);
     
-    // Filtri këtu siguron që të merren vetëm orët e kategorisë së kërkuar
     const { data, error } = await supabase
         .from('oras')
         .select('*')
         .eq('category', cat); 
 
     if (error) {
-        console.error("Gabim:", error);
+        console.error("Gabim gjatë marrjes së të dhënave:", error);
+        container.innerHTML = "Error loading items.";
         return;
     }
 
@@ -85,22 +106,63 @@ async function loadCategory(cat, containerId) {
         return;
     }
 
-    // Vizatimi i kartave
-    container.innerHTML = data.map(ora => `
-        <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
-            <img src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/${ora.image_url}">
-            <h3>${ora.brand} - ${ora.model}</h3>
-            <p>Ref: ${ora.reference}</p>
-            <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-        </div>
-    `).join('');
+    // Ndërtimi i kartave dinamike
+    container.innerHTML = data.map(ora => {
+        
+        // Imazhi standard nëse nuk ka foto
+        let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+
+        // Kontrolli dhe ndërtimi i saktë i linkut të fotos
+        if (ora['image-url']) {
+            if (Array.isArray(ora['image-url']) && ora['image-url'].length > 0) {
+                imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/" + ora['image-url'][0];
+            } 
+            else if (typeof ora['image-url'] === 'string' && ora['image-url'].trim() !== '' && ora['image-url'] !== 'null') {
+                if (ora['image-url'].startsWith('http')) {
+                    imgUrl = ora['image-url'];
+                } else {
+                    imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/images/" + ora['image-url'];
+                }
+            }
+        }
+
+        return `
+            <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
+                <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
+                <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
+                <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>
+                <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
+                
+                <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:10px; background:#222; color:#fff; border:1px solid #444; border-radius:4px; box-sizing:border-box;" onclick="event.stopPropagation();">
+                
+                <button class="btn-main btn-secondary" style="width:100%; margin-top:5px;" onclick="event.stopPropagation();">Send Request</button>
+                
+                ${ora.paypal_link ? `
+                <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;" onclick="event.stopPropagation();">
+                    <button class="btn-main btn-buy" style="width:100%; margin-top:5px;">🛒 Buy Now</button>
+                </a>
+                ` : ''}
+
+                <div style="display: flex; gap: 5px; margin-top: 5px;">
+                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" 
+                        onclick="event.stopPropagation(); this.style.background = this.style.background === 'rgb(220, 53, 69)' ? '#222' : '#dc3545';">
+                        ❤️ Like
+                    </button>
+                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" 
+                        onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.origin + '/product.html?id=${ora.id}'); alert('Link copied to clipboard!');">
+                        🔗 Share
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
 }
 
-
-    // Këto janë thirrjet e vetme që duhet të kesh
+    // Ngarkimi i kategorive
     loadCategory('luxury', 'luxury-container');
     loadCategory('vintage', 'vintage-container');
     loadCategory('parts', 'parts-container');
 </script>
+
 </body>  
 </html>

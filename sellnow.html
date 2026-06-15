@@ -69,41 +69,64 @@
 <script>
   const supabase = window.supabase.createClient("https://gnwsrmelmeqduhhmfmoa.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ");
 
-  document.getElementById('sellForm').addEventListener('submit', async (e) => {
+document.getElementById('sellForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    
-   // Mbledhja e të dhënave nga formulari
-   const oraData = {
-     brand: document.getElementById('brand').value,
-     model: document.getElementById('model').value,
-     reference: document.getElementById('reference').value,
-     material: document.getElementById('material').value,
-     case_size: document.getElementById('case_size').value,
-     year: parseInt(document.getElementById('year').value) || null,
-     movement: document.getElementById('movement').value,
-     function: document.getElementById('function').value,
-     service: document.getElementById('service').checked,
-     box_papers: document.getElementById('box_papers').checked,
-     description: document.getElementById('description').value,
-  
-    // SHTO KËTO TË DYJA KËTU:
+
+    // 1. MARRIM FOTOT NGA INPUTI
+    const fileInput = document.getElementById('fileInput');
+    const files = fileInput.files;
+    let uploadedFileNames = [];
+
+    // 2. NGARKOMI FOTOT NË SUPABASE STORAGE
+    if (files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            // Krijojmë një emër unik për foton që të mos zëvendësojë fotot e tjera
+            const uniqueFileName = Date.now() + "_" + file.name;
+
+            const { data, error: uploadError } = await supabase.storage
+                .from('or-images')
+                .upload(uniqueFileName, file);
+
+            if (uploadError) {
+                console.error("Gabim gjatë ngarkimit të fotos:", uploadError.message);
+            } else {
+                // Nëse ngarkohet me sukses, e shtojmë emrin në listë
+                uploadedFileNames.push(uniqueFileName);
+            }
+        }
+    }
+
+    // 3. MBLEDHJA E TË DHËNAVE NGA FORMULARI
+    const oraData = {
+        brand: document.getElementById('brand').value,
+        model: document.getElementById('model').value,
+        reference: document.getElementById('reference').value,
+        material: document.getElementById('material').value,
+        case_size: document.getElementById('case_size').value,
+        year: parseInt(document.getElementById('year').value) || null,
+        movement: document.getElementById('movement').value,
+        function: document.getElementById('function').value,
+        service: document.getElementById('service').checked,
+        box_papers: document.getElementById('box_papers').checked,
+        description: document.getElementById('description').value,
         category: document.getElementById('category').value,
         price: parseInt(document.getElementById('price').value) || 0,
-    
-        // NDRYSHIMI: Duhet të jetë BRENDA kllapës gjarpëruese!
-        image_url: [ uploadedFileName ] 
+        
+        // Këtu ruhet lista me emrat e fotove të ngarkuara fiks siç e kërkon databaza []
+        image_url: uploadedFileNames 
     };
 
-    // Dërgimi te tabela 'oras'
-    const { error } = await supabase.from('oras').insert([o
+    // 4. DËRGIMI TE TABELA 'ORAS'
+    const { error } = await supabase.from('oras').insert([oraData]);
 
     if (error) {
-      alert("Gabim: " + error.message);
+        alert("Gabim: " + error.message);
     } else {
-      alert("Ora u shtua me sukses!");
-      document.getElementById('sellForm').reset();
+        alert("Ora dhe fotot u shtuan me sukses!");
+        document.getElementById('sellForm').reset();
     }
-  });
+});
 </script>
 </body>
 </html>

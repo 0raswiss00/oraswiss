@@ -43,38 +43,39 @@
                 if (error) throw error;
 
            // 1. Krijojmë listën e të gjitha fotove që ka kjo orë
-            let imageArray = [];
-            if (data.image_url && data.image_url.length > 0) {
-                let urls = Array.isArray(data.image_url) ? data.image_url : [data.image_url];
-                imageArray = urls.map(img => {
-                    if (img.startsWith('http')) return img;
-                    return SUPABASE_URL + "/storage/v1/object/public/or-images/" + img;
-                });
-            } else {
-                imageArray = ["https://placeholder.co/600x400/222/fff?text=No+Image"];
-            }
+// 1. Ndërtojmë listën e fotove nga kolona e re image_url
+        let imageArray = [];
+        if (data.image_url && data.image_url.length > 0) {
+            let urls = Array.isArray(data.image_url) ? data.image_url : [data.image_url];
+            imageArray = urls.map(img => {
+                if (img.startsWith('http')) return img;
+                return SUPABASE_URL + "/storage/v1/object/public/or-images/" + img;
+            });
+        } else {
+            imageArray = ["https://placeholder.co/600x400/222/fff?text=No+Image"];
+        }
 
-            // 2. Ndërtojmë HTML-në e slider-it me butona majtas/djathtas
-            let imagesHtml = imageArray.map((url, index) => 
-                <img src="${url}" class="product-slider-img" style="width:100%; display: ${index === 0 ? 'block' : 'none'}; border-radius: 12px; max-height: 500px; object-fit: contain;">
-            ).join('');
+        // 2. Krijojmë HTML-në për çdo imazh të Slider-it
+        let imagesHtml = imageArray.map((url, index) => 
+            <img src="${url}" class="product-slider-img" style="width:100%; display: ${index === 0 ? 'block' : 'none'}; border-radius: 12px; max-height: 450px; object-fit: contain;">
+        ).join('');
 
-            let buttonsHtml = '';
-            if (imageArray.length > 1) {
-                buttonsHtml = `
-                    <button type="button" onclick="changeProductImage(-1)" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.7); color:white; border:none; padding:12px 16px; cursor:pointer; border-radius:50%; font-size:18px; z-index:10;">&#10094;</button>
-                    <button type="button" onclick="changeProductImage(1)" style="position:absolute; right:15px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.7); color:white; border:none; padding:12px 16px; cursor:pointer; border-radius:50%; font-size:18px; z-index:10;">&#10095;</button>
-                `;
-            }
-
-            // Kjo zëvendëson imgUrl e vjetër me një bllok të plotë Slider-i HTML
-            let imgUrl = `
-                <div style="position:relative; width:100%; overflow:hidden; background:#111; border-radius:12px; min-height:300px; display:flex; align-items:center; justify-content:center;">
-                    ${imagesHtml}
-                    ${buttonsHtml}
-                </div>
+        // 3. Krijojmë butonat majtas/djathtas nëse ka më shumë se 1 foto
+        let buttonsHtml = '';
+        if (imageArray.length > 1) {
+            buttonsHtml = `
+                <button type="button" onclick="window.changeProductImage(-1)" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.7); color:white; border:none; padding:12px 16px; cursor:pointer; border-radius:50%; font-size:18px; z-index:10; font-weight:bold;">&#10094;</button>
+                <button type="button" onclick="window.changeProductImage(1)" style="position:absolute; right:15px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.7); color:white; border:none; padding:12px 16px; cursor:pointer; border-radius:50%; font-size:18px; z-index:10; font-weight:bold;">&#10095;</button>
             `;
+        }
 
+        // 4. Krijojmë variablën e vjetër imgUrl por që tani mban të gjithë Slider-in
+        let imgUrl = `
+            <div style="position:relative; width:100%; overflow:hidden; background:#111; border-radius:12px; min-height:300px; display:flex; align-items:center; justify-content:center;">
+                ${imagesHtml}
+                ${buttonsHtml}
+            </div>
+        `;
                 // Kushti për butonin PayPal (shfaqet vetëm nëse ka çmim dhe link)
                 const paypalButton = (data.price && data.paypal_link) 
                     ? `<a href="${data.paypal_link}" target="_blank" class="btn btn-paypal">

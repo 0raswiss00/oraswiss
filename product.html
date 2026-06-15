@@ -19,66 +19,98 @@
 
     <div id="container">Duke ngarkuar...</div>
 
-    <script>
-// Fillon këtu pas rreshtit 22
+<script>
 const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-const supabase = window.supabase.createClient(SUPABASE_URL, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ");
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
+);
 
 let images = [];
 let currentIndex = 0;
 
 async function loadProduct() {
-    const id = new URLSearchParams(window.location.search).get('id');
-    const container = document.getElementById("container");
+  const id = new URLSearchParams(window.location.search).get('id');
+  const container = document.getElementById("container");
 
-    try {
-        const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-        if (error) throw error;
+  try {
+    const { data, error } = await supabase
+      .from('oras')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-        images = data.image_url ? (Array.isArray(data.image_url) ? data.image_url : [data.image_url]) : ["https://placeholder.co/600x400/222/fff?text=No+Image"];
+    if (error) throw error;
 
-        // Ndërtimi i HTML
-        container.innerHTML = `
-            <div class="product-card">
-                <div style="position: relative;">
-                    <img id="main-img" src="" class="product-img">
-                    <div id="btn-container" style="position:absolute; width:100%; top:40%; display:flex; justify-content:space-between; padding:0 10px;"></div>
-                </div>
-                <h1>${data.brand} - ${data.model}</h1>
-                <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>
-                <hr>
-                <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
-                <a href="https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per:%20${encodeURIComponent(data.brand + ' ' + data.model)}" class="btn btn-whatsapp">💬 ORDER ON WHATSAPP</a>
-            </div>
-        `;
+    images = data.image_url
+      ? (Array.isArray(data.image_url) ? data.image_url : [data.image_url])
+      : ["https://via.placeholder.com/600x400?text=No+Image"];
 
-        if (images.length > 1) {
-            document.getElementById('btn-container').innerHTML = `
-                <button onclick="changePhoto(-1)" style="cursor:pointer; background:rgba(0,0,0,0.5); color:white; border:none; padding:10px;">❮</button>
-                <button onclick="changePhoto(1)" style="cursor:pointer; background:rgba(0,0,0,0.5); color:white; border:none; padding:10px;">❯</button>
-            `;
-        }
-        updateImage();
-    } catch (err) {
-        container.innerHTML = "GABIM: " + err.message;
+    container.innerHTML = `
+      <div class="product-card">
+        <div style="position: relative;">
+          <img id="main-img" class="product-img" src="">
+          
+          <div id="btn-container"
+               style="position:absolute; width:100%; top:40%; display:flex; justify-content:space-between; padding:0 10px;">
+          </div>
+        </div>
+
+        <h1>${data.brand || ''} - ${data.model || ''}</h1>
+
+        <div class="price">
+          Price: ${data.price ? data.price + ' €' : 'Contact'}
+        </div>
+
+        <hr>
+
+        <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
+
+        <a href="https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per:%20${encodeURIComponent((data.brand || '') + ' ' + (data.model || ''))}"
+           class="btn btn-whatsapp">
+          💬 ORDER ON WHATSAPP
+        </a>
+      </div>
+    `;
+
+    if (images.length > 1) {
+      document.getElementById("btn-container").innerHTML = `
+        <button onclick="changePhoto(-1)"
+          style="cursor:pointer;background:rgba(0,0,0,0.5);color:white;border:none;padding:10px;">
+          ❮
+        </button>
+
+        <button onclick="changePhoto(1)"
+          style="cursor:pointer;background:rgba(0,0,0,0.5);color:white;border:none;padding:10px;">
+          ❯
+        </button>
+      `;
     }
+
+    updateImage();
+
+  } catch (err) {
+    container.innerHTML = "GABIM: " + err.message;
+  }
 }
 
 function updateImage() {
-    const imgElement = document.getElementById("main-img");
-    if (!imgElement) return;
-    let imgUrl = images[currentIndex];
-window.changePhoto = function(dir) {
-    currentIndex = (currentIndex + dir + images.length) % images.length;
-    updateImage();
-};
+  const imgElement = document.getElementById("main-img");
+  if (!imgElement) return;
+
+  const imgUrl = images[currentIndex];
+
+  imgElement.src = imgUrl.startsWith("http")
+    ? imgUrl
+    : ${SUPABASE_URL}/storage/v1/object/public/${imgUrl};
+}
 
 window.changePhoto = function(dir) {
-    currentIndex = (currentIndex + dir + images.length) % images.length;
-    updateImage();
+  currentIndex = (currentIndex + dir + images.length) % images.length;
+  updateImage();
 };
 
 loadProduct();
-    </script>
+</script>
 </body>
 </html>

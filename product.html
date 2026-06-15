@@ -68,7 +68,7 @@ function updateImage() {
     const imgElement = document.getElementById("main-img");
     if (!imgElement) return;
     let imgUrl = images[currentIndex];
-    imgElement.src = imgUrl.startsWith('http') ? imgUrl : ${SUPABASE_URL}/storage/v1/object/public/or-images/${imgUrl};
+    imgElement.src = imgUrl.startsWith('http') ? imgUrl : ${SUPABASE_URL}/storage/v1/object/public/${imgUrl};
 }
 
 window.changePhoto = function(dir) {

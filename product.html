@@ -42,23 +42,38 @@
                 const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
                 if (error) throw error;
 
-                // --- LOGJIKA E SAKTË E FOTOS (E njëjtë si te lista kryesore) ---
-      let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-      let primaryImage = "";
+           // 1. Krijojmë listën e të gjitha fotove që ka kjo orë
+            let imageArray = [];
+            if (data.image_url && data.image_url.length > 0) {
+                let urls = Array.isArray(data.image_url) ? data.image_url : [data.image_url];
+                imageArray = urls.map(img => {
+                    if (img.startsWith('http')) return img;
+                    return SUPABASE_URL + "/storage/v1/object/public/or-images/" + img;
+                });
+            } else {
+                imageArray = ["https://placeholder.co/600x400/222/fff?text=No+Image"];
+            }
 
-      // Kontrollojmë kolonën e saktë image_url tek objekti data
-      if (data.image_url && data.image_url.length > 0) {
-          // Nëse është Array, merr foton e parë, përndryshe merre si string
-          primaryImage = Array.isArray(data.image_url) ? data.image_url[0] : data.image_url;
-      }
-                
-                if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
-                    if (primaryImage.startsWith('http')) {
-                        imgUrl = primaryImage;
-                    } else {
-                        imgUrl = SUPABASE_URL + "/storage/v1/object/public/or-images/" + primaryImage;
-                    }
-                }
+            // 2. Ndërtojmë HTML-në e slider-it me butona majtas/djathtas
+            let imagesHtml = imageArray.map((url, index) => 
+                <img src="${url}" class="product-slider-img" style="width:100%; display: ${index === 0 ? 'block' : 'none'}; border-radius: 12px; max-height: 500px; object-fit: contain;">
+            ).join('');
+
+            let buttonsHtml = '';
+            if (imageArray.length > 1) {
+                buttonsHtml = `
+                    <button type="button" onclick="changeProductImage(-1)" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.7); color:white; border:none; padding:12px 16px; cursor:pointer; border-radius:50%; font-size:18px; z-index:10;">&#10094;</button>
+                    <button type="button" onclick="changeProductImage(1)" style="position:absolute; right:15px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.7); color:white; border:none; padding:12px 16px; cursor:pointer; border-radius:50%; font-size:18px; z-index:10;">&#10095;</button>
+                `;
+            }
+
+            // Kjo zëvendëson imgUrl e vjetër me një bllok të plotë Slider-i HTML
+            let imgUrl = `
+                <div style="position:relative; width:100%; overflow:hidden; background:#111; border-radius:12px; min-height:300px; display:flex; align-items:center; justify-content:center;">
+                    ${imagesHtml}
+                    ${buttonsHtml}
+                </div>
+            `;
 
                 // Kushti për butonin PayPal (shfaqet vetëm nëse ka çmim dhe link)
                 const paypalButton = (data.price && data.paypal_link) 
@@ -95,7 +110,34 @@
                 container.innerHTML = "GABIM: " + err.message;
             }
         }
+
+        // Funksioni që ndërron fotot te faqja e produktit
+window.changeProductImage = function(direction) {
+    const images = document.getElementsByClassName('product-slider-img');
+    if (images.length <= 1) return;
+    
+    let currentIndex = 0;
+    
+    // Gjejmë foton që po shfaqet aktualisht
+    for (let i = 0; i < images.length; i++) {
+        if (images[i].style.display === 'block') {
+            currentIndex = i;
+            break;
+        }
+    }
+    
+          // Fshehim foton aktuale
+          images[currentIndex].style.display = 'none';
+    
+          // Llogarisim indeksin e fotos së re
+          let newIndex = currentIndex + direction;
+          if (newIndex >= images.length) newIndex = 0;
+          if (newIndex < 0) newIndex = images.length - 1;
+    
+          // Shfaqim foton e re
+          images[newIndex].style.display = 'block';
+      }
         loadProduct();
-    </script>
+     </script>
 </body>
-</html>
+</html>       

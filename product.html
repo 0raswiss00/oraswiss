@@ -4,117 +4,214 @@
     <meta charset="UTF-8">
     <title>Ora Swiss - Detajet</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
-        body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
-        .product-card { background: #111; border: 1px solid #333; padding: 20px; max-width: 500px; margin: auto; border-radius: 10px; }
-        .product-img { width: 100%; height: auto; border-radius: 10px; margin-bottom: 15px; object-fit: cover; }
-        .price { color: #25D366; font-weight: bold; font-size: 1.4em; margin: 10px 0; }
-        hr { border: 0; border-top: 1px solid #333; margin: 15px 0; }
-        .btn { display: block; text-align: center; text-decoration: none; font-weight: bold; border-radius: 5px; padding: 15px; margin-top: 10px; }
-        .btn-whatsapp { background: #25D366; color: white; }
-        .btn-paypal { background: #ffeb00; color: black; } /* Bërë i verdhë si te lista kryesore */
+        body { font-family: Arial; background:#0b0b0b; color:#fff; padding:20px; }
+
+        .product-card {
+            background:#111;
+            border:1px solid #333;
+            padding:20px;
+            max-width:500px;
+            margin:auto;
+            border-radius:10px;
+        }
+
+        .price { color:#25D366; font-weight:bold; font-size:1.4em; margin:10px 0; }
+
+        hr { border:0; border-top:1px solid #333; margin:15px 0; }
+
+        .btn {
+            display:block;
+            text-align:center;
+            text-decoration:none;
+            font-weight:bold;
+            border-radius:5px;
+            padding:15px;
+            margin-top:10px;
+        }
+
+        .btn-whatsapp { background:#25D366; color:white; }
+        .btn-paypal { background:#ffeb00; color:black; }
+
+        /* GALERIA */
+        .gallery {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .gallery img {
+            width:100%;
+            border-radius:10px;
+            object-fit:cover;
+        }
+
+        .nav-btn {
+            position:absolute;
+            top:50%;
+            transform:translateY(-50%);
+            background:rgba(0,0,0,0.6);
+            color:white;
+            border:none;
+            font-size:22px;
+            padding:10px;
+            cursor:pointer;
+            border-radius:5px;
+        }
+
+        .prev { left:5px; }
+        .next { right:5px; }
+
+        .thumbs {
+            display:flex;
+            gap:8px;
+            margin-top:10px;
+            overflow-x:auto;
+        }
+
+        .thumbs img {
+            width:70px;
+            height:70px;
+            object-fit:cover;
+            border-radius:6px;
+            cursor:pointer;
+            border:2px solid transparent;
+        }
+
+        .thumbs img:hover {
+            border-color:#25D366;
+        }
     </style>
 </head>
 <body>
 
-    <div id="container">Duke ngarkuar...</div>
+<div id="container">Duke ngarkuar...</div>
 
-    <script>
-        if (typeof window.supabaseClient === 'undefined') {
-            window.supabaseClient = window.supabase.createClient(
-                "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
-            );
+<script>
+if (typeof window.supabaseClient === 'undefined') {
+    window.supabaseClient = window.supabase.createClient(
+        "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    );
+}
+
+var supabase = window.supabaseClient;
+const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+
+let images = [];
+let currentImage = 0;
+
+function buildImageList(data) {
+    let imgs = [];
+
+    if (data.image_url) {
+        if (Array.isArray(data.image_url)) {
+            imgs = data.image_url;
+        } else {
+            imgs = data.image_url.split(",");
         }
-        var supabase = window.supabaseClient;
-        const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+    }
 
-        async function loadProduct() {
-            const id = new URLSearchParams(window.location.search).get('id');
-            const container = document.getElementById("container");
+    imgs = imgs.map(img => {
+        img = img.trim();
+        if (!img) return null;
+        if (img.startsWith("http")) return img;
+        return SUPABASE_URL + "/storage/v1/object/public/or-images/" + img;
+    }).filter(Boolean);
 
-            if (!id) {
-                container.innerHTML = "Asnjë ID u gjet.";
-                return;
-            }
+    if (imgs.length === 0) {
+        imgs = ["https://placeholder.co/600x400/222/fff?text=No+Image"];
+    }
 
-            try {
-                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-                if (error) throw error;
+    return imgs;
+}
 
-                // --- LOGJIKA E SAKTË E FOTOS (E njëjtë si te lista kryesore) ---
-      let images = [];
-      let currentImage = 0;
+function renderGallery() {
+    return `
+        <div class="gallery">
+            <button class="nav-btn prev" onclick="changeImage(-1)">❮</button>
+            <img id="mainImage" src="${images[currentImage]}">
+            <button class="nav-btn next" onclick="changeImage(1)">❯</button>
+        </div>
 
-      if (data.image_url) {
-          if (Array.isArray(data.image_url)) {
-              images = data.image_url;
-          } else if (typeof data.image_url === "string") {
-              // Nëse janë ruajtur si tekst të ndara me presje
-              images = data.image_url.split(",").map(img => img.trim());
-          }
-     }
+        <div class="thumbs">
+            ${images.map((img, i) => `
+                <img src="${img}" onclick="showImage(${i})">
+            `).join("")}
+        </div>
+    `;
+}
 
-      if (images.length === 0) {
-          images = ["https://placeholder.co/600x400/222/fff?text=No+Image"];
-      }
+window.changeImage = function(dir) {
+    currentImage += dir;
+    if (currentImage < 0) currentImage = images.length - 1;
+    if (currentImage >= images.length) currentImage = 0;
+    document.getElementById("mainImage").src = images[currentImage];
+};
 
-      images = images.map(img => {
-          if (img.startsWith("http")) {
-              return img;
-          }
-          return SUPABASE_URL + "/storage/v1/object/public/or-images/" + img;
-      });
+window.showImage = function(i) {
+    currentImage = i;
+    document.getElementById("mainImage").src = images[currentImage];
+};
 
-                // Kushti për butonin PayPal (shfaqet vetëm nëse ka çmim dhe link)
-                const paypalButton = (data.price && data.paypal_link) 
-                    ? `<a href="${data.paypal_link}" target="_blank" class="btn btn-paypal">
-                           🛒 BUY NOW (PayPal)
-                       </a>` 
-                    : '';
-                
-               container.innerHTML = `
-                   <div class="product-card">
-                       <div class="gallery">
-    <button class="nav-btn" onclick="changeImage(-1)">❮</button>
+async function loadProduct() {
+    const id = new URLSearchParams(window.location.search).get('id');
+    const container = document.getElementById("container");
 
-          <img id="mainImage" src="${images[0]}" class="product-img" alt="${data.brand}">
+    if (!id) {
+        container.innerHTML = "Asnjë ID u gjet.";
+        return;
+    }
 
-          <button class="nav-btn" onclick="changeImage(1)">❯</button>
-      </div>
+    try {
+        const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+        if (error) throw error;
 
-      <div class="thumbs">
-          ${images.map((img, index) => `
-              <img src="${img}" class="thumb"
-                   onclick="showImage(${index})">
-    `      ).join("")}
-      </div>
-                       
-                       <h1>${data.brand} - ${data.model}</h1>
-                       <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>
-        
-                       <hr>
-                       <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
-                       <p><strong>Case Size:</strong> ${data.case_size || 'N/A'}</p>
-                       <p><strong>Movement:</strong> ${data.movement || 'N/A'}</p>
-                       <p><strong>Function:</strong> ${data.function || 'N/A'}</p>
-                       <p><strong>Service:</strong> ${data.service ? 'Yes (Serviced)' : 'No'}</p>
-                       <p><strong>Box & Papers:</strong> ${data.box_papers ? 'Full Set' : 'Watch Only'}</p>
-                       <p><strong>Description:</strong> ${data.description || 'N/A'}</p>
-        
-                       <br>
-                       <a href="https://wa.me/35569XXXXXXX?text=I%20am%20interested%20in:%20${encodeURIComponent(data.brand + ' ' + data.model)}" class="btn btn-whatsapp">
-                          💬 ORDER ON WHATSAPP
-                       </a>
+        images = buildImageList(data);
+        currentImage = 0;
 
-                       ${paypalButton}
-                    </div>
-               `;
-            } catch (err) {
-                container.innerHTML = "GABIM: " + err.message;
-            }
-        }
-        loadProduct();
-    </script>
+        const paypalButton = (data.price && data.paypal_link)
+        ? <a href="${data.paypal_link}" target="_blank" class="btn btn-paypal">🛒 BUY NOW (PayPal)</a>
+        : '';
+
+        container.innerHTML = `
+        <div class="product-card">
+
+            ${renderGallery()}
+
+            <h1>${data.brand} - ${data.model}</h1>
+
+            <div class="price">
+                Price: ${data.price ? data.price + " €" : "Contact"}
+            </div>
+
+            <hr>
+
+            <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
+            <p><strong>Case Size:</strong> ${data.case_size || 'N/A'}</p>
+            <p><strong>Movement:</strong> ${data.movement || 'N/A'}</p>
+            <p><strong>Function:</strong> ${data.function || 'N/A'}</p>
+            <p><strong>Service:</strong> ${data.service ? 'Yes' : 'No'}</p>
+            <p><strong>Box & Papers:</strong> ${data.box_papers ? 'Full Set' : 'Watch Only'}</p>
+            <p><strong>Description:</strong> ${data.description || 'N/A'}</p>
+
+            <a class="btn btn-whatsapp"
+            href="https://wa.me/35569XXXXXXX?text=I%20am%20interested%20in:%20${encodeURIComponent(data.brand + ' ' + data.model)}">
+            💬 ORDER ON WHATSAPP
+            </a>
+
+            ${paypalButton}
+        </div>
+        `;
+
+    } catch (err) {
+        container.innerHTML = "GABIM: " + err.message;
+    }
+}
+
+loadProduct();
+</script>
+
 </body>
 </html>

@@ -38,14 +38,22 @@ async function loadProduct() {
         // Përgatit listën e fotove
         images = data.image_url ? (Array.isArray(data.image_url) ? data.image_url : [data.image_url]) : ["https://placeholder.co/600x400/222/fff?text=No+Image"];
 
-        container.innerHTML = `
-                    <div class="product-card">
-                        <div style="position: relative;">
-                            <img id="main-img" src="" class="product-img">
-                             + (images.length > 1 ? 
-                                <button onclick="changePhoto(-1)" style="position:absolute; left:0; top:40%; cursor:pointer;">❮</button>
-                                <button onclick="changePhoto(1)" style="position:absolute; right:0; top:40%; cursor:pointer;">❯</button>
-                             : '') + 
+container.innerHTML = `
+            <div class="product-card">
+                <div style="position: relative;">
+                    <img id="main-img" src="" class="product-img">
+                     + (images.length > 1 ? 
+                        <button onclick="changePhoto(-1)" style="position:absolute; left:0; top:40%; cursor:pointer;">❮</button>
+                        <button onclick="changePhoto(1)" style="position:absolute; right:0; top:40%; cursor:pointer;">❯</button>
+                     : '') + 
+                </div>
+                <h1>${data.brand} - ${data.model}</h1>
+                <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>
+                <hr>
+                <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
+                <a href="https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per:%20${encodeURIComponent(data.brand + ' ' + data.model)}" class="btn btn-whatsapp">💬 ORDER ON WHATSAPP</a>
+            </div>
+        `;
                 </div>
                 <h1>${data.brand} - ${data.model}</h1>
                 <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>

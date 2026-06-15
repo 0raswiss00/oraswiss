@@ -22,6 +22,7 @@
     <script>
 // Fillon këtu pas rreshtit 22
 const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+// Sigurohu që ke importuar bibliotekën e Supabase në <head>
 const supabase = window.supabase.createClient(SUPABASE_URL, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ");
 
 let images = [];
@@ -37,12 +38,12 @@ async function loadProduct() {
 
         images = data.image_url ? (Array.isArray(data.image_url) ? data.image_url : [data.image_url]) : ["https://placeholder.co/600x400/222/fff?text=No+Image"];
 
-        // Ndërtimi i HTML-së në mënyrë të sigurt
+        // Ndërtimi i HTML-së në mënyrë të thjeshtë
         let html = `
             <div class="product-card">
                 <div style="position: relative;">
                     <img id="main-img" src="" class="product-img">
-                    <div id="btn-container" style="position:absolute; width:100%; top:40%; display:flex; justify-content:space-between; padding:0 5px;"></div>
+                    <div id="btn-container" style="position:absolute; width:100%; top:40%; display:flex; justify-content:space-between; padding:0 10px;"></div>
                 </div>
                 <h1>${data.brand} - ${data.model}</h1>
                 <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>
@@ -54,7 +55,7 @@ async function loadProduct() {
         
         container.innerHTML = html;
 
-        // Shtimi i butonave vetëm nëse ka më shumë se 1 foto
+        // Shtimi i butonave nëse ka më shumë se 1 foto
         if (images.length > 1) {
             const btnContainer = document.getElementById('btn-container');
             btnContainer.innerHTML = `

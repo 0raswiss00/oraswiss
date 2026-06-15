@@ -89,39 +89,37 @@
 <div id="container">Duke ngarkuar...</div>
 
 <script>
-if (typeof window.supabaseClient === 'undefined') {
-    window.supabaseClient = window.supabase.createClient(
-        "https://gnwsrmelmeqduhhmfmoa.supabase.co",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-    );
-}
+const supabase = window.supabase.createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "PASTE_KETU_API_KEY_ORIGJINAL_TENDIN"
+);
 
-var supabase = window.supabaseClient;
 const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
 
 let images = [];
 let currentImage = 0;
 
-function buildImageList(data) {
+function buildImages(data) {
     let imgs = [];
 
     if (data.image_url) {
         if (Array.isArray(data.image_url)) {
             imgs = data.image_url;
         } else {
-            imgs = data.image_url.split(",");
+            imgs = String(data.image_url).split(",");
         }
     }
 
-    imgs = imgs.map(img => {
-        img = img.trim();
-        if (!img) return null;
-        if (img.startsWith("http")) return img;
-        return SUPABASE_URL + "/storage/v1/object/public/or-images/" + img;
-    }).filter(Boolean);
+    imgs = imgs
+        .map(i => i.trim())
+        .filter(Boolean)
+        .map(i => i.startsWith("http")
+            ? i
+            : SUPABASE_URL + "/storage/v1/object/public/or-images/" + i
+        );
 
     if (imgs.length === 0) {
-        imgs = ["https://placeholder.co/600x400/222/fff?text=No+Image"];
+        imgs = ["https://placehold.co/600x400?text=No+Image"];
     }
 
     return imgs;
@@ -131,87 +129,73 @@ function renderGallery() {
     return `
         <div class="gallery">
             <button class="nav-btn prev" onclick="changeImage(-1)">❮</button>
-            <img id="mainImage" src="${images[currentImage]}">
+            <img id="mainImage" src="${images[currentImage]}" />
             <button class="nav-btn next" onclick="changeImage(1)">❯</button>
         </div>
 
         <div class="thumbs">
-            ${images.map((img, i) => `
+            ${images.map((img,i)=>`
                 <img src="${img}" onclick="showImage(${i})">
             `).join("")}
         </div>
     `;
 }
 
-window.changeImage = function(dir) {
+window.changeImage = function(dir){
     currentImage += dir;
-    if (currentImage < 0) currentImage = images.length - 1;
-    if (currentImage >= images.length) currentImage = 0;
+    if(currentImage < 0) currentImage = images.length - 1;
+    if(currentImage >= images.length) currentImage = 0;
     document.getElementById("mainImage").src = images[currentImage];
 };
 
-window.showImage = function(i) {
+window.showImage = function(i){
     currentImage = i;
-    document.getElementById("mainImage").src = images[currentImage];
+    document.getElementById("mainImage").src = images[i];
 };
 
-async function loadProduct() {
-    const id = new URLSearchParams(window.location.search).get('id');
+async function loadProduct(){
+    const id = new URLSearchParams(window.location.search).get("id");
     const container = document.getElementById("container");
 
-    if (!id) {
-        container.innerHTML = "Asnjë ID u gjet.";
+    if(!id){
+        container.innerHTML = "No ID";
         return;
     }
 
-    try {
-        const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-        if (error) throw error;
+    const { data, error } = await supabase
+        .from("oras")
+        .select("*")
+        .eq("id", id)
+        .single();
 
-        images = buildImageList(data);
-        currentImage = 0;
+    if(error){
+        container.innerHTML = error.message;
+        return;
+    }
 
-        const paypalButton = (data.price && data.paypal_link)
-        ? <a href="${data.paypal_link}" target="_blank" class="btn btn-paypal">🛒 BUY NOW (PayPal)</a>
-        : '';
+    images = buildImages(data);
+    currentImage = 0;
 
-        container.innerHTML = `
+    container.innerHTML = `
         <div class="product-card">
 
             ${renderGallery()}
 
             <h1>${data.brand} - ${data.model}</h1>
 
-            <div class="price">
-                Price: ${data.price ? data.price + " €" : "Contact"}
-            </div>
+            <div class="price">${data.price ? data.price + " €" : "Contact"}</div>
 
             <hr>
 
-            <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
-            <p><strong>Case Size:</strong> ${data.case_size || 'N/A'}</p>
-            <p><strong>Movement:</strong> ${data.movement || 'N/A'}</p>
-            <p><strong>Function:</strong> ${data.function || 'N/A'}</p>
-            <p><strong>Service:</strong> ${data.service ? 'Yes' : 'No'}</p>
-            <p><strong>Box & Papers:</strong> ${data.box_papers ? 'Full Set' : 'Watch Only'}</p>
-            <p><strong>Description:</strong> ${data.description || 'N/A'}</p>
+            <p><b>Reference:</b> ${data.reference || "-"}</p>
+            <p><b>Case Size:</b> ${data.case_size || "-"}</p>
+            <p><b>Movement:</b> ${data.movement || "-"}</p>
 
-            <a class="btn btn-whatsapp"
-            href="https://wa.me/35569XXXXXXX?text=I%20am%20interested%20in:%20${encodeURIComponent(data.brand + ' ' + data.model)}">
-            💬 ORDER ON WHATSAPP
-            </a>
-
-            ${paypalButton}
         </div>
-        `;
-
-    } catch (err) {
-        container.innerHTML = "GABIM: " + err.message;
-    }
+    `;
 }
 
 loadProduct();
 </script>
-
 </body>
 </html>

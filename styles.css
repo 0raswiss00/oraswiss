@@ -3234,3 +3234,22 @@ img {
   object-fit:cover;
   display:block;
 }     
+
+
+
+/* Shtoje këtë në CSS-në tënde tek <style> */
+.product-card button {
+    background: rgba(0, 0, 0, 0.6); /* Sfond gjysmë-transparent */
+    color: white;
+    border: none;
+    padding: 15px 10px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    z-index: 10;
+}
+.product-card button:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+      

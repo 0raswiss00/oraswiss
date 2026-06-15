@@ -7,16 +7,12 @@
     <style>
         body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
         .product-card { background: #111; border: 1px solid #333; padding: 20px; max-width: 500px; margin: auto; border-radius: 10px; }
-        .gallery { position: relative; width: 100%; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
-        #mainImage { width: 100%; max-height: 400px; object-fit: contain; border-radius: 10px; }
-        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none; padding: 15px; cursor: pointer; font-size: 20px; border-radius: 5px; }
-        .prev { left: 5px; }
-        .next { right: 5px; }
-        .thumbs { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
-        .thumbs img { width: 60px; height: 60px; object-fit: cover; cursor: pointer; border-radius: 5px; border: 2px solid #333; }
+        .product-img { width: 100%; height: auto; border-radius: 10px; margin-bottom: 15px; object-fit: cover; }
         .price { color: #25D366; font-weight: bold; font-size: 1.4em; margin: 10px 0; }
+        hr { border: 0; border-top: 1px solid #333; margin: 15px 0; }
         .btn { display: block; text-align: center; text-decoration: none; font-weight: bold; border-radius: 5px; padding: 15px; margin-top: 10px; }
         .btn-whatsapp { background: #25D366; color: white; }
+        .btn-paypal { background: #ffeb00; color: black; } /* Bërë i verdhë si te lista kryesore */
     </style>
 </head>
 <body>
@@ -24,54 +20,80 @@
     <div id="container">Duke ngarkuar...</div>
 
     <script>
-        const supabase = window.supabase.createClient(
-            "https://gnwsrmelmeqduhhmfmoa.supabase.co",
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
-        );
-
-        let images = [];
-        let currentImage = 0;
-
-        window.changeImage = function(dir) {
-            currentImage = (currentImage + dir + images.length) % images.length;
-            document.getElementById("mainImage").src = images[currentImage];
-        };
-
-        window.showImage = function(i) {
-            currentImage = i;
-            document.getElementById("mainImage").src = images[i];
-        };
+        if (typeof window.supabaseClient === 'undefined') {
+            window.supabaseClient = window.supabase.createClient(
+                "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
+            );
+        }
+        var supabase = window.supabaseClient;
+        const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
 
         async function loadProduct() {
-            const id = new URLSearchParams(window.location.search).get("id");
+            const id = new URLSearchParams(window.location.search).get('id');
             const container = document.getElementById("container");
-            
-            const { data, error } = await supabase.from("oras").select("*").eq("id", id).single();
-            if(error) { container.innerHTML = "Gabim: " + error.message; return; }
 
-            // Procesimi i fotove
-            let raw = data.image_url || [];
-            let imgs = Array.isArray(raw) ? raw : String(raw).split(",");
-            images = imgs.map(i => i.trim()).filter(Boolean).map(i => 
-                i.startsWith("http") ? i : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + i
-            );
-            if (images.length === 0) images = ["https://placehold.co/600x400?text=No+Image"];
+            if (!id) {
+                container.innerHTML = "Asnjë ID u gjet.";
+                return;
+            }
 
-            container.innerHTML = `
-                <div class="product-card">
-                    <div class="gallery">
-                        <button class="nav-btn prev" onclick="changeImage(-1)">❮</button>
-                        <img id="mainImage" src="${images[0]}" />
-                        <button class="nav-btn next" onclick="changeImage(1)">❯</button>
+            try {
+                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+                if (error) throw error;
+
+                // --- LOGJIKA E SAKTË E FOTOS (E njëjtë si te lista kryesore) ---
+      let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+      let primaryImage = "";
+
+      // Kontrollojmë kolonën e saktë image_url tek objekti data
+      if (data.image_url && data.image_url.length > 0) {
+          // Nëse është Array, merr foton e parë, përndryshe merre si string
+          primaryImage = Array.isArray(data.image_url) ? data.image_url[0] : data.image_url;
+      }
+                
+                if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
+                    if (primaryImage.startsWith('http')) {
+                        imgUrl = primaryImage;
+                    } else {
+                        imgUrl = SUPABASE_URL + "/storage/v1/object/public/or-images/" + primaryImage;
+                    }
+                }
+
+                // Kushti për butonin PayPal (shfaqet vetëm nëse ka çmim dhe link)
+                const paypalButton = (data.price && data.paypal_link) 
+                    ? `<a href="${data.paypal_link}" target="_blank" class="btn btn-paypal">
+                           🛒 BUY NOW (PayPal)
+                       </a>` 
+                    : '';
+                
+               container.innerHTML = `
+                   <div class="product-card">
+                       <img src="${imgUrl}" class="product-img" alt="${data.brand}">
+                       
+                       <h1>${data.brand} - ${data.model}</h1>
+                       <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>
+        
+                       <hr>
+                       <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
+                       <p><strong>Case Size:</strong> ${data.case_size || 'N/A'}</p>
+                       <p><strong>Movement:</strong> ${data.movement || 'N/A'}</p>
+                       <p><strong>Function:</strong> ${data.function || 'N/A'}</p>
+                       <p><strong>Service:</strong> ${data.service ? 'Yes (Serviced)' : 'No'}</p>
+                       <p><strong>Box & Papers:</strong> ${data.box_papers ? 'Full Set' : 'Watch Only'}</p>
+                       <p><strong>Description:</strong> ${data.description || 'N/A'}</p>
+        
+                       <br>
+                       <a href="https://wa.me/35569XXXXXXX?text=I%20am%20interested%20in:%20${encodeURIComponent(data.brand + ' ' + data.model)}" class="btn btn-whatsapp">
+                          💬 ORDER ON WHATSAPP
+                       </a>
+
+                       ${paypalButton}
                     </div>
-                    <div class="thumbs">
-                        ${images.map((img, i) => <img src="${img}" onclick="showImage(${i})">).join("")}
-                    </div>
-                    <h1>${data.brand} - ${data.model}</h1>
-                    <div class="price">${data.price ? data.price + " €" : "Contact"}</div>
-                    <a href="https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per:%20${encodeURIComponent(data.brand + ' ' + data.model)}" class="btn btn-whatsapp">💬 ORDER ON WHATSAPP</a>
-                </div>
-            `;
+               `;
+            } catch (err) {
+                container.innerHTML = "GABIM: " + err.message;
+            }
         }
         loadProduct();
     </script>

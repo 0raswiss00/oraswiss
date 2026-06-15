@@ -86,15 +86,16 @@
      box_papers: document.getElementById('box_papers').checked,
      description: document.getElementById('description').value,
   
-  // SHTO KËTO TË DYJA KËTU:
-      category: document.getElementById('category').value,
-      price: parseInt(document.getElementById('price').value) || 0,
+    // SHTO KËTO TË DYJA KËTU:
+        category: document.getElementById('category').value,
+        price: parseInt(document.getElementById('price').value) || 0,
     
-      // SHTIMI I RI PËR FOTOT (Futet brenda kllapave katrore):
-      image_url: [ uploadedFileName ]
-  
+        // NDRYSHIMI: Duhet të jetë BRENDA kllapës gjarpëruese!
+        image_url: [ uploadedFileName ] 
+    };
+
     // Dërgimi te tabela 'oras'
-    const { error } = await supabase.from('oras').insert([oraData]);
+    const { error } = await supabase.from('oras').insert([o
 
     if (error) {
       alert("Gabim: " + error.message);

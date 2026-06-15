@@ -35,18 +35,14 @@ async function loadProduct() {
         const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
         if (error) throw error;
 
-        // Përgatit listën e fotove
         images = data.image_url ? (Array.isArray(data.image_url) ? data.image_url : [data.image_url]) : ["https://placeholder.co/600x400/222/fff?text=No+Image"];
 
-        // Ndërtojmë HTML-në vetëm një herë
-        container.innerHTML = `
+        // Ndërtimi i HTML-së në mënyrë të sigurt
+        let html = `
             <div class="product-card">
                 <div style="position: relative;">
                     <img id="main-img" src="" class="product-img">
-                    ${images.length > 1 ? `
-                        <button onclick="changePhoto(-1)" style="position:absolute; left:0; top:40%; cursor:pointer; background:rgba(0,0,0,0.5); color:white; border:none; padding:10px;">❮</button>
-                        <button onclick="changePhoto(1)" style="position:absolute; right:0; top:40%; cursor:pointer; background:rgba(0,0,0,0.5); color:white; border:none; padding:10px;">❯</button>
-                    ` : ''}
+                    <div id="btn-container" style="position:absolute; width:100%; top:40%; display:flex; justify-content:space-between; padding:0 5px;"></div>
                 </div>
                 <h1>${data.brand} - ${data.model}</h1>
                 <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>
@@ -55,6 +51,18 @@ async function loadProduct() {
                 <a href="https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per:%20${encodeURIComponent(data.brand + ' ' + data.model)}" class="btn btn-whatsapp">💬 ORDER ON WHATSAPP</a>
             </div>
         `;
+        
+        container.innerHTML = html;
+
+        // Shtimi i butonave vetëm nëse ka më shumë se 1 foto
+        if (images.length > 1) {
+            const btnContainer = document.getElementById('btn-container');
+            btnContainer.innerHTML = `
+                <button onclick="changePhoto(-1)" style="cursor:pointer; background:rgba(0,0,0,0.5); color:white; border:none; padding:10px;">❮</button>
+                <button onclick="changePhoto(1)" style="cursor:pointer; background:rgba(0,0,0,0.5); color:white; border:none; padding:10px;">❯</button>
+            `;
+        }
+
         updateImage();
     } catch (err) {
         container.innerHTML = "GABIM: " + err.message;
@@ -65,7 +73,6 @@ function updateImage() {
     const imgElement = document.getElementById("main-img");
     if (!imgElement) return;
     let imgUrl = images[currentIndex];
-    // Sigurohemi që URL-ja e fotos të ndërtohet saktë
     imgElement.src = imgUrl.startsWith('http') ? imgUrl : ${SUPABASE_URL}/storage/v1/object/public/or-images/${imgUrl};
 }
 
@@ -75,6 +82,7 @@ window.changePhoto = function(dir) {
 };
 
 loadProduct();
+
     </script>
 </body>
 </html>

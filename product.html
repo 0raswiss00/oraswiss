@@ -35,8 +35,10 @@ async function loadProduct() {
         const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
         if (error) throw error;
 
+        // Përgatit listën e fotove
         images = data.image_url ? (Array.isArray(data.image_url) ? data.image_url : [data.image_url]) : ["https://placeholder.co/600x400/222/fff?text=No+Image"];
 
+        // Ndërtojmë HTML-në vetëm një herë
         container.innerHTML = `
             <div class="product-card">
                 <div style="position: relative;">
@@ -63,6 +65,7 @@ function updateImage() {
     const imgElement = document.getElementById("main-img");
     if (!imgElement) return;
     let imgUrl = images[currentIndex];
+    // Sigurohemi që URL-ja e fotos të ndërtohet saktë
     imgElement.src = imgUrl.startsWith('http') ? imgUrl : ${SUPABASE_URL}/storage/v1/object/public/or-images/${imgUrl};
 }
 

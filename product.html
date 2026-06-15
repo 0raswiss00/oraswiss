@@ -20,82 +20,59 @@
     <div id="container">Duke ngarkuar...</div>
 
     <script>
-        if (typeof window.supabaseClient === 'undefined') {
-            window.supabaseClient = window.supabase.createClient(
-                "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
-            );
-        }
-        var supabase = window.supabaseClient;
-        const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+// Fillon këtu pas rreshtit 22
+const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+const supabase = window.supabase.createClient(SUPABASE_URL, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ");
 
-        async function loadProduct() {
-            const id = new URLSearchParams(window.location.search).get('id');
-            const container = document.getElementById("container");
+let images = [];
+let currentIndex = 0;
 
-            if (!id) {
-                container.innerHTML = "Asnjë ID u gjet.";
-                return;
-            }
+async function loadProduct() {
+    const id = new URLSearchParams(window.location.search).get('id');
+    const container = document.getElementById("container");
 
-            try {
-                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-                if (error) throw error;
+    try {
+        const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+        if (error) throw error;
 
-                // --- LOGJIKA E SAKTË E FOTOS (E njëjtë si te lista kryesore) ---
-      let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-      let primaryImage = "";
+        // Përgatit listën e fotove
+        images = data.image_url ? (Array.isArray(data.image_url) ? data.image_url : [data.image_url]) : ["https://placeholder.co/600x400/222/fff?text=No+Image"];
 
-      // Kontrollojmë kolonën e saktë image_url tek objekti data
-      if (data.image_url && data.image_url.length > 0) {
-          // Nëse është Array, merr foton e parë, përndryshe merre si string
-          primaryImage = Array.isArray(data.image_url) ? data.image_url[0] : data.image_url;
-      }
-                
-                if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
-                    if (primaryImage.startsWith('http')) {
-                        imgUrl = primaryImage;
-                    } else {
-                        imgUrl = SUPABASE_URL + "/storage/v1/object/public/or-images/" + primaryImage;
-                    }
-                }
+        container.innerHTML = `
+            <div class="product-card">
+                <div style="position: relative;">
+                    <img id="main-img" src="" class="product-img">
+                    ${images.length > 1 ? `
+                        <button onclick="changePhoto(-1)" style="position:absolute; left:0; top:40%; cursor:pointer;">❮</button>
+                        <button onclick="changePhoto(1)" style="position:absolute; right:0; top:40%; cursor:pointer;">❯</button>
+                    ` : ''}
+                </div>
+                <h1>${data.brand} - ${data.model}</h1>
+                <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>
+                <hr>
+                <!-- Pjesa tjetër e detajeve -->
+                <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
+                <a href="https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per:%20${data.brand}" class="btn btn-whatsapp">💬 ORDER ON WHATSAPP</a>
+            </div>
+        `;
+        updateImage();
+    } catch (err) {
+        container.innerHTML = "GABIM: " + err.message;
+    }
+}
 
-                // Kushti për butonin PayPal (shfaqet vetëm nëse ka çmim dhe link)
-                const paypalButton = (data.price && data.paypal_link) 
-                    ? `<a href="${data.paypal_link}" target="_blank" class="btn btn-paypal">
-                           🛒 BUY NOW (PayPal)
-                       </a>` 
-                    : '';
-                
-               container.innerHTML = `
-                   <div class="product-card">
-                       <img src="${imgUrl}" class="product-img" alt="${data.brand}">
-                       
-                       <h1>${data.brand} - ${data.model}</h1>
-                       <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>
-        
-                       <hr>
-                       <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
-                       <p><strong>Case Size:</strong> ${data.case_size || 'N/A'}</p>
-                       <p><strong>Movement:</strong> ${data.movement || 'N/A'}</p>
-                       <p><strong>Function:</strong> ${data.function || 'N/A'}</p>
-                       <p><strong>Service:</strong> ${data.service ? 'Yes (Serviced)' : 'No'}</p>
-                       <p><strong>Box & Papers:</strong> ${data.box_papers ? 'Full Set' : 'Watch Only'}</p>
-                       <p><strong>Description:</strong> ${data.description || 'N/A'}</p>
-        
-                       <br>
-                       <a href="https://wa.me/35569XXXXXXX?text=I%20am%20interested%20in:%20${encodeURIComponent(data.brand + ' ' + data.model)}" class="btn btn-whatsapp">
-                          💬 ORDER ON WHATSAPP
-                       </a>
+function updateImage() {
+    const imgElement = document.getElementById("main-img");
+    let imgUrl = images[currentIndex];
+    imgElement.src = imgUrl.startsWith('http') ? imgUrl : ${SUPABASE_URL}/storage/v1/object/public/or-images/${imgUrl};
+}
 
-                       ${paypalButton}
-                    </div>
-               `;
-            } catch (err) {
-                container.innerHTML = "GABIM: " + err.message;
-            }
-        }
-        loadProduct();
+window.changePhoto = function(dir) {
+    currentIndex = (currentIndex + dir + images.length) % images.length;
+    updateImage();
+};
+
+loadProduct();
     </script>
 </body>
 </html>

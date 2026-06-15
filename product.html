@@ -1,166 +1,138 @@
 <!DOCTYPE html>
 <html lang="sq">
 <head>
-    <meta charset="UTF-8">
-    <title>Ora Swiss - Detajet</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8">
+<title>Ora Swiss - Detajet</title>
 
-    <style>
-        body { font-family: Arial; background:#0b0b0b; color:#fff; padding:20px; }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 
-        .product-card {
-            background:#111;
-            border:1px solid #333;
-            padding:20px;
-            max-width:500px;
-            margin:auto;
-            border-radius:10px;
-        }
+<style>
+body { font-family: Arial; background:#0b0b0b; color:#fff; padding:20px; }
 
-        .price { color:#25D366; font-weight:bold; font-size:1.4em; margin:10px 0; }
-
-        hr { border:0; border-top:1px solid #333; margin:15px 0; }
-
-        .btn {
-            display:block;
-            text-align:center;
-            text-decoration:none;
-            font-weight:bold;
-            border-radius:5px;
-            padding:15px;
-            margin-top:10px;
-        }
-
-        .btn-whatsapp { background:#25D366; color:white; }
-        .btn-paypal { background:#ffeb00; color:black; }
-
-        /* GALERIA */
-        .gallery {
-            position: relative;
-            width: 100%;
-            margin-bottom: 15px;
-        }
-
-        .gallery img {
-            width:100%;
-            border-radius:10px;
-            object-fit:cover;
-        }
-
-        .nav-btn {
-            position:absolute;
-            top:50%;
-            transform:translateY(-50%);
-            background:rgba(0,0,0,0.6);
-            color:white;
-            border:none;
-            font-size:22px;
-            padding:10px;
-            cursor:pointer;
-            border-radius:5px;
-        }
-
-        .prev { left:5px; }
-        .next { right:5px; }
-
-        .thumbs {
-            display:flex;
-            gap:8px;
-            margin-top:10px;
-            overflow-x:auto;
-        }
-
-        .thumbs img {
-            width:70px;
-            height:70px;
-            object-fit:cover;
-            border-radius:6px;
-            cursor:pointer;
-            border:2px solid transparent;
-        }
-
-        .thumbs img:hover {
-            border-color:#25D366;
-        }
-    </style>
-</head>
-<body>
-
-<div id="container">Duke ngarkuar...</div>
-
-<script>
-const supabase = window.supabase.createClient(
-    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
-    "PASTE_KETU_API_KEY_ORIGJINAL_TENDIN"
-);
-
-const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-
-let images = [];
-let currentImage = 0;
-
-function buildImages(data) {
-    let imgs = [];
-
-    if (data.image_url) {
-        if (Array.isArray(data.image_url)) {
-            imgs = data.image_url;
-        } else {
-            imgs = String(data.image_url).split(",");
-        }
-    }
-
-    imgs = imgs
-        .map(i => i.trim())
-        .filter(Boolean)
-        .map(i => i.startsWith("http")
-            ? i
-            : SUPABASE_URL + "/storage/v1/object/public/or-images/" + i
-        );
-
-    if (imgs.length === 0) {
-        imgs = ["https://placehold.co/600x400?text=No+Image"];
-    }
-
-    return imgs;
+.product-card {
+    background:#111;
+    border:1px solid #333;
+    padding:20px;
+    max-width:500px;
+    margin:auto;
+    border-radius:10px;
 }
 
-function renderGallery() {
+.price { color:#25D366; font-size:1.4em; font-weight:bold; margin:10px 0; }
+
+hr { border:0; border-top:1px solid #333; margin:15px 0; }
+
+.gallery { position:relative; }
+.gallery img { width:100%; border-radius:10px; }
+
+.nav {
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    background:rgba(0,0,0,0.6);
+    border:none;
+    color:white;
+    font-size:22px;
+    padding:10px;
+    cursor:pointer;
+}
+
+.prev { left:5px; }
+.next { right:5px; }
+
+.thumbs {
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+    overflow-x:auto;
+}
+
+.thumbs img {
+    width:70px;
+    height:70px;
+    object-fit:cover;
+    border-radius:6px;
+    cursor:pointer;
+    border:2px solid transparent;
+}
+
+.thumbs img:hover { border-color:#25D366; }
+
+.btn {
+    display:block;
+    text-align:center;
+    padding:15px;
+    margin-top:10px;
+    text-decoration:none;
+    font-weight:bold;
+    border-radius:5px;
+}
+
+.btn-whatsapp { background:#25D366; color:white; }
+.btn-paypal { background:#ffeb00; color:black; }
+</style>
+</head>
+
+<body>
+
+<div id="container">Loading...</div>
+
+<script>
+const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    "PASTE_YOUR_REAL_KEY"
+);
+
+let images = [];
+let current = 0;
+
+function parseImages(data){
+    let imgs = data.image_url || [];
+
+    if(!Array.isArray(imgs)){
+        imgs = String(imgs).split(",");
+    }
+
+    imgs = imgs.map(i => i.trim()).filter(Boolean);
+
+    return imgs.map(i =>
+        i.startsWith("http")
+            ? i
+            : SUPABASE_URL + "/storage/v1/object/public/or-images/" + i
+    );
+}
+
+function renderGallery(){
     return `
         <div class="gallery">
-            <button class="nav-btn prev" onclick="changeImage(-1)">❮</button>
-            <img id="mainImage" src="${images[currentImage]}" />
-            <button class="nav-btn next" onclick="changeImage(1)">❯</button>
+            <button class="nav prev" onclick="change(-1)">❮</button>
+            <img id="main" src="${images[current]}">
+            <button class="nav next" onclick="change(1)">❯</button>
         </div>
 
         <div class="thumbs">
             ${images.map((img,i)=>`
-                <img src="${img}" onclick="showImage(${i})">
+                <img src="${img}" onclick="set(${i})">
             `).join("")}
         </div>
     `;
 }
 
-window.changeImage = function(dir){
-    currentImage += dir;
-    if(currentImage < 0) currentImage = images.length - 1;
-    if(currentImage >= images.length) currentImage = 0;
-    document.getElementById("mainImage").src = images[currentImage];
+window.change = function(dir){
+    current += dir;
+    if(current < 0) current = images.length - 1;
+    if(current >= images.length) current = 0;
+    document.getElementById("main").src = images[current];
 };
 
-window.showImage = function(i){
-    currentImage = i;
-    document.getElementById("mainImage").src = images[i];
+window.set = function(i){
+    current = i;
+    document.getElementById("main").src = images[i];
 };
 
-async function loadProduct(){
-    const id = new URLSearchParams(window.location.search).get("id");
-    const container = document.getElementById("container");
-
-    if(!id){
-        container.innerHTML = "No ID";
-        return;
-    }
+async function load(){
+    const id = new URLSearchParams(location.search).get("id");
 
     const { data, error } = await supabase
         .from("oras")
@@ -169,33 +141,44 @@ async function loadProduct(){
         .single();
 
     if(error){
-        container.innerHTML = error.message;
+        document.getElementById("container").innerHTML = error.message;
         return;
     }
 
-    images = buildImages(data);
-    currentImage = 0;
+    images = parseImages(data);
+    current = 0;
 
-    container.innerHTML = `
+    if(images.length === 0){
+        images = ["https://placehold.co/600x400?text=No+Image"];
+    }
+
+    document.getElementById("container").innerHTML = `
         <div class="product-card">
 
             ${renderGallery()}
 
             <h1>${data.brand} - ${data.model}</h1>
 
-            <div class="price">${data.price ? data.price + " €" : "Contact"}</div>
+            <div class="price">
+                ${data.price ? data.price + " €" : "Contact"}
+            </div>
 
             <hr>
 
             <p><b>Reference:</b> ${data.reference || "-"}</p>
             <p><b>Case Size:</b> ${data.case_size || "-"}</p>
-            <p><b>Movement:</b> ${data.movement || "-"}</p>
+
+            <a class="btn btn-whatsapp"
+            href="https://wa.me/35569XXXXXXX?text=${encodeURIComponent(data.brand + ' ' + data.model)}">
+            WhatsApp
+            </a>
 
         </div>
     `;
 }
 
-loadProduct();
+load();
 </script>
+
 </body>
 </html>

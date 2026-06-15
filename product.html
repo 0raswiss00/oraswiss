@@ -56,7 +56,7 @@
 
         // 2. Krijojmë HTML-në për çdo imazh të Slider-it me klasën e duhur
         let imagesHtml = imageArray.map((url, index) => 
-            <img src="${url}" class="product-slider-img" style="width:100%; display: ${index === 0 ? 'block' : 'none'}; border-radius: 12px; max-height: 450px; object-fit: contain;">
+            ${sliderHtml}
         ).join('');
 
         // 3. Krijojmë butonat majtas/djathtas nëse ka më shumë se 1 foto

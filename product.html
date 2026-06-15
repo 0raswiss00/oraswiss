@@ -19,60 +19,83 @@
 
     <div id="container">Duke ngarkuar...</div>
 
-<script>
-    if (typeof window.supabaseClient === 'undefined') {
-        window.supabaseClient = window.supabase.createClient(
-            "https://gnwsrmelmeqduhhmfmoa.supabase.co",
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY4ODg4MTksImV4cCI6MjAzMjQ2NDgxOX0.X7j7Z8228iQ8lV9C5r5pS0R5M211L5N7P5r1q2u6w2s"
-        );
-    }
-    var supabase = window.supabaseClient;
-    const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-
-    function changeImg(dir) {
-        var imgs = document.getElementsByClassName('slider-img');
-        var i = 0;
-        for (i = 0; i < imgs.length; i++) {
-            if (imgs[i].style.display === 'block') break;
-        }
-        imgs[i].style.display = 'none';
-        i = (i + dir + imgs.length) % imgs.length;
-        imgs[i].style.display = 'block';
-    }
-
-    async function loadProduct() {
-        const id = new URLSearchParams(window.location.search).get('id');
-        const container = document.getElementById("container");
-        if (!id) { container.innerHTML = "Asnjë ID u gjet."; return; }
-
-        try {
-            const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-            if (error) throw error;
-
-            let raw = data.image_url || [];
-            let images = Array.isArray(raw) ? raw : String(raw).split(",");
-            images = images.map(i => i.trim()).filter(Boolean).map(i => 
-                i.startsWith("http") ? i : SUPABASE_URL + "/storage/v1/object/public/or-images/" + i
+    <script>
+        if (typeof window.supabaseClient === 'undefined') {
+            window.supabaseClient = window.supabase.createClient(
+                "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
             );
-            if (images.length === 0) images = ["https://placehold.co/600x400?text=No+Image"];
+        }
+        var supabase = window.supabaseClient;
+        const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
 
-            let imagesHtml = '';
-            for (let i = 0; i < images.length; i++) {
-                imagesHtml += '<img src="' + images[i] + '" class="slider-img" style="width:100%; display:' + (i === 0 ? 'block' : 'none') + ';">';
+        async function loadProduct() {
+            const id = new URLSearchParams(window.location.search).get('id');
+            const container = document.getElementById("container");
+
+            if (!id) {
+                container.innerHTML = "Asnjë ID u gjet.";
+                return;
             }
 
-            let navHtml = images.length > 1 ? '<div style="margin:10px 0;"><button onclick="changeImg(-1)">❮</button> <button onclick="changeImg(1)">❯</button></div>' : '';
-            let paypalHtml = data.paypal_link ? '<br><a href="' + data.paypal_link + '" target="_blank">🛒 BUY NOW (PayPal)</a>' : '';
+            try {
+                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+                if (error) throw error;
 
-            container.innerHTML = '<div class="product-card">' + imagesHtml + navHtml + 
-                                  '<h1>' + data.brand + ' - ' + data.model + '</h1>' +
-                                  '<br><a href="https://wa.me/35569XXXXXXX?text=I%20want%20to%20order%20' + data.model + '">💬 ORDER ON WHATSAPP</a>' +
-                                  paypalHtml + '</div>';
-        } catch (err) {
-            container.innerHTML = "GABIM: " + err.message;
+                // --- LOGJIKA E SAKTË E FOTOS (E njëjtë si te lista kryesore) ---
+      let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+      let primaryImage = "";
+
+      // Kontrollojmë kolonën e saktë image_url tek objekti data
+      if (data.image_url && data.image_url.length > 0) {
+          // Nëse është Array, merr foton e parë, përndryshe merre si string
+          primaryImage = Array.isArray(data.image_url) ? data.image_url[0] : data.image_url;
+      }
+                
+                if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
+                    if (primaryImage.startsWith('http')) {
+                        imgUrl = primaryImage;
+                    } else {
+                        imgUrl = SUPABASE_URL + "/storage/v1/object/public/or-images/" + primaryImage;
+                    }
+                }
+
+                // Kushti për butonin PayPal (shfaqet vetëm nëse ka çmim dhe link)
+                const paypalButton = (data.price && data.paypal_link) 
+                    ? `<a href="${data.paypal_link}" target="_blank" class="btn btn-paypal">
+                           🛒 BUY NOW (PayPal)
+                       </a>` 
+                    : '';
+                
+               container.innerHTML = `
+                   <div class="product-card">
+                       <img src="${imgUrl}" class="product-img" alt="${data.brand}">
+                       
+                       <h1>${data.brand} - ${data.model}</h1>
+                       <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>
+        
+                       <hr>
+                       <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
+                       <p><strong>Case Size:</strong> ${data.case_size || 'N/A'}</p>
+                       <p><strong>Movement:</strong> ${data.movement || 'N/A'}</p>
+                       <p><strong>Function:</strong> ${data.function || 'N/A'}</p>
+                       <p><strong>Service:</strong> ${data.service ? 'Yes (Serviced)' : 'No'}</p>
+                       <p><strong>Box & Papers:</strong> ${data.box_papers ? 'Full Set' : 'Watch Only'}</p>
+                       <p><strong>Description:</strong> ${data.description || 'N/A'}</p>
+        
+                       <br>
+                       <a href="https://wa.me/35569XXXXXXX?text=I%20am%20interested%20in:%20${encodeURIComponent(data.brand + ' ' + data.model)}" class="btn btn-whatsapp">
+                          💬 ORDER ON WHATSAPP
+                       </a>
+
+                       ${paypalButton}
+                    </div>
+               `;
+            } catch (err) {
+                container.innerHTML = "GABIM: " + err.message;
+            }
         }
-    }
-    loadProduct();
-</script>
+        loadProduct();
+    </script>
 </body>
 </html>

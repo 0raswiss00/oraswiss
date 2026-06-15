@@ -22,7 +22,6 @@
     <script>
 // Fillon këtu pas rreshtit 22
 const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-// Sigurohu që ke importuar bibliotekën e Supabase në <head>
 const supabase = window.supabase.createClient(SUPABASE_URL, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ");
 
 let images = [];
@@ -38,8 +37,8 @@ async function loadProduct() {
 
         images = data.image_url ? (Array.isArray(data.image_url) ? data.image_url : [data.image_url]) : ["https://placeholder.co/600x400/222/fff?text=No+Image"];
 
-        // Ndërtimi i HTML-së në mënyrë të thjeshtë
-        let html = `
+        // Ndërtimi i HTML
+        container.innerHTML = `
             <div class="product-card">
                 <div style="position: relative;">
                     <img id="main-img" src="" class="product-img">
@@ -52,18 +51,13 @@ async function loadProduct() {
                 <a href="https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per:%20${encodeURIComponent(data.brand + ' ' + data.model)}" class="btn btn-whatsapp">💬 ORDER ON WHATSAPP</a>
             </div>
         `;
-        
-        container.innerHTML = html;
 
-        // Shtimi i butonave nëse ka më shumë se 1 foto
         if (images.length > 1) {
-            const btnContainer = document.getElementById('btn-container');
-            btnContainer.innerHTML = `
+            document.getElementById('btn-container').innerHTML = `
                 <button onclick="changePhoto(-1)" style="cursor:pointer; background:rgba(0,0,0,0.5); color:white; border:none; padding:10px;">❮</button>
                 <button onclick="changePhoto(1)" style="cursor:pointer; background:rgba(0,0,0,0.5); color:white; border:none; padding:10px;">❯</button>
             `;
         }
-
         updateImage();
     } catch (err) {
         container.innerHTML = "GABIM: " + err.message;
@@ -83,7 +77,6 @@ window.changePhoto = function(dir) {
 };
 
 loadProduct();
-
     </script>
 </body>
 </html>

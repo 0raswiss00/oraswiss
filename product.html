@@ -81,7 +81,9 @@ function changeImage(step) {
                container.innerHTML = `
                    <div class="product-card">
                        <div class="gallery-container">
-                           <img id="main-product-img" class="product-img" src="" alt="${data.brand}">
+                           <img id="main-product-img" class="product-img" 
+                                src="${window.currentImages.length > 0 ? (window.currentImages[0].startsWith('http') ? window.currentImages[0] : 'https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/' + window.currentImages[0]) : ''}" 
+                                alt="${data.brand}">
                            ${window.currentImages.length > 1 ? `
                                <button class="nav-btn prev" onclick="changeImage(-1)">&#10094;</button>
                                <button class="nav-btn next" onclick="changeImage(1)">&#10095;</button>

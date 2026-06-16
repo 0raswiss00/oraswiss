@@ -26,13 +26,17 @@
 
 <script>
 (function() {
-    // Këtu çdo gjë është e izoluar dhe nuk do të konfliktojë me asgjë tjetër
-    var supabase = window.supabase.createClient("sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9", "KËTU_VENDO_KEY-N_TËND");
-    var productId = new URLSearchParams(window.location.search).get('id');
+    // 1. Inicializimi (Përdor URL-në dhe Key-n tuaj të saktë)
+    const supabaseUrl = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
+    const supabaseKey = 'KËTU_VENDO_ANON_KEY_TËND'; // Zëvendësoje me çelësin 'anon' nga Supabase
+    
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    const productId = new URLSearchParams(window.location.search).get('id');
 
+    // 2. Funksioni për mbushjen e formularit
     async function loadEditForm() {
         if (!productId) return;
-        var { data } = await supabase.from('oras').select('*').eq('id', productId).single();
+        const { data, error } = await supabase.from('oras').select('*').eq('id', productId).single();
         if (data) {
             document.getElementById("brand").value = data.brand || '';
             document.getElementById("model").value = data.model || '';
@@ -41,8 +45,9 @@
         }
     }
 
+    // 3. Funksioni i ruajtjes (E bëjmë global që butoni ta gjejë)
     window.saveProduct = async function() {
-        var { error } = await supabase
+        const { error } = await supabase
             .from('oras')
             .update({
                 brand: document.getElementById("brand").value,
@@ -52,8 +57,12 @@
             })
             .eq('id', productId);
 
-        if (error) { alert("Gabim: " + error.message); } 
-        else { alert("U ruajt!"); window.location.href = 'index.html'; }
+        if (error) {
+            alert("Gabim: " + error.message);
+        } else {
+            alert("U ruajt me sukses!");
+            window.location.href = 'index.html';
+        }
     }
 
     loadEditForm();

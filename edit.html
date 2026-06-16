@@ -30,10 +30,11 @@
 
 <script>
     // 1. Inicializimi (Vetëm një herë)
-    const supabase = supabase.createClient(
-        "URL_KTU", 
-        "KEY_KTU"
-    );
+    const supabase = createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9" // Vendos këtu KEY-in tënd të saktë
+);
+
 
     // 2. ID e produktit
     const productId = new URLSearchParams(window.location.search).get('id');

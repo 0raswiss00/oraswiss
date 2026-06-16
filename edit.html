@@ -25,11 +25,11 @@
 </div>
 
 <script>
-    // Këtu vendosni konfigurimin e Supabase
-    const supabase = window.supabase.createClient("URL-JA-JUAJ", "KEY-JA-JUAJ");
+    // 1. Inicializimi (Sigurohu që 'supabase' shkruhet vetëm KËTU)
+    const supabase = window.supabase.createClient("https://gnwsrmelmeqduhhmfmoa.supabase.co", "YOUR_ANON_KEY");
     const productId = new URLSearchParams(window.location.search).get('id');
 
-    // Funksioni për të mbushur të dhënat kur faqja hapet
+    // 2. Funksioni për të mbushur formularin
     async function loadEditForm() {
         if (!productId) return;
         const { data, error } = await supabase.from('oras').select('*').eq('id', productId).single();
@@ -42,8 +42,9 @@
         }
     }
 
-    // Funksioni për të ruajtur
+    // 3. Funksioni për të ruajtur (Duhet të jetë brenda këtij tagu <script>)
     async function saveProduct() {
+        console.log("Duke ruajtur...");
         const { data, error } = await supabase
             .from('oras')
             .update({
@@ -55,14 +56,15 @@
             })
             .eq('id', productId);
 
-        if (error) alert("Gabim: " + error.message);
-        else {
-            alert("U ruajt!");
+        if (error) {
+            alert("Gabim: " + error.message);
+        } else {
+            alert("U ruajt me sukses!");
             window.location.href = 'index.html';
         }
     }
 
-    // Ekzekuto funksionin load sapo të ngarkohet faqja
+    // Thirrja e funksionit
     loadEditForm();
 </script>
 </body>

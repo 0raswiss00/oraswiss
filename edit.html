@@ -1,56 +1,33 @@
 <!DOCTYPE html>
-<html lang="sq">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Edit Product - Ora Swiss</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        body { background: #111; color: #fff; padding: 20px; font-family: Arial; }
-        .edit-form { max-width: 500px; margin: auto; background: #222; padding: 20px; border-radius: 10px; }
-        input, textarea { width: 100%; padding: 10px; margin: 10px 0; background: #333; color: white; border: none; }
-        button { padding: 10px 20px; background: #f39c12; cursor: pointer; border: none; }
-    </style>
 </head>
 <body>
 
-<div class="edit-form">
-    <h2>Edit Product</h2>
-    <input type="text" id="brand" placeholder="Brand">
-    <input type="text" id="model" placeholder="Model">
-    <input type="number" id="price" placeholder="Price">
-    <textarea id="description" placeholder="Description"></textarea>
-    <input type="text" id="image_url" placeholder="Image URLs (comma separated)">
-    
-    <button onclick="saveProduct()">Ruaj Ndryshimet</button>
-</div>
+    <div id="container">Duke u ngarkuar...</div>
 
-<script>
-    // Inicimi - VETËM NJË HERË
-    if (!window.supabase) {
-        window.supabase = window.supabase.createClient(
-            "https://gnwsrmelmeqduhhmfmoa.supabase.co",
-            "VENDOS_KETU_CELESIN_ANON_PUBLIC"
-        );
-    }
-    const supabase = window.supabase;
+    <script>
+        console.log("Skripti ka filluar!"); // Kontrollo Console-in, duhet ta shfaqë këtë!
+        
+        const supabaseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+        const supabaseKey = "VENDOS_KETU_CELESIN_ANON_PUBLIC";
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    async function loadProduct() {
-        const id = new URLSearchParams(window.location.search).get('id');
-        const container = document.getElementById("container");
-        if (!container) return;
-        if (!id) { container.innerHTML = "ID nuk u gjet"; return; }
-
-        try {
-            const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-            if (error) throw error;
-
-            container.innerHTML = '<div><h1>' + data.brand + ' ' + data.model + '</h1></div>';
-        } catch (e) {
-            container.innerHTML = "Gabim: " + e.message;
+        async function init() {
+            const container = document.getElementById("container");
+            container.innerText = "Po lidhem me bazën e të dhënave...";
+            
+            // Test i thjeshtë
+            const { data, error } = await supabase.from('oras').select('*').limit(1);
+            if (error) {
+                container.innerText = "Gabim: " + error.message;
+            } else {
+                container.innerText = "Lidhja u bë me sukses! Baza po punon.";
+            }
         }
-    }
-    loadProduct();
-</script>
-
+        
+        init();
+    </script>
 </body>
 </html>

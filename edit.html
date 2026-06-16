@@ -45,24 +45,34 @@
     }
 
     // 3. Funksioni për të ruajtur ndryshimet (I pavarur jashtë loadData)
-    async function saveProduct() {
-        const newData = {
-            brand: document.getElementById('brand').value,
-            model: document.getElementById('model').value,
-            price: document.getElementById('price').value,
-            description: document.getElementById('description').value,
-            image_url: document.getElementById('image_url').value.split(',')
-        };
+async function saveProduct(id) {
+    const brand = document.getElementById("brand").value;
+    const model = document.getElementById("model").value;
+    const price = document.getElementById("price").value;
+    const description = document.getElementById("description").value;
+    
+    // Merr tekstin nga inputi dhe shndërroje në array
+    const imagesInput = document.getElementById("images").value;
+    const imagesArray = imagesInput.split(',').map(url => url.trim());
 
-        const { error } = await supabase.from('oras').update(newData).eq('id', id);
-        
-        if (error) {
-            alert("Gabim: " + error.message);
-        } else {
-            alert("U ruajt me sukses!");
-            window.location.href = 'product.html?id=' + id;
-        }
+    const { data, error } = await supabase
+        .from('oras')
+        .update({
+            brand: brand,
+            model: model,
+            price: price,
+            description: description,
+            image_url: imagesArray // Supabase tani do ta ruajë si array
+        })
+        .eq('id', id);
+
+    if (error) {
+        alert("Gabim gjatë ruajtjes: " + error.message);
+    } else {
+        alert("Ndryshimet u ruajtën me sukses!");
+        window.location.href = 'index.html';
     }
+}
 
     // 4. Thirr loadData në fund
     loadData();

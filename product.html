@@ -43,22 +43,30 @@
                 if (error) throw error;
 
                 // --- LOGJIKA E SAKTË E FOTOS (E njëjtë si te lista kryesore) ---
-      let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-      let primaryImage = "";
+let currentImgIndex = 0;
+let images = [];
 
-      // Kontrollojmë kolonën e saktë image_url tek objekti data
-      if (data.image_url && data.image_url.length > 0) {
-          // Nëse është Array, merr foton e parë, përndryshe merre si string
-          primaryImage = Array.isArray(data.image_url) ? data.image_url[0] : data.image_url;
-      }
-                
-                if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
-                    if (primaryImage.startsWith('http')) {
-                        imgUrl = primaryImage;
-                    } else {
-                        imgUrl = SUPABASE_URL + "/storage/v1/object/public/or-images/" + primaryImage;
-                    }
-                }
+function updateImageDisplay() {
+    const imgElement = document.getElementById("main-product-img");
+    const baseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/";
+    
+    let path = images[currentImgIndex];
+    imgElement.src = path.startsWith('http') ? path : baseUrl + path;
+}
+
+// Këtë e thërrisni brenda funksionit loadProduct pasi të merrni të dhënat
+function initGallery(imgArray) {
+    images = imgArray || [];
+    if(images.length === 0) images = ["https://placeholder.co/600x400/222/fff?text=No+Image"];
+    updateImageDisplay();
+}
+
+function changeImage(step) {
+    currentImgIndex += step;
+    if (currentImgIndex >= images.length) currentImgIndex = 0;
+    if (currentImgIndex < 0) currentImgIndex = images.length - 1;
+    updateImageDisplay();
+}
 
                 // Kushti për butonin PayPal (shfaqet vetëm nëse ka çmim dhe link)
                 const paypalButton = (data.price && data.paypal_link) 
@@ -69,8 +77,13 @@
                 
                container.innerHTML = `
                    <div class="product-card">
-                       <img src="${imgUrl}" class="product-img" alt="${data.brand}">
-                       
+                       <div class="gallery-container">
+                           <img id="main-product-img" class="product-img" src="" alt="${data.brand}">
+                           ${imgArray.length > 1 ? `
+                               <button class="nav-btn prev" onclick="changeImage(-1)">&#10094;</button>
+                               <button class="nav-btn next" onclick="changeImage(1)">&#10095;</button>
+                           ` : ''}
+                       </div>          
                        <h1>${data.brand} - ${data.model}</h1>
                        <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>
         

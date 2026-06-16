@@ -42,18 +42,21 @@
                 const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
                 if (error) throw error;
 
-                // --- LOGJIKA E SAKTË E FOTOS (E njëjtë si te lista kryesore) ---
-let currentImgIndex = 0;
-let images = [];
+// --- LOGJIKA E RE E GALERISË ---
+        window.currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
+        window.currentImgIndex = 0;
 
-function updateImageDisplay() {
-    const imgElement = document.getElementById("main-product-img");
-    const baseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/";
-    
-    let path = images[currentImgIndex];
-    imgElement.src = path.startsWith('http') ? path : baseUrl + path;
-}
-
+        window.changeImage = function(step) {
+            const baseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/";
+            window.currentImgIndex += step;
+            
+            if (window.currentImgIndex >= window.currentImages.length) window.currentImgIndex = 0;
+            if (window.currentImgIndex < 0) window.currentImgIndex = window.currentImages.length - 1;
+            
+            const imgElement = document.getElementById("main-product-img");
+            const path = window.currentImages[window.currentImgIndex];
+            imgElement.src = path.startsWith('http') ? path : baseUrl + path;
+        };
 // Këtë e thërrisni brenda funksionit loadProduct pasi të merrni të dhënat
 function initGallery(imgArray) {
     images = imgArray || [];

@@ -2,13 +2,16 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <title>Modifiko Produktin</title>
+    <title>Edit - Ora Swiss</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
-        input, textarea { width: 100%; margin-bottom: 10px; padding: 8px; box-sizing: border-box; }
-        button { padding: 10px 20px; cursor: pointer; }
+        body { background: #121212; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; padding: 20px; }
+        .container { max-width: 500px; margin: auto; background: #1e1e1e; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        h2 { color: #f39c12; margin-top: 0; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; background: #2d2d2d; border: 1px solid #444; color: white; border-radius: 6px; box-sizing: border-box; }
+        button { padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-right: 10px; }
+        .btn-save { background: #f39c12; color: #121212; }
+        .btn-delete { background: #e74c3c; color: white; }
     </style>
 </head>
 <body>
@@ -21,39 +24,32 @@
     <textarea id="description" placeholder="Description"></textarea>
     <input type="text" id="image_url" placeholder="URL-të (ndarë me presje)">
     
-    <button onclick="saveProduct()">Ruaj Ndryshimet</button>
-    <button onclick="deleteProduct()" style="background: red; color: white;">Fshi Produktin</button>
+    <button class="btn-save" onclick="saveProduct()">Ruaj Ndryshimet</button>
+    <button class="btn-delete" onclick="deleteProduct()">Fshi Produktin</button>
 </div>
 
 <script>
-    // 1. Inicializimi
-    const supabase = supabase.createClient(
-        "VENDOS_URL_KTU", 
-        "VENDOS_API_KEY_KTU"
-    );
-
-    // 2. Marrim ID-në nga URL
+    // Sigurohu që këto janë të sakta!
+    const supabase = supabase.createClient("URL_KTU", "KEY_KTU");
     const productId = new URLSearchParams(window.location.search).get('id');
 
-    // 3. Ngarkimi i të dhënave kur faqja hapet
+    console.log("ID e produktit që po editohet:", productId);
+
     async function loadData() {
-        if (!productId) return;
+        if (!productId) { alert("Nuk u gjet asnjë ID në URL!"); return; }
         const { data, error } = await supabase.from('oras').select('*').eq('id', productId).single();
-        if (data) {
+        if (error) { console.error("Gabim load:", error); alert("Gabim: " + error.message); }
+        else {
             document.getElementById("brand").value = data.brand || '';
             document.getElementById("model").value = data.model || '';
             document.getElementById("price").value = data.price || '';
             document.getElementById("description").value = data.description || '';
-            document.getElementById("image_url").value = Array.isArray(data.image_url) ? data.image_url.join(', ') : (data.image_url || '');
-        } else if (error) {
-            console.error("Gabim gjatë ngarkimit:", error.message);
+            document.getElementById("image_url").value = Array.isArray(data.image_url) ? data.image_url.join(', ') : data.image_url;
         }
     }
 
-    // 4. Funksioni Ruaj
     async function saveProduct() {
-        const imageUrls = document.getElementById("image_url").value.split(',').map(s => s.trim()).filter(s => s !== "");
-
+        console.log("Duke ruajtur...");
         const { error } = await supabase
             .from('oras')
             .update({
@@ -61,33 +57,23 @@
                 model: document.getElementById("model").value,
                 price: parseFloat(document.getElementById("price").value),
                 description: document.getElementById("description").value,
-                image_url: imageUrls
+                image_url: document.getElementById("image_url").value.split(',').map(s => s.trim())
             })
             .eq('id', productId);
 
-        if (error) {
-            alert("Gabim gjatë ruajtjes: " + error.message);
-        } else {
-            alert("U ruajt me sukses!");
-            window.location.href = 'index.html';
-        }
+        if (error) { alert("Gabim ruajtje: " + error.message); }
+        else { alert("U ruajt me sukses!"); window.location.href = 'index.html'; }
     }
 
-    // 5. Funksioni Fshi
     async function deleteProduct() {
-        if (!confirm("A jeni i sigurt që doni ta fshini këtë produkt?")) return;
-
+        console.log("Duke fshirë...");
+        if (!confirm("Sigurt që doni ta fshini?")) return;
         const { error } = await supabase.from('oras').delete().eq('id', productId);
         
-        if (error) {
-            alert("Gabim gjatë fshirjes: " + error.message);
-        } else {
-            alert("Produkti u fshi!");
-            window.location.href = 'index.html';
-        }
+        if (error) { alert("Gabim fshirje: " + error.message); }
+        else { alert("Produkti u fshi!"); window.location.href = 'index.html'; }
     }
 
-    // Ekzekuto ngarkimin
     loadData();
 </script>
 </body>

@@ -45,15 +45,15 @@
     }
 
     // 3. Funksioni për të ruajtur ndryshimet (I pavarur jashtë loadData)
-async function saveProduct(id) {
+async function saveProduct() {
     const brand = document.getElementById("brand").value;
     const model = document.getElementById("model").value;
     const price = document.getElementById("price").value;
     const description = document.getElementById("description").value;
-    
-    // Merr tekstin nga inputi dhe shndërroje në array
-    const imagesInput = document.getElementById("images").value;
-    const imagesArray = imagesInput.split(',').map(url => url.trim());
+    const imagesRaw = document.getElementById("image_url").value;
+
+    // Konverto stringun e ndarë me presje në një Array
+    const imagesArray = imagesRaw.split(',').map(url => url.trim()).filter(url => url !== "");
 
     const { data, error } = await supabase
         .from('oras')
@@ -62,15 +62,15 @@ async function saveProduct(id) {
             model: model,
             price: price,
             description: description,
-            image_url: imagesArray // Supabase tani do ta ruajë si array
+            image_url: imagesArray
         })
-        .eq('id', id);
+        .eq('id', productId); // Përdorim ID-në që morëm nga URL
 
     if (error) {
-        alert("Gabim gjatë ruajtjes: " + error.message);
+        alert("Gabim: " + error.message);
     } else {
-        alert("Ndryshimet u ruajtën me sukses!");
-        window.location.href = 'index.html';
+        alert("U ruajt me sukses!");
+        window.location.href = 'index.html'; // Kthehu te lista
     }
 }
 

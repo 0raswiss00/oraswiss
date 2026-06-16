@@ -268,3 +268,152 @@ function changeImage(step) {
 </html>
 
 
+
+
+ndarja
+
+
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <title>Ora Swiss - Detajet</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
+        .product-card { background: #111; border: 1px solid #333; padding: 20px; max-width: 500px; margin: auto; border-radius: 10px; }
+        .product-img { width: 100%; height: auto; border-radius: 10px; margin-bottom: 15px; object-fit: cover; }
+        .price { color: #25D366; font-weight: bold; font-size: 1.4em; margin: 10px 0; }
+        hr { border: 0; border-top: 1px solid #333; margin: 15px 0; }
+        .btn { display: block; text-align: center; text-decoration: none; font-weight: bold; border-radius: 5px; padding: 15px; margin-top: 10px; }
+        .btn-whatsapp { background: #25D366; color: white; }
+        .btn-paypal { background: #ffeb00; color: black; } /* Bërë i verdhë si te lista kryesore */
+    </style>
+</head>
+<body>
+
+    <div id="container">Duke ngarkuar...</div>
+
+    <script>
+        if (typeof window.supabaseClient === 'undefined') {
+            window.supabaseClient = window.supabase.createClient(
+                "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
+            );
+        }
+        var supabase = window.supabaseClient;
+        const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+
+        async function loadProduct() {
+            const id = new URLSearchParams(window.location.search).get('id');
+            const container = document.getElementById("container");
+
+            if (!id) {
+                container.innerHTML = "Asnjë ID u gjet.";
+                return;
+            }
+
+            try {
+                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+                if (error) throw error;
+
+// --- LOGJIKA E RE E GALERISË ---
+        window.currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
+        window.currentImgIndex = 0;
+
+        window.changeImage = function(step) {
+            const baseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/";
+            window.currentImgIndex += step;
+            
+            if (window.currentImgIndex >= window.currentImages.length) window.currentImgIndex = 0;
+            if (window.currentImgIndex < 0) window.currentImgIndex = window.currentImages.length - 1;
+            
+            const imgElement = document.getElementById("main-product-img");
+            const path = window.currentImages[window.currentImgIndex];
+            imgElement.src = path.startsWith('http') ? path : baseUrl + path;
+        };
+// Këtë e thërrisni brenda funksionit loadProduct pasi të merrni të dhënat
+function initGallery(imgArray) {
+    images = imgArray || [];
+    if(images.length === 0) images = ["https://placeholder.co/600x400/222/fff?text=No+Image"];
+    updateImageDisplay();
+}
+
+function changeImage(step) {
+    currentImgIndex += step;
+    if (currentImgIndex >= images.length) currentImgIndex = 0;
+    if (currentImgIndex < 0) currentImgIndex = images.length - 1;
+    updateImageDisplay();
+}
+
+                // Kushti për butonin PayPal (shfaqet vetëm nëse ka çmim dhe link)
+                const paypalButton = (data.price && data.paypal_link) 
+                    ? `<a href="${data.paypal_link}" target="_blank" class="btn btn-paypal">
+                           🛒 BUY NOW (PayPal)
+                       </a>` 
+                    : '';
+                
+               container.innerHTML = `
+                   <div class="product-card">
+                       <div class="gallery-container">
+                           <img id="main-product-img" class="product-img" 
+                                src="${window.currentImages.length > 0 ? (window.currentImages[0].startsWith('http') ? window.currentImages[0] : 'https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/' + window.currentImages[0]) : ''}" 
+                                alt="${data.brand}">
+                            ${window.currentImages.length > 1 ? `
+                                <button class="nav-btn prev" onclick="changeImage(-1)">&#10094;</button>
+                                <button class="nav-btn next" onclick="changeImage(1)">&#10095;</button>
+                            ` : ''}
+                       </div>          
+                       <h1>${data.brand} - ${data.model}</h1>
+                       <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>
+        
+                       <hr>
+                       <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
+                       <p><strong>Case Size:</strong> ${data.case_size || 'N/A'}</p>
+                       <p><strong>Movement:</strong> ${data.movement || 'N/A'}</p>
+                       <p><strong>Function:</strong> ${data.function || 'N/A'}</p>
+                       <p><strong>Service:</strong> ${data.service ? 'Yes (Serviced)' : 'No'}</p>
+                       <p><strong>Box & Papers:</strong> ${data.box_papers ? 'Full Set' : 'Watch Only'}</p>
+                       <p><strong>Description:</strong> ${data.description || 'N/A'}</p>
+        
+                       <br>
+                       <a href="https://wa.me/35569XXXXXXX?text=I%20am%20interested%20in:%20${encodeURIComponent(data.brand + ' ' + data.model)}" class="btn btn-whatsapp">
+                          💬 ORDER ON WHATSAPP
+                       </a>
+                      <div class="admin-actions" style="margin-top: 20px; padding: 15px; border: 1px solid #444; border-radius: 8px;">
+                          <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
+                          <button onclick="editProduct('${data.id}')" style="background: #f39c12; border: none; padding: 10px; cursor: pointer; color: white;">Modifiko</button>
+                          <button onclick="deleteProduct('${data.id}')" style="background: #e74c3c; border: none; padding: 10px; cursor: pointer; color: white; margin-left: 10px;">Fshi Produktin</button>
+                     </div>
+
+                       ${paypalButton}
+                    </div>
+               `;
+            } catch (err) {
+                container.innerHTML = "GABIM: " + err.message;
+            }
+        }
+        loadProduct();
+    
+// Funksioni për Fshirje të plotë
+async function deleteProduct(id) {
+    if (!confirm("A jeni i sigurt? Ky produkt do të fshihet përgjithmonë nga kategoria dhe baza!")) return;
+    
+    const { error } = await supabase.from('oras').delete().eq('id', id);
+    if (error) {
+        alert("Gabim gjatë fshirjes: " + error.message);
+    } else {
+        alert("Produkti u fshi me sukses!");
+        window.location.href = 'index.html'; // Kthehu te lista kryesore
+    }
+}
+
+// Funksioni për Modifikim
+function editProduct(id) {
+    // Kjo të dërgon në një faqe editimi (duhet ta krijosh edit.html)
+    function editProduct(id) {
+    window.location.href = edit.html?id=${id};
+}
+</script>
+</body>
+</html>

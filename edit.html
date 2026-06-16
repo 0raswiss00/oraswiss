@@ -29,27 +29,29 @@
 </div>
 
 <script>
-    // Sigurohu që këto janë të sakta!
-    const supabase = supabase.createClient("URL_KTU", "KEY_KTU");
+    // 1. Inicializimi (Vetëm një herë)
+    const supabase = supabase.createClient(
+        "URL_KTU", 
+        "KEY_KTU"
+    );
+
+    // 2. ID e produktit
     const productId = new URLSearchParams(window.location.search).get('id');
 
-    console.log("ID e produktit që po editohet:", productId);
-
+    // 3. Funksionet
     async function loadData() {
-        if (!productId) { alert("Nuk u gjet asnjë ID në URL!"); return; }
+        if (!productId) return;
         const { data, error } = await supabase.from('oras').select('*').eq('id', productId).single();
-        if (error) { console.error("Gabim load:", error); alert("Gabim: " + error.message); }
-        else {
+        if (data) {
             document.getElementById("brand").value = data.brand || '';
             document.getElementById("model").value = data.model || '';
             document.getElementById("price").value = data.price || '';
             document.getElementById("description").value = data.description || '';
-            document.getElementById("image_url").value = Array.isArray(data.image_url) ? data.image_url.join(', ') : data.image_url;
+            document.getElementById("image_url").value = Array.isArray(data.image_url) ? data.image_url.join(', ') : (data.image_url || '');
         }
     }
 
     async function saveProduct() {
-        console.log("Duke ruajtur...");
         const { error } = await supabase
             .from('oras')
             .update({
@@ -61,19 +63,18 @@
             })
             .eq('id', productId);
 
-        if (error) { alert("Gabim ruajtje: " + error.message); }
-        else { alert("U ruajt me sukses!"); window.location.href = 'index.html'; }
+        if (error) alert("Gabim: " + error.message);
+        else { alert("U ruajt!"); window.location.href = 'index.html'; }
     }
 
     async function deleteProduct() {
-        console.log("Duke fshirë...");
-        if (!confirm("Sigurt që doni ta fshini?")) return;
+        if (!confirm("Sigurt?")) return;
         const { error } = await supabase.from('oras').delete().eq('id', productId);
-        
-        if (error) { alert("Gabim fshirje: " + error.message); }
-        else { alert("Produkti u fshi!"); window.location.href = 'index.html'; }
+        if (error) alert("Gabim: " + error.message);
+        else { alert("U fshi!"); window.location.href = 'index.html'; }
     }
 
+    // Ekzekuto loadData
     loadData();
 </script>
 </body>

@@ -10181,4 +10181,93 @@ body {
 
 
 
+css264 352 er artikujt
+/* =========================
+      GALLERY PAGE FIX
+========================= */
 
+.gallery-grid img {
+    width: 250px;
+    height: auto;
+    border-radius: 12px;
+    margin: 10px;
+    object-fit: cover;
+}
+
+.gallery-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* =========================
+     CATEGORY COLORS
+========================= */
+
+/* Luxury – default */
+.product.luxury h2 {
+    color: #1f2937;
+}
+
+/* Vintage */
+.product.vintage h2 {
+    color: #8B5E3C;
+}
+
+/* Parts */
+.product.part h2 {
+    color: #333;
+}
+
+
+.luxury-vintage-parts-photos img {
+    width: auto;      /* ose vendos gjerësinë që do */
+    height: 200px;    /* shembull */
+}
+
+.luxury, 
+.vintage, 
+.parts {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;   /* që fotot të mos dalin jashtë ekranit */
+    gap: 15px;         /* hapësirë midis fotove */
+}
+
+
+
+.container img {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.container {
+    display: flex;
+    flex-direction: row; /* i vendos horizontalisht */
+    gap: 10px; /* opsionale, hapësirë mes fotove */
+}
+
+.product-main-image:hover:not(.zoomed) {
+    transform: scale(1.03);
+}
+
+.specs-list {
+  margin-top: 20px;
+  border-top: 1px solid #333;
+}
+
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #333;
+  font-size: 14px;
+}
+
+.spec-row span:first-child {
+  opacity: .75;
+}
+
+.spec-row span:last-child {
+  font-weight: 700;
+}

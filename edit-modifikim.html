@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifiko Produktin</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h2>Modifiko Produktin</h2>
+    <input type="text" id="brand" placeholder="Brand">
+    <input type="text" id="model" placeholder="Model">
+    <input type="number" id="price" placeholder="Price">
+    <textarea id="description" placeholder="Description"></textarea>
+    <input type="text" id="image_url" placeholder="Imazhet (ndarë me presje)">
+    
+    <button onclick="saveProduct()">Ruaj Ndryshimet</button>
+    <button onclick="deleteProduct()" style="color:red;">Fshi Produktin</button>
+
+    <script src="script.js"></script> </body>
+</html>

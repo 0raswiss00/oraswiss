@@ -2,77 +2,41 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Product - Ora Swiss</title>
+    <title>Modifiko Produktin</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { background: #111; color: #fff; padding: 20px; font-family: Arial; }
-        .edit-form { max-width: 500px; margin: auto; background: #222; padding: 20px; border-radius: 10px; }
-        input, textarea { width: 100%; padding: 10px; margin: 10px 0; background: #333; color: white; border: none; }
-        button { padding: 10px 20px; background: #f39c12; cursor: pointer; border: none; }
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
+        input, textarea { width: 100%; margin-bottom: 10px; padding: 8px; box-sizing: border-box; }
+        button { padding: 10px 20px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="edit-form">
-    <h2>Edit Product</h2>
+<div class="container">
+    <h2>Modifiko Produktin</h2>
     <input type="text" id="brand" placeholder="Brand">
     <input type="text" id="model" placeholder="Model">
     <input type="number" id="price" placeholder="Price">
     <textarea id="description" placeholder="Description"></textarea>
-    <input type="text" id="image_url" placeholder="Image URLs (comma separated)">
+    <input type="text" id="image_url" placeholder="URL-të (ndarë me presje)">
     
     <button onclick="saveProduct()">Ruaj Ndryshimet</button>
+    <button onclick="deleteProduct()" style="background: red; color: white;">Fshi Produktin</button>
 </div>
 
 <script>
-    // 1. Inicializimi (Vetëm një herë)
-    if (typeof window.supabaseClient === 'undefined') {
-        window.supabaseClient = window.supabase.createClient(
-            "https://gnwsrmelmequdhhmfmoa.supabase.co",
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVscWVkdWhobWZtb2EiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY4MjQyNzQ3OCwiZXhwIjoxOTk3OTg3NDc4LCJhdWQiOiJhdXRoIn0.Kz5_wM5xQ61a0z7k3zU9mS1z6Q6zM1zQ7z6zQ7z6zQ7"
-        );
-    }
-    const supabase = window.supabaseClient;
+    // 1. Inicializimi
+    const supabase = supabase.createClient(
+        "VENDOS_URL_KTU", 
+        "VENDOS_API_KEY_KTU"
+    );
+
+    // 2. Marrim ID-në nga URL
     const productId = new URLSearchParams(window.location.search).get('id');
 
-    // 2. Modifikimi (Save)
-    window.saveProduct = async function() {
-        const { data, error } = await supabase
-            .from('oras')
-            .update({
-                brand: document.getElementById("brand").value,
-                model: document.getElementById("model").value,
-                price: document.getElementById("price").value,
-                description: document.getElementById("description").value,
-                image_url: document.getElementById("image_url").value.split(',')
-            })
-            .eq('id', productId);
-        
-        if (error) alert("Gabim: " + error.message);
-        else {
-            alert("U ruajt me sukses!");
-            window.location.href = 'index.html';
-        }
-    };
-
-    // 3. Fshirja (Delete)
-    window.deleteProduct = async function() {
-        if (!confirm("A jeni i sigurt që doni ta fshini këtë produkt?")) return;
-
-        const { error } = await supabase
-            .from('oras')
-            .delete()
-            .eq('id', productId);
-
-        if (error) alert("Gabim gjatë fshirjes: " + error.message);
-        else {
-            alert("Produkti u fshi!");
-            window.location.href = 'index.html';
-        }
-    };
-
-    // 4. Mbushja fillestare
-    async function loadEditForm() {
+    // 3. Ngarkimi i të dhënave kur faqja hapet
+    async function loadData() {
         if (!productId) return;
         const { data, error } = await supabase.from('oras').select('*').eq('id', productId).single();
         if (data) {
@@ -80,10 +44,51 @@
             document.getElementById("model").value = data.model || '';
             document.getElementById("price").value = data.price || '';
             document.getElementById("description").value = data.description || '';
-            document.getElementById("image_url").value = Array.isArray(data.image_url) ? data.image_url.join(',') : data.image_url;
+            document.getElementById("image_url").value = Array.isArray(data.image_url) ? data.image_url.join(', ') : (data.image_url || '');
+        } else if (error) {
+            console.error("Gabim gjatë ngarkimit:", error.message);
         }
     }
-    loadEditForm();
+
+    // 4. Funksioni Ruaj
+    async function saveProduct() {
+        const imageUrls = document.getElementById("image_url").value.split(',').map(s => s.trim()).filter(s => s !== "");
+
+        const { error } = await supabase
+            .from('oras')
+            .update({
+                brand: document.getElementById("brand").value,
+                model: document.getElementById("model").value,
+                price: parseFloat(document.getElementById("price").value),
+                description: document.getElementById("description").value,
+                image_url: imageUrls
+            })
+            .eq('id', productId);
+
+        if (error) {
+            alert("Gabim gjatë ruajtjes: " + error.message);
+        } else {
+            alert("U ruajt me sukses!");
+            window.location.href = 'index.html';
+        }
+    }
+
+    // 5. Funksioni Fshi
+    async function deleteProduct() {
+        if (!confirm("A jeni i sigurt që doni ta fshini këtë produkt?")) return;
+
+        const { error } = await supabase.from('oras').delete().eq('id', productId);
+        
+        if (error) {
+            alert("Gabim gjatë fshirjes: " + error.message);
+        } else {
+            alert("Produkti u fshi!");
+            window.location.href = 'index.html';
+        }
+    }
+
+    // Ekzekuto ngarkimin
+    loadData();
 </script>
 </body>
 </html>

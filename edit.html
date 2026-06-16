@@ -28,7 +28,10 @@
 (function() {
     // 1. Inicializimi (Përdor çelësin TËND këtu)
     const supabaseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-    const supabaseKey = "VENDO_KETU_ANON_KEY_TEND"; // KETU VENDO ÇELËSIN ANON, JO URL-në
+    const supabase = window.supabase.createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
     
     // Kemi përdorur 'var' për të shmangur deklarimet e dyfishta
     var supabase = window.supabase.createClient(supabaseUrl, supabaseKey);

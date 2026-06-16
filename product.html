@@ -120,11 +120,13 @@ function changeImage(step) {
         }
         loadProduct();
     
-// Funksioni për Fshirje të plotë
+// Funksionet për Admin (Fshirje dhe Modifikim)
+
 async function deleteProduct(id) {
-    if (!confirm("A jeni i sigurt? Ky produkt do të fshihet përgjithmonë nga kategoria dhe baza!")) return;
+    if (!confirm("A jeni i sigurt që doni ta fshini këtë produkt?")) return;
     
     const { error } = await supabase.from('oras').delete().eq('id', id);
+    
     if (error) {
         alert("Gabim gjatë fshirjes: " + error.message);
     } else {
@@ -132,21 +134,11 @@ async function deleteProduct(id) {
         window.location.href = 'index.html'; // Kthehu te lista kryesore
     }
 }
-    // Kjo të dërgon në një faqe editimi (duhet ta krijosh edit.html)
-    function editProduct(id) {
+
+function editProduct(id) {
     window.location.href = `edit.html?id=${id}`;
 }
-async function deleteProduct(id) {
-    if (!confirm("A jeni i sigurt?")) return;
-    const { error } = await supabase.from('oras').delete().eq('id', id);
-    if (error) {
-        alert("Gabim: " + error.message);
-    } else {
-        alert("Produkti u fshi!");
-        // Rifresko faqen totalisht për të marrë listën e re nga baza
-        window.location.reload(); 
-    }
-}
+
         
 </script>        
 </body>

@@ -24,7 +24,11 @@
 </div>
 
 <script>
-    const supabase = window.supabase.createClient("SUPABASE_URL", "SUPABASE_KEY"); // SHTO URL DHE KEY TUAJ
+    // Përdorni URL-në që keni te product.html (rreshti 25) dhe API Key-in tuaj
+    const supabase = window.supabase.createClient(
+        "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+        "EYJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." // vendosni të gjithë kodin tuaj këtu
+    );    
     const id = new URLSearchParams(window.location.search).get('id');
 
     async function loadData() {

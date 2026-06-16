@@ -29,12 +29,12 @@
 </div>
 
 <script>
-    // 1. Inicializimi (Vetëm një herë)
-    const supabase = createClient(
-    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9" // Vendos këtu KEY-in tënd të saktë
-);
-
+    // 1. Inicializimi (Sigurohu që ke vendosur URL dhe KEY-in tënd real)
+    const { createClient } = supabase;
+    const supabaseClient = createClient(
+        "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9" // Shto këtu KEY-in tënd të plotë
+    );
 
     // 2. ID e produktit
     const productId = new URLSearchParams(window.location.search).get('id');
@@ -42,7 +42,7 @@
     // 3. Funksionet
     async function loadData() {
         if (!productId) return;
-        const { data, error } = await supabase.from('oras').select('*').eq('id', productId).single();
+        const { data, error } = await supabaseClient.from('oras').select('*').eq('id', productId).single();
         if (data) {
             document.getElementById("brand").value = data.brand || '';
             document.getElementById("model").value = data.model || '';
@@ -53,7 +53,7 @@
     }
 
     async function saveProduct() {
-        const { error } = await supabase
+        const { error } = await supabaseClient
             .from('oras')
             .update({
                 brand: document.getElementById("brand").value,
@@ -69,14 +69,15 @@
     }
 
     async function deleteProduct() {
-        if (!confirm("Sigurt?")) return;
-        const { error } = await supabase.from('oras').delete().eq('id', productId);
+        if (!confirm("Sigurt që doni ta fshini?")) return;
+        const { error } = await supabaseClient.from('oras').delete().eq('id', productId);
         if (error) alert("Gabim: " + error.message);
         else { alert("U fshi!"); window.location.href = 'index.html'; }
     }
 
-    // Ekzekuto loadData
+    // Ekzekuto ngarkimin
     loadData();
 </script>
+
 </body>
 </html>

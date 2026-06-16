@@ -136,6 +136,18 @@ async function deleteProduct(id) {
     function editProduct(id) {
     window.location.href = `edit.html?id=${id}`;
 }
-</script>
+async function deleteProduct(id) {
+    if (!confirm("A jeni i sigurt?")) return;
+    const { error } = await supabase.from('oras').delete().eq('id', id);
+    if (error) {
+        alert("Gabim: " + error.message);
+    } else {
+        alert("Produkti u fshi!");
+        // Rifresko faqen totalisht për të marrë listën e re nga baza
+        window.location.reload(); 
+    }
+}
+        
+</script>        
 </body>
 </html>

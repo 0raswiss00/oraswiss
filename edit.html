@@ -20,63 +20,50 @@
     <input type="number" id="price" placeholder="Price">
     <textarea id="description" placeholder="Description"></textarea>
     <input type="text" id="image_url" placeholder="Image URLs (comma separated)">
+    
     <button onclick="saveProduct()">Ruaj Ndryshimet</button>
 </div>
 
 <script>
-    // 1. Deklarimi i Supabase (Vetëm një herë!)
-    const supabase = window.supabase.createClient(
-        "https://gnwsrmelmeqduhhmfmoa.supabase.co",
-        "EYJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." // Vendos këtu API Key-në tënde të plotë
-    );
+    // Këtu vendosni konfigurimin e Supabase
+    const supabase = window.supabase.createClient("URL-JA-JUAJ", "KEY-JA-JUAJ");
+    const productId = new URLSearchParams(window.location.search).get('id');
 
-    const id = new URLSearchParams(window.location.search).get('id');
-
-    // 2. Funksioni për të ngarkuar të dhënat
-    async function loadData() {
-        const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+    // Funksioni për të mbushur të dhënat kur faqja hapet
+    async function loadEditForm() {
+        if (!productId) return;
+        const { data, error } = await supabase.from('oras').select('*').eq('id', productId).single();
         if (data) {
-            document.getElementById('brand').value = data.brand;
-            document.getElementById('model').value = data.model;
-            document.getElementById('price').value = data.price;
-            document.getElementById('description').value = data.description;
-            document.getElementById('image_url').value = Array.isArray(data.image_url) ? data.image_url.join(',') : data.image_url;
+            document.getElementById("brand").value = data.brand || '';
+            document.getElementById("model").value = data.model || '';
+            document.getElementById("price").value = data.price || '';
+            document.getElementById("description").value = data.description || '';
+            document.getElementById("image_url").value = Array.isArray(data.image_url) ? data.image_url.join(', ') : data.image_url;
         }
     }
 
-    // 3. Funksioni për të ruajtur ndryshimet (I pavarur jashtë loadData)
-async function saveProduct() {
-    const brand = document.getElementById("brand").value;
-    const model = document.getElementById("model").value;
-    const price = document.getElementById("price").value;
-    const description = document.getElementById("description").value;
-    const imagesRaw = document.getElementById("image_url").value;
+    // Funksioni për të ruajtur
+    async function saveProduct() {
+        const { data, error } = await supabase
+            .from('oras')
+            .update({
+                brand: document.getElementById("brand").value,
+                model: document.getElementById("model").value,
+                price: document.getElementById("price").value,
+                description: document.getElementById("description").value,
+                image_url: document.getElementById("image_url").value.split(',').map(s => s.trim())
+            })
+            .eq('id', productId);
 
-    // Konverto stringun e ndarë me presje në një Array
-    const imagesArray = imagesRaw.split(',').map(url => url.trim()).filter(url => url !== "");
-
-    const { data, error } = await supabase
-        .from('oras')
-        .update({
-            brand: brand,
-            model: model,
-            price: price,
-            description: description,
-            image_url: imagesArray
-        })
-        .eq('id', productId); // Përdorim ID-në që morëm nga URL
-
-    if (error) {
-        alert("Gabim: " + error.message);
-    } else {
-        alert("U ruajt me sukses!");
-        window.location.href = 'index.html'; // Kthehu te lista
+        if (error) alert("Gabim: " + error.message);
+        else {
+            alert("U ruajt!");
+            window.location.href = 'index.html';
+        }
     }
-}
 
-    // 4. Thirr loadData në fund
-    loadData();
+    // Ekzekuto funksionin load sapo të ngarkohet faqja
+    loadEditForm();
 </script>
-
 </body>
 </html>

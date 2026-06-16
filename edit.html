@@ -1,33 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="sq">
 <head>
+    <meta charset="UTF-8">
+    <title>Edit Product - Ora Swiss</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { background: #111; color: #fff; padding: 20px; font-family: Arial; }
+        .edit-form { max-width: 500px; margin: auto; background: #222; padding: 20px; border-radius: 10px; }
+        input, textarea { width: 100%; padding: 10px; margin: 10px 0; background: #333; color: white; border: none; }
+        button { padding: 10px 20px; background: #f39c12; cursor: pointer; border: none; }
+    </style>
 </head>
 <body>
 
-    <div id="container">Duke u ngarkuar...</div>
+<div class="edit-form">
+    <h2>Edit Product</h2>
+    <input type="text" id="brand" placeholder="Brand">
+    <input type="text" id="model" placeholder="Model">
+    <input type="number" id="price" placeholder="Price">
+    <textarea id="description" placeholder="Description"></textarea>
+    <input type="text" id="image_url" placeholder="Image URLs (comma separated)">
+    
+    <button onclick="saveProduct()">Ruaj Ndryshimet</button>
+</div>
 
-    <script>
-        console.log("Skripti ka filluar!"); // Kontrollo Console-in, duhet ta shfaqë këtë!
-        
-        const supabaseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-        const supabaseKey = "VENDOS_KETU_CELESIN_ANON_PUBLIC";
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+<script>
+    // 1. Inicializimi (Vetëm një herë)
+    if (typeof window.supabaseClient === 'undefined') {
+        window.supabaseClient = window.supabase.createClient(
+            "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
+        );
+    }
+    const supabase = window.supabaseClient;
+    const productId = new URLSearchParams(window.location.search).get('id');
 
-        async function init() {
-            const container = document.getElementById("container");
-            container.innerText = "Po lidhem me bazën e të dhënave...";
-            
-            // Test i thjeshtë
-            const { data, error } = await supabase.from('oras').select('*').limit(1);
-            if (error) {
-                container.innerText = "Gabim: " + error.message;
-            } else {
-                container.innerText = "Lidhja u bë me sukses! Baza po punon.";
-            }
+    // 2. Mbushja e formularit
+    async function loadEditForm() {
+        if (!productId) return;
+        const { data, error } = await supabase.from('oras').select('*').eq('id', productId).single();
+        if (data) {
+            document.getElementById("brand").value = data.brand || '';
+            document.getElementById("model").value = data.model || '';
+            document.getElementById("price").value = data.price || '';
+            document.getElementById("description").value = data.description || '';
+            document.getElementById("image_url").value = Array.isArray(data.image_url) ? data.image_url.join(', ') : (data.image_url || '');
         }
-        
-        init();
-    </script>
+    }
+
+    // 3. Ruajtja e ndryshimeve
+    window.saveProduct = async function() {
+        const { data, error } = await supabase
+            .from('oras')
+            .update({
+                brand: document.getElementById("brand").value,
+                model: document.getElementById("model").value,
+                price: document.getElementById("price").value,
+                description: document.getElementById("description").value,
+                image_url: document.getElementById("image_url").value.split(',').map(s => s.trim())
+            })
+            .eq('id', productId);
+
+        if (error) {
+            alert("Gabim: " + error.message);
+        } else {
+            alert("U ruajt me sukses!");
+            window.location.href = 'index.html';
+        }
+    }
+
+    loadEditForm();
+</script>
 </body>
 </html>

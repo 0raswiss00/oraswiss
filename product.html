@@ -121,23 +121,22 @@ function changeImage(step) {
         loadProduct();
     
 // Funksionet për Admin (Fshirje dhe Modifikim)
-
 async function deleteProduct(id) {
+    console.log("Duke fshirë ID-në:", id); // Kjo do shfaqet te Console (F12)
     if (!confirm("A jeni i sigurt që doni ta fshini këtë produkt?")) return;
     
-    const { error } = await supabase.from('oras').delete().eq('id', id);
+    const { data, error } = await supabase.from('oras').delete().eq('id', id);
     
     if (error) {
+        console.error("Gabim:", error); // Nëse ka gabim, do e shohësh këtu
         alert("Gabim gjatë fshirjes: " + error.message);
     } else {
+        console.log("Përgjigja:", data);
         alert("Produkti u fshi me sukses!");
-        window.location.href = 'index.html'; // Kthehu te lista kryesore
+        window.location.href = 'index.html'; 
     }
 }
 
-function editProduct(id) {
-    window.location.href = `edit.html?id=${id}`;
-}
 
         
 </script>        

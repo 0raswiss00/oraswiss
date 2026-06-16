@@ -28,27 +28,14 @@
     // 1. Inicializimi (Vetëm një herë)
     if (typeof window.supabaseClient === 'undefined') {
         window.supabaseClient = window.supabase.createClient(
-            "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
+            "https://gnwsrmelmequdhhmfmoa.supabase.co",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVscWVkdWhobWZtb2EiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY4MjQyNzQ3OCwiZXhwIjoxOTk3OTg3NDc4LCJhdWQiOiJhdXRoIn0.Kz5_wM5xQ61a0z7k3zU9mS1z6Q6zM1zQ7z6zQ7z6zQ7"
         );
     }
     const supabase = window.supabaseClient;
     const productId = new URLSearchParams(window.location.search).get('id');
 
-    // 2. Mbushja e formularit
-    async function loadEditForm() {
-        if (!productId) return;
-        const { data, error } = await supabase.from('oras').select('*').eq('id', productId).single();
-        if (data) {
-            document.getElementById("brand").value = data.brand || '';
-            document.getElementById("model").value = data.model || '';
-            document.getElementById("price").value = data.price || '';
-            document.getElementById("description").value = data.description || '';
-            document.getElementById("image_url").value = Array.isArray(data.image_url) ? data.image_url.join(', ') : (data.image_url || '');
-        }
-    }
-
-    // 3. Ruajtja e ndryshimeve
+    // 2. Modifikimi (Save)
     window.saveProduct = async function() {
         const { data, error } = await supabase
             .from('oras')
@@ -57,18 +44,45 @@
                 model: document.getElementById("model").value,
                 price: document.getElementById("price").value,
                 description: document.getElementById("description").value,
-                image_url: document.getElementById("image_url").value.split(',').map(s => s.trim())
+                image_url: document.getElementById("image_url").value.split(',')
             })
             .eq('id', productId);
-
-        if (error) {
-            alert("Gabim: " + error.message);
-        } else {
+        
+        if (error) alert("Gabim: " + error.message);
+        else {
             alert("U ruajt me sukses!");
             window.location.href = 'index.html';
         }
-    }
+    };
 
+    // 3. Fshirja (Delete)
+    window.deleteProduct = async function() {
+        if (!confirm("A jeni i sigurt që doni ta fshini këtë produkt?")) return;
+
+        const { error } = await supabase
+            .from('oras')
+            .delete()
+            .eq('id', productId);
+
+        if (error) alert("Gabim gjatë fshirjes: " + error.message);
+        else {
+            alert("Produkti u fshi!");
+            window.location.href = 'index.html';
+        }
+    };
+
+    // 4. Mbushja fillestare
+    async function loadEditForm() {
+        if (!productId) return;
+        const { data, error } = await supabase.from('oras').select('*').eq('id', productId).single();
+        if (data) {
+            document.getElementById("brand").value = data.brand || '';
+            document.getElementById("model").value = data.model || '';
+            document.getElementById("price").value = data.price || '';
+            document.getElementById("description").value = data.description || '';
+            document.getElementById("image_url").value = Array.isArray(data.image_url) ? data.image_url.join(',') : data.image_url;
+        }
+    }
     loadEditForm();
 </script>
 </body>

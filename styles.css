@@ -1,4 +1,4 @@
-css e madhe
+
 /* =========================
       GLOBAL RESET
 ========================= */
@@ -3251,5 +3251,29 @@ img {
 .product-card button:hover {
     background: rgba(0, 0, 0, 0.9);
 }
+
+
+.gallery-container {
+    position: relative; /* Kjo është shumë e rëndësishme */
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+}
+
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 20px;
+    z-index: 10; /* Kjo siguron që butonat të jenë përpara fotos */
+}
+
+.prev { left: 10px; }
+.next { right: 10px; }
 
       

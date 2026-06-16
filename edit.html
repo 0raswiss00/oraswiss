@@ -26,17 +26,17 @@
 
 <script>
 (function() {
-    // 1. Inicializimi (Përdor URL-në dhe Key-n tuaj të saktë)
+    // 1. Inicializimi - PËRDOR ÇELËSIN TËND 'ANON'
     const supabaseUrl = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
-    const supabaseKey = 'KËTU_VENDO_ANON_KEY_TËND'; // Zëvendësoje me çelësin 'anon' nga Supabase
+    const supabaseKey = 'KËTU_VENDO_ÇELËSIN_ANON_QË_GJEN_TE_SETTINGS_API'; 
     
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
     const productId = new URLSearchParams(window.location.search).get('id');
 
-    // 2. Funksioni për mbushjen e formularit
+    // 2. Ngarkimi i të dhënave
     async function loadEditForm() {
         if (!productId) return;
-        const { data, error } = await supabase.from('oras').select('*').eq('id', productId).single();
+        const { data } = await supabase.from('oras').select('*').eq('id', productId).single();
         if (data) {
             document.getElementById("brand").value = data.brand || '';
             document.getElementById("model").value = data.model || '';
@@ -45,7 +45,7 @@
         }
     }
 
-    // 3. Funksioni i ruajtjes (E bëjmë global që butoni ta gjejë)
+    // 3. Funksioni i ruajtjes (Global)
     window.saveProduct = async function() {
         const { error } = await supabase
             .from('oras')
@@ -57,16 +57,13 @@
             })
             .eq('id', productId);
 
-        if (error) {
-            alert("Gabim: " + error.message);
-        } else {
-            alert("U ruajt me sukses!");
-            window.location.href = 'index.html';
-        }
+        if (error) { alert("Gabim: " + error.message); } 
+        else { alert("U ruajt me sukses!"); window.location.href = 'index.html'; }
     }
 
     loadEditForm();
 })();
 </script>
+
 </body>
 </html>

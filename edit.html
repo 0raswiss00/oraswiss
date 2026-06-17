@@ -44,28 +44,34 @@
     );
 
     const productId = new URLSearchParams(window.location.search).get('id');
-    let currentIndex = 0;
-    window.produktData = null;
+// Shto këtë variabël në krye të skriptit
+let currentIndex = 0;
+let produktData = null; // Kjo mban të dhënat e produktit
 
-    // 2. Ngarko të dhënat
-    async function loadData() {
-        if (!productId) return;
-        const { data, error } = await supabaseClient.from('oras').select('*').eq('id', productId).single();
-        if (error) { console.error("Gabim:", error); return; }
+async function loadData() {
+    if (!productId) return;
+    
+    const { data, error } = await supabaseClient
+        .from('oras')
+        .select('*')
+        .eq('id', productId)
+        .single();
 
-        if (data) {
-            window.produktData = data;
-            document.getElementById("brand").value = data.brand || '';
-            document.getElementById("model").value = data.model || '';
-            document.getElementById("price").value = data.price || '';
-            document.getElementById("description").value = data.description || '';
-            
-            // Shfaq foton e parë
-            if (data.image_url && data.image_url.length > 0) {
-                document.getElementById("product-image").src = data.image_url[0];
-            }
+    if (error) { console.error(error); return; }
+
+    if (data) {
+        produktData = data; // E ruajmë këtu
+        document.getElementById("brand").value = data.brand || '';
+        document.getElementById("model").value = data.model || '';
+        document.getElementById("price").value = data.price || '';
+        document.getElementById("description").value = data.description || '';
+        
+        // Shfaq imazhin e parë
+        if (data.image_url && data.image_url.length > 0) {
+            document.getElementById("product-image").src = data.image_url[0];
         }
     }
+}
 
     // 3. Ruaj ndryshimet
     async function saveProduct() {
@@ -107,13 +113,13 @@
     }
 
     // 5. Navigimi i fotove
-    function ndryshoFoto(direction) {
-        if (window.produktData?.image_url?.length > 0) {
-            const images = window.produktData.image_url;
-            currentIndex = (currentIndex + direction + images.length) % images.length;
-            document.getElementById("product-image").src = images[currentIndex];
-        }
+function ndryshoFoto(direction) {
+    if (produktData && produktData.image_url && produktData.image_url.length > 0) {
+        const images = produktData.image_url;
+        currentIndex = (currentIndex + direction + images.length) % images.length;
+        document.getElementById("product-image").src = images[currentIndex];
     }
+}
 
     // Filloje
     loadData();

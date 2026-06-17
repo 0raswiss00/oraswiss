@@ -95,9 +95,10 @@ const updateData = {
     description: document.getElementById("description").value
 };
 
-// KËTU ËSHTË NDRYSHIMI: 
-// E mbështjellim imageUrl brenda kllapave [] që të bëhet Array
-if (imageUrl) updateData.image_url = [imageUrl]; 
+// KJO PJESË ZËVENDËSON LOGJIKËN E VJETËR TË RRESHTIT 100
+if (imageUrls && imageUrls.length > 0) {
+    updateData.image_url = imageUrls; 
+}
 
 const { error } = await supabaseClient
     .from('oras')
@@ -144,22 +145,19 @@ if (data) {
 
 let currentIndex = 0; // Indexi aktual i fotos
 
+// Deklaro variablin jashtë funksionit, që ta mbajë mend indexin
+let currentIndex = 0; 
+
 function ndryshoFoto() {
-    // Supozojmë që variabla 'produkti' përmban të dhënat e marra nga Supabase
-    // dhe 'image_url' është një array (p.sh. ["foto1.jpg", "foto2.jpg"])
+    // Kontrollojmë nëse kemi të dhëna
     if (window.produktData && window.produktData.image_url) {
         const images = window.produktData.image_url;
         const imgElement = document.getElementById("product-image");
 
-function ndryshoFoto() {
-    if (window.produktData && window.produktData.image_url) {
-        const images = window.produktData.image_url;
-        const imgElement = document.getElementById("product-image");
-
-        // Këtu është rreshti që duhet të jetë i plotë:
+        // Kalojmë tek fotoja tjetër
         currentIndex = (currentIndex + 1) % images.length;
         
-        // Dhe këtu ndryshimi i fotos:
+        // Ndryshojmë src e imazhit
         imgElement.src = images[currentIndex];
     }
 }

@@ -60,7 +60,7 @@
             const fileName = `${Date.now()}_${file.name}`;
             
             const { error: uploadError } = await supabaseClient.storage
-                .from('oras') 
+                .from('or-images') 
                 .upload(fileName, file);
 
             if (uploadError) { alert("Gabim foto: " + uploadError.message); return; }
@@ -78,7 +78,7 @@
 
         if (imageUrl) updateData.image_url = imageUrl;
 
-        const { error } = await supabaseClient.from('oras').update(updateData).eq('id', productId);
+        const { error } = await supabaseClient.from('or-images').update(updateData).eq('id', productId);
         
         if (error) alert("Gabim në ruajtje: " + error.message);
         else { alert("U ruajt me sukses!"); window.location.href = 'index.html'; }

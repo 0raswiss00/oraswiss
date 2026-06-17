@@ -40,17 +40,35 @@
     const productId = new URLSearchParams(window.location.search).get('id');
 
     // 3. Funksionet
-    async function loadData() {
-        if (!productId) return;
-        const { data, error } = await supabaseClient.from('oras').select('*').eq('id', productId).single();
-        if (data) {
-            document.getElementById("brand").value = data.brand || '';
-            document.getElementById("model").value = data.model || '';
-            document.getElementById("price").value = data.price || '';
-            document.getElementById("description").value = data.description || '';
-            document.getElementById("image_url").value = Array.isArray(data.image_url) ? data.image_url.join(', ') : (data.image_url || '');
-        }
+async function loadData() {
+    const productId = new URLSearchParams(window.location.search).get('id');
+    console.log("Duke kërkuar ID-në:", productId); // Kontrollo Console për këtë
+
+    if (!productId) {
+        console.error("Nuk u gjet asnjë ID në URL!");
+        return;
     }
+
+    const { data, error } = await supabaseClient
+        .from('oras')
+        .select('*')
+        .eq('id', productId)
+        .single();
+
+    if (error) {
+        console.error("Gabim gjatë marrjes së të dhënave:", error);
+        return;
+    }
+
+    if (data) {
+        console.log("Të dhënat u gjetën:", data);
+        // Mbushja e fushave
+        if(document.getElementById("brand")) document.getElementById("brand").value = data.brand || '';
+        if(document.getElementById("model")) document.getElementById("model").value = data.model || '';
+        if(document.getElementById("price")) document.getElementById("price").value = data.price || '';
+        if(document.getElementById("description")) document.getElementById("description").value = data.description || '';
+    }
+}
 
     async function saveProduct() {
     // 1. Marrim vlerat nga inputet e tjera

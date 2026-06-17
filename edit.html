@@ -52,51 +52,29 @@
         }
     }
 
-async function saveProduct() {
-    const fileInput = document.getElementById('image_input');
-    let imageUrls = []; // Këtu do të ruajmë URL-të e fotove
+    async function saveProduct() {
+        const { error } = await supabaseClient
+            .from('oras')
+            .update({
+                brand: document.getElementById("brand").value,
+                model: document.getElementById("model").value,
+                price: parseFloat(document.getElementById("price").value),
+                description: document.getElementById("description").value,
+                image_url: document.getElementById("image_url").value.split(',').map(s => s.trim())
+            })
+            .eq('id', productId);
 
-    // 1. Kontrollojmë nëse ka foto për t'u ngarkuar
-    if (fileInput.files.length > 0) {
-        for (let i = 0; i < fileInput.files.length; i++) {
-            const file = fileInput.files[i];
-            const fileName = produkti_${Date.now()}_${i}.jpg;
-
-            // Ngarkimi në "bucket" (ndrysho 'emri-i-bucket' me emrin e vërtetë në Supabase)
-            const { data, error } = await supabaseClient.storage
-                .from('emri-i-bucket') 
-                .upload(fileName, file);
-
-            if (!error) {
-                const { data: urlData } = supabaseClient.storage
-                    .from('emri-i-bucket')
-                    .getPublicUrl(fileName);
-                imageUrls.push(urlData.publicUrl);
-            }
-        }
+        if (error) alert("Gabim: " + error.message);
+        else { alert("U ruajt!"); window.location.href = 'index.html'; }
     }
 
-    // 2. Përditësimi i databazës
-    const updateData = {
-        brand: document.getElementById('brand').value,
-        model: document.getElementById('model').value,
-        price: parseFloat(document.getElementById('price').value),
-        description: document.getElementById('description').value,
-    };
-
-    // Nëse kemi ngarkuar foto të reja, i shtojmë te updateData
-    if (imageUrls.length > 0) {
-        updateData.image_url = imageUrls.join(', ');
+    async function deleteProduct() {
+        if (!confirm("Sigurt që doni ta fshini?")) return;
+        const { error } = await supabaseClient.from('oras').delete().eq('id', productId);
+        if (error) alert("Gabim: " + error.message);
+        else { alert("U fshi!"); window.location.href = 'index.html'; }
     }
 
-    const { error } = await supabaseClient
-        .from('oras')
-        .update(updateData)
-        .eq('id', productId);
-
-    if (error) alert("Gabim: " + error.message);
-    else { alert("U ruajt!"); window.location.href = 'index.html'; }
-}
     // Ekzekuto ngarkimin
     loadData();
 </script>

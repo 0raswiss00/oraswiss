@@ -129,6 +129,25 @@ const { error } = await supabaseClient
         }
     }
 
+// --- KODI QË DUHET TË SHTOSH ---
+
+let currentIndex = 0; // Indexi aktual i fotos
+
+function ndryshoFoto() {
+    // Supozojmë që variabla 'produkti' përmban të dhënat e marra nga Supabase
+    // dhe 'image_url' është një array (p.sh. ["foto1.jpg", "foto2.jpg"])
+    if (window.produktData && window.produktData.image_url) {
+        const images = window.produktData.image_url;
+        const imgElement = document.getElementById("product-image");
+
+        // Kalojmë tek fotoja tjetër
+        currentIndex = (currentIndex + 1) % images.length;
+        
+        // Ndryshojmë src e imazhit
+        imgElement.src = images[currentIndex];
+    }
+}
+    
     // Ekzekuto ngarkimin sapo të hapet faqja
     loadData();
 </script>

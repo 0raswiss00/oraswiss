@@ -26,22 +26,30 @@
     
     <button class="btn-save" onclick="saveProduct()">Ruaj Ndryshimet</button>
     <button class="btn-delete" onclick="deleteProduct()">Fshi Produktin</button>
+    <img id="main-product-img" src="" style="width: 200px; border: 1px solid #ccc; display: block; margin-top: 10px;">
 </div>
 <script>
-    // 1. Inicializimi
+    // 1. Inicializimi i Supabase
     const supabaseClient = supabase.createClient(
         "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
         "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
     );
 
     const productId = new URLSearchParams(window.location.search).get('id');
+    let currentIndex = 0; 
 
-    // 2. Ngarko të dhënat në fushat kur faqja hapet
-    async function loadData() {
-        if (!productId) {
-            console.log("Nuk ka ID në URL");
-            return;
+    // 2. Funksioni i navigimit (Prev/Next)
+    function ndryshoFoto(direction) {
+        if (window.produktData && window.produktData.image_url && window.produktData.image_url.length > 0) {
+            const images = window.produktData.image_url;
+            currentIndex = (currentIndex + direction + images.length) % images.length;
+            document.getElementById("main-product-img").src = images[currentIndex];
         }
+    }
+
+    // 3. Ngarko të dhënat (loadData)
+    async function loadData() {
+        if (!productId) return;
         
         const { data, error } = await supabaseClient
             .from('oras')
@@ -49,120 +57,50 @@
             .eq('id', productId)
             .single();
 
-        if (error) {
-            console.error("Gabim gjatë ngarkimit:", error);
-            return;
-        }
-
         if (data) {
-            if(document.getElementById("brand")) document.getElementById("brand").value = data.brand || '';
-            if(document.getElementById("model")) document.getElementById("model").value = data.model || '';
-            if(document.getElementById("price")) document.getElementById("price").value = data.price || '';
-            if(document.getElementById("description")) document.getElementById("description").value = data.description || '';
+            window.produktData = data; 
+            document.getElementById("brand").value = data.brand || '';
+            document.getElementById("model").value = data.model || '';
+            document.getElementById("price").value = data.price || '';
+            document.getElementById("description").value = data.description || '';
+            
+            // Shfaq foton e parë
+            if (data.image_url && data.image_url.length > 0) {
+                document.getElementById("main-product-img").src = data.image_url[0];
+            }
         }
     }
 
-    // 3. Ruaj ndryshimet (me foto)
+    // 4. Ruaj produktin
     async function saveProduct() {
         const fileInput = document.getElementById('image_input');
-        let imageUrl = null;
+        let imageUrls = window.produktData ? window.produktData.image_url : [];
 
-        // Nëse është zgjedhur foto, ngarkoje tek 'or-images'
         if (fileInput && fileInput.files.length > 0) {
-            const file = fileInput.files[0];
-            const fileName = `${Date.now()}_${file.name}`;
-            
-            const { error: uploadError } = await supabaseClient.storage
-                .from('or-images') 
-                .upload(fileName, file);
-
-            if (uploadError) { 
-                alert("Gabim gjatë ngarkimit të fotos: " + uploadError.message); 
-                return; 
+            imageUrls = []; // Rishkruajmë listën nëse po ngarkojmë foto të reja
+            for (let i = 0; i < fileInput.files.length; i++) {
+                const file = fileInput.files[i];
+                const fileName = ${Date.now()}_${i}_${file.name};
+                await supabaseClient.storage.from('or-images').upload(fileName, file);
+                const { data } = supabaseClient.storage.from('or-images').getPublicUrl(fileName);
+                imageUrls.push(data.publicUrl);
             }
-            
-            const { data } = supabaseClient.storage.from('or-images').getPublicUrl(fileName);
-            imageUrl = data.publicUrl;
         }
 
-        // Përgatit të dhënat për tabelën 'oras'
-// ... pjesa e sipërme e funksionit ...
+        const updateData = {
+            brand: document.getElementById("brand").value,
+            model: document.getElementById("model").value,
+            price: parseFloat(document.getElementById("price").value),
+            description: document.getElementById("description").value,
+            image_url: imageUrls
+        };
 
-const updateData = {
-    brand: document.getElementById("brand").value,
-    model: document.getElementById("model").value,
-    price: parseFloat(document.getElementById("price").value),
-    description: document.getElementById("description").value
-};
-
-// KJO PJESË ZËVENDËSON LOGJIKËN E VJETËR TË RRESHTIT 100
-if (imageUrls && imageUrls.length > 0) {
-    updateData.image_url = imageUrls; 
-}
-
-const { error } = await supabaseClient
-    .from('oras')
-    .update(updateData)
-    .eq('id', productId);
-        
-        if (error) {
-            alert("Gabim gjatë ruajtjes në bazën e të dhënave: " + error.message);
-        } else {
-            alert("U ruajt me sukses!");
-            window.location.href = 'index.html';
-        }
+        const { error } = await supabaseClient.from('oras').update(updateData).eq('id', productId);
+        if (error) alert("Gabim: " + error.message);
+        else { alert("U ruajt!"); window.location.href = 'index.html'; }
     }
 
-    // 4. Fshi produktin
-    async function deleteProduct() {
-        if (!confirm("Je i sigurt që dëshiron ta fshish këtë produkt?")) return;
-        
-        const { error } = await supabaseClient
-            .from('oras')
-            .delete()
-            .eq('id', productId);
-            
-        if (error) {
-            alert("Gabim gjatë fshirjes: " + error.message);
-        } else {
-            alert("Produkti u fshi me sukses!");
-            window.location.href = 'index.html';
-        }
-    }
-if (data) {
-    window.produktData = data; 
-    
-    // ... pjesa tjetër e kodit (brand, model, etj.) ...
-
-    // SHTO KËTË PËR TË SHFAQUR VETËM FOTON E PARË
-    const imgElement = document.getElementById("product-image");
-    if (imgElement && data.image_url && data.image_url.length > 0) {
-        imgElement.src = data.image_url[0]; // Shfaq vetëm foton e parë
-    }
-}
-    
-// --- KODI QË DUHET TË SHTOSH ---
-
-let currentIndex = 0; // Indexi aktual i fotos
-
-// Deklaro variablin jashtë funksionit, që ta mbajë mend indexin
-let currentIndex = 0; 
-
-function ndryshoFoto() {
-    // Kontrollojmë nëse kemi të dhëna
-    if (window.produktData && window.produktData.image_url) {
-        const images = window.produktData.image_url;
-        const imgElement = document.getElementById("product-image");
-
-        // Kalojmë tek fotoja tjetër
-        currentIndex = (currentIndex + 1) % images.length;
-        
-        // Ndryshojmë src e imazhit
-        imgElement.src = images[currentIndex];
-    }
-}
-    
-    // Ekzekuto ngarkimin sapo të hapet faqja
+    // Filloje procesin
     loadData();
 </script>
 

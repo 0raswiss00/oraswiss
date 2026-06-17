@@ -37,24 +37,76 @@
 </div>
 
 <script>
-    const supabaseClient = supabase.createClient("https://gnwsrmelmeqduhhmfmoa.supabase.co", "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9");
+    // 1. Inicializimi
+    const supabaseClient = supabase.createClient(
+        "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+    );
+
     const productId = new URLSearchParams(window.location.search).get('id');
     let currentIndex = 0;
+    window.produktData = null;
 
+    // 2. Ngarko të dhënat
     async function loadData() {
-        const { data } = await supabaseClient.from('oras').select('*').eq('id', productId).single();
+        if (!productId) return;
+        const { data, error } = await supabaseClient.from('oras').select('*').eq('id', productId).single();
+        if (error) { console.error("Gabim:", error); return; }
+
         if (data) {
             window.produktData = data;
             document.getElementById("brand").value = data.brand || '';
             document.getElementById("model").value = data.model || '';
             document.getElementById("price").value = data.price || '';
             document.getElementById("description").value = data.description || '';
+            
+            // Shfaq foton e parë
             if (data.image_url && data.image_url.length > 0) {
                 document.getElementById("product-image").src = data.image_url[0];
             }
         }
     }
 
+    // 3. Ruaj ndryshimet
+    async function saveProduct() {
+        const fileInput = document.getElementById('image_input');
+        let imageUrls = window.produktData?.image_url || [];
+
+        if (fileInput.files.length > 0) {
+            imageUrls = [];
+            for (let i = 0; i < fileInput.files.length; i++) {
+                const file = fileInput.files[i];
+                const fileName = ${Date.now()}_${file.name};
+                await supabaseClient.storage.from('or-images').upload(fileName, file);
+                const { data } = supabaseClient.storage.from('or-images').getPublicUrl(fileName);
+                imageUrls.push(data.publicUrl);
+            }
+        }
+
+        const { error } = await supabaseClient
+            .from('oras')
+            .update({
+                brand: document.getElementById("brand").value,
+                model: document.getElementById("model").value,
+                price: parseFloat(document.getElementById("price").value),
+                description: document.getElementById("description").value,
+                image_url: imageUrls
+            })
+            .eq('id', productId);
+        
+        if (error) alert("Gabim gjatë ruajtjes: " + error.message);
+        else { alert("U ruajt me sukses!"); window.location.href = 'index.html'; }
+    }
+
+    // 4. Fshi produktin
+    async function deleteProduct() {
+        if (!confirm("Je i sigurt?")) return;
+        const { error } = await supabaseClient.from('oras').delete().eq('id', productId);
+        if (error) alert("Gabim gjatë fshirjes: " + error.message);
+        else { alert("Produkti u fshi!"); window.location.href = 'index.html'; }
+    }
+
+    // 5. Navigimi i fotove
     function ndryshoFoto(direction) {
         if (window.produktData?.image_url?.length > 0) {
             const images = window.produktData.image_url;
@@ -63,39 +115,7 @@
         }
     }
 
-    async function saveProduct() {
-        const fileInput = document.getElementById('image_input');
-        let imageUrls = window.produktData?.image_url || [];
-
-        if (fileInput.files.length > 0) {
-            imageUrls = [];
-            for (let file of fileInput.files) {
-                const fileName = ${Date.now()}_${file.name};
-                await supabaseClient.storage.from('or-images').upload(fileName, file);
-                const { data } = supabaseClient.storage.from('or-images').getPublicUrl(fileName);
-                imageUrls.push(data.publicUrl);
-            }
-        }
-
-        const { error } = await supabaseClient.from('oras').update({
-            brand: document.getElementById("brand").value,
-            model: document.getElementById("model").value,
-            price: parseFloat(document.getElementById("price").value),
-            description: document.getElementById("description").value,
-            image_url: imageUrls
-        }).eq('id', productId);
-
-        if (error) alert("Gabim: " + error.message);
-        else { alert("U ruajt!"); window.location.href = 'index.html'; }
-    }
-
-    async function deleteProduct() {
-        if (confirm("Sigurt?")) {
-            await supabaseClient.from('oras').delete().eq('id', productId);
-            window.location.href = 'index.html';
-        }
-    }
-
+    // Filloje
     loadData();
 </script>
 </body>

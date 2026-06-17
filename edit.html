@@ -27,7 +27,6 @@
     <button class="btn-save" onclick="saveProduct()">Ruaj Ndryshimet</button>
     <button class="btn-delete" onclick="deleteProduct()">Fshi Produktin</button>
 </div>
-
 <script>
     // 1. Inicializimi
     const supabaseClient = supabase.createClient(
@@ -37,25 +36,39 @@
 
     const productId = new URLSearchParams(window.location.search).get('id');
 
-    // 2. Funksioni për të mbushur fushat
+    // 2. Ngarko të dhënat në fushat kur faqja hapet
     async function loadData() {
-        if (!productId) return;
-        const { data, error } = await supabaseClient.from('oras').select('*').eq('id', productId).single();
+        if (!productId) {
+            console.log("Nuk ka ID në URL");
+            return;
+        }
+        
+        const { data, error } = await supabaseClient
+            .from('oras')
+            .select('*')
+            .eq('id', productId)
+            .single();
+
+        if (error) {
+            console.error("Gabim gjatë ngarkimit:", error);
+            return;
+        }
+
         if (data) {
-            document.getElementById("brand").value = data.brand || '';
-            document.getElementById("model").value = data.model || '';
-            document.getElementById("price").value = data.price || '';
-            document.getElementById("description").value = data.description || '';
+            if(document.getElementById("brand")) document.getElementById("brand").value = data.brand || '';
+            if(document.getElementById("model")) document.getElementById("model").value = data.model || '';
+            if(document.getElementById("price")) document.getElementById("price").value = data.price || '';
+            if(document.getElementById("description")) document.getElementById("description").value = data.description || '';
         }
     }
 
-    // 3. Funksioni për të ruajtur (Korrektuar)
+    // 3. Ruaj ndryshimet (me foto)
     async function saveProduct() {
         const fileInput = document.getElementById('image_input');
         let imageUrl = null;
 
-        // Nëse është zgjedhur foto, ngarkoje
-        if (fileInput.files.length > 0) {
+        // Nëse është zgjedhur foto, ngarkoje tek 'or-images'
+        if (fileInput && fileInput.files.length > 0) {
             const file = fileInput.files[0];
             const fileName = `${Date.now()}_${file.name}`;
             
@@ -63,12 +76,16 @@
                 .from('or-images') 
                 .upload(fileName, file);
 
-            if (uploadError) { alert("Gabim foto: " + uploadError.message); return; }
+            if (uploadError) { 
+                alert("Gabim gjatë ngarkimit të fotos: " + uploadError.message); 
+                return; 
+            }
             
-            const { data } = supabaseClient.storage.from('oras').getPublicUrl(fileName);
+            const { data } = supabaseClient.storage.from('or-images').getPublicUrl(fileName);
             imageUrl = data.publicUrl;
         }
 
+        // Përgatit të dhënat për tabelën 'oras'
         const updateData = {
             brand: document.getElementById("brand").value,
             model: document.getElementById("model").value,
@@ -78,20 +95,38 @@
 
         if (imageUrl) updateData.image_url = imageUrl;
 
-        const { error } = await supabaseClient.from('oras').update(updateData).eq('id', productId);
+        // Bëj update tabelën 'oras'
+        const { error } = await supabaseClient
+            .from('oras')
+            .update(updateData)
+            .eq('id', productId);
         
-        if (error) alert("Gabim në ruajtje: " + error.message);
-        else { alert("U ruajt me sukses!"); window.location.href = 'index.html'; }
+        if (error) {
+            alert("Gabim gjatë ruajtjes në bazën e të dhënave: " + error.message);
+        } else {
+            alert("U ruajt me sukses!");
+            window.location.href = 'index.html';
+        }
     }
 
-    // 4. Funksioni për fshirje
+    // 4. Fshi produktin
     async function deleteProduct() {
-        if (!confirm("Sigurt?")) return;
-        const { error } = await supabaseClient.from('oras').delete().eq('id', productId);
-        if (error) alert("Gabim: " + error.message);
-        else { alert("U fshi!"); window.location.href = 'index.html'; }
+        if (!confirm("Je i sigurt që dëshiron ta fshish këtë produkt?")) return;
+        
+        const { error } = await supabaseClient
+            .from('oras')
+            .delete()
+            .eq('id', productId);
+            
+        if (error) {
+            alert("Gabim gjatë fshirjes: " + error.message);
+        } else {
+            alert("Produkti u fshi me sukses!");
+            window.location.href = 'index.html';
+        }
     }
 
+    // Ekzekuto ngarkimin sapo të hapet faqja
     loadData();
 </script>
 

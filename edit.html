@@ -53,31 +53,46 @@
     }
 
     async function saveProduct() {
-        const { error } = await supabaseClient
-            .from('oras')
-            .update({
-                brand: document.getElementById("brand").value,
-                model: document.getElementById("model").value,
-                price: parseFloat(document.getElementById("price").value),
-                description: document.getElementById("description").value,
-                image_url: document.getElementById("image_url").value.split(',').map(s => s.trim())
-            })
-            .eq('id', productId);
+    // 1. Marrim vlerat nga inputet e tjera
+    const brand = document.getElementById("brand").value;
+    const model = document.getElementById("model").value;
+    const price = parseFloat(document.getElementById("price").value);
+    const description = document.getElementById("description").value;
 
-        if (error) alert("Gabim: " + error.message);
-        else { alert("U ruajt!"); window.location.href = 'index.html'; }
+    // 2. Kontrollojmë nëse janë ngarkuar foto të reja
+    const fileInput = document.getElementById('image_input');
+    let imageUrl = ""; // Këtu do të ruajmë URL-në
+
+    if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const fileName = `${Date.now()}_${file.name}`;
+        
+        // Ngarkimi në Supabase (Zëvendëso 'emri-i-bucket' me emrin tuaj real)
+        const { data, error } = await supabaseClient.storage
+            .from('emri-i-bucket') 
+            .upload(fileName, file);
+
+        if (error) {
+            alert("Gabim gjatë ngarkimit: " + error.message);
+            return;
+        }
+
+        // Marrim URL-në publike
+        const { data: urlData } = supabaseClient.storage
+            .from('emri-i-bucket')
+            .getPublicUrl(fileName);
+        imageUrl = urlData.publicUrl;
     }
 
-    async function deleteProduct() {
-        if (!confirm("Sigurt që doni ta fshini?")) return;
-        const { error } = await supabaseClient.from('oras').delete().eq('id', productId);
-        if (error) alert("Gabim: " + error.message);
-        else { alert("U fshi!"); window.location.href = 'index.html'; }
-    }
+    // 3. Përditësojmë databazën
+    const updatePayload = { brand, model, price, description };
+    if (imageUrl) updatePayload.image_url = imageUrl; // Përditësojmë vetëm nëse ka foto
 
-    // Ekzekuto ngarkimin
-    loadData();
-</script>
+    const { error } = await supabaseClient
+        .from('oras')
+        .update(updatePayload)
+        .eq('id', productId);
 
-</body>
-</html>
+    if (error) alert("Gabim: " + error.message);
+    else { alert("U ruajt!"); window.location.href = 'index.html'; }
+}

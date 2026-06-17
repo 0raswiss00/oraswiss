@@ -18,11 +18,13 @@
 
 <div class="container">
     <h2>Modifiko Produktin</h2>
-    <input type="text" id="brand" placeholder="Brand">
-    <input type="text" id="model" placeholder="Model">
-    <input type="number" id="price" placeholder="Price">
-    <textarea id="description" placeholder="Description"></textarea>
     <input type="file" id="image_input" multiple accept="image/*">
+    
+    <div id="gallery-preview" style="margin: 20px 0;">
+        <img id="product-image" src="" style="width: 200px; display: block; border: 1px solid #444;">
+        <button type="button" onclick="ndryshoFoto(-1)">Prev</button>
+        <button type="button" onclick="ndryshoFoto(1)">Next</button>
+    </div>
     
     <button class="btn-save" onclick="saveProduct()">Ruaj Ndryshimet</button>
     <button class="btn-delete" onclick="deleteProduct()">Fshi Produktin</button>

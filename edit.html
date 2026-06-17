@@ -24,9 +24,9 @@
     <textarea id="description" placeholder="Description"></textarea>
     <input type="file" id="image_input" multiple accept="image/*">
     
-    <button class="btn-save" onclick="saveProduct()">Ruaj Ndryshimet</button>
-    <button class="btn-delete" onclick="deleteProduct()">Fshi Produktin</button>
     <img id="main-product-img" src="" style="width: 200px; border: 1px solid #ccc; display: block; margin-top: 10px;">
+    <button onclick="ndryshoFoto(-1)">Prev</button>
+    <button onclick="ndryshoFoto(1)">Next</button>
 </div>
 <script>
     // 1. Inicializimi i Supabase

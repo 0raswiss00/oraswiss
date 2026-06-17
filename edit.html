@@ -86,20 +86,23 @@
         }
 
         // Përgatit të dhënat për tabelën 'oras'
-        const updateData = {
-            brand: document.getElementById("brand").value,
-            model: document.getElementById("model").value,
-            price: parseFloat(document.getElementById("price").value),
-            description: document.getElementById("description").value
-        };
+// ... pjesa e sipërme e funksionit ...
 
-        if (imageUrl) updateData.image_url = imageUrl;
+const updateData = {
+    brand: document.getElementById("brand").value,
+    model: document.getElementById("model").value,
+    price: parseFloat(document.getElementById("price").value),
+    description: document.getElementById("description").value
+};
 
-        // Bëj update tabelën 'oras'
-        const { error } = await supabaseClient
-            .from('oras')
-            .update(updateData)
-            .eq('id', productId);
+// KËTU ËSHTË NDRYSHIMI: 
+// E mbështjellim imageUrl brenda kllapave [] që të bëhet Array
+if (imageUrl) updateData.image_url = [imageUrl]; 
+
+const { error } = await supabaseClient
+    .from('oras')
+    .update(updateData)
+    .eq('id', productId);
         
         if (error) {
             alert("Gabim gjatë ruajtjes në bazën e të dhënave: " + error.message);

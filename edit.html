@@ -151,10 +151,15 @@ function ndryshoFoto() {
         const images = window.produktData.image_url;
         const imgElement = document.getElementById("product-image");
 
-        // Kalojmë tek fotoja tjetër
+function ndryshoFoto() {
+    if (window.produktData && window.produktData.image_url) {
+        const images = window.produktData.image_url;
+        const imgElement = document.getElementById("product-image");
+
+        // Këtu është rreshti që duhet të jetë i plotë:
         currentIndex = (currentIndex + 1) % images.length;
         
-        // Ndryshojmë src e imazhit
+        // Dhe këtu ndryshimi i fotos:
         imgElement.src = images[currentIndex];
     }
 }

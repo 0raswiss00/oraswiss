@@ -10372,3 +10372,57 @@ css264 352 er artikujt
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+
+butona te zi me rreth gold css
+
+/* =========================
+          BUTTONS
+========================= */
+.product-buttons {
+    margin: 16px 0;
+}
+
+.buy-button {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 8px 18px;
+  background: #000;
+  color: #d4a017;              /* GOLD */
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 999px;
+  border: 1px solid #d4a017;
+  transition: all 0.25s ease;
+}
+
+.buy-button:hover {
+  background: #d4a017;
+  color: #000;
+  box-shadow: 0 8px 20px rgba(212,160,23,0.4);
+  transform: translateY(-2px);
+}
+.brand-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  margin-top:7px;
+  padding:4px 12px;
+
+  border-radius:999px;
+  background:linear-gradient(135deg,#1c1c1c,#2b2b2b); /* E ZEZË */
+  border:3px solid rgba(255,255,255,0.18);
+  color:#d4b87a; /* GOLD */
+
+  font-weight:600;
+  letter-spacing:.03em;
+  text-decoration:none;
+  transition:all .25s ease;
+}
+
+.brand-btn:hover{
+  background:linear-gradient(135deg,#2b2b2b,#3a3a3a);
+  border-color:rgba(212,184,122,.6);
+  color:#f1e2b6;
+}
+

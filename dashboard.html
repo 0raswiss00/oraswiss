@@ -26,6 +26,16 @@ const supabase = createClient(
   'VENDOS_KEY_TËNDE_KËTU' // Sigurohu që ke vendosur Anon Key-në këtu
 );
 
+// Shto këtë për të parë nëse ekziston ndonjë sesion
+supabase.auth.getSession().then(({ data }) => {
+    console.log("Sesioni i gjetur:", data.session);
+    if (data.session) {
+        fetchWatches(data.session.user.id);
+    } else {
+        console.log("Asnjë sesion nuk u gjet.");
+    }
+});
+    
 // Ky funksion kontrollon statusin e logimit
 supabase.auth.onAuthStateChange((event, session) => {
     if (session) {

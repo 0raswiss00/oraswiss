@@ -30,20 +30,20 @@ const supabase = createClient(
 );
 
 // 3. Shfaq orët nga Supabase
+// Funksioni për të marrë dhe shfaqur orët
 async function fetchWatches() {
   const { data, error } = await supabase.from('oras').select('*');
   
   if (error) {
-    console.error("Gabim në marrjen e të dhënave:", error);
+    console.error("Gabim gjatë marrjes së të dhënave:", error);
     return;
   }
   
   if (data) {
     const list = document.getElementById('myWatchesList');
-    list.innerHTML = ""; 
+    list.innerHTML = ""; // Pastro listën para se ta mbushësh
     data.forEach(watch => {
       let li = document.createElement('li');
-      // Përdor backticks për të shfaqur detajet
       li.innerHTML = `${watch.brand} - ${watch.model} | ${watch.price}€ 
         <button onclick="deleteWatch('${watch.id}')">Fshi</button>`;
       list.appendChild(li);
@@ -51,7 +51,7 @@ async function fetchWatches() {
   }
 }
 
-// Thirr funksionin menjëherë
+// Thirr funksionin sapo faqja të jetë gati
 fetchWatches();
 
   // 4. Funksioni për fshirje

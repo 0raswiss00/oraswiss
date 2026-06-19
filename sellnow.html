@@ -68,10 +68,15 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <script type="module">
-  // 1. Konfigurimi
+  // Përdorim 'window.supabase' nëse po përdorni versionin UMD
+  // ose sigurohemi që skripti është ngarkuar
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
   const SUPABASE_URL = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
-  const SUPABASE_ANON_KEY = 'VENDO_KËTU_PUBLISHABLE_KEY'; // Zëvendësoje me çelësin nga image_6.png
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const SUPABASE_ANON_KEY = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'; 
+
+  // Krijimi i klientit duke përdorur funksionin e importuar direkt
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // 2. Dëgjuesi i ngjarjes (Submit)
   document.getElementById('sellForm').addEventListener('submit', async (e) => {

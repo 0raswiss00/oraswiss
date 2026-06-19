@@ -29,12 +29,9 @@ const supabase = createClient(
   'sb_publishable_AkK_Z71htkvukN6Fy1cAQ_KBTXI...' // vendos çelësin tënd këtu
 );
 
-// 3. Shfaq orët nga Supabase
-// Funksioni për të marrë dhe shfaqur orët
-// 3. Shfaq orët nga Supabase për këtë përdorues
 // 3. Shfaq orët nga Supabase për këtë përdorues
 async function fetchWatches() {
-    // Së pari marrim përdoruesin
+    // 1. Marrim përdoruesin
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     
     if (authError || !user) {
@@ -42,7 +39,9 @@ async function fetchWatches() {
         return;
     }
 
-    // Tërheqim vetëm orët që kanë user_id të njëjtë me përdoruesin e loguar
+    console.log("Përdoruesi është loguar me ID:", user.id);
+
+    // 2. Tërheqim orët e përdoruesit
     const { data, error } = await supabase
         .from('oras')
         .select('*')
@@ -53,7 +52,7 @@ async function fetchWatches() {
         return;
     }
 
-    // Shfaqim orët në listë
+    // 3. Shfaqim orët në listë
     const list = document.getElementById('myWatchesList');
     if (list) {
         list.innerHTML = ""; 
@@ -65,10 +64,13 @@ async function fetchWatches() {
                 list.appendChild(li);
             });
         } else {
-            list.innerHTML = "<li>Nuk keni asnjë orë të shtuar.</li>";
+            list.innerHTML = "<li>Nuk keni orë të regjistruara.</li>";
         }
     }
 }
+
+// Thirr funksionin
+fetchWatches();
 
 // Thirr funksionin për të nisur procesin
 fetchWatches();

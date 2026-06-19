@@ -135,9 +135,6 @@ const oraData = {
 };
 
 // Pastaj dërgimi
-const { error: insertError } = await supabase.from('oras').insert([oraData]);
-        
-    // 5. Dërgimi në tabelën 'oras'
     const { error: insertError } = await supabase.from('oras').insert([oraData]);
 
     if (insertError) {

@@ -34,25 +34,27 @@
                     .select('*')
                     .eq('user_id', user.uid); // Filtro vetëm për këtë përdorues
 
-                if (data) {
-                    const list = document.getElementById('watchList');
-                    data.forEach(watch => {
-                    // ... rreshti 31: data.forEach(watch => {
-                    let li = document.createElement('li');
-                    // Këtu shtojmë butonat direkt në HTML-në e elementit 'li'
-                    li.innerHTML = `
-                        ${watch.brand} - ${watch.model} | ${watch.price}€ 
-                        <button onclick="deleteWatch('${watch.id}')">Fshi</button>
-                        <button onclick="editWatch('${watch.id}')">Edito</button>
-                   `;
-                   list.appendChild(li);
-                 
-           
-                }
-            } else {
-                window.location.href = "login.html"; // Nëse nuk është loguar
-            }
-        });
+// ... (pjesa e importimit dhe onAuthStateChanged)
+if (data) {
+    const list = document.getElementById('watchList');
+    list.innerHTML = ""; // Pastro listën përpara se të shfaqësh orët
+    data.forEach(watch => {
+        let li = document.createElement('li');
+        
+        // Këtu është rreshti 50-52 (innerHTML)
+        li.innerHTML = `${watch.brand} - ${watch.model} | ${watch.price}€ 
+            <button onclick="deleteWatch('${watch.id}')">Fshi</button>
+            <button onclick="editWatch('${watch.id}')">Edito</button>`;
+            
+        list.appendChild(li);
+    });
+}
+// Këto janë kllapat e duhura për mbylljen e "if (data)" dhe "onAuthStateChanged"
+} else {
+    // Nëse nuk ka të dhëna ose përdoruesi nuk është loguar
+    console.log("Nuk u gjetën orë ose përdoruesi nuk është loguar.");
+}
+}); // Kjo mbyll onAuthStateChanged
 
 window.deleteWatch = async (watchId) => {
     if(confirm("Je i sigurt që do ta fshish?")) {

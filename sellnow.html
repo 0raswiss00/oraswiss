@@ -125,7 +125,18 @@
       price: parseInt(document.getElementById('price').value) || 0,
       image_url: uploadedFileNames
     
+// Kjo duhet të jetë para rreshtit 130
+const oraData = {
+    box_papers: document.getElementById('box_papers').checked,
+    description: document.getElementById('description').value,
+    category: document.getElementById('category').value,
+    price: parseInt(document.getElementById('price').value) || 0,
+    image_url: uploadedFileNames // Sigurohuni që kjo është variabël valide
+};
 
+// Pastaj dërgimi
+const { error: insertError } = await supabase.from('oras').insert([oraData]);
+        
     // 5. Dërgimi në tabelën 'oras'
     const { error: insertError } = await supabase.from('oras').insert([oraData]);
 

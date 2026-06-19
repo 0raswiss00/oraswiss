@@ -19,20 +19,18 @@
 </body>
     
 <script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-  
-  // Zëvendëso këto me çelësat e tu nga Supabase API Settings
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-const supabase = createClient('URL_TËNDE', 'KEY_TËNDE');
+// Zëvendëso me çelësat e tu (shiko API Keys tek Settings në Supabase)
+const supabase = createClient('https://gnwsrmelmeqduhhmfmoa.supabase.co', 'SUPABASE_KEY_TËNDE');
 
-// KJO është zgjidhja: Ky funksion "dëgjon" kur përdoruesi log-ohet
+// Ky funksion pret derisa përdoruesi të jetë i loguar
 supabase.auth.onAuthStateChange((event, session) => {
     if (session) {
         console.log("Përdoruesi është loguar me ID:", session.user.id);
-        fetchWatches(session.user.id); // Thirre funksionin vetëm kur ke session
+        fetchWatches(session.user.id);
     } else {
-        console.log("Duke pritur logimin...");
+        console.log("Pritet logimi...");
     }
 });
 
@@ -43,7 +41,7 @@ async function fetchWatches(userId) {
         .eq('user_id', userId);
 
     if (error) {
-        console.error("Gabim në tërheqje:", error);
+        console.error("Gabim gjatë marrjes së të dhënave:", error);
         return;
     }
 

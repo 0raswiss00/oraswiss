@@ -29,26 +29,30 @@ const supabase = createClient(
   'sb_publishable_AkK_Z71htkvukN6Fy1cAQ_KBTXI...' // vendos çelësin tënd këtu
 );
 
-  // 3. Logjika për të shfaqur orët
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      const { data, error } = await supabase.from('oras').select('*').eq('user_id', user.uid);
-      
-      if (data) {
-        // Këtu ID-ja duhet të jetë "myWatchesList" siç e ke në HTML te rreshti 17
-        const list = document.getElementById('myWatchesList');
-        list.innerHTML = ""; 
-        data.forEach(watch => {
-          let li = document.createElement('li');
-          li.innerHTML = `${watch.brand} - ${watch.model} | ${watch.price}€ 
-            <button onclick="deleteWatch('${watch.id}')">Fshi</button>`;
-          list.appendChild(li);
-        });
-      }
-    } else {
-      window.location.href = "login.html";
-    }
-  });
+// 3. Shfaq orët nga Supabase
+async function fetchWatches() {
+  const { data, error } = await supabase.from('oras').select('*');
+  
+  if (error) {
+    console.error("Gabim në marrjen e të dhënave:", error);
+    return;
+  }
+  
+  if (data) {
+    const list = document.getElementById('myWatchesList');
+    list.innerHTML = ""; 
+    data.forEach(watch => {
+      let li = document.createElement('li');
+      // Përdor backticks për të shfaqur detajet
+      li.innerHTML = `${watch.brand} - ${watch.model} | ${watch.price}€ 
+        <button onclick="deleteWatch('${watch.id}')">Fshi</button>`;
+      list.appendChild(li);
+    });
+  }
+}
+
+// Thirr funksionin menjëherë
+fetchWatches();
 
   // 4. Funksioni për fshirje
   window.deleteWatch = async (watchId) => {

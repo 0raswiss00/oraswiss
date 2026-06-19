@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <title>Dashboard-i Im</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>Mirësevjen në profilin tënd!</h1>
+    <div id="myWatches">
+        <h3>Orët e mia për shitje:</h3>
+        <ul id="watchList"></ul>
+    </div>
+
+    <script type="module">
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+        
+        // Inicializo Supabase
+        const supabase = supabase.createClient('sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9');
+        const auth = getAuth();
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Merr orët e këtij përdoruesi nga Supabase
+                const { data, error } = await supabase
+                    .from('oras')
+                    .select('*')
+                    .eq('user_id', user.uid); // Filtro vetëm për këtë përdorues
+
+                if (data) {
+                    const list = document.getElementById('watchList');
+                    data.forEach(watch => {
+                        let li = document.createElement('li');
+                        li.textContent = ${watch.brand} - ${watch.model} | Çmimi: ${watch.price}€;
+                        list.appendChild(li);
+                    });
+                }
+            } else {
+                window.location.href = "login.html"; // Nëse nuk është loguar
+            }
+        });
+    </script>
+</body>
+</html>
+Compose
+Shkruaj te Ora Swiss

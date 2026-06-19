@@ -19,54 +19,15 @@
 </body>
     
 <script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+// Shto këtë rresht pas inicializimit të supabase
+console.log("Supabase URL:", 'https://gnwsrmelmeqduhhmfmoa.supabase.co');
 
-// Zëvendëso me çelësat e tu (shiko API Keys tek Settings në Supabase)
-const supabase = createClient('https://gnwsrmelmeqduhhmfmoa.supabase.co', 'SUPABASE_KEY_TËNDE');
-
-// Ky funksion pret derisa përdoruesi të jetë i loguar
-supabase.auth.onAuthStateChange((event, session) => {
-    if (session) {
-        console.log("Përdoruesi është loguar me ID:", session.user.id);
-        fetchWatches(session.user.id);
-    } else {
-        console.log("Pritet logimi...");
+supabase.auth.getSession().then(({ data }) => {
+    console.log("Sesioni aktual:", data.session);
+    if (!data.session) {
+        console.warn("Nuk u gjet asnjë sesion aktiv. A je i loguar?");
     }
 });
-
-async function fetchWatches(userId) {
-    const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .eq('user_id', userId);
-
-    if (error) {
-        console.error("Gabim gjatë marrjes së të dhënave:", error);
-        return;
-    }
-
-    const list = document.getElementById('myWatchesList');
-    if (list) {
-        list.innerHTML = "";
-        if (data && data.length > 0) {
-            data.forEach(watch => {
-                let li = document.createElement('li');
-                li.innerHTML = `${watch.brand} - ${watch.model} | ${watch.price}€ 
-                                <button onclick="deleteWatch('${watch.id}')">Fshi</button>`;
-                list.appendChild(li);
-            });
-        } else {
-            list.innerHTML = "<li>Nuk keni orë të regjistruara.</li>";
-        }
-    }
-}
-
-// Funksioni për fshirje
-window.deleteWatch = async (watchId) => {
-    const { error } = await supabase.from('oras').delete().eq('id', watchId);
-    if (!error) location.reload();
-    else console.error("Gabim fshirje:", error);
-};
 </script>
 
 </body>

@@ -65,71 +65,73 @@
   <button type="submit">Shto orën</button>
 </form>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-<script>
-  const supabase = window.supabase.createClient("https://gnwsrmelmeqduhhmfmoa.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ");
-  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-  const auth = getAuth(); // Kjo merr përdoruesin që është loguar
-  
-document.getElementById('sellForm').addEventListener('submit', async (e) => {
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<script type="module">
+  // 1. Konfigurimi
+  const SUPABASE_URL = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
+  const SUPABASE_ANON_KEY = 'VENDO_KËTU_PUBLISHABLE_KEY'; // Zëvendësoje me çelësin nga image_6.png
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // 2. Dëgjuesi i ngjarjes (Submit)
+  document.getElementById('sellForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // 1. MARRIM FOTOT NGA INPUTI
     const fileInput = document.getElementById('fileInput');
     const files = fileInput.files;
     let uploadedFileNames = [];
 
-    // 2. NGARKOMI FOTOT NË SUPABASE STORAGE
+    // 3. Ngarkimi i fotove në Supabase Storage
     if (files.length > 0) {
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            // Krijojmë një emër unik për foton që të mos zëvendësojë fotot e tjera
-            const uniqueFileName = Date.now() + "_" + file.name;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const uniqueFileName = Date.now() + "_" + file.name;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('or-images') // Sigurohu që emri i bucket është 'or-images'
+          .upload(uniqueFileName, file);
 
-            const { data, error: uploadError } = await supabase.storage
-                .from('or-images')
-                .upload(uniqueFileName, file);
-
-            if (uploadError) {
-                console.error("Gabim gjatë ngarkimit të fotos:", uploadError.message);
-            } else {
-                // Nëse ngarkohet me sukses, e shtojmë emrin në listë
-                uploadedFileNames.push(uniqueFileName);
-            }
+        if (uploadError) {
+          console.error("Gabim në ngarkim:", uploadError.message);
+          alert("Gabim gjatë ngarkimit të fotos.");
+          return;
         }
+        uploadedFileNames.push(uniqueFileName);
+      }
     }
 
-  // 3. MBLEDHJA E TË DHËNAVE NGA FORMULARI
+    // 4. Marrja e sesionit dhe mbledhja e të dhënave
+    const { data: { user } } = await supabase.auth.getUser();
+
     const oraData = {
-        user_id: auth.currentUser.uid, // Shtoje këtë këtu
-        brand: document.getElementById('brand').value,
-        model: document.getElementById('model').value,
-        reference: document.getElementById('reference').value,
-        material: document.getElementById('material').value,
-        case_size: document.getElementById('case_size').value,
-        year: parseInt(document.getElementById('year').value) || null,
-        movement: document.getElementById('movement').value,
-        function: document.getElementById('function').value,
-        service: document.getElementById('service').checked,
-        box_papers: document.getElementById('box_papers').checked,
-        description: document.getElementById('description').value,
-        category: document.getElementById('category').value,
-        price: parseInt(document.getElementById('price').value) || 0,
-        
-        // Këtu ruhet lista me emrat e fotove të ngarkuara fiks siç e kërkon databaza []
-        image_url: uploadedFileNames 
+      user_id: user?.id,
+      brand: document.getElementById('brand').value,
+      model: document.getElementById('model').value,
+      reference: document.getElementById('reference').value,
+      material: document.getElementById('material').value,
+      case_size: document.getElementById('case_size').value,
+      year: parseInt(document.getElementById('year').value) || null,
+      movement: document.getElementById('movement').value,
+      function: document.getElementById('function').value,
+      service: document.getElementById('service').checked,
+      box_papers: document.getElementById('box_papers').checked,
+      description: document.getElementById('description').value,
+      category: document.getElementById('category').value,
+      price: parseInt(document.getElementById('price').value) || 0,
+      image_url: uploadedFileNames
     };
 
-    // 4. DËRGIMI TE TABELA 'ORAS'
-    const { error } = await supabase.from('oras').insert([oraData]);
+    // 5. Dërgimi në tabelën 'oras'
+    const { error: insertError } = await supabase.from('oras').insert([oraData]);
 
-    if (error) {
-        alert("Gabim: " + error.message);
+    if (insertError) {
+      console.error("Gabim në ruajtje:", insertError.message);
+      alert("Gabim gjatë ruajtjes në bazën e të dhënave: " + insertError.message);
     } else {
-        alert("Ora dhe fotot u shtuan me sukses!");
-        document.getElementById('sellForm').reset();
+      alert("Ora u shtua me sukses!");
+      document.getElementById('sellForm').reset();
     }
-});
+  });
 </script>
 </body>
 </html>

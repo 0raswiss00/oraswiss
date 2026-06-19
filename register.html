@@ -78,7 +78,8 @@
 
         try {
           await signInWithEmailAndPassword(auth, email, password);
-          window.location.href = "sellnow.html";
+          // Ndryshimi që duhet të bësh në rreshtin 81:
+          window.location.href = "dashboard.html";
         } catch (e) {
           alert(e.message);
         }

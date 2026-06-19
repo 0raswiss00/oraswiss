@@ -11,6 +11,20 @@
         <ul id="watchList"></ul>
     </div>
 
+    <body>
+  <div class="wrap">
+    <h1>Mirë se erdhe!</h1>
+    
+    <!-- Butoni që kërkove për të shitur -->
+    <button onclick="window.location.href='sellnow.html'" style="background: gold; width: 100%; padding: 15px;">
+      + Sell Now
+    </button>
+    
+    <h3>Orët e mia:</h3>
+    <ul id="myWatchesList"></ul>
+  </div>
+</body>
+    
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";

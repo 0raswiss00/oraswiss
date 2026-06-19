@@ -21,11 +21,16 @@
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-const supabase = createClient('https://gnwsrmelmeqduhhmfmoa.supabase.co', 'VENDOS_KEY_TËNDE_KËTU');
+// Zëvendëso me URL-në dhe Anon Key-në tënde nga Supabase Settings -> API
+const supabase = createClient(
+  'https://gnwsrmelmeqduhhmfmoa.supabase.co', 
+  'VENDOS_ANON_KEY_KËTU' 
+);
 
+// Ky është funksioni që dëgjon nëse je i loguar
 supabase.auth.onAuthStateChange((event, session) => {
     if (session) {
-        console.log("Përdoruesi është loguar:", session.user.id);
+        console.log("Përdoruesi është loguar me ID:", session.user.id);
         fetchWatches(session.user.id);
     } else {
         console.log("Pritet logimi...");

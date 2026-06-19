@@ -68,17 +68,13 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <script type="module">
-  // Përdorim 'window.supabase' nëse po përdorni versionin UMD
-  // ose sigurohemi që skripti është ngarkuar
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
   const SUPABASE_URL = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'; 
 
-  // Krijimi i klientit duke përdorur funksionin e importuar direkt
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // 2. Dëgjuesi i ngjarjes (Submit)
   document.getElementById('sellForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -86,14 +82,14 @@
     const files = fileInput.files;
     let uploadedFileNames = [];
 
-    // 3. Ngarkimi i fotove në Supabase Storage
+    // 3. Ngarkimi i fotove
     if (files.length > 0) {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const uniqueFileName = Date.now() + "_" + file.name;
         
         const { error: uploadError } = await supabase.storage
-          .from('or-images') // Sigurohu që emri i bucket është 'or-images'
+          .from('or-images')
           .upload(uniqueFileName, file);
 
         if (uploadError) {
@@ -105,9 +101,10 @@
       }
     }
 
-    // 4. Marrja e sesionit dhe mbledhja e të dhënave
+    // 4. Marrja e të dhënave (Përfshi këtu ID-në e user-it nëse të duhet)
     const { data: { user } } = await supabase.auth.getUser();
 
+    // 5. Krijimi i objektit të vetëm (oraData)
     const oraData = {
       user_id: user?.id,
       brand: document.getElementById('brand').value,
@@ -124,22 +121,14 @@
       category: document.getElementById('category').value,
       price: parseInt(document.getElementById('price').value) || 0,
       image_url: uploadedFileNames
-    
-// Kjo duhet të jetë para rreshtit 130
-const oraData = {
-    box_papers: document.getElementById('box_papers').checked,
-    description: document.getElementById('description').value,
-    category: document.getElementById('category').value,
-    price: parseInt(document.getElementById('price').value) || 0,
-    image_url: uploadedFileNames // Sigurohuni që kjo është variabël valide
-};
+    };
 
-// Pastaj dërgimi
+    // 6. Dërgimi në Supabase
     const { error: insertError } = await supabase.from('oras').insert([oraData]);
 
     if (insertError) {
       console.error("Gabim në ruajtje:", insertError.message);
-      alert("Gabim gjatë ruajtjes në bazën e të dhënave: " + insertError.message);
+      alert("Gabim gjatë ruajtjes: " + insertError.message);
     } else {
       alert("Ora u shtua me sukses!");
       document.getElementById('sellForm').reset();

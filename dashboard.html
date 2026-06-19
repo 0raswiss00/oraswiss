@@ -18,56 +18,38 @@
   </div>
 </body>
     
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-        
-        // Pastaj inicializoje saktë në rreshtin 19:
-        const supabase = createClient('sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9');
-        const auth = getAuth();
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                // Merr orët e këtij përdoruesi nga Supabase
-                const { data, error } = await supabase
-                    .from('oras')
-                    .select('*')
-                    .eq('user_id', user.uid); // Filtro vetëm për këtë përdorues
+  // RREGULLO KËTU: Vendos URL-në dhe Key-në tënde reale
+  const supabase = createClient('URL_YT_SUPABASE', 'ANON_KEY_YT_SUPABASE');
+  const auth = getAuth();
 
-// ... (pjesa e importimit dhe onAuthStateChanged)
-if (data) {
-    const list = document.getElementById('watchList');
-    list.innerHTML = ""; // Pastro listën përpara se të shfaqësh orët
-    data.forEach(watch => {
-        let li = document.createElement('li');
-        
-        // Këtu është rreshti 50-52 (innerHTML)
-        li.innerHTML = `${watch.brand} - ${watch.model} | ${watch.price}€ 
-            <button onclick="deleteWatch('${watch.id}')">Fshi</button>
-            <button onclick="editWatch('${watch.id}')">Edito</button>`;
-            
-        list.appendChild(li);
-    });
-}
-// Këto janë kllapat e duhura për mbylljen e "if (data)" dhe "onAuthStateChanged"
-} else {
-    // Nëse nuk ka të dhëna ose përdoruesi nuk është loguar
-    console.log("Nuk u gjetën orë ose përdoruesi nuk është loguar.");
-}
-}); // Kjo mbyll onAuthStateChanged
-
-window.deleteWatch = async (watchId) => {
-    if(confirm("Je i sigurt që do ta fshish?")) {
-        const { error } = await supabase.from('oras').delete().eq('id', watchId);
-        if(!error) { alert("U fshi!"); location.reload(); }
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const { data, error } = await supabase.from('oras').select('*').eq('user_id', user.uid);
+      
+      if (data) {
+        const list = document.getElementById('watchList');
+        list.innerHTML = ""; 
+        data.forEach(watch => {
+          let li = document.createElement('li');
+          li.innerHTML = `${watch.brand} - ${watch.model} | ${watch.price}€ 
+            <button onclick="deleteWatch('${watch.id}')">Fshi</button>`;
+          list.appendChild(li);
+        });
+      }
+    } else {
+      window.location.href = "login.html";
     }
-};
+  });
 
-window.editWatch = (watchId) => {
-    alert("Funksioni edit: " + watchId);
-};
+  window.deleteWatch = async (watchId) => {
+    const { error } = await supabase.from('oras').delete().eq('id', watchId);
+    if (!error) location.reload();
+  };
+</script>
 
-        
-    </script>    
 </body>
 </html>

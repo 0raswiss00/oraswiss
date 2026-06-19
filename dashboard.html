@@ -23,9 +23,11 @@
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-  // 2. Inicializo Supabase (këtu vendos URL-në dhe Key-në tënde)
-  const supabase = createClient('https://gnwsrmelmeqduhhfmoa.supabase.co', 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9');
-  const auth = getAuth();
+// Kopjo dhe zëvendëso rreshtat 26-29 me këtë:
+const supabase = createClient(
+  'https://gnwsrmelmeqduhhfmoa.supabase.co', 
+  'sb_publishable_AkK_Z71htkvukN6Fy1cAQ_KBTXI...' // vendos çelësin tënd këtu
+);
 
   // 3. Logjika për të shfaqur orët
   onAuthStateChanged(auth, async (user) => {

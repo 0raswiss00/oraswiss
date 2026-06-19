@@ -16,6 +16,16 @@
   <div class="wrap">
     <h2>Profili</h2>
 
+<div class="wrap">
+    <h1 id="sellerTitle">Dyqani i Shitësit</h1>
+    
+    <h3>Orët në shitje:</h3>
+    <ul id="sellerWatches"></ul>
+
+    <h3>Feedback-u i blerësve:</h3>
+    <ul id="feedbackList"></ul>
+</div>
+   
     <p>Email: <b id="userEmail"></b></p>
     <p>Emri: <b id="userName">-</b></p>
 
@@ -24,8 +34,9 @@
     <button id="btnLogout" type="button">Logout</button>
     <p id="msg" style="margin-top:12px;"></p>
   </div>
-
-  <!-- ✅ VETËM 1 SCRIPT MODULE -->
+ 
+<!-- ✅ VETËM 1 SCRIPT MODULE -->
+ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'; 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
@@ -44,6 +55,32 @@ const countEl = document.getElementById("userCount");
 const msgEl = document.getElementById("msg");
 const logoutBtn = document.getElementById("logoutBtn");
 
+// Merr ID-në e shitësit nga URL
+const params = new URLSearchParams(window.location.search);
+const sellerId = params.get('user');
+
+async function loadData() {
+    if (!sellerId) return;
+
+    // 1. Merr orët nga Supabase
+    const { data: watches } = await supabase.from('oras').select('*').eq('user_id', sellerId);
+    const watchList = document.getElementById('sellerWatches');
+    watches?.forEach(w => {
+        let li = document.createElement('li');
+        li.innerHTML = <b>${w.brand}</b> - ${w.price}€;
+        watchList.appendChild(li);
+    });
+
+    // 2. Merr feedback-un
+    const { data: feedback } = await supabase.from('feedback').select('*').eq('seller_id', sellerId);
+    const feedList = document.getElementById('feedbackList');
+    feedback?.forEach(f => {
+        let li = document.createElement('li');
+        li.innerHTML = ⭐ ${f.rating}/5 - "${f.comment}";
+        feedList.appendChild(li);
+    });
+}
+  
 // ✅ KËTU vendoset kodi i fotos (FUNKSIONET)
 async function loadUserCount() {
   const snap = await getCountFromServer(collection(db, "users"));
@@ -77,8 +114,13 @@ logoutBtn.addEventListener("click", async () => {
   await signOut(auth);
   window.location.href = "index.html";
 });
-</script>
 
+onAuthStateChanged(auth, async (user) => {
+  // ... kodi yt ekzistues ...
+  await loadData(); // Shto këtë rresht këtu!
+});
+  
+</script>
 <script type="module">
   console.log("PROFILE projectId =", app.options.projectId);
 </script>

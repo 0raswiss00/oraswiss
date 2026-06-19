@@ -21,29 +21,19 @@
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-const supabase = createClient(
-  'https://gnwsrmelmeqduhhmfmoa.supabase.co', 
-  'VENDOS_KEY_TËNDE_KËTU' // Sigurohu që ke vendosur Anon Key-në këtu
-);
+// VENDOS ANON KEY-NË TËNDE KËTU (Jo tekstin e shkruar)
+const supabase = createClient('https://gnwsrmelmeqduhhmfmoa.supabase.co', 'VENDOS_ANON_KEY_TËNDE');
 
-// Shto këtë për të parë nëse ekziston ndonjë sesion
-supabase.auth.getSession().then(({ data }) => {
-    console.log("Sesioni i gjetur:", data.session);
-    if (data.session) {
-        fetchWatches(data.session.user.id);
-    } else {
-        console.log("Asnjë sesion nuk u gjet.");
-    }
-});
-    
-// Ky funksion kontrollon statusin e logimit
+// Përdor vetëm ON AUTH STATE CHANGE. 
+// Fshije getSession() sepse po të ngatërron.
 supabase.auth.onAuthStateChange((event, session) => {
     if (session) {
-        console.log("Përdoruesi është loguar me ID:", session.user.id);
+        console.log("Përdoruesi i loguar:", session.user.id);
         fetchWatches(session.user.id);
     } else {
-        console.log("Duke pritur logimin...");
-        document.getElementById('myWatchesList').innerHTML = "<li>Duhet të jesh i loguar për të parë orët.</li>";
+        console.log("Pritet logimi...");
+        const list = document.getElementById('myWatchesList');
+        if (list) list.innerHTML = "<li>Duhet të jesh i loguar.</li>";
     }
 });
 
@@ -57,7 +47,7 @@ async function fetchWatches(userId) {
     if (!list) return;
 
     if (error) {
-        console.error("Gabim në tërheqje:", error);
+        console.error("Gabim:", error);
         list.innerHTML = "<li>Gabim gjatë ngarkimit.</li>";
         return;
     }
@@ -80,7 +70,5 @@ window.deleteWatch = async (watchId) => {
     if (!error) location.reload();
     else console.error("Gabim fshirje:", error);
 };
-</script>
-
 </body>
 </html>

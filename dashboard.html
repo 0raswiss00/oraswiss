@@ -12,10 +12,11 @@
     </div>
 
     <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
         
         // Inicializo Supabase
-        const supabase = supabase.createClient('sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9');
+        const supabase = supabase.createClient('URL_YT_SUPABASE', 'ANON_KEY_YT_SUPABASE');
         const auth = getAuth();
 
         onAuthStateChanged(auth, async (user) => {
@@ -29,17 +30,35 @@
                 if (data) {
                     const list = document.getElementById('watchList');
                     data.forEach(watch => {
-                        let li = document.createElement('li');
-                        li.textContent = ${watch.brand} - ${watch.model} | Çmimi: ${watch.price}€;
-                        list.appendChild(li);
+                    // ... rreshti 31: data.forEach(watch => {
+                    let li = document.createElement('li');
+                    // Këtu shtojmë butonat direkt në HTML-në e elementit 'li'
+                    li.innerHTML = `
+                        ${watch.brand} - ${watch.model} | ${watch.price}€ 
+                        <button onclick="deleteWatch('${watch.id}')">Fshi</button>
+                        <button onclick="editWatch('${watch.id}')">Edito</button>
+                   `;
+                   list.appendChild(li);
+                 
                     });
                 }
             } else {
                 window.location.href = "login.html"; // Nëse nuk është loguar
             }
         });
-    </script>
+
+window.deleteWatch = async (watchId) => {
+    if(confirm("Je i sigurt që do ta fshish?")) {
+        const { error } = await supabase.from('oras').delete().eq('id', watchId);
+        if(!error) { alert("U fshi!"); location.reload(); }
+    }
+};
+
+window.editWatch = (watchId) => {
+    alert("Funksioni edit: " + watchId);
+};
+
+        
+    </script>    
 </body>
 </html>
-Compose
-Shkruaj te Ora Swiss

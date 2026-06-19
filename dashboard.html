@@ -19,70 +19,46 @@
 </body>
     
 <script type="module">
-  // 1. Importo libraritë (rreshtat 22-23)
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+  
+  // Zëvendëso këto me çelësat e tu nga Supabase API Settings
+  const supabase = createClient('URL_TËNDE', 'KEY_TËNDE');
 
-// Kopjo dhe zëvendëso rreshtat 26-29 me këtë:
-const supabase = createClient(
-  'https://gnwsrmelmeqduhhfmoa.supabase.co', 
-  'sb_publishable_AkK_Z71htkvukN6Fy1cAQ_KBTXI...' // vendos çelësin tënd këtu
-);
+  // Ky funksion do të thirret sapo sistemi të verifikojë që je i loguar
+  supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+          console.log("Përdoruesi është loguar:", session.user.id);
+          fetchWatches(session.user.id);
+      } else {
+          console.log("Pritet logimi...");
+      }
+  });
 
-// 3. Shfaq orët nga Supabase për këtë përdorues
-async function fetchWatches() {
-    // 1. Marrim përdoruesin
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    
-    if (authError || !user) {
-        console.log("Përdoruesi nuk është i loguar");
-        return;
-    }
+  async function fetchWatches(userId) {
+      const { data, error } = await supabase
+          .from('oras')
+          .select('*')
+          .eq('user_id', userId);
 
-    console.log("Përdoruesi është loguar me ID:", user.id);
+      if (error) {
+          console.error("Gabim në tërheqje:", error);
+          return;
+      }
 
-    // 2. Tërheqim orët e përdoruesit
-    const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .eq('user_id', user.id); 
-
-    if (error) {
-        console.error("Gabim gjatë marrjes së të dhënave:", error);
-        return;
-    }
-
-    // 3. Shfaqim orët në listë
-    const list = document.getElementById('myWatchesList');
-    if (list) {
-        list.innerHTML = ""; 
-        if (data && data.length > 0) {
-            data.forEach(watch => {
-                let li = document.createElement('li');
-                li.innerHTML = `${watch.brand} - ${watch.model} | ${watch.price}€ 
-                    <button onclick="deleteWatch('${watch.id}')">Fshi</button>`;
-                list.appendChild(li);
-            });
-        } else {
-            list.innerHTML = "<li>Nuk keni orë të regjistruara.</li>";
-        }
-    }
-}
-
-// Thirr funksionin
-fetchWatches();
-
-// Thirr funksionin për të nisur procesin
-fetchWatches();
-
-// Thirr funksionin sapo faqja të jetë gati
-fetchWatches();
-
-  // 4. Funksioni për fshirje
-  window.deleteWatch = async (watchId) => {
-    const { error } = await supabase.from('oras').delete().eq('id', watchId);
-    if (!error) location.reload();
-  };
+      const list = document.getElementById('myWatchesList');
+      if (list) {
+          list.innerHTML = "";
+          if (data && data.length > 0) {
+              data.forEach(watch => {
+                  let li = document.createElement('li');
+                  li.innerHTML = ${watch.brand} - ${watch.model} | ${watch.price}€;
+                  list.appendChild(li);
+              });
+          } else {
+              list.innerHTML = "<li>Nuk keni orë të regjistruara.</li>";
+          }
+      }
+  }
 </script>
 
 </body>

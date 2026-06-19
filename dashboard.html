@@ -23,13 +23,13 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 
 const supabase = createClient(
   'https://gnwsrmelmeqduhhmfmoa.supabase.co', 
-  'SUPABASE_ANON_KEY' // <--- VENDOS KEY-NË TËNDE KËTU
+  'VENDOS_KEY_TËNDE_KËTU' // Sigurohu që ke vendosur Anon Key-në këtu
 );
 
-// 1. Dëgjon ndryshimet e logimit
+// Ky funksion kontrollon statusin e logimit
 supabase.auth.onAuthStateChange((event, session) => {
     if (session) {
-        console.log("Përdoruesi është loguar:", session.user.id);
+        console.log("Përdoruesi është loguar me ID:", session.user.id);
         fetchWatches(session.user.id);
     } else {
         console.log("Duke pritur logimin...");
@@ -37,7 +37,6 @@ supabase.auth.onAuthStateChange((event, session) => {
     }
 });
 
-// 2. Funksioni për të tërhequr orët
 async function fetchWatches(userId) {
     const { data, error } = await supabase
         .from('oras')
@@ -49,7 +48,7 @@ async function fetchWatches(userId) {
 
     if (error) {
         console.error("Gabim në tërheqje:", error);
-        list.innerHTML = "<li>Gabim gjatë ngarkimit të të dhënave.</li>";
+        list.innerHTML = "<li>Gabim gjatë ngarkimit.</li>";
         return;
     }
 
@@ -66,15 +65,10 @@ async function fetchWatches(userId) {
     }
 }
 
-// 3. Funksioni për fshirje
 window.deleteWatch = async (watchId) => {
     const { error } = await supabase.from('oras').delete().eq('id', watchId);
-    if (!error) {
-        location.reload();
-    } else {
-        console.error("Gabim fshirje:", error);
-        alert("Gabim gjatë fshirjes!");
-    }
+    if (!error) location.reload();
+    else console.error("Gabim fshirje:", error);
 };
 </script>
 

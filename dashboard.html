@@ -31,24 +31,37 @@ const supabase = createClient(
 
 // 3. Shfaq orët nga Supabase
 // Funksioni për të marrë dhe shfaqur orët
+// 3. Shfaq orët nga Supabase për këtë përdorues
 async function fetchWatches() {
-  const { data, error } = await supabase.from('oras').select('*');
-  
-  if (error) {
-    console.error("Gabim gjatë marrjes së të dhënave:", error);
-    return;
-  }
-  
-  if (data) {
-    const list = document.getElementById('myWatchesList');
-    list.innerHTML = ""; // Pastro listën para se ta mbushësh
-    data.forEach(watch => {
-      let li = document.createElement('li');
-      li.innerHTML = `${watch.brand} - ${watch.model} | ${watch.price}€ 
-        <button onclick="deleteWatch('${watch.id}')">Fshi</button>`;
-      list.appendChild(li);
-    });
-  }
+    // Së pari marrim përdoruesin
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
+    if (authError || !user) {
+        console.log("Përdoruesi nuk është i loguar");
+        return;
+    }
+
+    // Tërheqim vetëm orët që kanë user_id të njëjtë me përdoruesin e loguar
+    const { data, error } = await supabase
+        .from('oras')
+        .select('*')
+        .eq('user_id', user.id); // KËTU ËSHTË FILTRI I RËNDËSISHËM
+
+    if (error) {
+        console.error("Gabim gjatë marrjes së të dhënave:", error);
+        return;
+    }
+
+    if (data) {
+        const list = document.getElementById('myWatchesList');
+        list.innerHTML = ""; 
+        data.forEach(watch => {
+            let li = document.createElement('li');
+            li.innerHTML = `${watch.brand} - ${watch.model} | ${watch.price}€ 
+                <button onclick="deleteWatch('${watch.id}')">Fshi</button>`;
+            list.appendChild(li);
+        });
+    }
 }
 
 // Thirr funksionin sapo faqja të jetë gati

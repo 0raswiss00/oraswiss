@@ -15,8 +15,8 @@
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
         
-        // Inicializo Supabase
-        const supabase = createClient('URL_YT_SUPABASE', 'ANON_KEY_YT_SUPABASE');
+        // Pastaj inicializoje saktë në rreshtin 19:
+        const supabase = createClient('sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9');
         const auth = getAuth();
 
         onAuthStateChanged(auth, async (user) => {

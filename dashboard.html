@@ -19,21 +19,22 @@
 </body>
     
 <script type="module">
+  // 1. Importo libraritë (rreshtat 22-23)
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-// Përdor këtë URL të plotë:
-const supabase = createClient('https://KOPJO_URL-NË_KËTU.supabase.co', 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9');
-  'https://gnwsrmelmeqduhhfmoa.supabase.co', 
-  ''sb_publishable_AkK_Z71htkvukN6Fy1cAQ_KBTXI...', 
-);
+  // 2. Inicializo Supabase (këtu vendos URL-në dhe Key-në tënde)
+  const supabase = createClient('https://gnwsrmelmeqduhhfmoa.supabase.co', 'VENDO_ANON_KEY_KËTU');
+  const auth = getAuth();
 
+  // 3. Logjika për të shfaqur orët
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       const { data, error } = await supabase.from('oras').select('*').eq('user_id', user.uid);
       
       if (data) {
-        const list = document.getElementById('watchList');
+        // Këtu ID-ja duhet të jetë "myWatchesList" siç e ke në HTML te rreshti 17
+        const list = document.getElementById('myWatchesList');
         list.innerHTML = ""; 
         data.forEach(watch => {
           let li = document.createElement('li');
@@ -47,6 +48,7 @@ const supabase = createClient('https://KOPJO_URL-NË_KËTU.supabase.co', 'sb_pub
     }
   });
 
+  // 4. Funksioni për fshirje
   window.deleteWatch = async (watchId) => {
     const { error } = await supabase.from('oras').delete().eq('id', watchId);
     if (!error) location.reload();

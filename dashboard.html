@@ -27,6 +27,16 @@ const supabase = createClient(
   'VENDOS_ANON_KEY_KËTU' 
 );
 
+// Shto këtë rresht pas inicializimit të supabase
+console.log("Supabase URL:", 'https://gnwsrmelmeqduhhmfmoa.supabase.co');
+
+supabase.auth.getSession().then(({ data }) => {
+    console.log("Sesioni aktual:", data.session);
+    if (!data.session) {
+        console.warn("Nuk u gjet asnjë sesion aktiv. A je i loguar?");
+    }
+});
+    
 // Ky është funksioni që dëgjon nëse je i loguar
 supabase.auth.onAuthStateChange((event, session) => {
     if (session) {

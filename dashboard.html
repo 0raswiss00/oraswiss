@@ -32,6 +32,7 @@ const supabase = createClient(
 // 3. Shfaq orët nga Supabase
 // Funksioni për të marrë dhe shfaqur orët
 // 3. Shfaq orët nga Supabase për këtë përdorues
+// 3. Shfaq orët nga Supabase për këtë përdorues
 async function fetchWatches() {
     // Së pari marrim përdoruesin
     const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -45,24 +46,32 @@ async function fetchWatches() {
     const { data, error } = await supabase
         .from('oras')
         .select('*')
-        .eq('user_id', user.id); // KËTU ËSHTË FILTRI I RËNDËSISHËM
+        .eq('user_id', user.id); 
 
     if (error) {
         console.error("Gabim gjatë marrjes së të dhënave:", error);
         return;
     }
 
-    if (data) {
-        const list = document.getElementById('myWatchesList');
+    // Shfaqim orët në listë
+    const list = document.getElementById('myWatchesList');
+    if (list) {
         list.innerHTML = ""; 
-        data.forEach(watch => {
-            let li = document.createElement('li');
-            li.innerHTML = `${watch.brand} - ${watch.model} | ${watch.price}€ 
-                <button onclick="deleteWatch('${watch.id}')">Fshi</button>`;
-            list.appendChild(li);
-        });
+        if (data && data.length > 0) {
+            data.forEach(watch => {
+                let li = document.createElement('li');
+                li.innerHTML = `${watch.brand} - ${watch.model} | ${watch.price}€ 
+                    <button onclick="deleteWatch('${watch.id}')">Fshi</button>`;
+                list.appendChild(li);
+            });
+        } else {
+            list.innerHTML = "<li>Nuk keni asnjë orë të shtuar.</li>";
+        }
     }
 }
+
+// Thirr funksionin për të nisur procesin
+fetchWatches();
 
 // Thirr funksionin sapo faqja të jetë gati
 fetchWatches();

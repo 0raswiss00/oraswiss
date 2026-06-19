@@ -22,9 +22,11 @@
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-  // RREGULLO KËTU: Vendos URL-në dhe Key-në tënde reale
-  const supabase = createClient('sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9');
-  const auth = getAuth();
+// Përdor këtë URL të plotë:
+const supabase = window.supabase.createClient(
+  'https://gnwsrmelmeqduhhfmoa.supabase.co', 
+  'KËTU_VENDO_ANON_KEY_TËNDE'
+);
 
   onAuthStateChanged(auth, async (user) => {
     if (user) {

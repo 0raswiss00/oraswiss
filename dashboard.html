@@ -8,39 +8,49 @@
     <h1>Orët e mia</h1>
     <ul id="myWatchesList"></ul>
 
-    <script type="module">
-        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-        const supabase = createClient('https://xyunmtvysqwonelecudf.supabase.co', 'sb_publishable_tk6dO6UWVIRrVWOfx4m_w_ZAoduHhx');
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-        supabase.auth.onAuthStateChange((event, session) => {
-            if (session) {
-                fetchWatches(session.user.id);
-            } else {
-                window.location.href = "login.html";
-            }
-        });
+  const supabase = createClient('https://xyunmtvysqwonelecudf.supabase.co', 'sb_publishable_tk6dO6UWVIRrVWOfx4m_w_ZAoduHhx');
 
-        async function fetchWatches(userId) {
-            let { data, error } = await supabase
-                .from('watches')
-                .select('*')
-                .eq('user_id', userId);
+  // Kontrollojmë gjendjen e sesionit
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    if (session) {
+      console.log("Përdoruesi i loguar, po marrim orët...");
+      fetchWatches(session.user.id);
+    } else {
+      console.log("Nuk ka sesion, dërgimi te login.html");
+      window.location.href = "login.html";
+    }
+  });
 
-            if (error) {
-                console.error("Gabim:", error.message);
-                return;
-            }
+  async function fetchWatches(userId) {
+    const { data, error } = await supabase
+      .from('watches')
+      .select('*')
+      .eq('user_id', userId);
 
-            const listElement = document.getElementById("myWatchesList");
-            listElement.innerHTML = ""; 
+    if (error) {
+      console.error("Gabim në databazë:", error.message);
+      return;
+    }
 
-            data.forEach(watch => {
-                const li = document.createElement("li");
-                // Kjo linjë tani ka backticks (`) që kodi të mos japë gabim
-                li.textContent = ${watch.name}; 
-                listElement.appendChild(li);
-            });
-        }
-    </script>
+    const listElement = document.getElementById("myWatchesList");
+    if (!listElement) return;
+
+    listElement.innerHTML = ""; 
+
+    if (data && data.length > 0) {
+      data.forEach(watch => {
+        const li = document.createElement("li");
+        // Këtu po përdorim vetëm emrin për të shmangur gabimet me kolonat
+        li.textContent = watch.name; 
+        listElement.appendChild(li);
+      });
+    } else {
+      listElement.innerHTML = "<li>Nuk ke asnjë orë të regjistruar.</li>";
+    }
+  }
+</script>
 </body>
 </html>

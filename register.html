@@ -4,68 +4,111 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Register</title>
+ <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-KD2ZZ3MJYY');
+  </script>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <div class="auth-page">
     <div class="auth-card register-form">
+      <button class="back-btn" onclick="history.back()">← Back</button>
+
       <h2>Sign Up</h2>
-      <input id="fullName" placeholder="Full Name" />
-      <input id="email" type="email" placeholder="Email" />
-      <input id="password" type="password" placeholder="Password" />
-      <button id="btnRegister" type="button">Register</button>
+      <input id="fullName" placeholder="Full Name" autocomplete="name" />
+      <input id="phone" placeholder="Phone" autocomplete="tel" />
+      <input id="country" placeholder="Country" autocomplete="country-name" />
+      <input id="email" type="email" placeholder="Email" autocomplete="email" autocapitalize="none" />
+      <input id="password" type="password" placeholder="Password" autocomplete="new-password" />
+      <button id="btnRegister" type="button" class="auth-btn">Register</button>
+
+      <div class="auth-sep"></div>
 
       <h2>Login</h2>
-      <input id="loginEmail" type="email" placeholder="Email" />
-      <input id="loginPassword" type="password" placeholder="Password" />
-      <button id="btnLogin" type="button">Login</button>
+      <input id="loginEmail" type="email" placeholder="Email" autocomplete="email" autocapitalize="none" />
+      <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password" />
+      <button id="btnLogin" type="button" class="auth-btn">Login</button>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
+    // ✅ Vendos konfigurimin tënd këtu (si objekt i vetëm)
     const firebaseConfig = {
       apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
       authDomain: "oraswiss-27e57.firebaseapp.com",
       projectId: "oraswiss-27e57",
       storageBucket: "oraswiss-27e57.firebasestorage.app",
       messagingSenderId: "596627676936",
-      appId: "1:596627676936:web:0c96cf820fef4e979616bd"
+      appId: "1:596627676936:web:0c96cf820fef4e979616bd",
+      measurementId: "G-VZPKMD67VQ"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const db = getFirestore(app);
 
-    document.getElementById("btnRegister").addEventListener("click", async () => {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-      const fullName = document.getElementById("fullName").value;
+    window.addEventListener("DOMContentLoaded", () => {
 
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        await setDoc(doc(db, "users", userCredential.user.uid), {
-          email, fullName, createdAt: new Date()
-        });
-        alert("Regjistrimi u krye!");
-      } catch (e) {
-        alert(e.message);
-      }
-    });
+      // REGISTER
+      document.getElementById("btnRegister").addEventListener("click", async () => {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
 
-    document.getElementById("btnLogin").addEventListener("click", async () => {
-      const email = document.getElementById("loginEmail").value.trim();
-      const password = document.getElementById("loginPassword").value;
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        window.location.href = "dashboard.html";
-      } catch (e) {
-        alert(e.message);
-      }
+        if (!email || !password) {
+          alert("Plotëso email dhe password");
+          return;
+        }
+
+        try {
+          await createUserWithEmailAndPassword(auth, email, password);
+          alert("Regjistrimi u krye");
+        } catch (e) {
+          alert(e.message);
+        }
+      });
+
+      // LOGIN
+      document.getElementById("btnLogin").addEventListener("click", async () => {
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+          // Ndryshimi që duhet të bësh në rreshtin 81:
+          window.location.href = "dashboard.html";
+        } catch (e) {
+          alert(e.message);
+        }
+      });
+
     });
   </script>
-</body>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/service-worker.js");
+    }
+  </script>
+
+<div id="minionsLoader" class="minions-loader hidden">
+  <img src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif">
+  <p>Po ngarkojmë fotot...</p>
+</div>
+
+<script>
+
+</body>  
 </html>

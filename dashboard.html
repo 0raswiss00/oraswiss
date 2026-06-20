@@ -21,68 +21,38 @@
 <script type="module">
   import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-  // Përditësoni rreshtin 25 si më poshtë:
   const supabase = createClient('https://xyunmtvysqwonelecudf.supabase.co', 'sb_publishable_tk6dO6UWVIRrVWOfx4m_w_ZAoduHhx');
 
-  // Funksioni që merr artikujt nga baza e të dhënave
+  // Monitorimi i gjendjes së logimit
+  supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+          fetchWatches(session.user.id);
+      } else {
+          window.location.href = "login.html";
+      }
+  });
+
   async function fetchWatches(userId) {
-    const { data, error } = await supabase
-      .from('watches') // Sigurohu që emri i tabelës është i saktë
-      .select('*')
-      .eq('user_id', userId);
+      let { data, error } = await supabase
+          .from('watches')
+          .select('*')
+          .eq('user_id', userId);
 
-    if (error) {
-      console.error("Gabim:", error.message);
-      return;
-    }
+      if (error) {
+          console.error("Gabim:", error.message);
+          return;
+      }
 
-    const listElement = document.getElementById("myWatchesList");
-    listElement.innerHTML = ""; // Pastro listën para se të shtosh elementet e reja
+      const listElement = document.getElementById("myWatchesList");
+      listElement.innerHTML = ""; 
 
-    data.forEach(watch => {
-      const li = document.createElement("li");
-      li.textContent = ${watch.name} - ${watch.price}€; // Përshtati emrat e kolonave
-      listElement.appendChild(li);
-    });
+      data.forEach(watch => {
+          const li = document.createElement("li");
+          // Këtu po përdorim backticks ( ) që kodi mos të nxjerrë gabim
+          li.textContent = ${watch.name} - ${watch.price || 0}€; 
+          listElement.appendChild(li);
+      });
   }
-
-// Monitorimi i gjendjes së logimit
-supabase.auth.onAuthStateChange((event, session) => {
-    if (session) {
-        console.log("Përdoruesi i loguar:", session.user.id);
-        
-        // Ky është funksioni që tërheq dhe shfaq orët
-        fetchWatches(session.user.id);
-    } else {
-        console.log("Përdoruesi nuk është loguar");
-        window.location.href = "login.html";
-    }
-});
-
-// Funksioni për të tërhequr orët nga baza
-async function fetchWatches(userId) {
-    let { data, error } = await supabase
-        .from('watches') // Sigurohu që emri i tabelës është saktësisht 'watches'
-        .select('*')
-        .eq('user_id', userId); // Filtrimi sipas ID-së së përdoruesit
-
-    if (error) {
-        console.error("Gabim:", error.message);
-        return;
-    }
-
-    const listElement = document.getElementById("myWatchesList");
-    if (!listElement) return; // Sigurohu që HTML-ja jote ka një element me këtë ID
-
-    listElement.innerHTML = ""; // Pastro listën para se të shtosh elementet e reja
-
-    data.forEach(watch => {
-        const li = document.createElement("li");
-        li.textContent = ${watch.name} - ${watch.price}€;
-        listElement.appendChild(li);
-    });
-}
-
-</script>    
+</script>
 </body>    
 </html>

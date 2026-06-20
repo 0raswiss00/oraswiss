@@ -39,42 +39,45 @@
   </div>
 
 <script type="module">
-  // 1. Importimi i klientit të Supabase nga CDN
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+  // Importimi i bibliotekës së Supabase
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-  // 2. Konfigurimi (Vendos këtu kredencialet nga Supabase Project Settings > API)
-  const supabaseUrl = 'URL_E_PROJEKTIT_TUAJ';
-  const supabaseKey = 'ANON_PUBLIC_KEY_E_PROJEKTIT_TUAJ';
+  // Vendos këtu të dhënat e tua nga Supabase (Project API Settings)
+  const supabaseUrl = 'https://gnwsrmelmeqduhhmf.supabase.co';
+  const supabaseKey = 'KËTU_VENDO_API_KEY_TËNDE_PUBLIKE'; // Kopjoje nga Supabase dashboard
+
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  document.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("DOMContentLoaded", () => {
 
-    // REGISTER LOGIC
+    // REGISTER
     document.getElementById("btnRegister").addEventListener("click", async () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
       const fullName = document.getElementById("fullName").value;
 
-      if (!email || !password) return alert("Plotëso email dhe password");
+      if (!email || !password) {
+        alert("Plotëso email dhe password");
+        return;
+      }
 
       try {
         const { data, error } = await supabase.auth.signUp({
           email: email,
           password: password,
           options: {
-            data: { full_name: fullName } // Ruajmë emrin në metadata
+            data: { full_name: fullName } // Shton emrin në profil
           }
         });
 
         if (error) throw error;
-        alert("Regjistrimi u krye me sukses!");
-        window.location.href = "dashboard.html";
+        alert("Regjistrimi u krye! Konfirmo emailin.");
       } catch (e) {
-        alert("Gabim gjatë regjistrimit: " + e.message);
+        alert(e.message);
       }
     });
 
-    // LOGIN LOGIC
+    // LOGIN
     document.getElementById("btnLogin").addEventListener("click", async () => {
       const email = document.getElementById("loginEmail").value.trim();
       const password = document.getElementById("loginPassword").value;
@@ -86,9 +89,9 @@
         });
 
         if (error) throw error;
-        window.location.href = "dashboard.html"; // Redirect pas login
+        window.location.href = "dashboard.html";
       } catch (e) {
-        alert("Gabim gjatë login: " + e.message);
+        alert(e.message);
       }
     });
   });

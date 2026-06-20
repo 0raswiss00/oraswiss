@@ -63,23 +63,33 @@
     window.addEventListener("DOMContentLoaded", () => {
 
       // REGISTER
-      document.getElementById("btnRegister").addEventListener("click", async () => {
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
+// Shto këtë import në krye me të tjerët:
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+const db = getFirestore(app);
 
-        if (!email || !password) {
-          alert("Plotëso email dhe password");
-          return;
-        }
+// Te pjesa e REGISTER ndryshoje kështu:
+document.getElementById("btnRegister").addEventListener("click", async () => {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const fullName = document.getElementById("fullName").value; // e marrim nga inputi
 
-        try {
-          await createUserWithEmailAndPassword(auth, email, password);
-          alert("Regjistrimi u krye");
-        } catch (e) {
-          alert(e.message);
-        }
-      });
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
 
+    // KËTU E RUAJMË NË FIRESTORE QË TA NUMËROSH PASTRA
+    await setDoc(doc(db, "users", user.uid), {
+      email: email,
+      fullName: fullName,
+      createdAt: new Date()
+    });
+
+    alert("Regjistrimi u krye dhe u ruajt!");
+  } catch (e) {
+    alert(e.message);
+  }
+});
+      
       // LOGIN
       document.getElementById("btnLogin").addEventListener("click", async () => {
         const email = document.getElementById("loginEmail").value.trim();

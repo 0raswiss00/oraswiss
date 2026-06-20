@@ -1,58 +1,46 @@
 <!DOCTYPE html>
 <html lang="sq">
 <head>
-    <title>Dashboard-i Im</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Mirë se erdhe!</h1>
-    
-    <!-- Butoni që kërkove për të shitur -->
-    <button onclick="window.location.href='sellnow.html'" style="background: gold; width: 100%; padding: 15px;">
-      + Sell Now
-    </button>
-    
-    <h3>Orët e mia:</h3>
+    <h1>Orët e mia</h1>
     <ul id="myWatchesList"></ul>
-  </div>
+
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+        const supabase = createClient('https://xyunmtvysqwonelecudf.supabase.co', 'sb_publishable_tk6dO6UWVIRrVWOfx4m_w_ZAoduHhx');
+
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (session) {
+                fetchWatches(session.user.id);
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        async function fetchWatches(userId) {
+            let { data, error } = await supabase
+                .from('watches')
+                .select('*')
+                .eq('user_id', userId);
+
+            if (error) {
+                console.error("Gabim:", error.message);
+                return;
+            }
+
+            const listElement = document.getElementById("myWatchesList");
+            listElement.innerHTML = ""; 
+
+            data.forEach(watch => {
+                const li = document.createElement("li");
+                // Kjo linjë tani ka backticks (`) që kodi të mos japë gabim
+                li.textContent = ${watch.name}; 
+                listElement.appendChild(li);
+            });
+        }
+    </script>
 </body>
-    
-<script type="module">
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-  const supabase = createClient('https://xyunmtvysqwonelecudf.supabase.co', 'sb_publishable_tk6dO6UWVIRrVWOfx4m_w_ZAoduHhx');
-
-  // Monitorimi i gjendjes së logimit
-  supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
-          fetchWatches(session.user.id);
-      } else {
-          window.location.href = "login.html";
-      }
-  });
-
-  async function fetchWatches(userId) {
-      let { data, error } = await supabase
-          .from('watches')
-          .select('*')
-          .eq('user_id', userId);
-
-      if (error) {
-          console.error("Gabim:", error.message);
-          return;
-      }
-
-      const listElement = document.getElementById("myWatchesList");
-      listElement.innerHTML = ""; 
-
-      data.forEach(watch => {
-          const li = document.createElement("li");
-          // Këtu po përdorim backticks ( ) që kodi mos të nxjerrë gabim
-          li.textContent = ${watch.name} - ${watch.price || 0}€; 
-          listElement.appendChild(li);
-      });
-  }
-</script>
-</body>    
 </html>

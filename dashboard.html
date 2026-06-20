@@ -11,16 +11,21 @@
 <script type="module">
   import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-  const supabaseKey = 'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx';
+  // URL-ja e projektit tënd
+  const supabaseUrl = 'https://xyunmtvysqwonelecudf.supabase.co';
+  
+  // VENDOSE ÇELËSIN E GJATË KËTU (ai që fillon me eyJ...)
+  const supabaseKey = 'PASTE_ÇELËSIN_TËND_KËTU'; 
 
-  // Kontrollojmë gjendjen e sesionit
-  supabase.auth.getSession().then(({ data: { session } }) => {
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  supabase.auth.getSession().then((result) => {
+    const session = result.data.session;
     if (session) {
-      console.log("Përdoruesi i loguar, po marrim orët...");
+      console.log("Loguar si:", session.user.email);
       fetchWatches(session.user.id);
     } else {
-      console.log("Nuk ka sesion, dërgimi te login.html");
-      window.location.href = "login.html";
+      console.log("Nuk ka sesion aktiv");
     }
   });
 
@@ -31,25 +36,46 @@
       .eq('user_id', userId);
 
     if (error) {
-      console.error("Gabim në databazë:", error.message);
+      console.error("Gabim në tërheqje:", error.message);
       return;
     }
+    
+    console.log("Të dhënat e marra:", data);
+  }
+</script>
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-    const listElement = document.getElementById("myWatchesList");
-    if (!listElement) return;
+  // URL-ja e projektit tënd
+  const supabaseUrl = 'https://xyunmtvysqwonelecudf.supabase.co';
+  
+  // VENDOSE ÇELËSIN E GJATË KËTU (ai që fillon me eyJ...)
+  const supabaseKey = 'PASTE_ÇELËSIN_TËND_KËTU'; 
 
-    listElement.innerHTML = ""; 
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
-    if (data && data.length > 0) {
-      data.forEach(watch => {
-        const li = document.createElement("li");
-        // Këtu po përdorim vetëm emrin për të shmangur gabimet me kolonat
-        li.textContent = watch.name; 
-        listElement.appendChild(li);
-      });
+  supabase.auth.getSession().then((result) => {
+    const session = result.data.session;
+    if (session) {
+      console.log("Loguar si:", session.user.email);
+      fetchWatches(session.user.id);
     } else {
-      listElement.innerHTML = "<li>Nuk ke asnjë orë të regjistruar.</li>";
+      console.log("Nuk ka sesion aktiv");
     }
+  });
+
+  async function fetchWatches(userId) {
+    const { data, error } = await supabase
+      .from('watches')
+      .select('*')
+      .eq('user_id', userId);
+
+    if (error) {
+      console.error("Gabim në tërheqje:", error.message);
+      return;
+    }
+    
+    console.log("Të dhënat e marra:", data);
   }
 </script>
 </body>

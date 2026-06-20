@@ -19,57 +19,43 @@
 </body>
     
 <script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-// VENDOS ANON KEY-NË TËNDE KËTU (Jo tekstin e shkruar)
-const supabase = createClient('https://gnwsrmelmeqduhhmfmoa.supabase.co', 'VENDOS_ANON_KEY_TËNDE');
+  const supabase = createClient('URL_E_PROJEKTIT', 'ANON_KEY');
 
-// Përdor vetëm ON AUTH STATE CHANGE. 
-// Fshije getSession() sepse po të ngatërron.
-supabase.auth.onAuthStateChange((event, session) => {
-    if (session) {
-        console.log("Përdoruesi i loguar:", session.user.id);
-        fetchWatches(session.user.id);
-    } else {
-        console.log("Pritet logimi...");
-        const list = document.getElementById('myWatchesList');
-        if (list) list.innerHTML = "<li>Duhet të jesh i loguar.</li>";
-    }
-});
-
-async function fetchWatches(userId) {
+  // Funksioni që merr artikujt nga baza e të dhënave
+  async function fetchWatches(userId) {
     const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .eq('user_id', userId);
-
-    const list = document.getElementById('myWatchesList');
-    if (!list) return;
+      .from('watches') // Sigurohu që emri i tabelës është i saktë
+      .select('*')
+      .eq('user_id', userId);
 
     if (error) {
-        console.error("Gabim:", error);
-        list.innerHTML = "<li>Gabim gjatë ngarkimit.</li>";
-        return;
+      console.error("Gabim:", error.message);
+      return;
     }
 
-    list.innerHTML = "";
-    if (data && data.length > 0) {
-        data.forEach(watch => {
-            let li = document.createElement('li');
-            li.innerHTML = `${watch.brand} - ${watch.model} | ${watch.price}€ 
-                            <button onclick="deleteWatch('${watch.id}')">Fshi</button>`;
-            list.appendChild(li);
-        });
+    const listElement = document.getElementById("myWatchesList");
+    listElement.innerHTML = ""; // Pastro listën para se të shtosh elementet e reja
+
+    data.forEach(watch => {
+      const li = document.createElement("li");
+      li.textContent = ${watch.name} - ${watch.price}€; // Përshtati emrat e kolonave
+      listElement.appendChild(li);
+    });
+  }
+
+  // Monitorimi i gjendjes së logimit
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (session) {
+      console.log("Përdoruesi i loguar:", session.user.id);
+      // Kur përdoruesi është i loguar, thirr funksionin për të mbushur listën
+      fetchWatches(session.user.id);
     } else {
-        list.innerHTML = "<li>Nuk keni orë të regjistruara.</li>";
+      console.log("Përdoruesi nuk është loguar");
+      window.location.href = "login.html"; // Ose ktheje te faqja e logimit
     }
-}
-
-window.deleteWatch = async (watchId) => {
-    const { error } = await supabase.from('oras').delete().eq('id', watchId);
-    if (!error) location.reload();
-    else console.error("Gabim fshirje:", error);
-};
-<script>
+  });
+</script>
 </body>    
 </html>

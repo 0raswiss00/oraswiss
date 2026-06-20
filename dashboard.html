@@ -11,73 +11,18 @@
 <script type="module">
   import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-  // URL-ja e saktë
-  const supabaseUrl = 'https://xyunmtvysqwonelecudf.supabase.co';
+const supabase = createClient(
+  'https://xyunmtvysqwonelecudf.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5dW5tdHZ5c3F3b25lbGVjdWRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTg5MTk2NTh9.K7_...' // (këtu vendos çelësin TË PLOTË që kopjove nga Supabase, pa asnjë shkronjë tjetër para)
+);  
   
-  // KËTU VENDO ÇELËSIN QE FILLON ME eyJ (E GJE TE SETTINGS -> API)
-  const supabaseKey = 'https://oraswiss.com/'; 
-
-  const supabase = createClient(supabaseUrl, supabaseKey);
-
-  supabase.auth.getSession().then((result) => {
-    const session = result.data.session;
-    if (session) {
-      console.log("Loguar si:", session.user.email);
-      fetchWatches(session.user.id);
-    } else {
-      console.log("Nuk ka sesion aktiv");
-    }
-  });
-
-  async function fetchWatches(userId) {
-    const { data, error } = await supabase
-      .from('watches')
-      .select('*')
-      .eq('user_id', userId);
-
-    if (error) {
-      console.error("Gabim në tërheqje:", error.message);
-      return;
-    }
-    
-    console.log("Të dhënat e marra:", data);
+  async function test() {
+    const { data, error } = await supabase.from('watches').select('*');
+    if (error) console.error("Gabim:", error);
+    else console.log("Të dhënat:", data);
   }
-</script>
-<script type="module">
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-  // URL-ja e projektit tënd
-  const supabaseUrl = 'https://xyunmtvysqwonelecudf.supabase.co';
-  
-  // VENDOSE ÇELËSIN E GJATË KËTU (ai që fillon me eyJ...)
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5dW5tdHZ5c3F3b25lbGVjdWRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5NjU2MzksImV4cCI6MjA5NzU0MTYzOX0.zt6_qX814eSjP47FMiXGwrae5CCU3P7M12v7zG0EzpA'; 
-
-  const supabase = createClient(supabaseUrl, supabaseKey);
-
-  supabase.auth.getSession().then((result) => {
-    const session = result.data.session;
-    if (session) {
-      console.log("Loguar si:", session.user.email);
-      fetchWatches(session.user.id);
-    } else {
-      console.log("Nuk ka sesion aktiv");
-    }
-  });
-
-  async function fetchWatches(userId) {
-    const { data, error } = await supabase
-      .from('watches')
-      .select('*')
-      .eq('user_id', userId);
-
-    if (error) {
-      console.error("Gabim në tërheqje:", error.message);
-      return;
-    }
-    
-    console.log("Të dhënat e marra:", data);
-  }
-</script>
+  test();
+</script
 </body>
 </html>
 

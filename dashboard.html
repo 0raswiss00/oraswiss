@@ -11,7 +11,7 @@
 <script type="module">
   import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-  const supabase = createClient('https://xyunmtvysqwonelecudf.supabase.co', 'sb_publishable_tk6dO6UWVIRrVWOfx4m_w_ZAoduHhx');
+  const supabaseKey = 'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx';
 
   // Kontrollojmë gjendjen e sesionit
   supabase.auth.getSession().then(({ data: { session } }) => {

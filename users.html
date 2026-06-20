@@ -25,20 +25,31 @@
   const listEl = document.getElementById("list");
   const countEl = document.getElementById("count");
 
-  async function loadUsers() {
-    listEl.innerHTML = "";
-    const q = query(collection(db, "users"), orderBy("createdAt", "desc"));
-    const snap = await getDocs(q);
+// Hiqe atë "async function loadUsers" dhe vendos këtë:
+async function loadOras() {
+  const listEl = document.getElementById("list");
+  const countEl = document.getElementById("count");
 
-    countEl.textContent = snap.size;
+  // Përdorim tabelën "oras" që pamë në foto
+  const { data, count, error } = await supabase
+    .from('oras')
+    .select('*', { count: 'exact' });
 
-    snap.forEach(docSnap => {
-      const u = docSnap.data();
-      const li = document.createElement("li");
-      li.textContent = ${u.email || "(pa email)"} ${u.fullName ? " - " + u.fullName : ""};
-      listEl.appendChild(li);
-    });
+  if (error) {
+    console.error("Gabim:", error);
+    return;
   }
 
-  loadUsers();
+  countEl.textContent = count;
+  listEl.innerHTML = "";
+
+  data.forEach(item => {
+    const li = document.createElement("li");
+    // Shfaq kategorinë ose diçka tjetër që ke në tabelë
+    li.textContent = ID: ${item.id} - Kategoria: ${item.category || "nuk ka"};
+    listEl.appendChild(li);
+  });
+}
+
+loadOras();
 </script>

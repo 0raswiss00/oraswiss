@@ -46,17 +46,43 @@
     });
   }
 
-  // Monitorimi i gjendjes së logimit
-  supabase.auth.onAuthStateChange((event, session) => {
+// Monitorimi i gjendjes së logimit
+supabase.auth.onAuthStateChange((event, session) => {
     if (session) {
-      console.log("Përdoruesi i loguar:", session.user.id);
-      // Kur përdoruesi është i loguar, thirr funksionin për të mbushur listën
-      fetchWatches(session.user.id);
+        console.log("Përdoruesi i loguar:", session.user.id);
+        
+        // Ky është funksioni që tërheq dhe shfaq orët
+        fetchWatches(session.user.id);
     } else {
-      console.log("Përdoruesi nuk është loguar");
-      window.location.href = "login.html"; // Ose ktheje te faqja e logimit
+        console.log("Përdoruesi nuk është loguar");
+        window.location.href = "login.html";
     }
-  });
-</script>
+});
+
+// Funksioni për të tërhequr orët nga baza
+async function fetchWatches(userId) {
+    let { data, error } = await supabase
+        .from('watches') // Sigurohu që emri i tabelës është saktësisht 'watches'
+        .select('*')
+        .eq('user_id', userId); // Filtrimi sipas ID-së së përdoruesit
+
+    if (error) {
+        console.error("Gabim:", error.message);
+        return;
+    }
+
+    const listElement = document.getElementById("myWatchesList");
+    if (!listElement) return; // Sigurohu që HTML-ja jote ka një element me këtë ID
+
+    listElement.innerHTML = ""; // Pastro listën para se të shtosh elementet e reja
+
+    data.forEach(watch => {
+        const li = document.createElement("li");
+        li.textContent = ${watch.name} - ${watch.price}€;
+        listElement.appendChild(li);
+    });
+}
+
+</script>    
 </body>    
 </html>

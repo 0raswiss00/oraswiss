@@ -38,64 +38,61 @@
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import {
-      getAuth,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword
-    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+<script type="module">
+  // 1. Importimi i klientit të Supabase nga CDN
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-    // ✅ Vendos konfigurimin tënd këtu (si objekt i vetëm)
-    const firebaseConfig = {
-      apiKey: "AIzaSyACmJj1OGz1gfRUjxz-w3_k94tNBfNyvVg",
-      authDomain: "oraswiss-27e57.firebaseapp.com",
-      projectId: "oraswiss-27e57",
-      storageBucket: "oraswiss-27e57.firebasestorage.app",
-      messagingSenderId: "596627676936",
-      appId: "1:596627676936:web:0c96cf820fef4e979616bd",
-      measurementId: "G-VZPKMD67VQ"
-    };
+  // 2. Konfigurimi (Vendos këtu kredencialet nga Supabase Project Settings > API)
+  const supabaseUrl = 'URL_E_PROJEKTIT_TUAJ';
+  const supabaseKey = 'ANON_PUBLIC_KEY_E_PROJEKTIT_TUAJ';
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+  document.addEventListener("DOMContentLoaded", () => {
 
-    window.addEventListener("DOMContentLoaded", () => {
+    // REGISTER LOGIC
+    document.getElementById("btnRegister").addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const fullName = document.getElementById("fullName").value;
 
-      // REGISTER
-      document.getElementById("btnRegister").addEventListener("click", async () => {
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
+      if (!email || !password) return alert("Plotëso email dhe password");
 
-        if (!email || !password) {
-          alert("Plotëso email dhe password");
-          return;
-        }
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            data: { full_name: fullName } // Ruajmë emrin në metadata
+          }
+        });
 
-        try {
-          await createUserWithEmailAndPassword(auth, email, password);
-          alert("Regjistrimi u krye");
-        } catch (e) {
-          alert(e.message);
-        }
-      });
-
-      // LOGIN
-      document.getElementById("btnLogin").addEventListener("click", async () => {
-        const email = document.getElementById("loginEmail").value.trim();
-        const password = document.getElementById("loginPassword").value;
-
-        try {
-          await signInWithEmailAndPassword(auth, email, password);
-          // Ndryshimi që duhet të bësh në rreshtin 81:
-          window.location.href = "dashboard.html";
-        } catch (e) {
-          alert(e.message);
-        }
-      });
-
+        if (error) throw error;
+        alert("Regjistrimi u krye me sukses!");
+        window.location.href = "dashboard.html";
+      } catch (e) {
+        alert("Gabim gjatë regjistrimit: " + e.message);
+      }
     });
-  </script>
+
+    // LOGIN LOGIC
+    document.getElementById("btnLogin").addEventListener("click", async () => {
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: email,
+          password: password,
+        });
+
+        if (error) throw error;
+        window.location.href = "dashboard.html"; // Redirect pas login
+      } catch (e) {
+        alert("Gabim gjatë login: " + e.message);
+      }
+    });
+  });
+</script>
 
   <script>
     if ("serviceWorker" in navigator) {

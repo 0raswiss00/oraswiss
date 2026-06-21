@@ -16,6 +16,40 @@
     'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
   );
 
+data.forEach(watch => {
+    const li = document.createElement("li");
+    // Linku tani çon te detaje.html, jo te sellnow
+    li.innerHTML = `
+        <a href="detaje.html?id=${watch.id}">${watch.name}</a>
+    `;
+    lista.appendChild(li);
+});
+
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+const supabase = createClient('URL_YT', 'KEY_YT');
+const id = new URLSearchParams(window.location.search).get('id');
+
+async function ngarkoDetajet() {
+    const { data } = await supabase.from('watches').select('*').eq('id', id).single();
+    if (data) {
+        document.getElementById('watch-name').textContent = data.name;
+    }
+}
+
+window.fshiProdukton = async () => {
+    if(confirm("Dëshiron ta fshish?")) {
+        await supabase.from('watches').delete().eq('id', id);
+        window.location.href = 'dashboard.html';
+    }
+};
+
+window.shkoTeModifikimi = () => {
+    window.location.href = sellnow.html?id=${id};
+};
+
+ngarkoDetajet();
+
+    
   async function ngarkoArtikujt() {
     try {
       const { data, error } = await supabase.from('watches').select('*');

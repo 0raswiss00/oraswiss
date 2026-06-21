@@ -18,35 +18,21 @@
 
   async function ngarkoArtikujt() {
     try {
-      // Marrja e të dhënave
       const { data, error } = await supabase.from('watches').select('*');
       if (error) throw error;
 
-      console.log("Të dhënat u morën:", data);
-
       const lista = document.getElementById("myWatchesList");
-      if (lista) {
-        lista.innerHTML = ""; // Pastro listën për të shmangur dublikimet
-        
-data.forEach(watch => {
-    const div = document.createElement("div");
-    div.className = "watch-card";
-    div.innerHTML = `
-        <img src="${watch.image_url || 'placeholder.jpg'}">
-        <h3>${watch.name}</h3>
-        <button onclick="editWatch('${watch.id}')">Modifiko</button>
-        <button onclick="deleteWatch('${watch.id}')" style="color:red">Fshi</button>
-    `;
-    lista.appendChild(div);
-});
+      if (!lista) return;
+      
+      lista.innerHTML = ""; // Pastro listën
 
-li.innerHTML = `
-    <div>
-        ${watch.name} 
-        <button onclick="window.location.href='sellnow.html?id=${watch.id}'">Sell Now</button>
-    </div>
-`;
-            lista.appendChild(li);
+      if (data.length === 0) {
+        lista.innerHTML = "<li>Nuk ka orë për momentin.</li>";
+      } else {
+        data.forEach(watch => {
+          const li = document.createElement("li");
+          li.textContent = watch.name || "Orë pa emër";
+          lista.appendChild(li);
         });
       }
     } catch (err) {
@@ -54,18 +40,6 @@ li.innerHTML = `
     }
   }
 
-window.deleteWatch = async (id) => {
-    if(confirm("Dëshiron ta fshish?")) {
-        await supabase.from('watches').delete().eq('id', id);
-        location.reload();
-    }
-};
-
-window.editWatch = (id) => {
-    window.location.href = sellnow.html?id=${id}&mode=edit;
-};
-    
-  // Ekzekuto funksionin
   ngarkoArtikujt();
 </script>
 </body>

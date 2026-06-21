@@ -11,17 +11,38 @@
 <script type="module">
   import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const supabase = createClient(
-  'https://xyunmtvysqwonelecudf.supabase.co',
-  'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx' // (këtu vendos çelësin TË PLOTË që kopjove nga Supabase, pa asnjë shkronjë tjetër para)
-);  
-  
-  async function test() {
+async function test() {
     const { data, error } = await supabase.from('watches').select('*');
-    if (error) console.error("Gabim:", error);
-    else console.log("Të dhënat:", data);
+    
+    if (error) {
+      console.error("Gabim:", error);
+      return;
+    }
+
+    // Gjejmë listën (ul) ku duam të shfaqim orët
+    const list = document.getElementById("myWatchesList");
+    
+    // Pastrojmë listën nëse ka ndonjë gjë brenda
+    list.innerHTML = "";
+
+    // Krijojmë elementet për çdo orë që kemi në bazë
+    data.forEach(watch => {
+      const li = document.createElement("li");
+      
+      // ZËVENDËSONI 'name' me emrin e saktë të kolonës suaj në Supabase
+      // Psh: nëse kolona quhet 'model', përdorni watch.model
+      li.innerHTML = `
+        <div class="watch-item">
+            <h3>${watch.name}</h3>
+            <button onclick="alert('Po shesim: ${watch.name}')">Sell Now</button>
+        </div>
+      `;
+      list.appendChild(li);
+    });
   }
+  
   test();
+
 </script
 </body>
 </html>

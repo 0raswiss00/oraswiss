@@ -65,8 +65,19 @@ kontrolloDheShfaqSellNow();
 supabase.auth.onAuthStateChange((event, session) => {
     kontrolloDheShfaqSellNow();
 });
-  // Ekzekuto funksionin
-  ngarkoArtikujt();
+  // 1. Funksioni për të kontrolluar nëse përdoruesi është i loguar
+async function shfaqButoninSell() {
+    const { data: { session } } = await supabase.auth.getSession();
+    const btnSell = document.getElementById("btnSellNow");
+
+    if (session && btnSell) {
+        btnSell.style.display = "block"; // Shfaqet nëse është loguar
+    }
+}
+
+// 2. Thirr funksionet
+shfaqButoninSell();
+ngarkoArtikujt();
 </script>
 </body>
 </html>

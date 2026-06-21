@@ -16,97 +16,36 @@
     'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
   );
 
-data.forEach(watch => {
-    const li = document.createElement("li");
-    // Linku tani çon te detaje.html, jo te sellnow
-    li.innerHTML = `
-        <a href="detaje.html?id=${watch.id}">${watch.name}</a>
-    `;
-    lista.appendChild(li);
-});
-
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-const supabase = createClient('https://xyunmtvysqwonelecudf.supabase.co', 'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx');
-
-const path = window.location.pathname;
-const params = new URLSearchParams(window.location.search);
-const id = params.get('id');
-
-// 1. DASHBOARD LOGIC
-if (path.includes('dashboard.html')) {
-    supabase.from('watches').select('*').then(({ data }) => {
-        const list = document.getElementById("myWatchesList");
-        if(list) data.forEach(w => list.innerHTML += <li>${w.name} <a href="detaje.html?id=${w.id}">Detaje</a></li>);
-    });
-}
-
-// 2. DETAJE LOGIC
-if (path.includes('detaje.html')) {
-    supabase.from('watches').select('*').eq('id', id).single().then(({ data }) => {
-        if(data) document.getElementById('name').textContent = data.name;
-    });
-    window.fshi = async () => { await supabase.from('watches').delete().eq('id', id); window.location.href = 'dashboard.html'; };
-    window.modifiko = () => window.location.href = 'sellnow.html?id=' + id;
-}
-
-// 3. SELLNOW LOGIC
-if (path.includes('sellnow.html')) {
-    const form = document.getElementById('sellForm');
-    if (id) {
-        supabase.from('watches').select('*').eq('id', id).single().then(({ data }) => {
-            if(data) document.getElementById('name').value = data.name;
-        });
-    }
-    form.onsubmit = async (e) => {
-        e.preventDefault();
-        const val = document.getElementById('name').value;
-        if (id) await supabase.from('watches').update({ name: val }).eq('id', id);
-        else await supabase.from('watches').insert({ name: val });
-        window.location.href = 'dashboard.html';
-    };
-}
- 
   async function ngarkoArtikujt() {
     try {
+      // Marrja e të dhënave
       const { data, error } = await supabase.from('watches').select('*');
       if (error) throw error;
 
-      const lista = document.getElementById("myWatchesList");
-      if (!lista) return;
-      
-      lista.innerHTML = ""; // Pastro listën
+      console.log("Të dhënat u morën:", data);
 
-      if (!data || data.length === 0) {
-        lista.innerHTML = "<li>Nuk ka orë për momentin.</li>";
-      } else {
+      const lista = document.getElementById("myWatchesList");
+      if (lista) {
+        lista.innerHTML = ""; // Pastro listën për të shmangur dublikimet
+        
         data.forEach(watch => {
           const li = document.createElement("li");
-          
-          // Ky është blloku HTML i pastër
+          // Këtu shfaqim emrin dhe butonin
+          // Ndrysho rreshtin e butonit në këtë formë:
           li.innerHTML = `
-            <span>${watch.name}</span>
-            <button onclick="window.location.href='sellnow.html?id=${watch.id}'">Modifiko</button>
-            <button onclick="fshiOren('${watch.id}')" style="color:red">Fshi</button>
+              ${watch.name} 
+              <button onclick="window.location.href='sellnow.html?id=${watch.id}'">Sell Now</button>
           `;
           lista.appendChild(li);
         });
       }
     } catch (err) {
-      console.error("Gabim:", err);
+      console.error("Gabim gjatë ngarkimit:", err);
     }
   }
 
-  // Funksioni për fshirje
-  window.fshiOren = async (id) => {
-    if (confirm("Je i sigurt që do ta fshish?")) {
-      await supabase.from('watches').delete().eq('id', id);
-      location.reload();
-    }
-  };
-
+  // Ekzekuto funksionin
   ngarkoArtikujt();
 </script>
 </body>
 </html>
-
-

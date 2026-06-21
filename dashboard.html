@@ -31,12 +31,13 @@
         data.forEach(watch => {
             const li = document.createElement("li");
             // Këtu po i kalojmë ID-në e orës përmes URL-së
+
 li.innerHTML = `
-            <div>
-              ${watch.name} 
-              <button onclick="window.location.href='sellnow.html?id=${watch.id}'">Sell Now</button>
-            </div>
-          `;
+    <div>
+        ${watch.name} 
+        <button onclick="window.location.href='sellnow.html?id=${watch.id}'">Sell Now</button>
+    </div>
+`;
             lista.appendChild(li);
         });
       }

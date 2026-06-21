@@ -8,65 +8,46 @@
     <h1>Orët e mia</h1>
     <ul id="myWatchesList"></ul>
 
-    <script type="module">
-        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-        // 1. Inicializimi i Supabase (bëhet vetëm një herë)
-        const supabase = createClient(
-            'https://xyunmtvysqwonelecudf.supabase.co',
-            'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
-        );
+  const supabase = createClient(
+    'https://xyunmtvysqwonelecudf.supabase.co',
+    'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
+  );
 
-        // 2. Funksioni për të marrë dhe shfaqur të dhënat
-        async function ngarkoOrët() {
-            try {
-                const { data, error } = await supabase.from('watches').select('*');
-                
-                if (error) throw error;
+  async function ngarkoArtikujt() {
+    try {
+      // Marrja e të dhënave
+      const { data, error } = await supabase.from('watches').select('*');
+      if (error) throw error;
 
-                const lista = document.getElementById("myWatchesList");
-                lista.innerHTML = ""; // Pastro listën
+      console.log("Të dhënat u morën:", data);
 
-                if (data.length === 0) {
-                    lista.innerHTML = "<li>Nuk ka orë për momentin.</li>";
-                } else {
-// Gjej këtë pjesë në kodin tënd dhe ndryshoje:
-
-data.forEach(watch => {
-    const li = document.createElement("li");
-    
-    // Këtu shtojmë strukturën me Buton brenda listës
-    li.innerHTML = `
-        <div style="margin-bottom: 10px; padding: 5px; border: 1px solid #ccc;">
-            <strong>${watch.name || "Orë pa emër"}</strong> 
-            <button onclick="sellWatch('${watch.id}')">Sell Now</button>
-        </div>
-    `;
-    lista.appendChild(li);
-});
-
-// Këtë funksion shtoje poshtë "ngarkoOrët()" ose jashtë tij (para mbylljes së skriptit)
-window.sellWatch = async function(watchId) {
-    const confirmSell = confirm("A je i sigurt që do ta shesësh këtë orë?");
-    if (!confirmSell) return;
-
-    // Kjo pjesë bën përditësimin në Supabase
-    const { error } = await supabase
-        .from('watches')
-        .update({ status: 'sold' }) // Sigurohu që ke një kolonë 'status'
-        .eq('id', watchId);
-
-    if (error) {
-        alert("Gabim: " + error.message);
-    } else {
-        alert("Ora u shit me sukses!");
-        location.reload(); // Rifreskon faqen për të parë ndryshimin
+      const lista = document.getElementById("myWatchesList");
+      if (lista) {
+        lista.innerHTML = ""; // Pastro listën për të shmangur dublikimet
+        
+        data.forEach(watch => {
+          const li = document.createElement("li");
+          // Këtu shfaqim emrin dhe butonin
+          li.innerHTML = `
+            <div>
+              <strong>${watch.name}</strong>
+              <button onclick="alert('Po shitet: ${watch.name}')">Sell Now</button>
+            </div>
+          `;
+          lista.appendChild(li);
+        });
+      }
+    } catch (err) {
+      console.error("Gabim gjatë ngarkimit:", err);
     }
-};
+  }
 
-        // 3. Thirrja e funksionit
-        ngarkoOrët();
-    </script>
+  // Ekzekuto funksionin
+  ngarkoArtikujt();
+</script>
 </body>
 </html>
 

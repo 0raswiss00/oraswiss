@@ -16,17 +16,19 @@
     'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
   );
 
-// Lexo ID-në nga URL-ja
-const params = new URLSearchParams(window.location.search);
-const id = params.get('id');
+  // --- FUNKSIONET E BUTONAVE ---
+  window.deleteWatch = async (id) => {
+    if(confirm("Dëshiron ta fshish këtë orë?")) {
+        await supabase.from('watches').delete().eq('id', id);
+        location.reload(); 
+    }
+  };
 
-if (id) {
-    // Nëse ka ID, do të thotë që po modifikojmë
-    // Këtu do të bësh një "SELECT" nga Supabase për të marrë të dhënat e kësaj ore
-    // dhe do t'i mbushësh inputet e formularit
-    console.log("Po modifikoj orën me ID:", id);
-}
-    
+  window.editWatch = (id) => {
+    window.location.href = sellnow.html?id=${id};
+  };
+
+  // --- FUNKSIONI KRYESOR ---
   async function ngarkoArtikujt() {
     try {
       const { data, error } = await supabase.from('watches').select('*');
@@ -35,16 +37,18 @@ if (id) {
       const lista = document.getElementById("myWatchesList");
       if (!lista) return;
       
-      lista.innerHTML = ""; // Pastro listën
+      lista.innerHTML = ""; 
 
       if (data.length === 0) {
         lista.innerHTML = "<li>Nuk ka orë për momentin.</li>";
       } else {
         data.forEach(watch => {
           const li = document.createElement("li");
+          // Këtu përdorim funksionet window.editWatch dhe window.deleteWatch
           li.innerHTML = `
             ${watch.name} 
-            <button onclick="window.location.href='sellnow.html?id=${watch.id}'">Sell Now</button>
+            <button onclick="editWatch('${watch.id}')">Modifiko</button>
+            <button onclick="deleteWatch('${watch.id}')" style="color:red">Fshi</button>
           `;
           lista.appendChild(li);
         });

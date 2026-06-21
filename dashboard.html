@@ -31,11 +31,10 @@
         data.forEach(watch => {
           const li = document.createElement("li");
           // Këtu shfaqim emrin dhe butonin
-li.innerHTML = `
-            <div>
-              <strong>${watch.name}</strong>
-              <button onclick="alert('Po shitet: ${watch.name}')">Sell Now</button>
-            </div>
+          // Ndrysho rreshtin e butonit në këtë formë:
+          li.innerHTML = `
+              ${watch.name} 
+              <button onclick="window.location.href='sellnow.html?id=${watch.id}'">Sell Now</button>
           `;
           lista.appendChild(li);
         });

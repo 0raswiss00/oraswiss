@@ -54,6 +54,17 @@ li.innerHTML = `
     }
   }
 
+window.deleteWatch = async (id) => {
+    if(confirm("Dëshiron ta fshish?")) {
+        await supabase.from('watches').delete().eq('id', id);
+        location.reload();
+    }
+};
+
+window.editWatch = (id) => {
+    window.location.href = sellnow.html?id=${id}&mode=edit;
+};
+    
   // Ekzekuto funksionin
   ngarkoArtikujt();
 </script>

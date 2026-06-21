@@ -39,76 +39,63 @@
   </div>
 
 <script type="module">
-  // Importimi i bibliotekës së Supabase
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-// Vendos URL-në dhe Key-në tënde këtu
-const supabaseUrl = 'https://xyunmtvysqwonelecudf.supabase.co';
-const supabaseKey = 'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'; 
-
-const supabase = createClient(supabaseUrl, supabaseKey);
+  const supabaseUrl = 'https://xyunmtvysqwonelecudf.supabase.co';
+  const supabaseKey = 'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'; 
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
   window.addEventListener("DOMContentLoaded", () => {
-
+    
     // REGISTER
-    document.getElementById("btnRegister").addEventListener("click", async () => {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-      const fullName = document.getElementById("fullName").value;
+    const btnReg = document.getElementById("btnRegister");
+    if (btnReg) {
+      btnReg.addEventListener("click", async () => {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const fullName = document.getElementById("fullName").value;
 
-      if (!email || !password) {
-        alert("Plotëso email dhe password");
-        return;
-      }
+        if (!email || !password) {
+          alert("Plotëso email dhe password");
+          return;
+        }
 
-      try {
-        const { data, error } = await supabase.auth.signUp({
-          email: email,
-          password: password,
-          options: {
-            data: { full_name: fullName } // Shton emrin në profil
-          }
-        });
-
-        if (error) throw error;
-        alert("Regjistrimi u krye! Konfirmo emailin.");
-      } catch (e) {
-        alert(e.message);
-      }
-    });
-
-// LOGIN
-document.getElementById("btnLogin").addEventListener("click", async () => {
-    const email = document.getElementById("loginEmail").value.trim();
-    const password = document.getElementById("loginPassword").value;
-
-    try {
-        const { data, error } = await supabase.auth.signInWithPassword({
+        try {
+          const { data, error } = await supabase.auth.signUp({
             email: email,
             password: password,
-        });
-
-        if (error) throw error;
-        window.location.href = "dashboard.html";
-    } catch (e) {
-        alert(e.message);
+            options: { data: { full_name: fullName } }
+          });
+          if (error) throw error;
+          alert("Regjistrimi u krye! Konfirmo emailin.");
+        } catch (e) {
+          alert(e.message);
+        }
+      });
     }
-});
+
+    // LOGIN
+    const btnLog = document.getElementById("btnLogin");
+    if (btnLog) {
+      btnLog.addEventListener("click", async () => {
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+
+        try {
+          const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password,
+          });
+
+          if (error) throw error;
+          window.location.href = "dashboard.html";
+        } catch (e) {
+          alert(e.message);
+        }
+      });
+    }
+  }); // Kjo mbyllje ishte ajo që mungonte!
 </script>
-
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/service-worker.js");
-    }
-  </script>
-
-<div id="minionsLoader" class="minions-loader hidden">
-  <img src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif">
-  <p>Po ngarkojmë fotot...</p>
-</div>
-
-<script>
-
 </body>  
 </html>
 

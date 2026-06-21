@@ -28,9 +28,17 @@
       if (lista) {
         lista.innerHTML = ""; // Pastro listën për të shmangur dublikimet
         
-        data.forEach(watch => {
-            const li = document.createElement("li");
-            // Këtu po i kalojmë ID-në e orës përmes URL-së
+data.forEach(watch => {
+    const div = document.createElement("div");
+    div.className = "watch-card";
+    div.innerHTML = `
+        <img src="${watch.image_url || 'placeholder.jpg'}">
+        <h3>${watch.name}</h3>
+        <button onclick="editWatch('${watch.id}')">Modifiko</button>
+        <button onclick="deleteWatch('${watch.id}')" style="color:red">Fshi</button>
+    `;
+    lista.appendChild(div);
+});
 
 li.innerHTML = `
     <div>

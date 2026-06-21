@@ -31,7 +31,10 @@
       } else {
         data.forEach(watch => {
           const li = document.createElement("li");
-          li.textContent = watch.name || "Orë pa emër";
+          li.innerHTML = `
+            ${watch.name} 
+            <button onclick="window.location.href='sellnow.html?id=${watch.id}'">Sell Now</button>
+          `;
           lista.appendChild(li);
         });
       }

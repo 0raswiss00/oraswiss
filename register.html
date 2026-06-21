@@ -77,24 +77,23 @@ const supabase = createClient(supabaseUrl, supabaseKey);
       }
     });
 
-    // LOGIN
-    document.getElementById("btnLogin").addEventListener("click", async () => {
-      const email = document.getElementById("loginEmail").value.trim();
-      const password = document.getElementById("loginPassword").value;
+// LOGIN
+document.getElementById("btnLogin").addEventListener("click", async () => {
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
 
-      try {
+    try {
         const { data, error } = await supabase.auth.signInWithPassword({
-          email: email,
-          password: password,
+            email: email,
+            password: password,
         });
 
         if (error) throw error;
         window.location.href = "dashboard.html";
-      } catch (e) {
+    } catch (e) {
         alert(e.message);
-      }
-    });
-  });
+    }
+});
 </script>
 
   <script>

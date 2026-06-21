@@ -26,30 +26,46 @@ data.forEach(watch => {
 });
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-const supabase = createClient('URL_YT', 'KEY_YT');
-const id = new URLSearchParams(window.location.search).get('id');
+const supabase = createClient('https://xyunmtvysqwonelecudf.supabase.co', 'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx');
 
-async function ngarkoDetajet() {
-    const { data } = await supabase.from('watches').select('*').eq('id', id).single();
-    if (data) {
-        document.getElementById('watch-name').textContent = data.name;
-    }
+const path = window.location.pathname;
+const params = new URLSearchParams(window.location.search);
+const id = params.get('id');
+
+// 1. DASHBOARD LOGIC
+if (path.includes('dashboard.html')) {
+    supabase.from('watches').select('*').then(({ data }) => {
+        const list = document.getElementById("myWatchesList");
+        if(list) data.forEach(w => list.innerHTML += <li>${w.name} <a href="detaje.html?id=${w.id}">Detaje</a></li>);
+    });
 }
 
-window.fshiProdukton = async () => {
-    if(confirm("Dëshiron ta fshish?")) {
-        await supabase.from('watches').delete().eq('id', id);
-        window.location.href = 'dashboard.html';
+// 2. DETAJE LOGIC
+if (path.includes('detaje.html')) {
+    supabase.from('watches').select('*').eq('id', id).single().then(({ data }) => {
+        if(data) document.getElementById('name').textContent = data.name;
+    });
+    window.fshi = async () => { await supabase.from('watches').delete().eq('id', id); window.location.href = 'dashboard.html'; };
+    window.modifiko = () => window.location.href = 'sellnow.html?id=' + id;
+}
+
+// 3. SELLNOW LOGIC
+if (path.includes('sellnow.html')) {
+    const form = document.getElementById('sellForm');
+    if (id) {
+        supabase.from('watches').select('*').eq('id', id).single().then(({ data }) => {
+            if(data) document.getElementById('name').value = data.name;
+        });
     }
-};
-
-window.shkoTeModifikimi = () => {
-    window.location.href = sellnow.html?id=${id};
-};
-
-ngarkoDetajet();
-
-    
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        const val = document.getElementById('name').value;
+        if (id) await supabase.from('watches').update({ name: val }).eq('id', id);
+        else await supabase.from('watches').insert({ name: val });
+        window.location.href = 'dashboard.html';
+    };
+}
+ 
   async function ngarkoArtikujt() {
     try {
       const { data, error } = await supabase.from('watches').select('*');

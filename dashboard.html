@@ -43,7 +43,28 @@
       console.error("Gabim gjatë ngarkimit:", err);
     }
   }
+async function kontrolloDheShfaqSellNow() {
+    // Merr sesionin aktual nga Supabase
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    const btnSell = document.getElementById("btnSellNow");
 
+    if (session) {
+        // Përdoruesi është loguar, shfaq butonin
+        if (btnSell) btnSell.style.display = "block";
+    } else {
+        // Përdoruesi nuk është loguar, butoni mbetet i fshehur
+        if (btnSell) btnSell.style.display = "none";
+    }
+}
+
+// Ekzekutoje këtë kur faqja ngarkohet
+kontrolloDheShfaqSellNow();
+
+// Opsionale: Dëgjo për ndryshime në gjendjen e autentifikimit
+supabase.auth.onAuthStateChange((event, session) => {
+    kontrolloDheShfaqSellNow();
+});
   // Ekzekuto funksionin
   ngarkoArtikujt();
 </script>

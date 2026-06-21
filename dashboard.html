@@ -8,42 +8,43 @@
     <h1>Orët e mia</h1>
     <ul id="myWatchesList"></ul>
 
-<script type="module">
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-async function test() {
-    const { data, error } = await supabase.from('watches').select('*');
-    
-    if (error) {
-      console.error("Gabim:", error);
-      return;
-    }
+        // 1. Inicializimi i Supabase (bëhet vetëm një herë)
+        const supabase = createClient(
+            'https://xyunmtvysqwonelecudf.supabase.co',
+            'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
+        );
 
-    // Gjejmë listën (ul) ku duam të shfaqim orët
-    const list = document.getElementById("myWatchesList");
-    
-    // Pastrojmë listën nëse ka ndonjë gjë brenda
-    list.innerHTML = "";
+        // 2. Funksioni për të marrë dhe shfaqur të dhënat
+        async function ngarkoOrët() {
+            try {
+                const { data, error } = await supabase.from('watches').select('*');
+                
+                if (error) throw error;
 
-    // Krijojmë elementet për çdo orë që kemi në bazë
-    data.forEach(watch => {
-      const li = document.createElement("li");
-      
-      // ZËVENDËSONI 'name' me emrin e saktë të kolonës suaj në Supabase
-      // Psh: nëse kolona quhet 'model', përdorni watch.model
-      li.innerHTML = `
-        <div class="watch-item">
-            <h3>${watch.name}</h3>
-            <button onclick="alert('Po shesim: ${watch.name}')">Sell Now</button>
-        </div>
-      `;
-      list.appendChild(li);
-    });
-  }
-  
-  test();
+                const lista = document.getElementById("myWatchesList");
+                lista.innerHTML = ""; // Pastro listën
 
-</script
+                if (data.length === 0) {
+                    lista.innerHTML = "<li>Nuk ka orë për momentin.</li>";
+                } else {
+                    data.forEach(watch => {
+                        const li = document.createElement("li");
+                        // Këtu ndrysho 'name' me emrin e saktë të kolonës në Supabase
+                        li.textContent = watch.name || "Orë pa emër"; 
+                        lista.appendChild(li);
+                    });
+                }
+            } catch (err) {
+                console.error("Gabim gjatë ngarkimit:", err);
+            }
+        }
+
+        // 3. Thirrja e funksionit
+        ngarkoOrët();
+    </script>
 </body>
 </html>
 

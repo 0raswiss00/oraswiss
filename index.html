@@ -169,7 +169,29 @@ async function loadCategory(cat, containerId) {
         `;
     }).join('');
 }
+// E vendosim tek 'window' që të jetë i aksesueshëm nga butoni në HTML
+window.trajtoKlikiminSell = async function() {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (session) {
+        window.location.href = 'sell.html'; // Faqja e shtimit të orës
+    } else {
+        window.location.href = 'register.html'; // Faqja e login/register
+    }
+};
 
+// Funksioni për ta shfaqur butonin vetëm kur përdoruesi është i loguar
+async function kontrolloDheShfaqSellNow() {
+    const { data: { session } } = await supabase.auth.getSession();
+    const btnSell = document.getElementById("btnSellNow");
+    if (session && btnSell) {
+        btnSell.style.display = "block"; 
+    }
+}
+
+// E thërrasim funksionin sapo faqja të hapet
+kontrolloDheShfaqSellNow();
+  
     // Ngarkimi i kategorive
     loadCategory('luxury', 'luxury-container');
     loadCategory('vintage', 'vintage-container');

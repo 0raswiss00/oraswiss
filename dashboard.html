@@ -16,6 +16,17 @@
     'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
   );
 
+// Lexo ID-në nga URL-ja
+const params = new URLSearchParams(window.location.search);
+const id = params.get('id');
+
+if (id) {
+    // Nëse ka ID, do të thotë që po modifikojmë
+    // Këtu do të bësh një "SELECT" nga Supabase për të marrë të dhënat e kësaj ore
+    // dhe do t'i mbushësh inputet e formularit
+    console.log("Po modifikoj orën me ID:", id);
+}
+    
   async function ngarkoArtikujt() {
     try {
       const { data, error } = await supabase.from('watches').select('*');

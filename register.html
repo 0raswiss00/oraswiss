@@ -40,17 +40,13 @@
 
 <script type="module">
   // Importimi i bibliotekës së Supabase
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-  // Vendos këtu të dhënat e tua nga Supabase (Project API Settings)
-  const supabaseUrl = 'https://xyunmtvysqwonelecudf.supabase.co'; // VENDOS URL-NË E RE
-  // Rreshti 14-17 duhet të duket ekzaktësisht kështu:
-  const supabase = createClient(
-    'https://xyunmtvysqwonelecudf.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5dW5tdHZ5c3F3b25lbGVjdWRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTg5MTk2NTh9.K7_...' // (këtu vendos çelësin TË PLOTË që kopjove nga Supabase, pa asnjë shkronjë tjetër para)
-  );
+// Vendos URL-në dhe Key-në tënde këtu
+const supabaseUrl = 'https://xyunmtvysqwonelecudf.supabase.co';
+const supabaseKey = 'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'; 
 
-  const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(supabaseUrl, supabaseKey);
 
   window.addEventListener("DOMContentLoaded", () => {
 

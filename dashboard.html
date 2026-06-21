@@ -30,17 +30,39 @@
                 if (data.length === 0) {
                     lista.innerHTML = "<li>Nuk ka orë për momentin.</li>";
                 } else {
-                    data.forEach(watch => {
-                        const li = document.createElement("li");
-                        // Këtu ndrysho 'name' me emrin e saktë të kolonës në Supabase
-                        li.textContent = watch.name || "Orë pa emër"; 
-                        lista.appendChild(li);
-                    });
-                }
-            } catch (err) {
-                console.error("Gabim gjatë ngarkimit:", err);
-            }
-        }
+// Gjej këtë pjesë në kodin tënd dhe ndryshoje:
+
+data.forEach(watch => {
+    const li = document.createElement("li");
+    
+    // Këtu shtojmë strukturën me Buton brenda listës
+    li.innerHTML = `
+        <div style="margin-bottom: 10px; padding: 5px; border: 1px solid #ccc;">
+            <strong>${watch.name || "Orë pa emër"}</strong> 
+            <button onclick="sellWatch('${watch.id}')">Sell Now</button>
+        </div>
+    `;
+    lista.appendChild(li);
+});
+
+// Këtë funksion shtoje poshtë "ngarkoOrët()" ose jashtë tij (para mbylljes së skriptit)
+window.sellWatch = async function(watchId) {
+    const confirmSell = confirm("A je i sigurt që do ta shesësh këtë orë?");
+    if (!confirmSell) return;
+
+    // Kjo pjesë bën përditësimin në Supabase
+    const { error } = await supabase
+        .from('watches')
+        .update({ status: 'sold' }) // Sigurohu që ke një kolonë 'status'
+        .eq('id', watchId);
+
+    if (error) {
+        alert("Gabim: " + error.message);
+    } else {
+        alert("Ora u shit me sukses!");
+        location.reload(); // Rifreskon faqen për të parë ndryshimin
+    }
+};
 
         // 3. Thirrja e funksionit
         ngarkoOrët();

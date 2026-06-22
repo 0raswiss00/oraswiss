@@ -81,7 +81,7 @@ async function shtoOren() {
   } catch (err) {
     console.error("Gabim gjatë ngarkimit:", err);
   }
-}
+
 async function kontrolloDheShfaqSellNow() {
   const { data: { session } } = await supabase.auth.getSession();
   const btnSell = document.getElementById("btnSellNow");

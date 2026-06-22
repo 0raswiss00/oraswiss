@@ -21,18 +21,18 @@
   );
 
 async function shtoOren() {
-  // 1. Merr përdoruesin dhe prit që procesi të mbarojë
+  // Merr përdoruesin
   const { data: { user } } = await supabase.auth.getUser();
 
-  // 2. Kontrollo nëse përdoruesi ekziston, nëse jo, shfaq mesazhin dhe ndalo
+  // Kontrollo nëse user ekziston përpara se të vazhdosh
   if (!user) {
     alert("Duhet të jesh i loguar për të shtuar një orë!");
-    return; // Kjo linjë është thelbësore, ndalon kodin të vazhdojë
+    return; // Kjo ndalon ekzekutimin e mëtejshëm
   }
 
-  // 3. Nëse kodi arrin këtu, do të thotë që jeni loguar, vazhdoni me mbledhjen e të dhënave
+  // Tani është e sigurt të përdorësh user.id
   const oraData = {
-    user_id: user.id, // Tani user.id është i sigurt për t'u përdorur
+    user_id: user.id,
     name: document.getElementById('emriOrës').value,
     category: document.getElementById('kategoria').value,
     price: document.getElementById('cmimi').value,
@@ -46,6 +46,15 @@ async function shtoOren() {
     description: document.getElementById('description').value
   };
 
+  const { data, error } = await supabase.from('watches').insert([oraData]);
+
+  if (error) {
+    console.error("Gabim gjatë shtimit:", error);
+    alert("Gabim gjatë shtimit në bazën e të dhënave.");
+  } else {
+    alert("Ora u shtua me sukses!");
+  }
+}
   // 4. Dërgo të dhënat në bazën e të dhënave
   const { data, error } = await supabase
     .from('watches')

@@ -84,65 +84,47 @@
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  document.getElementById('sellForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
+document.getElementById('sellForm').addEventListener('submit', async (e) => {
+    e.preventDefault(); // Ndalon rifreskimin e faqes
 
-    const fileInput = document.getElementById('fileInput');
-    const files = fileInput.files;
-    let uploadedFileNames = [];
-
-    // 3. Ngarkimi i fotove
-    if (files.length > 0) {
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const uniqueFileName = Date.now() + "_" + file.name;
-        
-        const { error: uploadError } = await supabase.storage
-          .from('or-images')
-          .upload(uniqueFileName, file);
-
-        if (uploadError) {
-          console.error("Gabim në ngarkim:", uploadError.message);
-          alert("Gabim gjatë ngarkimit të fotos.");
-          return;
-        }
-        uploadedFileNames.push(uniqueFileName);
-      }
+    // 1. Merr përdoruesin e loguar
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        alert("Duhet të jesh i loguar për të shtuar një orë!");
+        return;
     }
 
-    // 4. Marrja e të dhënave (Përfshi këtu ID-në e user-it nëse të duhet)
-    const { data: { user } } = await supabase.auth.getUser();
-
-    // 5. Krijimi i objektit të vetëm (oraData)
+    // 2. Mbledh të gjitha vlerat nga formulari
     const oraData = {
-      user_id: user?.id,
-      brand: document.getElementById('brand').value,
-      model: document.getElementById('model').value,
-      reference: document.getElementById('reference').value,
-      material: document.getElementById('material').value,
-      case_size: document.getElementById('case_size').value,
-      year: parseInt(document.getElementById('year').value) || null,
-      movement: document.getElementById('movement').value,
-      function: document.getElementById('function').value,
-      service: document.getElementById('service').checked,
-      box_papers: document.getElementById('box_papers').checked,
-      description: document.getElementById('description').value,
-      category: document.getElementById('category').value,
-      price: parseInt(document.getElementById('price').value) || 0,
-      image_url: uploadedFileNames
+        user_id: user.id, // Kjo është lidhja që të duhej
+        category: document.getElementById('category').value,
+        brand: document.getElementById('brand').value,
+        model: document.getElementById('model').value,
+        price: parseInt(document.getElementById('price').value),
+        reference: document.getElementById('reference').value,
+        material: document.getElementById('material').value,
+        case_size: document.getElementById('case_size').value,
+        production_year: parseInt(document.getElementById('year').value),
+        movement_type: document.getElementById('movement').value,
+        function: document.getElementById('function').value,
+        service_status: document.getElementById('service').checked, // true/false
+        box_papers: document.getElementById('box_papers').checked, // true/false
+        description: document.getElementById('description').value
     };
 
-    // 6. Dërgimi në Supabase
-    const { error: insertError } = await supabase.from('oras').insert([oraData]);
+    // 3. Dërgoje në Supabase
+    const { data, error } = await supabase
+        .from('watches')
+        .insert([oraData]);
 
-    if (insertError) {
-      console.error("Gabim në ruajtje:", insertError.message);
-      alert("Gabim gjatë ruajtjes: " + insertError.message);
+    if (error) {
+        console.error("Gabim gjatë shtimit:", error);
+        alert("Gabim: " + error.message);
     } else {
-      alert("Ora u shtua me sukses!");
-      document.getElementById('sellForm').reset();
+        alert("Ora u shtua me sukses!");
+        document.getElementById('sellForm').reset(); // Pastron formularin
     }
-  });
+});
 </script>
 
 </body>

@@ -21,14 +21,17 @@
   );
 
 async function shtoOren() {
-  // 1. Merr sesionin/përdoruesin
+  // SHTO KËTË PJESË QË MUNGON:
   const { data: { user } } = await supabase.auth.getUser();
 
-  // 2. Kontrollo nëse përdoruesi është i loguar
   if (!user) {
     alert("Duhet të jesh i loguar për të shtuar një orë!");
-    return; // Ndalon ekzekutimin nëse nuk ka user
+    return; // Kjo ndalon ekzekutimin e mëtejshëm
   }
+
+  // Vazhdo me pjesën tjetër të kodit tuaj për të shtuar orën...
+  const { data, error } = await supabase.from('watches').insert([/* të dhënat */]);
+}
 
   // 3. Nëse është loguar, vazhdo me shtimin e të dhënave
   const oraData = {

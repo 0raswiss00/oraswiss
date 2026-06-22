@@ -17,18 +17,25 @@
     'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
   );
 
-  async function ngarkoArtikujt() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+async function ngarkoArtikujt() {
+    // Kjo është mënyra e sigurt për të marrë user-in
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    
+    if (userError || !userData.user) {
+      console.log("Përdoruesi nuk është loguar");
+      return;
+    }
 
-    // Këtu po përdorim emra unikë për variablat
-    const { data: watches, error } = await supabase
+    const user = userData.user;
+
+    // Tërheqim orët duke përdorur emër tjetër për variablat
+    const { data: watches, error: dbError } = await supabase
       .from('watches')
       .select('*')
       .eq('user_id', user.id);
 
-    if (error) {
-      console.error("Gabim:", error);
+    if (dbError) {
+      console.error("Gabim gjatë marrjes nga databaza:", dbError);
       return;
     }
 

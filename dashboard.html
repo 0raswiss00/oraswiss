@@ -96,6 +96,17 @@ async function shfaqButoninSell() {
     }
 }
 
+// Shto këtë pas të gjitha funksioneve të tjera
+document.addEventListener("DOMContentLoaded", function() {
+    const butoniLart = document.getElementById("btnSellNow");
+    if (butoniLart) {
+        butoniLart.addEventListener("click", function() {
+            // Këtu vendos emrin e saktë të file-it ku ke formën e shitjes
+            window.location.href = "sell.html"; 
+        });
+    }
+});
+    
 // 2. Thirr funksionet
 shfaqButoninSell();
 ngarkoArtikujt();

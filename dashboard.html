@@ -29,7 +29,7 @@ async function shtoOren() {
     alert("Duhet të jesh i loguar për të shtuar një orë!");
     return; // Kjo ndalon ekzekutimin e mëtejshëm
   }
-
+  console.log("Të dhënat u morën:", data);
   // Tani është e sigurt të përdorësh user.id
   const oraData = {
     user_id: user.id,

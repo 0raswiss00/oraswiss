@@ -46,11 +46,13 @@ async function ngarkoArtikujt() {
 
     try {
 
-        const {
-            data: { user }
-        } = await supabase.auth.getUser();
+         const { data: { session } } = await supabase.auth.getSession();
+         const user = session?.user;
 
-        const lista = document.getElementById("myWatchesList");
+         if (!user) {
+           alert("Duhet të jesh i loguar!");
+           return;
+         }
 
         if (!user) {
             lista.innerHTML =

@@ -18,22 +18,37 @@
     'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
   );
 
-  async function ngarkoArtikujt() {
-    try {
-      // Marrja e të dhënave
-      const { data, error } = await supabase.from('watches').select('*');
-      if (error) throw error;
+async function ngarkoArtikujt() {
+  try {
+    // 1. Merr sesionin për të ditur cili përdorues është loguar
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      console.log("Përdoruesi nuk është loguar.");
+      return;
+    }
 
-      console.log("Të dhënat u morën:", data);
+    console.log("Duke kërkuar orë për user_id:", session.user.id);
 
-      const lista = document.getElementById("myWatchesList");
-      if (lista) {
-        lista.innerHTML = ""; // Pastro listën për të shmangur dublikimet
-        
+    // 2. Merr vetëm orët që kanë këtë user_id
+    const { data, error } = await supabase
+      .from('watches')
+      .select('*')
+      .eq('user_id', session.user.id); // KY ËSHTË RRESHTI QË MUNGONTE
+
+    if (error) throw error;
+
+    console.log("Të dhënat u morën:", data);
+
+    const lista = document.getElementById("myWatchesList");
+    if (lista) {
+      lista.innerHTML = "";
+      
+      if (data.length === 0) {
+        lista.innerHTML = "<li>Nuk keni asnjë orë të regjistruar për këtë llogari.</li>";
+      } else {
         data.forEach(watch => {
           const li = document.createElement("li");
-          // Këtu shfaqim emrin dhe butonin
-          // Ndrysho rreshtin e butonit në këtë formë:
           li.innerHTML = `
               ${watch.name} 
               <button onclick="window.location.href='sellnow.html?id=${watch.id}'">Sell Now</button>
@@ -41,10 +56,11 @@
           lista.appendChild(li);
         });
       }
-    } catch (err) {
-      console.error("Gabim gjatë ngarkimit:", err);
     }
+  } catch (err) {
+    console.error("Gabim gjatë ngarkimit:", err);
   }
+}
 async function kontrolloDheShfaqSellNow() {
     // Merr sesionin aktual nga Supabase
     const { data: { session } } = await supabase.auth.getSession();

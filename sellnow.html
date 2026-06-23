@@ -3,13 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Sell Your Watch</title>
- <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-KD2ZZ3MJYY');
   </script>
   <style>
@@ -23,8 +21,8 @@
 <body>
 
 <form id="sellForm">
- <h2>Shto orë të re</h2>
- <label>Kategoria:</label>
+  <h2>Shto orë të re</h2>
+  <label>Kategoria:</label>
   <select id="category" style="width: 100%; margin-bottom: 15px;">
     <option value="luxury">Luxury</option>
     <option value="vintage">Vintage</option>
@@ -34,8 +32,8 @@
     <input type="text" id="brand" placeholder="Brand" required>
     <input type="text" id="model" placeholder="Model" required>
   </div>
-   <label>Çmimi:</label>
-   <input type="number" id="price" placeholder="Çmimi në €" style="width: 100%; margin-bottom: 15px; padding: 10px;">   
+  <label>Çmimi:</label>
+  <input type="number" id="price" placeholder="Çmimi në €" style="width: 100%; margin-bottom: 15px; padding: 10px;">
   <div class="row">
     <input type="text" id="reference" placeholder="Reference">
     <input type="text" id="material" placeholder="Material">
@@ -44,13 +42,11 @@
     <input type="text" id="case_size" placeholder="Case Size (e.g. 41mm)">
     <input type="number" id="year" placeholder="Year">
   </div>
-  
   <select id="movement" style="margin-bottom: 15px; width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444;">
     <option value="Automatic">Automatic</option>
     <option value="Manual">Manual</option>
     <option value="Quartz">Quartz</option>
   </select>
-
   <select id="function" style="margin-bottom: 15px; width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444;">
     <option value="Date">Date</option>
     <option value="Chronometer">Chronometer</option>
@@ -58,73 +54,69 @@
     <option value="Turbillon">Turbillon</option>
     <option value="No Date">No Date</option>
   </select>
-
-<div class="row" style="margin-top:15px">
+  <div class="row" style="margin-top:15px">
     <label><input type="checkbox" id="service"> Service kryer</label>
     <label><input type="checkbox" id="box_papers"> Box / Papers</label>
-</div>
-
+  </div>
   <textarea id="description" placeholder="Description..." rows="4" style="width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px; box-sizing: border-box;"></textarea>
-  
   <div style="margin-top:15px">
     <label style="color:#aaa; font-size:14px;">Ngarko Foton e Orës:</label>
     <input type="file" id="fileInput" name="images[]" accept="image/*" multiple style="margin-top: 5px;">
   </div>
-  
   <button type="submit">Shto orën</button>
 </form>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-  const SUPABASE_URL = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'; 
+  const supabase = createClient(
+    'https://gnwsrmelmeqduhhmfmoa.supabase.co',
+    'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
+  );
 
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  // Kontrollo login para se te hapet forma
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    alert("Duhet të jesh i loguar për të shitur një orë!");
+    window.location.href = 'login.html';
+  }
 
-document.getElementById('sellForm').addEventListener('submit', async (e) => {
-    e.preventDefault(); // Ndalon rifreskimin e faqes
+  document.getElementById('sellForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-    // 1. Merr përdoruesin e loguar
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
-        alert("Duhet të jesh i loguar për të shtuar një orë!");
-        return;
+      alert("Duhet të jesh i loguar!");
+      return;
     }
 
-    // 2. Mbledh të gjitha vlerat nga formulari
     const oraData = {
-        user_id: user.id, // Kjo është lidhja që të duhej
-        category: document.getElementById('category').value,
-        brand: document.getElementById('brand').value,
-        model: document.getElementById('model').value,
-        price: parseInt(document.getElementById('price').value),
-        reference: document.getElementById('reference').value,
-        material: document.getElementById('material').value,
-        case_size: document.getElementById('case_size').value,
-        production_year: parseInt(document.getElementById('year').value),
-        movement_type: document.getElementById('movement').value,
-        function: document.getElementById('function').value,
-        service_status: document.getElementById('service').checked, // true/false
-        box_papers: document.getElementById('box_papers').checked, // true/false
-        description: document.getElementById('description').value
+      user_id: user.id,
+      category: document.getElementById('category').value,
+      brand: document.getElementById('brand').value,
+      model: document.getElementById('model').value,
+      price: parseInt(document.getElementById('price').value),
+      reference: document.getElementById('reference').value,
+      material: document.getElementById('material').value,
+      case_size: document.getElementById('case_size').value,
+      production_year: parseInt(document.getElementById('year').value),
+      movement_type: document.getElementById('movement').value,
+      function: document.getElementById('function').value,
+      service_status: document.getElementById('service').checked,
+      box_papers: document.getElementById('box_papers').checked,
+      description: document.getElementById('description').value
     };
 
-    // 3. Dërgoje në Supabase
-    const { data, error } = await supabase
-        .from('watches')
-        .insert([oraData]);
+    const { error } = await supabase.from('watches').insert([oraData]);
 
     if (error) {
-        console.error("Gabim gjatë shtimit:", error);
-        alert("Gabim: " + error.message);
+      console.error("Gabim gjatë shtimit:", error);
+      alert("Gabim: " + error.message);
     } else {
-        alert("Ora u shtua me sukses!");
-        document.getElementById('sellForm').reset(); // Pastron formularin
+      alert("Ora u shtua me sukses!");
+      window.location.href = 'dashboard.html';
     }
-});
+  });
 </script>
 
 </body>

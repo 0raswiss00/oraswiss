@@ -3,6 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <title>Sell Your Watch</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KD2ZZ3MJYY');
+  </script>
   <style>
     body { font-family: Arial; background: #000; color: #fff; padding: 20px; }
     form { max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border-radius: 10px; }
@@ -62,20 +69,20 @@
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-  // Projekti 1 - Login/Dashboard (privat)
-  const supabasePrivate = createClient(
+  // V1 - vetem per login/sesion
+  const supabaseAuth = createClient(
     'https://xyunmtvysqwonelecudf.supabase.co',
     'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
   );
 
-  // Projekti 2 - Faqja publike
-  const supabasePublic = createClient(
+  // V2 - ku shkruajme te dhena
+  const supabaseV2 = createClient(
     'https://gnwsrmelmeqduhhmfmoa.supabase.co',
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
 
-  // Kontrollo login
-  const { data: { user } } = await supabasePrivate.auth.getUser();
+  // Kontrollo login nga V1
+  const { data: { user } } = await supabaseAuth.auth.getUser();
   if (!user) {
     alert("Duhet të jesh i loguar!");
     window.location.href = 'login.html';
@@ -84,7 +91,7 @@
   document.getElementById('sellForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const { data: { user } } = await supabasePrivate.auth.getUser();
+    const { data: { user } } = await supabaseAuth.auth.getUser();
     if (!user) {
       alert("Duhet të jesh i loguar!");
       return;
@@ -99,35 +106,26 @@
       reference: document.getElementById('reference').value,
       material: document.getElementById('material').value,
       case_size: document.getElementById('case_size').value,
-      production_year: parseInt(document.getElementById('year').value),
-      movement_type: document.getElementById('movement').value,
+      year: parseInt(document.getElementById('year').value),
+      movement: document.getElementById('movement').value,
       function: document.getElementById('function').value,
-      service_status: document.getElementById('service').checked,
+      service: document.getElementById('service').checked,
       box_papers: document.getElementById('box_papers').checked,
       description: document.getElementById('description').value
     };
 
-    // Shkruaj ne Projektin 1 (watches - privat)
-    const { error: error1 } = await supabasePrivate
-      .from('watches')
-      .insert([oraData]);
-
-    if (error1) {
-      alert("Gabim privat: " + error1.message);
-      return;
-    }
-
-    // Shkruaj ne Projektin 2 (oras - publik)
-    const { error: error2 } = await supabasePublic
+    // Shkruaj vetem te V2 tabela oras
+    const { error } = await supabaseV2
       .from('oras')
       .insert([oraData]);
 
-    if (error2) {
-      alert("Gabim publik: " + error2.message);
+    if (error) {
+      console.error("Gabim:", error);
+      alert("Gabim: " + error.message);
       return;
     }
 
-    alert("Ora u shtua me sukses dhe u publikua!");
+    alert("Ora u shtua me sukses!");
     window.location.href = 'dashboard.html';
   });
 </script>

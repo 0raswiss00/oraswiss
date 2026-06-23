@@ -46,10 +46,10 @@ async function ngarkoArtikujt() {
 
     try {
 
-         const { data: { session } } = await supabase.auth.getSession();
-         const user = session?.user;
+         const { data: { user }, error: userError } = await supabase.auth.getUser();
 
-         if (!user) {
+         // Përditësoni kontrollin tuaj (rreshti 52):
+         if (userError || !user) {
            alert("Duhet të jesh i loguar!");
            return;
          }

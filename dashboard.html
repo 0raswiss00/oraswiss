@@ -39,8 +39,7 @@
   async function ngarkoArtikujt() {
     const lista = document.getElementById("myWatchesList");
     const { data: { session } } = await supabaseAuth.auth.getSession();
-    console.log("User ID:", session?.user?.id);
-      
+
     if (!session) {
       lista.innerHTML = "<li>Duhet të jeni të loguar.</li>";
       return;
@@ -64,8 +63,8 @@
     }
 
     data.forEach(watch => {
+      const li = document.createElement("li");
       li.onclick = function() { window.location.href = 'product.html?id=' + watch.id; };
-      li.onclick = () => { window.location.href = product.html?id=${watch.id}; };
       li.innerHTML = `
         <div class="watch-name">${watch.brand} ${watch.model}</div>
         <div class="watch-price">${watch.price}€</div>

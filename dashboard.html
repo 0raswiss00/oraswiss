@@ -15,25 +15,34 @@
     <ul id="myWatchesList"></ul>
 
 <script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-const supabase = createClient(
+  // Projekti V1 - per sesionin/login
+  const supabaseAuth = createClient(
     'https://xyunmtvysqwonelecudf.supabase.co',
     'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
-);
+  );
+
+  // Projekti V2 - ku jane oret ne shitje
+  const supabaseOras = createClient(
+    'https://gnwsrmelmeqduhhmfmoa.supabase.co',
+    'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
+  );
 
   async function ngarkoArtikujt() {
     const lista = document.getElementById("myWatchesList");
 
-    const { data: { session } } = await supabase.auth.getSession();
+    // Kontrollo sesionin nga V1
+    const { data: { session } } = await supabaseAuth.auth.getSession();
 
     if (!session) {
       lista.innerHTML = "<li>Duhet të jeni të loguar.</li>";
       return;
     }
 
-    const { data, error } = await supabase
-      .from('watches')
+    // Merr oret e ketij useri nga projekti V2
+    const { data, error } = await supabaseOras
+      .from('oras')
       .select('*')
       .eq('user_id', session.user.id);
 
@@ -44,8 +53,8 @@ const supabase = createClient(
 
     lista.innerHTML = "";
 
-    if (data.length === 0) {
-      lista.innerHTML = "<li>Nuk keni orë të regjistruara.</li>";
+    if (!data || data.length === 0) {
+      lista.innerHTML = "<li>Nuk keni orë në shitje. <a href='sellnow.html' style='color:gold'>+ Shto orë</a></li>";
       return;
     }
 
@@ -59,7 +68,7 @@ const supabase = createClient(
     });
   }
 
-  supabase.auth.onAuthStateChange(() => {
+  supabaseAuth.auth.onAuthStateChange(() => {
     ngarkoArtikujt();
   });
 

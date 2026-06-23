@@ -64,7 +64,7 @@
 
     data.forEach(watch => {
       const li = document.createElement("li");
-      li.onclick = () => window.location.href = product.html?id=${watch.id};
+      li.onclick = () => { window.location.href = product.html?id=${watch.id}; };
       li.innerHTML = `
         <div class="watch-name">${watch.brand} ${watch.model}</div>
         <div class="watch-price">${watch.price}€</div>

@@ -14,93 +14,113 @@
     Sell Now
 </button>
 
-<ul id="list"></ul>
+<ul id="myWatchesList"></ul>
 
 <script type="module">
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const supabase = createClient(
-  'https://xyunmtvysqwonelecudf.supabase.co',
-  'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
+    'https://xyunmtvysqwonelecudf.supabase.co',
+    'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
 );
 
-let currentUser = null;
+// Kontrollon nëse përdoruesi është i loguar
+async function kontrolloLogin() {
 
-// LOGIN CHECK (SIMPLE + STABLE)
-async function auth() {
-  const { data: { session } } = await supabase.auth.getSession();
+    const {
+        data: { session }
+    } = await supabase.auth.getSession();
 
-  const btn = document.getElementById("btnSellNow");
+    const btnSell = document.getElementById("btnSellNow");
 
-  if (!session) {
-    currentUser = null;
-    btn.style.display = "none";
-    return false;
-  }
-
-  currentUser = session.user;
-  btn.style.display = "inline-block";
-  return true;
-}
-
-// LOAD DATA
-async function load() {
-
-  const list = document.getElementById("list");
-
-  if (!currentUser) {
-    const ok = await auth();
-    if (!ok) {
-      list.innerHTML = "<li>Nuk je i loguar</li>";
-      return;
+    if (session) {
+        btnSell.style.display = "inline-block";
+    } else {
+        btnSell.style.display = "none";
     }
-  }
-
-  const { data, error } = await supabase
-    .from("watches")
-    .select("*")
-    .eq("user_id", currentUser.id);
-
-  if (error) {
-    console.error(error);
-    list.innerHTML = "<li>Gabim në server</li>";
-    return;
-  }
-
-  if (!data || data.length === 0) {
-    list.innerHTML = "<li>S’ke orë</li>";
-    return;
-  }
-
-  list.innerHTML = "";
-
-  data.forEach(item => {
-    const li = document.createElement("li");
-
-    const btn = document.createElement("button");
-    btn.textContent = "Sell Now";
-
-    btn.onclick = () => {
-      window.location.href = sellnow.html?id=${item.id};
-    };
-
-    li.textContent = item.name + " ";
-    li.appendChild(btn);
-
-    list.appendChild(li);
-  });
 }
 
-// BUTTON TOP
-document.getElementById("btnSellNow").onclick = () => {
-  window.location.href = "sellnow.html";
-};
+// Ngarkon orët e përdoruesit
+async function ngarkoArtikujt() {
 
-// INIT (RUN ONCE ONLY)
+    try {
+
+        const {
+            data: { user }
+        } = await supabase.auth.getUser();
+
+        const lista = document.getElementById("myWatchesList");
+
+        if (!user) {
+            lista.innerHTML =
+                "<li>Duhet të logohesh për të parë orët e tua.</li>";
+            return;
+        }
+
+        const { data, error } = await supabase
+            .from("watches")
+            .select("*")
+            .eq("user_id", user.id);
+
+        if (error) {
+            console.error(error);
+            lista.innerHTML =
+                "<li>Gabim gjatë marrjes së të dhënave.</li>";
+            return;
+        }
+
+        lista.innerHTML = "";
+
+        if (data.length === 0) {
+            lista.innerHTML =
+                "<li>Nuk keni asnjë orë të regjistruar.</li>";
+            return;
+        }
+
+        data.forEach(watch => {
+
+            const li = document.createElement("li");
+
+            li.innerHTML = `
+                ${watch.name}
+                <button onclick="window.location.href='sellnow.html?id=${watch.id}'">
+                    Sell Now
+                </button>
+            `;
+
+            lista.appendChild(li);
+
+        });
+
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// Butoni lart
+document
+    .getElementById("btnSellNow")
+    .addEventListener("click", () => {
+
+        window.location.href = "sellnow.html";
+
+    });
+
+// Dëgjon login/logout
+supabase.auth.onAuthStateChange(() => {
+
+    kontrolloLogin();
+    ngarkoArtikujt();
+
+});
+
+// Kur faqja hapet
 document.addEventListener("DOMContentLoaded", async () => {
-  await auth();
-  await load();
+
+    await kontrolloLogin();
+    await ngarkoArtikujt();
+
 });
 
 </script>

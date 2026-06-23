@@ -14,110 +14,93 @@
     Sell Now
 </button>
 
-<ul id="myWatchesList"></ul>
+<ul id="list"></ul>
 
 <script type="module">
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const supabase = createClient(
-    'https://xyunmtvysqwonelecudf.supabase.co',
-    'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
+  'https://xyunmtvysqwonelecudf.supabase.co',
+  'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
 );
 
-let user = null;
+let currentUser = null;
 
-// kontroll login (FIXED)
-async function kontrolloLogin() {
+// LOGIN CHECK (SIMPLE + STABLE)
+async function auth() {
+  const { data: { session } } = await supabase.auth.getSession();
 
-    const { data: { session } } = await supabase.auth.getSession();
+  const btn = document.getElementById("btnSellNow");
 
-    const btnSell = document.getElementById("btnSellNow");
+  if (!session) {
+    currentUser = null;
+    btn.style.display = "none";
+    return false;
+  }
 
-    if (!session) {
-        user = null;
-        btnSell.style.display = "none";
-        return false;
-    }
-
-    user = session.user;
-    btnSell.style.display = "inline-block";
-
-    return true;
+  currentUser = session.user;
+  btn.style.display = "inline-block";
+  return true;
 }
 
-// ngarko artikujt (FIXED)
-async function ngarkoArtikujt() {
+// LOAD DATA
+async function load() {
 
-    const lista = document.getElementById("myWatchesList");
+  const list = document.getElementById("list");
 
-    if (!user) {
-        const ok = await kontrolloLogin();
-
-        if (!ok) {
-            lista.innerHTML = "<li>Duhet të logohesh për të parë orët e tua.</li>";
-            return;
-        }
+  if (!currentUser) {
+    const ok = await auth();
+    if (!ok) {
+      list.innerHTML = "<li>Nuk je i loguar</li>";
+      return;
     }
+  }
 
-    const { data, error } = await supabase
-        .from("watches")
-        .select("*")
-        .eq("user_id", user.id);
+  const { data, error } = await supabase
+    .from("watches")
+    .select("*")
+    .eq("user_id", currentUser.id);
 
-    if (error) {
-        console.error(error);
-        lista.innerHTML = "<li>Gabim gjatë marrjes së të dhënave.</li>";
-        return;
-    }
+  if (error) {
+    console.error(error);
+    list.innerHTML = "<li>Gabim në server</li>";
+    return;
+  }
 
-    if (!data || data.length === 0) {
-        lista.innerHTML = "<li>Nuk keni asnjë orë të regjistruar.</li>";
-        return;
-    }
+  if (!data || data.length === 0) {
+    list.innerHTML = "<li>S’ke orë</li>";
+    return;
+  }
 
-    lista.innerHTML = "";
+  list.innerHTML = "";
 
-    data.forEach(watch => {
+  data.forEach(item => {
+    const li = document.createElement("li");
 
-        const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.textContent = "Sell Now";
 
-        const btn = document.createElement("button");
-        btn.textContent = "Sell Now";
+    btn.onclick = () => {
+      window.location.href = sellnow.html?id=${item.id};
+    };
 
-        btn.onclick = () => {
-            window.location.href = sellnow.html?id=${watch.id};
-        };
+    li.textContent = item.name + " ";
+    li.appendChild(btn);
 
-        li.textContent = watch.name + " ";
-        li.appendChild(btn);
-
-        lista.appendChild(li);
-    });
+    list.appendChild(li);
+  });
 }
 
-// butoni sipër
-document.getElementById("btnSellNow").addEventListener("click", () => {
-    window.location.href = "sellnow.html";
-});
+// BUTTON TOP
+document.getElementById("btnSellNow").onclick = () => {
+  window.location.href = "sellnow.html";
+};
 
-// auth change (FIXED - no duplicate reload spam)
-supabase.auth.onAuthStateChange((event, session) => {
-
-    if (session) {
-        user = session.user;
-    } else {
-        user = null;
-    }
-
-    kontrolloLogin();
-    ngarkoArtikujt();
-});
-
-// init (clean)
+// INIT (RUN ONCE ONLY)
 document.addEventListener("DOMContentLoaded", async () => {
-    await kontrolloLogin();
-    await ngarkoArtikujt();
+  await auth();
+  await load();
 });
 
 </script>

@@ -1,108 +1,72 @@
 <!DOCTYPE html>
 <html lang="sq">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard</title>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
 </head>
-
 <body>
-
-<h1>Orët e mia</h1>
-
-<button id="btnSellNow" style="display:none;">Sell Now</button>
-
-<ul id="list"></ul>
+    <h1>Orët e mia</h1>
+    <ul id="myWatchesList"></ul>
 
 <script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+  const supabase = createClient(
+    'https://xyunmtvysqwonelecudf.supabase.co',
+    'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
+  );
 
-const supabase = createClient(
-  'https://xyunmtvysqwonelecudf.supabase.co',
-  'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
-);
+  async function ngarkoArtikujt() {
+    try {
+      // Marrja e të dhënave
+      const { data, error } = await supabase.from('watches').select('*');
+      if (error) throw error;
 
-let user = null;
+      console.log("Të dhënat u morën:", data);
 
-/* 🔥 GET CURRENT USER (SAFE WAY) */
-async function getUser() {
-  const { data: { session } } = await supabase.auth.getSession();
-  return session?.user || null;
+      const lista = document.getElementById("myWatchesList");
+      if (lista) {
+        lista.innerHTML = ""; // Pastro listën për të shmangur dublikimet
+        
+        data.forEach(watch => {
+          const li = document.createElement("li");
+          // Këtu shfaqim emrin dhe butonin
+          // Ndrysho rreshtin e butonit në këtë formë:
+          li.innerHTML = `
+              ${watch.name} 
+              <button onclick="window.location.href='sellnow.html?id=${watch.id}'">Sell Now</button>
+          `;
+          lista.appendChild(li);
+        });
+      }
+    } catch (err) {
+      console.error("Gabim gjatë ngarkimit:", err);
+    }
+  }
+async function kontrolloDheShfaqSellNow() {
+    // Merr sesionin aktual nga Supabase
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    const btnSell = document.getElementById("btnSellNow");
+
+    if (session) {
+        // Përdoruesi është loguar, shfaq butonin
+        if (btnSell) btnSell.style.display = "block";
+    } else {
+        // Përdoruesi nuk është loguar, butoni mbetet i fshehur
+        if (btnSell) btnSell.style.display = "none";
+    }
 }
 
-/* 🔥 AUTH CHECK */
-async function checkAuth() {
-  user = await getUser();
+// Ekzekutoje këtë kur faqja ngarkohet
+kontrolloDheShfaqSellNow();
 
-  const btn = document.getElementById("btnSellNow");
-
-  if (!user) {
-    btn.style.display = "none";
-    return false;
-  }
-
-  btn.style.display = "inline-block";
-  return true;
-}
-
-/* 🔥 LOAD DATA */
-async function loadWatches() {
-
-  const list = document.getElementById("list");
-
-  const ok = await checkAuth();
-
-  if (!ok) {
-    list.innerHTML = "<li>Nuk je i loguar</li>";
-    return;
-  }
-
-  const { data, error } = await supabase
-    .from("watches")
-    .select("*")
-    .eq("user_id", user.id);
-
-  if (error) {
-    console.error(error);
-    list.innerHTML = "<li>Gabim server</li>";
-    return;
-  }
-
-  if (!data || data.length === 0) {
-    list.innerHTML = "<li>S’ke orë</li>";
-    return;
-  }
-
-  list.innerHTML = "";
-
-  data.forEach(item => {
-
-    const li = document.createElement("li");
-
-    const btn = document.createElement("button");
-    btn.textContent = "Sell Now";
-
-    btn.onclick = () => {
-      window.location.href = sellnow.html?id=${item.id};
-    };
-
-    li.textContent = item.name + " ";
-    li.appendChild(btn);
-
-    list.appendChild(li);
-  });
-}
-
-/* 🔥 BUTTON */
-document.getElementById("btnSellNow").onclick = () => {
-  window.location.href = "sellnow.html";
-};
-
-/* 🔥 INIT */
-document.addEventListener("DOMContentLoaded", loadWatches);
-
+// Opsionale: Dëgjo për ndryshime në gjendjen e autentifikimit
+supabase.auth.onAuthStateChange((event, session) => {
+    kontrolloDheShfaqSellNow();
+});
+  // Ekzekuto funksionin
+  ngarkoArtikujt();
 </script>
-
 </body>
 </html>

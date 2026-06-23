@@ -39,7 +39,8 @@
   async function ngarkoArtikujt() {
     const lista = document.getElementById("myWatchesList");
     const { data: { session } } = await supabaseAuth.auth.getSession();
-
+    console.log("User ID:", session?.user?.id);
+      
     if (!session) {
       lista.innerHTML = "<li>Duhet të jeni të loguar.</li>";
       return;

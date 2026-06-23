@@ -48,17 +48,18 @@ async function ngarkoArtikujt() {
 
          const { data: { user }, error: userError } = await supabase.auth.getUser();
 
-         // Përditësoni kontrollin tuaj (rreshti 52):
+         // 2. Kontrollo nëse ka ndonjë gabim ose nëse user-i është null
          if (userError || !user) {
-           alert("Duhet të jesh i loguar!");
-           return;
+             console.error("User nuk është i loguar:", userError);
+             lista.innerHTML = "<li>Duhet të logohesh për të parë orët e tua.</li>";
+             return; // Ndalon ekzekutimin këtu nëse nuk je i loguar
          }
 
-        if (!user) {
-            lista.innerHTML =
-                "<li>Duhet të logohesh për të parë orët e tua.</li>";
-            return;
-        }
+         // 3. Nëse kodi arrin këtu, do të thotë që je i loguar. Vazhdo me marrjen e të dhënave
+         const { data, error } = await supabase
+             .from("watches")
+             .select("*")
+             .eq("user_id", user.id);
 
         const { data, error } = await supabase
             .from("watches")

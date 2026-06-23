@@ -20,27 +20,19 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const supabase = createClient(
   'https://xyunmtvysqwonelecudf.supabase.co',
-  'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx',
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true
-    }
-  }
+  'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
 );
 
 let user = null;
 
-// GET USER (ONLY WAY)
+/* 🔥 GET CURRENT USER (SAFE WAY) */
 async function getUser() {
   const { data: { session } } = await supabase.auth.getSession();
   return session?.user || null;
 }
 
-// CHECK AUTH
+/* 🔥 AUTH CHECK */
 async function checkAuth() {
-
   user = await getUser();
 
   const btn = document.getElementById("btnSellNow");
@@ -54,7 +46,7 @@ async function checkAuth() {
   return true;
 }
 
-// LOAD WATCHES
+/* 🔥 LOAD DATA */
 async function loadWatches() {
 
   const list = document.getElementById("list");
@@ -84,7 +76,7 @@ async function loadWatches() {
 
   list.innerHTML = "";
 
-  data.forEach(watch => {
+  data.forEach(item => {
 
     const li = document.createElement("li");
 
@@ -92,22 +84,22 @@ async function loadWatches() {
     btn.textContent = "Sell Now";
 
     btn.onclick = () => {
-      window.location.href = sellnow.html?id=${watch.id};
+      window.location.href = sellnow.html?id=${item.id};
     };
 
-    li.textContent = watch.name + " ";
+    li.textContent = item.name + " ";
     li.appendChild(btn);
 
     list.appendChild(li);
   });
 }
 
-// BUTTON
+/* 🔥 BUTTON */
 document.getElementById("btnSellNow").onclick = () => {
   window.location.href = "sellnow.html";
 };
 
-// INIT
+/* 🔥 INIT */
 document.addEventListener("DOMContentLoaded", loadWatches);
 
 </script>

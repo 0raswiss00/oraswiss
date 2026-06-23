@@ -6,10 +6,8 @@
 </head>
 <body>
     <h1>Orët e mia</h1>
-    <button type="button" onclick="window.location.href='sellnow.html';">
-      Sell Now
-    </button>
     <ul id="myWatchesList"></ul>
+
     <div id="watches-container"></div>
     
 <script type="module">
@@ -20,69 +18,22 @@
     'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
   );
 
-async function shtoOren() {
-  // SHTO KËTË PJESË QË MUNGON:
-  const { data: { user } } = await supabase.auth.getUser();
+  async function ngarkoArtikujt() {
+    try {
+      // Marrja e të dhënave
+      const { data, error } = await supabase.from('watches').select('*');
+      if (error) throw error;
 
-  if (!user) {
-    alert("Duhet të jesh i loguar për të shtuar një orë!");
-    return; // Kjo ndalon ekzekutimin e mëtejshëm
-  }
+      console.log("Të dhënat u morën:", data);
 
-  // Vazhdo me pjesën tjetër të kodit tuaj për të shtuar orën...
-  const { data, error } = await supabase.from('watches').insert([/* të dhënat */]);
-}
-
-  // 3. Nëse është loguar, vazhdo me shtimin e të dhënave
-  const oraData = {
-    user_id: user.id, // Tani user.id është i sigurt
-    name: document.getElementById('emriOrës').value,
-    category: document.getElementById('kategoria').value,
-    price: document.getElementById('cmimi').value,
-    reference: document.getElementById('reference').value,
-    material: document.getElementById('material').value,
-    case_size: document.getElementById('caseSize').value,
-    production_year: parseInt(document.getElementById('year').value),
-    movement_type: document.getElementById('movement').value,
-    service_status: document.getElementById('serviceKryer').checked,
-    box_papers: document.getElementById('boxPapers').checked,
-    description: document.getElementById('description').value
-  };
-
-  const { data, error } = await supabase.from('watches').insert([oraData]);
-
-  if (error) {
-    console.error("Gabim:", error);
-    alert("Gabim gjatë shtimit në bazën e të dhënave.");
-  } else {
-    alert("Ora u shtua me sukses!");
-  }
-}
-
-  // 4. Dërgo të dhënat në bazën e të dhënave
-  const { data, error } = await supabase
-    .from('watches')
-    .insert([oraData]);
-
-  if (error) {
-    console.error("Gabim gjatë shtimit:", error);
-    alert("Gabim gjatë shtimit në bazën e të dhënave: " + error.message);
-  } else {
-    alert("Ora u shtua me sukses!");
-  }
-}
-
-    console.log("Të dhënat u morën:", data);
-
-    const lista = document.getElementById("myWatchesList");
-    if (lista) {
-      lista.innerHTML = "";
-      
-      if (data.length === 0) {
-        lista.innerHTML = "<li>Nuk keni asnjë orë të regjistruar për këtë llogari.</li>";
-      } else {
+      const lista = document.getElementById("myWatchesList");
+      if (lista) {
+        lista.innerHTML = ""; // Pastro listën për të shmangur dublikimet
+        
         data.forEach(watch => {
           const li = document.createElement("li");
+          // Këtu shfaqim emrin dhe butonin
+          // Ndrysho rreshtin e butonit në këtë formë:
           li.innerHTML = `
               ${watch.name} 
               <button onclick="window.location.href='sellnow.html?id=${watch.id}'">Sell Now</button>
@@ -90,25 +41,23 @@ async function shtoOren() {
           lista.appendChild(li);
         });
       }
+    } catch (err) {
+      console.error("Gabim gjatë ngarkimit:", err);
     }
-  } catch (err) {
-    console.error("Gabim gjatë ngarkimit:", err);
   }
-
 async function kontrolloDheShfaqSellNow() {
-  const { data: { session } } = await supabase.auth.getSession();
-  const btnSell = document.getElementById("btnSellNow");
+    // Merr sesionin aktual nga Supabase
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    const btnSell = document.getElementById("btnSellNow");
 
-  // Kontrollo nëse butoni ekziston në HTML
-  if (btnSell) {
     if (session) {
-      // Përdoruesi është loguar
-      btnSell.style.display = "block";
+        // Përdoruesi është loguar, shfaq butonin
+        if (btnSell) btnSell.style.display = "block";
     } else {
-      // Përdoruesi NUK është loguar
-      btnSell.style.display = "none";
+        // Përdoruesi nuk është loguar, butoni mbetet i fshehur
+        if (btnSell) btnSell.style.display = "none";
     }
-  }
 }
 
 // Ekzekutoje këtë kur faqja ngarkohet
@@ -128,17 +77,6 @@ async function shfaqButoninSell() {
     }
 }
 
-// Shto këtë pas të gjitha funksioneve të tjera
-document.addEventListener("DOMContentLoaded", function() {
-    const butoniLart = document.getElementById("btnSellNow");
-    if (butoniLart) {
-        butoniLart.addEventListener("click", function() {
-            // Këtu vendos emrin e saktë të file-it ku ke formën e shitjes
-            window.location.href = "sell.html"; 
-        });
-    }
-});
-    
 // 2. Thirr funksionet
 shfaqButoninSell();
 ngarkoArtikujt();

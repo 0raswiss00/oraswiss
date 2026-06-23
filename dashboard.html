@@ -39,10 +39,11 @@
       return;
     }
 
-    // Merr te gjitha oret nga V2 (pa filtrim user_id sepse jane NULL)
-    const { data, error } = await supabaseOras
-      .from('oras')
-      .select('*');
+// Merr vetem oret e ketij useri
+const { data, error } = await supabaseOras
+  .from('oras')
+  .select('*')
+  .eq('user_id', session.user.id);
 
     if (error) {
       console.error("Gabim:", error);

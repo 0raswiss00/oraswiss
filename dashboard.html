@@ -3,43 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
+    <style>
+        body { font-family: Arial; background: #000; color: #fff; padding: 20px; }
+        ul { list-style: none; padding: 0; }
+        li { background: #111; margin: 10px 0; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        button { background: gold; color: #000; font-weight: bold; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+    </style>
 </head>
 <body>
     <h1>Orët e mia</h1>
     <ul id="myWatchesList"></ul>
 
 <script type="module">
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
   const supabase = createClient(
-    'https://xyunmtvysqwonelecudf.supabase.co',
-    'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
+    'https://gnwsrmelmeqduhhmfmoa.supabase.co',
+    'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
 
   async function ngarkoArtikujt() {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
+    const lista = document.getElementById("myWatchesList");
 
-      const { data, error } = await supabase.from('watches').select('*');
-      if (error) throw error;
+    const { data: { session } } = await supabase.auth.getSession();
 
-      const lista = document.getElementById("myWatchesList");
-      lista.innerHTML = "";
-
-      data.forEach(watch => {
-        const li = document.createElement("li");
-
-        const sellButton = session 
-          ? <button onclick="window.location.href='sellnow.html?id=${watch.id}'">Sell Now</button>
-          : '';
-
-        li.innerHTML = ${watch.name} ${sellButton};
-        lista.appendChild(li);
-      });
-
-    } catch (err) {
-      console.error("Gabim gjatë ngarkimit:", err);
+    if (!session) {
+      lista.innerHTML = "<li>Duhet të jeni të loguar.</li>";
+      return;
     }
+
+    const { data, error } = await supabase
+      .from('watches')
+      .select('*')
+      .eq('user_id', session.user.id);
+
+    if (error) {
+      console.error("Gabim:", error);
+      return;
+    }
+
+    lista.innerHTML = "";
+
+    if (data.length === 0) {
+      lista.innerHTML = "<li>Nuk keni orë të regjistruara.</li>";
+      return;
+    }
+
+    data.forEach(watch => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <span><strong>${watch.brand} ${watch.model}</strong> — ${watch.price}€</span>
+        <button onclick="window.location.href='sellnow.html?id=${watch.id}'">Sell Now</button>
+      `;
+      lista.appendChild(li);
+    });
   }
 
   supabase.auth.onAuthStateChange(() => {

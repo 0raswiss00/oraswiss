@@ -7,11 +7,7 @@
 <body>
     <h1>Orët e mia</h1>
     <ul id="myWatchesList"></ul>
-    <button id="btnSellNow" style="display:none;">
-        Sell Now
-    </button>
-    <div id="watches-container"></div>
-    
+
 <script type="module">
   import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -69,20 +65,8 @@ kontrolloDheShfaqSellNow();
 supabase.auth.onAuthStateChange((event, session) => {
     kontrolloDheShfaqSellNow();
 });
-  // 1. Funksioni për të kontrolluar nëse përdoruesi është i loguar
-async function shfaqButoninSell() {
-    const { data: { session } } = await supabase.auth.getSession();
-    const btnSell = document.getElementById("btnSellNow");
-
-    if (session && btnSell) {
-        btnSell.style.display = "block"; // Shfaqet nëse është loguar
-    }
-}
-
-// 2. Thirr funksionet
-shfaqButoninSell();
-ngarkoArtikujt();
+  // Ekzekuto funksionin
+  ngarkoArtikujt();
 </script>
 </body>
 </html>
-

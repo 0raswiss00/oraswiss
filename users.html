@@ -317,7 +317,10 @@
 
             // Shfaq vizitorët
             updateVisitorsDisplay();
-            
+
+            // Shfaq numrin e vizitoreve
+            document.getElementById('count').textContent = visitorsList.length;
+         
             // Ngarkoni të dhënat
             loadAllData();
         });

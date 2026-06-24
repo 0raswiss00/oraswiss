@@ -198,22 +198,14 @@ kontrolloDheShfaqSellNow();
     loadCategory('parts', 'parts-container');
 
 async function loadUserCount() {
-    const { count, error } = await supabase
-        .from('oras')
-        .select('user_id', { count: 'exact', head: false });
+    const { count } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true });
     
-    if (!error && count !== null) {
-        // Numro user_id unik
-        const { data } = await supabase
-            .from('oras')
-            .select('user_id');
-        
-        const uniqueUsers = [...new Set(data?.map(w => w.user_id).filter(Boolean))];
-        document.getElementById('count-users').textContent = uniqueUsers.length;
-    }
+    document.getElementById('count-users').textContent = count || 0;
 }
 
-loadUserCount();  
+loadUserCount();
 </script>
 </body>  
 </html>

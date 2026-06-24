@@ -78,6 +78,50 @@
             font-weight: bold;
         }
 
+        .visitors-list {
+            margin-top: 40px;
+            background: rgba(255, 215, 0, 0.05);
+            border: 2px solid #FFD700;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .visitors-list h2 {
+            color: #FFD700;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #FFD700;
+            padding-bottom: 10px;
+        }
+
+        .visitor-item {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 12px;
+            margin: 10px 0;
+            border-left: 4px solid #FFA500;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .visitor-item strong {
+            color: #FFD700;
+        }
+
+        .visitor-time {
+            color: #aaa;
+            font-size: 0.9em;
+        }
+
+        .visitor-badge {
+            background: #FFD700;
+            color: #000;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
         .users-list {
             margin-top: 40px;
         }
@@ -96,9 +140,6 @@
             margin-bottom: 15px;
             border-radius: 5px;
             transition: all 0.3s ease;
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 15px;
         }
 
         .user-card:hover {
@@ -116,6 +157,7 @@
             justify-content: center;
             font-weight: bold;
             font-size: 1.5em;
+            margin-bottom: 10px;
         }
 
         .user-info h3 {
@@ -183,10 +225,6 @@
             background: #FFA500;
             transform: scale(1.05);
         }
-
-        .refresh-btn:active {
-            transform: scale(0.95);
-        }
     </style>
 </head>
 <body>
@@ -197,7 +235,7 @@
         <!-- STATISTIKA -->
         <div class="stats">
             <div class="stat-box">
-                <h3>👥 Përdorues</h3>
+                <h3>👥 Përdorues DB</h3>
                 <div class="number" id="count-users">0</div>
             </div>
             <div class="stat-box">
@@ -208,11 +246,23 @@
                 <h3>🛒 Porosi</h3>
                 <div class="number" id="count-orders">0</div>
             </div>
+            <div class="stat-box">
+                <h3>👀 Vizitorë Aktualë</h3>
+                <div class="number" id="count-visitors">0</div>
+            </div>
+        </div>
+
+        <!-- LISTA E VIZITORËVE -->
+        <div class="visitors-list" id="visitors-container">
+            <h2>👥 Vizitorët e Fundit</h2>
+            <div id="visitors-content" style="max-height: 300px; overflow-y: auto;">
+                <p style="color: #aaa; text-align: center;">Po përgjuron...</p>
+            </div>
         </div>
 
         <!-- LISTA E PËRDORUESVE -->
         <div class="users-list">
-            <h2>📋 Lista e Përdoruesve të Regjistruar</h2>
+            <h2>📋 Lista e Përdoruesve të Regjistruar (Database)</h2>
             <button class="refresh-btn" onclick="trackEvent('refresh_data'); loadAllData();">🔄 Përditeso</button>
             <div id="users-container" class="loading">
                 <div class="spinner"></div>
@@ -228,33 +278,82 @@
         
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // FUNKSIONI PËR TRACK EVENTS
+        // LISTA E VIZITORËVE
+        let visitorsList = [];
+
+        // TRACK EVENTS
         function trackEvent(eventName, eventData = {}) {
             if (typeof gtag !== 'undefined') {
                 gtag('event', eventName, eventData);
-                console.log('📊 Event i trackuar:', eventName, eventData);
+                console.log('📊 Event:', eventName);
             }
         }
 
-        // TRACK PAGE VIEW
+        // KUR HAPET FAQJA
         window.addEventListener('load', function() {
-            trackEvent('page_view', {
-                page_title: document.title,
-                page_location: window.location.href
+            // Krijo visitor ID
+            let visitorId = localStorage.getItem('visitorId');
+            if (!visitorId) {
+                visitorId = 'V' + Date.now();
+                localStorage.setItem('visitorId', visitorId);
+            }
+
+            // Ruaj vizitorin
+            let visitor = {
+                id: visitorId,
+                time: new Date().toLocaleTimeString('sq-AL'),
+                date: new Date().toLocaleDateString('sq-AL'),
+                browser: navigator.userAgent.split('/')[navigator.userAgent.split('/').length - 1].substring(0, 20)
+            };
+
+            visitorsList.push(visitor);
+            document.getElementById('count-visitors').textContent = visitorsList.length;
+
+            // Track event
+            trackEvent('visitor_joined', {
+                visitor_id: visitorId,
+                total_visitors: visitorsList.length
             });
+
+            // Shfaq vizitorët
+            updateVisitorsDisplay();
+            
+            // Ngarkoni të dhënat
+            loadAllData();
         });
 
-        // FUNKSIONI KRYESOR
+        // SHFAQ VIZITORËT
+        function updateVisitorsDisplay() {
+            let html = '';
+            visitorsList.slice().reverse().forEach((visitor, index) => {
+                html += `
+                    <div class="visitor-item">
+                        <div>
+                            <strong>👤 ${visitor.id}</strong>
+                            <div class="visitor-time">
+                                🕐 ${visitor.time} | 📅 ${visitor.date}
+                            </div>
+                            <div class="visitor-time" style="font-size: 0.8em; margin-top: 5px;">
+                                🌐 ${visitor.browser}
+                            </div>
+                        </div>
+                        <div class="visitor-badge">#${visitorsList.length - index}</div>
+                    </div>
+                `;
+            });
+            document.getElementById('visitors-content').innerHTML = html || '<p style="color: #aaa;">Nuk ka vizitorë</p>';
+        }
+
+        // LOAD PËRDORUESIT NGA DATABASE
         async function loadAllData() {
             const usersContainer = document.getElementById("users-container");
             
             try {
                 usersContainer.innerHTML = '<div class="loading"><div class="spinner"></div><p>Po ngarkohet...</p></div>';
 
-                // Track data loading event
                 trackEvent('data_loading_started');
 
-                // 1. NGARKONI PËRDORUESIT
+                // NGARKONI PËRDORUESIT
                 const { data: users, error: usersError } = await supabase
                     .from('users')
                     .select('*')
@@ -262,19 +361,19 @@
 
                 if (usersError) throw usersError;
 
-                // 2. NGARKONI PRODUKTET
+                // NGARKONI PRODUKTET
                 const { data: products, error: productsError } = await supabase
                     .from('products')
                     .select('*');
 
                 if (productsError) throw productsError;
 
-                // 3. NGARKONI POROSITË (OPTIONAL)
+                // NGARKONI POROSITË
                 const { data: orders, error: ordersError } = await supabase
                     .from('orders')
                     .select('*');
 
-                // Përditësoni statistikat
+                // PËRDITËSONI STATISTIKAT
                 const userCount = users?.length || 0;
                 const productCount = products?.length || 0;
                 const orderCount = orders?.length || 0;
@@ -283,27 +382,25 @@
                 document.getElementById("count-products").textContent = productCount;
                 document.getElementById("count-orders").textContent = orderCount;
 
-                // Track successful data load
                 trackEvent('data_loaded_successfully', {
                     users_count: userCount,
                     products_count: productCount,
                     orders_count: orderCount
                 });
 
-                // Shfaq përdoruesit
+                // SHFAQ PËRDORUESIT
                 displayUsers(users);
 
             } catch (error) {
                 console.error("❌ Gabim:", error);
                 
-                // Track error
                 trackEvent('data_loading_error', {
                     error_message: error.message
                 });
 
                 usersContainer.innerHTML = `
                     <div class="error">
-                        <strong>❌ Gabim në ngarkimin e të dhënave:</strong><br>
+                        <strong>❌ Gabim:</strong><br>
                         ${error.message}
                     </div>
                 `;
@@ -315,12 +412,12 @@
             const container = document.getElementById("users-container");
 
             if (!users || users.length === 0) {
-                container.innerHTML = '<div class="empty">📭 Ende nuk ka përdorues të regjistruar</div>';
+                container.innerHTML = '<div class="empty">📭 Ende nuk ka përdorues</div>';
                 return;
             }
 
             let html = '';
-            users.forEach((user, index) => {
+            users.forEach((user) => {
                 const avatar = user.full_name 
                     ? user.full_name.charAt(0).toUpperCase() 
                     : '👤';
@@ -328,20 +425,18 @@
                 const createdDate = new Date(user.created_at).toLocaleDateString('sq-AL', {
                     year: 'numeric',
                     month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
+                    day: 'numeric'
                 });
 
                 html += `
-                    <div class="user-card" onclick="trackEvent('user_card_viewed', {user_email: '${user.email}'})">
+                    <div class="user-card">
                         <div class="user-avatar">${avatar}</div>
                         <div class="user-info">
                             <h3>${user.full_name || 'Nuk ka emër'}</h3>
-                            <p>📧 <strong>${user.email}</strong></p>
-                            <p>📱 ${user.phone || 'Nuk ka numër'}</p>
-                            <p>📅 Regjistruar: ${createdDate}</p>
-                            <p>🆔 ID: <code style="background:#333; padding:2px 6px; border-radius:3px;">${user.id.substring(0, 8)}...</code></p>
+                            <p>📧 ${user.email}</p>
+                            <p>📱 ${user.phone || '-'}</p>
+                            <p>📅 ${createdDate}</p>
+                            <p>🆔 ${user.id.substring(0, 8)}...</p>
                         </div>
                     </div>
                 `;
@@ -350,10 +445,7 @@
             container.innerHTML = html;
         }
 
-        // NGARKONI KURRENTË KUR FAQJA HAPET
-        document.addEventListener('DOMContentLoaded', loadAllData);
-
-        // PËRDITËSO Çëdo 30 SEKONDA (OPTIONAL)
+        // PËRDITËSO ÇËDO 30 SEKONDA
         setInterval(loadAllData, 30000);
     </script>
 </body>

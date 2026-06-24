@@ -1,67 +1,314 @@
-<div style="color:white; font-family:Arial">
-  <h2>Users</h2>
-  <div>Totali: <b id="count">0</b> përdorues të regjistruar</div>
-  <ul id="list" style="list-style:none; padding:0;"></ul>
-</div>
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ora Swiss - Users</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<script>
-  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
-  
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-  async function loadUsers() {
-    const listEl = document.getElementById("list");
-    const countEl = document.getElementById("count");
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #FFD700;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
 
-    try {
-      // Merrni të gjithë përdoruesit e regjistruar
-      const { data, error } = await supabase
-        .from('users') // Emri i tabelës ku ruhen përdoruesit
-        .select('*');
+        h1 {
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
 
-      if (error) {
-        console.error("❌ Gabim:", error.message);
-        listEl.innerHTML = `<li style="color:red;">Gabim: ${error.message}</li>`;
-        return;
-      }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
 
-      // Përditëso numrin total
-      countEl.textContent = data.length;
-      listEl.innerHTML = "";
+        .stat-box {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #FFD700;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
 
-      if (data.length === 0) {
-        listEl.innerHTML = "<li style='color:#aaa;'>Ende nuk ka përdorues të regjistruar</li>";
-        return;
-      }
+        .stat-box h3 {
+            color: #FFD700;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
 
-      // Shfaq çdo përdorues
-      data.forEach(user => {
-        const li = document.createElement("li");
-        li.style.cssText = `
-          padding: 15px;
-          margin: 10px 0;
-          background: rgba(255,255,255,0.1);
-          border-left: 4px solid #FFD700;
-          border-radius: 4px;
-        `;
-        li.innerHTML = `
-          <strong>👤 ${user.full_name || user.name || "Nuk ka emër"}</strong><br>
-          📧 ${user.email}<br>
-          🆔 ${user.id}<br>
-          📅 Regjistruar: ${new Date(user.created_at).toLocaleDateString('sq-AL')}
-        `;
-        listEl.appendChild(li);
-      });
+        .stat-box .number {
+            font-size: 2.5em;
+            color: #FFD700;
+            font-weight: bold;
+        }
 
-    } catch (err) {
-      console.error("❌ Gabim:", err);
-      listEl.innerHTML = "<li style='color:red;'>Gabim në koneksion</li>";
-    }
-  }
+        .users-list {
+            margin-top: 40px;
+        }
 
-  // Ngarkoni përdoruesit
-  loadUsers();
-</script>
-</body>  
+        .users-list h2 {
+            color: #FFD700;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #FFD700;
+            padding-bottom: 10px;
+        }
+
+        .user-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #FFD700;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 15px;
+        }
+
+        .user-card:hover {
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+
+        .user-info h3 {
+            color: #FFD700;
+            margin-bottom: 5px;
+        }
+
+        .user-info p {
+            color: #aaa;
+            font-size: 0.9em;
+            margin: 3px 0;
+        }
+
+        .loading {
+            text-align: center;
+            color: #FFD700;
+            font-size: 1.2em;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 215, 0, 0.2);
+            border-top: 4px solid #FFD700;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: rgba(255, 0, 0, 0.2);
+            border: 2px solid #ff0000;
+            color: #ff6b6b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .empty {
+            text-align: center;
+            color: #aaa;
+            padding: 40px;
+            font-size: 1.1em;
+        }
+
+        .refresh-btn {
+            background: #FFD700;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #FFA500;
+            transform: scale(1.05);
+        }
+
+        .refresh-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⌚ ORA SWISS</h1>
+        <p style="text-align: center; color: #aaa; margin-bottom: 30px;">Platforma e Shitjes së Orëve të Luksit</p>
+
+        <!-- STATISTIKA -->
+        <div class="stats">
+            <div class="stat-box">
+                <h3>👥 Përdorues</h3>
+                <div class="number" id="count-users">0</div>
+            </div>
+            <div class="stat-box">
+                <h3>⌚ Ora në Katalog</h3>
+                <div class="number" id="count-products">0</div>
+            </div>
+            <div class="stat-box">
+                <h3>🛒 Porosi</h3>
+                <div class="number" id="count-orders">0</div>
+            </div>
+        </div>
+
+        <!-- LISTA E PËRDORUESVE -->
+        <div class="users-list">
+            <h2>📋 Lista e Përdoruesve të Regjistruar</h2>
+            <button class="refresh-btn" onclick="loadAllData()">🔄 Përditeso</button>
+            <div id="users-container" class="loading">
+                <div class="spinner"></div>
+                <p>Po ngarkohet...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // INICIALIZIMI I SUPABASE
+        const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDI1NDk2MDAsImV4cCI6MjAxODEyNTYwMH0.7N0xYUQ_xYZ_example_key";
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // FUNKSIONI KRYESOR
+        async function loadAllData() {
+            const usersContainer = document.getElementById("users-container");
+            
+            try {
+                usersContainer.innerHTML = '<div class="loading"><div class="spinner"></div><p>Po ngarkohet...</p></div>';
+
+                // 1. NGARKONI PËRDORUESIT
+                const { data: users, error: usersError } = await supabase
+                    .from('users')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (usersError) throw usersError;
+
+                // 2. NGARKONI PRODUKTET
+                const { data: products, error: productsError } = await supabase
+                    .from('products')
+                    .select('*');
+
+                if (productsError) throw productsError;
+
+                // 3. NGARKONI POROSITË (OPTIONAL)
+                const { data: orders, error: ordersError } = await supabase
+                    .from('orders')
+                    .select('*');
+
+                // Përditësoni statistikat
+                document.getElementById("count-users").textContent = users?.length || 0;
+                document.getElementById("count-products").textContent = products?.length || 0;
+                document.getElementById("count-orders").textContent = orders?.length || 0;
+
+                // Shfaq përdoruesit
+                displayUsers(users);
+
+            } catch (error) {
+                console.error("❌ Gabim:", error);
+                usersContainer.innerHTML = `
+                    <div class="error">
+                        <strong>❌ Gabim në ngarkimin e të dhënave:</strong><br>
+                        ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // SHFAQ PËRDORUESIT
+        function displayUsers(users) {
+            const container = document.getElementById("users-container");
+
+            if (!users || users.length === 0) {
+                container.innerHTML = '<div class="empty">📭 Ende nuk ka përdorues të regjistruar</div>';
+                return;
+            }
+
+            let html = '';
+            users.forEach((user, index) => {
+                const avatar = user.full_name 
+                    ? user.full_name.charAt(0).toUpperCase() 
+                    : '👤';
+
+                const createdDate = new Date(user.created_at).toLocaleDateString('sq-AL', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                html += `
+                    <div class="user-card">
+                        <div class="user-avatar">${avatar}</div>
+                        <div class="user-info">
+                            <h3>${user.full_name || 'Nuk ka emër'}</h3>
+                            <p>📧 <strong>${user.email}</strong></p>
+                            <p>📱 ${user.phone || 'Nuk ka numër'}</p>
+                            <p>📅 Regjistruar: ${createdDate}</p>
+                            <p>🆔 ID: <code style="background:#333; padding:2px 6px; border-radius:3px;">${user.id.substring(0, 8)}...</code></p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // NGARKONI KURRENTË KUR FAQJA HAPET
+        document.addEventListener('DOMContentLoaded', loadAllData);
+
+        // PËRDITËSO Çсеко 30 SEKONDA (OPTIONAL)
+        setInterval(loadAllData, 30000);
+    </script>
+</body>
 </html>

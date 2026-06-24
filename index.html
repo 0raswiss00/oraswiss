@@ -66,7 +66,7 @@
   <nav class="nav-scroll">
     <span class="site-title">ORA<br>SWISS</span>
     <span style="color: white; margin-left: 20px;">
-      user: <b id="count-users">0</b> | posted: <b id="count-posted">0</b>
+      user: <b id="count-users">0</b>
     </span>
     <a href="register.html">Register</a>
     <button id="btnSellNow" onclick="window.trajtoKlikiminSell()" style="background-color: gold; padding: 10px 20px; border-radius: 5px; cursor: pointer; border: none; font-weight: bold;">Sell Now</button>
@@ -95,8 +95,8 @@
 
 <script>
   const supabase = window.supabase.createClient(
-    "https://xyunmtvysqwonelecudf.supabase.co", 
-    "sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx"
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
   );
 
 async function loadCategory(cat, containerId) {
@@ -198,19 +198,22 @@ kontrolloDheShfaqSellNow();
     loadCategory('parts', 'parts-container');
 
 async function loadUserCount() {
-    const { count: userCount } = await supabase
-        .from('profiles')
-        .select('*', { count: 'exact', head: true });
-    
-    const { count: postedCount } = await supabase
+    const { count, error } = await supabase
         .from('oras')
-        .select('*', { count: 'exact', head: true });
+        .select('user_id', { count: 'exact', head: false });
     
-    document.getElementById('count-users').textContent = userCount || 0;
-    document.getElementById('count-posted').textContent = postedCount || 0;
+    if (!error && count !== null) {
+        // Numro user_id unik
+        const { data } = await supabase
+            .from('oras')
+            .select('user_id');
+        
+        const uniqueUsers = [...new Set(data?.map(w => w.user_id).filter(Boolean))];
+        document.getElementById('count-users').textContent = uniqueUsers.length;
+    }
 }
 
-loadUserCount();
+loadUserCount();  
 </script>
 </body>  
 </html>

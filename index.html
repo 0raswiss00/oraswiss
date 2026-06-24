@@ -198,11 +198,16 @@ kontrolloDheShfaqSellNow();
     loadCategory('parts', 'parts-container');
 
 async function loadUserCount() {
-    const { count } = await supabase
+    const { count: userCount } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true });
     
-    document.getElementById('count-users').textContent = count || 0;
+    const { count: postedCount } = await supabase
+        .from('oras')
+        .select('*', { count: 'exact', head: true });
+    
+    document.getElementById('count-users').textContent = userCount || 0;
+    document.getElementById('count-posted').textContent = postedCount || 0;
 }
 
 loadUserCount();

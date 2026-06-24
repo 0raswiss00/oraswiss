@@ -348,67 +348,37 @@
         }
 
         // LOAD PËRDORUESIT NGA DATABASE
-        async function loadAllData() {
-            const usersContainer = document.getElementById("users-container");
-            
-            try {
-                usersContainer.innerHTML = '<div class="loading"><div class="spinner"></div><p>Po ngarkohet...</p></div>';
+async function loadAllData() {
+    const usersContainer = document.getElementById("users-container");
+    
+    try {
+        usersContainer.innerHTML = '<div class="loading"><div class="spinner"></div><p>Po ngarkohet...</p></div>';
 
-                trackEvent('data_loading_started');
+        // NGARKO WATCHES
+        const { data: watches, error: watchesError } = await supabase
+            .from('watches')
+            .select('*')
+            .order('created_at', { ascending: false });
 
-                // NGARKONI PËRDORUESIT
-                const { data: users, error: usersError } = await supabase
-                    .from('users')
-                    .select('*')
-                    .order('created_at', { ascending: false });
+        if (watchesError) throw watchesError;
 
-                if (usersError) throw usersError;
+        // NUMRO USERIT UNIK NGA WATCHES
+        const uniqueUsers = [...new Set(watches?.map(w => w.user_id))];
+        const userCount = uniqueUsers.length;
+        const watchCount = watches?.length || 0;
 
-                // NGARKONI PRODUKTET
-                const { data: products, error: productsError } = await supabase
-                    .from('products')
-                    .select('*');
+        document.getElementById("count-users").textContent = userCount;
+        document.getElementById("count").textContent = userCount;
+        document.getElementById("count-products").textContent = watchCount;
 
-                if (productsError) throw productsError;
+        // SHFAQ USERIT
+        displayUsers(watches);
 
-                // NGARKONI POROSITË
-                const { data: orders, error: ordersError } = await supabase
-                    .from('orders')
-                    .select('*');
-
-                // PËRDITËSONI STATISTIKAT
-                const userCount = users?.length || 0;
-                const productCount = products?.length || 0;
-                const orderCount = orders?.length || 0;
-
-                document.getElementById("count-users").textContent = userCount;
-                document.getElementById("count-products").textContent = productCount;
-                document.getElementById("count-orders").textContent = orderCount;
-
-                trackEvent('data_loaded_successfully', {
-                    users_count: userCount,
-                    products_count: productCount,
-                    orders_count: orderCount
-                });
-
-                // SHFAQ PËRDORUESIT
-                displayUsers(users);
-
-            } catch (error) {
-                console.error("❌ Gabim:", error);
-                
-                trackEvent('data_loading_error', {
-                    error_message: error.message
-                });
-
-                usersContainer.innerHTML = `
-                    <div class="error">
-                        <strong>❌ Gabim:</strong><br>
-                        ${error.message}
-                    </div>
-                `;
-            }
-        }
+    } catch (error) {
+        console.error("❌ Gabim:", error);
+        usersContainer.innerHTML = <div class="error"><strong>❌ Gabim:</strong><br>${error.message}</div>;
+    }
+}
 
         // SHFAQ PËRDORUESIT
         function displayUsers(users) {

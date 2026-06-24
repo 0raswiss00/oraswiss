@@ -1,46 +1,67 @@
 <div style="color:white; font-family:Arial">
   <h2>Users</h2>
-  <div>Totali: <b id="count">0</b></div>
-  <ul id="list"></ul>
+  <div>Totali: <b id="count">0</b> përdorues të regjistruar</div>
+  <ul id="list" style="list-style:none; padding:0;"></ul>
 </div>
 
 <script>
-  const supabase = window.supabase.createClient(
-    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-  );
+  const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+  
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  async function loadOras() {
+  async function loadUsers() {
     const listEl = document.getElementById("list");
     const countEl = document.getElementById("count");
 
-    // Merrni të gjithë oras
-    const { data, error, count } = await supabase
-      .from('oras')
-      .select('*', { count: 'exact' });
+    try {
+      // Merrni të gjithë përdoruesit e regjistruar
+      const { data, error } = await supabase
+        .from('users') // Emri i tabelës ku ruhen përdoruesit
+        .select('*');
 
-    if (error) {
-      console.error("Gabim:", error);
-      listEl.innerHTML = "<li style='color:red'>Gabim në marrjen e të dhënave</li>";
-      return;
+      if (error) {
+        console.error("❌ Gabim:", error.message);
+        listEl.innerHTML = `<li style="color:red;">Gabim: ${error.message}</li>`;
+        return;
+      }
+
+      // Përditëso numrin total
+      countEl.textContent = data.length;
+      listEl.innerHTML = "";
+
+      if (data.length === 0) {
+        listEl.innerHTML = "<li style='color:#aaa;'>Ende nuk ka përdorues të regjistruar</li>";
+        return;
+      }
+
+      // Shfaq çdo përdorues
+      data.forEach(user => {
+        const li = document.createElement("li");
+        li.style.cssText = `
+          padding: 15px;
+          margin: 10px 0;
+          background: rgba(255,255,255,0.1);
+          border-left: 4px solid #FFD700;
+          border-radius: 4px;
+        `;
+        li.innerHTML = `
+          <strong>👤 ${user.full_name || user.name || "Nuk ka emër"}</strong><br>
+          📧 ${user.email}<br>
+          🆔 ${user.id}<br>
+          📅 Regjistruar: ${new Date(user.created_at).toLocaleDateString('sq-AL')}
+        `;
+        listEl.appendChild(li);
+      });
+
+    } catch (err) {
+      console.error("❌ Gabim:", err);
+      listEl.innerHTML = "<li style='color:red;'>Gabim në koneksion</li>";
     }
-
-    // Përditëso numrin total
-    countEl.textContent = data.length;
-    listEl.innerHTML = "";
-
-    // Shfaq secilin ora
-    data.forEach(item => {
-      const li = document.createElement("li");
-      li.style.padding = "10px";
-      li.style.borderBottom = "1px solid #444";
-      li.textContent = `${item.brand} ${item.model} - ${item.category} - ${item.price}€`;
-      listEl.appendChild(li);
-    });
   }
 
-  // Thërrni kur hapet faqja
-  loadOras();
+  // Ngarkoni përdoruesit
+  loadUsers();
 </script>
 </body>  
 </html>

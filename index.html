@@ -196,7 +196,24 @@ kontrolloDheShfaqSellNow();
     loadCategory('luxury', 'luxury-container');
     loadCategory('vintage', 'vintage-container');
     loadCategory('parts', 'parts-container');
-</script>
 
+async function loadUserCount() {
+    const { count, error } = await supabase
+        .from('oras')
+        .select('user_id', { count: 'exact', head: false });
+    
+    if (!error && count !== null) {
+        // Numro user_id unik
+        const { data } = await supabase
+            .from('oras')
+            .select('user_id');
+        
+        const uniqueUsers = [...new Set(data?.map(w => w.user_id).filter(Boolean))];
+        document.getElementById('count-users').textContent = uniqueUsers.length;
+    }
+}
+
+loadUserCount();  
+</script>
 </body>  
 </html>

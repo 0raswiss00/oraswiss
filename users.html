@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ora Swiss - Users</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -203,7 +213,7 @@
         <!-- LISTA E PËRDORUESVE -->
         <div class="users-list">
             <h2>📋 Lista e Përdoruesve të Regjistruar</h2>
-            <button class="refresh-btn" onclick="loadAllData()">🔄 Përditeso</button>
+            <button class="refresh-btn" onclick="trackEvent('refresh_data'); loadAllData();">🔄 Përditeso</button>
             <div id="users-container" class="loading">
                 <div class="spinner"></div>
                 <p>Po ngarkohet...</p>
@@ -218,12 +228,31 @@
         
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        // FUNKSIONI PËR TRACK EVENTS
+        function trackEvent(eventName, eventData = {}) {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', eventName, eventData);
+                console.log('📊 Event i trackuar:', eventName, eventData);
+            }
+        }
+
+        // TRACK PAGE VIEW
+        window.addEventListener('load', function() {
+            trackEvent('page_view', {
+                page_title: document.title,
+                page_location: window.location.href
+            });
+        });
+
         // FUNKSIONI KRYESOR
         async function loadAllData() {
             const usersContainer = document.getElementById("users-container");
             
             try {
                 usersContainer.innerHTML = '<div class="loading"><div class="spinner"></div><p>Po ngarkohet...</p></div>';
+
+                // Track data loading event
+                trackEvent('data_loading_started');
 
                 // 1. NGARKONI PËRDORUESIT
                 const { data: users, error: usersError } = await supabase
@@ -246,15 +275,32 @@
                     .select('*');
 
                 // Përditësoni statistikat
-                document.getElementById("count-users").textContent = users?.length || 0;
-                document.getElementById("count-products").textContent = products?.length || 0;
-                document.getElementById("count-orders").textContent = orders?.length || 0;
+                const userCount = users?.length || 0;
+                const productCount = products?.length || 0;
+                const orderCount = orders?.length || 0;
+
+                document.getElementById("count-users").textContent = userCount;
+                document.getElementById("count-products").textContent = productCount;
+                document.getElementById("count-orders").textContent = orderCount;
+
+                // Track successful data load
+                trackEvent('data_loaded_successfully', {
+                    users_count: userCount,
+                    products_count: productCount,
+                    orders_count: orderCount
+                });
 
                 // Shfaq përdoruesit
                 displayUsers(users);
 
             } catch (error) {
                 console.error("❌ Gabim:", error);
+                
+                // Track error
+                trackEvent('data_loading_error', {
+                    error_message: error.message
+                });
+
                 usersContainer.innerHTML = `
                     <div class="error">
                         <strong>❌ Gabim në ngarkimin e të dhënave:</strong><br>
@@ -288,7 +334,7 @@
                 });
 
                 html += `
-                    <div class="user-card">
+                    <div class="user-card" onclick="trackEvent('user_card_viewed', {user_email: '${user.email}'})">
                         <div class="user-avatar">${avatar}</div>
                         <div class="user-info">
                             <h3>${user.full_name || 'Nuk ka emër'}</h3>
@@ -307,7 +353,7 @@
         // NGARKONI KURRENTË KUR FAQJA HAPET
         document.addEventListener('DOMContentLoaded', loadAllData);
 
-        // PËRDITËSO Çсеко 30 SEKONDA (OPTIONAL)
+        // PËRDITËSO Çëdo 30 SEKONDA (OPTIONAL)
         setInterval(loadAllData, 30000);
     </script>
 </body>

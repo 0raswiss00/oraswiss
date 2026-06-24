@@ -4,52 +4,43 @@
   <ul id="list"></ul>
 </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+<script>
+  const supabase = window.supabase.createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  );
 
-  // ⬇️ këtu vendos firebaseConfig-in TEND (si në kodin tënd)
-  const firebaseConfig = {
-    apiKey: "...",
-    authDomain: "...",
-    projectId: "...",
-    storageBucket: "...",
-    messagingSenderId: "...",
-    appId: "...",
-    measurementId: "..."
-  };
+  async function loadOras() {
+    const listEl = document.getElementById("list");
+    const countEl = document.getElementById("count");
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+    // Merrni të gjithë oras
+    const { data, error, count } = await supabase
+      .from('oras')
+      .select('*', { count: 'exact' });
 
-  const listEl = document.getElementById("list");
-  const countEl = document.getElementById("count");
+    if (error) {
+      console.error("Gabim:", error);
+      listEl.innerHTML = "<li style='color:red'>Gabim në marrjen e të dhënave</li>";
+      return;
+    }
 
-// Hiqe atë "async function loadUsers" dhe vendos këtë:
-async function loadOras() {
-  const listEl = document.getElementById("list");
-  const countEl = document.getElementById("count");
+    // Përditëso numrin total
+    countEl.textContent = data.length;
+    listEl.innerHTML = "";
 
-  // Përdorim tabelën "oras" që pamë në foto
-  const { data, count, error } = await supabase
-    .from('oras')
-    .select('*', { count: 'exact' });
-
-  if (error) {
-    console.error("Gabim:", error);
-    return;
+    // Shfaq secilin ora
+    data.forEach(item => {
+      const li = document.createElement("li");
+      li.style.padding = "10px";
+      li.style.borderBottom = "1px solid #444";
+      li.textContent = `${item.brand} ${item.model} - ${item.category} - ${item.price}€`;
+      listEl.appendChild(li);
+    });
   }
 
-  countEl.textContent = count;
-  listEl.innerHTML = "";
-
-  data.forEach(item => {
-    const li = document.createElement("li");
-    // Shfaq kategorinë ose diçka tjetër që ke në tabelë
-    li.textContent = ID: ${item.id} - Kategoria: ${item.category || "nuk ka"};
-    listEl.appendChild(li);
-  });
-}
-
-loadOras();
+  // Thërrni kur hapet faqja
+  loadOras();
 </script>
+</body>  
+</html>

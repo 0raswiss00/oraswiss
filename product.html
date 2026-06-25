@@ -3,147 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <title>Ora Swiss - Detajet</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
     <style>
         body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
         .product-card { background: #111; border: 1px solid #333; padding: 20px; max-width: 500px; margin: auto; border-radius: 10px; }
-        .product-img { width: 100%; height: auto; border-radius: 10px; margin-bottom: 15px; object-fit: cover; }
         .price { color: #25D366; font-weight: bold; font-size: 1.4em; margin: 10px 0; }
         hr { border: 0; border-top: 1px solid #333; margin: 15px 0; }
-        .btn { display: block; text-align: center; text-decoration: none; font-weight: bold; border-radius: 5px; padding: 15px; margin-top: 10px; }
+        .btn { display: block; text-align: center; text-decoration: none; font-weight: bold; border-radius: 5px; padding: 15px; margin-top: 10px; cursor: pointer; border: none; font-size: 16px; }
         .btn-whatsapp { background: #25D366; color: white; }
-        .btn-paypal { background: #ffeb00; color: black; } /* Bërë i verdhë si te lista kryesore */
+        .btn-paypal { background: #ffeb00; color: black; }
+        .btn-edit { background: gold; color: #000; }
+        .btn-delete { background: #c0392b; color: white; }
+
+        /* GALERIA */
+        .gallery { position: relative; margin-bottom: 15px; }
+        .gallery img { width: 100%; height: 300px; object-fit: cover; border-radius: 10px; display: block; }
+        .gallery-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: #fff; border: none; font-size: 22px; padding: 10px 15px; cursor: pointer; border-radius: 5px; }
+        .gallery-nav.prev { left: 5px; }
+        .gallery-nav.next { right: 5px; }
+        .gallery-counter { text-align: center; color: #aaa; font-size: 13px; margin-top: 5px; }
+        .no-image { width: 100%; height: 200px; background: #222; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #555; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <div id="container">Duke ngarkuar...</div>
+<div id="container">Duke ngarkuar...</div>
 
-    <script>
-        if (typeof window.supabaseClient === 'undefined') {
-            window.supabaseClient = window.supabase.createClient(
-                "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
-            );
-        }
-        var supabase = window.supabaseClient;
-        const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+<script>
+    const supabaseClient = window.supabase.createClient(
+        "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
+    );
 
-        async function loadProduct() {
-            const id = new URLSearchParams(window.location.search).get('id');
-            const container = document.getElementById("container");
+    let images = [];
+    let currentIndex = 0;
 
-            if (!id) {
-                container.innerHTML = "Asnjë ID u gjet.";
-                return;
-            }
-
-            try {
-                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-                if (error) throw error;
-
-// --- LOGJIKA E RE E GALERISË ---
-        window.currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
-        window.currentImgIndex = 0;
-
-        window.changeImage = function(step) {
-            const baseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/";
-            window.currentImgIndex += step;
-            
-            if (window.currentImgIndex >= window.currentImages.length) window.currentImgIndex = 0;
-            if (window.currentImgIndex < 0) window.currentImgIndex = window.currentImages.length - 1;
-            
-            const imgElement = document.getElementById("main-product-img");
-            const path = window.currentImages[window.currentImgIndex];
-            imgElement.src = path.startsWith('http') ? path : baseUrl + path;
-        };
-// Këtë e thërrisni brenda funksionit loadProduct pasi të merrni të dhënat
-function initGallery(imgArray) {
-    images = imgArray || [];
-    if(images.length === 0) images = ["https://placeholder.co/600x400/222/fff?text=No+Image"];
-    updateImageDisplay();
-}
-
-function changeImage(step) {
-    currentImgIndex += step;
-    if (currentImgIndex >= images.length) currentImgIndex = 0;
-    if (currentImgIndex < 0) currentImgIndex = images.length - 1;
-    updateImageDisplay();
-}
-
-                // Kushti për butonin PayPal (shfaqet vetëm nëse ka çmim dhe link)
-                const paypalButton = (data.price && data.paypal_link) 
-                    ? `<a href="${data.paypal_link}" target="_blank" class="btn btn-paypal">
-                           🛒 BUY NOW (PayPal)
-                       </a>` 
-                    : '';
-                
-               container.innerHTML = `
-                   <div class="product-card">
-                       <div class="gallery-container">
-                           <img id="main-product-img" class="product-img" 
-                                src="${window.currentImages.length > 0 ? (window.currentImages[0].startsWith('http') ? window.currentImages[0] : 'https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/' + window.currentImages[0]) : ''}" 
-                                alt="${data.brand}">
-                            ${window.currentImages.length > 1 ? `
-                                <button class="nav-btn prev" onclick="changeImage(-1)">&#10094;</button>
-                                <button class="nav-btn next" onclick="changeImage(1)">&#10095;</button>
-                            ` : ''}
-                       </div>          
-                       <h1>${data.brand} - ${data.model}</h1>
-                       <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>
-        
-                       <hr>
-                       <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
-                       <p><strong>Case Size:</strong> ${data.case_size || 'N/A'}</p>
-                       <p><strong>Movement:</strong> ${data.movement || 'N/A'}</p>
-                       <p><strong>Function:</strong> ${data.function || 'N/A'}</p>
-                       <p><strong>Service:</strong> ${data.service ? 'Yes (Serviced)' : 'No'}</p>
-                       <p><strong>Box & Papers:</strong> ${data.box_papers ? 'Full Set' : 'Watch Only'}</p>
-                       <p><strong>Description:</strong> ${data.description || 'N/A'}</p>
-        
-                       <br>
-                       <a href="https://wa.me/35569XXXXXXX?text=I%20am%20interested%20in:%20${encodeURIComponent(data.brand + ' ' + data.model)}" class="btn btn-whatsapp">
-                          💬 ORDER ON WHATSAPP
-                       </a>
-                      <div class="admin-actions" style="margin-top: 20px; padding: 15px; border: 1px solid #444; border-radius: 8px;">
-                          <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
-                          <button onclick="editProduct(${data.id})">Modifiko</button>
-                          <button onclick="deleteProduct(${data.id})">Fshi Produktin</button>
-                     </div>
-
-                       ${paypalButton}
-                    </div>
-               `;
-            } catch (err) {
-                container.innerHTML = "GABIM: " + err.message;
-            }
-        }
-        loadProduct();
-    
-// Funksionet për Admin (Fshirje dhe Modifikim)
-async function deleteProduct(id) {
-    console.log("Duke fshirë ID-në:", id); // Kjo do shfaqet te Console (F12)
-    if (!confirm("A jeni i sigurt që doni ta fshini këtë produkt?")) return;
-    
-    const { data, error } = await supabase.from('oras').delete().eq('id', id);
-    
-    if (error) {
-        console.error("Gabim:", error); // Nëse ka gabim, do e shohësh këtu
-        alert("Gabim gjatë fshirjes: " + error.message);
-    } else {
-        console.log("Përgjigja:", data);
-        alert("Produkti u fshi me sukses!");
-        window.location.href = 'index.html'; 
+    function updateGallery() {
+        const img = document.getElementById('main-img');
+        const counter = document.getElementById('img-counter');
+        if (img) img.src = images[currentIndex];
+        if (counter) counter.textContent = (currentIndex + 1) + ' / ' + images.length;
     }
-}
-// Shto këtë funksion për modifikimin
-function editProduct(id) {
-    console.log("Duke shkuar te faqja e modifikimit për ID-në:", id);
-    window.location.href = 'edit.html?id=' + id;
-}
 
+    window.changeImage = function(step) {
+        currentIndex += step;
+        if (currentIndex >= images.length) currentIndex = 0;
+        if (currentIndex < 0) currentIndex = images.length - 1;
+        updateGallery();
+    };
 
-        
-</script>        
+    async function loadProduct() {
+        const id = new URLSearchParams(window.location.search).get('id');
+        const container = document.getElementById("container");
+
+        if (!id) { container.innerHTML = "Asnjë ID u gjet."; return; }
+
+        const { data, error } = await supabaseClient.from('oras').select('*').eq('id', id).single();
+
+        if (error) { container.innerHTML = "GABIM: " + error.message; return; }
+
+        // Merr fotot
+        images = Array.isArray(data.image_url) ? data.image_url.filter(u => u) : (data.image_url ? [data.image_url] : []);
+
+        // Galeria HTML
+        let galleryHTML = '';
+        if (images.length === 0) {
+            galleryHTML = '<div class="no-image">📷 Nuk ka foto</div>';
+        } else if (images.length === 1) {
+            galleryHTML = <div class="gallery"><img id="main-img" src="${images[0]}" alt="foto"></div>;
+        } else {
+            galleryHTML = `
+                <div class="gallery">
+                    <img id="main-img" src="${images[0]}" alt="foto">
+                    <button class="gallery-nav prev" onclick="changeImage(-1)">&#10094;</button>
+                    <button class="gallery-nav next" onclick="changeImage(1)">&#10095;</button>
+                </div>
+                <div class="gallery-counter" id="img-counter">1 / ${images.length}</div>
+            `;
+        }
+
+        const paypalBtn = (data.price && data.paypal_link)
+            ? <a href="${data.paypal_link}" target="_blank" class="btn btn-paypal">🛒 BUY NOW (PayPal)</a>
+            : '';
+
+        container.innerHTML = `
+            <div class="product-card">
+                ${galleryHTML}
+                <h1>${data.brand} - ${data.model}</h1>
+                <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>
+                <hr>
+                <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
+                <p><strong>Case Size:</strong> ${data.case_size || 'N/A'}</p>
+                <p><strong>Movement:</strong> ${data.movement || 'N/A'}</p>
+                <p><strong>Function:</strong> ${data.function || 'N/A'}</p>
+                <p><strong>Service:</strong> ${data.service ? 'Yes (Serviced)' : 'No'}</p>
+                <p><strong>Box & Papers:</strong> ${data.box_papers ? 'Full Set' : 'Watch Only'}</p>
+                <p><strong>Description:</strong> ${data.description || 'N/A'}</p>
+                <br>
+                <a href="https://wa.me/35569XXXXXXX?text=I%20am%20interested%20in:%20${encodeURIComponent(data.brand + ' ' + data.model)}" class="btn btn-whatsapp">
+                    💬 ORDER ON WHATSAPP
+                </a>
+                ${paypalBtn}
+                <hr>
+                <button class="btn btn-edit" onclick="window.location.href='edit.html?id=${data.id}'">✏️ Modifiko</button>
+                <button class="btn btn-delete" onclick="deleteProduct(${data.id})">🗑️ Fshi Produktin</button>
+            </div>
+        `;
+    }
+
+    async function deleteProduct(id) {
+        if (!confirm("A jeni i sigurt që doni ta fshini këtë produkt?")) return;
+        const { error } = await supabaseClient.from('oras').delete().eq('id', id);
+        if (error) {
+            alert("Gabim: " + error.message);
+        } else {
+            alert("Produkti u fshi!");
+            window.location.href = 'index.html';
+        }
+    }
+
+    loadProduct();
+</script>
 </body>
 </html>

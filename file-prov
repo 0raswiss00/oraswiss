@@ -10708,3 +10708,97 @@ csss
     font-size: 16px;
     font-weight: 600;
 }
+
+
+css 201 291
+/* ===== €400 + BUY NOW + WHATSAPP + EMAIL POSHTË FORMËS ===== */
+/* Butoni Like */
+.like-btn {
+    background: #ff4d6d;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+.like-btn.active {
+    background: #c9184a;
+    transform: scale(1.15);
+}
+
+/* Butoni Share */
+.share-btn {
+    background: #6c5ce7;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+.buy-row {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.buy-row .price {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* Butonat me ngjyra moderne */
+.buy-btn,
+.whatsapp-btn,
+.email-btn {
+  padding: 8px 14px;
+  border-radius: 999px;      /* forma “pill” */
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #ffffff;
+  display: inline-block;
+}
+
+/* Ngjyrat */
+.buy-btn{
+  background: #000;          /* e zezë */
+  color: #d4af37 !important; /* ari */
+  border: 1px solid #d4af37; /* kornizë ari (opsionale, duket bukur) */
+}
+.buy-btn:hover{
+  background: #111;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+}
+
+.whatsapp-btn {
+  background: #25d366;       /* jeshile WhatsApp */
+}
+
+.email-btn {
+  background: #007bff;       /* blu e qetë */
+}
+
+/* ===== PËRSHKRIMI POSHTË – KUTI E GJERË ===== */
+.product-info {
+  flex-basis: 100%;          /* zë gjithë rreshtin poshtë */
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 16px 18px;
+  font-size: 14px;
+}
+
+.product-info h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}

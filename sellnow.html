@@ -59,8 +59,7 @@
 </form>
 
 <script type="module">
-  // ✅ PËRDOR KËTË
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
   // V1 - per login/sesion
   const supabaseV1 = createClient(
@@ -81,78 +80,46 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     window.location.href = 'login.html';
   }
 
-document.getElementById('sellForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
+  document.getElementById('sellForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-  const btn = e.target.querySelector('button');
-  btn.disabled = true;
-  btn.textContent = 'Duke ngarkuar...';
-
-  const { data: { user } } = await supabaseV1.auth.getUser();
-  if (!user) {
-    alert("Duhet të jesh i loguar!");
-    return;
-  }
-
-  // 📸 NGARKO FOTOT NË SUPABASE STORAGE
-  const files = document.getElementById('fileInput').files;
-  let imageUrls = [];
-
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    const fileName = ${user.id}/${Date.now()}_${i}_${file.name};
-
-    const { error: uploadError } = await supabaseV2
-      .storage
-      .from('watch-images')
-      .upload(fileName, file);
-
-    if (uploadError) {
-      alert("Gabim me foto: " + uploadError.message);
-      btn.disabled = false;
-      btn.textContent = 'Shto orën';
+    const { data: { user } } = await supabaseV1.auth.getUser();
+    if (!user) {
+      alert("Duhet të jesh i loguar!");
       return;
     }
 
-    const { data: { publicUrl } } = supabaseV2
-      .storage
-      .from('watch-images')
-      .getPublicUrl(fileName);
+    const oraData = {
+      user_id: user.id,  // ← KY ESHTE CELES I GJITHE PROBLEMIT
+      category: document.getElementById('category').value,
+      brand: document.getElementById('brand').value,
+      model: document.getElementById('model').value,
+      price: parseInt(document.getElementById('price').value),
+      reference: document.getElementById('reference').value,
+      material: document.getElementById('material').value,
+      case_size: document.getElementById('case_size').value,
+      year: parseInt(document.getElementById('year').value),
+      movement: document.getElementById('movement').value,
+      function: document.getElementById('function').value,
+      service: document.getElementById('service').checked,
+      box_papers: document.getElementById('box_papers').checked,
+      description: document.getElementById('description').value
+    };
 
-    imageUrls.push(publicUrl);
-  }
+    // Shkruan VETEM te V2 tabela oras
+    const { error } = await supabaseV2
+      .from('oras')
+      .insert([oraData]);
 
-  // 🧾 RUAJ TË DHËNAT
-  const oraData = {
-    user_id: user.id,
-    category: document.getElementById('category').value,
-    brand: document.getElementById('brand').value,
-    model: document.getElementById('model').value,
-    price: parseInt(document.getElementById('price').value) || null,
-    reference: document.getElementById('reference').value,
-    material: document.getElementById('material').value,
-    case_size: document.getElementById('case_size').value,
-    year: parseInt(document.getElementById('year').value) || null,
-    movement: document.getElementById('movement').value,
-    function: document.getElementById('function').value,
-    service: document.getElementById('service').checked,
-    box_papers: document.getElementById('box_papers').checked,
-    description: document.getElementById('description').value,
-    image_url: imageUrls
-  };
+    if (error) {
+      console.error("Gabim:", error);
+      alert("Gabim: " + error.message);
+      return;
+    }
 
-  const { error } = await supabaseV2.from('oras').insert([oraData]);
-
-  if (error) {
-    alert("Gabim: " + error.message);
-    btn.disabled = false;
-    btn.textContent = 'Shto orën';
-    return;
-  }
-
-  alert("Ora u publikua me sukses!");
-  window.location.href = 'dashboard.html';
-});
+    alert("Ora u publikua me sukses!");
+    window.location.href = 'dashboard.html';
+  });
 </script>
 </body>
 </html>

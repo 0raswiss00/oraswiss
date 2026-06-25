@@ -83,49 +83,69 @@
 document.getElementById('sellForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
+  const btn = e.target.querySelector('button');
+  btn.disabled = true;
+  btn.textContent = 'Duke ngarkuar...';
+
   const { data: { user } } = await supabaseV1.auth.getUser();
   if (!user) {
     alert("Duhet të jesh i loguar!");
     return;
   }
 
-  // 📸 FOTO
+  // 📸 NGARKO FOTOT NË SUPABASE STORAGE
   const files = document.getElementById('fileInput').files;
-
   let imageUrls = [];
 
   for (let i = 0; i < files.length; i++) {
-    imageUrls.push(URL.createObjectURL(files[i])); 
+    const file = files[i];
+    const fileName = ${user.id}/${Date.now()}_${i}_${file.name};
+
+    const { error: uploadError } = await supabaseV2
+      .storage
+      .from('watch-images')
+      .upload(fileName, file);
+
+    if (uploadError) {
+      alert("Gabim me foto: " + uploadError.message);
+      btn.disabled = false;
+      btn.textContent = 'Shto orën';
+      return;
+    }
+
+    const { data: { publicUrl } } = supabaseV2
+      .storage
+      .from('watch-images')
+      .getPublicUrl(fileName);
+
+    imageUrls.push(publicUrl);
   }
 
-  // 🧾 DATA E ORËS
+  // 🧾 RUAJ TË DHËNAT
   const oraData = {
     user_id: user.id,
     category: document.getElementById('category').value,
     brand: document.getElementById('brand').value,
     model: document.getElementById('model').value,
-    price: parseInt(document.getElementById('price').value),
+    price: parseInt(document.getElementById('price').value) || null,
     reference: document.getElementById('reference').value,
     material: document.getElementById('material').value,
     case_size: document.getElementById('case_size').value,
-    year: parseInt(document.getElementById('year').value),
+    year: parseInt(document.getElementById('year').value) || null,
     movement: document.getElementById('movement').value,
     function: document.getElementById('function').value,
     service: document.getElementById('service').checked,
     box_papers: document.getElementById('box_papers').checked,
     description: document.getElementById('description').value,
-
-    // ⭐ KJO ËSHTË SHUMË E RËNDËSISHME
     image_url: imageUrls
   };
 
-  const { error } = await supabaseV2
-    .from('oras')
-    .insert([oraData]);
+  const { error } = await supabaseV2.from('oras').insert([oraData]);
 
   if (error) {
-    console.error(error);
     alert("Gabim: " + error.message);
+    btn.disabled = false;
+    btn.textContent = 'Shto orën';
     return;
   }
 

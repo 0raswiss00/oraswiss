@@ -92,11 +92,29 @@ document.getElementById('sellForm').addEventListener('submit', async (e) => {
   // 📸 FOTO
   const files = document.getElementById('fileInput').files;
 
-  let imageUrls = [];
+let imageUrls = [];
 
-  for (let i = 0; i < files.length; i++) {
-    imageUrls.push(URL.createObjectURL(files[i])); 
+for (let i = 0; i < files.length; i++) {
+  const file = files[i];
+  const fileName = ${Date.now()}_${i}.${file.name.split('.').pop()};
+
+  const { error: uploadError } = await supabaseV2
+    .storage
+    .from('or-images')
+    .upload(fileName, file);
+
+  if (uploadError) {
+    alert("Gabim foto: " + uploadError.message);
+    return;
   }
+
+  const { data: urlData } = supabaseV2
+    .storage
+    .from('or-images')
+    .getPublicUrl(fileName);
+
+  imageUrls.push(urlData.publicUrl);
+}
 
   // 🧾 DATA E ORËS
   const oraData = {

@@ -61,7 +61,12 @@
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-  const supabase = createClient(
+  const supabaseV1 = createClient(
+    'https://xyunmtvysqwonelecudf.supabase.co',
+    'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
+  );
+
+  const supabaseV2 = createClient(
     'https://gnwsrmelmeqduhhmfmoa.supabase.co',
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );

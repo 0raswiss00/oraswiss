@@ -97,6 +97,24 @@ for (let i = 0; i < files.length; i++) {
   const file = files[i];
   const fileName = Date.now() + '' + i + '' + file.name;
 
+  const { error: uploadError } = await supabaseV2
+    .storage
+    .from('images')
+    .upload(fileName, file);
+
+  if (uploadError) {
+    alert("Gabim foto: " + uploadError.message);
+    return;
+  }
+
+  const { data: urlData } = supabaseV2
+    .storage
+    .from('images')
+    .getPublicUrl(fileName);
+
+  imageUrls.push(urlData.publicUrl);
+}
+
   const { data, error: uploadError } = await supabaseV2
     .storage
     .from('or-images')       // emri i bucket-it tuaj

@@ -61,6 +61,11 @@
       lista.innerHTML = "<li>Nuk keni orë në shitje.</li>";
       return;
     }
+console.log("Këto janë të dhënat që po marrim nga baza:", data); // Shto këtë rresht
+if (!data || data.length === 0) {
+    lista.innerHTML = "<li>Nuk keni orë në shitje.</li>";
+    return;
+}
 
     data.forEach(watch => {
       const li = document.createElement("li");

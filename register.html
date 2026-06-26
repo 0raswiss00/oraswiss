@@ -32,17 +32,20 @@
       <div class="auth-sep"></div>
 
       <h2>Login</h2>
-      <input id="loginEmail" type="email" placeholder="Email" autocomplete="email" autocapitalize="none" />
-      <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password" />
-      <button id="btnLogin" type="button" class="auth-btn">Login</button>
-      <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password" />
 
-      <p>
-          <a href="#" id="forgotPassword">Forgot Password?</a>
-      </p>
+<input id="loginEmail" type="email" placeholder="Email" autocomplete="email">
 
-      <button id="btnLogin" type="button" class="auth-btn">Login</button>
-    </div>
+<input id="loginPassword" type="password"
+       placeholder="Password"
+       autocomplete="current-password">
+
+<p>
+  <a href="#" id="forgotPassword">Forgot Password?</a>
+</p>
+
+<button id="btnLogin" type="button" class="auth-btn">
+  Login
+</button>
 
 <script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";

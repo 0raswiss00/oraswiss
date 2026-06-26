@@ -61,87 +61,85 @@
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-  const supabaseV1 = createClient(
-    'https://xyunmtvysqwonelecudf.supabase.co',
-    'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
-  );
-
-  const supabaseV2 = createClient(
+  const supabase = createClient(
     'https://gnwsrmelmeqduhhmfmoa.supabase.co',
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
 
-  const { data: { user } } = await supabaseV1.auth.getUser();
-  if (!user) {
-    alert("Duhet të jesh i loguar!");
-    window.location.href = 'login.html';
-  }
+  const form = document.getElementById('sellForm');
 
-  document.getElementById('sellForm').addEventListener('submit', async (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    const { data: { user } } = await supabaseV1.auth.getUser();
+    
+    // Kontrollo sesionin para se të fillosh
+    const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       alert("Duhet të jesh i loguar!");
       return;
     }
 
-    // FOTO - upload ne Supabase Storage
-    const files = document.getElementById('fileInput').files;
-    let imageUrls = [];
+    // Butoni Loading
+    const btn = form.querySelector('button');
+    btn.disabled = true;
+    btn.innerText = "Duke ngarkuar...";
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const fileName = Date.now() + '' + i + '' + file.name;
+    try {
+      // 1. NGARKIMI I FOTOVE
+      const files = document.getElementById('fileInput').files;
+      let imageUrls = [];
 
-      const { error: uploadError } = await supabaseV2
-        .storage
-        .from('or-images')
-        .upload(fileName, file);
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileName = ${user.id}/${Date.now()}_${i}_${file.name}; // Strukturë më e mirë në storage
 
-      if (uploadError) {
-        alert("Gabim foto: " + uploadError.message);
-        return;
+        const { error: uploadError } = await supabase.storage
+          .from('or-images')
+          .upload(fileName, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: urlData } = supabase.storage
+          .from('or-images')
+          .getPublicUrl(fileName);
+          
+        imageUrls.push(urlData.publicUrl);
       }
 
-      const { data: urlData } = supabaseV2
-        .storage
-        .from('or-images')
-        .getPublicUrl(fileName);
+      // 2. MARRJA E TË GJITHA OPSIONEVE DHE VLERAVE
+      const oraData = {
+        user_id: user.id,
+        category: document.getElementById('category').value,
+        brand: document.getElementById('brand').value.trim(),
+        model: document.getElementById('model').value.trim(),
+        price: parseFloat(document.getElementById('price').value) || 0,
+        reference: document.getElementById('reference').value.trim(),
+        material: document.getElementById('material').value.trim(),
+        case_size: document.getElementById('case_size').value.trim(),
+        year: parseInt(document.getElementById('year').value) || null,
+        movement: document.getElementById('movement').value, // Merr vlerën e zgjedhur nga select
+        function: document.getElementById('function').value, // Merr vlerën e zgjedhur nga select
+        service: document.getElementById('service').checked, // Kthen true ose false
+        box_papers: document.getElementById('box_papers').checked, // Kthen true ose false
+        description: document.getElementById('description').value.trim(),
+        image_url: imageUrls // Array me linkat e fotove
+      };
 
-      imageUrls.push(urlData.publicUrl);
+      // 3. DËRGIMI NË SUPABASE
+      const { error: dbError } = await supabase
+        .from('oras')
+        .insert([oraData]);
+
+      if (dbError) throw dbError;
+
+      alert("Ora u publikua me sukses!");
+      window.location.href = 'dashboard.html';
+
+    } catch (err) {
+      console.error(err);
+      alert("Gabim: " + err.message);
+      btn.disabled = false;
+      btn.innerText = "Shto orën";
     }
-
-    // DATA E ORES
-    const oraData = {
-      user_id: user.id,
-      category: document.getElementById('category').value,
-      brand: document.getElementById('brand').value,
-      model: document.getElementById('model').value,
-      price: parseInt(document.getElementById('price').value) || null,
-      reference: document.getElementById('reference').value,
-      material: document.getElementById('material').value,
-      case_size: document.getElementById('case_size').value,
-      year: parseInt(document.getElementById('year').value) || null,
-      movement: document.getElementById('movement').value,
-      function: document.getElementById('function').value,
-      service: document.getElementById('service').checked,
-      box_papers: document.getElementById('box_papers').checked,
-      description: document.getElementById('description').value,
-      image_url: imageUrls
-    };
-
-    const { error } = await supabaseV2
-      .from('oras')
-      .insert([oraData]);
-
-    if (error) {
-      alert("Gabim: " + error.message);
-      return;
-    }
-
-    alert("Ora u publikua me sukses!");
-    window.location.href = 'dashboard.html';
   });
 </script>
 </body>

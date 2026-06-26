@@ -90,13 +90,31 @@ document.getElementById('sellForm').addEventListener('submit', async (e) => {
   }
 
   // 📸 FOTO
-  const files = document.getElementById('fileInput').files;
+const files = document.getElementById('fileInput').files;
+let imageUrls = [];
 
-  let imageUrls = [];
+for (let i = 0; i < files.length; i++) {
+  const file = files[i];
+  const fileName = Date.now() + '' + i + '' + file.name;
 
-  for (let i = 0; i < files.length; i++) {
-    imageUrls.push(URL.createObjectURL(files[i])); 
+  const { data, error: uploadError } = await supabaseV2
+    .storage
+    .from('or-images')       // emri i bucket-it tuaj
+    .upload(fileName, file);
+
+  if (uploadError) {
+    alert("Gabim me foton: " + uploadError.message);
+    return;
   }
+
+  // Merr URL-në publike
+  const { data: urlData } = supabaseV2
+    .storage
+    .from('or-images')
+    .getPublicUrl(fileName);
+
+  imageUrls.push(urlData.publicUrl);
+}
 
   // 🧾 DATA E ORËS
   const oraData = {

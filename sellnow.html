@@ -61,113 +61,88 @@
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-  // V1 - per login/sesion
   const supabaseV1 = createClient(
     'https://xyunmtvysqwonelecudf.supabase.co',
     'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
   );
 
-  // V2 - tabela oras (publike)
   const supabaseV2 = createClient(
     'https://gnwsrmelmeqduhhmfmoa.supabase.co',
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
 
-  // Kontrollo login nga V1
   const { data: { user } } = await supabaseV1.auth.getUser();
   if (!user) {
     alert("Duhet të jesh i loguar!");
     window.location.href = 'login.html';
   }
 
-document.getElementById('sellForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
+  document.getElementById('sellForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-  const { data: { user } } = await supabaseV1.auth.getUser();
-  if (!user) {
-    alert("Duhet të jesh i loguar!");
-    return;
-  }
+    const { data: { user } } = await supabaseV1.auth.getUser();
+    if (!user) {
+      alert("Duhet të jesh i loguar!");
+      return;
+    }
 
-  // 📸 FOTO
-const files = document.getElementById('fileInput').files;
-let imageUrls = [];
+    // FOTO - upload ne Supabase Storage
+    const files = document.getElementById('fileInput').files;
+    let imageUrls = [];
 
-for (let i = 0; i < files.length; i++) {
-  const file = files[i];
-  const fileName = Date.now() + '' + i + '' + file.name;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const fileName = Date.now() + '' + i + '' + file.name;
 
-  const { error: uploadError } = await supabaseV2
-    .storage
-    .from('images')
-    .upload(fileName, file);
+      const { error: uploadError } = await supabaseV2
+        .storage
+        .from('or-images')
+        .upload(fileName, file);
 
-  if (uploadError) {
-    alert("Gabim foto: " + uploadError.message);
-    return;
-  }
+      if (uploadError) {
+        alert("Gabim foto: " + uploadError.message);
+        return;
+      }
 
-  const { data: urlData } = supabaseV2
-    .storage
-    .from('images')
-    .getPublicUrl(fileName);
+      const { data: urlData } = supabaseV2
+        .storage
+        .from('or-images')
+        .getPublicUrl(fileName);
 
-  imageUrls.push(urlData.publicUrl);
-}
+      imageUrls.push(urlData.publicUrl);
+    }
 
-  const { data, error: uploadError } = await supabaseV2
-    .storage
-    .from('or-images')       // emri i bucket-it tuaj
-    .upload(fileName, file);
+    // DATA E ORES
+    const oraData = {
+      user_id: user.id,
+      category: document.getElementById('category').value,
+      brand: document.getElementById('brand').value,
+      model: document.getElementById('model').value,
+      price: parseInt(document.getElementById('price').value) || null,
+      reference: document.getElementById('reference').value,
+      material: document.getElementById('material').value,
+      case_size: document.getElementById('case_size').value,
+      year: parseInt(document.getElementById('year').value) || null,
+      movement: document.getElementById('movement').value,
+      function: document.getElementById('function').value,
+      service: document.getElementById('service').checked,
+      box_papers: document.getElementById('box_papers').checked,
+      description: document.getElementById('description').value,
+      image_url: imageUrls
+    };
 
-  if (uploadError) {
-    alert("Gabim me foton: " + uploadError.message);
-    return;
-  }
+    const { error } = await supabaseV2
+      .from('oras')
+      .insert([oraData]);
 
-  // Merr URL-në publike
-  const { data: urlData } = supabaseV2
-    .storage
-    .from('or-images')
-    .getPublicUrl(fileName);
+    if (error) {
+      alert("Gabim: " + error.message);
+      return;
+    }
 
-  imageUrls.push(urlData.publicUrl);
-}
-
-  // 🧾 DATA E ORËS
-  const oraData = {
-    user_id: user.id,
-    category: document.getElementById('category').value,
-    brand: document.getElementById('brand').value,
-    model: document.getElementById('model').value,
-    price: parseInt(document.getElementById('price').value),
-    reference: document.getElementById('reference').value,
-    material: document.getElementById('material').value,
-    case_size: document.getElementById('case_size').value,
-    year: parseInt(document.getElementById('year').value),
-    movement: document.getElementById('movement').value,
-    function: document.getElementById('function').value,
-    service: document.getElementById('service').checked,
-    box_papers: document.getElementById('box_papers').checked,
-    description: document.getElementById('description').value,
-
-    // ⭐ KJO ËSHTË SHUMË E RËNDËSISHME
-    image_url: imageUrls
-  };
-
-  const { error } = await supabaseV2
-    .from('oras')
-    .insert([oraData]);
-
-  if (error) {
-    console.error(error);
-    alert("Gabim: " + error.message);
-    return;
-  }
-
-  alert("Ora u publikua me sukses!");
-  window.location.href = 'dashboard.html';
-});
+    alert("Ora u publikua me sukses!");
+    window.location.href = 'dashboard.html';
+  });
 </script>
 </body>
 </html>

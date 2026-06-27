@@ -349,37 +349,27 @@
 
         // LOAD PËRDORUESIT NGA DATABASE
 async function loadAllData() {
-    const usersContainer = document.getElementById("users-container");
-    
     try {
-        usersContainer.innerHTML = '<div class="loading"><div class="spinner"></div><p>Po ngarkohet...</p></div>';
+        // 1. Numëro përdoruesit (supozojmë tabela quhet 'profiles')
+        const { count: userCount, error: userError } = await supabase
+            .from('profiles') // ose emri i tabelës suaj të përdoruesve
+            .select('*', { count: 'exact', head: true });
 
-        // NGARKO WATCHES
-        const { data: watches, error: watchesError } = await supabase
+        // 2. Numëro orët (watches)
+        const { count: watchCount, error: watchError } = await supabase
             .from('watches')
-            .select('*')
-            .order('created_at', { ascending: false });
+            .select('*', { count: 'exact', head: true });
 
-        if (watchesError) throw watchesError;
+        if (userError || watchError) throw userError || watchError;
 
-        // NUMRO USERIT UNIK NGA WATCHES
-        const uniqueUsers = [...new Set(watches?.map(w => w.user_id))];
-        const userCount = uniqueUsers.length;
-        const watchCount = watches?.length || 0;
-
-        document.getElementById("count-users").textContent = userCount;
-        document.getElementById("count").textContent = userCount;
-        document.getElementById("count-products").textContent = watchCount;
-
-        // SHFAQ USERIT
-        displayUsers(watches);
+        // Përditëso HTML-në
+        document.getElementById("count-users").textContent = userCount || 0;
+        document.getElementById("count-products").textContent = watchCount || 0;
 
     } catch (error) {
-        console.error("❌ Gabim:", error);
-        usersContainer.innerHTML = `<div class="error"><strong>❌ Gabim:</strong><br>${error.message}</div>`;
+        console.error("Gabim:", error);
     }
 }
-
         // SHFAQ PËRDORUESIT
         function displayUsers(users) {
             const container = document.getElementById("users-container");

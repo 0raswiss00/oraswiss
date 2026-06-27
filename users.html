@@ -376,7 +376,8 @@ async function loadAllData() {
 
     } catch (error) {
         console.error("❌ Gabim:", error);
-        usersContainer.innerHTML = <div class="error"><strong>❌ Gabim:</strong><br>${error.message}</div>;
+        usersContainer.innerHTML = `<div class="error"><strong>❌ Gabim:</strong><br>${error.message}</div>`;
+
     }
 }
 

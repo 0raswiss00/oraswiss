@@ -411,36 +411,40 @@ async function loadAllData() {
         // PËRDITËSO ÇËDO 30 SEKONDA
         setInterval(loadAllData, 30000);
     </script>
-    </script>
-async function updateCounters() {
-    // 1. Numërimi i përdoruesve
-    // Sigurohu që tabela në Supabase quhet 'profiles'
-    const { count: users, error: err1 } = await supabase
-        .from('profiles') 
-        .select('*', { count: 'exact', head: true });
+<script>
+    // 1. Inicializimi i Supabase (ajo që kishe)
+    const supabase = window.supabase.createClient("URL", "KEY");
+
+    // 2. Funksioni për të mbushur numrat
+    async function loadAllData() {
+        try {
+            // Numërimi i përdoruesve (kontrollo emrin e tabelës)
+            const { count: userCount } = await supabase
+                .from('profiles')
+                .select('*', { count: 'exact', head: true });
+            
+            // Numërimi i produkteve
+            const { count: watchCount } = await supabase
+                .from('watches')
+                .select('*', { count: 'exact', head: true });
+
+            // Vendosja e vlerave në HTML
+            if (document.getElementById('count-users')) 
+                document.getElementById('count-users').textContent = userCount || 0;
+            
+            if (document.getElementById('count-products')) 
+                document.getElementById('count-products').textContent = watchCount || 0;
+
+        } catch (error) {
+            console.error("Gabim:", error);
+        }
+    }
+
+    // 3. Ekzekuto kur hapet faqja
+    window.addEventListener('load', loadAllData);
     
-    if (err1) {
-        console.error("Gabim te profilet:", err1);
-    } else if (users !== null) {
-        const el = document.getElementById('count-users');
-        if (el) el.textContent = users;
-    }
-
-    // 2. Numërimi i artikujve (watches)
-    const { count: watches, error: err2 } = await supabase
-        .from('watches')
-        .select('*', { count: 'exact', head: true });
-
-    if (err2) {
-        console.error("Gabim te watches:", err2);
-    } else if (watches !== null) {
-        const el = document.getElementById('count-products');
-        if (el) el.textContent = watches;
-    }
-}
-
-// Kjo e ekzekuton kur faqja ngarkohet
-window.onload = updateCounters;
-
+    // 4. Përditëso çdo 30 sekonda
+    setInterval(loadAllData, 30000);
+</script>
 </body>    
 </html>

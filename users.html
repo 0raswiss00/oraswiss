@@ -411,40 +411,6 @@ async function loadAllData() {
         // PËRDITËSO ÇËDO 30 SEKONDA
         setInterval(loadAllData, 30000);
     </script>
-<script>
-    // 1. Inicializimi i Supabase (ajo që kishe)
-    const supabase = window.supabase.createClient("URL", "KEY");
 
-    // 2. Funksioni për të mbushur numrat
-    async function loadAllData() {
-        try {
-            // Numërimi i përdoruesve (kontrollo emrin e tabelës)
-            const { count: userCount } = await supabase
-                .from('profiles')
-                .select('*', { count: 'exact', head: true });
-            
-            // Numërimi i produkteve
-            const { count: watchCount } = await supabase
-                .from('watches')
-                .select('*', { count: 'exact', head: true });
-
-            // Vendosja e vlerave në HTML
-            if (document.getElementById('count-users')) 
-                document.getElementById('count-users').textContent = userCount || 0;
-            
-            if (document.getElementById('count-products')) 
-                document.getElementById('count-products').textContent = watchCount || 0;
-
-        } catch (error) {
-            console.error("Gabim:", error);
-        }
-    }
-
-    // 3. Ekzekuto kur hapet faqja
-    window.addEventListener('load', loadAllData);
-    
-    // 4. Përditëso çdo 30 sekonda
-    setInterval(loadAllData, 30000);
-</script>
 </body>    
 </html>

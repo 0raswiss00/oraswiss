@@ -29,16 +29,17 @@
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
+  // Klienti i vetëm dhe korrekt
   const supabaseOras = createClient(
     'https://gnwsrmelmeqduhhmfmoa.supabase.co',
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
 
-async function ngarkoArtikujt() {
+  async function ngarkoArtikujt() {
     const lista = document.getElementById("myWatchesList");
     
     // Merr sesionin
-    const { data: { session } } = await supabaseAuth.auth.getSession();
+    const { data: { session } } = await supabaseOras.auth.getSession();
 
     if (!session) {
         lista.innerHTML = "<li>Duhet të jeni të loguar për të parë orët tuaja.</li>";
@@ -62,24 +63,25 @@ async function ngarkoArtikujt() {
 
         data.forEach(watch => {
             const li = document.createElement("li");
-            li.style.cursor = "pointer"; // Shto këtë për t'i treguar përdoruesit që është klikueshëm
-            li.onclick = () => window.location.href = `product.html?id=${watch.id}`;
+            li.style.cursor = "pointer";
+            li.onclick = () => window.location.href = product.html?id=${watch.id};
             
-            // Kontroll për imazhin në rast se array është bosh
             const imgUrl = (watch.image_url && watch.image_url.length > 0) ? watch.image_url[0] : 'placeholder.jpg';
             
             li.innerHTML = `
               <img src="${imgUrl}" style="width:80px; height:80px; object-fit:cover; border-radius:6px;" />
+              <div class="watch-name">${watch.brand} ${watch.model}</div>
               <div class="watch-price"><strong>${watch.price} €</strong></div>
             `;
             lista.appendChild(li);
         });
     } catch (err) {
-        console.error("Gabim gjatë marrjes së të dhënave:", err.message);
+        console.error("Gabim:", err.message);
         lista.innerHTML = "<li>Pati një gabim gjatë ngarkimit. Ju lutem provoni përsëri.</li>";
     }
-}
+  }
 
+  // Përdorim supabaseOras për gjithçka
   supabaseOras.auth.onAuthStateChange(() => {
     ngarkoArtikujt();
   });

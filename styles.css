@@ -2187,76 +2187,7 @@ body{background:#000!important;color:#E6E6E6!important}
   cursor:pointer;
 }
 
-/* ===== FINAL HERO (fix desktop + mobile) ===== */
-.hero{
-  min-height: 70vh;
-  display:flex;
-  align-items:center;
-  justify-content: space-between;   /* desktop */
-  gap: 24px;
-  padding: 60px 80px;
-  background:
-    linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)),
-    url("images/oraswiss-bg.jpg");
-  background-size: cover;
-  background-position: center;
-}
 
-.hero-left{ flex:1; color:#fff; }
-.hero-right{ flex:1; display:flex; justify-content:flex-end; }
-
-.hero-right img{
-  width: min(40vw, 360px);   /* nuk bëhet e hollë */
-  max-width: 360px;
-  height: auto;
-  display:block;
-}
-
-/* Desktop */
-@media (min-width: 1024px){
-  .hero{
-    min-height: 75vh;
-  }
-}      
-      
-/* Mobile */
-@media (max-width:768px){      
-  .hero{
-    flex-direction: column;
-    justify-content:center;
-    padding: 20px 16px;
-    min-height: 60vh;
-    text-align:center;
-  }
-  .hero-right{ justify-content:center; }
-  .hero-right img{
-    width: min(90vw, 420px);  /* logo e madhe në telefon */
-    max-width: 420px;
-  }
-
-  }    
-  .logo-center img{
-    width: min(90vw, 520px);
-    height: auto;
-  }
-      
-#msg{
-  position: fixed;
-  bottom: 12px;
-  left: 12px;
-  right: 12px;
-  background: #0b0b0b;
-  color: #fff;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #222;
-  z-index: 9999;
-}
-
-.hero {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-}
     
 /* ===== WATCH .HTML ===== */
 .specs {
@@ -2793,3 +2724,19 @@ img {
 .prev { left: 5px; }
 .next { right: 5px; }
     
+
+#myWatchesList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    list-style: none;
+    padding: 0;
+}
+#myWatchesList li {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    width: 120px;
+    text-align: center;
+}
+      

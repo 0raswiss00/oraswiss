@@ -43,28 +43,62 @@
             document.getElementById('brand').value = data.brand;
             document.getElementById('model').value = data.model;
             document.getElementById('price').value = data.price;
-            document.getElementById('description').value = data.description;
+            document.getElementById('description').value =         // ... previous lines 43-45
+        document.getElementById('description').value = data.description;
+
+        // 1. Store data globally to access it during save
+        window.produktData = data;
+
+        // 2. Display existing images
+        const gallery = document.getElementById('gallery-container');
+        gallery.innerHTML = ''; 
+        if (data.image_url && Array.isArray(data.image_url)) {
+            data.image_url.forEach(url => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.style.width = '100px';
+                img.style.marginRight = '10px';
+                gallery.appendChild(img);
+            });
+        }
+    }
+}
+
+// 2. Ruaj ndryshimet
+document.getElementById('editForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Start with existing images
+    let imageUrls = window.produktData?.image_url || [];
+    const fileInput = document.getElementById('image_input');
+
+    // If new files are selected, upload them
+    if (fileInput.files.length > 0) {
+        for (let i = 0; i < fileInput.files.length; i++) {
+            const file = fileInput.files[i];
+            const fileName = `${Date.now()}_${file.name}`;
+            await supabase.storage.from('or-images').upload(fileName, file);
+            const { data } = supabase.storage.from('or-images').getPublicUrl(fileName);
+            imageUrls.push(data.publicUrl);
         }
     }
 
-    // 2. Ruaj ndryshimet
-    document.getElementById('editForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const { error } = await supabase.from('oras').update({
-            brand: document.getElementById('brand').value,
-            model: document.getElementById('model').value,
-            price: parseInt(document.getElementById('price').value),
-            description: document.getElementById('description').value
-        }).eq('id', id);
+    const { error } = await supabase.from('oras').update({
+        brand: document.getElementById('brand').value,
+        model: document.getElementById('model').value,
+        price: parseInt(document.getElementById('price').value),
+        description: document.getElementById('description').value,
+        image_url: imageUrls // Update the column with the combined list
+    }).eq('id', id);
 
-        if (error) alert("Gabim: " + error.message);
-        else {
-            alert("Ora u modifikua me sukses!");
-            window.location.href = 'dashboard.html';
-        }
-    });
+    if (error) alert("Gabim: " + error.message);
+    else {
+        alert("Ora u modifikua me sukses!");
+        window.location.href = 'dashboard.html';
+    }
+});
 
-    fetchWatch();
+fetchWatch();
 </script>
 </body>
 </html>

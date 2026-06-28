@@ -50,16 +50,21 @@
         window.currentImgIndex = 0;
 
         window.changeImage = function(step) {
+            // KONTROLLI I SIGURISË: Nëse nuk ka foto, mos bëj asgjë
+            if (!window.currentImages || window.currentImages.length === 0) return;
+
             const baseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/";
             window.currentImgIndex += step;
-            
+
+            // Logjika për ta kthyer indeksin në 0 ose në fund të listës
             if (window.currentImgIndex >= window.currentImages.length) window.currentImgIndex = 0;
             if (window.currentImgIndex < 0) window.currentImgIndex = window.currentImages.length - 1;
-            
+
             const imgElement = document.getElementById("main-product-img");
             const path = window.currentImages[window.currentImgIndex];
             imgElement.src = path.startsWith('http') ? path : baseUrl + path;
         };
+
 // Këtë e thërrisni brenda funksionit loadProduct pasi të merrni të dhënat
 function initGallery(imgArray) {
     images = imgArray || [];

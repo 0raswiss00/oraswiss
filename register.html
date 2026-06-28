@@ -95,7 +95,6 @@
             email: email,
             password: password,
           });
-
           if (error) throw error;
           window.location.href = "dashboard.html";
         } catch (e) {
@@ -103,33 +102,32 @@
         }
       });
     }
-  }); // Kjo mbyllje ishte ajo që mungonte!
-// FORGOT PASSWORD
-const forgotPasswordLink = document.getElementById("forgotPassword");
-if (forgotPasswordLink) {
-    forgotPasswordLink.addEventListener("click", async (e) => {
-        e.preventDefault(); // Parandalon që faqja të rifreskohet ose të shkojë te #
-        
-        // Këtu mund të merrni email-in nga input-i për ta përdorur në Supabase
+
+    // FORGOT PASSWORD ← tani është BRENDA DOMContentLoaded ✅
+    const forgotPasswordLink = document.getElementById("forgotPassword");
+    if (forgotPasswordLink) {
+      forgotPasswordLink.addEventListener("click", async (e) => {
+        e.preventDefault();
         const email = document.getElementById("loginEmail").value.trim();
         
         if (!email) {
-            alert("Ju lutem shkruani email-in tuaj në fushën e login-it.");
-            return;
+          alert("Ju lutem shkruani email-in tuaj në fushën e login-it.");
+          return;
         }
 
-        // Funksioni i Supabase për reset password
         const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: 'https://oraswiss.com/update-password.html', // Ndryshoni me URL-në tuaj
+          redirectTo: 'https://oraswiss.com/update-password.html',
         });
 
         if (error) {
-            alert(error.message);
+          alert(error.message);
         } else {
-            alert("Një email për rivendosjen e fjalëkalimit është dërguar.");
+          alert("Një email për rivendosjen e fjalëkalimit është dërguar.");
         }
-    });
-}
+      });
+    }
+
+  }); // ← mbyllja e DOMContentLoaded
 </script>
 </body>  
 </html>

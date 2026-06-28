@@ -271,145 +271,74 @@
         </div>
     </div>
 
-    <script>
-        // INICIALIZIMI I SUPABASE
-        const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-        const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+<script>
+    const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // LISTA E VIZITORËVE
-        let visitorsList = [];
+    let visitorsList = [];
 
-        // TRACK EVENTS
-        function trackEvent(eventName, eventData = {}) {
-            if (typeof gtag !== 'undefined') {
-                gtag('event', eventName, eventData);
-                console.log('📊 Event:', eventName);
-            }
+    function trackEvent(eventName, eventData = {}) {
+        if (typeof gtag !== 'undefined') {
+            gtag('event', eventName, eventData);
+        }
+    }
+
+    window.addEventListener('load', function() {
+        let visitorId = localStorage.getItem('visitorId');
+        if (!visitorId) {
+            visitorId = 'V' + Date.now();
+            localStorage.setItem('visitorId', visitorId);
         }
 
-        // KUR HAPET FAQJA
-        window.addEventListener('load', function() {
-            // Krijo visitor ID
-            let visitorId = localStorage.getItem('visitorId');
-            if (!visitorId) {
-                visitorId = 'V' + Date.now();
-                localStorage.setItem('visitorId', visitorId);
-            }
-
-            // Ruaj vizitorin
-            let visitor = {
-                id: visitorId,
-                time: new Date().toLocaleTimeString('sq-AL'),
-                date: new Date().toLocaleDateString('sq-AL'),
-                browser: navigator.userAgent.split('/')[navigator.userAgent.split('/').length - 1].substring(0, 20)
-            };
-
-            visitorsList.push(visitor);
-            document.getElementById('count-visitors').textContent = visitorsList.length;
-
-            // Track event
-            trackEvent('visitor_joined', {
-                visitor_id: visitorId,
-                total_visitors: visitorsList.length
-            });
-
-            // Shfaq vizitorët
-            updateVisitorsDisplay();
-
-            // Shfaq numrin e vizitoreve
-            document.getElementById('count').textContent = visitorsList.length;
-         
-            // Ngarkoni të dhënat
-            loadAllData();
+        visitorsList.push({
+            id: visitorId,
+            time: new Date().toLocaleTimeString('sq-AL'),
+            date: new Date().toLocaleDateString('sq-AL'),
+            browser: navigator.userAgent.split('/').pop().substring(0, 20)
         });
 
-        // SHFAQ VIZITORËT
-        function updateVisitorsDisplay() {
-            let html = '';
-            visitorsList.slice().reverse().forEach((visitor, index) => {
-                html += `
-                    <div class="visitor-item">
-                        <div>
-                            <strong>👤 ${visitor.id}</strong>
-                            <div class="visitor-time">
-                                🕐 ${visitor.time} | 📅 ${visitor.date}
-                            </div>
-                            <div class="visitor-time" style="font-size: 0.8em; margin-top: 5px;">
-                                🌐 ${visitor.browser}
-                            </div>
-                        </div>
-                        <div class="visitor-badge">#${visitorsList.length - index}</div>
+        document.getElementById('count-visitors').textContent = visitorsList.length;
+        updateVisitorsDisplay();
+        loadAllData();
+    });
+
+    function updateVisitorsDisplay() {
+        let html = '';
+        visitorsList.slice().reverse().forEach((visitor, index) => {
+            html += `
+                <div class="visitor-item">
+                    <div>
+                        <strong>👤 ${visitor.id}</strong>
+                        <div class="visitor-time">🕐 ${visitor.time} | 📅 ${visitor.date}</div>
+                        <div class="visitor-time" style="font-size:0.8em">🌐 ${visitor.browser}</div>
                     </div>
-                `;
-            });
-            document.getElementById('visitors-content').innerHTML = html || '<p style="color: #aaa;">Nuk ka vizitorë</p>';
-        }
-
-        // LOAD PËRDORUESIT NGA DATABASE
-async function loadAllData() {
-    try {
-        // 1. Numëro përdoruesit (supozojmë tabela quhet 'profiles')
-        const { count: userCount, error: userError } = await supabase
-            .from('profiles') // ose emri i tabelës suaj të përdoruesve
-            .select('*', { count: 'exact', head: true });
-
-        // 2. Numëro orët (watches)
-        const { count: watchCount, error: watchError } = await supabase
-            .from('watches')
-            .select('*', { count: 'exact', head: true });
-
-        if (userError || watchError) throw userError || watchError;
-
-        // Përditëso HTML-në
-        document.getElementById("count-users").textContent = userCount || 0;
-        document.getElementById("count-products").textContent = watchCount || 0;
-
-    } catch (error) {
-        console.error("Gabim:", error);
+                    <div class="visitor-badge">#${visitorsList.length - index}</div>
+                </div>
+            `;
+        });
+        document.getElementById('visitors-content').innerHTML = html || '<p style="color:#aaa;">Nuk ka vizitorë</p>';
     }
-}
-        // SHFAQ PËRDORUESIT
-        function displayUsers(users) {
-            const container = document.getElementById("users-container");
 
-            if (!users || users.length === 0) {
-                container.innerHTML = '<div class="empty">📭 Ende nuk ka përdorues</div>';
-                return;
-            }
+    async function loadAllData() {
+        try {
+            const { count: userCount, error: userError } = await supabase
+                .from('profiles')
+                .select('*', { count: 'exact', head: true });
 
-            let html = '';
-            users.forEach((user) => {
-                const avatar = user.full_name 
-                    ? user.full_name.charAt(0).toUpperCase() 
-                    : '👤';
+            const { count: watchCount, error: watchError } = await supabase
+                .from('watches')
+                .select('*', { count: 'exact', head: true });
 
-                const createdDate = new Date(user.created_at).toLocaleDateString('sq-AL', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
+            document.getElementById("count-users").textContent = userCount || 0;
+            document.getElementById("count-products").textContent = watchCount || 0;
 
-                html += `
-                    <div class="user-card">
-                        <div class="user-avatar">${avatar}</div>
-                        <div class="user-info">
-                            <h3>${user.full_name || 'Nuk ka emër'}</h3>
-                            <p>📧 ${user.email}</p>
-                            <p>📱 ${user.phone || '-'}</p>
-                            <p>📅 ${createdDate}</p>
-                            <p>🆔 ${user.id.substring(0, 8)}...</p>
-                        </div>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
+        } catch (error) {
+            console.error("Gabim:", error);
         }
+    }
 
-        // PËRDITËSO ÇËDO 30 SEKONDA
-        setInterval(loadAllData, 30000);
-    </script>
-
+    setInterval(loadAllData, 30000);
+</script>
 </body>    
 </html>

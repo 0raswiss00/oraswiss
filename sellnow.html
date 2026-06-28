@@ -61,32 +61,26 @@
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-  const supabaseV1 = createClient(
-    'https://xyunmtvysqwonelecudf.supabase.co',
-    'sb_publishable_tk6dO6UWVlRrVWOfrX4m_w_ZAoduHhx'
-  );
-
-  const supabaseV2 = createClient(
+  const supabase = createClient(
     'https://gnwsrmelmeqduhhmfmoa.supabase.co',
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
 
-  const { data: { user } } = await supabaseV1.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     alert("Duhet të jesh i loguar!");
-    window.location.href = 'login.html';
+    window.location.href = 'register.html';
   }
 
   document.getElementById('sellForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const { data: { user } } = await supabaseV1.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       alert("Duhet të jesh i loguar!");
       return;
     }
 
-    // FOTO - upload ne Supabase Storage
     const files = document.getElementById('fileInput').files;
     let imageUrls = [];
 
@@ -94,25 +88,20 @@
       const file = files[i];
       const fileName = Date.now() + '' + i + '' + file.name;
 
-      const { error: uploadError } = await supabaseV2
-        .storage
-        .from('or-images')
-        .upload(fileName, file);
+      const { error: uploadError } = await supabase
+        .storage.from('or-images').upload(fileName, file);
 
       if (uploadError) {
         alert("Gabim foto: " + uploadError.message);
         return;
       }
 
-      const { data: urlData } = supabaseV2
-        .storage
-        .from('or-images')
-        .getPublicUrl(fileName);
+      const { data: urlData } = supabase
+        .storage.from('or-images').getPublicUrl(fileName);
 
       imageUrls.push(urlData.publicUrl);
     }
 
-    // DATA E ORES
     const oraData = {
       user_id: user.id,
       category: document.getElementById('category').value,
@@ -131,9 +120,7 @@
       image_url: imageUrls
     };
 
-    const { error } = await supabaseV2
-      .from('oras')
-      .insert([oraData]);
+    const { error } = await supabase.from('oras').insert([oraData]);
 
     if (error) {
       alert("Gabim: " + error.message);

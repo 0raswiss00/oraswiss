@@ -54,27 +54,26 @@
         gallery.innerHTML = ''; 
         if (data.image_url && Array.isArray(data.image_url)) {
            data.image_url.forEach((url, index) => {
-    const wrapper = document.createElement('div');
-    wrapper.style.display = 'inline-block';
-    wrapper.style.marginRight = '10px';
-    wrapper.style.cursor = 'pointer'; // Për t'i treguar përdoruesit që është e klikueshme
+               const wrapper = document.createElement('div');
+               wrapper.style.display = 'inline-block';
+               wrapper.style.marginRight = '10px';
+               wrapper.style.cursor = 'pointer'; // Për t'i treguar përdoruesit që është e klikueshme
 
-    const img = document.createElement('img');
-    img.src = url;
-    img.style.width = '100px';
-    img.style.display = 'block';
+               const img = document.createElement('img');
+               img.src = url;
+               img.style.width = '100px';
+               img.style.display = 'block';
 
-    // Këtu shtojmë funksionin kur klikohet fotoja
-    img.onclick = () => {
-        // Logjika për të ndryshuar renditjen
-        // 1. Heqim URL-në nga pozicioni aktual
-        // 2. E vendosim atë në pozicionin 0 (të parën)
-    };
+               // Këtu shtojmë funksionin kur klikohet fotoja
+               img.onclick = () => {
+                   // Logjika për të ndryshuar renditjen
+                   // 1. Heqim URL-në nga pozicioni aktual
+                   // 2. E vendosim atë në pozicionin 0 (të parën)
+               };
 
-    wrapper.appendChild(img);
-    gallery.appendChild(wrapper);
-});
-
+               wrapper.appendChild(img);
+               gallery.appendChild(wrapper);
+           });
         }
     }
 }

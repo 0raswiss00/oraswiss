@@ -12,16 +12,25 @@
 </head>
 <body>
 
-<form id="editForm">
-    <h2>Modifiko Orën</h2>
-    <input type="text" id="brand" placeholder="Brand" required>
-    <input type="text" id="model" placeholder="Model" required>
+<div class="container">
+    <h2>Modifiko Produktin</h2>
+    <input type="text" id="brand" placeholder="Brand">
+    <input type="text" id="model" placeholder="Model">
     <input type="number" id="price" placeholder="Price">
     <textarea id="description" placeholder="Description"></textarea>
-    <label for="image_input">Shto ose ndrysho fotot:</label>
     <input type="file" id="image_input" multiple accept="image/*">
-    <button type="submit">Ruaj Ndryshimet</button>
-</form>
+    
+    <div id="gallery-preview" style="margin: 20px 0;">
+        <img id="product-image" src="" style="width: 200px; border: 1px solid #444; display: block;">
+        <div style="margin-top: 10px;">
+            <button type="button" onclick="ndryshoFoto(-1)">Prev</button>
+            <button type="button" onclick="ndryshoFoto(1)">Next</button>
+        </div>
+    </div>
+    
+    <button class="btn-save" onclick="saveProduct()">Ruaj Ndryshimet</button>
+    <button class="btn-delete" onclick="deleteProduct()">Fshi Produktin</button>
+</div
 
 <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
@@ -65,3 +74,5 @@
 </script>
 </body>
 </html>
+
+

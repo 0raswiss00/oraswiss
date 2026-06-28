@@ -2749,3 +2749,23 @@ img {
     display: block;
 }
 
+
+/* Zmadhimi i butonave të karuselit/fotos */
+.carousel-btn, .prev, .next {
+    font-size: 30px !important; /* Zmadhon ikonën/shigjetën */
+    padding: 20px !important;    /* Shton zonën e prekjes (touch target) */
+    background: rgba(0, 0, 0, 0.5); /* Shton pak sfond për dukshmëri */
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+/* Sigurohuni që butonat të mos jenë shumë afër njëri-tjetrit */
+.carousel-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+

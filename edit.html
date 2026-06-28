@@ -2,115 +2,64 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <title>Edit - Ora Swiss</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>Modifiko Orën</title>
     <style>
-        body { background: #121212; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; padding: 20px; }
-        .container { max-width: 500px; margin: auto; background: #1e1e1e; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        h2 { color: #f39c12; }
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; background: #2d2d2d; border: 1px solid #444; color: white; border-radius: 6px; box-sizing: border-box; }
-        button { padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-right: 10px; }
-        .btn-save { background: #f39c12; color: #121212; }
-        .btn-delete { background: #e74c3c; color: white; }
+        body { font-family: Arial; background: #000; color: #fff; padding: 20px; }
+        form { max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border-radius: 10px; }
+        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px; }
+        button { width: 100%; padding: 15px; background: gold; border: none; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Modifiko Produktin</h2>
-    <input type="text" id="brand" placeholder="Brand">
-    <input type="text" id="model" placeholder="Model">
+<form id="editForm">
+    <h2>Modifiko Orën</h2>
+    <input type="text" id="brand" placeholder="Brand" required>
+    <input type="text" id="model" placeholder="Model" required>
     <input type="number" id="price" placeholder="Price">
     <textarea id="description" placeholder="Description"></textarea>
-    <input type="file" id="image_input" multiple accept="image/*">
-    
-    <div id="gallery-preview" style="margin: 20px 0;">
-        <img id="product-image" src="" style="width: 200px; border: 1px solid #444; display: block;">
-        <div style="margin-top: 10px;">
-            <button type="button" onclick="ndryshoFoto(-1)">Prev</button>
-            <button type="button" onclick="ndryshoFoto(1)">Next</button>
-        </div>
-    </div>
-    
-    <button class="btn-save" onclick="saveProduct()">Ruaj Ndryshimet</button>
-    <button class="btn-delete" onclick="deleteProduct()">Fshi Produktin</button>
-</div>
+    <button type="submit">Ruaj Ndryshimet</button>
+</form>
 
-<script>
-    const supabaseClient = supabase.createClient(
+<script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    const supabase = createClient(
         "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
         "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
     );
 
-    const productId = new URLSearchParams(window.location.search).get('id');
-    let currentIndex = 0;
-    window.produktData = null;
+    const id = new URLSearchParams(window.location.search).get('id');
 
-    async function loadData() {
-        if (!productId) return;
-        const { data, error } = await supabaseClient.from('oras').select('*').eq('id', productId).single();
-        if (error) { console.error("Gabim loadData:", error); return; }
-
+    // 1. Ngarko të dhënat kur faqja hapet
+    async function fetchWatch() {
+        const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
         if (data) {
-            window.produktData = data;
-            document.getElementById("brand").value = data.brand || '';
-            document.getElementById("model").value = data.model || '';
-            document.getElementById("price").value = data.price || '';
-            document.getElementById("description").value = data.description || '';
-            
-            if (data.image_url && data.image_url.length > 0) {
-                document.getElementById("product-image").src = data.image_url[0];
-            }
+            document.getElementById('brand').value = data.brand;
+            document.getElementById('model').value = data.model;
+            document.getElementById('price').value = data.price;
+            document.getElementById('description').value = data.description;
         }
     }
 
-    async function saveProduct() {
-        const fileInput = document.getElementById('image_input');
-        let imageUrls = window.produktData?.image_url || [];
+    // 2. Ruaj ndryshimet
+    document.getElementById('editForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const { error } = await supabase.from('oras').update({
+            brand: document.getElementById('brand').value,
+            model: document.getElementById('model').value,
+            price: parseInt(document.getElementById('price').value),
+            description: document.getElementById('description').value
+        }).eq('id', id);
 
-        if (fileInput.files.length > 0) {
-            imageUrls = [];
-            for (let i = 0; i < fileInput.files.length; i++) {
-                const file = fileInput.files[i];
-                const fileName = `${Date.now()}_${file.name}`;
-                await supabaseClient.storage.from('or-images').upload(fileName, file);
-                const { data } = supabaseClient.storage.from('or-images').getPublicUrl(fileName);
-                imageUrls.push(data.publicUrl);
-            }
+        if (error) alert("Gabim: " + error.message);
+        else {
+            alert("Ora u modifikua me sukses!");
+            window.location.href = 'dashboard.html';
         }
+    });
 
-        const { error } = await supabaseClient
-            .from('oras')
-            .update({
-                brand: document.getElementById("brand").value,
-                model: document.getElementById("model").value,
-                price: parseFloat(document.getElementById("price").value),
-                description: document.getElementById("description").value,
-                image_url: imageUrls
-            })
-            .eq('id', productId);
-        
-        if (error) alert("Gabim ruajtje: " + error.message);
-        else { alert("U ruajt me sukses!"); window.location.href = 'index.html'; }
-    }
-
-    async function deleteProduct() {
-        if (!confirm("Je i sigurt?")) return;
-        const { error } = await supabaseClient.from('oras').delete().eq('id', productId);
-        if (error) alert("Gabim fshirje: " + error.message);
-        else { alert("U fshi!"); window.location.href = 'index.html'; }
-    }
-
-    function ndryshoFoto(direction) {
-        if (window.produktData?.image_url?.length > 0) {
-            const images = window.produktData.image_url;
-            currentIndex = (currentIndex + direction + images.length) % images.length;
-            document.getElementById("product-image").src = images[currentIndex];
-        }
-    }
-
-    loadData();
+    fetchWatch();
 </script>
-
 </body>
 </html>

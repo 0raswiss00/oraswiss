@@ -29,38 +29,25 @@
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-  // Klienti i vetëm dhe korrekt
-  const supabaseOras = createClient(
+  // Ky është i vetmi klient - Asnjë emër tjetër nuk lejohet më
+  const supabase = createClient(
     'https://gnwsrmelmeqduhhmfmoa.supabase.co',
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
 
   async function ngarkoArtikujt() {
     const lista = document.getElementById("myWatchesList");
-    
-    // Merr sesionin
-    const { data: { session } } = await supabaseOras.auth.getSession();
+    lista.innerHTML = "Duke ngarkuar...";
+
+    const { data: { session } } = await supabase.auth.getSession();
 
     if (!session) {
-        lista.innerHTML = "<li>Duhet të jeni të loguar për të parë orët tuaja.</li>";
+        lista.innerHTML = "<li>Duhet të jeni të loguar.</li>";
         return;
     }
 
     try {
-        // Ndrysho rreshtin 42 (getSession) me këtë version debug
-        const { data: { session } } = await supabaseOras.auth.getSession();
-        console.log("Sesioni aktiv:", session); // Shtuar për debug
-
-        if (session) {
-            console.log("Po kërkoj orë për ID:", session.user.id);
-            const { data, error } = await supabaseOras
-                .from('oras')
-                .select('*'); // Hiqe përkohësisht .eq('user_id', ...) për të parë nëse shfaqen gjithë orët
-    
-            console.log("Të gjitha orët në tabelë:", data);
-        }
- 
-        const { data, error } = await supabaseOras
+        const { data, error } = await supabase
             .from('oras')
             .select('*')
             .eq('user_id', session.user.id);
@@ -70,35 +57,31 @@
         lista.innerHTML = "";
 
         if (!data || data.length === 0) {
-            lista.innerHTML = "<li>Nuk keni asnjë orë të shtuar për shitje.</li>";
+            lista.innerHTML = "<li>Nuk keni asnjë orë të shtuar.</li>";
             return;
         }
 
         data.forEach(watch => {
             const li = document.createElement("li");
             li.style.cursor = "pointer";
-            li.onclick = () => window.location.href = `product.html?id=${watch.id}`;
-            
+            li.onclick = () => window.location.href = product.html?id=${watch.id};
             const imgUrl = (watch.image_url && watch.image_url.length > 0) ? watch.image_url[0] : 'placeholder.jpg';
-            
-            li.innerHTML = `
-              <img src="${imgUrl}" style="width:80px; height:80px; object-fit:cover; border-radius:6px;" />
-              <div class="watch-name">${watch.brand} ${watch.model}</div>
-              <div class="watch-price"><strong>${watch.price} €</strong></div>
-            `;
+            li.innerHTML = `<img src="${imgUrl}" style="width:80px;height:80px;object-fit:cover;border-radius:6px;"/> 
+                           <div>${watch.brand} ${watch.model} - ${watch.price} €</div>`;
             lista.appendChild(li);
         });
     } catch (err) {
-        console.error("Gabim:", err.message);
-        lista.innerHTML = "<li>Pati një gabim gjatë ngarkimit. Ju lutem provoni përsëri.</li>";
+        lista.innerHTML = "<li>Gabim gjatë ngarkimit.</li>";
+        console.error(err);
     }
   }
 
-  // Përdorim supabaseOras për gjithçka
-  supabaseOras.auth.onAuthStateChange(() => {
+  // Kjo thirret sa herë ndryshon statusi i logimit
+  supabase.auth.onAuthStateChange(() => {
     ngarkoArtikujt();
   });
 
+  // Thirrja e parë
   ngarkoArtikujt();
 </script>
 </body>

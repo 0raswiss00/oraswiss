@@ -53,13 +53,29 @@
         const gallery = document.getElementById('gallery-container');
         gallery.innerHTML = ''; 
         if (data.image_url && Array.isArray(data.image_url)) {
-            data.image_url.forEach(url => {
-                const img = document.createElement('img');
-                img.src = url;
-                img.style.width = '100px';
-                img.style.marginRight = '10px';
-                gallery.appendChild(img);
-            });
+            data.image_url.forEach((url, index) => {
+    // 1. Krijojmë një div mbështjellës për çdo foto
+    const wrapper = document.createElement('div');
+    wrapper.style.display = 'inline-block';
+    wrapper.style.marginRight = '10px';
+
+    const img = document.createElement('img');
+    img.src = url;
+    img.style.width = '100px';
+    img.style.display = 'block';
+
+    // 2. Krijojmë butonin për të ndryshuar renditjen
+    const btn = document.createElement('button');
+    btn.textContent = 'Bëje kryesore';
+    btn.onclick = () => {
+        // Logjika për të vendosur këtë foto si të parën
+    };
+
+    wrapper.appendChild(img);
+    wrapper.appendChild(btn);
+    gallery.appendChild(wrapper);
+});
+
         }
     }
 }

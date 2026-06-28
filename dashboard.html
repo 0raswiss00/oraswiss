@@ -47,6 +47,19 @@
     }
 
     try {
+        // Ndrysho rreshtin 42 (getSession) me këtë version debug
+        const { data: { session } } = await supabaseOras.auth.getSession();
+        console.log("Sesioni aktiv:", session); // Shtuar për debug
+
+        if (session) {
+            console.log("Po kërkoj orë për ID:", session.user.id);
+            const { data, error } = await supabaseOras
+                .from('oras')
+                .select('*'); // Hiqe përkohësisht .eq('user_id', ...) për të parë nëse shfaqen gjithë orët
+    
+            console.log("Të gjitha orët në tabelë:", data);
+        }
+ 
         const { data, error } = await supabaseOras
             .from('oras')
             .select('*')

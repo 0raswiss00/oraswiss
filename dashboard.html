@@ -80,7 +80,7 @@ async function ngarkoArtikujt() {
     }
 }
 
-  supabaseAuth.auth.onAuthStateChange(() => {
+  supabaseOras.auth.onAuthStateChange(() => {
     ngarkoArtikujt();
   });
 

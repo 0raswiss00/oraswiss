@@ -2739,4 +2739,21 @@ img {
     width: 120px;
     text-align: center;
 }
-      
+
+
+/* Për ta bërë foton të zërë sa më shumë hapësirë në ekran */
+.product-image-container {
+    width: 100%;
+    max-width: 800px; /* Mund ta ndryshosh sipas dëshirës */
+    margin: 0 auto;
+    display: block;
+}
+
+.product-image-container img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+}
+

@@ -163,7 +163,34 @@ async function checkOwnership(watchOwnerId) {
         if (deleteBtn) deleteBtn.style.display = "none";
     }
 }
+async function loadProduct() {
+    const id = new URLSearchParams(window.location.search).get('id');
+    const container = document.getElementById("container");
 
+    try {
+        // 1. Shkarko produktin
+        const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+        if (error) throw error;
+
+        // 2. Merr përdoruesin e loguar (KËTU E VENDOS)
+        const { data: { user } } = await supabase.auth.getUser();
+
+        // 3. Ndërto HTML-në
+        container.innerHTML = `
+            <div class="product-card">
+                <h1>${data.brand} - ${data.model}</h1>
+                <p>Description: ${data.description}</p>
+                <div id="admin-controls"></div> 
+            </div>
+        `;
+
+        // 4. Tani thirr funksionin për të treguar/fshehur butonat
+        await checkOwnership(data.user_id);
+
+    } catch (err) {
+        container.innerHTML = "Gabim: " + err.message;
+    }
+}
         
 </script>        
 </body>

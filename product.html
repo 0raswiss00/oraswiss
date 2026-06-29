@@ -150,25 +150,40 @@ function editProduct(id) {
     window.location.href = 'edit.html?id=' + id;
 }
 
-async function checkOwnership(watchOwnerId) {
-    // ... brenda try/catch tek loadProduct, pas const { data, error } ...
+async function loadProduct() {
+    const id = new URLSearchParams(window.location.search).get('id');
+    const container = document.getElementById("container");
 
-    // 1. Merr përdoruesin aktual
-    const { data: { user } } = await supabase.auth.getUser();
+    try {
+        const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+        if (error) throw error;
 
-    // 2. Kontrollo nëse përdoruesi është i loguar dhe nëse është pronari i produktit
-    const isOwner = user && data.user_id === user.id;
+        // 1. Merr përdoruesin e loguar
+        const { data: { user } } = await supabase.auth.getUser();
 
-    // 3. Shfaq butonat vetëm nëse është pronari
-    const adminControls = isOwner ? `
+        // 2. Kontrollo pronësinë
+        const isOwner = user && data.user_id === user.id;
+
+        // 3. Përgatit butonat vetëm nëse është pronari
+        const adminControls = isOwner ? `
             <div class="admin-actions" style="margin-top: 20px; padding: 15px; border: 1px solid #444; border-radius: 8px;">
-            <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
-            <button onclick="editProduct(${data.id})">Modifiko</button>
-            <button onclick="deleteProduct(${data.id})">Fshi Produktin</button>
-        </div>` : '';
+                <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
+                <button onclick="editProduct(${data.id})">Modifiko</button>
+                <button onclick="deleteProduct(${data.id})">Fshi Produktin</button>
+            </div>` : '';
 
-     // Shto ${adminControls} në template-in e container.innerHTML
-        
+        // 4. Shfaq gjithçka në ekran
+        container.innerHTML = `
+            <div class="product-card">
+                <h1>${data.brand} - ${data.model}</h1>
+                <p>Description: ${data.description}</p>
+                ${adminControls} 
+            </div>
+        `;
+    } catch (err) {
+        container.innerHTML = "Gabim: " + err.message;
+    }
+}
 </script>        
 </body>
 </html>

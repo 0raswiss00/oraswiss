@@ -145,24 +145,6 @@ async function deleteProduct(id) {
     }
 }
 // Shto këtë funksion për modifikimin
-function editProduct(id) {
-    console.log("Duke shkuar te faqja e modifikimit për ID-në:", id);
-    window.location.href = 'edit.html?id=' + id;
-}
-
-async function checkOwnership(watchOwnerId) {
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    // Gjej butonat (sigurohu që kanë këto ID në HTML)
-    const editBtn = document.getElementById("edit-btn");
-    const deleteBtn = document.getElementById("delete-btn");
-
-    // Nëse përdoruesi nuk është loguar ose nuk është pronari, fshi butonat
-    if (!user || user.id !== watchOwnerId) {
-        if (editBtn) editBtn.style.display = "none";
-        if (deleteBtn) deleteBtn.style.display = "none";
-    }
-}
 async function loadProduct() {
     const id = new URLSearchParams(window.location.search).get('id');
     const container = document.getElementById("container");

@@ -151,19 +151,23 @@ function editProduct(id) {
 }
 
 async function checkOwnership(watchOwnerId) {
+    // ... brenda try/catch tek loadProduct, pas const { data, error } ...
+
+    // 1. Merr përdoruesin aktual
     const { data: { user } } = await supabase.auth.getUser();
-    
-    // Gjej butonat (sigurohu që kanë këto ID në HTML)
-    const editBtn = document.getElementById("edit-btn");
-    const deleteBtn = document.getElementById("delete-btn");
 
-    // Nëse përdoruesi nuk është loguar ose nuk është pronari, fshi butonat
-    if (!user || user.id !== watchOwnerId) {
-        if (editBtn) editBtn.style.display = "none";
-        if (deleteBtn) deleteBtn.style.display = "none";
-    }
-}
+    // 2. Kontrollo nëse përdoruesi është i loguar dhe nëse është pronari i produktit
+    const isOwner = user && data.user_id === user.id;
 
+    // 3. Shfaq butonat vetëm nëse është pronari
+    const adminControls = isOwner ? `
+            <div class="admin-actions" style="margin-top: 20px; padding: 15px; border: 1px solid #444; border-radius: 8px;">
+            <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
+            <button onclick="editProduct(${data.id})">Modifiko</button>
+            <button onclick="deleteProduct(${data.id})">Fshi Produktin</button>
+        </div>` : '';
+
+     // Shto ${adminControls} në template-in e container.innerHTML
         
 </script>        
 </body>

@@ -46,7 +46,7 @@
             document.getElementById('brand').value = data.brand;
             document.getElementById('model').value = data.model;
             document.getElementById('price').value = data.price;
-            document.getElementById('description').value =         // ... previous lines 43-45
+            document.getElementById('description').value = data.description || "";
         document.getElementById('description').value = data.description;
 
         // 1. Store data globally to access it during save

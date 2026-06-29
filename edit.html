@@ -38,67 +38,87 @@
     );
 
     const id = new URLSearchParams(window.location.search).get('id');
-    window.produktData = null;
-
+    
+    // Funksioni kryesor që merr të dhënat dhe i shfaq në form dhe galeri
     async function fetchWatch() {
         const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-        if (error || !data) return;
+        if (error || !data) { console.error("Gabim:", error); return; }
 
-        // PËRDITËSIM: Nëse kolona jote quhet "image-url", zëvendëso 'image_url' me 'image-url' këtu:
-        const images = data.image_url || []; 
-        window.produktData = { ...data, image_url: Array.isArray(images) ? images : [images] };
+        // 1. Shfaq emrat dhe të dhënat në fushat e formës
+        document.getElementById('brand').value = data.brand || "";
+        document.getElementById('model').value = data.model || "";
+        document.getElementById('price').value = data.price || "";
+        document.getElementById('description').value = data.description || "";
+
+        // 2. Ruaj fotot në një variabël global për t'i manipuluar
+        // Nëse nuk është array, e bëjmë array
+        window.produktData = data;
+        window.produktData.image_url = Array.isArray(data.image_url) ? data.image_url : [];
         
-        renderGallery();
+        renderGallery(); // Vizato fotot për herë të parë
     }
 
+    // Funksioni që vizaton fotot (dhe ri-vizaton sa herë klikon)
     function renderGallery() {
         const gallery = document.getElementById('gallery-container');
-        gallery.innerHTML = "<h4>Klikoni një foto për ta bërë kryesore:</h4>";
+        gallery.innerHTML = ""; // Pastro galerinë
+
+        if (window.produktData.image_url.length === 0) {
+            gallery.innerHTML = "<p>Nuk ka foto</p>";
+            return;
+        }
 
         window.produktData.image_url.forEach((url, index) => {
             const img = document.createElement("img");
-            img.src = url;
+            img.src = url.startsWith("http") ? url : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + url;
+            
+            // Stilimi: Fotoja e parë (indeksi 0) është kryesorja
             img.style.width = "100px";
-            img.style.border = index === 0 ? "4px solid gold" : "2px solid #333";
+            img.style.height = "100px";
+            img.style.objectFit = "cover";
             img.style.cursor = "pointer";
-            img.style.margin = "5px";
+            img.style.border = index === 0 ? "4px solid gold" : "2px solid #555";
+            img.title = "Klikoni për ta bërë kryesore";
 
+            // FUNKSIONI I KLIKIMIT: E çon foton në fillim të listës
             img.onclick = () => {
-                // E heqim nga pozicioni aktual dhe e vendosim në fillim
                 const clickedImg = window.produktData.image_url.splice(index, 1)[0];
                 window.produktData.image_url.unshift(clickedImg);
-                renderGallery(); // Rindërtojmë galerinë me renditjen e re
+                renderGallery(); // Rindërton vizualisht galerinë
             };
+
             gallery.appendChild(img);
         });
     }
 
+    // Ruajtja e ndryshimeve
     document.getElementById('editForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        // Ngarko fotot e reja nëse ka
-        let currentImages = [...window.produktData.image_url];
+        // Përditëso listën e fotove me fotot e reja nëse përdoruesi ka ngarkuar të tjera
+        let finalImageUrls = [...window.produktData.image_url];
         const fileInput = document.getElementById('image_input');
-        
+
         if (fileInput.files.length > 0) {
             for (let file of fileInput.files) {
                 const fileName = ${Date.now()}_${file.name};
                 await supabase.storage.from('or-images').upload(fileName, file);
                 const { data } = supabase.storage.from('or-images').getPublicUrl(fileName);
-                currentImages.push(data.publicUrl);
+                finalImageUrls.push(data.publicUrl);
             }
         }
 
-        // Ruajtja në bazë
+        // Dërgo ndryshimet në Supabase
         const { error } = await supabase.from('oras').update({
             brand: document.getElementById('brand').value,
             model: document.getElementById('model').value,
             price: parseInt(document.getElementById('price').value),
-            image_url: currentImages // Sigurohu që emri përputhet me bazën
+            description: document.getElementById('description').value,
+            image_url: finalImageUrls
         }).eq('id', id);
 
         if (error) alert("Gabim: " + error.message);
-        else { alert("U ruajt me sukses!"); window.location.reload(); }
+        else { alert("Modifikimet u ruajtën!"); window.location.href = 'dashboard.html'; }
     });
 
     fetchWatch();

@@ -39,16 +39,42 @@
 
     const id = new URLSearchParams(window.location.search).get('id');
 
-    // 1. Ngarko të dhënat kur faqja hapet
-    async function fetchWatch() {
-        const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-        if (data) {
-            document.getElementById('brand').value = data.brand;
-            document.getElementById('model').value = data.model;
-            document.getElementById('price').value = data.price;
-            document.getElementById('description').value = data.description || "";
+async function fetchWatch() {
+    const { data, error } = await supabase
+        .from('oras')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (data) {
+
+        // ==========================
+        // KONTROLLI I PRONARIT
+        // ==========================
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            location.href = "login.html";
+            return;
+        }
+
+        if (data.user_id !== user.id) {
+            alert("Nuk ke leje të modifikosh këtë produkt.");
+            location.href = "product.html?id=" + id;
+            return;
+        }
+
+        // ==========================
+        // MBUSH FORMULARIN
+        // ==========================
+        document.getElementById('brand').value = data.brand;
+        document.getElementById('model').value = data.model;
+        document.getElementById('price').value = data.price;
         document.getElementById('description').value = data.description;
 
+        // ...vazhdon pjesa tjetër e kodit tënd...
+    }
+}
         // 1. Store data globally to access it during save
         window.produktData = data;
 

@@ -177,18 +177,6 @@ async function loadProduct() {
     }
 }
 
-// Sigurohu që funksionet e tjera janë të deklaruara qartë
-async function deleteProduct(id) {
-    if (!confirm("A jeni i sigurt?")) return;
-    const { error } = await supabase.from('oras').delete().eq('id', id);
-    if (error) alert(error.message);
-    else window.location.href = 'index.html';
-}
-
-function editProduct(id) {
-    window.location.href = 'edit.html?id=' + id;
-}
-
 // Thirr funksionin në fund
 loadProduct();
 </script>        

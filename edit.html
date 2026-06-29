@@ -78,37 +78,34 @@ async function fetchWatch() {
         // 1. Store data globally to access it during save
         window.produktData = data;
 
-        // 2. Display existing images
-        const gallery = document.getElementById('gallery-container');
-        gallery.innerHTML = ''; 
-        if (data.image_url && Array.isArray(data.image_url)) {
-           data.image_url.forEach((url, index) => {
-               const wrapper = document.createElement('div');
-               wrapper.style.display = 'inline-block';
-               wrapper.style.marginRight = '10px';
-               wrapper.style.cursor = 'pointer';
+           // 2. Display existing images
+           const gallery = document.getElementById('gallery-container');
+           gallery.innerHTML = '';
 
-               const img = document.createElement('img');
-               img.src = url;
-               img.style.width = '100px';
-               img.style.display = 'block';
+           let images = [];
 
-               // Këtu fotoja bëhet e klikueshme
-               img.onclick = () => {
-                   // 1. Heqim foton nga pozicioni i saj aktual (index)
-                   const clickedUrl = data.image_url.splice(index, 1)[0];
-        
-                   // 2. E vendosim në pozicionin e parë (0)
-                   data.image_url.unshift(clickedUrl);
-        
-                   // 3. Rithërrasim funksionin për të rifreskuar galerinë në ekran
-                   // (Do të duhet ta ndash pak logjikën e shfaqjes që ta thërrasësh përsëri)
-                   console.log("Renditja e re:", data.image_url);
-                   alert("Fotoja u vendos si kryesore!");
+           try {
+               images = Array.isArray(data.image_url)
+                   ? data.image_url
+                   : JSON.parse(data.image_url || "[]");
+           } catch (e) {
+              images = (data.image_url || "").split(",").filter(Boolean);
+           }
+
+           images.forEach((url, index) => {
+              const img = document.createElement('img');
+              img.src = url;
+              img.style.width = '100px';
+              img.style.cursor = 'pointer';
+
+              img.onclick = () => {
+                   const moved = images.splice(index, 1)[0];
+                   images.unshift(moved);
+                   console.log("New order:", images);
+                   alert("Fotoja u bë kryesore!");
                };
 
-               wrapper.appendChild(img);
-               gallery.appendChild(wrapper);
+               gallery.appendChild(img);
            });
         }
     }

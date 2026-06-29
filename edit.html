@@ -108,29 +108,58 @@ async function fetchWatch() {
 document.getElementById('editForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    // SHTESË: Merr informacionin e përdoruesit të loguar
-const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) {
+        alert("Duhet të jesh i loguar!");
+        return;
+    }
 
-const { error } = await supabase
-.from('oras')
-.update({
-    brand: document.getElementById('brand').value,
-    model: document.getElementById('model').value,
-    price: Number(document.getElementById('price').value),
-    description: document.getElementById('description').value,
-    image_url: imageUrls
-})
-.eq('id', id);
+    // KORRIGJIMI: Sigurohemi që imageUrls ekziston gjithmonë
+    let imageUrls = [];
+    if (window.produktData && window.produktData.image_url) {
+        // Nëse është array, e marrim siç është, nëse është string e konvertojmë
+        imageUrls = Array.isArray(window.produktData.image_url) 
+            ? [...window.produktData.image_url] 
+            : JSON.parse(window.produktData.image_url || "[]");
+    }
+
+    const fileInput = document.getElementById('image_input');
+
+    if (fileInput.files.length > 0) {
+        for (let i = 0; i < fileInput.files.length; i++) {
+            const file = fileInput.files[i];
+            const fileName = ${Date.now()}_${file.name};
+            
+            // Upload
+            const { error: uploadError } = await supabase.storage.from('or-images').upload(fileName, file);
+            if (uploadError) {
+                console.error("Gabim upload:", uploadError);
+                continue; // Vazhdo me fotot e tjera edhe nëse njëra dështon
+            }
+            
+            const { data } = supabase.storage.from('or-images').getPublicUrl(fileName);
+            imageUrls.push(data.publicUrl);
+        }
+    }
+
+    // Tani imageUrls është i definuar dhe plotësuar
+    const { error } = await supabase.from('oras').update({
+        brand: document.getElementById('brand').value,
+        model: document.getElementById('model').value,
+        price: parseInt(document.getElementById('price').value),
+        description: document.getElementById('description').value,
+        image_url: imageUrls // Këtu përdoret variabli i pastër
+    })
+    .eq('id', id)
+    .eq('user_id', user.id);
 
     if (error) {
-        console.error("Gabim:", error);
         alert("Gabim gjatë ruajtjes: " + error.message);
     } else {
         alert("Ora u modifikua me sukses!");
         window.location.href = 'dashboard.html';
     }
 });
-
 fetchWatch();
 </script>
 </body>

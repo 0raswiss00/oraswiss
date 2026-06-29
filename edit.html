@@ -92,11 +92,17 @@
 document.getElementById('editForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    // Start with existing images
+    // SHTESË: Merr informacionin e përdoruesit të loguar
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    
+    if (userError || !user) {
+        alert("Duhet të jesh i loguar për të bërë ndryshime!");
+        return;
+    }
+
     let imageUrls = window.produktData?.image_url || [];
     const fileInput = document.getElementById('image_input');
 
-    // If new files are selected, upload them
     if (fileInput.files.length > 0) {
         for (let i = 0; i < fileInput.files.length; i++) {
             const file = fileInput.files[i];
@@ -107,16 +113,22 @@ document.getElementById('editForm').addEventListener('submit', async (e) => {
         }
     }
 
+    // MODIFIKIMI KRYESOR:
+    // Përdorim .eq('user_id', user.id) për të siguruar që RLS na lejon update-in
     const { error } = await supabase.from('oras').update({
         brand: document.getElementById('brand').value,
         model: document.getElementById('model').value,
         price: parseInt(document.getElementById('price').value),
         description: document.getElementById('description').value,
-        image_url: imageUrls // Update the column with the combined list
-    }).eq('id', id);
+        image_url: imageUrls
+    })
+    .eq('id', id)
+    .eq('user_id', user.id); // KY ËSHTË KRYESORI: Siguron pronësinë
 
-    if (error) alert("Gabim: " + error.message);
-    else {
+    if (error) {
+        console.error("Gabim:", error);
+        alert("Gabim gjatë ruajtjes: " + error.message);
+    } else {
         alert("Ora u modifikua me sukses!");
         window.location.href = 'dashboard.html';
     }

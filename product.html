@@ -82,7 +82,7 @@
                 </div>` : '';
 
             const paypalButton = (data.price && data.paypal_link)
-                ? `<a href="${data.paypal_link}" target="_blank" class="btn btn-paypal">🛒 BUY NOW (PayPal)</a>`
+                ? <a href="${data.paypal_link}" target="_blank" class="btn btn-paypal">🛒 BUY NOW (PayPal)</a>
                 : '';
 
             container.innerHTML = `

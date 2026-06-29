@@ -38,129 +38,103 @@
     );
 
     const id = new URLSearchParams(window.location.search).get('id');
+    window.produktData = null; // Inicializim global
 
-async function fetchWatch() {
-    const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .eq('id', id)
-        .single();
+    async function fetchWatch() {
+        const { data, error } = await supabase
+            .from('oras')
+            .select('*')
+            .eq('id', id)
+            .single();
 
-    if (error || !data) {
-        console.log(error);
-        return;
-    }
-
-    // form fields
-    document.getElementById('brand').value = data.brand || "";
-    document.getElementById('model').value = data.model || "";
-    document.getElementById('price').value = data.price || "";
-    document.getElementById('description').value = data.description || "";
-
-    window.produktData = data;
-
-    // =========================
-    // GALERIA E SAKTË
-    // =========================
-    const gallery = document.getElementById('gallery-container');
-    gallery.innerHTML = "";
-
-    let images = [];
-
-    if (Array.isArray(data.image_url)) {
-        images = data.image_url;
-    } else if (typeof data.image_url === "string") {
-        try {
-            images = JSON.parse(data.image_url);
-        } catch {
-            images = data.image_url.split(",").filter(Boolean);
+        if (error || !data) {
+            console.error(error);
+            return;
         }
+
+        document.getElementById('brand').value = data.brand || "";
+        document.getElementById('model').value = data.model || "";
+        document.getElementById('price').value = data.price || "";
+        document.getElementById('description').value = data.description || "";
+
+        // Sigurohemi që image_url është gjithmonë array
+        if (typeof data.image_url === "string") {
+            try { data.image_url = JSON.parse(data.image_url); } catch { data.image_url = [data.image_url]; }
+        } else if (!Array.isArray(data.image_url)) {
+            data.image_url = [];
+        }
+
+        window.produktData = data;
+        renderGallery();
     }
 
-    if (!images.length) {
-        gallery.innerHTML = "<p>No images</p>";
-        return;
+    function renderGallery() {
+        const gallery = document.getElementById('gallery-container');
+        gallery.innerHTML = "";
+
+        if (!window.produktData.image_url.length) {
+            gallery.innerHTML = "<p>No images</p>";
+            return;
+        }
+
+        window.produktData.image_url.forEach((url, index) => {
+            const img = document.createElement("img");
+            img.src = url.startsWith("http") ? url : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + url;
+            img.style.width = "100px";
+            img.style.cursor = "pointer";
+            img.style.border = index === 0 ? "3px solid gold" : "none"; // Bën kornizë të artë fotos së parë
+
+            img.onclick = () => {
+                const moved = window.produktData.image_url.splice(index, 1)[0];
+                window.produktData.image_url.unshift(moved);
+                renderGallery(); // Rifreskon galerinë
+            };
+
+            gallery.appendChild(img);
+        });
     }
 
-    images.forEach((url, index) => {
-        const img = document.createElement("img");
+    document.getElementById('editForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (userError || !user) {
+            alert("Duhet të jesh i loguar!");
+            return;
+        }
 
-        img.src = url.startsWith("http")
-            ? url
-            : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + url;
+        let currentImageUrls = [...window.produktData.image_url];
+        const fileInput = document.getElementById('image_input');
 
-        img.style.width = "100px";
-        img.style.cursor = "pointer";
-        img.style.marginRight = "10px";
-
-        img.onclick = () => {
-            const moved = images.splice(index, 1)[0];
-            images.unshift(moved);
-            window.produktData.image_url = images;
-            alert("Foto u bë kryesore");
-        };
-
-        gallery.appendChild(img);
-    });
-}
-
-// 2. Ruaj ndryshimet
-document.getElementById('editForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-    if (userError || !user) {
-        alert("Duhet të jesh i loguar!");
-        return;
-    }
-
-    // KORRIGJIMI: Sigurohemi që imageUrls ekziston gjithmonë
-    let imageUrls = [];
-    if (window.produktData && window.produktData.image_url) {
-        // Nëse është array, e marrim siç është, nëse është string e konvertojmë
-        imageUrls = Array.isArray(window.produktData.image_url) 
-            ? [...window.produktData.image_url] 
-            : JSON.parse(window.produktData.image_url || "[]");
-    }
-
-    const fileInput = document.getElementById('image_input');
-
-    if (fileInput.files.length > 0) {
-        for (let i = 0; i < fileInput.files.length; i++) {
-            const file = fileInput.files[i];
-            const fileName = ${Date.now()}_${file.name};
-            
-            // Upload
-            const { error: uploadError } = await supabase.storage.from('or-images').upload(fileName, file);
-            if (uploadError) {
-                console.error("Gabim upload:", uploadError);
-                continue; // Vazhdo me fotot e tjera edhe nëse njëra dështon
+        if (fileInput.files.length > 0) {
+            for (let i = 0; i < fileInput.files.length; i++) {
+                const file = fileInput.files[i];
+                const fileName = ${Date.now()}_${file.name};
+                await supabase.storage.from('or-images').upload(fileName, file);
+                const { data } = supabase.storage.from('or-images').getPublicUrl(fileName);
+                currentImageUrls.push(data.publicUrl);
             }
-            
-            const { data } = supabase.storage.from('or-images').getPublicUrl(fileName);
-            imageUrls.push(data.publicUrl);
         }
-    }
 
-    // Tani imageUrls është i definuar dhe plotësuar
-    const { error } = await supabase.from('oras').update({
-        brand: document.getElementById('brand').value,
-        model: document.getElementById('model').value,
-        price: parseInt(document.getElementById('price').value),
-        description: document.getElementById('description').value,
-        image_url: imageUrls // Këtu përdoret variabli i pastër
-    })
-    .eq('id', id)
-    .eq('user_id', user.id);
+        const { error } = await supabase.from('oras').update({
+            brand: document.getElementById('brand').value,
+            model: document.getElementById('model').value,
+            price: parseInt(document.getElementById('price').value),
+            description: document.getElementById('description').value,
+            image_url: currentImageUrls
+        })
+        .eq('id', id)
+        .eq('user_id', user.id);
 
-    if (error) {
-        alert("Gabim gjatë ruajtjes: " + error.message);
-    } else {
-        alert("Ora u modifikua me sukses!");
-        window.location.href = 'dashboard.html';
-    }
-});
-fetchWatch();
+        if (error) {
+            alert("Gabim: " + error.message);
+        } else {
+            alert("Ora u modifikua me sukses!");
+            window.location.href = 'dashboard.html';
+        }
+    });
+
+    fetchWatch();
 </script>
 </body>
 </html>

@@ -149,51 +149,27 @@ async function loadProduct() {
     const id = new URLSearchParams(window.location.search).get('id');
     const container = document.getElementById("container");
 
-    if (!id) {
-        container.innerHTML = "Asnjë ID u gjet.";
-        return;
-    }
-
     try {
+        // Merr produktin
         const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
         if (error) throw error;
 
-        // 1. Merr përdoruesin e loguar
+        // Merr përdoruesin e loguar
         const { data: { user } } = await supabase.auth.getUser();
 
-        // 2. Logjika e Galerisë
-        window.currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
-        window.currentImgIndex = 0;
-
-        // 3. Përcakto nëse është pronari
+        // Kontrollo pronësinë direkt këtu (isOwner)
         const isOwner = user && data.user_id === user.id;
 
-        // 4. Përgatit Butonin PayPal
-        const paypalButton = (data.price && data.paypal_link) 
-            ? <a href="${data.paypal_link}" target="_blank" class="btn btn-paypal">🛒 BUY NOW (PayPal)</a> : '';
-
-        // 5. Përgatit Butonat Admin (Vetëm nëse është pronar)
-        const adminControls = isOwner ? `
-            <div class="admin-actions" style="margin-top: 20px; padding: 15px; border: 1px solid #444; border-radius: 8px;">
-                <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
-                <button onclick="editProduct(${data.id})">Modifiko</button>
-                <button onclick="deleteProduct(${data.id})">Fshi Produktin</button>
-            </div>` : '';
-
-        // 6. Shfaq gjithçka
+        // Shfaq përmbajtjen
         container.innerHTML = `
             <div class="product-card">
-                <div class="gallery-container">
-                    <img id="main-product-img" class="product-img" src="${window.currentImages.length > 0 ? (window.currentImages[0].startsWith('http') ? window.currentImages[0] : 'https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/' + window.currentImages[0]) : ''}" alt="${data.brand}">
-                    ${window.currentImages.length > 1 ? <button class="nav-btn prev" onclick="changeImage(-1)">&#10094;</button><button class="nav-btn next" onclick="changeImage(1)">&#10095;</button> : ''}
-                </div>          
                 <h1>${data.brand} - ${data.model}</h1>
-                <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>
-                <hr>
-                <p><strong>Description:</strong> ${data.description || 'N/A'}</p>
-                <a href="https://wa.me/35569XXXXXXX?text=I%20am%20interested%20in:%20${encodeURIComponent(data.brand + ' ' + data.model)}" class="btn btn-whatsapp">💬 ORDER ON WHATSAPP</a>
-                ${adminControls}
-                ${paypalButton}
+                <p>Description: ${data.description}</p>
+                ${isOwner ? `
+                    <div id="admin-actions">
+                        <button onclick="editProduct(${data.id})">Modifiko</button>
+                        <button onclick="deleteProduct(${data.id})">Fshi Produktin</button>
+                    </div>` : ''}
             </div>
         `;
     } catch (err) {
@@ -201,31 +177,20 @@ async function loadProduct() {
     }
 }
 
-// Funksioni i Galerisë (duhet jashtë loadProduct)
-window.changeImage = function(step) {
-    if (!window.currentImages || window.currentImages.length === 0) return;
-    const baseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/";
-    window.currentImgIndex = (window.currentImgIndex + step + window.currentImages.length) % window.currentImages.length;
-    const imgElement = document.getElementById("main-product-img");
-    const path = window.currentImages[window.currentImgIndex];
-    imgElement.src = path.startsWith('http') ? path : baseUrl + path;
-};
-
-// Funksionet Admin
+// Sigurohu që funksionet e tjera janë të deklaruara qartë
 async function deleteProduct(id) {
     if (!confirm("A jeni i sigurt?")) return;
     const { error } = await supabase.from('oras').delete().eq('id', id);
     if (error) alert(error.message);
-    else { alert("U fshi!"); window.location.href = 'index.html'; }
+    else window.location.href = 'index.html';
 }
 
 function editProduct(id) {
     window.location.href = 'edit.html?id=' + id;
 }
 
-// Thirrja fillestare
+// Thirr funksionin në fund
 loadProduct();
-
 </script>        
 </body>
 </html>

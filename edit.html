@@ -46,69 +46,62 @@ async function fetchWatch() {
         .eq('id', id)
         .single();
 
-    if (data) {
-
-        // ==========================
-        // KONTROLLI I PRONARIT
-        // ==========================
-        const { data: { user } } = await supabase.auth.getUser();
-
-        if (!user) {
-            location.href = "login.html";
-            return;
-        }
-
-        if (data.user_id !== user.id) {
-            alert("Nuk ke leje të modifikosh këtë produkt.");
-            location.href = "product.html?id=" + id;
-            return;
-        }
-
-        // ==========================
-        // MBUSH FORMULARIN
-        // ==========================
-        document.getElementById('brand').value = data.brand;
-        document.getElementById('model').value = data.model;
-        document.getElementById('price').value = data.price;
-        document.getElementById('description').value = data.description;
-
-        // ...vazhdon pjesa tjetër e kodit tënd...
+    if (error || !data) {
+        console.log(error);
+        return;
     }
-}
-        // 1. Store data globally to access it during save
-        window.produktData = data;
 
-           // 2. Display existing images
-           const gallery = document.getElementById('gallery-container');
-           gallery.innerHTML = '';
+    // form fields
+    document.getElementById('brand').value = data.brand || "";
+    document.getElementById('model').value = data.model || "";
+    document.getElementById('price').value = data.price || "";
+    document.getElementById('description').value = data.description || "";
 
-           let images = [];
+    window.produktData = data;
 
-           try {
-               images = Array.isArray(data.image_url)
-                   ? data.image_url
-                   : JSON.parse(data.image_url || "[]");
-           } catch (e) {
-              images = (data.image_url || "").split(",").filter(Boolean);
-           }
+    // =========================
+    // GALERIA E SAKTË
+    // =========================
+    const gallery = document.getElementById('gallery-container');
+    gallery.innerHTML = "";
 
-           images.forEach((url, index) => {
-              const img = document.createElement('img');
-              img.src = url;
-              img.style.width = '100px';
-              img.style.cursor = 'pointer';
+    let images = [];
 
-              img.onclick = () => {
-                   const moved = images.splice(index, 1)[0];
-                   images.unshift(moved);
-                   console.log("New order:", images);
-                   alert("Fotoja u bë kryesore!");
-               };
-
-               gallery.appendChild(img);
-           });
+    if (Array.isArray(data.image_url)) {
+        images = data.image_url;
+    } else if (typeof data.image_url === "string") {
+        try {
+            images = JSON.parse(data.image_url);
+        } catch {
+            images = data.image_url.split(",").filter(Boolean);
         }
     }
+
+    if (!images.length) {
+        gallery.innerHTML = "<p>No images</p>";
+        return;
+    }
+
+    images.forEach((url, index) => {
+        const img = document.createElement("img");
+
+        img.src = url.startsWith("http")
+            ? url
+            : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + url;
+
+        img.style.width = "100px";
+        img.style.cursor = "pointer";
+        img.style.marginRight = "10px";
+
+        img.onclick = () => {
+            const moved = images.splice(index, 1)[0];
+            images.unshift(moved);
+            window.produktData.image_url = images;
+            alert("Foto u bë kryesore");
+        };
+
+        gallery.appendChild(img);
+    });
 }
 
 // 2. Ruaj ndryshimet

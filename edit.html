@@ -38,90 +38,119 @@
     );
 
     const id = new URLSearchParams(window.location.search).get('id');
-    
-    // Funksioni kryesor që merr të dhënat dhe i shfaq në form dhe galeri
-    async function fetchWatch() {
-        const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-        if (error || !data) { console.error("Gabim:", error); return; }
 
-        // 1. Shfaq emrat dhe të dhënat në fushat e formës
-        document.getElementById('brand').value = data.brand || "";
-        document.getElementById('model').value = data.model || "";
-        document.getElementById('price').value = data.price || "";
-        document.getElementById('description').value = data.description || "";
+async function fetchWatch() {
+    const { data, error } = await supabase
+        .from('oras')
+        .select('*')
+        .eq('id', id)
+        .single();
 
-        // 2. Ruaj fotot në një variabël global për t'i manipuluar
-        // Nëse nuk është array, e bëjmë array
-        window.produktData = data;
-        window.produktData.image_url = Array.isArray(data.image_url) ? data.image_url : [];
-        
-        renderGallery(); // Vizato fotot për herë të parë
+    if (error || !data) {
+        console.log(error);
+        return;
     }
 
-    // Funksioni që vizaton fotot (dhe ri-vizaton sa herë klikon)
-    function renderGallery() {
-        const gallery = document.getElementById('gallery-container');
-        gallery.innerHTML = ""; // Pastro galerinë
+    // form fields
+    document.getElementById('brand').value = data.brand || "";
+    document.getElementById('model').value = data.model || "";
+    document.getElementById('price').value = data.price || "";
+    document.getElementById('description').value = data.description || "";
 
-        if (window.produktData.image_url.length === 0) {
-            gallery.innerHTML = "<p>Nuk ka foto</p>";
-            return;
+    window.produktData = data;
+
+    // =========================
+    // GALERIA E SAKTË
+    // =========================
+    const gallery = document.getElementById('gallery-container');
+    gallery.innerHTML = "";
+
+    let images = [];
+
+    if (Array.isArray(data.image_url)) {
+        images = data.image_url;
+    } else if (typeof data.image_url === "string") {
+        try {
+            images = JSON.parse(data.image_url);
+        } catch {
+            images = data.image_url.split(",").filter(Boolean);
         }
-
-        window.produktData.image_url.forEach((url, index) => {
-            const img = document.createElement("img");
-            img.src = url.startsWith("http") ? url : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + url;
-            
-            // Stilimi: Fotoja e parë (indeksi 0) është kryesorja
-            img.style.width = "100px";
-            img.style.height = "100px";
-            img.style.objectFit = "cover";
-            img.style.cursor = "pointer";
-            img.style.border = index === 0 ? "4px solid gold" : "2px solid #555";
-            img.title = "Klikoni për ta bërë kryesore";
-
-            // FUNKSIONI I KLIKIMIT: E çon foton në fillim të listës
-            img.onclick = () => {
-                const clickedImg = window.produktData.image_url.splice(index, 1)[0];
-                window.produktData.image_url.unshift(clickedImg);
-                renderGallery(); // Rindërton vizualisht galerinë
-            };
-
-            gallery.appendChild(img);
-        });
     }
 
-    // Ruajtja e ndryshimeve
-    document.getElementById('editForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        // Përditëso listën e fotove me fotot e reja nëse përdoruesi ka ngarkuar të tjera
-        let finalImageUrls = [...window.produktData.image_url];
-        const fileInput = document.getElementById('image_input');
+    if (!images.length) {
+        gallery.innerHTML = "<p>No images</p>";
+        return;
+    }
 
-        if (fileInput.files.length > 0) {
-            for (let file of fileInput.files) {
-                const fileName = ${Date.now()}_${file.name};
-                await supabase.storage.from('or-images').upload(fileName, file);
-                const { data } = supabase.storage.from('or-images').getPublicUrl(fileName);
-                finalImageUrls.push(data.publicUrl);
-            }
-        }
+    images.forEach((url, index) => {
+        const img = document.createElement("img");
 
-        // Dërgo ndryshimet në Supabase
-        const { error } = await supabase.from('oras').update({
-            brand: document.getElementById('brand').value,
-            model: document.getElementById('model').value,
-            price: parseInt(document.getElementById('price').value),
-            description: document.getElementById('description').value,
-            image_url: finalImageUrls
-        }).eq('id', id);
+        img.src = url.startsWith("http")
+            ? url
+            : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + url;
 
-        if (error) alert("Gabim: " + error.message);
-        else { alert("Modifikimet u ruajtën!"); window.location.href = 'dashboard.html'; }
+        img.style.width = "100px";
+        img.style.cursor = "pointer";
+        img.style.marginRight = "10px";
+
+        img.onclick = () => {
+            const moved = images.splice(index, 1)[0];
+            images.unshift(moved);
+            window.produktData.image_url = images;
+            alert("Foto u bë kryesore");
+        };
+
+        gallery.appendChild(img);
     });
+}
 
-    fetchWatch();
+// 2. Ruaj ndryshimet
+document.getElementById('editForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // SHTESË: Merr informacionin e përdoruesit të loguar
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    
+    if (userError || !user) {
+        alert("Duhet të jesh i loguar për të bërë ndryshime!");
+        return;
+    }
+
+    let imageUrls = window.produktData?.image_url || [];
+    const fileInput = document.getElementById('image_input');
+
+    if (fileInput.files.length > 0) {
+        for (let i = 0; i < fileInput.files.length; i++) {
+            const file = fileInput.files[i];
+            const fileName = ${Date.now()}_${file.name};
+            await supabase.storage.from('or-images').upload(fileName, file);
+            const { data } = supabase.storage.from('or-images').getPublicUrl(fileName);
+            imageUrls.push(data.publicUrl);
+        }
+    }
+
+    // MODIFIKIMI KRYESOR:
+    // Përdorim .eq('user_id', user.id) për të siguruar që RLS na lejon update-in
+    const { error } = await supabase.from('oras').update({
+        brand: document.getElementById('brand').value,
+        model: document.getElementById('model').value,
+        price: parseInt(document.getElementById('price').value),
+        description: document.getElementById('description').value,
+        image_url: imageUrls
+    })
+    .eq('id', id)
+    .eq('user_id', user.id); // KY ËSHTË KRYESORI: Siguron pronësinë
+
+    if (error) {
+        console.error("Gabim:", error);
+        alert("Gabim gjatë ruajtjes: " + error.message);
+    } else {
+        alert("Ora u modifikua me sukses!");
+        window.location.href = 'dashboard.html';
+    }
+});
+
+fetchWatch();
 </script>
 </body>
-</html>
+</htm

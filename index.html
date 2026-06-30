@@ -201,56 +201,45 @@ kontrolloDheShfaqSellNow();
     loadCategory('vintage', 'vintage-container');
     loadCategory('parts', 'parts-container');
 
+// Funksioni për të numëruar produktet (orët)
+async function loadProductCount() {
+    try {
+        console.log("Duke u lidhur me Supabase për produkte...");
+        const { count, error } = await supabase
+            .from('oras') // Përdor tabelën 'oras' që konfirmuat
+            .select('*', { count: 'exact' });
+
+        if (error) {
+            console.error("GABIM SUPABASE:", error);
+        } else {
+            console.log("Numri i produkteve:", count);
+            const element = document.getElementById('count-products');
+            if (element) {
+                element.textContent = count || 0;
+            }
+        }
+    } catch (err) {
+        console.error("Gabim i papritur:", err);
+    }
+}
+
+// Funksioni për të numëruar përdoruesit
 async function loadUserCount() {
-    const { count, error } = await supabase
-        .from('oras')
-        .select('user_id', { count: 'exact', head: false });
-    
-    if (!error && count !== null) {
-        // Numro user_id unik
-        const { data } = await supabase
+    try {
+        const { data, error } = await supabase
             .from('oras')
             .select('user_id');
         
+        if (error) throw error;
+        
         const uniqueUsers = [...new Set(data?.map(w => w.user_id).filter(Boolean))];
         document.getElementById('count-users').textContent = uniqueUsers.length;
-    }
-}
-// 1. Funksioni për Userat
-async function loadUserCount() {
-    try {
-        const { count, error } = await supabase
-            .from('oras')
-            .select('user_id', { count: 'exact', head: false });
-
-        if (!error && count !== null) {
-            const { data } = await supabase.from('oras').select('user_id');
-            const uniqueUsers = [...new Set(data?.map(w => w.user_id).filter(Boolean))];
-            document.getElementById('count-users').textContent = uniqueUsers.length;
-        }
     } catch (err) {
         console.error("Gabim te loadUserCount:", err);
     }
 }
 
-// 2. Funksioni për Orët (Artikujt)
-async function loadCategory(cat, containerId) {
-    const container = document.getElementById(containerId);
-    
-    // Ndryshoje këtë pjesë (hiq .eq('category', cat))
-    const { data, error } = await supabase
-        .from('oras')
-        .select('*'); 
-
-    if (error) {
-        console.error("Gabim:", error);
-        return;
-    }
-
-    console.log("Të dhëna të marra nga tabela oras:", data);
-    // ... pjesa tjetër e kodit
-}
-// 3. Thirrja e funksioneve (VETËM NJË HERË)
+// THIRRJA E FUNKSIONEVE (Sigurohu që janë jashtë çdo funksioni tjetër)
 loadUserCount();
 loadProductCount();
 </script>

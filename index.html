@@ -234,30 +234,38 @@ async function loadUserCount() {
 }
 
 // 2. Funksioni për Orët (Artikujt)
-async function loadProductCount() {
-    try {
-        console.log("Duke u lidhur me Supabase për produkte...");
-        // Hiqni 'head: true' për të parë nëse punon kështu
-        const { count, error } = await supabase
-            .from('watches') 
-            .select('*', { count: 'exact' });
+async function loadAllData() {
+        try {
+            console.log("Duke ngarkuar statistikat...");
 
-        if (error) {
-            console.error("GABIM SUPABASE:", error); 
-        } else {
-            console.log("Numri i produkteve:", count);
-            const element = document.getElementById('count-products');
-            if (element) {
-                element.textContent = count || 0;
+            // 1. Numërimi i Përdoruesve nga tabela 'profiles'
+            const { count: userCount, error: userError } = await supabase
+                .from('profiles')
+                .select('*', { count: 'exact', head: true });
+            
+            if (!userError) {
+                document.getElementById("count-users").textContent = userCount || 0;
             }
+
+            // 2. Numërimi i Orëve nga tabela 'oras' (E NDRYSHUAR KËTU)
+            const { count: watchCount, error: watchError } = await supabase
+                .from('oras') 
+                .select('*', { count: 'exact', head: true });
+
+            if (watchError) {
+                console.error("Gabim te tabela oras:", watchError);
+            } else {
+                console.log("Numri i orëve është:", watchCount);
+                document.getElementById("count-products").textContent = watchCount || 0;
+            }
+
+        } catch (error) {
+            console.error("Gabim i papritur në ngarkim:", error);
         }
-    } catch (err) {
-        console.error("Gabim i papritur:", err);
     }
-}
-// 3. Thirrja e funksioneve (VETËM NJË HERË)
-loadUserCount();
-loadProductCount();
+    // 3. Thirrja e funksioneve (VETËM NJË HERË)
+    loadUserCount();
+    loadProductCount();
 </script>
 </body>  
 </html>

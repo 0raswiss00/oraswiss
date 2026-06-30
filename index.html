@@ -216,6 +216,19 @@ async function loadUserCount() {
         document.getElementById('count-users').textContent = uniqueUsers.length;
     }
 }
+async function loadProductCount() {
+    // Kujdes: Sigurohu që emri i tabelës ('watches') është 
+    // emri i saktë i tabelës ku mban orët në Supabase
+    const { count, error } = await supabase
+        .from('watches') 
+        .select('*', { count: 'exact', head: true });
+
+    if (!error && count !== null) {
+        document.getElementById('count-products').textContent = count;
+    } else {
+        console.error("Gabim te numërimi i orëve:", error);
+    }
+}
 
 loadUserCount();  
 </script>

@@ -82,6 +82,10 @@ async function fetchWatch() {
         return;
     }
 
+function renderGallery(images) {
+    const gallery = document.getElementById("gallery-container");
+    gallery.innerHTML = "";
+
     images.forEach((url, index) => {
         const img = document.createElement("img");
 
@@ -90,14 +94,18 @@ async function fetchWatch() {
             : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + url;
 
         img.style.width = "100px";
-        img.style.cursor = "pointer";
         img.style.marginRight = "10px";
+        img.style.cursor = "pointer";
+        img.style.border = index === 0 ? "3px solid gold" : "1px solid #555";
 
         img.onclick = () => {
             const moved = images.splice(index, 1)[0];
             images.unshift(moved);
+
             window.produktData.image_url = images;
-            alert("Foto u bë kryesore");
+
+            // Rifresko galerinë
+            renderGallery(images);
         };
 
         gallery.appendChild(img);

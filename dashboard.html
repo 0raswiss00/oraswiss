@@ -46,64 +46,53 @@
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
 
-  // Funksion global që thirret nga butoni në HTML
+  // E bëjmë funksionin global në mënyrë që butoni HTML ta gjejë
   window.ngarkoArtikujt = async function() {
       const lista = document.getElementById("myWatchesList");
-      lista.innerHTML = "Po ngarkohen..."; 
+      lista.innerHTML = "Po ngarkojmë orët..."; 
 
       const { data: { user } } = await supabase.auth.getUser();
 
       if (!user) {
-          lista.innerHTML = "<li>Duhet të logoheni për të parë orët!</li>";
+          lista.innerHTML = "<li>Duhet të logoheni!</li>";
           return;
       }
 
-      // Marrja e të dhënave nga tabela 'oras'
       const { data, error } = await supabase
           .from('oras')
           .select('*')
           .eq('user_id', user.id); 
 
       if (error) { 
-          lista.innerHTML = "<li>Gabim gjatë ngarkimit të të dhënave.</li>";
           console.error(error);
+          lista.innerHTML = "<li>Gabim gjatë lidhjes.</li>";
           return; 
       }
 
       lista.innerHTML = ""; 
     
       if (!data || data.length === 0) {
-          lista.innerHTML = "<li>Nuk keni asnjë orë në shitje për momentin.</li>";
+          lista.innerHTML = "<li>Nuk keni asnjë orë në listë.</li>";
       } else {
           data.forEach(watch => {
               const li = document.createElement("li");
               li.className = "watch-card";
-              li.style.cursor = "pointer";
-              li.style.display = "flex";
-              li.style.alignItems = "center";
-              li.style.gap = "15px";
-              
-              // Kontrolli për foton (nese nuk ka foto, shfaqet placeholder)
               const imgUrl = (watch.image_url && watch.image_url.length > 0) ? watch.image_url[0] : 'placeholder.jpg';
               
-              // Pjesa e saktë për mbushjen e listës
               li.innerHTML = `
                   <img src="${imgUrl}" style="width:80px;height:80px;object-fit:cover;border-radius:6px;"/> 
                   <div style="margin-left: 10px;">
-                      <div class="watch-name" style="font-weight:bold; font-size:16px;">${watch.brand} ${watch.model}</div>
-                      <div class="watch-price" style="color:gold; margin-top:5px;">${watch.price} €</div>
+                      <strong>${watch.brand} ${watch.model}</strong><br>
+                      <span style="color:gold;">${watch.price} €</span>
                   </div>
               `;
-            
-              // Kur klikohet ora, dërgohet te faqja e detajeve
-              li.onclick = () => {
-                  window.location.href = product.html?id=${watch.id};
+              li.onclick = function() {
+                  window.location.href = 'product.html?id=' + watch.id;
               };
-            
               lista.appendChild(li);
           });
       }
-  }; // Mbyllja e funksionit window.ngarkoArtikujt
+  };
 </script>
 </body>
 </html>

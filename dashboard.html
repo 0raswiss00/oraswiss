@@ -53,40 +53,25 @@
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
 
-  // Ky është funksioni që thërret butoni
   window.shfaqArtikujt = async function() {
-      // 1. Fsheh pjesën kryesore
-      document.getElementById('mainDashboard').style.display = 'none';
-      // 2. Shfaq kontejnerin e listës
-      document.getElementById('myWatchesContainer').style.display = 'block';
-
       const lista = document.getElementById("myWatchesList");
+      document.getElementById('myWatchesContainer').style.display = 'block';
       lista.innerHTML = "Po ngarkohen...";
 
-      // Kërkesa tek Supabase (pa filtër për të marrë të gjitha)
-      const { data, error } = await supabase
-          .from('oras')
-          .select('*'); 
+      const { data, error } = await supabase.from('oras').select('*');
 
-      if (error) { 
-          lista.innerHTML = "Gabim: " + error.message;
-          return; 
-      }
+      if (error) { lista.innerHTML = "Gabim: " + error.message; return; }
 
       lista.innerHTML = "";
-      if (!data || data.length === 0) {
-          lista.innerHTML = "<li>Nuk ka artikuj.</li>";
-      } else {
-          data.forEach(watch => {
-              const li = document.createElement("li");
-              li.innerHTML = ${watch.brand} ${watch.model} - ${watch.price} €;
-              lista.appendChild(li);
-          });
-      }
+      data.forEach(watch => {
+          const li = document.createElement("li");
+          li.innerHTML = <div>${watch.brand} ${watch.model} - ${watch.price} €</div>;
+          li.onclick = () => window.location.href = product.html?id=${watch.id};
+          lista.appendChild(li);
+      });
   };
 
   window.kthehuPas = function() {
-      document.getElementById('mainDashboard').style.display = 'block';
       document.getElementById('myWatchesContainer').style.display = 'none';
   };
 </script>

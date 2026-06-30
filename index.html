@@ -234,38 +234,25 @@ async function loadUserCount() {
 }
 
 // 2. Funksioni për Orët (Artikujt)
-async function loadAllData() {
-        try {
-            console.log("Duke ngarkuar statistikat...");
+async function loadCategory(cat, containerId) {
+    const container = document.getElementById(containerId);
+    
+    // Ndryshoje këtë pjesë (hiq .eq('category', cat))
+    const { data, error } = await supabase
+        .from('oras')
+        .select('*'); 
 
-            // 1. Numërimi i Përdoruesve nga tabela 'profiles'
-            const { count: userCount, error: userError } = await supabase
-                .from('profiles')
-                .select('*', { count: 'exact', head: true });
-            
-            if (!userError) {
-                document.getElementById("count-users").textContent = userCount || 0;
-            }
-
-            // 2. Numërimi i Orëve nga tabela 'oras' (E NDRYSHUAR KËTU)
-            const { count: watchCount, error: watchError } = await supabase
-                .from('oras') 
-                .select('*', { count: 'exact', head: true });
-
-            if (watchError) {
-                console.error("Gabim te tabela oras:", watchError);
-            } else {
-                console.log("Numri i orëve është:", watchCount);
-                document.getElementById("count-products").textContent = watchCount || 0;
-            }
-
-        } catch (error) {
-            console.error("Gabim i papritur në ngarkim:", error);
-        }
+    if (error) {
+        console.error("Gabim:", error);
+        return;
     }
-    // 3. Thirrja e funksioneve (VETËM NJË HERË)
-    loadUserCount();
-    loadProductCount();
+
+    console.log("Të dhëna të marra nga tabela oras:", data);
+    // ... pjesa tjetër e kodit
+}
+// 3. Thirrja e funksioneve (VETËM NJË HERË)
+loadUserCount();
+loadProductCount();
 </script>
 </body>  
 </html>

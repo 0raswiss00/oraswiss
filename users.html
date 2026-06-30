@@ -322,21 +322,28 @@
 
     async function loadAllData() {
         try {
+            // 1. Numërimi i Përdoruesve
             const { count: userCount, error: userError } = await supabase
                 .from('profiles')
                 .select('*', { count: 'exact', head: true });
 
-            // Në vend të .select('*', { count: 'exact', head: true })
-            // Provo të përdorësh .select('id', { count: 'exact', head: true })
-            const { count: watchCount, error: watchError } = await supabase
+            // 2. Numërimi i Orëve (Ndryshimi është këtu)
+            // Heqim 'head: true' për ta testuar, ose përdorim këtë formë:
+            const { data, count, error: watchError } = await supabase
                 .from('watches')
-                .select('id', { count: 'exact', head: true }); 
+                .select('*', { count: 'exact' });
+
+            if (watchError) {
+                console.error("Gabim te watches:", watchError);
+            } else {
+                console.log("Numri i orëve është:", count);
+                document.getElementById("count-products").textContent = count || 0;
+            }
 
             document.getElementById("count-users").textContent = userCount || 0;
-            document.getElementById("count-products").textContent = watchCount || 0;
 
         } catch (error) {
-            console.error("Gabim:", error);
+            console.error("Gabim i përgjithshëm:", error);
         }
     }
 

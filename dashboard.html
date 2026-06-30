@@ -47,37 +47,40 @@
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
 
+  // Dhe sigurohu që funksioni është i tillë:
   async function ngarkoArtikujt() {
-    const lista = document.getElementById("myWatchesList");
-    const { data: { user } } = await supabase.auth.getUser();
+      const lista = document.getElementById("myWatchesList");
+      lista.innerHTML = "Po ngarkohen..."; // Indikatori që po punon
 
-    if (!user) {
-        lista.innerHTML = "<li>Duhet të logoheni për të parë koleksionin.</li>";
-        return;
-    }
+      const { data: { user } } = await supabase.auth.getUser();
 
-    // Tërheqim vetëm orët e këtij përdoruesi
-    const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .eq('user_id', user.id); 
+      if (!user) {
+          lista.innerHTML = "<li>Duhet të logoheni!</li>";
+          return;
+      }
 
-    if (error) { console.error(error); return; }
+      const { data, error } = await supabase
+          .from('oras')
+          .select('*')
+          .eq('user_id', user.id); 
 
-    lista.innerHTML = data.length === 0 ? "<li>Nuk keni orë në shitje.</li>" : "";
+      if (error) { 
+          lista.innerHTML = "<li>Gabim gjatë ngarkimit.</li>";
+          return; 
+      }
 
-    data.forEach(watch => {
-        const li = document.createElement("li");
-        li.className = "watch-card";
-        li.innerHTML = `
-            <img src="${watch.image_url?.[0] || 'placeholder.jpg'}" style="width:60px;height:60px;border-radius:4px;object-fit:cover;">
-            <div>
-                <strong>${watch.brand} ${watch.model}</strong><br>
-                <span style="color:gold;">${watch.price} €</span>
-            </div>
-        `;
-        lista.appendChild(li);
-    });
+      lista.innerHTML = ""; // Pastro listën para se të shtosh artikujt e rinj
+    
+      if (data.length === 0) {
+          lista.innerHTML = "<li>Nuk keni asnjë artikull për momentin.</li>";
+      } else {
+          data.forEach(watch => {
+              const li = document.createElement("li");
+              li.className = "watch-card";
+              li.innerHTML = <div>${watch.brand} ${watch.model} - ${watch.price} €</div>;
+              lista.appendChild(li);
+          });
+      }
   }
 
   ngarkoArtikujt();

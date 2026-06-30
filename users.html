@@ -327,11 +327,10 @@
                 .select('*', { count: 'exact', head: true });
 
             // Në vend të .select('*', { count: 'exact', head: true })
-// Provo të përdorësh .select('id', { count: 'exact', head: true })
-const { count: watchCount, error: watchError } = await supabase
-    .from('watches')
-    .select('id', { count: 'exact', head: true }); 
-
+            // Provo të përdorësh .select('id', { count: 'exact', head: true })
+            const { count: watchCount, error: watchError } = await supabase
+                .from('watches')
+                .select('id', { count: 'exact', head: true }); 
 
             document.getElementById("count-users").textContent = userCount || 0;
             document.getElementById("count-products").textContent = watchCount || 0;

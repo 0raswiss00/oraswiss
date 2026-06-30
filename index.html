@@ -216,21 +216,44 @@ async function loadUserCount() {
         document.getElementById('count-users').textContent = uniqueUsers.length;
     }
 }
-async function loadProductCount() {
-    // Kujdes: Sigurohu që emri i tabelës ('watches') është 
-    // emri i saktë i tabelës ku mban orët në Supabase
-    const { count, error } = await supabase
-        .from('watches') 
-        .select('*', { count: 'exact', head: true });
+// 1. Funksioni për Userat
+async function loadUserCount() {
+    try {
+        const { count, error } = await supabase
+            .from('oras')
+            .select('user_id', { count: 'exact', head: false });
 
-    if (!error && count !== null) {
-        document.getElementById('count-products').textContent = count;
-    } else {
-        console.error("Gabim te numërimi i orëve:", error);
+        if (!error && count !== null) {
+            const { data } = await supabase.from('oras').select('user_id');
+            const uniqueUsers = [...new Set(data?.map(w => w.user_id).filter(Boolean))];
+            document.getElementById('count-users').textContent = uniqueUsers.length;
+        }
+    } catch (err) {
+        console.error("Gabim te loadUserCount:", err);
     }
 }
 
-loadUserCount();  
+// 2. Funksioni për Orët (Artikujt)
+async function loadProductCount() {
+    try {
+        // Sigurohu që tabela në Supabase quhet 'watches'
+        const { count, error } = await supabase
+            .from('watches') 
+            .select('*', { count: 'exact', head: true });
+
+        if (!error && count !== null) {
+            document.getElementById('count-products').textContent = count;
+        } else {
+            console.error("Gabim te numërimi i orëve:", error);
+        }
+    } catch (err) {
+        console.error("Gabim te loadProductCount:", err);
+    }
+}
+
+// 3. Thirrja e funksioneve (VETËM NJË HERË)
+loadUserCount();
+loadProductCount();
 </script>
 </body>  
 </html>

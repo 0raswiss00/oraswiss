@@ -53,26 +53,44 @@
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
 
-  window.shfaqArtikujt = async function() {
+  // Kjo e bën funksionin të dukshëm për butonin HTML
+  window.ngarkoArtikujt = async function() {
       const lista = document.getElementById("myWatchesList");
-      document.getElementById('myWatchesContainer').style.display = 'block';
-      lista.innerHTML = "Po ngarkohen...";
+      lista.innerHTML = "Po ngarkohen..."; 
 
       const { data, error } = await supabase.from('oras').select('*');
 
-      if (error) { lista.innerHTML = "Gabim: " + error.message; return; }
+      if (error) { 
+          console.error(error);
+          lista.innerHTML = "Gabim gjatë ngarkimit.";
+          return; 
+      }
 
       lista.innerHTML = "";
-      data.forEach(watch => {
-          const li = document.createElement("li");
-          li.innerHTML = <div>${watch.brand} ${watch.model} - ${watch.price} €</div>;
-          li.onclick = () => window.location.href = product.html?id=${watch.id};
-          lista.appendChild(li);
-      });
-  };
-
-  window.kthehuPas = function() {
-      document.getElementById('myWatchesContainer').style.display = 'none';
+      if (data.length === 0) {
+          lista.innerHTML = "Nuk ka artikuj.";
+      } else {
+          data.forEach(watch => {
+              const li = document.createElement("li");
+              li.className = "watch-card";
+              li.style.cssText = "border-bottom:1px solid #ccc; padding:10px;";
+              
+              // Sigurohu që ke marrë foton saktë
+              const imgUrl = (watch.image_url && watch.image_url.length > 0) ? watch.image_url[0] : 'placeholder.jpg';
+              
+              li.innerHTML = `
+                  <div style="display:flex; align-items:center;">
+                      <img src="${imgUrl}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;"/>
+                      <div style="margin-left:15px;">
+                          <strong>${watch.brand || ''} ${watch.model || ''}</strong><br>
+                          <span style="color:gold;">${watch.price || 0} €</span>
+                      </div>
+                  </div>
+              `;
+              li.onclick = () => window.location.href = product.html?id=${watch.id};
+              lista.appendChild(li);
+          });
+      }
   };
 </script>
 </body>

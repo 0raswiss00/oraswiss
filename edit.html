@@ -82,27 +82,35 @@ async function fetchWatch() {
         return;
     }
 
-images.forEach((url, index) => {
-    const img = document.createElement("img");
+// Shto këtë funksion për të rishfaqur fotot kur ndryshon renditja
+function renderGallery(images) {
+    const gallery = document.getElementById('gallery-container');
+    gallery.innerHTML = "";
+    
+    images.forEach((url, index) => {
+        const img = document.createElement("img");
+        // Sigurohu që linku është i plotë
+        img.src = url.startsWith("http") ? url : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + url;
+        img.style.width = "100px";
+        img.style.cursor = "pointer";
+        img.style.border = (index === 0) ? "3px solid gold" : "none"; // Vizualizo cila është kryesore
+        
+        img.onclick = () => {
+            const moved = images.splice(index, 1)[0];
+            images.unshift(moved);
+            window.produktData.image_url = images;
+            renderGallery(images); // Rifresko pamjen pas klikimit
+        };
+        gallery.appendChild(img);
+    });
+}
 
-    // Kontrollo nëse URL-ja është tashmë link i plotë
-    if (url.startsWith("http")) {
-        img.src = url;
-    } else {
-        // Nëse është vetëm emri i file-it, shto prefix-in e Supabase
-        img.src = https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/${url};
-    }
+// Dhe tek funksioni fetchWatch, ndrysho thirrjen:
+// ... brenda fetchWatch ...
+images.forEach((url, index) => { /* fshi këtë loop të vjetër */ });
+// Shto këtë:
+renderGallery(images);
 
-    img.style.width = "100px";
-    img.style.cursor = "pointer";
-    img.style.marginRight = "10px";
-
-    img.onclick = () => {
-        // ... (kodi yt për ndryshimin e renditjes)
-    };
-
-    gallery.appendChild(img);
-});
 // 2. Ruaj ndryshimet
 document.getElementById('editForm').addEventListener('submit', async (e) => {
     e.preventDefault();

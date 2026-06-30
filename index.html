@@ -236,21 +236,25 @@ async function loadUserCount() {
 // 2. Funksioni për Orët (Artikujt)
 async function loadProductCount() {
     try {
-        // Sigurohu që tabela në Supabase quhet 'watches'
+        console.log("Duke u lidhur me Supabase për produkte...");
+        // Hiqni 'head: true' për të parë nëse punon kështu
         const { count, error } = await supabase
             .from('watches') 
-            .select('*', { count: 'exact', head: true });
+            .select('*', { count: 'exact' });
 
-        if (!error && count !== null) {
-            document.getElementById('count-products').textContent = count;
+        if (error) {
+            console.error("GABIM SUPABASE:", error); 
         } else {
-            console.error("Gabim te numërimi i orëve:", error);
+            console.log("Numri i produkteve:", count);
+            const element = document.getElementById('count-products');
+            if (element) {
+                element.textContent = count || 0;
+            }
         }
     } catch (err) {
-        console.error("Gabim te loadProductCount:", err);
+        console.error("Gabim i papritur:", err);
     }
 }
-
 // 3. Thirrja e funksioneve (VETËM NJË HERË)
 loadUserCount();
 loadProductCount();

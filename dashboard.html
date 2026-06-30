@@ -53,52 +53,38 @@
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
 
-  // Funksioni për të shfaqur listën
+  // Ky është funksioni që thërret butoni
   window.shfaqArtikujt = async function() {
-      // Fshehim Dashboard-in kryesor dhe shfaqim kontejnerin e listës
+      // 1. Fsheh pjesën kryesore
       document.getElementById('mainDashboard').style.display = 'none';
+      // 2. Shfaq kontejnerin e listës
       document.getElementById('myWatchesContainer').style.display = 'block';
 
       const lista = document.getElementById("myWatchesList");
-      lista.innerHTML = "Po ngarkohen të 52 artikujt...";
+      lista.innerHTML = "Po ngarkohen...";
 
-      // Marrja e të dhënave PA FILTRA (për të parë nëse dalin të gjitha)
+      // Kërkesa tek Supabase (pa filtër për të marrë të gjitha)
       const { data, error } = await supabase
           .from('oras')
           .select('*'); 
 
       if (error) { 
-          lista.innerHTML = "<li>Gabim gjatë ngarkimit: " + error.message + "</li>";
+          lista.innerHTML = "Gabim: " + error.message;
           return; 
       }
 
       lista.innerHTML = "";
       if (!data || data.length === 0) {
-          lista.innerHTML = "<li>Nuk u gjet asnjë artikull.</li>";
+          lista.innerHTML = "<li>Nuk ka artikuj.</li>";
       } else {
           data.forEach(watch => {
               const li = document.createElement("li");
-              li.className = "watch-card";
-              li.style.cssText = "border-bottom:1px solid #ccc; padding:10px; list-style:none; cursor:pointer;";
-              
-              const imgUrl = (watch.image_url && watch.image_url.length > 0) ? watch.image_url[0] : 'placeholder.jpg';
-              
-              li.innerHTML = `
-                  <div style="display:flex; align-items:center;">
-                      <img src="${imgUrl}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;"/>
-                      <div style="margin-left:15px;">
-                          <div style="font-weight:bold;">${watch.brand || 'Pa emër'} ${watch.model || ''}</div>
-                          <div style="color:gold;">${watch.price || 0} €</div>
-                      </div>
-                  </div>
-              `;
-              li.onclick = () => window.location.href = product.html?id=${watch.id};
+              li.innerHTML = ${watch.brand} ${watch.model} - ${watch.price} €;
               lista.appendChild(li);
           });
       }
   };
 
-  // Funksioni për t'u kthyer mbrapsht
   window.kthehuPas = function() {
       document.getElementById('mainDashboard').style.display = 'block';
       document.getElementById('myWatchesContainer').style.display = 'none';

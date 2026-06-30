@@ -32,11 +32,18 @@
         <div class="menu-item" onclick="location.href='info.html'"><span>ℹ️ Info</span> <span>></span></div>
     </div>
 
-    <button onclick="ngarkoArtikujt()" class="btn-sell" style="background: #333; color: white;">
-        Shfaq artikujt e mi
-    </button>
+    <div id="mainDashboard">
+        <button onclick="shfaqArtikujt()" class="btn-sell">Artikujt e mi në shitje</button>
+        </div>
 
-    <ul id="myWatchesList"></ul>
+    <div id="mainDashboard">
+        <button onclick="window.shfaqArtikujt()" class="btn-sell">Artikujt e mi në shitje</button>
+    </div>
+
+    <div id="myWatchesContainer" style="display: none;">
+        <button onclick="window.kthehuPas()" class="btn-back">← Kthehu mbrapa</button>
+        <ul id="myWatchesList"></ul>
+    </div>
 
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
@@ -46,53 +53,55 @@
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
 
-  // E bëjmë funksionin global në mënyrë që butoni HTML ta gjejë
-  window.ngarkoArtikujt = async function() {
+  // Funksioni për të shfaqur listën
+  window.shfaqArtikujt = async function() {
+      // Fshehim Dashboard-in kryesor dhe shfaqim kontejnerin e listës
+      document.getElementById('mainDashboard').style.display = 'none';
+      document.getElementById('myWatchesContainer').style.display = 'block';
+
       const lista = document.getElementById("myWatchesList");
-      lista.innerHTML = "Po ngarkojmë orët..."; 
+      lista.innerHTML = "Po ngarkohen të 52 artikujt...";
 
-      const { data: { user } } = await supabase.auth.getUser();
-
-      if (!user) {
-          lista.innerHTML = "<li>Duhet të logoheni!</li>";
-          return;
-      }
-
+      // Marrja e të dhënave PA FILTRA (për të parë nëse dalin të gjitha)
       const { data, error } = await supabase
           .from('oras')
-          .select('*')
-          .eq('user_id', user.id)
-          .range(0, 100); // Kjo tregon: merr nga rreshti i 0 deri te i 100-ti 
+          .select('*'); 
 
       if (error) { 
-          console.error(error);
-          lista.innerHTML = "<li>Gabim gjatë lidhjes.</li>";
+          lista.innerHTML = "<li>Gabim gjatë ngarkimit: " + error.message + "</li>";
           return; 
       }
 
-      lista.innerHTML = ""; 
-    
+      lista.innerHTML = "";
       if (!data || data.length === 0) {
-          lista.innerHTML = "<li>Nuk keni asnjë orë në listë.</li>";
+          lista.innerHTML = "<li>Nuk u gjet asnjë artikull.</li>";
       } else {
           data.forEach(watch => {
               const li = document.createElement("li");
               li.className = "watch-card";
+              li.style.cssText = "border-bottom:1px solid #ccc; padding:10px; list-style:none; cursor:pointer;";
+              
               const imgUrl = (watch.image_url && watch.image_url.length > 0) ? watch.image_url[0] : 'placeholder.jpg';
               
               li.innerHTML = `
-                  <img src="${imgUrl}" style="width:80px;height:80px;object-fit:cover;border-radius:6px;"/> 
-                  <div style="margin-left: 10px;">
-                      <strong>${watch.brand} ${watch.model}</strong><br>
-                      <span style="color:gold;">${watch.price} €</span>
+                  <div style="display:flex; align-items:center;">
+                      <img src="${imgUrl}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;"/>
+                      <div style="margin-left:15px;">
+                          <div style="font-weight:bold;">${watch.brand || 'Pa emër'} ${watch.model || ''}</div>
+                          <div style="color:gold;">${watch.price || 0} €</div>
+                      </div>
                   </div>
               `;
-              li.onclick = function() {
-                  window.location.href = 'product.html?id=' + watch.id;
-              };
+              li.onclick = () => window.location.href = product.html?id=${watch.id};
               lista.appendChild(li);
           });
       }
+  };
+
+  // Funksioni për t'u kthyer mbrapsht
+  window.kthehuPas = function() {
+      document.getElementById('mainDashboard').style.display = 'block';
+      document.getElementById('myWatchesContainer').style.display = 'none';
   };
 </script>
 </body>

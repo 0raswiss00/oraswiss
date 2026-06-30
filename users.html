@@ -346,7 +346,13 @@
             console.error("Gabim i përgjithshëm:", error);
         }
     }
-
+    // ... kodi yt i mëparshëm ...
+    } else {
+        alert("Ora u modifikua me sukses!");
+        // Këtu duhet të jetë thirrja, që të rifreskojë listën pasi ndryshimi u krye
+        fetchWatch(); 
+        window.location.href = 'dashboard.html'; 
+    }
     setInterval(loadAllData, 30000);
 </script>
 </body>    

@@ -82,28 +82,27 @@ async function fetchWatch() {
         return;
     }
 
-    images.forEach((url, index) => {
-        const img = document.createElement("img");
+images.forEach((url, index) => {
+    const img = document.createElement("img");
 
-        img.src = url.startsWith("http")
-            ? url
-            : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + url;
+    // Kontrollo nëse URL-ja është tashmë link i plotë
+    if (url.startsWith("http")) {
+        img.src = url;
+    } else {
+        // Nëse është vetëm emri i file-it, shto prefix-in e Supabase
+        img.src = https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/${url};
+    }
 
-        img.style.width = "100px";
-        img.style.cursor = "pointer";
-        img.style.marginRight = "10px";
+    img.style.width = "100px";
+    img.style.cursor = "pointer";
+    img.style.marginRight = "10px";
 
-        img.onclick = () => {
-            const moved = images.splice(index, 1)[0];
-            images.unshift(moved);
-            window.produktData.image_url = images;
-            alert("Foto u bë kryesore");
-        };
+    img.onclick = () => {
+        // ... (kodi yt për ndryshimin e renditjes)
+    };
 
-        gallery.appendChild(img);
-    });
-}
-
+    gallery.appendChild(img);
+});
 // 2. Ruaj ndryshimet
 document.getElementById('editForm').addEventListener('submit', async (e) => {
     e.preventDefault();

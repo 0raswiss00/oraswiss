@@ -82,10 +82,6 @@ async function fetchWatch() {
         return;
     }
 
-function renderGallery(images) {
-    const gallery = document.getElementById("gallery-container");
-    gallery.innerHTML = "";
-
     images.forEach((url, index) => {
         const img = document.createElement("img");
 
@@ -94,18 +90,14 @@ function renderGallery(images) {
             : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + url;
 
         img.style.width = "100px";
-        img.style.marginRight = "10px";
         img.style.cursor = "pointer";
-        img.style.border = index === 0 ? "3px solid gold" : "1px solid #555";
+        img.style.marginRight = "10px";
 
         img.onclick = () => {
             const moved = images.splice(index, 1)[0];
             images.unshift(moved);
-
             window.produktData.image_url = images;
-
-            // Rifresko galerinë
-            renderGallery(images);
+            alert("Foto u bë kryesore");
         };
 
         gallery.appendChild(img);
@@ -130,7 +122,7 @@ document.getElementById('editForm').addEventListener('submit', async (e) => {
     if (fileInput.files.length > 0) {
         for (let i = 0; i < fileInput.files.length; i++) {
             const file = fileInput.files[i];
-            const fileName = ${Date.now()}_${file.name};
+            const fileName = `${Date.now()}_${file.name}`;
             await supabase.storage.from('or-images').upload(fileName, file);
             const { data } = supabase.storage.from('or-images').getPublicUrl(fileName);
             imageUrls.push(data.publicUrl);

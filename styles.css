@@ -2769,3 +2769,29 @@ img {
     align-items: center;
 }
 
+/* Stili për ta mbajtur menunë në fund të ekranit */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #000; /* E zeza që dëshironi */
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-top: 1px solid #333; /* Ndarje e hollë sipër */
+    z-index: 1000; /* Siguron që të jetë gjithmonë sipër */
+}
+
+.nav-item {
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.nav-item.active {
+    color: #ffd700; /* Ngjyra e artë për tab-in aktiv */
+}

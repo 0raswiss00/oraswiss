@@ -141,20 +141,23 @@
 </head>
 <body>
 
-<header class="site-header">
-  <nav class="nav-scroll">
-    <span class="site-title">ORA<br>SWISS</span>
-    <span style="color: white; margin-left: 20px; display: flex; align-items: center; gap: 15px;">
-        <span>👤 User: <b id="count-users">0</b></span>
-    
-        <span>⌚ Ora: <b id="count-products">0</b></span>
+<header class="site-header" style="background: #000; padding-bottom: 10px;">
+  <!-- Rreshti i parë: Logo dhe Statistikat -->
+  <nav class="nav-scroll" style="display: flex; align-items: center; padding: 10px; color: white;">
+    <span class="site-title" style="font-weight: bold; font-size: 18px;">ORA<br>SWISS</span>
+    <span style="margin-left: 20px; display: flex; gap: 15px; font-size: 14px;">
+        <span>👤 <b id="count-users">0</b></span>
+        <span>⌚ <b id="count-products">0</b></span>
     </span>
-    <!-- Search bar i integruar -->
-    <div style="padding: 10px 20px; background: #000;">
-        <input type="text" id="searchInput" placeholder="Search on Ora Swiss..." 
-               onkeyup="searchItems()" 
-               style="width: 100%; padding: 12px; border-radius: 20px; border: none; background: #1a1a1a; color: white;">
-    </div>    
+  </nav>
+
+  <!-- Rreshti i dytë: Search Bar i lirë (nuk është më brenda nav-scroll) -->
+  <div style="padding: 0 15px;">
+      <input type="text" id="searchInput" placeholder="Search on Ora Swiss..." 
+             onkeyup="searchItems()" 
+             style="width: 100%; padding: 12px; border-radius: 20px; border: none; background: #1a1a1a; color: white; box-sizing: border-box;">
+  </div>
+</header>  
     <a href="register.html">Register</a>
     <button id="btnSellNow" onclick="window.trajtoKlikiminSell()" style="background-color: gold; padding: 10px 20px; border-radius: 5px; cursor: pointer; border: none; font-weight: bold;">Sell Now</button>
     <a href="home.html">Home</a>

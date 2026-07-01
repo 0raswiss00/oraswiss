@@ -126,9 +126,6 @@
         <span>⌚ Ora: <b id="count-products">0</b></span>
     </span>
    
-    <div class="search-sticky">
-        <input type="text" id="searchInput" placeholder="Search on Ora Swiss..." onkeyup="searchItems()">
-    </div>
     <a href="register.html">Register</a>
     <button id="btnSellNow" onclick="window.trajtoKlikiminSell()" style="background-color: gold; padding: 10px 20px; border-radius: 5px; cursor: pointer; border: none; font-weight: bold;">Sell Now</button>
     <a href="home.html">Home</a>
@@ -300,27 +297,7 @@ async function loadUserCount() {
 // THIRRJA E FUNKSIONEVE (Sigurohu që janë jashtë çdo funksioni tjetër)
 loadUserCount();
 loadProductCount();
-// Funksioni për kërkimin e artikujve
-function searchItems() {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const items = document.querySelectorAll('.card'); 
 
-    items.forEach(item => {
-        // Kërkojmë në të gjithë tekstin e kartës
-        const itemName = item.innerText.toLowerCase();
-        
-        // Nëse kutia e kërkimit është bosh, shfaqini të gjitha
-        if (searchTerm === "") {
-            item.style.display = "";
-        } 
-        // Nëse ka tekst, filtro
-        else if (itemName.includes(searchTerm)) {
-            item.style.display = ""; 
-        } else {
-            item.style.display = "none";
-        }
-    });
-}
 </script>  
 <nav class="bottom-nav">
     <a href="index.html" class="nav-item">🏠 Home</a>

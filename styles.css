@@ -2795,3 +2795,22 @@ img {
 .nav-item.active {
     color: #ffd700; /* Ngjyra e artë për tab-in aktiv */
 }
+.dashboard-menu {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.menu-item {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 15px 20px;
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    background-color: #252525;
+}

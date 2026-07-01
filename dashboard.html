@@ -11,103 +11,96 @@
         .menu-item:hover { background: #222; }
         .btn-sell { background: gold; color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 5px; cursor: pointer; width: 100%; margin-bottom: 20px; }
         #myWatchesList { list-style: none; padding: 0; }
-       .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; }
-    <style>
-     /* Siguron që rrjeta të jetë dyshe edhe këtu */
-    .grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        padding: 10px;
-        padding-bottom: 80px; /* Hapësirë që footer të mos mbivendoset */
-    }
-
-     /* Stilimi i përbashkët për navigimin fundor */
-    .bottom-nav {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        background: #000;
-        display: flex;
-        justify-content: space-around;
-        padding: 12px 0;
-        border-top: 1px solid #333;
-        z-index: 1000;
-    }
+        .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; }
     </style>
-    </style>    
 </head>
 <body>
 
-<!-- Pjesa e trupit (HTML) -->
-<div class="dashboard-content">
-    <h2>Artikujt e mi në shitje</h2>
-    <!-- Kontejneri ku do të shfaqen orët pa butona lart -->
-    <ul id="myWatchesList" class="grid"></ul>
-</div>
+    <div class="profile-header">
+        <h2>Ardian Cela</h2>
+        <a href="profile.html" style="color: gold; text-decoration: none;">To your profile</a>
+    </div>
 
-<!-- Navigimi i poshtëm (i modifikuar) -->
-<nav class="bottom-nav">
-    <a href="index.html" class="nav-item">🏠 Home</a>
-    <a href="favorites.html" class="nav-item">❤️ Favorites</a>
-    
-    <!-- Butoni që kërkove në navigim -->
-    <a href="#" onclick="ngarkoArtikujt()" class="nav-item">⌚ Artikujt</a>
-    
-    <a href="sellnow.html" class="nav-item">➕ Sell</a>
-    <a href="profile.html" class="nav-item">👤 Account</a>
-</nav>
+    <button class="btn-sell" onclick="window.location.href='sellnow.html'">+ Sell Now</button>
 
-<!-- Skripti (JavaScript) -->
+    <!-- Menuja e stilit Chrono24 -->
+    <div class="dashboard-menu">
+        <div class="menu-item" onclick="location.href='buy.html'"><span>🛒 Buy</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='messages.html'"><span>✉️ Messages</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='settings.html'"><span>⚙️ Account Settings</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='support.html'"><span>🎧 Support</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='info.html'"><span>ℹ️ Info</span> <span>></span></div>
+    </div>
+
+    <button onclick="ngarkoArtikujt()" class="btn-sell" style="background: #333; color: white;">
+        Shfaq artikujt e mi
+    </button>
+
+    <ul id="myWatchesList"></ul>
+
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-  
-  // E deklaron këtu në fillim, jashtë çdo funksioni
+
   const supabase = createClient(
-    'https://gnwsrmelmeqduhhmfmoa.supabase.co', // URL-ja jote këtu
-    'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9' // Anon/Public Key jote këtu
+    'https://gnwsrmelmeqduhhmfmoa.supabase.co',
+    'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
-    
-  // Tani funksioni yt do ta shohë atë
+
+  // E bëjmë funksionin global në mënyrë që butoni HTML ta gjejë
   window.ngarkoArtikujt = async function() {
-      const { data, error } = await supabase.from('watches').select('*');
-      // ... pjesa tjetër e kodit
+      const lista = document.getElementById("myWatchesList");
+      lista.innerHTML = "Po ngarkojmë orët..."; 
+
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+          lista.innerHTML = "<li>Duhet të logoheni!</li>";
+          return;
+      }
+
+      const { data, error } = await supabase
+          .from('oras')
+          .select('*')
+          .eq('user_id', user.id); 
+
+      if (error) { 
+          console.error(error);
+          lista.innerHTML = "<li>Gabim gjatë lidhjes.</li>";
+          return; 
+      }
+
+      lista.innerHTML = ""; 
+    
+      if (!data || data.length === 0) {
+          lista.innerHTML = "<li>Nuk keni asnjë orë në listë.</li>";
+      } else {
+          data.forEach(watch => {
+              const li = document.createElement("li");
+              li.className = "watch-card";
+              const imgUrl = (watch.image_url && watch.image_url.length > 0) ? watch.image_url[0] : 'placeholder.jpg';
+              
+              li.innerHTML = `
+                  <img src="${imgUrl}" style="width:80px;height:80px;object-fit:cover;border-radius:6px;"/> 
+                  <div style="margin-left: 10px;">
+                      <strong>${watch.brand} ${watch.model}</strong><br>
+                      <span style="color:gold;">${watch.price} €</span>
+                  </div>
+              `;
+              li.onclick = function() {
+                  window.location.href = 'product.html?id=' + watch.id;
+              };
+              lista.appendChild(li);
+          });
+      }
   };
-
-window.ngarkoArtikujt = async function() {
-    const lista = document.getElementById('myWatchesList');
-    // Supozojmë se ke supabase të inicializuar
-    const { data, error } = await supabase.from('watches').select('*'); 
-
-    if (!data || data.length === 0) {
-        lista.innerHTML = "<li>Nuk keni asnjë orë në listë.</li>";
-    } else {
-        lista.innerHTML = ""; // Pastro listën para se të shtosh të rejat
-        data.forEach(watch => {
-            const li = document.createElement("li");
-            li.className = "watch-card";
-            const imgUrl = (watch.image_url && watch.image_url.length > 0) ? watch.image_url[0] : 'placeholder.jpg';
-
-            // Logjika me etiketën e re
-            li.innerHTML = `
-                <div style="position: relative; display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #333;">
-                    <div style="position: absolute; top: 10px; left: 10px; background: gold; color: black; padding: 2px 6px; font-size: 10px; font-weight: bold; border-radius: 4px; z-index: 10;">
-                        NË SHITJE
-                    </div>
-                    <img src="${imgUrl}" style="width:80px;height:80px;object-fit:cover;border-radius:5px;">
-                    <div style="margin-left: 15px;">
-                        <strong>${watch.brand} ${watch.model}</strong><br>
-                        <span style="color:gold;">${watch.price} €</span>
-                    </div>
-                </div>
-            `;
-            lista.appendChild(li);
-        });
-    }
-};
-</script>
-</body> 
+  <!-- Shtoje këtu navigimin fiks -->
+  <nav class="bottom-nav">
+      <a href="index.html" class="nav-item">🏠 Home</a>
+      <a href="favorites.html" class="nav-item">❤️ Favorites</a>
+      <a href="collection.html" class="nav-item">⌚ Collection</a>
+      <a href="sellnow.html" class="nav-item">➕ Sell</a>
+      <a href="profile.html" class="nav-item">👤 Account</a>
+   </nav> 
+</script>    
+</body>
 </html>
-
-
-

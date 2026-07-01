@@ -110,6 +110,10 @@
 <body>
 
      <div class="search-container">
+         <input type="text" id="searchInput" placeholder="Search on OraSwiss" onkeyup="searchItems()">
+     </div>
+  
+     <div class="search-container">
          <div class="search-box">
              <span class="search-icon">🔍</span>
              <input type="text" id="searchInput" placeholder="Search on OraSwiss">
@@ -329,5 +333,23 @@ function searchItems() {
     <a href="sellnow.html" class="nav-item">➕ Sell</a>
     <a href="profile.html" class="nav-item">👤 Account</a>
 </nav>
+<script>
+    function searchItems() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        // Ky selector '.card' duhet të përputhet me klasën e kartave të orëve në index.html
+        const items = document.querySelectorAll('.card'); 
+
+        items.forEach(item => {
+            const itemName = item.innerText.toLowerCase();
+            if (searchTerm === "") {
+                item.style.display = "";
+            } else if (itemName.includes(searchTerm)) {
+                item.style.display = "";
+            } else {
+                item.style.display = "none";
+            }
+        });
+    }
+</script>
 </body>   
 </html>

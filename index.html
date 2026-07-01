@@ -297,12 +297,18 @@ loadProductCount();
 // Funksioni për kërkimin e artikujve
 function searchItems() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    // Ndryshuar nga .product-card në .card
     const items = document.querySelectorAll('.card'); 
 
     items.forEach(item => {
+        // Kërkojmë në të gjithë tekstin e kartës
         const itemName = item.innerText.toLowerCase();
-        if (itemName.includes(searchTerm)) {
+        
+        // Nëse kutia e kërkimit është bosh, shfaqini të gjitha
+        if (searchTerm === "") {
+            item.style.display = "";
+        } 
+        // Nëse ka tekst, filtro
+        else if (itemName.includes(searchTerm)) {
             item.style.display = ""; 
         } else {
             item.style.display = "none";

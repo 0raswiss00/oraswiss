@@ -177,5 +177,57 @@ window.ngarkoArtikujt = async function () {
     }
 };
 </script>
-</body>
+<script>
+    // 1. Funksioni i thjeshtë (global) që menuja ta gjejë gjithmonë
+    function toggleMenu() {
+        const menu = document.getElementById('myOraSwissMenu');
+        if (menu) {
+            menu.classList.toggle('active');
+        }
+    }
+</script>
+
+<script type="module">
+    // 2. Moduli për Supabase
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    const supabase = createClient(
+        'https://gnwsrmelmeqduhhmfmoa.supabase.co',
+        'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
+    );
+
+    // Bëjmë funksionin global që butoni në HTML ta shohë
+    window.ngarkoArtikujt = async function() {
+        const lista = document.getElementById("myWatchesList");
+        lista.innerHTML = "Po ngarkojmë orët...";
+
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+            lista.innerHTML = "<li>Duhet të logoheni!</li>";
+            return;
+        }
+
+        const { data, error } = await supabase
+            .from('oras')
+            .select('*')
+            .eq('user_id', user.id);
+
+        if (error) {
+            lista.innerHTML = "<li>Gabim gjatë lidhjes.</li>";
+            return;
+        }
+
+        lista.innerHTML = "";
+        if (!data || data.length === 0) {
+            lista.innerHTML = "<li>Nuk keni orë në shitje.</li>";
+        } else {
+            data.forEach(watch => {
+                const li = document.createElement("li");
+                li.innerHTML = <strong>${watch.brand}</strong> - ${watch.price} €;
+                lista.appendChild(li);
+            });
+        }
+    };
+</script>
+</body>    
 </html>

@@ -297,7 +297,8 @@ loadProductCount();
 // Funksioni për kërkimin e artikujve
 function searchItems() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const items = document.querySelectorAll('.product-card'); // Sigurohu që kartelat e tua kanë këtë klasë
+    // Ndryshuar nga .product-card në .card
+    const items = document.querySelectorAll('.card'); 
 
     items.forEach(item => {
         const itemName = item.innerText.toLowerCase();

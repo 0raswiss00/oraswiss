@@ -111,31 +111,30 @@
     </button> 
   </nav>
 <script>
-// Sigurohu që funksioni është jashtë çdo skripti tjetër të tipit module
+// FUNKSIONI I MENU-së (vetëm një herë)
 function toggleMenu() {
     const menu = document.getElementById('myOraSwissMenu');
     if (menu) {
         menu.classList.toggle('active');
     }
 }
-
-    // Skripti për të hapur dhe mbyllur menunë e My OraSwiss
-    function toggleMenu() {
-        const menu = document.getElementById('myOraSwissMenu');
-        menu.classList.toggle('active');
-    }
+</script>
 
 <script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-  const supabase = createClient(
+const supabase = createClient(
     'https://gnwsrmelmeqduhhmfmoa.supabase.co',
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
-  );
+);
 
-  window.ngarkoArtikujt = async function() {
-      const lista = document.getElementById("myWatchesList");
-      lista.innerHTML = "Po ngarkojmë orët..."; 
+// Nëse do ta thërrasësh nga HTML (onclick), e bën globale:
+window.ngarkoArtikujt = async function () {
+    const lista = document.getElementById("myWatchesList");
+    lista.innerHTML = "Po ngarkojmë orët...";
+
+    // vazhdon kodi yt këtu...
+};
 
       const { data: { user } } = await supabase.auth.getUser();
 

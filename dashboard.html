@@ -91,17 +91,25 @@
 
     <!-- Shiriti i navigimit në fund të faqes -->
     <nav class="bottom-nav">
-        <a href="index.html" class="bottom-nav-item">🏠 Home</a>
+        <!-- Profili yt -->
+        <a href="profile.html" class="bottom-nav-item">👤 Profile</a>
+        <a href="index.html" class="bottom-nav-item">🏠 Home</a> 
         <a href="favorites.html" class="bottom-nav-item">❤️ Favorites</a>
         <a href="collection.html" class="bottom-nav-item">⌚ Collection</a>
+
+           <!-- Orët në shitje (My Sale Watch) -->
+       <a href="my-sales.html" class="bottom-nav-item">⌚ My Sales</a> 
     <a href="sell.html" class="bottom-nav-item">🏷️ Sell</a>
-  
+        
     <!-- Këtu është rregullimi për "My OraSwiss" -->
     <button type="button" class="bottom-nav-item" onclick="toggleMenu()" style="border:none; background:none; cursor:pointer;">
     👤 My OraSwiss
     </button>
+    <!-- Butoni që hap menunë e plotë -->
+    <button type="button" class="bottom-nav-item" onclick="toggleMenu()" style="background:none; border:none; cursor:pointer;">
+        ☰ More
+    </button> 
   </nav>
-
 <script>
 // Sigurohu që funksioni është jashtë çdo skripti tjetër të tipit module
 function toggleMenu() {

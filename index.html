@@ -109,14 +109,6 @@
 </head>
 <body>
   
-     <div class="search-container">
-         <div class="search-box">
-             <span class="search-icon">🔍</span>
-             <input type="text" id="searchInput" placeholder="Search on OraSwiss">
-             <button class="camera-icon" onclick="alert('Funksioni për foto së shpejti!')">📷</button>
-         </div>
-     </div>
-  
 <header class="site-header">
   <nav class="nav-scroll">
     <span class="site-title">ORA<br>SWISS</span>
@@ -140,6 +132,17 @@
   </nav>
 </header>
 
+<!-- Search Bar i ri -->
+<div class="search-container" style="padding: 10px 16px;">
+    <div class="search-box" style="display: flex; align-items: center; background: #1a1a1a; padding: 10px 15px; border-radius: 8px; border: 1px solid #333;">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search on OraSwiss" onkeyup="searchItems()" style="background: transparent; border: none; color: #fff; flex: 1; margin: 0 10px; outline: none; font-size: 16px;">
+        <button class="camera-icon" onclick="alert('Funksioni për foto së shpejti!')" style="border: none; background: none; cursor: pointer; font-size: 20px;">📷</button>
+    </div>
+</div>
+
+<div id="luxury-container" class="grid">Loading...</div>
+  
 <h2>Luxury Collection</h2>
 <div id="luxury-container" class="grid">Loading...</div>
 

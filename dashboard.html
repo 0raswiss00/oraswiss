@@ -11,8 +11,31 @@
         .menu-item:hover { background: #222; }
         .btn-sell { background: gold; color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 5px; cursor: pointer; width: 100%; margin-bottom: 20px; }
         #myWatchesList { list-style: none; padding: 0; }
-        .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; }
+       .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; }
+    <style>
+     /* Siguron që rrjeta të jetë dyshe edhe këtu */
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        padding: 10px;
+        padding-bottom: 80px; /* Hapësirë që footer të mos mbivendoset */
+    }
+
+     /* Stilimi i përbashkët për navigimin fundor */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background: #000;
+        display: flex;
+        justify-content: space-around;
+        padding: 12px 0;
+        border-top: 1px solid #333;
+        z-index: 1000;
+    }
     </style>
+    </style>    
 </head>
 <body>
 

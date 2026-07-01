@@ -57,6 +57,53 @@
     .btn-buy:hover {
       background: #e6c200;
     }
+
+  /* 1. Stili për Search Bar */
+  #searchInput {
+      width: 100%;
+      padding: 12px;
+      border-radius: 20px;
+      border: none;
+      background-color: #1a1a1a;
+      color: white;
+      font-size: 16px;
+      outline: none;
+      box-sizing: border-box; /* Siguron që padding nuk prish gjerësinë */
+  }
+
+  /* 2. Stili për Footer Navigation (Chrono24 style) */
+  .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #000;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 12px 0;
+      border-top: 1px solid #333;
+      z-index: 1000;
+  }
+
+  .nav-item {
+      color: #888;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .nav-item.active {
+      color: #ffd700; /* Ngjyra e artë për tabin ku ndodhesh */
+  }
+
+  /* 3. Sigurohu që faqja të ketë hapësirë poshtë që navigimi të mos mbulojë përmbajtjen */
+  body {
+      padding-bottom: 70px; 
+  }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 </head>

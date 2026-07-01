@@ -104,7 +104,39 @@
   body {
       padding-bottom: 70px; 
   }
-  </style>
+<style>
+/* Grid dyshe */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Kjo detyron 2 kolona */
+    gap: 10px;
+    padding: 10px;
+    padding-bottom: 80px; /* Hapësirë që footer të mos mbulojë orët */
+}
+
+/* Navigimi fiks në fund */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #000;
+    display: flex;
+    justify-content: space-around;
+    padding: 15px 0;
+    border-top: 1px solid #333;
+    z-index: 1000;
+}
+
+.nav-item {
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+  </style> 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 </head>
 <body>

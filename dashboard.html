@@ -90,21 +90,33 @@
     </div>
 
     <!-- Shiriti i navigimit në fund të faqes -->
-    <nav class="bottom-nav">
-        <a href="index.html" class="bottom-nav-item">🏠 Home</a>
-        <a href="favorites.html" class="bottom-nav-item">❤️ Favorites</a>
-        <a href="collection.html" class="bottom-nav-item">⌚ Collection</a>
-        <a href="sell.html" class="bottom-nav-item">🏷️ Sell</a>
-        <button class="bottom-nav-item" onclick="toggleMenu()">👤 My OraSwiss</button>
-    </nav>
+<!-- Shiriti i navigimit në fund të faqes -->
+<nav class="bottom-nav">
+  <a href="index.html" class="bottom-nav-item">🏠 Home</a>
+  <a href="favorites.html" class="bottom-nav-item">❤️ Favorites</a>
+  <a href="collection.html" class="bottom-nav-item">⌚ Collection</a>
+  <a href="sell.html" class="bottom-nav-item">🏷️ Sell</a>
+  
+  <!-- Këtu është rregullimi për "My OraSwiss" -->
+  <button type="button" class="bottom-nav-item" onclick="toggleMenu()" style="border:none; background:none; cursor:pointer;">
+    👤 My OraSwiss
+  </button>
+</nav>
 
 <script>
+// Sigurohu që funksioni është jashtë çdo skripti tjetër të tipit module
+function toggleMenu() {
+    const menu = document.getElementById('myOraSwissMenu');
+    if (menu) {
+        menu.classList.toggle('active');
+    }
+}
+
     // Skripti për të hapur dhe mbyllur menunë e My OraSwiss
     function toggleMenu() {
         const menu = document.getElementById('myOraSwissMenu');
         menu.classList.toggle('active');
     }
-</script>
 
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';

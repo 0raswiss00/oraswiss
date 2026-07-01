@@ -59,7 +59,18 @@
 </nav>
 
 <!-- Skripti (JavaScript) -->
-<script>
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+  
+  // E deklaron këtu në fillim, jashtë çdo funksioni
+  const supabase = createClient('URL_E_SUPABASE', 'KEY_E_SUPABASE');
+
+  // Tani funksioni yt do ta shohë atë
+  window.ngarkoArtikujt = async function() {
+      const { data, error } = await supabase.from('watches').select('*');
+      // ... pjesa tjetër e kodit
+  };
+
 window.ngarkoArtikujt = async function() {
     const lista = document.getElementById('myWatchesList');
     // Supozojmë se ke supabase të inicializuar

@@ -144,35 +144,32 @@
             return;
         }
 
-// ... pjesa tjetër e kodit tuaj ...
+        // ... pjesa tjetër e kodit tuaj ...
+        lista.innerHTML = "";
+        if (!data || data.length === 0) {
+            lista.innerHTML = "<li>Nuk keni orë në shitje.</li>";
+        } else {
+            data.forEach(watch => {
+                const li = document.createElement("li");
+                li.className = "watch-card"; // SHTO KËTË PËR TË FUNKSIONUAR KËRKIMI
+                // Përdor backticks (`) në fillim dhe fund të stringut:
+                li.innerHTML = `<strong>${watch.brand}</strong> - ${watch.price} €`;
+                lista.appendChild(li);
+            });
+        }
+        // Pjesa e kërkimit (searchInput)
+        document.getElementById('searchInput').addEventListener('keyup', function(e) {
+            const termi = e.target.value.toLowerCase();
+            const lista = document.getElementById("myWatchesList");
+            const artikujt = lista.getElementsByClassName("watch-card");
 
-lista.innerHTML = "";
-if (!data || data.length === 0) {
-    lista.innerHTML = "<li>Nuk keni orë në shitje.</li>";
-} else {
-    data.forEach(watch => {
-        const li = document.createElement("li");
-        li.className = "watch-card"; // SHTO KËTË PËR TË FUNKSIONUAR KËRKIMI
-        // Përdor backticks (`) në fillim dhe fund të stringut:
-        li.innerHTML = `<strong>${watch.brand}</strong> - ${watch.price} €`;
-        lista.appendChild(li);
-    });
-}
-
-// Pjesa e kërkimit (searchInput)
-document.getElementById('searchInput').addEventListener('keyup', function(e) {
-    const termi = e.target.value.toLowerCase();
-    const lista = document.getElementById("myWatchesList");
-    const artikujt = lista.getElementsByClassName("watch-card");
-
-    for (let i = 0; i < artikujt.length; i++) {
-        let tekst = artikujt[i].textContent.toLowerCase();
-        // Nëse teksti e përmban termin, shfaqe, përndryshe fshihe
-        artikujt[i].style.display = tekst.includes(termi) ? "" : "none";
-    }
-});
-
-    document.getElementById('btnNgarko').addEventListener('click', window.ngarkoArtikujt);
+            for (let i = 0; i < artikujt.length; i++) {
+                let tekst = artikujt[i].textContent.toLowerCase();
+                // Nëse teksti e përmban termin, shfaqe, përndryshe fshihe
+                artikujt[i].style.display = tekst.includes(termi) ? "" : "none";
+            }
+        });
+        document.getElementById('btnNgarko').addEventListener('click', window.ngarkoArtikujt);
 </script>     
 </body>    
 </html>

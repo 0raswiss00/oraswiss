@@ -150,7 +150,7 @@
             data.forEach(watch => {
                 const li = document.createElement("li");
                 li.className = "watch-card"; // E rëndësishme për kërkimin
-                li.innerHTML = `<strong>${watch.brand}</strong> - ${watch.price} €`;
+                li.innerHTML = `<img src="${watch.image_url[0]}" alt="${watch.brand}" style="width:60px; height:60px; object-fit:cover; border-radius:6px; margin-right:10px;"> <strong>${watch.brand}</strong> - ${watch.price} €`;
                 lista.appendChild(li);
             });
         }

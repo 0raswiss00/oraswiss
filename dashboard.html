@@ -156,7 +156,18 @@
         }
     }
 
-    // 2. Lidh eventet pasi DOM të jetë ngarkuar plotësisht
+    // 2. Funksioni për hapjen/mbylljen e menusë "My OraSwiss"
+    function toggleMenu() {
+        const menu = document.getElementById('myOraSwissMenu');
+        menu.classList.toggle('active');
+    }
+
+    // 3. Bëj funksionet të aksesueshme nga onclick="" në HTML
+    // (të nevojshme sepse type="module" i izolon funksionet nga scope-i global)
+    window.ngarkoArtikujt = ngarkoArtikujt;
+    window.toggleMenu = toggleMenu;
+
+    // 4. Lidh eventet pasi DOM të jetë ngarkuar plotësisht
     document.addEventListener('DOMContentLoaded', () => {
         // Lidh butonin (Sigurohu që butoni në HTML ka id="btnNgarko")
         const btn = document.getElementById('btnNgarko');
@@ -179,3 +190,4 @@
 </script>
 </body>    
 </html>
+

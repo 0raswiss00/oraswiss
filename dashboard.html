@@ -115,7 +115,6 @@
     </nav>
 
 <script type="module">
-    // 2. Moduli për Supabase
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
     const supabase = createClient(
@@ -123,8 +122,8 @@
         'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
     );
 
-    // Bëjmë funksionin global që butoni në HTML ta shohë
-    window.ngarkoArtikujt = async function() {
+    // 1. Deklaro funksionin si të zakonshëm
+    async function ngarkoArtikujt() {
         const lista = document.getElementById("myWatchesList");
         lista.innerHTML = "Po ngarkojmë orët...";
 
@@ -144,32 +143,39 @@
             return;
         }
 
-        // ... pjesa tjetër e kodit tuaj ...
         lista.innerHTML = "";
         if (!data || data.length === 0) {
             lista.innerHTML = "<li>Nuk keni orë në shitje.</li>";
         } else {
             data.forEach(watch => {
                 const li = document.createElement("li");
-                li.className = "watch-card"; // SHTO KËTË PËR TË FUNKSIONUAR KËRKIMI
-                // Përdor backticks (`) në fillim dhe fund të stringut:
-                li.innerHTML = `<strong>${watch.brand}</strong> - ${watch.price} €`;
+                li.className = "watch-card"; // E rëndësishme për kërkimin
+                li.innerHTML = <strong>${watch.brand}</strong> - ${watch.price} €;
                 lista.appendChild(li);
             });
         }
-        // Pjesa e kërkimit (searchInput)
-        document.getElementById('searchInput').addEventListener('keyup', function(e) {
-            const termi = e.target.value.toLowerCase();
-            const lista = document.getElementById("myWatchesList");
-            const artikujt = lista.getElementsByClassName("watch-card");
+    }
 
-            for (let i = 0; i < artikujt.length; i++) {
-                let tekst = artikujt[i].textContent.toLowerCase();
-                // Nëse teksti e përmban termin, shfaqe, përndryshe fshihe
-                artikujt[i].style.display = tekst.includes(termi) ? "" : "none";
-            }
-        });
-        document.getElementById('btnNgarko').addEventListener('click', window.ngarkoArtikujt);
-</script>     
+    // 2. Lidh eventet pasi DOM të jetë ngarkuar plotësisht
+    document.addEventListener('DOMContentLoaded', () => {
+        // Lidh butonin (Sigurohu që butoni në HTML ka id="btnNgarko")
+        const btn = document.getElementById('btnNgarko');
+        if (btn) btn.addEventListener('click', ngarkoArtikujt);
+
+        // Lidh kërkimin
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function(e) {
+                const termi = e.target.value.toLowerCase();
+                const lista = document.getElementById("myWatchesList");
+                const artikujt = lista.getElementsByClassName("watch-card");
+                for (let i = 0; i < artikujt.length; i++) {
+                    let tekst = artikujt[i].textContent.toLowerCase();
+                    artikujt[i].style.display = tekst.includes(termi) ? "" : "none";
+                }
+            });
+        }
+    });
+</script>
 </body>    
 </html>

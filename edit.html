@@ -2,155 +2,191 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <title>Modifiko Orën</title>
+    <title>myOraSwiss - Dashboard</title>
     <style>
-        body { font-family: Arial; background: #000; color: #fff; padding: 20px; }
-        form { max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border-radius: 10px; }
-        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px; }
-        button { width: 100%; padding: 15px; background: gold; border: none; font-weight: bold; cursor: pointer; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; 
+            background: #000; 
+            color: #fff; 
+            padding: 20px; 
+            padding-bottom: 80px; /* Lë hapësirë që përmbajtja të mos mbulohet nga shiriti i poshtëm */
+            margin: 0;
+        }
+        .profile-header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 20px; }
+        .btn-sell { background: gold; color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 5px; cursor: pointer; width: 100%; margin-bottom: 20px; }
+        
+        /* SHIRITI I POSHTËM FIKS (Bottom Navigation) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #111;
+            border-top: 1px solid #333;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 12px 0;
+            z-index: 1000;
+        }
+        .bottom-nav-item {
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .bottom-nav-item:hover { color: gold; }
+
+        /* MENUJA "MY ORASWISS" (E fshehur fillimisht) */
+        .my-oraswiss-menu { 
+            display: none; 
+            position: fixed;
+            bottom: 70px; /* Shfaqet fiks mbi shiritin e poshtëm */
+            left: 5%;
+            width: 90%;
+            background: #111; 
+            border: 1px solid #333;
+            border-radius: 8px; 
+            z-index: 999;
+            padding: 10px;
+            box-sizing: border-box;
+            box-shadow: 0px -5px 15px rgba(0,0,0,0.5);
+        }
+        .my-oraswiss-menu.active { display: block; }
+        
+        .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 10px; border-bottom: 1px solid #222; cursor: pointer; }
+        .menu-item:last-child { border-bottom: none; }
+        
+        .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; }
     </style>
 </head>
 <body>
-<a href="dashboard.html"
-    style="color:#ccc; text-align:center; display:block; margin-top:10px;">
-    ← Back 
-</a>
-<form id="editForm">
-    <h2>Modifiko Orën</h2>
-    <input type="text" id="brand" placeholder="Brand" required>
-    <input type="text" id="model" placeholder="Model" required>
-    <input type="number" id="price" placeholder="Price">
-    <textarea id="description" placeholder="Description"></textarea>
-    <label for="image_input">Shto ose ndrysho fotot:</label>
-    <input type="file" id="image_input" multiple accept="image/*">
-    <button type="submit">Ruaj Ndryshimet</button>
-</form>
 
-<div id="gallery-container" style="margin: 15px 0; display: flex; gap: 10px; flex-wrap: wrap;">
+    <div class="search-container">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Search on OraSwiss">
+            <button class="camera-icon" onclick="alert('Funksioni për foto së shpejti!')">📷</button>
+        </div>
     </div>
-   
+
+    <ul id="myWatchesList" style="list-style: none; padding: 0;"></ul>
+
+    <!-- Menuja që hapet (Buy, Messages, etj.) -->
+    <div id="myOraSwissMenu" class="my-oraswiss-menu">
+        <div class="menu-item" onclick="location.href='buy.html'"><span>🛒 Buy</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='messages.html'"><span>✉️ Messages</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='settings.html'"><span>⚙️ Account Settings</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='support.html'"><span>🎧 Support</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='info.html'"><span>ℹ️ Info</span> <span>></span></div>
+    </div>
+
+    <!-- Shiriti i navigimit i rregulluar -->
+    <nav class="bottom-nav">
+        <!-- 1. Profili -->
+        <a href="profile.html" class="bottom-nav-item">👤 Profile</a>
+    
+        <!-- 2. Home -->
+        <a href="index.html" class="bottom-nav-item">🏠 Home</a>
+    
+        <!-- 3. Favorites -->
+        <a href="favorites.html" class="bottom-nav-item">❤️ Favorites</a>
+    
+        <!-- 4. Collection -->
+        <a href="collection.html" class="bottom-nav-item">⌚ Collection</a>
+    
+        <!-- 5. My Sales (Funksioni ngarkoArtikujt) -->
+        <button type="button" class="bottom-nav-item" onclick="ngarkoArtikujt()" style="background:none; border:none; cursor:pointer; font-size:inherit; color:inherit;">
+            ⌚ My Sales
+        </button>
+    
+        <!-- 6. Sell -->
+        <a href="sellnow.html" class="bottom-nav-item">🏷️ Sell</a>
+
+        <!-- 7. Butoni i menusë My OraSwiss -->
+        <button type="button" class="bottom-nav-item" onclick="toggleMenu()" style="background:none; border:none; cursor:pointer; font-size:inherit; color:inherit;">
+            👤 My OraSwiss
+        </button>
+    </nav>
+
 <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
     const supabase = createClient(
-        "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+        'https://gnwsrmelmeqduhhmfmoa.supabase.co',
+        'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
     );
 
-    const id = new URLSearchParams(window.location.search).get('id');
+    // 1. Deklaro funksionin si të zakonshëm
+    async function ngarkoArtikujt() {
+        const lista = document.getElementById("myWatchesList");
+        lista.innerHTML = "Po ngarkojmë orët...";
 
-async function fetchWatch() {
-    const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .eq('id', id)
-        .single();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+            lista.innerHTML = "<li>Duhet të logoheni!</li>";
+            return;
+        }
 
-    if (error || !data) {
-        console.log(error);
-        return;
-    }
+        const { data, error } = await supabase
+            .from('oras')
+            .select('*')
+            .eq('user_id', user.id);
 
-    // form fields
-    document.getElementById('brand').value = data.brand || "";
-    document.getElementById('model').value = data.model || "";
-    document.getElementById('price').value = data.price || "";
-    document.getElementById('description').value = data.description || "";
+        if (error) {
+            lista.innerHTML = "<li>Gabim gjatë lidhjes.</li>";
+            return;
+        }
 
-    window.produktData = data;
-
-    // =========================
-    // GALERIA E SAKTË
-    // =========================
-    const gallery = document.getElementById('gallery-container');
-    gallery.innerHTML = "";
-
-    let images = [];
-
-    if (Array.isArray(data.image_url)) {
-        images = data.image_url;
-    } else if (typeof data.image_url === "string") {
-        try {
-            images = JSON.parse(data.image_url);
-        } catch {
-            images = data.image_url.split(",").filter(Boolean);
+        lista.innerHTML = "";
+        if (!data || data.length === 0) {
+            lista.innerHTML = "<li>Nuk keni orë në shitje.</li>";
+        } else {
+            data.forEach(watch => {
+                const li = document.createElement("li");
+                li.className = "watch-card"; // E rëndësishme për kërkimin
+                li.innerHTML = `<strong>${watch.brand}</strong> - ${watch.price} €`;
+                lista.appendChild(li);
+            });
         }
     }
 
-    if (!images.length) {
-        gallery.innerHTML = "<p>No images</p>";
-        return;
+    // 2. Funksioni për hapjen/mbylljen e menusë "My OraSwiss"
+    function toggleMenu() {
+        const menu = document.getElementById('myOraSwissMenu');
+        menu.classList.toggle('active');
     }
 
-    images.forEach((url, index) => {
-        const img = document.createElement("img");
+    // 3. Bëj funksionet të aksesueshme nga onclick="" në HTML
+    // (të nevojshme sepse type="module" i izolon funksionet nga scope-i global)
+    window.ngarkoArtikujt = ngarkoArtikujt;
+    window.toggleMenu = toggleMenu;
 
-        img.src = url.startsWith("http")
-            ? url
-            : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + url;
+    // 4. Lidh eventet pasi DOM të jetë ngarkuar plotësisht
+    document.addEventListener('DOMContentLoaded', () => {
+        // Lidh butonin (Sigurohu që butoni në HTML ka id="btnNgarko")
+        const btn = document.getElementById('btnNgarko');
+        if (btn) btn.addEventListener('click', ngarkoArtikujt);
 
-        img.style.width = "100px";
-        img.style.cursor = "pointer";
-        img.style.marginRight = "10px";
-
-        img.onclick = () => {
-            const moved = images.splice(index, 1)[0];
-            images.unshift(moved);
-            window.produktData.image_url = images;
-            alert("Foto u bë kryesore");
-        };
-
-        gallery.appendChild(img);
+        // Lidh kërkimin
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function(e) {
+                const termi = e.target.value.toLowerCase();
+                const lista = document.getElementById("myWatchesList");
+                const artikujt = lista.getElementsByClassName("watch-card");
+                for (let i = 0; i < artikujt.length; i++) {
+                    let tekst = artikujt[i].textContent.toLowerCase();
+                    artikujt[i].style.display = tekst.includes(termi) ? "" : "none";
+                }
+            });
+        }
     });
-}
-
-// 2. Ruaj ndryshimet
-document.getElementById('editForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    // SHTESË: Merr informacionin e përdoruesit të loguar
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-    
-    if (userError || !user) {
-        alert("Duhet të jesh i loguar për të bërë ndryshime!");
-        return;
-    }
-
-    let imageUrls = window.produktData?.image_url || [];
-    const fileInput = document.getElementById('image_input');
-
-    if (fileInput.files.length > 0) {
-        for (let i = 0; i < fileInput.files.length; i++) {
-            const file = fileInput.files[i];
-            const fileName = ${Date.now()}_${file.name};
-            await supabase.storage.from('or-images').upload(fileName, file);
-            const { data } = supabase.storage.from('or-images').getPublicUrl(fileName);
-            imageUrls.push(data.publicUrl);
-        }
-    }
-
-    // MODIFIKIMI KRYESOR:
-    // Përdorim .eq('user_id', user.id) për të siguruar që RLS na lejon update-in
-    const { error } = await supabase.from('oras').update({
-        brand: document.getElementById('brand').value,
-        model: document.getElementById('model').value,
-        price: parseInt(document.getElementById('price').value),
-        description: document.getElementById('description').value,
-        image_url: imageUrls
-    })
-    .eq('id', id)
-    .eq('user_id', user.id); // KY ËSHTË KRYESORI: Siguron pronësinë
-
-    if (error) {
-        console.error("Gabim:", error);
-        alert("Gabim gjatë ruajtjes: " + error.message);
-    } else {
-        alert("Ora u modifikua me sukses!");
-        window.location.href = 'dashboard.html';
-    }
-});
-
-fetchWatch();
 </script>
-</body>
+</body>    
 </html>

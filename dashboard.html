@@ -152,9 +152,12 @@
                 const li = document.createElement("li");
                 li.className = "watch-card";
                 li.innerHTML = `
-                <img src="${watch.image_url[0]}" alt="${watch.brand}" style="width:100px; height:auto;">
-                <strong>${watch.brand}</strong> - ${watch.price} €
-            `;
+    <a href="edit.html?id=${watch.id}" style="text-decoration:none; color:inherit; display:flex; align-items:center;">
+        <img src="${watch.image_url && watch.image_url[0] ? watch.image_url[0] : ''}" alt="${watch.brand}" style="width:100px; height:auto; margin-right:15px;">
+        <strong>${watch.brand}</strong> - ${watch.price} €
+    </a>
+`;
+
                 lista.appendChild(li);
             });
         }

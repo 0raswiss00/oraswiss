@@ -16,84 +16,97 @@
   <div class="wrap">
     <h2>Profili</h2>
 
-<div class="wrap">
     <h1 id="sellerTitle">Dyqani i Shitësit</h1>
-    
+
     <h3>Orët në shitje:</h3>
     <ul id="sellerWatches"></ul>
 
     <h3>Feedback-u i blerësve:</h3>
     <ul id="feedbackList"></ul>
-</div>
-   
+
     <p>Email: <b id="userEmail"></b></p>
     <p>Emri: <b id="userName">-</b></p>
+    <p>Telefon: <b id="userPhone">-</b></p>
+    <p>Shteti: <b id="userCountry">-</b></p>
+    <p>Rruga: <b id="userStreet">-</b></p>
+    <p>Nr. Shtëpisë: <b id="userHouseNumber">-</b></p>
+    <p>Kodi Postar: <b id="userZip">-</b></p>
 
     <p>Te regjistruar gjithsej: <b id="userCount">0</b></p>
 
     <button id="btnLogout" type="button">Logout</button>
     <p id="msg" style="margin-top:12px;"></p>
   </div>
- 
-<!-- ✅ VETËM 1 SCRIPT MODULE -->
- import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'; 
+
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-import { getFirestore, doc, getDoc, collection, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
 
-// KONFIGURIMI
-const firebaseConfig = { /* config yt */ };
-const supabase = createClient('URL_YT_SUPABASE', 'KEY_YT_SUPABASE');
+  const supabaseUrl = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
+  const supabaseKey = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9';
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+  // ELEMENTET
+  const emailEl = document.getElementById("userEmail");
+  const nameEl = document.getElementById("userName");
+  const phoneEl = document.getElementById("userPhone");
+  const countryEl = document.getElementById("userCountry");
+  const streetEl = document.getElementById("userStreet");
+  const houseEl = document.getElementById("userHouseNumber");
+  const zipEl = document.getElementById("userZip");
+  const countEl = document.getElementById("userCount");
+  const msgEl = document.getElementById("msg");
+  const logoutBtn = document.getElementById("btnLogout");
+  const watchList = document.getElementById("sellerWatches");
 
-// ELEMENTET
-const nameEl = document.getElementById("userName");
-const countEl = document.getElementById("userCount");
-const msgEl = document.getElementById("msg");
-const logoutBtn = document.getElementById("btnLogout"); // U rregullua ID
+  // NGARKO ORËT E SHITËSIT NGA SUPABASE
+  async function loadWatches(uid) {
+    const { data: watches, error } = await supabase
+      .from('oras')
+      .select('*')
+      .eq('user_id', uid);
 
-// FUNKSIONI I SUPABASE
-async function loadData(uid) {
-    const { data: watches } = await supabase.from('oras').select('*').eq('user_id', uid);
-    const watchList = document.getElementById('sellerWatches');
     watchList.innerHTML = "";
+    if (error) {
+      console.error(error);
+      return;
+    }
     watches?.forEach(w => {
-        let li = document.createElement('li');
-        li.innerHTML = <b>${w.brand}</b> - ${w.price}€;
-        watchList.appendChild(li);
+      const li = document.createElement('li');
+      li.innerHTML = `<b>${w.brand}</b> - ${w.price}€`;
+      watchList.appendChild(li);
     });
-}
-
-// LOGJIKA KRYESORE
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    window.location.href = "index.html";
-    return;
   }
 
-  msgEl.textContent = user.email;
-  
-  // Ngarko emrin dhe numrin
-  const snap = await getDoc(doc(db, "users", user.uid));
-  if (snap.exists()) nameEl.textContent = snap.data().name;
-  
-  const countSnap = await getCountFromServer(collection(db, "users"));
-  countEl.innerText = countSnap.data().count;
+  // LOGJIKA KRYESORE
+  window.addEventListener("DOMContentLoaded", async () => {
+    const { data: { user }, error } = await supabase.auth.getUser();
 
-  // Ngarko orët nga Supabase
-  await loadData(user.uid); 
-});
+    if (error || !user) {
+      window.location.href = "index.html";
+      return;
+    }
 
-logoutBtn.addEventListener("click", async () => {
-  await signOut(auth);
-  window.location.href = "index.html";
-});
+    const meta = user.user_metadata || {};
+
+    emailEl.textContent = user.email;
+    nameEl.textContent = meta.full_name || "-";
+    phoneEl.textContent = meta.phone || "-";
+    countryEl.textContent = meta.country || "-";
+    streetEl.textContent = meta.street || "-";
+    houseEl.textContent = meta.house_number || "-";
+    zipEl.textContent = meta.zip_code || "-";
+
+    // Numri total i të regjistruarve (kërkon RPC/tabelë; shih shënimin poshtë)
+    // countEl.textContent = ...;
+
+    await loadWatches(user.id);
+  });
+
+  // LOGOUT
+  logoutBtn.addEventListener("click", async () => {
+    await supabase.auth.signOut();
+    window.location.href = "index.html";
+  });
 </script>
-</body>  
+</body>
 </html>
-

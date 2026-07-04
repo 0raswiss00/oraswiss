@@ -27,6 +27,10 @@
       <input id="country" placeholder="Country" autocomplete="country-name" />
       <input id="email" type="email" placeholder="Email" autocomplete="email" autocapitalize="none" />
       <input id="password" type="password" placeholder="Password" autocomplete="new-password" />
+      <input id="street" placeholder="Rruga" autocomplete="street-address" />
+      <input id="houseNumber" placeholder="Nr. Shtëpisë" />
+      <input id="zipCode" placeholder="Kodi Postar" autocomplete="postal-code" />
+
       <button id="btnRegister" type="button" class="auth-btn">Register</button>
 
       <div class="auth-sep"></div>
@@ -57,31 +61,42 @@
   window.addEventListener("DOMContentLoaded", () => {
     
     // REGISTER
-    const btnReg = document.getElementById("btnRegister");
-    if (btnReg) {
-      btnReg.addEventListener("click", async () => {
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
-        const fullName = document.getElementById("fullName").value;
+    btnReg.addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const fullName = document.getElementById("fullName").value;
+      const phone = document.getElementById("phone").value;
+      const country = document.getElementById("country").value;
+      const street = document.getElementById("street").value;
+      const houseNumber = document.getElementById("houseNumber").value;
+      const zipCode = document.getElementById("zipCode").value;
 
-        if (!email || !password) {
-          alert("Plotëso email dhe password");
-          return;
-        }
+      if (!email || !password) {
+        alert("Plotëso email dhe password");
+        return;
+      }
 
-        try {
-          const { data, error } = await supabase.auth.signUp({
-            email: email,
-            password: password,
-            options: { data: { full_name: fullName } }
-          });
-          if (error) throw error;
-          alert("Regjistrimi u krye! Konfirmo emailin.");
-        } catch (e) {
-          alert(e.message);
-        }
-      });
-    }
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            data: {
+              full_name: fullName,
+              phone: phone,
+              country: country,
+              street: street,
+              house_number: houseNumber,
+              zip_code: zipCode
+            }
+          }
+        });
+        if (error) throw error;
+        alert("Regjistrimi u krye! Konfirmo emailin.");
+      } catch (e) {
+        alert(e.message);
+      }
+    });
 
     // LOGIN
     const btnLog = document.getElementById("btnLogin");

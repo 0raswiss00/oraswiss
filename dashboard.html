@@ -151,7 +151,7 @@
                 const li = document.createElement("li");
                 li.className = "watch-card";
                 li.innerHTML = `
-                    <img src="${watch.image_url}" alt="${watch.brand}" style="width:100px; height:auto;">
+                    li.innerHTML = `<img src="${watch.image_url && watch.image_url[0] ? watch.image_url[0] : ''}" alt="${watch.brand}" style="width:100px; height:auto;"> <strong>${watch.brand}</strong> - ${watch.price} €`;
                     <strong>${watch.brand}</strong> - ${watch.price} €
                 `;
                 lista.appendChild(li);

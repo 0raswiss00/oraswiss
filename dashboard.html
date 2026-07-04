@@ -149,11 +149,15 @@
         } else {
             data.forEach(watch => {
                 const li = document.createElement("li");
-                li.className = "watch-card"; // E rëndësishme për kërkimin
+                li.className = "watch-card";
                 li.innerHTML = `
                     <img src="${watch.image_url}" alt="${watch.brand}" style="width:100px; height:auto;">
                     <strong>${watch.brand}</strong> - ${watch.price} €
                 `;
+                lista.appendChild(li);
+            });
+        }
+    }
 
     // 2. Funksioni për hapjen/mbylljen e menusë "My OraSwiss"
     function toggleMenu() {
@@ -162,17 +166,18 @@
     }
 
     // 3. Bëj funksionet të aksesueshme nga onclick="" në HTML
-    // (të nevojshme sepse type="module" i izolon funksionet nga scope-i global)
     window.ngarkoArtikujt = ngarkoArtikujt;
     window.toggleMenu = toggleMenu;
 
     // 4. Lidh eventet pasi DOM të jetë ngarkuar plotësisht
     document.addEventListener('DOMContentLoaded', () => {
-        // Lidh butonin (Sigurohu që butoni në HTML ka id="btnNgarko")
         const btn = document.getElementById('btnNgarko');
-        if (btn) btn.addEventListener('click', ngarkoArtikujt);
+        if (btn) {
+            btn.addEventListener('click', ngarkoArtikujt);
+        } else {
+            ngarkoArtikujt();
+        }
 
-        // Lidh kërkimin
         const searchInput = document.getElementById('searchInput');
         if (searchInput) {
             searchInput.addEventListener('keyup', function(e) {
@@ -187,5 +192,5 @@
         }
     });
 </script>
-</body>    
-</html
+</body>
+</html>

@@ -150,11 +150,10 @@
             data.forEach(watch => {
                 const li = document.createElement("li");
                 li.className = "watch-card"; // E rëndësishme për kërkimin
-                // Ndrysho rreshtin 153 me këtë:
-li.innerHTML = `
-    <img src="${watch.image_url}" alt="${watch.brand}" style="width:100px; height:auto;">
-    <strong>${watch.brand}</strong> - ${watch.price} €
-`;
+                li.innerHTML = `
+                    <img src="${watch.image_url}" alt="${watch.brand}" style="width:100px; height:auto;">
+                    <strong>${watch.brand}</strong> - ${watch.price} €
+                `;
 
     // 2. Funksioni për hapjen/mbylljen e menusë "My OraSwiss"
     function toggleMenu() {

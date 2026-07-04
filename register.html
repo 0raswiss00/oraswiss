@@ -59,7 +59,8 @@
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   window.addEventListener("DOMContentLoaded", () => {
-    
+
+    const btnReg = document.getElementById("btnRegister");
     // REGISTER
     btnReg.addEventListener("click", async () => {
       const email = document.getElementById("email").value.trim();

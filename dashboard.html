@@ -137,7 +137,7 @@
             .from('oras')
             .select('*')
             .eq('user_id', user.id)
-            .range(0, 5000); // Kjo i thotë kodit të kërkojë deri në 1000 artikuj
+            .order('created_at', { ascending: false }); // 
 
         if (error) {
             lista.innerHTML = "<li>Gabim gjatë lidhjes.</li>";

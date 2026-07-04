@@ -2905,3 +2905,19 @@ img {
     font-size: 18px;
 }
       
+.my-oraswiss-menu {
+    display: none;
+    position: fixed;
+    bottom: 70px;
+    left: 5%;
+    width: 90%;
+    max-height: 70vh; /* Kjo e lejon listën të marrë deri në 70% të lartësisë së ekranit */
+    overflow-y: auto; /* Kjo shton scroll-in nëse artikujt janë më shumë se 9 */
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    z-index: 999;
+    padding: 10px;
+    box-sizing: border-box;
+}
+Compose

@@ -117,15 +117,21 @@ document.getElementById('editForm').addEventListener('submit', async (e) => {
     }
 
     let imageUrls = window.produktData?.image_url || [];
-    const fileInput = document.getElementById('image_input');
-
-    if (fileInput.files.length > 0) {
-        for (let i = 0; i < fileInput.files.length; i++) {
-            const file = fileInput.files[i];
-            const fileName = ${Date.now()}_${file.name};
-            await supabase.storage.from('or-images').upload(fileName, file);
-            const { data } = supabase.storage.from('or-images').getPublicUrl(fileName);
-            imageUrls.push(data.publicUrl);
+    // Sigurohuni që funksioni që mbyll këtë kod të ketë 'async'
+    async function saveImages() { 
+        // ... kodi juaj tjetër ...
+    
+        if (fileInput.files.length > 0) {
+            for (let i = 0; i < fileInput.files.length; i++) {
+                const file = fileInput.files[i];
+                const fileName = ${Date.now()}_${file.name};
+            
+                // Tani 'await' do të funksionojë siç duhet
+                await supabase.storage.from('or-images').upload(fileName, file);
+            
+                const { data } = supabase.storage.from('or-images').getPublicUrl(fileName);
+                imageUrls.push(data.publicUrl);
+            }
         }
     }
 

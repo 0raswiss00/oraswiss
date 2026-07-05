@@ -155,12 +155,11 @@
 <div id="parts-container" class="grid">Loading...</div>
 
 <script>
-  if (!window.supabase) {
-      window.supabase = window.supabase.createClient(
-          "https://gnwsrmelmeqduhhmfmoa.supabase.co",
-          "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-      );
-  }
+const supabase = supabase.createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "sb_publishable_AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
+
 // Tani përdorni variablin 'supabase' kudo në kod
 
 async function loadCategory(cat, containerId) {

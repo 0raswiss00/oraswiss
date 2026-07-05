@@ -1,5 +1,5 @@
 // 1. Konfigurimi - Zëvendëso këto me të dhënat e tua nga Supabase Settings
-const supabaseUrl = '//gnwsrmelmeqduhhmfmoa.supabase.co';
+const supabaseUrl = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
 const supabaseKey = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9';
 
 // 2. Krijimi i klientit

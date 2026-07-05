@@ -790,3 +790,880 @@ if (forgotPasswordLink) {
 
 
 register
+
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <title>myOraSwiss - Dashboard</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; 
+            background: #000; 
+            color: #fff; 
+            padding: 20px; 
+            padding-bottom: 80px; /* Lë hapësirë që përmbajtja të mos mbulohet nga shiriti i poshtëm */
+            margin: 0;
+        }
+        .profile-header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 20px; }
+        .btn-sell { background: gold; color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 5px; cursor: pointer; width: 100%; margin-bottom: 20px; }
+        
+        /* SHIRITI I POSHTËM FIKS (Bottom Navigation) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #111;
+            border-top: 1px solid #333;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 12px 0;
+            z-index: 1000;
+        }
+        .bottom-nav-item {
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .bottom-nav-item:hover { color: gold; }
+
+        /* MENUJA "MY ORASWISS" (E fshehur fillimisht) */
+        .my-oraswiss-menu { 
+            display: none; 
+            position: fixed;
+            bottom: 70px; /* Shfaqet fiks mbi shiritin e poshtëm */
+            left: 5%;
+            width: 90%;
+            background: #111; 
+            border: 1px solid #333;
+            border-radius: 8px; 
+            z-index: 999;
+            padding: 10px;
+            box-sizing: border-box;
+            box-shadow: 0px -5px 15px rgba(0,0,0,0.5);
+        }
+        .my-oraswiss-menu.active { display: block; }
+        
+        .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 10px; border-bottom: 1px solid #222; cursor: pointer; }
+        .menu-item:last-child { border-bottom: none; }
+        
+        .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; }
+    </style>
+</head>
+<body>
+
+    <div class="search-container">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Search on OraSwiss">
+            <button class="camera-icon" onclick="alert('Funksioni për foto së shpejti!')">📷</button>
+        </div>
+    </div>
+
+    <ul id="myWatchesList" style="list-style: none; padding: 0;"></ul>
+
+    <!-- Menuja që hapet (Buy, Messages, etj.) -->
+    <div id="myOraSwissMenu" class="my-oraswiss-menu">
+        <div class="menu-item" onclick="location.href='buy.html'"><span>🛒 Buy</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='messages.html'"><span>✉️ Messages</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='settings.html'"><span>⚙️ Account Settings</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='support.html'"><span>🎧 Support</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='info.html'"><span>ℹ️ Info</span> <span>></span></div>
+    </div>
+
+    <!-- Shiriti i navigimit i rregulluar -->
+    <nav class="bottom-nav">
+        <!-- 1. Profili -->
+        <a href="profile.html" class="bottom-nav-item">👤 Profile</a>
+    
+        <!-- 2. Home -->
+        <a href="index.html" class="bottom-nav-item">🏠 Home</a>
+    
+        <!-- 3. Favorites -->
+        <a href="favorites.html" class="bottom-nav-item">❤️ Favorites</a>
+    
+        <!-- 4. Collection -->
+        <a href="collection.html" class="bottom-nav-item">⌚ Collection</a>
+    
+        <!-- 5. My Sales (Funksioni ngarkoArtikujt) -->
+        <button type="button" class="bottom-nav-item" id="btnNgarko" style="background:none;">
+            ⌚ My Sales
+        </button>
+    
+        <!-- 6. Sell -->
+        <a href="sellnow.html" class="bottom-nav-item">🏷️ Sell</a>
+
+        <!-- 7. Butoni i menusë My OraSwiss -->
+        <button type="button" class="bottom-nav-item" onclick="toggleMenu()" style="background:none; border:none; cursor:pointer; font-size:inherit; color:inherit;">
+            👤 My OraSwiss
+        </button>
+    </nav>
+
+<script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    const supabase = createClient(
+        'https://gnwsrmelmeqduhhmfmoa.supabase.co',
+        'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
+    );
+
+    // 1. Deklaro funksionin si të zakonshëm
+    async function ngarkoArtikujt() {
+        const lista = document.getElementById("myWatchesList");
+        lista.innerHTML = "Po ngarkojmë orët...";
+
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+            lista.innerHTML = "<li>Duhet të logoheni!</li>";
+            return;
+        }
+
+        const { data, error } = await supabase
+            .from('oras')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .range(0, 500); // Shto këtë rresht patjetër!
+
+        if (error) {
+            lista.innerHTML = "<li>Gabim gjatë lidhjes.</li>";
+            return;
+        }
+
+        lista.innerHTML = "";
+        if (!data || data.length === 0) {
+            lista.innerHTML = "<li>Nuk keni orë në shitje.</li>";
+        } else {
+            data.forEach(watch => {
+                const li = document.createElement("li");
+                li.className = "watch-card";
+                li.innerHTML = `
+                    <a href="edit.html?id=${watch.id}" style="text-decoration:none; color:inherit; display:flex; align-items:center;">
+                        <img src="${watch.image_url && watch.image_url[0] ? watch.image_url[0] : ''}" alt="${watch.brand}" style="width:100px; height:auto; margin-right:15px;">
+                        <strong>${watch.brand}</strong> - ${watch.price} €
+                    </a>
+                `;
+
+                lista.appendChild(li);
+            });
+        }
+    }
+
+    // 2. Funksioni për hapjen/mbylljen e menusë "My OraSwiss"
+    function toggleMenu() {
+        const menu = document.getElementById('myOraSwissMenu');
+        menu.classList.toggle('active');
+    }
+
+    // 3. Bëj funksionet të aksesueshme nga onclick="" në HTML
+    window.ngarkoArtikujt = ngarkoArtikujt;
+    window.toggleMenu = toggleMenu;
+
+    // 4. Lidh eventet pasi DOM të jetë ngarkuar plotësisht
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('btnNgarko');
+        if (btn) {
+            btn.addEventListener('click', ngarkoArtikujt);
+        } else {
+            ngarkoArtikujt();
+        }
+
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function(e) {
+                const termi = e.target.value.toLowerCase();
+                const lista = document.getElementById("myWatchesList");
+                const artikujt = lista.getElementsByClassName("watch-card");
+                for (let i = 0; i < artikujt.length; i++) {
+                    let tekst = artikujt[i].textContent.toLowerCase();
+                    artikujt[i].style.display = tekst.includes(termi) ? "" : "none";
+                }
+            });
+        }
+    });
+</script>
+<script>
+    let lastScrollTop = 0;
+    const nav = document.querySelector('.bottom-nav');
+
+    window.addEventListener('scroll', () => {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (scrollTop > lastScrollTop) {
+            // Scroll poshtë - fshihte navigimin
+            nav.classList.add('hidden');
+        } else {
+            // Scroll lart - shfaqe navigimin
+            nav.classList.remove('hidden');
+        }
+        
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Për të evituar gabime në Safari
+    }, false);
+</script>
+</body>    
+</html>
+dashboard
+
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile - Ora Swiss</title>
+
+  <style>
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
+    .wrap{max-width:520px;margin:30px auto;padding:0 16px}
+    button{padding:10px 14px;border-radius:10px;border:1px solid #777;background:#111;color:#fff;cursor:pointer}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <h2>Profili</h2>
+
+    <h1 id="sellerTitle">Dyqani i Shitësit</h1>
+
+    <h3>Orët në shitje:</h3>
+    <ul id="sellerWatches"></ul>
+
+    <h3>Feedback-u i blerësve:</h3>
+    <ul id="feedbackList"></ul>
+
+    <p>Email: <b id="userEmail"></b></p>
+    <p>Emri: <b id="userName">-</b></p>
+    <p>Telefon: <b id="userPhone">-</b></p>
+    <p>Shteti: <b id="userCountry">-</b></p>
+    <p>Rruga: <b id="userStreet">-</b></p>
+    <p>Nr. Shtëpisë: <b id="userHouseNumber">-</b></p>
+    <p>Kodi Postar: <b id="userZip">-</b></p>
+
+    <p>Te regjistruar gjithsej: <b id="userCount">0</b></p>
+
+    <button id="btnLogout" type="button">Logout</button>
+    <p id="msg" style="margin-top:12px;"></p>
+  </div>
+
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
+
+  const supabaseUrl = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
+  const supabaseKey = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9';
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  // ELEMENTET
+  const emailEl = document.getElementById("userEmail");
+  const nameEl = document.getElementById("userName");
+  const phoneEl = document.getElementById("userPhone");
+  const countryEl = document.getElementById("userCountry");
+  const streetEl = document.getElementById("userStreet");
+  const houseEl = document.getElementById("userHouseNumber");
+  const zipEl = document.getElementById("userZip");
+  const countEl = document.getElementById("userCount");
+  const msgEl = document.getElementById("msg");
+  const logoutBtn = document.getElementById("btnLogout");
+  const watchList = document.getElementById("sellerWatches");
+
+  // NGARKO ORËT E SHITËSIT NGA SUPABASE
+  async function loadWatches(uid) {
+    const { data: watches, error } = await supabase
+      .from('oras')
+      .select('*')
+      .eq('user_id', uid);
+
+    watchList.innerHTML = "";
+    if (error) {
+      console.error(error);
+      return;
+    }
+    watches?.forEach(w => {
+      const li = document.createElement('li');
+      li.innerHTML = `<b>${w.brand}</b> - ${w.price}€`;
+      watchList.appendChild(li);
+    });
+  }
+
+  // LOGJIKA KRYESORE
+  window.addEventListener("DOMContentLoaded", async () => {
+    const { data: { user }, error } = await supabase.auth.getUser();
+
+    if (error || !user) {
+      window.location.href = "index.html";
+      return;
+    }
+
+    const meta = user.user_metadata || {};
+
+    emailEl.textContent = user.email;
+    nameEl.textContent = meta.full_name || "-";
+    phoneEl.textContent = meta.phone || "-";
+    countryEl.textContent = meta.country || "-";
+    streetEl.textContent = meta.street || "-";
+    houseEl.textContent = meta.house_number || "-";
+    zipEl.textContent = meta.zip_code || "-";
+
+    // Numri total i të regjistruarve (kërkon RPC/tabelë; shih shënimin poshtë)
+    // countEl.textContent = ...;
+
+    await loadWatches(user.id);
+  });
+
+  // LOGOUT
+  logoutBtn.addEventListener("click", async () => {
+    await supabase.auth.signOut();
+    window.location.href = "index.html";
+  });
+</script>
+</body>
+</html>
+
+profil
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sell Your Watch</title>
+  <style>
+    body { font-family: Arial; background: #000; color: #fff; padding: 20px; }
+    form { max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border-radius: 10px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+    input, select, textarea { width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px; box-sizing: border-box;}
+    button { width: 100%; padding: 15px; background: gold; color: #000; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+  </style>
+</head>
+<body>
+<form id="sellForm">
+  <h2>Shto orë të re</h2>
+  <label>Kategoria:</label>
+  <select id="category" style="width:100%;margin-bottom:15px;">
+    <option value="luxury">Luxury</option>
+    <option value="vintage">Vintage</option>
+    <option value="parts">Parts</option>
+  </select>
+  <div class="row">
+    <input type="text" id="brand" placeholder="Brand" required>
+    <input type="text" id="model" placeholder="Model" required>
+  </div>
+  <label>Çmimi:</label>
+  <input type="number" id="price" placeholder="Çmimi në €" style="width:100%;margin-bottom:15px;padding:10px;">
+  <div class="row">
+    <input type="text" id="reference" placeholder="Reference">
+    <input type="text" id="material" placeholder="Material">
+  </div>
+  <div class="row">
+    <input type="text" id="case_size" placeholder="Case Size (e.g. 41mm)">
+    <input type="number" id="year" placeholder="Year">
+  </div>
+  <select id="movement" style="margin-bottom:15px;width:100%;padding:10px;background:#222;color:#fff;border:1px solid #444;">
+    <option value="Automatic">Automatic</option>
+    <option value="Manual">Manual</option>
+    <option value="Quartz">Quartz</option>
+  </select>
+  <select id="function" style="margin-bottom:15px;width:100%;padding:10px;background:#222;color:#fff;border:1px solid #444;">
+    <option value="Date">Date</option>
+    <option value="Chronometer">Chronometer</option>
+    <option value="Chronograph">Chronograph</option>
+    <option value="Turbillon">Turbillon</option>
+    <option value="No Date">No Date</option>
+  </select>
+  <div class="row" style="margin-top:15px">
+    <label><input type="checkbox" id="service"> Service kryer</label>
+    <label><input type="checkbox" id="box_papers"> Box / Papers</label>
+  </div>
+  <textarea id="description" placeholder="Description..." rows="4" style="width:100%;padding:10px;background:#222;color:#fff;border:1px solid #444;border-radius:5px;box-sizing:border-box;"></textarea>
+  <div style="margin-top:15px">
+    <label style="color:#aaa;font-size:14px;">Ngarko Foton e Orës:</label>
+    <input type="file" id="fileInput" name="images[]" accept="image/*" multiple style="margin-top:5px;">
+  </div>
+  <button type="submit">Shto orën</button>
+</form>
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+  const supabase = createClient(
+    'https://gnwsrmelmeqduhhmfmoa.supabase.co',
+    'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
+  );
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    alert("Duhet të jesh i loguar!");
+    window.location.href = 'register.html';
+  }
+
+  document.getElementById('sellForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      alert("Duhet të jesh i loguar!");
+      return;
+    }
+
+    const files = document.getElementById('fileInput').files;
+    let imageUrls = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const fileName = Date.now() + '' + i + '' + file.name;
+
+      const { error: uploadError } = await supabase
+        .storage.from('or-images').upload(fileName, file);
+
+      if (uploadError) {
+        alert("Gabim foto: " + uploadError.message);
+        return;
+      }
+
+      const { data: urlData } = supabase
+        .storage.from('or-images').getPublicUrl(fileName);
+
+      imageUrls.push(urlData.publicUrl);
+    }
+
+    const oraData = {
+      user_id: user.id,
+      category: document.getElementById('category').value,
+      brand: document.getElementById('brand').value,
+      model: document.getElementById('model').value,
+      price: parseInt(document.getElementById('price').value) || null,
+      reference: document.getElementById('reference').value,
+      material: document.getElementById('material').value,
+      case_size: document.getElementById('case_size').value,
+      year: parseInt(document.getElementById('year').value) || null,
+      movement: document.getElementById('movement').value,
+      function: document.getElementById('function').value,
+      service: document.getElementById('service').checked,
+      box_papers: document.getElementById('box_papers').checked,
+      description: document.getElementById('description').value,
+      image_url: imageUrls
+    };
+
+    const { error } = await supabase.from('oras').insert([oraData]);
+
+    if (error) {
+      alert("Gabim: " + error.message);
+      return;
+    }
+
+    alert("Ora u publikua me sukses!");
+    window.location.href = 'dashboard.html';
+  });
+</script>
+</body>
+</html>
+
+sell now
+
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ora Swiss - Users</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-KD2ZZ3MJYY');
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #FFD700;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .stat-box {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #FFD700;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .stat-box h3 {
+            color: #FFD700;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .stat-box .number {
+            font-size: 2.5em;
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        .visitors-list {
+            margin-top: 40px;
+            background: rgba(255, 215, 0, 0.05);
+            border: 2px solid #FFD700;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .visitors-list h2 {
+            color: #FFD700;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #FFD700;
+            padding-bottom: 10px;
+        }
+
+        .visitor-item {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 12px;
+            margin: 10px 0;
+            border-left: 4px solid #FFA500;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .visitor-item strong {
+            color: #FFD700;
+        }
+
+        .visitor-time {
+            color: #aaa;
+            font-size: 0.9em;
+        }
+
+        .visitor-badge {
+            background: #FFD700;
+            color: #000;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
+        .users-list {
+            margin-top: 40px;
+        }
+
+        .users-list h2 {
+            color: #FFD700;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #FFD700;
+            padding-bottom: 10px;
+        }
+
+        .user-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #FFD700;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .user-card:hover {
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .user-info h3 {
+            color: #FFD700;
+            margin-bottom: 5px;
+        }
+
+        .user-info p {
+            color: #aaa;
+            font-size: 0.9em;
+            margin: 3px 0;
+        }
+
+        .loading {
+            text-align: center;
+            color: #FFD700;
+            font-size: 1.2em;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 215, 0, 0.2);
+            border-top: 4px solid #FFD700;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: rgba(255, 0, 0, 0.2);
+            border: 2px solid #ff0000;
+            color: #ff6b6b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .empty {
+            text-align: center;
+            color: #aaa;
+            padding: 40px;
+            font-size: 1.1em;
+        }
+
+        .refresh-btn {
+            background: #FFD700;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #FFA500;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⌚ ORA SWISS</h1>
+        <p style="text-align: center; color: #aaa; margin-bottom: 30px;">Platforma e Shitjes së Orëve të Luksit</p>
+
+        <!-- STATISTIKA -->
+        <div class="stats">
+            <div class="stat-box">
+                <h3>👥 Përdorues DB</h3>
+                <div class="number" id="count-users">0</div>
+            </div>
+            <div class="stat-box">
+                <h3>⌚ Ora në Katalog</h3>
+                <div class="number" id="count-products">0</div>
+            </div>
+            <div class="stat-box">
+                <h3>🛒 Porosi</h3>
+                <div class="number" id="count-orders">0</div>
+            </div>
+            <div class="stat-box">
+                <h3>👀 Vizitorë Aktualë</h3>
+                <div class="number" id="count-visitors">0</div>
+            </div>
+        </div>
+
+        <!-- LISTA E VIZITORËVE -->
+        <div class="visitors-list" id="visitors-container">
+            <h2>👥 Vizitorët e Fundit</h2>
+            <div id="visitors-content" style="max-height: 300px; overflow-y: auto;">
+                <p style="color: #aaa; text-align: center;">Po përgjuron...</p>
+            </div>
+        </div>
+
+        <!-- LISTA E PËRDORUESVE -->
+        <div class="users-list">
+            <h2>📋 Lista e Përdoruesve të Regjistruar (Database)</h2>
+            <button class="refresh-btn" onclick="trackEvent('refresh_data'); loadAllData();">🔄 Përditeso</button>
+            <div id="users-container" class="loading">
+                <div class="spinner"></div>
+                <p>Po ngarkohet...</p>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let visitorsList = [];
+
+    function trackEvent(eventName, eventData = {}) {
+        if (typeof gtag !== 'undefined') {
+            gtag('event', eventName, eventData);
+        }
+    }
+
+    window.addEventListener('load', function() {
+        let visitorId = localStorage.getItem('visitorId');
+        if (!visitorId) {
+            visitorId = 'V' + Date.now();
+            localStorage.setItem('visitorId', visitorId);
+        }
+
+        visitorsList.push({
+            id: visitorId,
+            time: new Date().toLocaleTimeString('sq-AL'),
+            date: new Date().toLocaleDateString('sq-AL'),
+            browser: navigator.userAgent.split('/').pop().substring(0, 20)
+        });
+
+        document.getElementById('count-visitors').textContent = visitorsList.length;
+        updateVisitorsDisplay();
+        loadAllData();
+    });
+
+    function updateVisitorsDisplay() {
+        let html = '';
+        visitorsList.slice().reverse().forEach((visitor, index) => {
+            html += `
+                <div class="visitor-item">
+                    <div>
+                        <strong>👤 ${visitor.id}</strong>
+                        <div class="visitor-time">🕐 ${visitor.time} | 📅 ${visitor.date}</div>
+                        <div class="visitor-time" style="font-size:0.8em">🌐 ${visitor.browser}</div>
+                    </div>
+                    <div class="visitor-badge">#${visitorsList.length - index}</div>
+                </div>
+            `;
+        });
+        document.getElementById('visitors-content').innerHTML = html || '<p style="color:#aaa;">Nuk ka vizitorë</p>';
+    }
+
+    async function loadAllData() {
+        try {
+            // 1. Numërimi i Përdoruesve
+            const { count: userCount, error: userError } = await supabase
+                .from('profiles')
+                .select('*', { count: 'exact', head: true });
+
+            // 2. Numërimi i Orëve (Ndryshimi është këtu)
+            // Heqim 'head: true' për ta testuar, ose përdorim këtë formë:
+            const { data, count, error: watchError } = await supabase
+                .from('watches')
+                .select('*', { count: 'exact' });
+
+            if (watchError) {
+                console.error("Gabim te watches:", watchError);
+            } else {
+                console.log("Numri i orëve është:", count);
+                document.getElementById("count-products").textContent = count || 0;
+            }
+
+            document.getElementById("count-users").textContent = userCount || 0;
+
+        } catch (error) {
+            console.error("Gabim i përgjithshëm:", error);
+        }
+    }
+    // ... kodi yt i mëparshëm ...
+    } else {
+        alert("Ora u modifikua me sukses!");
+        // Këtu duhet të jetë thirrja, që të rifreskojë listën pasi ndryshimi u krye
+        fetchWatch(); 
+        window.location.href = 'dashboard.html'; 
+    }
+    setInterval(loadAllData, 30000);
+</script>
+</body>    
+</html>
+user
+
+{
+  "id": 1767473010259,
+  "cat": "vintage",
+  "brand": "",
+  "model": "",
+  "ref": "",
+  "year": "",
+  "material": "",
+  "caseSize": "",
+  "condition": "Very Good",
+  "price": "",
+  "description": "",
+  "photos": [omega-2400-4-1.jpg]
+}
+watches.json
+
+{
+  "name": "Ora Swiss",
+  "short_name": "OraSwiss",
+  "start_url": "/",
+  "scope": "/",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+manifest.webmanifest
+
+
+

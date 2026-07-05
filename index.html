@@ -326,6 +326,19 @@ loadProductCount();
             }
         });
     }
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keyup', function(e) {
+            const termi = e.target.value.toLowerCase();
+            const lista = document.getElementById("myWatchesList");
+            const artikujt = lista.getElementsByClassName("watch-card");
+            for (let i = 0; i < artikujt.length; i++) {
+                let tekst = artikujt[i].textContent.toLowerCase();
+                artikujt[i].style.display = tekst.includes(termi) ? "" : "none";
+            }
+        });
+    }
+});
 </script>
 </body>   
 </html>

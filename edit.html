@@ -152,7 +152,24 @@ document.getElementById('editForm').addEventListener('submit', async (e) => {
         window.location.href = 'dashboard.html';
     }
 });
+document.getElementById('deleteBtn').addEventListener('click', async () => {
+    if (!confirm("A jeni i sigurt që doni ta fshini këtë orë?")) return;
 
+    const { data: { user } } = await supabase.auth.getUser();
+
+    const { error } = await supabase
+        .from('oras')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id); 
+
+    if (error) {
+        alert("Gabim gjatë fshirjes: " + error.message);
+    } else {
+        alert("Ora u fshi me sukses!");
+        window.location.href = 'dashboard.html';
+    }
+});
 fetchWatch();
 </script>
 </body>

@@ -2815,66 +2815,61 @@ img {
     background-color: #252525;
 }
 
-
-/* --- Navigimi Fundor (Varka) --- */
+/* --- Navigimi Fundor --- */
 .bottom-nav {
     position: fixed;
     bottom: 20px;
-    left: 20px;
-    right: 20px;
-    background: #ffffff; /* Sfondi i bardhë si te Chrono24 */
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 15px 10px;
-    border-radius: 50px; /* Kjo krijon formën e "kapsulës" */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Hija e butë */
-    z-index: 1000;
-}
-
-.nav-item {
-    color: #333; /* Ngjyra e ikonave/tekstit */
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-}
-
-/* Stili "Chrono24" për shiritin e poshtëm */
-.bottom-nav {
-    position: fixed;
-    bottom: 20px; /* E ngremë pak nga fundi */
     left: 5%;
     width: 90%;
-    background: rgba(255, 255, 255, 0.9); /* Efekt pak transparent si në foto */
+    background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(10px);
-    border-radius: 50px; /* Rrumbullakimi që kërkoni */
+    border-radius: 50px;
     display: flex;
     justify-content: space-around;
     align-items: center;
     padding: 15px 10px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     z-index: 1000;
+    transition: transform 0.3s ease-in-out;
 }
 
-.bottom-nav-item {
-    color: #000; /* Ngjyra e ikonave si në Chrono24 */
-    text-decoration: none;
-    font-size: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
+.bottom-nav.hidden {
+    transform: translateY(150px);
+}
+
+/* --- Menuja Oraswiss --- */
+.my-oraswiss-menu {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 200px;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    padding: 10px;
+    z-index: 999;
+}
+
+.my-oraswiss-menu.active {
+    display: block;
+}
+
+/* --- Elementet e Menusë --- */
+.menu-item {
+    padding: 12px;
     cursor: pointer;
-    background: none;
-    border: none;
-    font-weight: 500;
+    border-bottom: 1px solid #eee;
+    color: #000;
 }
 
-/* Stili "Chrono24" Me Foto Serch */
+.menu-item:hover {
+    background: #f8f8f8;
+}
+
+/* --- Search Box --- */
 .search-container {
     padding: 15px;
     background: #fff;
@@ -2898,61 +2893,3 @@ img {
     font-size: 16px;
 }
 
-.camera-icon {
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-size: 18px;
-}
-      
-.my-oraswiss-menu {
-    display: none;
-    position: fixed;
-    bottom: 70px;
-    left: 5%;
-    width: 90%;
-    max-height: 70vh; /* Kjo e lejon listën të marrë deri në 70% të lartësisë së ekranit */
-    overflow-y: auto; /* Kjo shton scroll-in nëse artikujt janë më shumë se 9 */
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 8px;
-    z-index: 999;
-    padding: 10px;
-    box-sizing: border-box;
-}
-.bottom-nav {
-    /* ... stilet tuaja ekzistuese ... */
-    transition: transform 0.3s ease-in-out; /* Animim i butë i lëvizjes */
-}
-
-.bottom-nav.hidden {
-    transform: translateY(150px); /* E zhvendos shiritin jashtë ekranit */
-}
-
-.my-oraswiss-menu {
-    display: none; /* Fshehur fillimisht */
-    position: fixed;
-    bottom: 90px; /* E ngremë sipër shiritit të navigimit */
-    right: 20px;
-    background: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    padding: 10px;
-    width: 200px;
-    z-index: 999;
-}
-
-/* Klasa që JS do të shtojë/heqë */
-.my-oraswiss-menu.active {
-    display: block;
-}
-
-.menu-item {
-    padding: 12px;
-    cursor: pointer;
-    border-bottom: 1px solid #eee;
-}
-
-.menu-item:hover {
-    background: #f8f8f8;
-}

@@ -24,3 +24,13 @@ async function testo() {
 
 // Thirrja e funksionit
 testo();
+// Testim lidhjeje
+async function testoLidhjen() {
+    const { data, error } = await supabase.from('oras').select('*');
+    if (error) {
+        console.error("Gabim në lidhje:", error.message);
+    } else {
+        console.log("Lidhja me Supabase është OK! Të dhënat:", data);
+    }
+}
+testoLidhjen();

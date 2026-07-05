@@ -24,11 +24,17 @@
         <tbody id="orders-body"></tbody>
     </table>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="db-connect.js"></script>
-    <script>
-        // Thirrja e funksionit kur faqja ngarkohet
-        window.onload = fetchOrders;
-    </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="db-connect.js"></script>
+
+<script>
+    // Përdorni një "event listener" për të pritur ngarkimin e skriptit
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof testo === 'function') {
+            testo(); // Kjo do të ekzekutojë funksionin që keni në db-connect.js
+        }
+    });
+</script>
+
 </body>
 </html>

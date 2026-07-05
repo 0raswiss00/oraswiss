@@ -2815,92 +2815,57 @@ img {
     background-color: #252525;
 }
 
-/* --- Navigimi Fundor --- */
-/* --- Shiriti i navigimit për të dyja faqet --- */
+/* --- Navigimi Fundor i Pastër --- */
 .bottom-nav {
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 110%;
-    height: 100px; /* Zmadhimi i lartësisë */
-    background: #ffffff;
+    width: 100%; /* U rregullua: 100% (ishte 110%) */
+    height: 70px; /* U ul pak për të qenë më elegant */
+    background: #000; /* Fond i zi për kontrast më të mirë */
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 90px;
-    box-shadow: 0 -2px 15px rgba(0,0,0,0.15);
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
     z-index: 1000;
 }
 
-/* Sigurohu që ikonat dhe teksti brenda të duken bukur në atë hapësirë */
-.bottom-nav-item {
-    font-size: 90px; /* Tekst më i madh */
+.bottom-nav a, .bottom-nav button {
+    color: #fff; /* Tekst i bardhë */
+    text-decoration: none;
+    font-size: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #000;
-    text-decoration: none;
+    gap: 5px;
 }
 
-.bottom-nav.hidden {
-    transform: translateY(150px);
-}
-
-/* --- Menuja Oraswiss --- */
+/* --- Menuja OraSwiss --- */
 .my-oraswiss-menu {
     display: none;
     position: fixed;
-    bottom: 150px;
-    right: 40px;
-    width: 300px;
-    max-height: 80vh;
-    overflow-y: auto;
-    background: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    padding: 10px;
+    bottom: 80px; /* Pak më lart se navigimi */
+    right: 15px;
+    width: 220px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    padding: 10px 0;
     z-index: 999;
 }
 
-.my-oraswiss-menu.active {
-    display: block;
-}
-
-/* --- Elementet e Menusë (Të zmadhuara dhe të zhvendosura) --- */
 .menu-item {
-    padding: 40px 55px;       /* Rritja e padding i bën opsionet më të gjera dhe më të larta */
+    padding: 15px 20px; /* U zvogëlua nga 30px në 15px */
     cursor: pointer;
-    border-bottom: 1px solid #eee;
-    color: #000;
-    font-size: 22px;          /* Zmadhon tekstin */
-    font-weight: 600;         /* E bën tekstin pak më të theksuar */
+    color: #333;
+    font-size: 16px; /* U zvogëlua nga 22px në 16px */
+    font-weight: 500;
+    transition: background 0.2s;
 }
 
 .menu-item:hover {
-    background: #f8f8f8;      /* Efekti kur vendos kursorin */
-}
-
-/* --- Search Box --- */
-.search-container {
-    padding: 15px;
-    background: #fff;
-    border-bottom: 1px solid #eee;
-}
-
-.search-box {
-    display: flex;
-    align-items: center;
     background: #f0f0f0;
-    padding: 10px 15px;
-    border-radius: 8px;
 }
-
-.search-box input {
-    border: none;
-    background: transparent;
-    flex: 1;
-    margin: 0 10px;
-    outline: none;
-    font-size: 16px;
-}
-

@@ -1,6 +1,6 @@
 // 1. Konfigurimi
 const supabaseUrl = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
-const supabaseKey = 'KËTU_VENDOS_ÇELËSIN_E_RI'; // DHE RINOVONI ATË NË PANEL!
+const supabaseKey = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'; // DHE RINOVONI ATË NË PANEL!
 
 // 2. Krijimi i klientit
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);

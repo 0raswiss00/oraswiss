@@ -8,11 +8,14 @@
         table { width: 100%; border-collapse: collapse; background: white; margin-top: 20px; }
         th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
         th { background-color: #333; color: white; }
+        button { padding: 6px 10px; cursor: pointer; }
     </style>
 </head>
 <body>
+
     <h1>Porositë e mia</h1>
-    <table id="orders-table">
+
+    <table>
         <thead>
             <tr>
                 <th>Ora</th>
@@ -21,19 +24,12 @@
                 <th>Veprime</th>
             </tr>
         </thead>
+
         <tbody id="orders-body"></tbody>
     </table>
 
-<script src="supabase-lib.js"></script>
-<script src="db-connect.js"></script>
-<script>
-    // Përdorni një "event listener" për të pritur ngarkimin e skriptit
-    document.addEventListener('DOMContentLoaded', () => {
-        if (typeof testo === 'function') {
-            testo(); // Kjo do të ekzekutojë funksionin që keni në db-connect.js
-        }
-    });
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="db-connect.js"></script>
 
 </body>
 </html>

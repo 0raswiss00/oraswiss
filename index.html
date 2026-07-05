@@ -133,11 +133,12 @@
 </header>
 
 <!-- Search Bar i ri -->
-<div class="search-container" style="padding: 10px 16px;">
-    <div class="search-box" style="display: flex; align-items: center; background: #1a1a1a; padding: 10px 15px; border-radius: 8px; border: 1px solid #333;">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="Search on OraSwiss" onkeyup="searchItems()" style="background: transparent; border: none; color: #fff; flex: 1; margin: 0 10px; outline: none; font-size: 16px;">
-        <button class="camera-icon" onclick="alert('Funksioni për foto së shpejti!')" style="border: none; background: none; cursor: pointer; font-size: 20px;">📷</button>
+    <div id="myOraSwissMenu" class="my-oraswiss-menu">
+        <div class="menu-item" onclick="location.href='buy.html'"><span>🛒 Buy</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='messages.html'"><span>✉️ Messages</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='settings.html'"><span>⚙️ Account Settings</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='support.html'"><span>🎧 Support</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='info.html'"><span>ℹ️ Info</span> <span>></span></div>
     </div>
 </div>
 

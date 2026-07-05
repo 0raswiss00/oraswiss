@@ -1,24 +1,18 @@
-// 1. Konfigurimi
-const supabaseUrl = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
-const supabaseKey = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'; 
+// Krijimi i klientit
+const supabase = supabase.createClient('https://gnwsrmelmeqduhhmfmoa.supabase.co', 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9');
 
-// 2. Krijimi i klientit
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+async function testoLidhjen() {
+  console.log("Duke kërkuar orët në tabelën 'oras'...");
+  
+  const { data, error } = await supabase
+    .from('oras')
+    .select('*');
 
-// 3. Testimi real: Provojmë të marrim diçka nga baza
-async function testLidhjen() {
-  console.log("Duke u lidhur me Supabase...");
-  try {
-    const { data, error } = await supabase.from('test_table').select('*').limit(1);
-    if (error) {
-      console.error("Gabim gjatë lidhjes:", error.message);
-    } else {
-      console.log("Supabase u lidh me sukses! Të dhënat:", data);
-    }
-  } catch (err) {
-    console.error("Gabim fatal:", err);
+  if (error) {
+    console.error("Gabim në lidhje:", error.message);
+  } else {
+    console.log("Sukses! Ja çfarë gjetëm në tabelë:", data);
   }
 }
 
-testLidhjen();
-
+testoLidhjen();

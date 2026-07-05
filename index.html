@@ -243,14 +243,17 @@ async function loadUserCount() {
 }
 
 // ... (pjesa jote e mbetur e funksioneve)
+// ... pjesa tjetër e kodit
     } catch (err) {
         console.error("Gabim:", err);
-    }
-} // Mbyllja e loadUserCount
+    } 
+} // Kjo mbyll funksionin loadUserCount
+
+// Thirrja e funksioneve duhet të jetë pas mbylljes së të gjitha funksioneve
 loadUserCount();
 loadProductCount();
-</script> 
 
+</script>
 <div id="myOraSwissMenu" style="display: none; position: fixed; bottom: 80px; right: 10px; background: #222; border: 1px solid #444; padding: 10px; border-radius: 10px; z-index: 9999; width: 180px;">
     <div class="menu-item" onclick="location.href='buy.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 Buy</div>
     <div class="menu-item" onclick="location.href='messages.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">✉️ Messages</div>

@@ -242,46 +242,38 @@ async function loadUserCount() {
     }
 }
 
-// THIRRJA E FUNKSIONEVE (Sigurohu që janë jashtë çdo funksioni tjetër)
-// ... (të gjitha funksionet tuaja deri te loadProductCount() dhe loadUserCount())
-
-// THIRRJA E FUNKSIONEVE
+// ... (pjesa jote e mbetur e funksioneve)
+    } catch (err) {
+        console.error("Gabim:", err);
+    }
+} // Mbyllja e loadUserCount
 loadUserCount();
 loadProductCount();
+</script> 
 
-// Funksioni për kërkimin
-function searchItems() {
-    const searchTerm = document.getElementById('searchInput')?.value.toLowerCase();
-    const items = document.querySelectorAll('.card'); 
-    items.forEach(item => {
-        item.style.display = item.innerText.toLowerCase().includes(searchTerm) ? "" : "none";
-    });
-}
-
-// Funksioni për menunë
-function toggleMenu() {
-    const menu = document.getElementById('myOraSwissMenu');
-    menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-}
-</script>  
-
-<div id="myOraSwissMenu" class="my-oraswiss-menu" style="display:none; position: fixed; bottom: 60px; background: #222; padding: 10px; border-radius: 5px;">
-    <div class="menu-item" onclick="location.href='buy.html'">🛒 Buy</div>
-    <div class="menu-item" onclick="location.href='messages.html'">✉️ Messages</div>
-    <div class="menu-item" onclick="location.href='settings.html'">⚙️ Settings</div>
-    <div class="menu-item" onclick="location.href='support.html'">🎧 Support</div>
-    <div class="menu-item" onclick="location.href='info.html'">ℹ️ Info</div>
+<div id="myOraSwissMenu" style="display: none; position: fixed; bottom: 70px; right: 15px; background: #222; border: 1px solid #444; padding: 10px; border-radius: 8px; z-index: 9999;">
+    <div class="menu-item" onclick="location.href='buy.html'" style="padding: 15px; color: white; cursor: pointer; border-bottom: 1px solid #333;">🛒 Buy</div>
+    <div class="menu-item" onclick="location.href='messages.html'" style="padding: 15px; color: white; cursor: pointer; border-bottom: 1px solid #333;">✉️ Messages</div>
+    <div class="menu-item" onclick="location.href='settings.html'" style="padding: 15px; color: white; cursor: pointer; border-bottom: 1px solid #333;">⚙️ Settings</div>
+    <div class="menu-item" onclick="location.href='support.html'" style="padding: 15px; color: white; cursor: pointer; border-bottom: 1px solid #333;">🎧 Support</div>
+    <div class="menu-item" onclick="location.href='info.html'" style="padding: 15px; color: white; cursor: pointer;">ℹ️ Info</div>
 </div>
 
-<nav class="bottom-nav" style="position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; background: #000; padding: 10px;">
-    <a href="index.html" class="nav-item">🏠 Home</a>
-    <a href="favorites.html" class="nav-item">❤️ Favorites</a>
-    <a href="collection.html" class="nav-item">⌚ Collection</a>
-    <a href="sellnow.html" class="nav-item">➕ Sell</a>
-    <button type="button" class="bottom-nav-item" onclick="toggleMenu()" style="background:none; border:none; color:white; cursor:pointer;">👤 My OraSwiss</button>
+<nav class="bottom-nav" style="position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-around; background: #000; padding: 15px 0; border-top: 1px solid #333; z-index: 9998; box-sizing: border-box;">
+    <a href="index.html" style="color: white; text-decoration: none; font-size: 20px;">🏠 Home</a>
+    <a href="favorites.html" style="color: white; text-decoration: none; font-size: 20px;">❤️ Favorites</a>
+    <a href="collection.html" style="color: white; text-decoration: none; font-size: 20px;">⌚ Collection</a>
+    <a href="sellnow.html" style="color: white; text-decoration: none; font-size: 20px;">➕ Sell</a>
+    <button type="button" onclick="toggleMenu()" style="background: none; border: none; color: white; cursor: pointer; font-size: 20px;">👤 My OraSwiss</button>
 </nav>
 
-</body>   
+<script>
+    function toggleMenu() {
+        const menu = document.getElementById('myOraSwissMenu');
+        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+    }
+</script>
+</body>
 </html>
   
 

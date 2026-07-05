@@ -133,28 +133,6 @@
             return;
         }
 
-        async function fshiOren(watchId) {
-            // 1. Siguria: A je i sigurt?
-            if (!confirm("Jeni të sigurt që doni ta fshini këtë orë?")) return;
-
-            // 2. Kërkesa në Supabase
-            const { error } = await supabase
-                .from('oras')
-                .delete()
-                .eq('id', watchId);
-
-            // 3. Kontrolli i gabimeve
-            if (error) {
-                alert("Gabim gjatë fshirjes: " + error.message);
-            } else {
-                alert("Ora u fshi me sukses!");
-                // 4. Rifresko listën menjëherë që të zhduket artikulli
-                ngarkoArtikujt(); 
-            }
-        }
-        // Bëje funksionin global që butoni ta gjejë
-        window.fshiOren = fshiOren;
-        
         const { data, error } = await supabase
             .from('oras')
             .select('*')

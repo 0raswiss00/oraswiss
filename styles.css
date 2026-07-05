@@ -2816,21 +2816,30 @@ img {
 }
 
 /* --- Navigimi Fundor --- */
+/* --- Shiriti i navigimit për të dyja faqet --- */
 .bottom-nav {
     position: fixed;
-    bottom: 20px;
-    left: 5%;
-    width: 90%;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    border-radius: 50px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 90px; /* Zmadhimi i lartësisë */
+    background: #ffffff;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 15px 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    padding: 10px;
+    box-shadow: 0 -2px 15px rgba(0,0,0,0.15);
     z-index: 1000;
-    transition: transform 0.3s ease-in-out;
+}
+
+/* Sigurohu që ikonat dhe teksti brenda të duken bukur në atë hapësirë */
+.bottom-nav-item {
+    font-size: 18px; /* Tekst më i madh */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #000;
+    text-decoration: none;
 }
 
 .bottom-nav.hidden {

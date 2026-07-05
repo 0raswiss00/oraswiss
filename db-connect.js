@@ -1,6 +1,6 @@
 // 1. Konfigurimi - Zëvendëso këto me të dhënat e tua nga Supabase Settings
-const supabaseUrl = 'VENDO_URL_KËTU';
-const supabaseKey = 'VENDO_PUBLIC_ANON_KEY_KËTU';
+const supabaseUrl = '//gnwsrmelmeqduhhmfmoa.supabase.co';
+const supabaseKey = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9';
 
 // 2. Krijimi i klientit
 const supabase = supabaseClient.createClient(supabaseUrl, supabaseKey);

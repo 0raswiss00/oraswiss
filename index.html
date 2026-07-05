@@ -327,5 +327,23 @@ loadProductCount();
         });
     }
 </script>
+<script>
+    let lastScrollTop = 0;
+    const nav = document.querySelector('.bottom-nav');
+
+    window.addEventListener('scroll', () => {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (scrollTop > lastScrollTop) {
+            // Scroll poshtë - fshihte navigimin
+            nav.classList.add('hidden');
+        } else {
+            // Scroll lart - shfaqe navigimin
+            nav.classList.remove('hidden');
+        }
+        
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Për të evituar gabime në Safari
+    }, false);
+</script>
 </body>   
 </html>

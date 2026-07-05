@@ -2929,3 +2929,30 @@ img {
     transform: translateY(150px); /* E zhvendos shiritin jashtë ekranit */
 }
 
+.my-oraswiss-menu {
+    display: none; /* Fshehur fillimisht */
+    position: fixed;
+    bottom: 90px; /* E ngremë sipër shiritit të navigimit */
+    right: 20px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    padding: 10px;
+    width: 200px;
+    z-index: 999;
+}
+
+/* Klasa që JS do të shtojë/heqë */
+.my-oraswiss-menu.active {
+    display: block;
+}
+
+.menu-item {
+    padding: 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.menu-item:hover {
+    background: #f8f8f8;
+}

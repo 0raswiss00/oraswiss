@@ -1,12 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <title>Blej Oret - Ora Swiss</title>
+    <title>Porositë e mia - Ora Swiss</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 20px; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #333; color: white; }
+    </style>
 </head>
 <body>
-    <h1>Faqja e Blerjes</h1>
-    <p>Këtu do të shfaqen orët për blerje shumë shpejt!</p>
-    <a href="index.html">Kthehu te faqja kryesore</a>
+    <h1>Porositë e mia</h1>
+    <table id="orders-table">
+        <thead>
+            <tr>
+                <th>Ora</th>
+                <th>Statusi</th>
+                <th>Nr. Dërgimi</th>
+                <th>Veprime</th>
+            </tr>
+        </thead>
+        <tbody id="orders-body"></tbody>
+    </table>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="db-connect.js"></script>
+    <script>
+        // Thirrja e funksionit kur faqja ngarkohet
+        window.onload = fetchOrders;
+    </script>
 </body>
 </html>

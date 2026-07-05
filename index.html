@@ -133,12 +133,11 @@
 </header>
 
 <!-- Search Bar i ri -->
-    <div id="myOraSwissMenu" class="my-oraswiss-menu">
-        <div class="menu-item" onclick="location.href='buy.html'"><span>🛒 Buy</span> <span>></span></div>
-        <div class="menu-item" onclick="location.href='messages.html'"><span>✉️ Messages</span> <span>></span></div>
-        <div class="menu-item" onclick="location.href='settings.html'"><span>⚙️ Account Settings</span> <span>></span></div>
-        <div class="menu-item" onclick="location.href='support.html'"><span>🎧 Support</span> <span>></span></div>
-        <div class="menu-item" onclick="location.href='info.html'"><span>ℹ️ Info</span> <span>></span></div>
+<div class="search-container" style="padding: 10px 16px;">
+    <div class="search-box" style="display: flex; align-items: center; background: #1a1a1a; padding: 10px 15px; border-radius: 8px; border: 1px solid #333;">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search on OraSwiss" onkeyup="searchItems()" style="background: transparent; border: none; color: #fff; flex: 1; margin: 0 10px; outline: none; font-size: 16px;">
+        <button class="camera-icon" onclick="alert('Funksioni për foto së shpejti!')" style="border: none; background: none; cursor: pointer; font-size: 20px;">📷</button>
     </div>
 </div>
 
@@ -156,7 +155,7 @@
 <script>
   const supabase = window.supabase.createClient(
     "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdud3NybWVsbWVxZHVoaG1mbW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDE2NjIsImV4cCI6MjA4MTE3NzY2Mn0.M_KMTq9SDvd6mWe7uK53fQK7ssVu9_ltRMfoxrQq-nQ"
   );
 
 async function loadCategory(cat, containerId) {
@@ -303,20 +302,14 @@ loadUserCount();
 loadProductCount();
 
 </script>  
-    <nav class="bottom-nav">
-        <a href="profile.html" class="bottom-nav-item">👤 Profile</a>
-        <a href="index.html" class="bottom-nav-item">🏠 Home</a>
-        <a href="favorites.html" class="bottom-nav-item">❤️ Favorites</a> 
-        <a href="collection.html" class="bottom-nav-item">⌚ Collection</a>
-        <button type="button" class="bottom-nav-item" id="btnNgarko" style="background:none;">
-            ⌚ My Sales
-        </button>
-        <a href="sellnow.html" class="bottom-nav-item">🏷️ Sell</a>
-        <button type="button" class="bottom-nav-item" onclick="toggleMenu()" style="background:none; border:none; cursor:pointer; font-size:inherit; color:inherit;">
-            👤 My OraSwiss
-        </button>
-    </nav>
-<script>  
+<nav class="bottom-nav">
+    <a href="index.html" class="nav-item">🏠 Home</a>
+    <a href="favorites.html" class="nav-item">❤️ Favorites</a>
+    <a href="collection.html" class="nav-item">⌚ Collection</a>
+    <a href="sellnow.html" class="nav-item">➕ Sell</a>
+    <a href="profile.html" class="nav-item">👤 Account</a>
+</nav>
+<script>
     function searchItems() {
         const searchTerm = document.getElementById('searchInput').value.toLowerCase();
         // Ky selector '.card' duhet të përputhet me klasën e kartave të orëve në index.html
@@ -333,24 +326,6 @@ loadProductCount();
             }
         });
     }
-</script>
-<script>
-    let lastScrollTop = 0;
-    const nav = document.querySelector('.bottom-nav');
-
-    window.addEventListener('scroll', () => {
-        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-        if (scrollTop > lastScrollTop) {
-            // Scroll poshtë - fshihte navigimin
-            nav.classList.add('hidden');
-        } else {
-            // Scroll lart - shfaqe navigimin
-            nav.classList.remove('hidden');
-        }
-        
-        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Për të evituar gabime në Safari
-    }, false);
 </script>
 </body>   
 </html>

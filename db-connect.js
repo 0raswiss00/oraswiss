@@ -4,7 +4,7 @@ console.log("Duke u lidhur me Supabase...");
 const supabaseUrl = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
 const supabaseKey = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'; 
 
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 async function testo() {
   const { data, error } = await supabase.from('oras').select('*');

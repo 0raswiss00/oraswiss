@@ -242,11 +242,6 @@ async function loadUserCount() {
     }
 }
 
-} catch (err) {
-        console.error("Gabim:", err);
-    } 
-} 
-
 // Thirr funksionet këtu (jashtë çdo funksioni tjetër)
 loadUserCount();
 loadProductCount();
@@ -279,9 +274,7 @@ loadProductCount();
         const menu = document.getElementById('myOraSwissMenu');
         menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
     }
-    loadCategory('luxury', 'luxury-container');
-    loadCategory('vintage', 'vintage-container');
-    loadCategory('parts', 'parts-container');
+  
 </script>  
 </body>
 </html>

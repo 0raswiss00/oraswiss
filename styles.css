@@ -2866,16 +2866,18 @@ img {
     display: block;
 }
 
-/* --- Elementet e Menusë --- */
+/* --- Elementet e Menusë (Të zmadhuara dhe të zhvendosura) --- */
 .menu-item {
-    padding: 12px;
+    padding: 20px 25px;       /* Rritja e padding i bën opsionet më të gjera dhe më të larta */
     cursor: pointer;
     border-bottom: 1px solid #eee;
     color: #000;
+    font-size: 18px;          /* Zmadhon tekstin */
+    font-weight: 500;         /* E bën tekstin pak më të theksuar */
 }
 
 .menu-item:hover {
-    background: #f8f8f8;
+    background: #f8f8f8;      /* Efekti kur vendos kursorin */
 }
 
 /* --- Search Box --- */

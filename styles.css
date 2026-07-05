@@ -2821,8 +2821,8 @@ img {
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 100%;
-    height: 90px; /* Zmadhimi i lartësisë */
+    width: 110%;
+    height: 100px; /* Zmadhimi i lartësisë */
     background: #ffffff;
     display: flex;
     justify-content: space-around;
@@ -2834,7 +2834,7 @@ img {
 
 /* Sigurohu që ikonat dhe teksti brenda të duken bukur në atë hapësirë */
 .bottom-nav-item {
-    font-size: 18px; /* Tekst më i madh */
+    font-size: 20px; /* Tekst më i madh */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2850,8 +2850,8 @@ img {
 .my-oraswiss-menu {
     display: none;
     position: fixed;
-    bottom: 90px;
-    right: 20px;
+    bottom: 100px;
+    right: 30px;
     width: 200px;
     max-height: 70vh;
     overflow-y: auto;
@@ -2868,12 +2868,12 @@ img {
 
 /* --- Elementet e Menusë (Të zmadhuara dhe të zhvendosura) --- */
 .menu-item {
-    padding: 20px 25px;       /* Rritja e padding i bën opsionet më të gjera dhe më të larta */
+    padding: 30px 35px;       /* Rritja e padding i bën opsionet më të gjera dhe më të larta */
     cursor: pointer;
     border-bottom: 1px solid #eee;
     color: #000;
-    font-size: 18px;          /* Zmadhon tekstin */
-    font-weight: 500;         /* E bën tekstin pak më të theksuar */
+    font-size: 22px;          /* Zmadhon tekstin */
+    font-weight: 600;         /* E bën tekstin pak më të theksuar */
 }
 
 .menu-item:hover {

@@ -2920,4 +2920,12 @@ img {
     padding: 10px;
     box-sizing: border-box;
 }
-Compose
+.bottom-nav {
+    /* ... stilet tuaja ekzistuese ... */
+    transition: transform 0.3s ease-in-out; /* Animim i butë i lëvizjes */
+}
+
+.bottom-nav.hidden {
+    transform: translateY(150px); /* E zhvendos shiritin jashtë ekranit */
+}
+

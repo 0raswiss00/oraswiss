@@ -1,18 +1,18 @@
-// Krijimi i klientit
-const supabase = supabase.createClient('https://gnwsrmelmeqduhhmfmoa.supabase.co', 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9');
+console.log("Duke u lidhur me Supabase...");
 
-async function testoLidhjen() {
-  console.log("Duke kërkuar orët në tabelën 'oras'...");
-  
-  const { data, error } = await supabase
-    .from('oras')
-    .select('*');
+// Sigurohu që URL dhe KEY janë të sakta
+const supabaseUrl = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
+const supabaseKey = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'; 
 
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+async function testo() {
+  const { data, error } = await supabase.from('oras').select('*');
   if (error) {
-    console.error("Gabim në lidhje:", error.message);
+    console.error("Gabim:", error.message);
   } else {
-    console.log("Sukses! Ja çfarë gjetëm në tabelë:", data);
+    console.log("Sukses! Këtu janë të dhënat nga baza:", data);
   }
 }
 
-testoLidhjen();
+testo();

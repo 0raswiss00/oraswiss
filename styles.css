@@ -2827,14 +2827,14 @@ img {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 10px;
+    padding: 90px;
     box-shadow: 0 -2px 15px rgba(0,0,0,0.15);
     z-index: 1000;
 }
 
 /* Sigurohu që ikonat dhe teksti brenda të duken bukur në atë hapësirë */
 .bottom-nav-item {
-    font-size: 20px; /* Tekst më i madh */
+    font-size: 90px; /* Tekst më i madh */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2850,10 +2850,10 @@ img {
 .my-oraswiss-menu {
     display: none;
     position: fixed;
-    bottom: 120px;
-    right: 30px;
-    width: 200px;
-    max-height: 70vh;
+    bottom: 150px;
+    right: 40px;
+    width: 300px;
+    max-height: 80vh;
     overflow-y: auto;
     background: #ffffff;
     border-radius: 15px;
@@ -2868,7 +2868,7 @@ img {
 
 /* --- Elementet e Menusë (Të zmadhuara dhe të zhvendosura) --- */
 .menu-item {
-    padding: 30px 35px;       /* Rritja e padding i bën opsionet më të gjera dhe më të larta */
+    padding: 40px 55px;       /* Rritja e padding i bën opsionet më të gjera dhe më të larta */
     cursor: pointer;
     border-bottom: 1px solid #eee;
     color: #000;

@@ -21,8 +21,10 @@
     <a href="index.html" style="color:#ccc; text-align:center; display:block; margin-top:10px;">
         ← Kthehu në Home
     </a>
-    <div class="admin-actions" id="admin-controls-container" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #444;">
-        <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
+    <div id="container">Duke ngarkuar...</div>
+
+    <div class="admin-actions" id="admin-controls-container" style="display: none; border: 1px solid #444; padding: 15px; margin-top: 20px;">
+        <h4>Admin Controls</h4>
         <button id="edit-btn">Modifiko</button>
         <button id="delete-btn" style="background: #ff4d4d; color: white;">Fshi Produktin</button>
     </div>
@@ -90,6 +92,32 @@
 
     // Fillo punën
     loadProduct();
+</script>
+<script>
+    async function initAdmin(productId, ownerId) {
+        const { data: { user } } = await supabase.auth.getUser();
+        const container = document.getElementById("admin-controls-container");
+
+        // 1. Kontrollo pronësinë
+        if (user && user.id === ownerId) {
+            container.style.display = "block";
+
+            // 2. Lidh butonin Modifiko (zgjidhja për Cartier)
+            document.getElementById('edit-btn').onclick = function() {
+                window.location.href = edit.html?id=${productId};
+            };
+
+            // 3. Lidh butonin Fshi
+            document.getElementById('delete-btn').onclick = function() {
+                deleteProduct(productId);
+            };
+        } else {
+            container.style.display = "none";
+        }
+    }
+
+    // Kur e merr 'data' nga Supabase, thirr:
+    // initAdmin(data.id, data.user_id);
 </script>
 
 </body>

@@ -293,38 +293,32 @@ loadProductCount();
     }
 
 }); 
-
-</script>
-
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const isLoggedIn = localStorage.getItem("loggedIn") === "true";
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("DOM është ngarkuar!"); // 1. Kontrolli i parë
 
     const searchInput = document.getElementById("searchInput");
     const cameraBtn = document.querySelector(".camera-icon");
 
-    if (!isLoggedIn) {
-
-        // 🔒 bllokon search
-        searchInput.addEventListener("focus", function (e) {
-            e.preventDefault();
-            searchInput.blur();
-            requireLogin();
+    if (!searchInput) {
+        console.error("Gabim: Nuk u gjet 'searchInput'!");
+    } else {
+        searchInput.addEventListener("focus", function(e) {
+            console.log("Input u klikua!");
+            // Këtu vendos logjikën tënde
         });
-
-        // 🔒 bllokon kamera
-        cameraBtn.addEventListener("click", function (e) {
-            e.preventDefault();
-            requireLogin();
-        });
-
-        // opsional: e bën search box më të zbehtë
-        document.querySelector(".search-box").style.opacity = "0.5";
     }
 
+    if (!cameraBtn) {
+        console.error("Gabim: Nuk u gjet 'camera-icon'!");
+    } else {
+        cameraBtn.addEventListener("click", function(e) {
+            console.log("Kamera u klikua!");
+        });
+    }
 });
+
 </script>
+
 </body>    
 </html>
   

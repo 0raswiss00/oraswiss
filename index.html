@@ -269,50 +269,41 @@ loadProductCount();
 </nav>
 
 
-<script>
-    function toggleMenu() {
-        const menu = document.getElementById('myOraSwissMenu');
-        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-    }
-  
-
 <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-    const supabase = createClient('sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'); 
+    const supabase = createClient('URL_YT', 'KEY_YT');
 
     async function updateNav() {
+        // Kontrollo statusin
         const { data: { user } } = await supabase.auth.getUser();
 
-        // Gjej elementet
         const btnMySales = document.getElementById('btnMySales');
         const btnSell = document.getElementById('btnSell');
         const btnMyMenu = document.getElementById('btnMyMenu');
         const btnLogin = document.getElementById('btnLogin');
 
+        // Nëse je i loguar
         if (user) {
-            // Nëse është i loguar: shfaq butonat e privilegjuar
-            if (btnMySales) btnMySales.style.display = 'block';
-            if (btnSell) btnSell.style.display = 'block';
-            if (btnMyMenu) btnMyMenu.style.display = 'block';
-            
-            // Fsheh butonin Login
-            if (btnLogin) btnLogin.style.display = 'none';
-
-            // Lidh funksionin për My Sales (nqs është buton)
-            btnMySales.onclick = () => ngarkoArtikujt(); 
+            btnMySales.style.display = 'block';
+            btnSell.style.display = 'block';
+            btnMyMenu.style.display = 'block';
+            btnLogin.style.display = 'none'; // Fsheh Login
         } else {
-            // Nëse NUK është i loguar: fshi butonat
-            if (btnMySales) btnMySales.style.display = 'none';
-            if (btnSell) btnSell.style.display = 'none';
-            if (btnMyMenu) btnMyMenu.style.display = 'none';
-            
-            // Shfaq butonin Login
-            if (btnLogin) btnLogin.style.display = 'block';
+            // Nëse NUK je i loguar
+            btnMySales.style.display = 'none';
+            btnSell.style.display = 'none';
+            btnMyMenu.style.display = 'none';
+            btnLogin.style.display = 'block'; // Shfaq Login
         }
     }
 
-    // Ekzekutoje kur të ngarkohet faqja
+    // Ekzekutoje sapo faqja të ngarkohet
     updateNav();
+    
+    // Shto edhe një dëgjues (listener) që të rifreskohet navi nëse statusi ndryshon
+    supabase.auth.onAuthStateChange(() => {
+        updateNav();
+    });
 </script>
 
 </body>  

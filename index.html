@@ -344,18 +344,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function renderResults(products) {
     const container = document.getElementById("luxury-container");
-    container.innerHTML = ""; // Pastro "Loading..."
+    container.innerHTML = ""; // Pastro listën aktuale
 
-    if (products.length === 0) {
-        container.innerHTML = "<p>Nuk u gjet asnjë produkt.</p>";
-        return;
-    }
-    
-    // Krijojmë një grid për çdo produkt
     products.forEach(product => {
-        // Përdorim emrat e kolonave që pamë (brand, etj.)
+        // Kontrollojmë nëse ka foto, nëse jo, vendosim një placeholder
+        const imageUrl = product.image_url && product.image_url.length > 0 ? product.image_url[0] : 'default-image.jpg';
+        
         container.innerHTML += `
             <div class="product-card">
+                <img src="${imageUrl}" alt="${product.brand}" style="width:100px; height:100px;">
                 <h3>${product.brand}</h3>
                 <p>Kategoria: ${product.category}</p>
             </div>

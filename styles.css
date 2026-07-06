@@ -2870,3 +2870,31 @@ img {
     border-top: 1px solid #333;
 }
       
+.bottom-nav {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 70px !important; /* Lartësia e duhur për të qenë i plotë */
+    background: #111 !important;
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    z-index: 9999 !important;
+    border-top: 2px solid #333;
+    padding: 0 10px;
+}
+
+.bottom-nav-item {
+    color: #fff !important;
+    text-decoration: none;
+    font-size: 13px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex: 1; /* I jep mundësi çdo butoni të marrë hapësirën e vet */
+}

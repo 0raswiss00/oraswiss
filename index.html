@@ -255,16 +255,16 @@ loadProductCount();
     <div class="menu-item" onclick="location.href='info.html'" style="padding: 10px; color: white; cursor: pointer;">ℹ️ Info</div>
 </div>
 
-<nav class="bottom-nav" style="position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-around; background: #000; padding: 15px 0; border-top: 1px solid #333; z-index: 9998; box-sizing: border-box;">
-    <a href="index.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">🏠<br>Home</a>
-    <a href="favorites.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">❤️<br>Favs</a>
-    <a href="collection.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">⌚<br>Col</a>
-    <a href="mysales.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">
-        ⌚<br>My Sales
-    </a>
-    <a href="sellnow.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">➕<br>Sell</a>
-    <button type="button" onclick="toggleMenu()" style="background: none; border: none; color: white; cursor: pointer; font-size: 13px; text-align: center;">👤<br>Menu</button>
+<nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">🏠 Home</a>
+    
+    <button id="btnMySales" class="bottom-nav-item" style="background:none; display:none;">⌚ My Sales</button>
+    <a href="sellnow.html" id="btnSell" class="bottom-nav-item" style="display:none;">🏷️ Sell</a>
+    <button id="btnMyMenu" class="bottom-nav-item" style="background:none; display:none;" onclick="toggleMenu()">👤 My OraSwiss</button>
+    
+    <a href="login.html" id="btnLogin" class="bottom-nav-item">🔑 Login</a>
 </nav>
+
 
 <script>
     function toggleMenu() {
@@ -273,7 +273,46 @@ loadProductCount();
     }
   
 </script>  
-</body>
+<script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+    const supabase = createClient('URL_YT', 'KEY_YT'); // Zëvendëso me kredencialet e tua
+
+    async function updateNav() {
+        const { data: { user } } = await supabase.auth.getUser();
+
+        // Gjej elementet
+        const btnMySales = document.getElementById('btnMySales');
+        const btnSell = document.getElementById('btnSell');
+        const btnMyMenu = document.getElementById('btnMyMenu');
+        const btnLogin = document.getElementById('btnLogin');
+
+        if (user) {
+            // Nëse është i loguar: shfaq butonat e privilegjuar
+            if (btnMySales) btnMySales.style.display = 'block';
+            if (btnSell) btnSell.style.display = 'block';
+            if (btnMyMenu) btnMyMenu.style.display = 'block';
+            
+            // Fsheh butonin Login
+            if (btnLogin) btnLogin.style.display = 'none';
+
+            // Lidh funksionin për My Sales (nqs është buton)
+            btnMySales.onclick = () => ngarkoArtikujt(); 
+        } else {
+            // Nëse NUK është i loguar: fshi butonat
+            if (btnMySales) btnMySales.style.display = 'none';
+            if (btnSell) btnSell.style.display = 'none';
+            if (btnMyMenu) btnMyMenu.style.display = 'none';
+            
+            // Shfaq butonin Login
+            if (btnLogin) btnLogin.style.display = 'block';
+        }
+    }
+
+    // Ekzekutoje kur të ngarkohet faqja
+    updateNav();
+</script>
+
+</body>  
 </html>
   
 

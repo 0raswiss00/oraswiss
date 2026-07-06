@@ -294,25 +294,36 @@ loadProductCount();
 
 }); 
 document.addEventListener("DOMContentLoaded", function() {
-    console.log("DOM është ngarkuar!"); // 1. Kontrolli i parë
-
     const searchInput = document.getElementById("searchInput");
+    const container = document.getElementById("luxury-container");
     const cameraBtn = document.querySelector(".camera-icon");
 
-    if (!searchInput) {
-        console.error("Gabim: Nuk u gjet 'searchInput'!");
-    } else {
-        searchInput.addEventListener("focus", function(e) {
-            console.log("Input u klikua!");
-            // Këtu vendos logjikën tënde
+    // 1. Logjika e kërkimit (Search)
+    if (searchInput) {
+        searchInput.addEventListener("input", async function(e) {
+            const query = e.target.value;
+            if (query.length > 0) {
+                const { data, error } = await supabase
+                    .from('oras')
+                    .select('*')
+                    .ilike('brand', `%${query}%`);
+
+                if (error) {
+                    console.error("Gabim në kërkim:", error);
+                } else {
+                    renderResults(data);
+                }
+            } else {
+                container.innerHTML = ""; // Pastro nëse fusha është bosh
+            }
         });
     }
 
-    if (!cameraBtn) {
-        console.error("Gabim: Nuk u gjet 'camera-icon'!");
-    } else {
-        cameraBtn.addEventListener("click", function(e) {
+    // 2. Logjika e kamerës
+    if (cameraBtn) {
+        cameraBtn.addEventListener("click", function() {
             console.log("Kamera u klikua!");
+            // Këtu shto logjikën e kamerës
         });
     }
 });

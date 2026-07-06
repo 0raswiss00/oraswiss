@@ -113,13 +113,13 @@
           });
 
           if (error) throw error;
-          window.location.href = "dashboard.html";
+          window.location.href = localStorage.getItem("redirectAfterLogin") || "index.html";
         } catch (e) {
           alert(e.message);
         }
       });
     }
-  }); // Kjo mbyllje ishte ajo që mungonte!
+  });
 // FORGOT PASSWORD
 const forgotPasswordLink = document.getElementById("forgotPassword");
 if (forgotPasswordLink) {

@@ -344,12 +344,25 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function renderResults(products) {
     const container = document.getElementById("luxury-container");
-    container.innerHTML = ""; // Pastro listën aktuale
+    container.innerHTML = ""; // Pastro "Loading..."
+
+    if (products.length === 0) {
+        container.innerHTML = "<p>Nuk u gjet asnjë produkt.</p>";
+        return;
+    }
     
+    // Krijojmë një grid për çdo produkt
     products.forEach(product => {
-        container.innerHTML += `<div>${product.brand}</div>`;
+        // Përdorim emrat e kolonave që pamë (brand, etj.)
+        container.innerHTML += `
+            <div class="product-card">
+                <h3>${product.brand}</h3>
+                <p>Kategoria: ${product.category}</p>
+            </div>
+        `;
     });
 }
+
 </script>
 
 </body>    

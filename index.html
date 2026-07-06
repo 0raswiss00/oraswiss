@@ -293,8 +293,41 @@ loadProductCount();
     }
 
 }); 
-</script>  
-</body>
+function requireLogin() {
+    localStorage.setItem("redirectAfterLogin", window.location.href);
+    window.location.href = "register.html";
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const isLoggedIn = localStorage.getItem("loggedIn") === "true";
+
+    const searchInput = document.getElementById("searchInput");
+    const cameraBtn = document.querySelector(".camera-icon");
+
+    if (!isLoggedIn) {
+
+        // 🔒 bllokon search
+        searchInput.addEventListener("focus", function (e) {
+            e.preventDefault();
+            searchInput.blur();
+            requireLogin();
+        });
+
+        // 🔒 bllokon kamera
+        cameraBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            requireLogin();
+        });
+
+        // opsional: e bën search box më të zbehtë
+        document.querySelector(".search-box").style.opacity = "0.5";
+    }
+
+});
+
+</script>
+</body>  
 </html>
   
 

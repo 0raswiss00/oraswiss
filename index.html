@@ -325,7 +325,7 @@ async function performSearch(query) {
     const { data, error } = await supabase
         .from('oras')
         .select('*')
-        .ilike('name', %${query}%); // 'ilike' kërkon fjalën kudo në emër
+        .ilike('name', `%${query}%`) 
 
     if (error) {
         console.error("Gabim në kërkim:", error);

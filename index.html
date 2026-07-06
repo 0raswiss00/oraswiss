@@ -318,22 +318,40 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 // Funksioni që bën kërkimin real në Supabase
-async function performSearch(query) {
-    console.log("Duke kërkuar për:", query);
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById("searchInput");
+    const container = document.getElementById("luxury-container");
+
+    searchInput.addEventListener("input", async function(e) {
+        const query = e.target.value;
+        
+        if (query.length > 0) {
+            // Kërkojmë në kolonën 'brand'
+            const { data, error } = await supabase
+                .from('oras')
+                .select('*')
+                .ilike('brand', `%${query}%`);
+
+            if (error) {
+                console.error("Gabim:", error);
+            } else {
+                console.log("Rezultatet:", data);
+                renderResults(data); // Funksioni që shfaq rezultatet
+            }
+        }
+    });
+});
+
+function renderResults(products) {
+    const container = document.getElementById("luxury-container");
+    container.innerHTML = ""; // Pastro listën aktuale
     
-    // Përdorim 'brand' sepse kjo është kolona ekzistuese në tabelën 'oras'
-    const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .ilike('brand', `%${query}%`); // 'ilike' kërkon fjalën kudo në kolonën 'brand'
-
-    if (error) {
-        console.error("Gabim në kërkim:", error);
-        return;
-    }
-
-    console.log("Rezultatet:", data);
+    products.forEach(product => {
+        container.innerHTML += `<div>${product.brand}</div>`;
+    });
 }
+</script>
 
 </script>
 

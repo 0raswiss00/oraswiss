@@ -317,26 +317,30 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-document.addEventListener("DOMContentLoaded", function() {
-    console.log("Faqja është gati.");
+// Funksioni që bën kërkimin real në Supabase
+async function performSearch(query) {
+    console.log("Duke kërkuar për:", query);
+    
+    // Marrim të dhënat nga tabela 'oras'
+    const { data, error } = await supabase
+        .from('oras')
+        .select('*')
+        .ilike('name', %${query}%); // 'ilike' kërkon fjalën kudo në emër
 
-    const searchInput = document.getElementById("searchInput");
-    const cameraBtn = document.querySelector(".camera-icon");
-
-    // Kontrollo nëse i gjeti elementet
-    if (!searchInput) console.warn("Kujdes: Nuk gjeta 'searchInput'");
-    if (!cameraBtn) console.warn("Kujdes: Nuk gjeta 'camera-icon'");
-
-    if (searchInput) {
-        searchInput.addEventListener("focus", function() {
-            alert("Kërkimi u aktivizua!");
-        });
+    if (error) {
+        console.error("Gabim në kërkim:", error);
+        return;
     }
 
-    if (cameraBtn) {
-        cameraBtn.addEventListener("click", function() {
-            alert("Kamera u aktivizua!");
-        });
+    console.log("Rezultatet:", data);
+    // Këtu mund t'i shfaqësh rezultatet në faqen tënde
+}
+
+// Lidhja me inputin
+searchInput.addEventListener("input", function(e) {
+    const value = e.target.value;
+    if (value.length > 2) { // Kërkon pasi përdoruesi ka shkruar më shumë se 2 shkronja
+        performSearch(value);
     }
 });
 

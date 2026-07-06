@@ -2856,3 +2856,17 @@ img {
 .menu-item:hover {
     background: #f0f0f0;
 }
+
+.bottom-nav {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: space-around !important;
+    background-color: #000 !important; /* Ngjyra e zezë */
+    padding: 10px 0 !important;
+    z-index: 9999 !important;
+    border-top: 1px solid #333;
+}
+      

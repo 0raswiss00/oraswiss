@@ -22,11 +22,33 @@
         ← Kthehu në Home
     </a>
     <div class="admin-actions" id="admin-controls-container" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #444;">
-        </div>
         <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
-        <button id="edit-btn" onclick="editProduct(${data.id})">Modifiko</button>
-        <button id="delete-btn" onclick="deleteProduct(${data.id})">Fshi Produktin</button>
+        <button id="edit-btn">Modifiko</button>
+        <button id="delete-btn" style="background: #ff4d4d; color: white;">Fshi Produktin</button>
     </div>
+
+    <script>
+    // 1. Funksioni për të kontrolluar pronësinë
+    async function checkOwnership(watchOwnerId) {
+        const { data: { user } } = await supabase.auth.getUser();
+        const adminDiv = document.getElementById("admin-controls-container");
+
+        // Shfaq vetëm nëse user-i është i loguar dhe është pronari
+        if (user && user.id === watchOwnerId) {
+            adminDiv.style.display = "block";
+        } else {
+            adminDiv.style.display = "none";
+        }
+    }
+
+    // 2. Kur ngarkon detajet e produktit (në funksionin tënd të load-it)
+    // Pasi merr 'data' nga Supabase, thirr:
+    // checkOwnership(data.user_id); 
+
+    // 3. Lidh butonat me ID-në e produktit (pasi faqja të jetë ngarkuar)
+    document.getElementById('edit-btn').onclick = () => editProduct(data.id);
+    document.getElementById('delete-btn').onclick = () => deleteProduct(data.id);
+    </script>
     
     <script>
         if (typeof window.supabaseClient === 'undefined') {

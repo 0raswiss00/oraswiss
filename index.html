@@ -278,7 +278,7 @@ loadProductCount();
 
 <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-    const supabase = createClient('URL_YT', 'KEY_YT'); // Zëvendëso me kredencialet e tua
+    const supabase = createClient('sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'); 
 
     async function updateNav() {
         const { data: { user } } = await supabase.auth.getUser();

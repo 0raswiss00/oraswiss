@@ -18,9 +18,8 @@
 <body>
 
     <div id="container">Duke ngarkuar...</div>
-    <a href="dashboard.html"
-       style="color:#ccc; text-align:center; display:block; margin-top:10px;">
-       ← Back
+    <a href="index.html" style="color:#ccc; text-align:center; display:block; margin-top:10px;">
+        ← Kthehu në Home
     </a>
     <div class="admin-actions" id="admin-controls-container" style="margin-top: 20px; padding: 15px; border: 1px solid #444; border-radius: 8px; display: none;">
         <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
@@ -168,6 +167,20 @@ async function checkOwnership(watchOwnerId) {
             adminDiv.style.display = "none";
         }
     }
+}
+
+async function checkOwnership(watchOwnerId) {
+    const { data: { user } } = await supabase.auth.getUser();
+    const adminDivs = document.querySelectorAll(".admin-actions"); 
+
+    adminDivs.forEach(div => {
+        // Shfaq vetëm nëse user-i ekziston dhe ID-ja përputhet
+        if (user && user.id === watchOwnerId) {
+            div.style.display = "block"; 
+        } else {
+            div.style.display = "none";
+        }
+    });
 }
         
 </script>        

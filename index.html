@@ -321,11 +321,11 @@ document.addEventListener("DOMContentLoaded", function() {
 async function performSearch(query) {
     console.log("Duke kërkuar për:", query);
     
-    // Marrim të dhënat nga tabela 'oras'
+    // Përdorim 'brand' sepse kjo është kolona ekzistuese në tabelën 'oras'
     const { data, error } = await supabase
         .from('oras')
         .select('*')
-        .ilike('name', `%${query}%`) 
+        .ilike('brand', `%${query}%`); // 'ilike' kërkon fjalën kudo në kolonën 'brand'
 
     if (error) {
         console.error("Gabim në kërkim:", error);
@@ -333,16 +333,7 @@ async function performSearch(query) {
     }
 
     console.log("Rezultatet:", data);
-    // Këtu mund t'i shfaqësh rezultatet në faqen tënde
 }
-
-// Lidhja me inputin
-searchInput.addEventListener("input", function(e) {
-    const value = e.target.value;
-    if (value.length > 2) { // Kërkon pasi përdoruesi ka shkruar më shumë se 2 shkronja
-        performSearch(value);
-    }
-});
 
 </script>
 

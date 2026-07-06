@@ -247,12 +247,13 @@ loadUserCount();
 loadProductCount();
 
 </script>
-<div id="myOraSwissMenu" style="display: none; position: fixed; bottom: 80px; right: 10px; background: #222; border: 1px solid #444; padding: 10px; border-radius: 10px; z-index: 9999; width: 180px;">
-    <div class="menu-item" onclick="location.href='buy.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 Buy</div>
-    <div class="menu-item" onclick="location.href='messages.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">✉️ Messages</div>
-    <div class="menu-item" onclick="location.href='settings.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">⚙️ Settings</div>
-    <div class="menu-item" onclick="location.href='support.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🎧 Support</div>
-    <div class="menu-item" onclick="location.href='info.html'" style="padding: 10px; color: white; cursor: pointer;">ℹ️ Info</div>
+<!-- Menuja që hapet -->
+<div id="myOraSwissMenu" class="my-oraswiss-menu" style="display:none;">
+    <div class="menu-item" onclick="location.href='buy.html'"><span>🛒 Buy</span> <span>></span></div>
+    <div class="menu-item" onclick="location.href='messages.html'"><span>✉️ Messages</span> <span>></span></div>
+    <div class="menu-item" onclick="location.href='settings.html'"><span>⚙️ Account Settings</span> <span>></span></div>
+    <div class="menu-item" onclick="location.href='support.html'"><span>🎧 Support</span> <span>></span></div>
+    <div class="menu-item" onclick="location.href='info.html'"><span>ℹ️ Info</span> <span>></span></div>
 </div>
 
 <nav class="bottom-nav">
@@ -261,7 +262,9 @@ loadProductCount();
     <button id="btnMySales" class="bottom-nav-item" style="background:none; display:none;">⌚ My Sales</button>
     <a href="sellnow.html" id="btnSell" class="bottom-nav-item" style="display:none;">🏷️ Sell</a>
     <button id="btnMyMenu" class="bottom-nav-item" style="background:none; display:none;" onclick="toggleMenu()">👤 My OraSwiss</button>
-    
+    <button id="btnMyMenu" class="bottom-nav-item" onclick="toggleMenu()" style="background:none; display:none;">
+        👤 My OraSwiss
+    </button>
     <a href="login.html" id="btnLogin" class="bottom-nav-item">🔑 Login</a>
 </nav>
 

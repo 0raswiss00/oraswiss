@@ -7,113 +7,74 @@
     <style>
         body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
         .product-card { background: #111; border: 1px solid #333; padding: 20px; max-width: 500px; margin: auto; border-radius: 10px; }
-        .product-img { width: 100%; height: auto; border-radius: 10px; margin-bottom: 15px; object-fit: cover; }
-        .price { color: #25D366; font-weight: bold; font-size: 1.4em; margin: 10px 0; }
-        hr { border: 0; border-top: 1px solid #333; margin: 15px 0; }
-        .btn { display: block; text-align: center; text-decoration: none; font-weight: bold; border-radius: 5px; padding: 15px; margin-top: 10px; }
-        .btn-whatsapp { background: #25D366; color: white; }
-        .btn-paypal { background: #ffeb00; color: black; } /* Bërë i verdhë si te lista kryesore */
+        .product-img { width: 100%; height: auto; border-radius: 10px; margin-bottom: 15px; }
+        .admin-actions { margin-top: 20px; padding: 15px; border: 1px solid #444; border-radius: 8px; display: none; }
     </style>
 </head>
 <body>
 
     <div id="container">Duke ngarkuar...</div>
-    <a href="index.html" style="color:#ccc; text-align:center; display:block; margin-top:10px;">
-        ← Kthehu në Home
-    </a>
-    <div class="admin-actions" id="admin-controls-container" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #444;">
-        <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
-        <button id="edit-btn">Modifiko</button>
-        <button id="delete-btn" style="background: #ff4d4d; color: white;">Fshi Produktin</button>
-    </div>
 
-<script>
-    // --- 1. KONFIGURIMI I SUPABASE ---
-    if (typeof window.supabaseClient === 'undefined') {
-        window.supabaseClient = window.supabase.createClient(
+    <script>
+        // 1. Konfigurimi - Vetëm një deklarim!
+        const supabase = window.supabase.createClient(
             "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
             "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
         );
-    }
-    const supabase = window.supabaseClient;
 
-    // --- 2. FUNKSIONET E ADMIN-IT ---
-    async function deleteProduct(id) {
-        if (!confirm("A jeni i sigurt që doni ta fshini këtë produkt?")) return;
-        
-        const { error } = await supabase.from('oras').delete().eq('id', id);
-        
-        if (error) {
-            alert("Gabim gjatë fshirjes: " + error.message);
-        } else {
-            alert("Produkti u fshi me sukses!");
-            window.location.href = 'index.html'; 
+        // 2. Funksionet Admin
+        async function deleteProduct(id) {
+            if (!confirm("A jeni i sigurt që doni ta fshini këtë produkt?")) return;
+            const { error } = await supabase.from('oras').delete().eq('id', id);
+            if (error) alert("Gabim: " + error.message);
+            else { alert("Produkti u fshi!"); window.location.href = 'index.html'; }
         }
-    }
 
-    function editProduct(id) {
-        window.location.href = 'edit.html?id=' + id;
-    }
+        function editProduct(id) {
+            window.location.href = 'edit.html?id=' + id;
+        }
 
-    // --- 3. KONTROLLI I PRONËSISË (Shfaq/Fsheh Admin Controls) ---
-    async function checkOwnership(watchOwnerId) {
-        const { data: { user } } = await supabase.auth.getUser();
-        const adminDiv = document.querySelector(".admin-actions");
-        
-        if (adminDiv) {
-            // Shfaq vetëm nëse përdoruesi është i loguar dhe është pronari
-            if (user && user.id === watchOwnerId) {
+        // 3. Kontrolli i pronësisë
+        async function checkOwnership(watchOwnerId) {
+            const { data: { user } } = await supabase.auth.getUser();
+            const adminDiv = document.querySelector(".admin-actions");
+            if (adminDiv && user && user.id === watchOwnerId) {
                 adminDiv.style.display = "block";
-            } else {
-                adminDiv.style.display = "none";
             }
         }
-    }
 
-    // --- 4. NGARKIMI I PRODUKTIT ---
-    async function loadProduct() {
-        const id = new URLSearchParams(window.location.search).get('id');
-        const container = document.getElementById("container");
+        // 4. Ngarkimi i produktit
+        async function loadProduct() {
+            const id = new URLSearchParams(window.location.search).get('id');
+            const container = document.getElementById("container");
 
-        if (!id) {
-            container.innerHTML = "Asnjë ID u gjet.";
-            return;
-        }
+            if (!id) { container.innerHTML = "ID e pasaktë."; return; }
 
-        try {
             const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-            if (error) throw error;
-
-            // Logjika për galerinë
-            window.currentImages = Array.isArray(data.image_url) ? data.image_url : [data.image_url];
             
-            // Gjenerimi i HTML-së
+            if (error) { container.innerHTML = "Gabim: " + error.message; return; }
+
+            // Gjenerojmë HTML-në
             container.innerHTML = `
                 <div class="product-card">
-                    <img id="main-product-img" class="product-img" src="https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/${window.currentImages[0]}" alt="${data.brand}">
-                    <h1>${data.brand} - ${data.model}</h1>
-                    <p><strong>Çmimi:</strong> ${data.price} €</p>
-                    <p><strong>Përshkrimi:</strong> ${data.description}</p>
+                    <h1>${data.brand} ${data.model}</h1>
+                    <p>Çmimi: ${data.price} €</p>
+                    <p>${data.description || ''}</p>
                     
-                    <div class="admin-actions" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #444;">
-                        <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
+                    <div class="admin-actions">
+                        <h4>Admin Controls</h4>
                         <button onclick="editProduct(${data.id})">Modifiko</button>
-                        <button onclick="deleteProduct(${data.id})" style="background: #ff4d4d; color: white;">Fshi Produktin</button>
+                        <button onclick="deleteProduct(${data.id})" style="color:red">Fshi Produktin</button>
                     </div>
                 </div>
             `;
-
-            // Pas ngarkimit të HTML-së, kontrollo pronësinë
+            
+            // Kontrollojmë pronësinë pas gjenerimit të butonave
             checkOwnership(data.user_id);
-
-        } catch (err) {
-            container.innerHTML = "Gabim: " + err.message;
         }
-    }
 
-    // Fillo procesin
-    loadProduct();
-</script>
-
+        // Ekzekutimi
+        loadProduct();
+    </script>
 </body>
 </html>

@@ -293,8 +293,7 @@ loadProductCount();
     }
 
 }); 
-</script>
- document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() {
     console.log("DOM është ngarkuar!"); // 1. Kontrolli i parë
 
     const searchInput = document.getElementById("searchInput");
@@ -317,7 +316,30 @@ loadProductCount();
         });
     }
 });
- 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("Faqja është gati.");
+
+    const searchInput = document.getElementById("searchInput");
+    const cameraBtn = document.querySelector(".camera-icon");
+
+    // Kontrollo nëse i gjeti elementet
+    if (!searchInput) console.warn("Kujdes: Nuk gjeta 'searchInput'");
+    if (!cameraBtn) console.warn("Kujdes: Nuk gjeta 'camera-icon'");
+
+    if (searchInput) {
+        searchInput.addEventListener("focus", function() {
+            alert("Kërkimi u aktivizua!");
+        });
+    }
+
+    if (cameraBtn) {
+        cameraBtn.addEventListener("click", function() {
+            alert("Kamera u aktivizua!");
+        });
+    }
+});
+
 </script>
 
 </body>    

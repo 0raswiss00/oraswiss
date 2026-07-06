@@ -21,7 +21,8 @@
     <a href="index.html" style="color:#ccc; text-align:center; display:block; margin-top:10px;">
         ← Kthehu në Home
     </a>
-    <div class="admin-actions" id="admin-controls-container" style="margin-top: 20px; padding: 15px; border: 1px solid #444; border-radius: 8px; display: none;">
+    <div class="admin-actions" id="admin-controls-container" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #444;">
+        </div>
         <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
         <button id="edit-btn" onclick="editProduct(${data.id})">Modifiko</button>
         <button id="delete-btn" onclick="deleteProduct(${data.id})">Fshi Produktin</button>
@@ -157,16 +158,18 @@ function editProduct(id) {
 
 async function checkOwnership(watchOwnerId) {
     const { data: { user } } = await supabase.auth.getUser();
-    const adminDiv = document.querySelector(".admin-actions"); // Gjen div-in e admin
+    
+    // Përdor querySelectorAll për të marrë GJITHË butonat/div-et
+    const adminDivs = document.querySelectorAll(".admin-actions"); 
 
-    if (adminDiv) {
-        // Shfaq div-in vetëm nëse përdoruesi është i loguar DHE pronari i orës
+    adminDivs.forEach(div => {
+        // Kontrollo nëse user-i është i loguar DHE id-ja përputhet
         if (user && user.id === watchOwnerId) {
-            adminDiv.style.display = "block"; 
+            div.style.display = "block"; // Shfaq për pronarin
         } else {
-            adminDiv.style.display = "none";
+            div.style.display = "none";  // Fshi për të tjerët
         }
-    }
+    });
 }
 
 async function checkOwnership(watchOwnerId) {

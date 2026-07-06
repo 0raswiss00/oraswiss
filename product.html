@@ -7,7 +7,7 @@
     <style>
         body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
         .product-card { background: #111; border: 1px solid #333; padding: 20px; max-width: 500px; margin: auto; border-radius: 10px; }
-        .product-img { width: 100%; height: auto; border-radius: 10px; margin-bottom: 15px; }
+        .product-img { width: 100%; border-radius: 10px; margin-bottom: 15px; }
         .admin-actions { margin-top: 20px; padding: 15px; border: 1px solid #444; border-radius: 8px; display: none; }
     </style>
 </head>
@@ -16,7 +16,7 @@
     <div id="container">Duke ngarkuar...</div>
 
     <script>
-        // 1. Konfigurimi - Vetëm një deklarim!
+        // 1. Inicializimi i vetëm i klientit
         const supabase = window.supabase.createClient(
             "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
             "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
@@ -38,12 +38,13 @@
         async function checkOwnership(watchOwnerId) {
             const { data: { user } } = await supabase.auth.getUser();
             const adminDiv = document.querySelector(".admin-actions");
+            // Shfaq butonat vetëm nëse user-i është loguar dhe është pronar
             if (adminDiv && user && user.id === watchOwnerId) {
                 adminDiv.style.display = "block";
             }
         }
 
-        // 4. Ngarkimi i produktit
+        // 4. Ngarkimi i të dhënave
         async function loadProduct() {
             const id = new URLSearchParams(window.location.search).get('id');
             const container = document.getElementById("container");
@@ -54,7 +55,7 @@
             
             if (error) { container.innerHTML = "Gabim: " + error.message; return; }
 
-            // Gjenerojmë HTML-në
+            // Gjenerojmë HTML-në me butonat që përdorin funksione direkte
             container.innerHTML = `
                 <div class="product-card">
                     <h1>${data.brand} ${data.model}</h1>
@@ -69,11 +70,10 @@
                 </div>
             `;
             
-            // Kontrollojmë pronësinë pas gjenerimit të butonave
+            // Kontrollojmë nëse duhet të shfaqim butonat
             checkOwnership(data.user_id);
         }
 
-        // Ekzekutimi
         loadProduct();
     </script>
 </body>

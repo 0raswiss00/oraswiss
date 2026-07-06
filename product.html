@@ -21,7 +21,11 @@
     <a href="index.html" style="color:#ccc; text-align:center; display:block; margin-top:10px;">
         ← Kthehu në Home
     </a>
-
+    <div class="admin-actions" id="admin-controls-container" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #444;">
+        <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
+        <button id="edit-btn">Modifiko</button>
+        <button id="delete-btn" style="background: #ff4d4d; color: white;">Fshi Produktin</button>
+    </div>
 
     <script>
     // 1. Funksioni për të kontrolluar pronësinë
@@ -137,11 +141,6 @@ function changeImage(step) {
                        <a href="https://wa.me/35569XXXXXXX?text=I%20am%20interested%20in:%20${encodeURIComponent(data.brand + ' ' + data.model)}" class="btn btn-whatsapp">
                           💬 ORDER ON WHATSAPP
                        </a>
-                      <div class="admin-actions" style="margin-top: 20px; padding: 15px; border: 1px solid #444; border-radius: 8px;">
-                          <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
-                          <button onclick="editProduct(${data.id})">Modifiko</button>
-                          <button onclick="deleteProduct(${data.id})">Fshi Produktin</button>
-                     </div>
 
                        ${paypalButton}
                     </div>

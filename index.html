@@ -344,22 +344,30 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function renderResults(products) {
     const container = document.getElementById("luxury-container");
-    container.innerHTML = ""; 
+    container.innerHTML = ""; // Pastron listën e vjetër
+
+    if (products.length === 0) {
+        container.innerHTML = "<p>Nuk u gjet asnjë produkt.</p>";
+        return;
+    }
 
     products.forEach(product => {
-        const imageUrl = product.image_url && product.image_url.length > 0 ? product.image_url[0] : 'default-image.jpg';
+        // Logjika për foton: merr foton e parë ose shfaq placeholder
+        const imageUrl = (product.image_url && product.image_url.length > 0) 
+            ? product.image_url[0] 
+            : 'https://oraswiss.com/placeholder.jpg';
         
-        // Krijojmë një link që dërgon te faqja e produktit (p.sh. product.html?id=123)
+        // Krijojmë kartën e klikueshme
+        // Sigurohu që class="product-card" e ke në CSS për të pasur pamje të mirë
         container.innerHTML += `
-            <a href="product.html?id=${product.id}" class="product-card" style="text-decoration:none; color:white; display:block; cursor:pointer;">
-                <img src="${imageUrl}" alt="${product.brand}" style="width:100px; height:100px; display:block;">
+            <a href="product.html?id=${product.id}" class="product-card" style="display:block; text-decoration:none; color:inherit; border:1px solid #ccc; margin:10px; padding:10px;">
+                <img src="${imageUrl}" alt="${product.brand}" style="width:100px; height:100px; display:block; object-fit:cover;">
                 <h3>${product.brand}</h3>
                 <p>Kategoria: ${product.category}</p>
             </a>
         `;
     });
 }
-
 </script>
 
 </body>    

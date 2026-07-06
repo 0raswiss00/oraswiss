@@ -233,7 +233,61 @@ loadProductCount();
 loadUserCount();
 
 </script>
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
+const supabase = createClient(
+  "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+  "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
+
+// ---------------- LOGIN REDIRECT ----------------
+function requireLogin() {
+    localStorage.setItem("redirectAfterLogin", window.location.href);
+    window.location.href = "login.html";
+}
+
+async function openSell() {
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (user) {
+        window.location.href = "sellnow.html";
+    } else {
+        requireLogin();
+    }
+}
+
+// ---------------- MENU ----------------
+window.toggleMenu = function() {
+    const menu = document.getElementById('myOraSwissMenu');
+    if (menu) {
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+};
+
+// ---------------- NAV UPDATE ----------------
+async function updateNav() {
+    const { data: { user } } = await supabase.auth.getUser();
+
+    const btnMySales = document.getElementById('btnMySales');
+    const btnSell = document.getElementById('btnSell');
+    const btnMyAccount = document.getElementById('btnMyAccount');
+
+    if (user) {
+        if (btnMySales) btnMySales.style.display = "block";
+        if (btnSell) btnSell.style.display = "block";
+        if (btnMyAccount) btnMyAccount.style.display = "block";
+    } else {
+        if (btnMySales) btnMySales.style.display = "none";
+        if (btnSell) btnSell.style.display = "none";
+        if (btnMyAccount) btnMyAccount.style.display = "none";
+    }
+}
+
+updateNav();
+supabase.auth.onAuthStateChange(updateNav);
+
+</script>
 
 </body>  
 </html>

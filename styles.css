@@ -2048,11 +2048,6 @@ body {
   overflow-x: hidden;
 }
 
-body.about-page,
-body.service-page{
-  background:#000 !important;
-  color:#e6e6e6 !important;
-}
 
 .about-page .service-section,
 .service-page .service-section{
@@ -2362,9 +2357,7 @@ body{background:#000!important;color:#E6E6E6!important}
   pointer-events: auto !important;
 }
 
- body{
-  padding-bottom: calc(120px + env(safe-area-inset-bottom));
-}     
+ 
 
 #publishBtn{
   position: sticky;
@@ -2413,10 +2406,7 @@ button, a, input, select, textarea { pointer-events: auto !important; }
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* BACKGROUND */
-body {
-  background: #ececec;
-}
+
 
 /* CENTER PAGE */
 .auth-page {

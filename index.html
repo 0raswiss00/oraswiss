@@ -96,194 +96,6 @@
 <h2>Parts Collection</h2>
 <div id="parts-container" class="grid">Loading...</div>
 
-<script>
-  const supabase = window.supabase.createClient(
-    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-  );
-// Tani përdorni variablin 'supabase' kudo në kod
-function requireLogin() {
-    localStorage.setItem("redirectAfterLogin", window.location.href);
-    window.location.href = "login.html";
-}
-  
-async function loadCategory(cat, containerId) {
-    const container = document.getElementById(containerId);
-    
-    const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .eq('category', cat); 
-
-    if (error) {
-        console.error("Gabim gjatë marrjes së të dhënave:", error);
-        container.innerHTML = "Error loading items.";
-        return;
-    }
-
-    if (!data || data.length === 0) {
-        container.innerHTML = "No items in this category.";
-        return;
-    }
-
-    // Ndërtimi i kartave dinamike
-    container.innerHTML = data.map(ora => {
-        
-// Imazhi standard nëse nuk ka foto
-        let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-        let primaryImage = "";
-
-        // Kontrolli i kolonës së re image_url (me vizë poshtë)
-        if (ora.image_url && ora.image_url.length > 0) {
-            primaryImage = Array.isArray(ora.image_url) ? ora.image_url[0] : ora.image_url;
-        }
-
-  if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
-              if (primaryImage.startsWith('http')) {
-                  imgUrl = primaryImage;
-              } else {
-                  imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
-              }
-          }
-      
-        return `
-            <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
-                <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
-                <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
-                <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>
-                <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-                
-                <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:10px; background:#222; color:#fff; border:1px solid #444; border-radius:4px; box-sizing:border-box;" onclick="event.stopPropagation();">
-                
-                <button class="btn-main btn-secondary" style="width:100%; margin-top:5px;" onclick="event.stopPropagation();">Send Request</button>
-                
-                ${ora.paypal_link ? `
-                <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;" onclick="event.stopPropagation();">
-                    <button class="btn-main btn-buy" style="width:100%; margin-top:5px;">🛒 Buy Now</button>
-                </a>
-                ` : ''}
-
-                <div style="display: flex; gap: 5px; margin-top: 5px;">
-                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" 
-                        onclick="event.stopPropagation(); this.style.background = this.style.background === 'rgb(220, 53, 69)' ? '#222' : '#dc3545';">
-                        ❤️ Like
-                    </button>
-                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" 
-                        onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.origin + '/product.html?id=${ora.id}'); alert('Link copied to clipboard!');">
-                        🔗 Share
-                    </button>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-// E vendosim tek 'window' që të jetë i aksesueshëm nga butoni në HTML
-window.trajtoKlikiminSell = async function() {
-  // Përdor getUser në vend të getSession
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (user) {
-    // Nëse ka user, shko te faqja e shitjes
-    window.location.href = 'register.html'; 
-  } else {
-    // Nëse nuk ka user, dërgoje te logimi
-    window.location.href = 'login.html'; 
-  }
-};
-async function openSell() {
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (user) {
-        window.location.href = "sellnow.html";
-    } else {
-        requireLogin();
-    }
-}
-
-// Funksioni për ta shfaqur butonin vetëm kur përdoruesi është i loguar
-async function kontrolloDheShfaqSellNow() {
-    const { data: { session } } = await supabase.auth.getSession();
-    const btnSell = document.getElementById("btnSellNow");
-    if (session && btnSell) {
-        btnSell.style.display = "block"; 
-    }
-}
-
-// E thërrasim funksionin sapo faqja të hapet
-kontrolloDheShfaqSellNow();
-  
-    // Ngarkimi i kategorive
-    loadCategory('luxury', 'luxury-container');
-    loadCategory('vintage', 'vintage-container');
-    loadCategory('parts', 'parts-container');
-
-// Funksioni për të numëruar produktet (orët)
-async function loadProductCount() {
-    try {
-        console.log("Duke u lidhur me Supabase për produkte...");
-        const { count, error } = await supabase
-            .from('oras') // Përdor tabelën 'oras' që konfirmuat
-            .select('*', { count: 'exact' });
-
-        if (error) {
-            console.error("GABIM SUPABASE:", error);
-        } else {
-            console.log("Numri i produkteve:", count);
-            const element = document.getElementById('count-products');
-            if (element) {
-                element.textContent = count || 0;
-            }
-        }
-    } catch (err) {
-        console.error("Gabim i papritur:", err);
-    }
-}
-
-// Funksioni për të numëruar përdoruesit
-async function loadUserCount() {
-    try {
-        const { data, error } = await supabase
-            .from('oras')
-            .select('user_id');
-        
-        if (error) throw error;
-        
-        const uniqueUsers = [...new Set(data?.map(w => w.user_id).filter(Boolean))];
-        document.getElementById('count-users').textContent = uniqueUsers.length;
-    } catch (err) {
-        console.error("Gabim te loadUserCount:", err);
-    }
-}
-
-// Thirr funksionet këtu (jashtë çdo funksioni tjetër)
-loadUserCount();
-loadProductCount();
-
-</script>
-<!-- Menuja që hapet -->
-<div id="myOraSwissMenu" class="my-oraswiss-menu" style="display:none;">
-    <div class="menu-item" onclick="location.href='buy.html'"><span>🛒 Buy</span> <span>></span></div>
-    <div class="menu-item" onclick="location.href='messages.html'"><span>✉️ Messages</span> <span>></span></div>
-    <div class="menu-item" onclick="location.href='settings.html'"><span>⚙️ Account Settings</span> <span>></span></div>
-    <div class="menu-item" onclick="location.href='support.html'"><span>🎧 Support</span> <span>></span></div>
-    <div class="menu-item" onclick="location.href='info.html'"><span>ℹ️ Info</span> <span>></span></div>
-</div>
-
-<nav class="bottom-nav">
-    <a href="index.html">🏠 Home</a>
-
-    <a href="favorites.html">❤️ Favorites</a>
-
-    <a href="collection.html">⌚ Collection</a>
-
-    <a href="#" id="btnSell" class="bottom-nav-item" onclick="openSell()">🏷️ Sell</a>
-
-    <a href="#" id="btnMySales">🏷️ My Sales</a>
-
-    <a href="#" id="btnMyAccount">👤 My OraSwiss</a>
-</nav>
-
-
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -292,7 +104,8 @@ const supabase = createClient(
   "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
 );
 
-// ---------------- LOGIN REDIRECT ----------------
+
+// ================= LOGIN REDIRECT =================
 function requireLogin() {
     localStorage.setItem("redirectAfterLogin", window.location.href);
     window.location.href = "login.html";
@@ -308,37 +121,119 @@ async function openSell() {
     }
 }
 
-// ---------------- MENU ----------------
-window.toggleMenu = function() {
-    const menu = document.getElementById('myOraSwissMenu');
-    if (menu) {
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    }
-};
 
-// ---------------- NAV UPDATE ----------------
+// ================= CATEGORY LOAD =================
+async function loadCategory(cat, containerId) {
+    const container = document.getElementById(containerId);
+
+    const { data, error } = await supabase
+        .from('oras')
+        .select('*')
+        .eq('category', cat);
+
+    if (error) {
+        console.error(error);
+        container.innerHTML = "Error loading items";
+        return;
+    }
+
+    if (!data || data.length === 0) {
+        container.innerHTML = "No items";
+        return;
+    }
+
+    container.innerHTML = data.map(ora => {
+
+        let imgUrl = "https://via.placeholder.com/600x400?text=No+Image";
+        let img = ora.image_url;
+
+        if (img) {
+            imgUrl = img.startsWith("http")
+                ? img
+                : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + img;
+        }
+
+        return `
+        <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
+            <img src="${imgUrl}">
+            <h3>${ora.brand || ''} ${ora.model || ''}</h3>
+            <p>Ref: ${ora.reference || '/'}</p>
+            <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+
+            <button onclick="event.stopPropagation()">Send Request</button>
+
+            ${ora.paypal_link ? `
+                <a href="${ora.paypal_link}" target="_blank" onclick="event.stopPropagation()">
+                    <button>🛒 Buy</button>
+                </a>
+            ` : ''}
+        </div>
+        `;
+    }).join('');
+}
+
+
+// ================= NAV CONTROL =================
 async function updateNav() {
     const { data: { user } } = await supabase.auth.getUser();
 
-    const btnMySales = document.getElementById('btnMySales');
-    const btnSell = document.getElementById('btnSell');
-    const btnMyAccount = document.getElementById('btnMyAccount');
+    const btnSell = document.getElementById("btnSell");
+    const btnMySales = document.getElementById("btnMySales");
+    const btnMyAccount = document.getElementById("btnMyAccount");
 
     if (user) {
-        if (btnMySales) btnMySales.style.display = "block";
         if (btnSell) btnSell.style.display = "block";
+        if (btnMySales) btnMySales.style.display = "block";
         if (btnMyAccount) btnMyAccount.style.display = "block";
     } else {
-        if (btnMySales) btnMySales.style.display = "none";
         if (btnSell) btnSell.style.display = "none";
+        if (btnMySales) btnMySales.style.display = "none";
         if (btnMyAccount) btnMyAccount.style.display = "none";
     }
 }
 
-updateNav();
 supabase.auth.onAuthStateChange(updateNav);
+updateNav();
+
+
+// ================= MENU =================
+window.toggleMenu = function () {
+    const menu = document.getElementById("myOraSwissMenu");
+    if (menu) {
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+};
+
+
+// ================= COUNTERS =================
+async function loadProductCount() {
+    const { count } = await supabase
+        .from('oras')
+        .select('*', { count: 'exact', head: true });
+
+    document.getElementById("count-products").textContent = count || 0;
+}
+
+async function loadUserCount() {
+    const { data } = await supabase
+        .from('oras')
+        .select('user_id');
+
+    const unique = [...new Set((data || []).map(u => u.user_id))];
+    document.getElementById("count-users").textContent = unique.length;
+}
+
+
+// ================= INIT =================
+loadCategory('luxury', 'luxury-container');
+loadCategory('vintage', 'vintage-container');
+loadCategory('parts', 'parts-container');
+
+loadProductCount();
+loadUserCount();
 
 </script>
+
 
 </body>  
 </html>

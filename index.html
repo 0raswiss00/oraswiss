@@ -271,7 +271,10 @@ loadProductCount();
 
 <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-    const supabase = createClient('sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9');
+    const supabaseUrl = 'https://id-e-projektit-tend.supabase.co';
+    const supabaseKey = 'sb_publishable_AKk_Z7lhtkvukN6Fy1cAQ_KBTXicY9';
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     async function updateNav() {
         // Kontrollo statusin

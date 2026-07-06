@@ -307,8 +307,18 @@ loadProductCount();
     supabase.auth.onAuthStateChange(() => {
         updateNav();
     });
-</script>
+    async function updateNav() {
+        const { data: { user } } = await supabase.auth.getUser();
+        const nav = document.querySelector('.bottom-nav');
+        if (user) {
+            nav.style.display = 'flex'; // Shfaq navin nëse është i loguar
+        } else {
+            nav.style.display = 'none'; // Fsheh navin nëse nuk është i loguar
+        }
+    }
+    updateNav();
 
+</script>
 </body>  
 </html>
   

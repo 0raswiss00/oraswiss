@@ -101,7 +101,11 @@
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
   );
 // Tani përdorni variablin 'supabase' kudo në kod
-
+function requireLogin() {
+    localStorage.setItem("redirectAfterLogin", window.location.href);
+    window.location.href = "register.html";
+}
+  
 async function loadCategory(cat, containerId) {
     const container = document.getElementById(containerId);
     

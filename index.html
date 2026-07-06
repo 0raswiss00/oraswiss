@@ -105,7 +105,6 @@ function requireLogin() {
     localStorage.setItem("redirectAfterLogin", window.location.href);
     window.location.href = "register.html";
 }
-Compose
   
 async function loadCategory(cat, containerId) {
     const container = document.getElementById(containerId);
@@ -273,7 +272,20 @@ loadProductCount();
         const menu = document.getElementById('myOraSwissMenu');
         menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
     }
-  
+ document.addEventListener("DOMContentLoaded", function () {
+
+    const isLoggedIn = localStorage.getItem("loggedIn") === "true";
+
+    if (!isLoggedIn) {
+        document.querySelectorAll("#bottomNav a").forEach(link => {
+            link.addEventListener("click", function (e) {
+                e.preventDefault();
+                requireLogin();
+            });
+        });
+    }
+
+}); 
 </script>  
 </body>
 </html>

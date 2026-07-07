@@ -162,43 +162,22 @@ async function loadCategory(cat, containerId) {
               }
           }
       
-        // Gjeni pjesën ku ndërtohet kodi HTML në loadCategory
-        async function loadCategory(cat, containerId) {
-    const container = document.getElementById(containerId);
-    
-    const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .eq('category', cat); 
-
-    if (error) {
-        console.error("Gabim:", error);
-        container.innerHTML = "Error loading items.";
-        return;
-    }
-
-    if (!data || data.length === 0) {
-        container.innerHTML = "No items in this category.";
-        return;
-    }
-
-    container.innerHTML = data.map(ora => {
-        let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-        if (ora.image_url) {
-            const path = Array.isArray(ora.image_url) ? ora.image_url[0] : ora.image_url;
-            imgUrl = path.startsWith('http') ? path : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + path;
-        }
-
         return `
             <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
                 <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
                 <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
                 <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>
                 <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-            </div>
-        `;
-    }).join('');
-}
+                
+                <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:10px; background:#222; color:#fff; border:1px solid #444; border-radius:4px; box-sizing:border-box;" onclick="event.stopPropagation();">
+                
+                <button class="btn-main btn-secondary" style="width:100%; margin-top:5px;" onclick="event.stopPropagation();">Send Request</button>
+                
+                ${ora.paypal_link ? `
+                <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;" onclick="event.stopPropagation();">
+                    <button class="btn-main btn-buy" style="width:100%; margin-top:5px;">🛒 Buy Now</button>
+                </a>
+                ` : ''}
 
                 <div style="display: flex; gap: 5px; margin-top: 5px;">
                     <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" 
@@ -361,7 +340,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const { data, error } = await supabase
                 .from('oras')
                 .select('*')
-                .ilike('brand', `%${query}%`);
+                .ilike('brand', %${query}%);
 
             if (error) {
                 console.error("Gabim:", error);
@@ -378,7 +357,7 @@ async function performSearch(query) {
     const { data, error } = await supabase
         .from('oras')
         .select('*')
-        .ilike('brand', `%${query}%`); 
+        .ilike('brand', %${query}%); 
 
     // 2. Trajto gabimet
     if (error) {
@@ -419,5 +398,3 @@ function renderResults(products) {
 
 </body>    
 </html>
-  
-

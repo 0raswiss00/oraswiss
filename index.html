@@ -340,7 +340,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const { data, error } = await supabase
                 .from('oras')
                 .select('*')
-                .ilike('brand', `%${query}%`);
+                .ilike('brand', `%${query}%`)
 
             if (error) {
                 console.error("Gabim:", error);

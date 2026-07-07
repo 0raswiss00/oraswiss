@@ -182,12 +182,12 @@ async function loadCategory(cat, containerId) {
         return;
     }
 
-    // Përdorimi i map për të ndërtuar HTML
+    // Sigurohuni që backtick-u (`) hapet këtu dhe mbyllet në fund
     container.innerHTML = data.map(ora => {
         let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
         if (ora.image_url) {
-             const path = Array.isArray(ora.image_url) ? ora.image_url[0] : ora.image_url;
-             imgUrl = path.startsWith('http') ? path : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + path;
+            const path = Array.isArray(ora.image_url) ? ora.image_url[0] : ora.image_url;
+            imgUrl = path.startsWith('http') ? path : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + path;
         }
 
         return `
@@ -196,8 +196,17 @@ async function loadCategory(cat, containerId) {
                 <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
                 <p>Ref: ${ora.reference || '/'}</p>
                 <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
+                <input type="email" placeholder="Emaili yt" onclick="event.stopPropagation();">
+                <button class="btn-main btn-secondary" onclick="event.stopPropagation();">Send Request</button>
+                <div style="display: flex; gap: 5px; margin-top: 5px;">
+                    <button onclick="event.stopPropagation();">❤️ Like</button>
+                    <button onclick="event.stopPropagation();">🔗 Share</button>
+                </div>
             </div>
         `;
+    }).join('');
+}
+
   
                 <div style="display: flex; gap: 5px; margin-top: 5px;">
                     <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" 

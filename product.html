@@ -21,7 +21,7 @@
     <a href="index.html" style="color:#ccc; text-align:center; display:block; margin-top:10px;">
         ← Kthehu në Home
     </a>
-    <div id="admin-controls-container" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #ccc;">
+    <div class="admin-actions" id="admin-controls-container" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #444;">
         <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
         <button onclick="editProduct(window.currentProductId)">Modifiko</button>
         <button onclick="deleteProduct(window.currentProductId)" style="background: #ff4d4d; color: white;">Fshi Produktin</button>
@@ -32,13 +32,9 @@
     async function checkOwnership(watchOwnerId) {
         const { data: { user } } = await supabase.auth.getUser();
         const adminDiv = document.getElementById("admin-controls-container");
-    
-        // Shto këtë për të parë në Console (F12) se çfarë po krahason
-        console.log("User ID:", user?.id, "Article Owner ID:", watchOwnerId);
-    
-        // Përdor == në vend të === për të shmangur problemet me tipet e të dhënave
-        // ose konvertoji të dyja në String
-        if (user && String(user.id) === String(watchOwnerId)) {
+
+        // Shfaq vetëm nëse user-i është i loguar dhe është pronari
+        if (user && user.id === watchOwnerId) {
             adminDiv.style.display = "block";
         } else {
             adminDiv.style.display = "none";
@@ -66,17 +62,12 @@
                 return;
             }
 
- try {
-    const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-    if (error) throw error;
-    
-    window.currentProductId = data.id;
-    checkOwnership(data.user_id);
-    window.currentImages = Array.isArray(data.image_url) ? data.image_url : [data.image_url];
-    window.currentImgIndex = 0;
-} catch (err) {
-    console.error("Gabim gjatë ngarkimit:", err);
-}
+    try {
+            const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+            if (error) throw error;
+
+            // Thirr funksionin vetëm një herë
+            checkOwnership(data.user_id);
         
             // Ruaj ID-në për butonat
             window.currentProductId = data.id; 

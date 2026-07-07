@@ -26,7 +26,32 @@
 
 <script src="supabase-lib.js"></script>
 <script src="db-connect.js"></script>
-<script>
+<script>  
+ async function loadOrders() {
+    const ordersBody = document.getElementById('orders-body');
+    if (!ordersBody) return;
+
+    // 1. Marrrim porositë nga tabela 'orders'
+    const { data, error } = await supabase
+        .from('orders')
+        .select('*');
+
+    if (error) {
+        console.error("Gabim gjatë marrjes së porosive:", error);
+        return;
+    }
+
+    // 2. Gjenerojmë rreshtat e tabelës
+    ordersBody.innerHTML = data.map(order => `
+        <tr>
+            <td>Ora #${order.product_id}</td>
+            <td>${order.status}</td>
+            <td>${order.tracing_number || 'N/A'}</td>
+            <td><button>Detaje</button></td>
+        </tr>
+    `).join('');
+}
+
     // Përdorni një "event listener" për të pritur ngarkimin e skriptit
     document.addEventListener('DOMContentLoaded', () => {
         if (typeof testo === 'function') {

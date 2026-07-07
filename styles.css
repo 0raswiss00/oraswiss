@@ -2878,4 +2878,19 @@ img {
  .admin-actions { display: none; }     
 
 
+/* Rregullojmë kontejnerin që përdor klasën grid */
+#vintage-container.grid {
+    display: grid;
+    /* 2 kolona në celular, 4 në kompjuter */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Kjo pjesë siguron 4 kolona kur ekrani është i gjerë */
+@media (min-width: 1024px) {
+    #vintage-container.grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
 

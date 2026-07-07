@@ -66,12 +66,17 @@
                 return;
             }
 
-    try {
-            const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-            if (error) throw error;
-
-            // Thirr funksionin vetëm një herë
-            checkOwnership(data.user_id);
+            try {
+                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+                if (error) throw error;
+    
+                window.currentProductId = data.id;
+                // Thirrje e thjeshtë:
+                checkOwnership(data.user_id); 
+    
+            } catch (err) {
+                console.error("Gabim gjatë ngarkimit:", err);
+            }
         
             // Ruaj ID-në për butonat
             window.currentProductId = data.id; 

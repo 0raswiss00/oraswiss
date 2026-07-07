@@ -2894,3 +2894,17 @@ img {
     }
 }
 
+/* Rregullimi i Grid pa prekur JavaScript-in */
+#vintage-container.grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    width: 100% !important;
+}
+
+/* Për kompjuter (Desktop) */
+@media (min-width: 1024px) {
+    #vintage-container.grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+}

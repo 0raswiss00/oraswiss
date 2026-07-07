@@ -62,16 +62,20 @@
                 return;
             }
 
-            try {
-                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-                if (error) throw error;
-                checkOwnership(data.user_id);
-        // --- LOGJIKA E RE E GALERISË ---
-        (checkOwnership(data.user_id);)
-        window.currentProductId = data.id; // Kjo e bën ID-në të aksesueshme kudo        
-        window.currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
-        window.currentImgIndex = 0;
+    try {
+            const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+            if (error) throw error;
 
+            // Thirr funksionin vetëm një herë
+            checkOwnership(data.user_id);
+        
+            // Ruaj ID-në për butonat
+            window.currentProductId = data.id; 
+        
+            // Logjika e galerisë
+            window.currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
+            window.currentImgIndex = 0;
+        
         window.changeImage = function(step) {
             // KONTROLLI I SIGURISË: Nëse nuk ka foto, mos bëj asgjë
             if (!window.currentImages || window.currentImages.length === 0) return;

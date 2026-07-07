@@ -2878,47 +2878,17 @@ img {
  .admin-actions { display: none; }     
 
 
-/* Rregullojmë kontejnerin që përdor klasën grid */
-#vintage-container.grid {
-    display: grid;
-    /* 2 kolona në celular, 4 në kompjuter */
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    padding: 20px;
-}
-
-/* Kjo pjesë siguron 4 kolona kur ekrani është i gjerë */
-@media (min-width: 1024px) {
-    #vintage-container.grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-/* Rregullimi i Grid pa prekur JavaScript-in */
-#vintage-container.grid {
+/* Ky kod targeton çdo div që ka klasën 'grid' */
+.grid {
     display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
-    width: 100% !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* 2 kolona për celular */
+    gap: 15px !important;
+    padding: 10px !important;
 }
 
-/* Për kompjuter (Desktop) */
+/* Për desktop, ndryshojmë klasën 'grid' në 4 kolona */
 @media (min-width: 1024px) {
-    #vintage-container.grid {
+    .grid {
         grid-template-columns: repeat(4, 1fr) !important;
     }
 }
-
-/* Mos ndrysho asgjë tjetër, shto vetëm këtë në fund të skedarit */
-#vintage-container {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr); /* 2 kolona celular */
-    gap: 15px;
-    padding: 10px;
-}
-
-@media (min-width: 768px) {
-    #vintage-container {
-        grid-template-columns: repeat(4, 1fr); /* 4 kolona desktop */
-    }
-}      

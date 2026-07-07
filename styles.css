@@ -2914,3 +2914,29 @@ img {
         height: 180px; /* Pak më e madhe në desktop */
     }
 }
+
+/* Kjo rregullon çdo kontejner të orëve në çdo faqe */
+.watch-container {
+    display: grid;
+    /* 2 kolona në celular, 4 në kompjuter */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+}
+
+@media (min-width: 1024px) {
+    .watch-container {
+        grid-template-columns: repeat(4, 1fr); /* Fikse 4 kolona në desktop */
+    }
+}
+
+/* Sigurohemi që fotot të mos jenë gjigante */
+.watch-card img {
+    width: 100%;
+    height: 180px; /* Lartësi fikse për t'i mbajtur rreshtat të rregullt */
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+      

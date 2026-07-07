@@ -66,21 +66,17 @@
                 return;
             }
 
-            try {
-                const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-                if (error) throw error;
+ try {
+    const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+    if (error) throw error;
     
-                window.currentProductId = data.id;
-                // Thirrje e thjeshtë:
-                checkOwnership(data.user_id); 
-    
-                // Logjika e galerisë (të dhënat janë gati)
-                window.currentImages = Array.isArray(data.image_url) ? data.image_url : [data.image_url];
-                window.currentImgIndex = 0;
-
-            } catch (err) {
-                console.error("Gabim gjatë ngarkimit:", err);
-            }
+    window.currentProductId = data.id;
+    checkOwnership(data.user_id);
+    window.currentImages = Array.isArray(data.image_url) ? data.image_url : [data.image_url];
+    window.currentImgIndex = 0;
+} catch (err) {
+    console.error("Gabim gjatë ngarkimit:", err);
+}
         
             // Ruaj ID-në për butonat
             window.currentProductId = data.id; 

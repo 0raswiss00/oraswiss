@@ -21,7 +21,7 @@
     <a href="index.html" style="color:#ccc; text-align:center; display:block; margin-top:10px;">
         ← Kthehu në Home
     </a>
-    <div class="admin-actions" id="admin-controls-container" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #444;">
+    <div id="admin-controls-container" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #ccc;">
         <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
         <button onclick="editProduct(window.currentProductId)">Modifiko</button>
         <button onclick="deleteProduct(window.currentProductId)" style="background: #ff4d4d; color: white;">Fshi Produktin</button>
@@ -33,11 +33,11 @@
         const { data: { user } } = await supabase.auth.getUser();
         const adminDiv = document.getElementById("admin-controls-container");
 
-        // Shfaq vetëm nëse user-i është i loguar dhe është pronari
+        // Kontrollo nëse user-i ekziston dhe nëse është pronari
         if (user && user.id === watchOwnerId) {
-            adminDiv.style.display = "block";
+            adminDiv.style.display = "block"; // Shfaq butonat
         } else {
-            adminDiv.style.display = "none";
+            adminDiv.style.display = "none";  // Fshihi butonat
         }
     }
 

@@ -2908,3 +2908,17 @@ img {
         grid-template-columns: repeat(4, 1fr) !important;
     }
 }
+
+/* Mos ndrysho asgjë tjetër, shto vetëm këtë në fund të skedarit */
+#vintage-container {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr); /* 2 kolona celular */
+    gap: 15px;
+    padding: 10px;
+}
+
+@media (min-width: 768px) {
+    #vintage-container {
+        grid-template-columns: repeat(4, 1fr); /* 4 kolona desktop */
+    }
+}      

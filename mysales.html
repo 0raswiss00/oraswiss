@@ -396,6 +396,37 @@ function renderResults(products) {
 }
 
 </script>
+<script>
+  // 1. Funksioni që merr të dhënat nga tabela 'orders'
+  async function loadMySales() {
+    const tableBody = document.getElementById('sales-body'); // Sigurohu që ke <tbody> me këtë ID
+    if (!tableBody) return;
+
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*'); // Këtu po marrim gjithçka nga tabela që krijuam
+
+    if (error) {
+      console.error("Gabim:", error);
+      return;
+    }
+
+    // 2. Ndërtimi i rreshtave në tabelë
+    tableBody.innerHTML = data.map(order => `
+      <tr>
+        <td>${order.product_id}</td>
+        <td style="color: ${order.status === 'pending' ? 'red' : 'green'}">
+            ${order.status}
+        </td>
+        <td>${order.tracing_number || 'S'ka'}</td>
+        <td>Kthim</td>
+      </tr>
+    `).join('');
+  }
+
+  // 3. Thirr funksionin sapo faqja të ngarkohet
+  loadMySales();
+</script>
 
 </body>    
 </html>

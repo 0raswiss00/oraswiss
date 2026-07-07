@@ -2876,3 +2876,36 @@ img {
 
 /* --- per te fsheur butonat pa loguar --- */
  .admin-actions { display: none; }     
+
+
+
+
+/* Stili bazë (për celular) - 2 kolona */
+.watch-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Gjithmonë 2 kolona në celular */
+    gap: 15px; /* Hapësira mes fotove */
+    padding: 10px;
+}
+
+/* Stili për kompjuter (ekrane më të mëdhenj se 768px) - 4 kolona */
+@media (min-width: 768px) {
+    .watch-container {
+        grid-template-columns: repeat(4, 1fr); /* Këtu ndryshon në 4 kolona */
+    }
+}
+
+/* Për të siguruar që fotot nuk dalin shumë të mëdha */
+.watch-card img {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* I mban fotot katrore, ose mund ta ndryshosh në 3/4 */
+    object-fit: cover;   /* Pret foton që të mos deformohet */
+    border-radius: 8px;
+}
+
+
+
+
+
+
+      

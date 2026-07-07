@@ -23,8 +23,8 @@
     </a>
     <div class="admin-actions" id="admin-controls-container" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #444;">
         <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
-        <button id="edit-btn">Modifiko</button>
-        <button id="delete-btn" style="background: #ff4d4d; color: white;">Fshi Produktin</button>
+        <button id="edit-btn" onclick="editProduct(window.currentProductId)">Modifiko</button>
+        <button id="delete-btn" onclick="deleteProduct(window.currentProductId)" style="background: #ff4d4d; color: white;">Fshi Produktin</button>
     </div>
 
     <script>

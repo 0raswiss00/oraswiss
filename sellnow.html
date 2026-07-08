@@ -29,7 +29,7 @@
   </div>
 
   <label>Price:</label>
-  <input type="number" id="warranty_months" placeholder="Example: 12" disabled>
+  <input type="number" id="price" placeholder="Price in €" style="width:100%;margin-bottom:15px;padding:10px;">
 
   <div class="row">
     <input type="text" id="reference" placeholder="Reference">
@@ -42,14 +42,14 @@
   </div>
 
   <label>Movement:</label>
-  <select id="movement" style="margin-bottom:15px;width:100%;padding:10px;">
+  <select id="movement">
     <option value="Automatic">Automatic</option>
     <option value="Manual">Manual</option>
     <option value="Quartz">Quartz</option>
   </select>
 
   <label>Function:</label>
-  <select id="function" style="margin-bottom:15px;width:100%;padding:10px;">
+  <select id="function">
     <option value="Date">Date</option>
     <option value="Chronometer">Chronometer</option>
     <option value="Chronograph">Chronograph</option>
@@ -57,7 +57,7 @@
     <option value="No Date">No Date</option>
   </select>
 
-  <div class="row" style="margin-top:15px">
+  <div class="row">
     <label>
       <input type="checkbox" id="service"> Service Completed
     </label>
@@ -89,32 +89,27 @@
     </select>
   </div>
 
-
   <label>Warranty:</label>
   <select id="warranty">
     <option value="No Warranty">No Warranty</option>
     <option value="Warranty">Warranty</option>
   </select>
 
-
   <div style="margin-top:15px;">
     <label>Warranty Period (Months):</label>
-    <input type="number" id="warranty_months" placeholder="Example: 12">
+    <input type="number" id="warranty_months" placeholder="Example: 12" disabled>
   </div>
-
 
   <div style="margin-top:15px">
     <input type="text" id="serial_number" placeholder="Serial Number">
   </div>
 
-
   <textarea 
     id="description" 
     placeholder="Description..." 
-    rows="4" 
+    rows="4"
     style="width:100%;padding:10px;background:#222;color:#fff;border:1px solid #444;border-radius:5px;box-sizing:border-box;">
   </textarea>
-
 
   <div style="margin-top:15px">
     <label style="color:#aaa;font-size:14px;">
@@ -126,10 +121,8 @@
       id="fileInput" 
       name="images[]" 
       accept="image/*" 
-      multiple 
-      style="margin-top:5px;">
+      multiple>
   </div>
-
 
   <button type="submit">Sell Now</button>
 

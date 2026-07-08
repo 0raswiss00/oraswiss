@@ -2755,3 +2755,10 @@ img {
         grid-template-columns: repeat(4, 1fr); /* 4 kolona për desktop */
     }
 }
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 kolona fikse */
+    gap: 20px;
+    padding: 20px;
+}      

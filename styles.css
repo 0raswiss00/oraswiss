@@ -2756,14 +2756,18 @@ img {
     }
 }
 
-.product-grid {
+.koleksion-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 kolona fikse */
+    grid-template-columns: repeat(4, 1fr); /* 4 kolona për desktop */
     gap: 20px;
     padding: 20px;
-}      
-.koleksion {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+}
+
+/* Për të kontrolluar fotot brenda kartave */
+.card img {
+    width: 100%;
+    height: 200px; /* Vendos lartësinë që dëshiron */
+    object-fit: cover; /* Siguron që fotoja të mos deformohet */
+    display: block;
+    border-radius: 8px;
 }

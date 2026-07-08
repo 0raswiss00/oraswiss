@@ -2756,17 +2756,19 @@ img {
     }
 }
 
-.koleksion-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 kolona për desktop */
-    gap: 20px;
-    padding: 20px;
+/* Renditja në 4 kolona */
+.grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px !important;
+    padding: 20px !important;
 }
 
-/* Për të kontrolluar fotot brenda kartave */
-.product-img {
-    width: 100%;       /* E mban gjerësinë brenda kutisë */
-    height: 200px;     /* KËTU ESHTE SEKRETI: Vendos një numër më të vogël, psh 250px ose 300px */
-    object-fit: cover; /* Kjo bën që fotoja të mos deformohet, por të pritet bukur */
-    display: block;
-}      
+/* Kufizimi i fotove që të mos dalin jashtë */
+.grid img, .product-img {
+    width: 100% !important;
+    height: 250px !important; /* Kjo e rregullon madhësinë */
+    object-fit: cover !important;
+    display: block !important;
+    border-radius: 10px !important;
+}

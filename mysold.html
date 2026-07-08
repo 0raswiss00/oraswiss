@@ -113,7 +113,7 @@ async function loadMySold() {
 
         const emriOres = order.oras
             ? `${order.oras.brand} ${order.oras.model}`
-            :`Ora #${order.product_id}`;
+            : `Ora #${order.product_id}`;
 
         return `
             <tr>

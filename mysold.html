@@ -68,20 +68,29 @@
         }
     }
 
-    // 3. Shfaqja e të dhënave në tabelë
-    tableBody.innerHTML = data.map(order => {
-        // Kontrollojmë nëse ekziston ora e lidhur
-        const emriOres = order.oras ? ${order.oras.brand} ${order.oras.model} : Ora #${order.product_id};
+        // 3. Shfaqja e të dhënave në tabelë
+        } else {
+            // SHFAQJA E TË DHËNAVE (Ky kod duhet të jetë brenda "else")
+            soldBody.innerHTML = data.map(order => {
+                const emriOres = order.oras ? ${order.oras.brand} ${order.oras.model} : Ora #${order.product_id};
+                
+                return `
+                    <tr>
+                        <td><b>${emriOres}</b></td>
+                        <td>${order.status}</td>
+                        <td>${order.tracing_number || 'Nuk ka'}</td>
+                        <td><button onclick="anulloPorosine('${order.id}')">Detaje</button></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+    } // Mbyllja e funksionit loadMySold
 
-        return `
-            <tr>
-                <td><b>${emriOres}</b></td>
-                <td>${order.status}</td>
-                <td>${order.tracing_number || 'Nuk ka'}</td>
-                <td><button>Detaje</button></td>
-            </tr>
-        `;
-    }).join(''); // Mbyll kllapën e map dhe bëj join
+    // Ekzekutohet sapo hapet faqja
+    document.addEventListener('DOMContentLoaded', loadMySold);
+
+    // Ekzekutohet sapo hapet faqja
+    document.addEventListener('DOMContentLoaded', loadMySold);
 
     // Funksioni për anullimin e porosisë (përditëson statusin në Supabase)
     async function anulloPorosine(orderId) {

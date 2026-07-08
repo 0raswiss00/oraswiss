@@ -53,16 +53,31 @@ async function kryejBlerjen(productId) {
     }
 
     // 2. Ruajmë porosinë në tabelën 'orders' në Supabase
-    const { data, error } = await supabase
-        .from('orders')
-        .insert([
-            { 
-                product_id: productId,       // ID e orës që po blihet
-                user_id: user.id,            // ID e përdoruesit që po e blen
-                status: 'pending',           // Statusi fillestar
-                tracing_number: null         // Nr. dërgimi (bëhet update më vonë)
-            }
-        ]);
+    // Marrim të dhënat e orës
+const { data: ora, error: oraError } = await supabase
+    .from('oras')
+    .select('seller_id, price')
+    .eq('id', productId)
+    .single();
+
+if (oraError) {
+    console.error(oraError);
+    return;
+}
+
+// Krijojmë porosinë
+const { data, error } = await supabase
+    .from('orders')
+    .insert([
+        {
+            product_id: productId,
+            buyer_id: user.id,
+            seller_id: ora.seller_id,
+            amount: ora.price,
+            status: 'pending',
+            tracking_number: null
+        }
+    ]);
 
     if (error) {
         console.error("Gabim gjatë blerjes:", error);

@@ -67,69 +67,6 @@ ul {
 .black-bar span {
     display: inline-block;
 }
-/* =========================
-      PRODUCTS SECTION
-========================= */
-.products-section {
-    max-width: 1200px; /* Ose 100% për ta lënë të përshtatet vetë */
-    margin: 40px auto;
-    padding: 0 16px;
-}
-
-/* =========================
-           INFO BOX
-========================= */
-.product-info {
-    background: #f9fafb;
-    padding: 16px;
-    border-radius: 12px;
-}
-
-.description-scroll::-webkit-scrollbar-thumb {
-  background: #aaa;
-  border-radius: 10px;
-}
-
-/* Logo majtas */
-.site-title {
-    font-size: 26px;
-    font-weight: bold;
-    color: white;
-}
-
-/* Menu në qendër */
-.menu {
-    display: flex;
-    gap: 20px;
-    flex-grow: 1;
-    justify-content: center;
-}
-
-/* Input kur klikon mbi të */
-.register-form input:focus {
-  border-color: #aaa;
-  outline: none;
-}
-
-/* Butoni */
-.register-form button {
-  width: 100%;
-  padding: 12px;
-  background-color: #d4a017; /* ngjyrë ari */
-  border: none;
-  border-radius: 6px;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 15px;
-}
-
-/* Butoni kur e prek */
-.register-form button:hover {
-  background-color: #f2b91e;
-}
-
-
 
 
 

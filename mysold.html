@@ -55,7 +55,7 @@
             .select('*, oras(brand, model)')
             .eq('seller_id', user.id); // <--- Kjo lidhje duhet të ekzistojë në DB
 
-        if (error) {
+if (error) {
             console.error("Gabim Supabase:", error);
             soldBody.innerHTML = "<tr><td colspan='4'>Gabim në lidhje.</td></tr>";
             return;
@@ -64,13 +64,7 @@
         if (data.length === 0) {
             soldBody.innerHTML = "<tr><td colspan='4'>Nuk ke asnjë shitje ende.</td></tr>";
         } else {
-            // Këtu mbush tabelën...
-        }
-    }
-
-        // 3. Shfaqja e të dhënave në tabelë
-        } else {
-            // SHFAQJA E TË DHËNAVE (Ky kod duhet të jetë brenda "else")
+            // MBUSHJA E TABELËS
             soldBody.innerHTML = data.map(order => {
                 const emriOres = order.oras ? ${order.oras.brand} ${order.oras.model} : Ora #${order.product_id};
                 
@@ -84,12 +78,9 @@
                 `;
             }).join('');
         }
-    } // Mbyllja e funksionit loadMySold
+    } // Kjo mbyll funksionin loadMySold
 
-    // Ekzekutohet sapo hapet faqja
-    document.addEventListener('DOMContentLoaded', loadMySold);
-
-    // Ekzekutohet sapo hapet faqja
+    // Ekzekutimi kur faqja ngarkohet
     document.addEventListener('DOMContentLoaded', loadMySold);
 
     // Funksioni për anullimin e porosisë (përditëson statusin në Supabase)

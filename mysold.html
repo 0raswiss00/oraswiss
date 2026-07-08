@@ -83,51 +83,133 @@ async function loadMySold() {
 
     if (!user) {
         soldBody.innerHTML =
-            "<tr><td colspan='4'>Duhet të jesh i loguar.</td></tr>";
+        "<tr><td colspan='10'>Duhet të jesh i loguar.</td></tr>";
         return;
     }
 
+
     const { data, error } = await supabase
         .from("orders")
-        .select("*, oras(brand,model)")
+        .select(`
+            *,
+            oras (
+                id,
+                brand,
+                model,
+                image_url
+            )
+        `)
         .eq("seller_id", user.id);
+
 
     if (error) {
         console.error(error);
 
         soldBody.innerHTML =
-            "<tr><td colspan='4'>Gabim gjatë marrjes së të dhënave.</td></tr>";
+        "<tr><td colspan='10'>Gabim gjatë marrjes së të dhënave.</td></tr>";
 
         return;
     }
+
 
     if (!data || data.length === 0) {
 
         soldBody.innerHTML =
-            "<tr><td colspan='4'>Nuk ke asnjë shitje.</td></tr>";
+        "<tr><td colspan='10'>Nuk ke asnjë shitje.</td></tr>";
 
         return;
     }
 
+
     soldBody.innerHTML = data.map(order => {
 
-        const emriOres = order.oras
-            ? `${order.oras.brand} ${order.oras.model}`
-            : `Ora #${order.product_id}`;
+
+        const ora = order.oras;
 
         return `
-            <tr>
-                <td>${emriOres}</td>
-                <td>${order.status}</td>
-                <td>${order.tracing_number || "Nuk ka"}</td>
-                <td>
-                    <button class="btn-cancel"
-                        onclick="anulloPorosine('${order.id}')">
-                        Anullo
-                    </button>
-                </td>
-            </tr>
+        <tr>
+
+            <td>
+                ${
+                ora
+                ?
+                `
+                <a href="product.html?id=${order.product_id}">
+                    <img 
+                    src="${ora.image_url}" 
+                    width="70"
+                    style="border-radius:8px;">
+                </a>
+                `
+                :
+                "Pa foto"
+                }
+            </td>
+
+
+            <td>
+                ${
+                ora
+                ?
+                `
+                <a href="product.html?id=${order.product_id}">
+                    ${ora.brand} ${ora.model}
+                </a>
+                `
+                :
+                "Ora #"+order.product_id
+                }
+            </td>
+
+
+            <td>${order.id}</td>
+
+
+            <td>${order.status || "-"}</td>
+
+
+            <td>
+                ${order.tracking_number || "Nuk ka"}
+            </td>
+
+
+            <td>
+                ${order.payment_status || "Pending"}
+            </td>
+
+
+            <td>
+                ${order.payment_amount || "0"} €
+            </td>
+
+
+            <td>
+                ${
+                order.received_confirmed
+                ? "Po"
+                : "Jo"
+                }
+            </td>
+
+
+            <td>
+                ${
+                order.return_requested
+                ? order.return_reason || "Kërkesë kthimi"
+                : "Jo"
+                }
+            </td>
+
+
+            <td>
+                <button onclick="anulloPorosine('${order.id}')">
+                    Anullo
+                </button>
+            </td>
+
+        </tr>
         `;
+
     }).join("");
 }
 

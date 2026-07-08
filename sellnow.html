@@ -74,14 +74,19 @@
    <option value="No">No</option>
   </select>
 
-  <div id="warrantyYearsBox" style="display:none; margin-top:15px;">
-    <label>Warranty Years:</label>
-    <select id="warranty_years">
-      <option value="1 year">1 year</option>
-      <option value="2 years">2 years</option>
-      <option value="3 years">3 years</option>
-    </select>
-  </div>
+<div style="margin-top:15px;">
+  <label>Warranty:</label>
+  <select name="warranty">
+    <option value="No Warranty">No Warranty</option>
+    <option value="Warranty">Warranty</option>
+  </select>
+</div>
+
+<div style="margin-top:15px;">
+  <label>Warranty Period (Months):</label>
+  <input type="number" name="warranty_months" placeholder="Example: 12">
+  <span>months</span>
+</div>
 
   <div style="margin-top:15px">
     <input type="text" id="serial_number" placeholder="Serial Number">

@@ -13,43 +13,61 @@
 </head>
 <body>
 <form id="sellForm">
-  <h2>Shto orë të re</h2>
-  <label>Kategoria:</label>
+
+  <h2>Add New Watch</h2>
+
+  <label>Category:</label>
   <select id="category" style="width:100%;margin-bottom:15px;">
     <option value="luxury">Luxury</option>
     <option value="vintage">Vintage</option>
     <option value="parts">Parts</option>
   </select>
+
   <div class="row">
     <input type="text" id="brand" placeholder="Brand" required>
     <input type="text" id="model" placeholder="Model" required>
   </div>
-  <label>Çmimi:</label>
-  <input type="number" id="price" placeholder="Çmimi në €" style="width:100%;margin-bottom:15px;padding:10px;">
+
+  <label>Price:</label>
+  <input type="number" id="price" placeholder="Price in €" style="width:100%;margin-bottom:15px;padding:10px;">
+
   <div class="row">
     <input type="text" id="reference" placeholder="Reference">
     <input type="text" id="material" placeholder="Material">
   </div>
+
   <div class="row">
     <input type="text" id="case_size" placeholder="Case Size (e.g. 41mm)">
     <input type="number" id="year" placeholder="Year">
   </div>
-  <select id="movement" style="margin-bottom:15px;width:100%;padding:10px;background:#222;color:#fff;border:1px solid #444;">
+
+  <label>Movement:</label>
+  <select id="movement" style="margin-bottom:15px;width:100%;padding:10px;">
     <option value="Automatic">Automatic</option>
     <option value="Manual">Manual</option>
     <option value="Quartz">Quartz</option>
   </select>
-  <select id="function" style="margin-bottom:15px;width:100%;padding:10px;background:#222;color:#fff;border:1px solid #444;">
+
+  <label>Function:</label>
+  <select id="function" style="margin-bottom:15px;width:100%;padding:10px;">
     <option value="Date">Date</option>
     <option value="Chronometer">Chronometer</option>
     <option value="Chronograph">Chronograph</option>
-    <option value="Turbillon">Turbillon</option>
+    <option value="Tourbillon">Tourbillon</option>
     <option value="No Date">No Date</option>
   </select>
+
   <div class="row" style="margin-top:15px">
-    <label><input type="checkbox" id="service"> Service kryer</label>
-    <label><input type="checkbox" id="box_papers"> Box / Papers</label>
+    <label>
+      <input type="checkbox" id="service"> Service Completed
+    </label>
+
+    <label>
+      <input type="checkbox" id="box_papers"> Box / Papers
+    </label>
   </div>
+
+  <div class="row">
     <select id="origin">
       <option value="Switzerland">Switzerland</option>
       <option value="Other">Other</option>
@@ -57,46 +75,64 @@
 
     <select id="work_status">
       <option value="Working">Working</option>
-      <option value="Not working">Not working</option>
-      <option value="Not tested">Not tested</option>
+      <option value="Not working">Not Working</option>
+      <option value="Not tested">Not Tested</option>
     </select>
   </div>
 
   <div class="row">
     <select id="bracelet">
       <option value="Leather">Leather</option>
-      <option value="There is no">There is no</option>
+      <option value="Metal">Metal</option>
+      <option value="Rubber">Rubber</option>
+      <option value="No Bracelet">No Bracelet</option>
     </select>
+  </div>
+
 
   <label>Warranty:</label>
   <select id="warranty">
-    <option value="Yes">Yes</option>
-   <option value="No">No</option>
-  </select>
-
-<div style="margin-top:15px;">
-  <label>Warranty:</label>
-  <select name="warranty">
     <option value="No Warranty">No Warranty</option>
     <option value="Warranty">Warranty</option>
   </select>
-</div>
 
-<div style="margin-top:15px;">
-  <label>Warranty Period (Months):</label>
-  <input type="number" name="warranty_months" placeholder="Example: 12">
-  <span>months</span>
-</div>
+
+  <div style="margin-top:15px;">
+    <label>Warranty Period (Months):</label>
+    <input type="number" id="warranty_months" placeholder="Example: 12">
+  </div>
+
 
   <div style="margin-top:15px">
     <input type="text" id="serial_number" placeholder="Serial Number">
-  </div>    
-  <textarea id="description" placeholder="Description..." rows="4" style="width:100%;padding:10px;background:#222;color:#fff;border:1px solid #444;border-radius:5px;box-sizing:border-box;"></textarea>
-  <div style="margin-top:15px">
-    <label style="color:#aaa;font-size:14px;">Ngarko Foton e Orës:</label>
-    <input type="file" id="fileInput" name="images[]" accept="image/*" multiple style="margin-top:5px;">
   </div>
-  <button type="submit">Shto orën</button>
+
+
+  <textarea 
+    id="description" 
+    placeholder="Description..." 
+    rows="4" 
+    style="width:100%;padding:10px;background:#222;color:#fff;border:1px solid #444;border-radius:5px;box-sizing:border-box;">
+  </textarea>
+
+
+  <div style="margin-top:15px">
+    <label style="color:#aaa;font-size:14px;">
+      Upload Watch Photos:
+    </label>
+
+    <input 
+      type="file" 
+      id="fileInput" 
+      name="images[]" 
+      accept="image/*" 
+      multiple 
+      style="margin-top:5px;">
+  </div>
+
+
+  <button type="submit">Sell Now</button>
+
 </form>
 
 <script type="module">

@@ -72,7 +72,7 @@ const { data, error } = await supabase
         {
             product_id: productId,
             buyer_id: user.id,
-            seller_id: ora.seller_id,
+            seller_id: ora.user_id,
             amount: ora.price,
             status: 'pending',
             tracking_number: null

@@ -71,7 +71,9 @@
         // 3. Shfaqja e të dhënave të lidhura në tabelë
         tableBody.innerHTML = data.map(order => {
             // Kontrollojmë nëse ekziston ora e lidhur në databazë
-            const emriOres = order.oras ? ${order.oras.brand} ${order.oras.model} : Ora #${order.product_id};
+            const emriOres = order.oras 
+                ? ${order.oras.brand} ${order.oras.model} 
+                : Ora #${order.product_id};
             
             return `
                 <tr>
@@ -108,7 +110,7 @@
     }
 
     // Ekzekutohet sapo hapet faqja mysales.html
-    document.addEventListener('DOMContentLoaded', loadMySales);
+    document.addEventListener('DOMContentLoaded', loadMySold);
 </script>
 
 </body>

@@ -50,6 +50,36 @@
     <label><input type="checkbox" id="service"> Service kryer</label>
     <label><input type="checkbox" id="box_papers"> Box / Papers</label>
   </div>
+    <select id="origin">
+      <option value="Switzerland">Switzerland</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <select id="work_status">
+      <option value="Working">Working</option>
+      <option value="Not working">Not working</option>
+      <option value="Not tested">Not tested</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <select id="bracelet">
+      <option value="Leather">Leather</option>
+      <option value="There is no">There is no</option>
+    </select>
+
+    <select id="warranty">
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+      <option value="1 year">1 year</option>
+      <option value="2 years">2 years</option>
+      <option value="3 years">3 years</option>
+    </select>
+  </div>
+
+  <div style="margin-top:15px">
+    <input type="text" id="serial_number" placeholder="Serial Number">
+  </div>    
   <textarea id="description" placeholder="Description..." rows="4" style="width:100%;padding:10px;background:#222;color:#fff;border:1px solid #444;border-radius:5px;box-sizing:border-box;"></textarea>
   <div style="margin-top:15px">
     <label style="color:#aaa;font-size:14px;">Ngarko Foton e Orës:</label>
@@ -115,6 +145,11 @@
       movement: document.getElementById('movement').value,
       function: document.getElementById('function').value,
       service: document.getElementById('service').checked,
+      origin: document.getElementById('origin').value,
+      work_status: document.getElementById('work_status').value,
+      bracelet: document.getElementById('bracelet').value,
+      warranty: document.getElementById('warranty').value,
+      serial_number: document.getElementById('serial_number').value,
       box_papers: document.getElementById('box_papers').checked,
       description: document.getElementById('description').value,
       image_url: imageUrls

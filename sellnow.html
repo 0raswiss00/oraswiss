@@ -102,30 +102,49 @@
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
 
+
+  // Kontrollon shfaqjen e viteve të garancisë
+  document.getElementById('warranty').addEventListener('change', function() {
+    const box = document.getElementById('warrantyYearsBox');
+
+    if (this.value === "Yes") {
+      box.style.display = "block";
+    } else {
+      box.style.display = "none";
+    }
+  });
+
+
   const { data: { user } } = await supabase.auth.getUser();
+
   if (!user) {
     alert("Duhet të jesh i loguar!");
     window.location.href = 'register.html';
   }
 
+
   document.getElementById('sellForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const { data: { user } } = await supabase.auth.getUser();
+
     if (!user) {
       alert("Duhet të jesh i loguar!");
       return;
     }
 
+
     const files = document.getElementById('fileInput').files;
     let imageUrls = [];
+
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const fileName = Date.now() + '' + i + '' + file.name;
 
       const { error: uploadError } = await supabase
-        .storage.from('or-images').upload(fileName, file);
+        .storage.from('or-images')
+        .upload(fileName, file);
 
       if (uploadError) {
         alert("Gabim foto: " + uploadError.message);
@@ -133,10 +152,12 @@
       }
 
       const { data: urlData } = supabase
-        .storage.from('or-images').getPublicUrl(fileName);
+        .storage.from('or-images')
+        .getPublicUrl(fileName);
 
       imageUrls.push(urlData.publicUrl);
     }
+
 
     const oraData = {
       user_id: user.id,
@@ -150,27 +171,40 @@
       year: parseInt(document.getElementById('year').value) || null,
       movement: document.getElementById('movement').value,
       function: document.getElementById('function').value,
-      service: document.getElementById('service').checked,
+
       origin: document.getElementById('origin').value,
       work_status: document.getElementById('work_status').value,
       bracelet: document.getElementById('bracelet').value,
+
       warranty: document.getElementById('warranty').value,
+      warranty_years: document.getElementById('warranty_years').value,
+
       serial_number: document.getElementById('serial_number').value,
+
+      service: document.getElementById('service').checked,
       box_papers: document.getElementById('box_papers').checked,
       description: document.getElementById('description').value,
       image_url: imageUrls
     };
 
-    const { error } = await supabase.from('oras').insert([oraData]);
+
+    const { error } = await supabase
+      .from('oras')
+      .insert([oraData]);
+
 
     if (error) {
       alert("Gabim: " + error.message);
       return;
     }
 
+
     alert("Ora u publikua me sukses!");
     window.location.href = 'dashboard.html';
+
   });
+
 </script>
+
 </body>
 </html>

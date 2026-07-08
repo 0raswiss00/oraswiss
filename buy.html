@@ -56,7 +56,7 @@ async function kryejBlerjen(productId) {
     // Marrim të dhënat e orës
 const { data: ora, error: oraError } = await supabase
     .from('oras')
-    .select('seller_id, price')
+    .select('user_id, price')
     .eq('id', productId)
     .single();
 

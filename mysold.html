@@ -112,8 +112,8 @@ async function loadMySold() {
     soldBody.innerHTML = data.map(order => {
 
         const emriOres = order.oras
-            ? ${order.oras.brand} ${order.oras.model}
-            : Ora #${order.product_id};
+            ? `${order.oras.brand} ${order.oras.model}`
+            :`Ora #${order.product_id}`;
 
         return `
             <tr>

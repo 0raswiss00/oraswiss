@@ -39,33 +39,34 @@
     );
 
     // Funksioni që ngarkon porositë e lidhura me produktet
-    async function loadMySales() {
-        const tableBody = document.getElementById('sales-body');
-        if (!tableBody) return;
-
-        // 1. Marrim ID-në e përdoruesit të loguar
+    async function loadMySold() {
+        const soldBody = document.getElementById('sold-body'); // Sigurohu që ID-ja në HTML është kjo
         const { data: { user } } = await supabase.auth.getUser();
+
         if (!user) {
-            tableBody.innerHTML = <tr><td colspan="4">Ju lutem <a href="login.html" style="color:gold;">lohuni</a> për të parë shitjet.</td></tr>;
+            soldBody.innerHTML = "<tr><td colspan='4'>Duhet të jesh i loguar!</td></tr>";
             return;
         }
 
-        // 2. Marrim të dhënat nga 'orders' dhe bëjmë lidhjen (join) me tabelën 'oras'
+        // Këtu kontrollon tabelën 'orders' ose 'oras'
+        // Nëse po shfaq shitjet e tua, duhet të filtrash me seller_id
         const { data, error } = await supabase
-            .from('orders')
-            .select('*, oras(brand, model, price)') // Kjo merr automatikisht brand-in dhe modelin nga tabela oras
-            .eq('user_id', user.id); // Shfaq vetëm porositë e këtij user-i
+            .from('orders') 
+            .select('*, oras(brand, model)')
+            .eq('seller_id', user.id); // <--- Kjo lidhje duhet të ekzistojë në DB
 
         if (error) {
-            console.error("Gabim gjatë marrjes së të dhënave:", error);
-            tableBody.innerHTML = <tr><td colspan="4">Gabim në ngarkim.</td></tr>;
+            console.error("Gabim Supabase:", error);
+            soldBody.innerHTML = "<tr><td colspan='4'>Gabim në lidhje.</td></tr>";
             return;
         }
 
         if (data.length === 0) {
-            tableBody.innerHTML = <tr><td colspan="4">Nuk keni asnjë porosi ende.</td></tr>;
-            return;
+            soldBody.innerHTML = "<tr><td colspan='4'>Nuk ke asnjë shitje ende.</td></tr>";
+        } else {
+            // Këtu mbush tabelën...
         }
+    }
 
         // 3. Shfaqja e të dhënave të lidhura në tabelë
         tableBody.innerHTML = data.map(order => {

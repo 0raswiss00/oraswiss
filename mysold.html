@@ -89,18 +89,17 @@ async function loadMySold() {
 
 
     const { data, error } = await supabase
-        .from("orders")
-        .select(`
-            *,
-            oras (
-                id,
-                brand,
-                model,
-                image_url
-            )
-        `)
-        .eq("seller_id", user.id);
-
+    .from("orders")
+    .select(`
+        *,
+        oras (
+            id,
+            brand,
+            model,
+            image_url
+        )
+    `)
+    .eq("seller_id", user.id);
 
     if (error) {
         console.error(error);

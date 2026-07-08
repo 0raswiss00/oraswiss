@@ -358,7 +358,7 @@ async function performSearch(query) {
     const { data, error } = await supabase
         .from('oras')
         .select('*')
-        .ilike('brand', %${query}%); 
+        .ilike('brand', `%${query}%`);
 
     // 2. Trajto gabimet
     if (error) {

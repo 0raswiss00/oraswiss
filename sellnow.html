@@ -137,18 +137,6 @@
   );
 
 
-  // Kontrollon shfaqjen e viteve të garancisë
-  document.getElementById('warranty').addEventListener('change', function() {
-    const box = document.getElementById('warrantyYearsBox');
-
-    if (this.value === "Yes") {
-      box.style.display = "block";
-    } else {
-      box.style.display = "none";
-    }
-  });
-
-
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

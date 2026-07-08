@@ -68,29 +68,20 @@
         }
     }
 
-        // 3. Shfaqja e të dhënave të lidhura në tabelë
-        tableBody.innerHTML = data.map(order => {
-            // Kontrollojmë nëse ekziston ora e lidhur në databazë
-            const emriOres = order.oras 
-                ? ${order.oras.brand} ${order.oras.model} 
-                : Ora #${order.product_id};
-            
-            return `
-                <tr>
-                    <td><b>${emriOres}</b></td>
-                    <td style="color: ${order.status === 'pending' ? 'gold' : order.status === 'cancelled' ? 'red' : 'green'}">
-                        ${order.status.toUpperCase()}
-                    </td>
-                    <td>${order.tracing_number || 'Nuk ka'}</td>
-                    <td>
-                        ${order.status === 'pending' 
-                            ? <button class="btn-cancel" onclick="anulloPorosine('${order.id}')">Anullo</button> 
-                            : order.status === 'completed' ? 'Kthim' : '-'}
-                    </td>
-                </tr>
-            `;
-        }).join('');
-    }
+    // 3. Shfaqja e të dhënave në tabelë
+    tableBody.innerHTML = data.map(order => {
+        // Kontrollojmë nëse ekziston ora e lidhur
+        const emriOres = order.oras ? ${order.oras.brand} ${order.oras.model} : Ora #${order.product_id};
+
+        return `
+            <tr>
+                <td><b>${emriOres}</b></td>
+                <td>${order.status}</td>
+                <td>${order.tracing_number || 'Nuk ka'}</td>
+                <td><button>Detaje</button></td>
+            </tr>
+        `;
+    }).join(''); // Mbyll kllapën e map dhe bëj join
 
     // Funksioni për anullimin e porosisë (përditëson statusin në Supabase)
     async function anulloPorosine(orderId) {

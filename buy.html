@@ -41,6 +41,40 @@
         return;
     }
 
+// Funksioni që ekzekutohet kur klikohet butoni "Blej"
+async function kryejBlerjen(productId) {
+    // 1. Marrim përdoruesin e loguar aktualisht
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        alert("Duhet të jeni i loguar për të bërë blerje!");
+        window.location.href = "login.html";
+        return;
+    }
+
+    // 2. Ruajmë porosinë në tabelën 'orders' në Supabase
+    const { data, error } = await supabase
+        .from('orders')
+        .insert([
+            { 
+                product_id: productId,       // ID e orës që po blihet
+                user_id: user.id,            // ID e përdoruesit që po e blen
+                status: 'pending',           // Statusi fillestar
+                tracing_number: null         // Nr. dërgimi (bëhet update më vonë)
+            }
+        ]);
+
+    if (error) {
+        console.error("Gabim gjatë blerjes:", error);
+        alert("Blerja dështoi: " + error.message);
+    } else {
+        alert("Porosia u krye me sukses!");
+        // Pas blerjes, e dërgojmë direkt te faqja e historikut të porosisë
+        window.location.href = "mysales.html"; 
+    }
+}
+
+     
     // 2. Gjenerojmë rreshtat e tabelës
     ordersBody.innerHTML = data.map(order => `
         <tr>

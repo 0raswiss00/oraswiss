@@ -2744,39 +2744,13 @@ img {
 
 
 /* Ky kod targeton çdo div që ka klasën 'grid' */
-.grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important; /* 2 kolona për celular */
-    gap: 15px !important;
-    padding: 10px !important;
-}
-
-/* Për desktop, ndryshojmë klasën 'grid' në 4 kolona */
-@media (min-width: 1024px) {
-    .grid {
-        grid-template-columns: repeat(4, 1fr) !important;
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof testo === 'function') {
+        testo();
     }
-}
-
-
-.products-container {
-    display: grid;
-    /* Kjo tregon 4 kolona me gjerësi të barabartë */
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 20px;
-}
-      
-.grid {
-        display: grid;
-        /* Desktop: 4 kolona; Celular: 2 kolona */
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 15px;
-        padding: 10px;
+    
+    // SHTO KËTË RRESHT KËTU:
+    if (typeof loadOrders === 'function') {
+        loadOrders();
     }
-
-    /* Për të siguruar që kartat nuk bëhen shumë të mëdha në ekranet e mëdha */
-    @media (min-width: 1024px) {
-        .grid {
-            grid-template-columns: repeat(4, 1fr);
-        }
-    }
+});

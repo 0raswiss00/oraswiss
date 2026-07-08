@@ -2743,14 +2743,15 @@ img {
  .admin-actions { display: none; }     
 
 
-/* Ky kod targeton çdo div që ka klasën 'grid' */
-document.addEventListener('DOMContentLoaded', () => {
-    if (typeof testo === 'function') {
-        testo();
+.products-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 kolona për celular */
+    gap: 20px;
+    padding: 20px;
+}
+
+@media (min-width: 1024px) {
+    .products-container {
+        grid-template-columns: repeat(4, 1fr); /* 4 kolona për desktop */
     }
-    
-    // SHTO KËTË RRESHT KËTU:
-    if (typeof loadOrders === 'function') {
-        loadOrders();
-    }
-});
+}

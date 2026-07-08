@@ -71,7 +71,7 @@ ul {
       PRODUCTS SECTION
 ========================= */
 .products-section {
-    max-width: 700px;
+    max-width: 1200px; /* Ose 100% për ta lënë të përshtatet vetë */
     margin: 40px auto;
     padding: 0 16px;
 }
@@ -2772,3 +2772,9 @@ img {
     display: block !important;
     border-radius: 10px !important;
 }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Kjo i ndan në 4 */
+    gap: 20px;
+}      

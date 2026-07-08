@@ -3,105 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <title>My Sold - Ora Swiss</title>
+
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background: #000; color: #fff; }
-        table { width: 100%; border-collapse: collapse; background: #111; margin-top: 20px; border: 1px solid #333; }
-        th, td { padding: 12px; border: 1px solid #333; text-align: left; }
-        th { background-color: gold; color: black; }
-        .btn-cancel { background: #dc3545; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #000;
+            color: #fff;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #111;
+        }
+
+        th, td {
+            border: 1px solid #333;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: gold;
+            color: #000;
+        }
+
+        button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-cancel {
+            background: #dc3545;
+            color: white;
+        }
     </style>
-    <!-- Vendos skriptin e Supabase si tek faqja kryesore -->
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 </head>
+
 <body>
 
-    <h1>Menaxhimi i Porosive (My Sold)</h1>
+<h1>Menaxhimi i Porosive (My Sold)</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Ora (Produkti)</th>
-                <th>Statusi</th>
-                <th>Nr. Dërgimi</th>
-                <th>Veprime</th>
-            </tr>
-        </thead>
-        <tbody id="sales-body">
-            <tr><td colspan="4">Duke ngarkuar të dhënat...</td></tr>
-        </tbody>
-    </table>
+<table>
+    <thead>
+        <tr>
+            <th>Ora</th>
+            <th>Statusi</th>
+            <th>Nr. Dërgimi</th>
+            <th>Veprime</th>
+        </tr>
+    </thead>
+
+    <tbody id="sales-body">
+        <tr>
+            <td colspan="4">Duke ngarkuar...</td>
+        </tr>
+    </tbody>
+</table>
 
 <script>
-    // Inicializimi i Supabase (Saktësisht si tek faqja e parë)
-    const supabase = window.supabase.createClient(
-        "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-    );
+const supabase = window.supabase.createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
 
-    // Funksioni që ngarkon porositë e lidhura me produktet
-    async function loadMySold() {
-        const soldBody = document.getElementById('sold-body'); // Sigurohu që ID-ja në HTML është kjo
-        const { data: { user } } = await supabase.auth.getUser();
+async function loadMySold() {
 
-        if (!user) {
-            soldBody.innerHTML = "<tr><td colspan='4'>Duhet të jesh i loguar!</td></tr>";
-            return;
-        }
+    const soldBody = document.getElementById("sales-body");
 
-        // Këtu kontrollon tabelën 'orders' ose 'oras'
-        // Nëse po shfaq shitjet e tua, duhet të filtrash me seller_id
-        const { data, error } = await supabase
-            .from('orders') 
-            .select('*, oras(brand, model)')
-            .eq('seller_id', user.id); // <--- Kjo lidhje duhet të ekzistojë në DB
+    const {
+        data: { user }
+    } = await supabase.auth.getUser();
 
-if (error) {
-            console.error("Gabim Supabase:", error);
-            soldBody.innerHTML = "<tr><td colspan='4'>Gabim në lidhje.</td></tr>";
-            return;
-        }
-
-        if (data.length === 0) {
-            soldBody.innerHTML = "<tr><td colspan='4'>Nuk ke asnjë shitje ende.</td></tr>";
-        } else {
-            // MBUSHJA E TABELËS
-            soldBody.innerHTML = data.map(order => {
-                const emriOres = order.oras ? ${order.oras.brand} ${order.oras.model} : Ora #${order.product_id};
-                
-                return `
-                    <tr>
-                        <td><b>${emriOres}</b></td>
-                        <td>${order.status}</td>
-                        <td>${order.tracing_number || 'Nuk ka'}</td>
-                        <td><button onclick="anulloPorosine('${order.id}')">Detaje</button></td>
-                    </tr>
-                `;
-            }).join('');
-        }
-    } // Kjo mbyll funksionin loadMySold
-
-    // Ekzekutimi kur faqja ngarkohet
-    document.addEventListener('DOMContentLoaded', loadMySold);
-
-    // Funksioni për anullimin e porosisë (përditëson statusin në Supabase)
-    async function anulloPorosine(orderId) {
-        if(!confirm("A jeni i sigurt që dëshironi të anulloni këtë porosi?")) return;
-
-        const { error } = await supabase
-            .from('orders')
-            .update({ status: 'cancelled' })
-            .eq('id', orderId);
-
-        if (error) {
-            alert("Gabim gjatë anullimit: " + error.message);
-        } else {
-            alert("Porosia u anullua me sukses!");
-            loadMySales(); // Rifreskon tabelën automatikisht
-        }
+    if (!user) {
+        soldBody.innerHTML =
+            "<tr><td colspan='4'>Duhet të jesh i loguar.</td></tr>";
+        return;
     }
 
-    // Ekzekutohet sapo hapet faqja mysales.html
-    document.addEventListener('DOMContentLoaded', loadMySold);
+    const { data, error } = await supabase
+        .from("orders")
+        .select("*, oras(brand,model)")
+        .eq("seller_id", user.id);
+
+    if (error) {
+        console.error(error);
+
+        soldBody.innerHTML =
+            "<tr><td colspan='4'>Gabim gjatë marrjes së të dhënave.</td></tr>";
+
+        return;
+    }
+
+    if (!data || data.length === 0) {
+
+        soldBody.innerHTML =
+            "<tr><td colspan='4'>Nuk ke asnjë shitje.</td></tr>";
+
+        return;
+    }
+
+    soldBody.innerHTML = data.map(order => {
+
+        const emriOres = order.oras
+            ? ${order.oras.brand} ${order.oras.model}
+            : Ora #${order.product_id};
+
+        return `
+            <tr>
+                <td>${emriOres}</td>
+                <td>${order.status}</td>
+                <td>${order.tracing_number || "Nuk ka"}</td>
+                <td>
+                    <button class="btn-cancel"
+                        onclick="anulloPorosine('${order.id}')">
+                        Anullo
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join("");
+}
+
+async function anulloPorosine(orderId) {
+
+    if (!confirm("A dëshironi ta anuloni këtë porosi?")) {
+        return;
+    }
+
+    const { error } = await supabase
+        .from("orders")
+        .update({
+            status: "cancelled"
+        })
+        .eq("id", orderId);
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    alert("Porosia u anulua me sukses.");
+
+    loadMySold();
+}
+
+document.addEventListener("DOMContentLoaded", loadMySold);
 </script>
 
 </body>

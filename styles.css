@@ -2764,10 +2764,9 @@ img {
 }
 
 /* Për të kontrolluar fotot brenda kartave */
-.card img {
-    width: 100%;
-    height: 200px; /* Vendos lartësinë që dëshiron */
-    object-fit: cover; /* Siguron që fotoja të mos deformohet */
+.product-img {
+    width: 100%;       /* E mban gjerësinë brenda kutisë */
+    height: 200px;     /* KËTU ESHTE SEKRETI: Vendos një numër më të vogël, psh 250px ose 300px */
+    object-fit: cover; /* Kjo bën që fotoja të mos deformohet, por të pritet bukur */
     display: block;
-    border-radius: 8px;
-}
+}      

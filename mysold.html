@@ -101,7 +101,9 @@ async function loadMySold() {
         )
     `)
     .eq("seller_id", user.id);
-
+    console.log("ORDERS:", data);
+    console.log("ERROR:", error);
+    
     if (error) {
         console.error(error);
 

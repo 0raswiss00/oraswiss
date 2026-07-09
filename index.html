@@ -488,6 +488,15 @@ async function checkLogin(event, page) {
         }
     });
 </script>     
-
+<script>
+  window.addEventListener("DOMContentLoaded", async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    const nav = document.querySelector('.bottom-nav');
+    
+    if (session && nav) {
+      nav.style.display = 'flex'; // Shfaq navigimin vetëm nëse ka sesion
+    }
+  });
+</script>
 </body>    
 </html>

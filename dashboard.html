@@ -195,11 +195,23 @@
                 const li = document.createElement("li");
                 li.className = "watch-card";
                 li.innerHTML = `
-                    <a href="edit.html?id=${watch.id}" style="text-decoration:none; color:inherit; display:flex; align-items:center;">
-                        <img src="${watch.image_url && watch.image_url[0] ? watch.image_url[0] : ''}" alt="${watch.brand}" style="width:100px; height:auto; margin-right:15px;">
-                        <strong>${watch.brand}</strong> - ${watch.price} €
-                    </a>
-                `;
+    <img src="${watch.image_url && watch.image_url[0] ? watch.image_url[0] : ''}" 
+    alt="${watch.brand}" style="width:100px; height:auto; margin-right:15px;">
+
+    <div>
+        <strong>${watch.brand}</strong> - ${watch.price} €
+
+        <br><br>
+
+        <button onclick="window.location.href='edit.html?id=${watch.id}'">
+            ✏️ Modifiko
+        </button>
+
+        <button onclick="fshiOren('${watch.id}')">
+            🗑️ Fshi
+        </button>
+    </div>
+`;
 
                 lista.appendChild(li);
             });

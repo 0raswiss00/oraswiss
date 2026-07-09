@@ -136,18 +136,6 @@
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
 
-  async function protectPage() {
-      const { data: { user } } = await supabase.auth.getUser();
-
-      if (!user) {
-          window.location.href = "index.html";
-          return false;
-      }
-
-      return true;
-  }
-
-  protectPage(); 
 
   const { data: { user } } = await supabase.auth.getUser();
 

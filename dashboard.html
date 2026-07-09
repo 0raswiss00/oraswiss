@@ -266,5 +266,20 @@
         lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Për të evituar gabime në Safari
     }, false);
 </script>
-</body>    
+<script>
+    function checkLogin(event, targetUrl) {
+        event.preventDefault(); // Ndalon butonin të hapet direkt
+    
+        // Këtu vendos logjikën tënde. Për shembull:
+        const isLoggedIn = localStorage.getItem('isLoggedIn'); // ose kontrolli yt
+    
+        if (isLoggedIn === 'true') {
+            window.location.href = targetUrl;
+        } else {
+            alert("Duhet të jesh i loguar për ta hapur këtë faqe!");
+            // Ose: window.location.href = 'login.html';
+        }
+    }
+</script>    
+</body>   
 </html>

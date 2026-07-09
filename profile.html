@@ -12,7 +12,7 @@
   </style>
 </head>
 
-<body>
+<body style="visibility:hidden;">
   <div class="wrap">
     <h2>Profili</h2>
 
@@ -86,6 +86,12 @@
       return;
     }
 
+    if (error || !user) {
+      window.location.href = "index.html";
+      return;
+    }
+
+    document.body.style.visibility = "visible";
     const meta = user.user_metadata || {};
 
     emailEl.textContent = user.email;

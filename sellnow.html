@@ -13,8 +13,10 @@
 </head>
 <body>
 <form id="sellForm">
-  <h2>Shto orë të re</h2>
-  <label>Kategoria:</label>
+
+  <h2>Add New Watch</h2>
+
+  <label>Category:</label>
   <select id="category" style="width:100%;margin-bottom:15px;">
     <option value="luxury">Luxury</option>
     <option value="vintage">Vintage</option>
@@ -150,7 +152,7 @@
 
     if (!user) {
       alert("Duhet të jesh i loguar!");
-      window.location.href = 'login.html';
+      return;
     }
 
 

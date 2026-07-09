@@ -216,13 +216,22 @@
     window.toggleMenu = toggleMenu;
 
     // 4. Lidh eventet pasi DOM të jetë ngarkuar plotësisht
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            window.location.href = "login.html";
+            return;
+        }
+
         const btn = document.getElementById('btnNgarko');
+
         if (btn) {
             btn.addEventListener('click', ngarkoArtikujt);
         } else {
             ngarkoArtikujt();
         }
+    });
 
         const searchInput = document.getElementById('searchInput');
         if (searchInput) {

@@ -2663,4 +2663,35 @@ img {
 }      
 
 
+.bottom-nav {
+    display: none !important;
+}
 
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    /* Ndryshimet kryesore këtu: */
+    display: flex; 
+    overflow-x: auto; /* Kjo e aktivizon scroll-in horizontal */
+    white-space: nowrap; /* I mban ikonat në një rresht */
+    background: #000;
+    padding: 10px 0;
+    border-top: 1px solid #333;
+    z-index: 9998;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch; /* Për lëvizje më të butë në iPhone/Android */
+}
+
+/* Sigurohu që elementet brenda të kenë hapësirë */
+.bottom-nav a, .bottom-nav button {
+    flex: 0 0 auto; /* Parandalon tkurrjen e ikonave */
+    min-width: 70px; /* Jepi një gjerësi minimale që të mos ngjishen */
+    text-align: center;
+}
+
+/* Fshih scrollbar-in për një pamje më të pastër */
+.bottom-nav::-webkit-scrollbar {
+    display: none;
+}

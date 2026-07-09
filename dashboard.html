@@ -135,6 +135,20 @@
         'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
     );
 
+    async function checkUserAccess() {
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        // këtu ngarkohen të dhënat e user-it
+        ngarkoArtikujt();
+    }
+
+    checkUserAccess();
+  
     async function checkLogin(event, page) {
         event.preventDefault();
 

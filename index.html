@@ -316,11 +316,22 @@ loadProductCount();
 </nav>
 
 <script>
-    function toggleMenu() {
-        const menu = document.getElementById('myOraSwissMenu');
-        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+     function toggleMenu() {
+         const menu = document.getElementById('myOraSwissMenu');
+         menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+     }
+
+     async function kontrolloNavigimin() {
+        const { data: { session } } = await supabase.auth.getSession();
+
+        const nav = document.getElementById("bottomNav");
+
+        if (nav) {
+            nav.style.display = session ? "flex" : "none";
+        }
     }
- document.addEventListener("DOMContentLoaded", function () {
+
+    kontrolloNavigimin();
 
     const isLoggedIn = localStorage.getItem("loggedIn") === "true";
 

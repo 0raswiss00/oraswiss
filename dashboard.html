@@ -88,31 +88,44 @@
 
     <!-- Shiriti i navigimit i rregulluar -->
     <nav class="bottom-nav">
+
         <!-- 1. Profili -->
-        <a href="profile.html" class="bottom-nav-item">👤 Profile</a>
-    
+        <a href="profile.html" onclick="checkLogin(event,'profile.html')" class="bottom-nav-item">
+            👤 Profile
+        </a>
+
         <!-- 2. Home -->
-        <a href="index.html" class="bottom-nav-item">🏠 Home</a>
-    
+        <a href="index.html" class="bottom-nav-item">
+            🏠 Home
+        </a>
+
         <!-- 3. Favorites -->
-        <a href="favorites.html" class="bottom-nav-item">❤️ Favorites</a>
-    
+        <a href="favorites.html" onclick="checkLogin(event,'favorites.html')" class="bottom-nav-item">
+            ❤️ Favorites
+        </a>
+
         <!-- 4. Collection -->
-        <a href="collection.html" class="bottom-nav-item">⌚ Collection</a>
-    
-        <!-- 5. My Sales (Funksioni ngarkoArtikujt) -->
-        <button type="button" class="bottom-nav-item" id="btnNgarko" style="background:none;">
+        <a href="collection.html" onclick="checkLogin(event,'collection.html')" class="bottom-nav-item">
+            ⌚ Collection
+        </a>
+
+        <!-- 5. My Sales -->
+        <button type="button" onclick="checkLogin(event,'mysales.html')" class="bottom-nav-item" style="background:none;">
             ⌚ My Sales
         </button>
-    
-        <!-- 6. Sell -->
-        <a href="sellnow.html" class="bottom-nav-item">🏷️ Sell</a>
 
-        <!-- 7. Butoni i menusë My OraSwiss -->
-        <button type="button" class="bottom-nav-item" onclick="toggleMenu()" style="background:none; border:none; cursor:pointer; font-size:inherit; color:inherit;">
+        <!-- 6. Sell -->
+        <a href="sellnow.html" onclick="checkLogin(event,'sellnow.html')" class="bottom-nav-item">
+            🏷️ Sell
+        </a>
+
+        <!-- 7. My OraSwiss -->
+        <button type="button" onclick="checkLogin(event,'settings.html')" class="bottom-nav-item" style="background:none; border:none;">
             👤 My OraSwiss
         </button>
+
     </nav>
+
 
 <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
@@ -122,6 +135,20 @@
         'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
     );
 
+    async function checkLogin(event, page) {
+        event.preventDefault();
+
+        const { data } = await supabase.auth.getSession();
+
+        if (data.session) {
+            window.location.href = page;
+        } else {
+            window.location.href = "login.html";
+        }
+    }
+
+    window.checkLogin = checkLogin;
+    
     // 1. Deklaro funksionin si të zakonshëm
     async function ngarkoArtikujt() {
         const lista = document.getElementById("myWatchesList");

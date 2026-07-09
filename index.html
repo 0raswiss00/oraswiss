@@ -86,7 +86,6 @@
     <a href="luxury.html">Luxury</a>
     <a href="vintage.html">Vintage</a>
     <a href="parts.html">Parts</a>
-    <a href="separate-parts.html">Separate Parts</a>
     <a href="service.html">Service</a>
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
@@ -116,7 +115,20 @@
     "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
   );
-// Tani përdorni variablin 'supabase' kudo në kod
+
+async function checkLogin(event, page) {
+    event.preventDefault();
+
+    const { data } = await supabase.auth.getSession();
+
+    if (data.session) {
+        window.location.href = page;
+    } else {
+        window.location.href = "login.html";
+    }
+}
+ 
+// Tani përdorni variablin 'supabase' kudo në kod 
 function requireLogin() {
     localStorage.setItem("redirectAfterLogin", window.location.href);
     window.location.href = "register.html";
@@ -276,12 +288,31 @@ loadProductCount();
 </div>
 
 <nav class="bottom-nav" style="position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-around; background: #000; padding: 15px 0; border-top: 1px solid #333; z-index: 9998; box-sizing: border-box;">
-    <a href="index.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">🏠<br>Home</a>
-    <a href="favorites.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">❤️<br>Favs</a>
-    <a href="collection.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">⌚<br>Col</a>
-    <a href="mysales.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">⌚<br>My Sales</a>
-    <a href="sellnow.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">➕<br>Sell</a>
-    <button type="button" onclick="toggleMenu()" style="background: none; border: none; color: white; cursor: pointer; font-size: 13px; text-align: center;">👤<br>Menu</button>
+    
+    <a href="index.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">
+        🏠<br>Home
+    </a>
+
+    <a href="favorites.html" onclick="checkLogin(event,'favorites.html')" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">
+        ❤️<br>Favs
+    </a>
+
+    <a href="collection.html" onclick="checkLogin(event,'collection.html')" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">
+        ⌚<br>Col
+    </a>
+
+    <a href="mysales.html" onclick="checkLogin(event,'mysales.html')" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">
+        ⌚<br>My Sales
+    </a>
+
+    <a href="sellnow.html" onclick="checkLogin(event,'sellnow.html')" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">
+        ➕<br>Sell
+    </a>
+
+    <button type="button" onclick="toggleMenu()" style="background: none; border: none; color: white; cursor: pointer; font-size: 13px; text-align: center;">
+        👤<br>Menu
+    </button>
+
 </nav>
 
 <script>
@@ -405,7 +436,19 @@ function renderResults(products) {
         }
     }
 </script>
+<script>
+async function checkLogin(event, page) {
+    event.preventDefault();
 
+    const { data } = await supabase.auth.getSession();
+
+    if (data.session) {
+        window.location.href = page;
+    } else {
+        window.location.href = "login.html";
+    }
+}
+</script> 
 </body>    
 </html>
 

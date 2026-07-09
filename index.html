@@ -472,5 +472,16 @@ async function checkLogin(event, page) {
         }
     }
 </script>   
-</body>    
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        const bottomNav = document.querySelector('.bottom-nav');
+
+        // Nëse ka sesion, e bëjmë të dukshëm
+        if (session) {
+            bottomNav.style.display = 'flex';
+        }
+    });
+</script>     
+</body>      
 </html>

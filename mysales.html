@@ -107,7 +107,21 @@
     "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
   );
-// Tani përdorni variablin 'supabase' kudo në kod
+
+async function protectPage() {
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        window.location.href = "index.html";
+        return false;
+    }
+
+    return true;
+}
+
+protectPage();
+
+// Tani përdorni variablin 'supabase' kudo në kod   
 function requireLogin() {
     localStorage.setItem("redirectAfterLogin", window.location.href);
     window.location.href = "register.html";

@@ -449,5 +449,23 @@ async function checkLogin(event, page) {
     }
 }
 </script> 
+<script>
+    async function checkLogin(event, url) {
+        // 1. Parandalo veprimin default të linkut/butonit
+        event.preventDefault(); 
+
+        // 2. Kontrollo nëse ka një sesion aktiv në Supabase
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (session) {
+            // Nëse përdoruesi është i loguar, kalo te faqja përkatëse
+            window.location.href = url;
+        } else {
+            // Nëse nuk është i loguar, shfaq mesazhin ose dërgoje te logini
+            alert("Duhet të jesh i loguar për ta hapur këtë faqe!");
+            // Ose: window.location.href = 'login.html';
+        }
+    }
+</script>   
 </body>    
 </html>

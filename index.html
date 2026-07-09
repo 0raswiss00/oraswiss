@@ -283,47 +283,7 @@ loadUserCount();
 loadProductCount();
 
 </script>
-<div id="myOraSwissMenu" style="display: none; position: fixed; bottom: 80px; right: 10px; background: #222; border: 1px solid #444; padding: 10px; border-radius: 10px; z-index: 9999; width: 180px;">
-    <div class="menu-item" onclick="location.href='buy.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 Buy</div>
-    <div class="menu-item" onclick="location.href='mysold.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 My Sold</div>
-    <div class="menu-item" onclick="location.href='messages.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">✉️ Messages</div>
-    <div class="menu-item" onclick="location.href='settings.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">⚙️ Settings</div>
-    <div class="menu-item" onclick="location.href='support.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🎧 Support</div>
-    <div class="menu-item" onclick="location.href='info.html'" style="padding: 10px; color: white; cursor: pointer;">ℹ️ Info</div>
-</div>
 
-<nav class="bottom-nav" style="position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-around; background: #000; padding: 15px 0; border-top: 1px solid #333; z-index: 9998; box-sizing: border-box;">
-    
-    <a href="index.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">
-        🏠<br>Home
-    </a>
-
-    <a href="favorites.html" onclick="checkLogin(event,'favorites.html')" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">
-        ❤️<br>Favs
-    </a>
-
-    <a href="collection.html" style="color: white; text-decoration: none;">
-      ⌚<br>Col
-    </a>
-
-    <a href="mysales.html" style="color: white; text-decoration: none;">
-      💰<br>My Sales
-    </a>
-
-    <a href="sellnow.html" onclick="checkLogin(event,'sellnow.html')" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">
-        ➕<br>Sell
-    </a>
-
-    <button type="button" onclick="toggleMenu()" class="bottom-nav-item">
-      👤<br>MyOraSwiss
-    </button>
-
-    <!-- 1. Profili - Me kërkesë logimi -->
-    <a href="profile.html" onclick="checkLogin(event, 'profile.html')">
-      👤 Profile
-    </a>
-  
-</nav>
 
 <script>
     function toggleMenu() {

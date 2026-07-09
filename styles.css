@@ -2550,33 +2550,6 @@ img {
     background-color: #252525;
 }
 
-/* --- Navigimi Fundor i Pastër --- */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%; /* U rregullua: 100% (ishte 110%) */
-    height: 70px; /* U ul pak për të qenë më elegant */
-    background: #000; /* Fond i zi për kontrast më të mirë */
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
-    z-index: 1000;
-}
-
-.bottom-nav a, .bottom-nav button {
-    color: #fff; /* Tekst i bardhë */
-    text-decoration: none;
-    font-size: 14px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-}
 
 /* --- Menuja OraSwiss --- */
 .my-oraswiss-menu {
@@ -2667,31 +2640,39 @@ img {
     display: none !important;
 }
 
+/* --- Navigimi Fundor --- */
 .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    /* Ndryshimet kryesore këtu: */
-    display: flex; 
-    overflow-x: auto; /* Kjo e aktivizon scroll-in horizontal */
-    white-space: nowrap; /* I mban ikonat në një rresht */
-    background: #000;
-    padding: 10px 0;
-    border-top: 1px solid #333;
-    z-index: 9998;
-    box-sizing: border-box;
-    -webkit-overflow-scrolling: touch; /* Për lëvizje më të butë në iPhone/Android */
+    display: none !important; /* E fshehur derisa JS ta shfaqë */
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 70px !important;
+    background: #000 !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    display: flex !important;
+    align-items: center !important;
+    z-index: 9999 !important;
+    -webkit-overflow-scrolling: touch !important;
 }
 
-/* Sigurohu që elementet brenda të kenë hapësirë */
 .bottom-nav a, .bottom-nav button {
-    flex: 0 0 auto; /* Parandalon tkurrjen e ikonave */
-    min-width: 70px; /* Jepi një gjerësi minimale që të mos ngjishen */
+    flex: 0 0 auto !important;
+    min-width: 75px !important;
     text-align: center;
+    color: #fff !important;
+    text-decoration: none;
+    font-size: 13px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
 }
 
-/* Fshih scrollbar-in për një pamje më të pastër */
 .bottom-nav::-webkit-scrollbar {
     display: none;
 }

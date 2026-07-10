@@ -2676,4 +2676,28 @@ body {
     gap: 5px;
 }
 
+.bottom-nav {
+  position: fixed;
+  bottom: 10px; /* Distanca nga fundi i ekranit */
+  left: 10px;
+  right: 10px;
+  background-color: #1a1a1a; /* E zeza e errët që ke përdorur */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 8px;
+  border-radius: 20px; /* Këndet e rrumbullakosura */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.5); /* Hijëzimi që i jep pamjen e kartës */
+  z-index: 9999;
+}
+
+.bottom-nav-item {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 9px; /* Madhësi e vogël për të mos u mbivendosur */
+  text-align: center;
+  white-space: nowrap; /* Parandalon thyerjen e fjalëve */
+  flex: 1; /* Secili artikull zë hapësirë të barabartë */
+  padding: 0 2px;
+}
       

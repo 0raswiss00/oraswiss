@@ -5,18 +5,17 @@
     <title>My Sales - Ora Swiss</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* 1. Sfondi i Zezë */
         body {
-            background-color: #000000;
-            color: #ffffff;
+            background-color: #0056b3; /* Sfondi i faqes */
+            color: white;              /* Teksti kryesor i bardhë që të duket mbi blunë */
             font-family: Arial, sans-serif;
             padding: 20px;
+            margin: 0;
         }
 
-        /* 2. Karta e produktit (e zezë me kornizë gold) */
         .sale-item { 
-            background-color: #1a1a1a; 
-            border: 1px solid #d4a017; /* Gold */
+            background-color: #0056b3; /* Karta e produktit tani është e njëjtë me sfondin */
+            border: 2px solid #003d82; /* Një kornizë pak më e errët për ta ndarë produktin */
             margin-bottom: 15px; 
             padding: 15px; 
             display: flex; 
@@ -25,36 +24,33 @@
             border-radius: 8px; 
         }
 
-        /* 3. Butonat (Gold me tekst të zi) */
+        .sale-item img { 
+            width: 100px; 
+            height: 100px; 
+            object-fit: cover; 
+            border-radius: 5px; 
+            cursor: pointer; 
+        }
+
+        /* Butonat mbeten të bardhë me shkronja të zeza */
         button {
-            background-color: #d4a017; /* Gold */
-            color: #000000;
+            background-color: white;
+            color: black;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 15px;
             cursor: pointer;
             font-weight: bold;
-            border-radius: 6px;
-            transition: 0.3s;
+            border-radius: 4px;
+            margin-right: 5px;
         }
 
         button:hover {
-            background-color: #b88b10; /* Gold më i errët për hover */
+            background-color: #e0e0e0;
         }
 
-        /* 4. Teksti dhe Linket */
         a {
             text-decoration: none;
-            color: #d4a017; /* Linket në Gold */
-        }
-
-        /* 5. Navigimi Fundor (i zi me ikona/tekst Gold) */
-        .bottom-nav {
-            background: #000000 !important;
-            border-top: 2px solid #d4a017 !important; /* Vijë gold sipër */
-        }
-
-        .nav-item.active {
-            color: #d4a017 !important;
+            color: white; /* Teksti i linkut i bardhë */
         }
     </style>
 </head>

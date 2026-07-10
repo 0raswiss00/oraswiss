@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <title>Ora Swiss - Detajet</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
+        .product-card { background: #111; border: 1px solid #333; padding: 20px; max-width: 500px; margin: auto; border-radius: 10px; }
+        .product-img { width: 100%; height: auto; border-radius: 10px; margin-bottom: 15px; }
+        .admin-actions { margin-top: 20px; padding: 15px; border: 1px solid #444; border-radius: 8px; display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="container">Duke ngarkuar...</div>
+
+    <script>
+        // 1. Konfigurimi - Vetëm një deklarim!
+        const supabase = window.supabase.createClient(
+            "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+            "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+        );
+
+        // 2. Funksionet Admin
+        async function deleteProduct(id) {
+            if (!confirm("A jeni i sigurt që doni ta fshini këtë produkt?")) return;
+            const { error } = await supabase.from('oras').delete().eq('id', id);
+            if (error) alert("Gabim: " + error.message);
+            else { alert("Produkti u fshi!"); window.location.href = 'index.html'; }
+        }
+
+        function editProduct(id) {
+            window.location.href = 'edit.html?id=' + id;
+        }
+
+        // 3. Kontrolli i pronësisë
+        async function checkOwnership(watchOwnerId) {
+            const { data: { user } } = await supabase.auth.getUser();
+            const adminDiv = document.querySelector(".admin-actions");
+            if (adminDiv && user && user.id === watchOwnerId) {
+                adminDiv.style.display = "block";
+            }
+        }
+
+        // 4. Ngarkimi i produktit
+        async function loadProduct() {
+            const id = new URLSearchParams(window.location.search).get('id');
+            const container = document.getElementById("container");
+
+            if (!id) { container.innerHTML = "ID e pasaktë."; return; }
+
+            const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
+            
+            if (error) { container.innerHTML = "Gabim: " + error.message; return; }
+
+            // Gjenerojmë HTML-në
+            container.innerHTML = `
+                <div class="product-card">
+                    <h1>${data.brand} ${data.model}</h1>
+                    <p>Çmimi: ${data.price} €</p>
+                    <p>${data.description || ''}</p>
+                    
+                    <div class="admin-actions">
+                        <h4>Admin Controls</h4>
+                        <button onclick="editProduct(${data.id})">Modifiko</button>
+                        <button onclick="deleteProduct(${data.id})" style="color:red">Fshi Produktin</button>
+                    </div>
+                </div>
+            `;
+            
+            // Kontrollojmë pronësinë pas gjenerimit të butonave
+            checkOwnership(data.user_id);
+        }
+
+        // Ekzekutimi
+        loadProduct();
+    </script>
+</body>
+</html>

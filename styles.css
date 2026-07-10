@@ -2701,3 +2701,18 @@ body {
   padding: 0 2px;
 }
       
+
+.menu-content {
+    display: none; /* Fillohen të gjitha të mbyllura */
+    position: fixed;
+    bottom: 70px; /* Mbi shiritin e navigimit */
+    left: 10px;
+    right: 10px;
+    background: #1a1a1a;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+    z-index: 10000;
+}
+
+      

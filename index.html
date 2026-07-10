@@ -20,17 +20,27 @@
     .nav-scroll a{color:#fff;text-decoration:none;padding:6px 10px}
     .nav-scroll a:hover{color:gold}
     .site-title{font-weight:700;line-height:1.05;margin-right:10px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));gap:20px;padding:30px 16px}
-    .card{background:#111;padding:15px;border-radius:10px;border:1px solid #333;cursor:pointer;}
-    .price{color:#25D366;font-weight:bold;margin-top:10px;margin-bottom:10px;}
-    h2{padding:20px 16px 0;margin:0}
+
+    .grid {
+        display: grid; 
+        grid-template-columns: 1fr 1fr; 
+        gap: 10px; 
+        padding: 10px;
+    }
+
+    .card {
+        background: #111;
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #333;
+    }
 
     .card img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-      display: block;
-      border-radius: 8px;
+        width: 100%;
+        height: 140px; /* Ndryshoni vlerën nga 220px në 140px */
+        object-fit: cover;
+        display: block;
+        border-radius: 8px;
     }
 
     /* Stilet për butonat që mungonin */
@@ -76,11 +86,9 @@
     <a href="luxury.html">Luxury</a>
     <a href="vintage.html">Vintage</a>
     <a href="parts.html">Parts</a>
-    <a href="separate-parts.html">Separate Parts</a>
     <a href="service.html">Service</a>
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
-    <a href="jewelry.html">Jewelry</a>
     <a href="policy.html">Policy</a>
     <a href="sell.html">Sell</a>
   </nav>
@@ -101,27 +109,26 @@
 
 <h2>Parts Collection</h2>
 <div id="parts-container" class="grid">Loading...</div>
-
+  
 <script>
   const supabase = window.supabase.createClient(
     "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
   );
 
-async function protectPage() {
-    const { data: { user } } = await supabase.auth.getUser();
+async function checkLogin(event, page) {
+    event.preventDefault();
 
-    if (!user) {
-        window.location.href = "index.html";
-        return false;
+    const { data } = await supabase.auth.getSession();
+
+    if (data.session) {
+        window.location.href = page;
+    } else {
+        window.location.href = "login.html";
     }
-
-    return true;
 }
-
-protectPage();
-
-// Tani përdorni variablin 'supabase' kudo në kod   
+ 
+// Tani përdorni variablin 'supabase' kudo në kod 
 function requireLogin() {
     localStorage.setItem("redirectAfterLogin", window.location.href);
     window.location.href = "register.html";
@@ -271,22 +278,7 @@ loadUserCount();
 loadProductCount();
 
 </script>
-<div id="myOraSwissMenu" style="display: none; position: fixed; bottom: 80px; right: 10px; background: #222; border: 1px solid #444; padding: 10px; border-radius: 10px; z-index: 9999; width: 180px;">
-    <div class="menu-item" onclick="location.href='buy.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 Buy</div>
-    <div class="menu-item" onclick="location.href='messages.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">✉️ Messages</div>
-    <div class="menu-item" onclick="location.href='settings.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">⚙️ Settings</div>
-    <div class="menu-item" onclick="location.href='support.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🎧 Support</div>
-    <div class="menu-item" onclick="location.href='info.html'" style="padding: 10px; color: white; cursor: pointer;">ℹ️ Info</div>
-</div>
 
-<nav class="bottom-nav" style="position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-around; background: #000; padding: 15px 0; border-top: 1px solid #333; z-index: 9998; box-sizing: border-box;">
-    <a href="index.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">🏠<br>Home</a>
-    <a href="favorites.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">❤️<br>Favs</a>
-    <a href="collection.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">⌚<br>Col</a>
-    <a href="mysales.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">⌚<br>My Sales</a>
-    <a href="sellnow.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">➕<br>Sell</a>
-    <button type="button" onclick="toggleMenu()" style="background: none; border: none; color: white; cursor: pointer; font-size: 13px; text-align: center;">👤<br>Menu</button>
-</nav>
 
 <script>
     function toggleMenu() {
@@ -308,37 +300,25 @@ loadProductCount();
 
 }); 
 document.addEventListener("DOMContentLoaded", function() {
+    console.log("DOM është ngarkuar!"); // 1. Kontrolli i parë
+
     const searchInput = document.getElementById("searchInput");
-    const container = document.getElementById("luxury-container");
     const cameraBtn = document.querySelector(".camera-icon");
 
-    // 1. Logjika e kërkimit (Search)
-    if (searchInput) {
-        searchInput.addEventListener("input", async function(e) {
-            const query = e.target.value;
-            if (query.length > 0) {
-                const { data, error } = await supabase
-                    .from('oras')
-                    .select('*')
-                    .ilike('brand', `%${query}%`);
-
-
-                if (error) {
-                    console.error("Gabim në kërkim:", error);
-                } else {
-                    renderResults(data);
-                }
-            } else {
-                container.innerHTML = ""; // Pastro nëse fusha është bosh
-            }
+    if (!searchInput) {
+        console.error("Gabim: Nuk u gjet 'searchInput'!");
+    } else {
+        searchInput.addEventListener("focus", function(e) {
+            console.log("Input u klikua!");
+            // Këtu vendos logjikën tënde
         });
     }
 
-    // 2. Logjika e kamerës
-    if (cameraBtn) {
-        cameraBtn.addEventListener("click", function() {
+    if (!cameraBtn) {
+        console.error("Gabim: Nuk u gjet 'camera-icon'!");
+    } else {
+        cameraBtn.addEventListener("click", function(e) {
             console.log("Kamera u klikua!");
-            // Këtu shto logjikën e kamerës
         });
     }
 });
@@ -356,7 +336,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const { data, error } = await supabase
                 .from('oras')
                 .select('*')
-                .ilike('brand', `%${query}%`);
+                .ilike('brand', %${query}%);
 
             if (error) {
                 console.error("Gabim:", error);
@@ -373,7 +353,7 @@ async function performSearch(query) {
     const { data, error } = await supabase
         .from('oras')
         .select('*')
-        .ilike('brand', %${query}%); 
+        .ilike('brand', %${query}%);
 
     // 2. Trajto gabimet
     if (error) {
@@ -412,37 +392,6 @@ function renderResults(products) {
 
 </script>
 <script>
-  // 1. Funksioni që merr të dhënat nga tabela 'orders'
-  async function loadMySales() {
-    const tableBody = document.getElementById('sales-body'); // Sigurohu që ke <tbody> me këtë ID
-    if (!tableBody) return;
-
-    const { data, error } = await supabase
-      .from('orders')
-      .select('*'); // Këtu po marrim gjithçka nga tabela që krijuam
-
-    if (error) {
-      console.error("Gabim:", error);
-      return;
-    }
-
-    // 2. Ndërtimi i rreshtave në tabelë
-    tableBody.innerHTML = data.map(order => `
-      <tr>
-        <td>${order.product_id}</td>
-        <td style="color: ${order.status === 'pending' ? 'red' : 'green'}">
-            ${order.status}
-        </td>
-        <td>${order.tracing_number || 'S'ka'}</td>
-        <td>Kthim</td>
-      </tr>
-    `).join('');
-  }
-
-  // 3. Thirr funksionin sapo faqja të ngarkohet
-  loadMySales();
-</script>
-<script>
     function toggleMenu() {
         var menu = document.getElementById('myOraSwissMenu');
         if (menu.style.display === 'none') {
@@ -452,6 +401,57 @@ function renderResults(products) {
         }
     }
 </script>
+<script>
+async function checkLogin(event, page) {
+    event.preventDefault();
 
+    const { data } = await supabase.auth.getSession();
+
+    if (data.session) {
+        window.location.href = page;
+    } else {
+        window.location.href = "login.html";
+    }
+}
+</script> 
+<script>
+    async function checkLogin(event, url) {
+        // 1. Parandalo veprimin default të linkut/butonit
+        event.preventDefault(); 
+
+        // 2. Kontrollo nëse ka një sesion aktiv në Supabase
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (session) {
+            // Nëse përdoruesi është i loguar, kalo te faqja përkatëse
+            window.location.href = url;
+        } else {
+            // Nëse nuk është i loguar, shfaq mesazhin ose dërgoje te logini
+            alert("Duhet të jesh i loguar për ta hapur këtë faqe!");
+            // Ose: window.location.href = 'login.html';
+        }
+    }
+</script>   
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        const bottomNav = document.querySelector('.bottom-nav');
+
+        // Nëse ka sesion, e bëjmë të dukshëm
+        if (session) {
+            bottomNav.style.display = 'flex';
+        }
+    });
+</script>     
+<script>
+  window.addEventListener("DOMContentLoaded", async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    const nav = document.querySelector('.bottom-nav');
+    
+    if (session && nav) {
+      nav.style.display = 'flex'; // Shfaq navigimin vetëm nëse ka sesion
+    }
+  });
+</script>
 </body>    
-</html>
+</html

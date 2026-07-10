@@ -1,162 +1,114 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="sq">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ora | OraSwiss</title>
-
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0b0b0b;
-      color: #fff;
-      padding: 20px;
-    }
-
-    h2 {
-      margin-bottom: 10px;
-    }
-
-    #msg {
-      margin-bottom: 15px;
-      color: #aaa;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 15px;
-    }
-
-    .card {
-      background: #161616;
-      border-radius: 8px;
-      padding: 12px;
-    }
-
-    .card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 6px;
-      margin-bottom: 8px;
-    }
-
-    .price {
-      font-weight: bold;
-      color: #4caf50;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>My Sales - Ora Swiss</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #000; color: #fff; }
+        table { width: 100%; border-collapse: collapse; background: #111; margin-top: 20px; border: 1px solid #333; }
+        th, td { padding: 12px; border: 1px solid #333; text-align: left; }
+        th { background-color: gold; color: black; }
+        .btn-cancel { background: #dc3545; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+    </style>
+    <!-- Vendos skriptin e Supabase si tek faqja kryesore -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 </head>
-
 <body>
 
-  <h2>Ora për shitje</h2>
-  <div id="msg">Duke ngarkuar…</div>
-  <div id="grid" class="grid"></div>
+    <h1>Menaxhimi i Porosive (My Sales)</h1>
 
-  <!-- Supabase v2 -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <table>
+        <thead>
+            <tr>
+                <th>Ora (Produkti)</th>
+                <th>Statusi</th>
+                <th>Nr. Dërgimi</th>
+                <th>Veprime</th>
+            </tr>
+        </thead>
+        <tbody id="sales-body">
+            <tr><td colspan="4">Duke ngarkuar të dhënat...</td></tr>
+        </tbody>
+    </table>
 
-  <script>
-    // 🔑 SUPABASE
-    const SUPABASE_URL = "https://gnwsrmelmeqduhhfmtoa.supabase.co";
-    const SUPABASE_ANON_KEY = "PASTE_KETU_KEY";
-
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
+<script>
+    // Inicializimi i Supabase (Saktësisht si tek faqja e parë)
+    const supabase = window.supabase.createClient(
+        "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
     );
 
-    const msgEl = document.getElementById("msg");
-    const grid = document.getElementById("grid");
+    // Funksioni që ngarkon porositë e lidhura me produktet
+    async function loadMySales() {
+        const tableBody = document.getElementById('sales-body');
+        if (!tableBody) return;
 
-    function setMsg(t) {
-      msgEl.textContent = t;
+        // 1. Marrim ID-në e përdoruesit të loguar
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+            tableBody.innerHTML = <tr><td colspan="4">Ju lutem <a href="login.html" style="color:gold;">lohuni</a> për të parë shitjet.</td></tr>;
+            return;
+        }
+
+        // 2. Marrim të dhënat nga 'orders' dhe bëjmë lidhjen (join) me tabelën 'oras'
+        const { data, error } = await supabase
+            .from('orders')
+            .select('*, oras(brand, model, price)') // Kjo merr automatikisht brand-in dhe modelin nga tabela oras
+            .eq('user_id', user.id); // Shfaq vetëm porositë e këtij user-i
+
+        if (error) {
+            console.error("Gabim gjatë marrjes së të dhënave:", error);
+            tableBody.innerHTML = <tr><td colspan="4">Gabim në ngarkim.</td></tr>;
+            return;
+        }
+
+        if (data.length === 0) {
+            tableBody.innerHTML = <tr><td colspan="4">Nuk keni asnjë porosi ende.</td></tr>;
+            return;
+        }
+
+        // 3. Shfaqja e të dhënave të lidhura në tabelë
+        tableBody.innerHTML = data.map(order => {
+            // Kontrollojmë nëse ekziston ora e lidhur në databazë
+            const emriOres = order.oras ? ${order.oras.brand} ${order.oras.model} : Ora #${order.product_id};
+            
+            return `
+                <tr>
+                    <td><b>${emriOres}</b></td>
+                    <td style="color: ${order.status === 'pending' ? 'gold' : order.status === 'cancelled' ? 'red' : 'green'}">
+                        ${order.status.toUpperCase()}
+                    </td>
+                    <td>${order.tracing_number || 'Nuk ka'}</td>
+                    <td>
+                        ${order.status === 'pending' 
+                            ? <button class="btn-cancel" onclick="anulloPorosine('${order.id}')">Anullo</button> 
+                            : order.status === 'completed' ? 'Kthim' : '-'}
+                    </td>
+                </tr>
+            `;
+        }).join('');
     }
 
-    async function loadWatches() {
-      const { data, error } = await supabaseClient
-        .from("watches")
-        .select("*")
-        .eq("status", "approved")
-        .order("created_at", { ascending: false });
+    // Funksioni për anullimin e porosisë (përditëson statusin në Supabase)
+    async function anulloPorosine(orderId) {
+        if(!confirm("A jeni i sigurt që dëshironi të anulloni këtë porosi?")) return;
 
-      if (error) {
-        console.error(error);
-        setMsg("Gabim në ngarkim.");
-        return;
-      }
+        const { error } = await supabase
+            .from('orders')
+            .update({ status: 'cancelled' })
+            .eq('id', orderId);
 
-      if (!data.length) {
-        setMsg("Nuk ka ora për momentin.");
-        return;
-      }
-
-      setMsg("");
-
-    data.forEach(w => {
-      const card = document.createElement("div");
-      card.className = "card";
-
-      const img = document.createElement("img");
-      img.src = (w.photos && w.photos.length)
-        ? w.photos[0]
-        : "https://via.placeholder.com/400x300?text=No+Image";
-
-      card.appendChild(img);
-
-      const specs = document.createElement("div");
-      specs.className = "specs";
-
-      specs.innerHTML = `
-        <div class="spec"><span>Brand</span><strong>${w.brand || "-"}</strong></div>
-        <div class="spec"><span>Model</span><strong>${w.model || "-"}</strong></div>
-        <div class="spec"><span>Ref</span><strong>${w.ref || "-"}</strong></div>
-        <div class="spec"><span>Viti</span><strong>${w.year || "-"}</strong></div>
-        <div class="spec"><span>Material</span><strong>${w.material || "-"}</strong></div>
-        <div class="spec"><span>Gjendje</span><strong>${w.condition || "-"}</strong></div>
-        <div class="spec"><span>Case</span><strong>${w.case_size ? w.case_size + " mm" : "-"}</strong></div>
-  `    ;
-
-      const price = document.createElement("div");
-      price.className = "price";
-      price.textContent = w.price ? w.price + " €" : "";
-
-      card.appendChild(specs);
-      card.appendChild(price);
-
-      grid.appendChild(card);
-    });
-
-        const img = document.createElement("img");
-        img.src = (w.photos && w.photos.length)
-          ? w.photos[0]
-          : "https://via.placeholder.com/400x300?text=No+Image";
-
-        const title = document.createElement("div");
-        title.textContent = ${w.brand} ${w.model || ""};
-
-        const ref = document.createElement("div");
-        ref.style.color = "#aaa";
-        ref.textContent = w.ref || "";
-
-        const price = document.createElement("div");
-        price.className = "price";
-        price.textContent = w.price ? w.price + " €" : "";
-
-        card.appendChild(img);
-        card.appendChild(title);
-        card.appendChild(ref);
-        card.appendChild(price);
-
-        grid.appendChild(card);
-      });
+        if (error) {
+            alert("Gabim gjatë anullimit: " + error.message);
+        } else {
+            alert("Porosia u anullua me sukses!");
+            loadMySales(); // Rifreskon tabelën automatikisht
+        }
     }
 
-    loadWatches();
-  </script>
+    // Ekzekutohet sapo hapet faqja mysales.html
+    document.addEventListener('DOMContentLoaded', loadMySales);
+</script>
 
 </body>
 </html>

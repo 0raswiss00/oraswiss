@@ -46,7 +46,7 @@
         // 1. Marrim ID-në e përdoruesit të loguar
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
-            tableBody.innerHTML = <tr><td colspan="4">Ju lutem <a href="login.html" style="color:gold;">lohuni</a> për të parë shitjet.</td></tr>;
+            tableBody.innerHTML = `<tr><td colspan="4">Ju lutem <a href="login.html" style="color:gold;">lohuni</a> për të parë shitjet.</td></tr>`;
             return;
         }
 
@@ -58,19 +58,19 @@
 
         if (error) {
             console.error("Gabim gjatë marrjes së të dhënave:", error);
-            tableBody.innerHTML = <tr><td colspan="4">Gabim në ngarkim.</td></tr>;
+            tableBody.innerHTML = `<tr><td colspan="4">Gabim në ngarkim.</td></tr>`;
             return;
         }
 
         if (data.length === 0) {
-            tableBody.innerHTML = <tr><td colspan="4">Nuk keni asnjë porosi ende.</td></tr>;
+            tableBody.innerHTML = `<tr><td colspan="4">Nuk keni asnjë porosi ende.</td></tr>`;
             return;
         }
 
         // 3. Shfaqja e të dhënave të lidhura në tabelë
         tableBody.innerHTML = data.map(order => {
             // Kontrollojmë nëse ekziston ora e lidhur në databazë
-            const emriOres = order.oras ? ${order.oras.brand} ${order.oras.model} : Ora #${order.product_id};
+            const emriOres = order.oras ? `${order.oras.brand} ${order.oras.model}` : `Ora #${order.product_id}`;
             
             return `
                 <tr>
@@ -81,7 +81,7 @@
                     <td>${order.tracing_number || 'Nuk ka'}</td>
                     <td>
                         ${order.status === 'pending' 
-                            ? <button class="btn-cancel" onclick="anulloPorosine('${order.id}')">Anullo</button> 
+                            ? `<button class="btn-cancel" onclick="anulloPorosine('${order.id}')">Anullo</button>` 
                             : order.status === 'completed' ? 'Kthim' : '-'}
                     </td>
                 </tr>

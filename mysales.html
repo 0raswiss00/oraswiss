@@ -26,13 +26,6 @@
 
     async function loadMySales() {
         const salesList = document.getElementById("salesList");
-        
-        // 1. Merr user-in e loguar
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) {
-            salesList.innerHTML = "Ju lutem logohuni për të parë shitjet tuaja.";
-            return;
-        }
 
         // 2. Merr vetëm produktet e këtij user-i
         const { data, error } = await supabase
@@ -56,7 +49,7 @@
                 </div>
             </div>
         `).join('');
-    }
+    
 
     loadMySales();
 </script>

@@ -430,6 +430,15 @@ async function checkLogin(event, page) {
         }
     }
 </script>      
+<script>
+    // Ky kod kontrollon nëse në URL shkruhet ?showMenu=true
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('showMenu')) {
+            document.getElementById("myOraSwissMenu").style.display = "block";
+        }
+    };
+</script>
 
 </body>    
 </html

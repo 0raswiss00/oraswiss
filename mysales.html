@@ -6,23 +6,22 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body {
-            background-color: #0056b3; /* Sfondi blu */
-            color: black;              /* Shkronja të zeza */
+            background-color: #0056b3; /* Sfondi i faqes */
+            color: white;              /* Teksti kryesor i bardhë që të duket mbi blunë */
             font-family: Arial, sans-serif;
             padding: 20px;
             margin: 0;
         }
 
         .sale-item { 
-            background-color: white;   /* Kartat e produkteve të bardha */
-            border: none; 
+            background-color: #0056b3; /* Karta e produktit tani është e njëjtë me sfondin */
+            border: 2px solid #003d82; /* Një kornizë pak më e errët për ta ndarë produktin */
             margin-bottom: 15px; 
             padding: 15px; 
             display: flex; 
             align-items: center; 
             gap: 15px; 
             border-radius: 8px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
 
         .sale-item img { 
@@ -33,11 +32,11 @@
             cursor: pointer; 
         }
 
-        /* Stili për butonat e bardhë me shkronja të zeza */
+        /* Butonat mbeten të bardhë me shkronja të zeza */
         button {
             background-color: white;
             color: black;
-            border: 1px solid #000;
+            border: none;
             padding: 8px 15px;
             cursor: pointer;
             font-weight: bold;
@@ -46,12 +45,12 @@
         }
 
         button:hover {
-            background-color: #f0f0f0;
+            background-color: #e0e0e0;
         }
 
         a {
             text-decoration: none;
-            color: black;
+            color: white; /* Teksti i linkut i bardhë */
         }
     </style>
 </head>
@@ -95,7 +94,7 @@
             salesList.innerHTML = data.map(item => `
                 <div class="sale-item">
                     <a href="detajet.html?id=${item.id}">
-                        <img src="${item.image_url && item.image_url[0] ? item.image_url[0] : 'placeholder.jpg'}" alt="${item.brand}">
+                        <img src="${item.image_url && item.image_url[0] ? item.image_url[0] : 'placeholder.jpg'}">
                     </a>
 
                     <div>

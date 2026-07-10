@@ -209,9 +209,9 @@ window.trajtoKlikiminSell = async function() {
     const { data: { session } } = await supabase.auth.getSession();
 
     if (session) {
-        window.location.href = "sellnow.html";
+        window.location.href = "dashboard.html";
     } else {
-        localStorage.setItem("redirectAfterLogin", "sellnow.html");
+        localStorage.setItem("redirectAfterLogin", "dashboard.html");
         window.location.href = "login.html";
     }
 };

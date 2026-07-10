@@ -274,22 +274,11 @@ loadProductCount();
 </nav>
 
 <script>
-    // Ndryshoje në async që të mund të kontrollojmë sesionin
-    async function toggleMenu() {
+    function toggleMenu() {
         const menu = document.getElementById('myOraSwissMenu');
-        
-        // 1. Kontrollo nëse përdoruesi është i loguar
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        // 2. Nëse nuk është i loguar, dërgoje te login.html
-        if (!session) {
-            window.location.href = 'login.html'; 
-            return; // Ndalo ekzekutimin e mëtejshëm
-        }
-        
-        // 3. Nëse është i loguar, hap ose mbyll menynë
         menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
     }
-</script>
+  
+</script>  
 </body>
 </html>

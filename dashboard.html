@@ -89,13 +89,13 @@
 
     <!-- Shiriti i navigimit i rregulluar -->
     <nav class="bottom-nav">
-      <a href="index.html?showMenu=true" class="bottom-nav-item">OraSwiss</a>
-      <a href="profile.html" class="bottom-nav-item">Profile</a>
-      <a href="favorites.html" class="bottom-nav-item">Favorites</a>
-      <a href="collection.html" class="bottom-nav-item">Collection</a>
-      <a href="mysales.html" class="bottom-nav-item">Sales</a>
-      <a href="sellnow.html" class="bottom-nav-item">Sell</a>
-      <a href="javascript:void(0)" onclick="document.getElementById('myOraSwissMenu').style.display = 'block';" class="bottom-nav-item">Menu</a>
+      <a href="#" class="bottom-nav-item" onclick="toggleMenu('indexMenu')">OraSwiss</a>
+      <a href="#" class="bottom-nav-item" onclick="toggleMenu('profileMenu')">Profile</a>
+      <a href="#" class="bottom-nav-item" onclick="toggleMenu('favoritesMenu')">Favorites</a>
+      <a href="#" class="bottom-nav-item" onclick="toggleMenu('collectionMenu')">Collection</a>
+      <a href="#" class="bottom-nav-item" onclick="toggleMenu('salesMenu')">Sales</a>
+      <a href="#" class="bottom-nav-item" onclick="toggleMenu('sellMenu')">Sell</a>
+      <a href="#" class="bottom-nav-item" onclick="toggleMenu('myOraSwissMenu')">My OraSwiss</a>
     </nav>
 
 <script type="module">
@@ -250,5 +250,26 @@
         }
     }
 </script>    
-</body>   
+<script>
+  window.toggleMenu = function(menuId) {
+      var menu = document.getElementById(menuId);
+      if (!menu) return; 
+
+      // Mbyll çdo menu tjetër që ka klasën 'menu-content'
+      var allMenus = document.querySelectorAll('.menu-content');
+      allMenus.forEach(function(m) {
+          if (m.id !== menuId) {
+              m.style.display = 'none';
+          }
+      });
+
+      // Logjika: Klikim për hapje, klikim për mbyllje
+      if (menu.style.display === 'block') {
+          menu.style.display = 'none';
+      } else {
+          menu.style.display = 'block';
+      }
+  };
+</script>
+</body>       
 </html>

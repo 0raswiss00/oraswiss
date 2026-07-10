@@ -45,12 +45,11 @@
                 return;
             }
 
-    
             // Gjenerimi i listës me imazhe të klikueshme
             salesList.innerHTML = data.map(item => `
                 <div class="sale-item">
-                    <!-- Tani imazhi të çon te product.html -->
-                    <a href="product.html?id=${item.id}">
+                    <!-- Imazhi i klikueshëm -->
+                    <a href="detajet.html?id=${item.id}">
                         <img src="${item.image_url && item.image_url[0] ? item.image_url[0] : 'placeholder.jpg'}" alt="${item.brand}">
                     </a>
 
@@ -58,14 +57,16 @@
                         <strong>${item.brand} ${item.model}</strong><br>
                         <small>Çmimi: ${item.price} €</small>
                         <div style="margin-top:10px;">
-                            <!-- Edhe butoni "Shiko" tani të çon te product.html -->
-                            <button onclick="window.location.href='product.html?id=${item.id}'">Shiko</button>
+                            <button onclick="window.location.href='detajet.html?id=${item.id}'">Shiko</button>
                             <button onclick="window.location.href='edit.html?id=${item.id}'" style="background:#444; color:#fff;">Modifiko</button>
                         </div>
                     </div>
                 </div>
             `).join('');
         }
-</script>
+
+        // Thirrja e funksionit
+        loadMySales();
+    </script>
 </body>
 </html>

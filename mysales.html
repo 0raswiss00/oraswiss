@@ -3,112 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <title>My Sales - Ora Swiss</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background: #000; color: #fff; }
-        table { width: 100%; border-collapse: collapse; background: #111; margin-top: 20px; border: 1px solid #333; }
-        th, td { padding: 12px; border: 1px solid #333; text-align: left; }
-        th { background-color: gold; color: black; }
-        .btn-cancel { background: #dc3545; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+        body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
+        .list-container { max-width: 800px; margin: auto; }
+        .sale-item { background: #111; border: 1px solid #333; padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        button { cursor: pointer; padding: 8px 12px; }
     </style>
-    <!-- Vendos skriptin e Supabase si tek faqja kryesore -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 </head>
 <body>
 
-    <h1>Menaxhimi i Porosive (My Sales)</h1>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Ora (Produkti)</th>
-                <th>Statusi</th>
-                <th>Nr. Dërgimi</th>
-                <th>Veprime</th>
-            </tr>
-        </thead>
-        <tbody id="sales-body">
-            <tr><td colspan="4">Duke ngarkuar të dhënat...</td></tr>
-        </tbody>
-    </table>
+<div class="list-container">
+    <h1>Artikujt e mi në shitje</h1>
+    <div id="salesList">Duke ngarkuar...</div>
+</div>
 
 <script>
-    // Inicializimi i Supabase (Saktësisht si tek faqja e parë)
     const supabase = window.supabase.createClient(
         "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
         "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
     );
 
-    // Funksioni që ngarkon porositë e lidhura me produktet
     async function loadMySales() {
-        const tableBody = document.getElementById('sales-body');
-        if (!tableBody) return;
-
-        // 1. Marrim ID-në e përdoruesit të loguar
+        const salesList = document.getElementById("salesList");
+        
+        // 1. Merr user-in e loguar
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
-            tableBody.innerHTML = `<tr><td colspan="4">Ju lutem <a href="login.html" style="color:gold;">lohuni</a> për të parë shitjet.</td></tr>`;
+            salesList.innerHTML = "Ju lutem logohuni për të parë shitjet tuaja.";
             return;
         }
 
-        // 2. Marrim të dhënat nga 'orders' dhe bëjmë lidhjen (join) me tabelën 'oras'
+        // 2. Merr vetëm produktet e këtij user-i
         const { data, error } = await supabase
-            .from('orders')
-            .select('*, oras(brand, model, price)') // Kjo merr automatikisht brand-in dhe modelin nga tabela oras
-            .eq('user_id', user.id); // Shfaq vetëm porositë e këtij user-i
+            .from('oras')
+            .select('*')
+            .eq('user_id', user.id);
 
-        if (error) {
-            console.error("Gabim gjatë marrjes së të dhënave:", error);
-            tableBody.innerHTML = `<tr><td colspan="4">Gabim në ngarkim.</td></tr>`;
-            return;
-        }
+        if (error) { salesList.innerHTML = "Gabim: " + error.message; return; }
+        if (data.length === 0) { salesList.innerHTML = "Nuk keni asnjë artikull në shitje."; return; }
 
-        if (data.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="4">Nuk keni asnjë porosi ende.</td></tr>`;
-            return;
-        }
-
-        // 3. Shfaqja e të dhënave të lidhura në tabelë
-        tableBody.innerHTML = data.map(order => {
-            // Kontrollojmë nëse ekziston ora e lidhur në databazë
-            const emriOres = order.oras ? `${order.oras.brand} ${order.oras.model}` : `Ora #${order.product_id}`;
-            
-            return `
-                <tr>
-                    <td><b>${emriOres}</b></td>
-                    <td style="color: ${order.status === 'pending' ? 'gold' : order.status === 'cancelled' ? 'red' : 'green'}">
-                        ${order.status.toUpperCase()}
-                    </td>
-                    <td>${order.tracing_number || 'Nuk ka'}</td>
-                    <td>
-                        ${order.status === 'pending' 
-                            ? `<button class="btn-cancel" onclick="anulloPorosine('${order.id}')">Anullo</button>` 
-                            : order.status === 'completed' ? 'Kthim' : '-'}
-                    </td>
-                </tr>
-            `;
-        }).join('');
+        // 3. Gjenero listën
+        salesList.innerHTML = data.map(item => `
+            <div class="sale-item">
+                <div>
+                    <strong>${item.brand} ${item.model}</strong><br>
+                    <small>Çmimi: ${item.price} €</small>
+                </div>
+                <div>
+                    <button onclick="window.location.href='detajet.html?id=${item.id}'">Shiko</button>
+                    <button onclick="window.location.href='edit.html?id=${item.id}'" style="background:#444; color:#fff;">Modifiko</button>
+                </div>
+            </div>
+        `).join('');
     }
 
-    // Funksioni për anullimin e porosisë (përditëson statusin në Supabase)
-    async function anulloPorosine(orderId) {
-        if(!confirm("A jeni i sigurt që dëshironi të anulloni këtë porosi?")) return;
-
-        const { error } = await supabase
-            .from('orders')
-            .update({ status: 'cancelled' })
-            .eq('id', orderId);
-
-        if (error) {
-            alert("Gabim gjatë anullimit: " + error.message);
-        } else {
-            alert("Porosia u anullua me sukses!");
-            loadMySales(); // Rifreskon tabelën automatikisht
-        }
-    }
-
-    // Ekzekutohet sapo hapet faqja mysales.html
-    document.addEventListener('DOMContentLoaded', loadMySales);
+    loadMySales();
 </script>
-
 </body>
 </html>

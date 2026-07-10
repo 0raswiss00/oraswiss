@@ -136,15 +136,12 @@
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
 
-  supabase.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN') {
-      console.log("Përdoruesi u logua me sukses");
-    } else if (!session) {
-      // Vetëm nëse sesioni mungon realisht, dërgoje te regjistrimi
-      // Dhe sigurohu që po hapet faqja e saktë
-      window.location.href = 'register.html';
-    }
-  });
+  const { data: { session } } = await supabase.auth.getSession();
+
+  if (!session) {
+      localStorage.setItem("redirectAfterLogin", "sell.html");
+      window.location.href = "login.html";
+  }
 
   document.getElementById('sellForm').addEventListener('submit', async (e) => {
     e.preventDefault();

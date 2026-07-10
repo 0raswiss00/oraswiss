@@ -20,27 +20,17 @@
     .nav-scroll a{color:#fff;text-decoration:none;padding:6px 10px}
     .nav-scroll a:hover{color:gold}
     .site-title{font-weight:700;line-height:1.05;margin-right:10px}
-
-    .grid {
-        display: grid; 
-        grid-template-columns: 1fr 1fr; 
-        gap: 10px; 
-        padding: 10px;
-    }
-
-    .card {
-        background: #111;
-        padding: 15px;
-        border-radius: 10px;
-        border: 1px solid #333;
-    }
+    .grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));gap:20px;padding:30px 16px}
+    .card{background:#111;padding:15px;border-radius:10px;border:1px solid #333;cursor:pointer;}
+    .price{color:#25D366;font-weight:bold;margin-top:10px;margin-bottom:10px;}
+    h2{padding:20px 16px 0;margin:0}
 
     .card img {
-        width: 100%;
-        height: 140px; /* Ndryshoni vlerën nga 220px në 140px */
-        object-fit: cover;
-        display: block;
-        border-radius: 8px;
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      border-radius: 8px;
     }
 
     /* Stilet për butonat që mungonin */
@@ -86,20 +76,15 @@
     <a href="luxury.html">Luxury</a>
     <a href="vintage.html">Vintage</a>
     <a href="parts.html">Parts</a>
+    <a href="separate-parts.html">Separate Parts</a>
     <a href="service.html">Service</a>
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
+    <a href="jewelry.html">Jewelry</a>
     <a href="policy.html">Policy</a>
     <a href="sell.html">Sell</a>
   </nav>
 </header>
-<div class="search-container">
-    <div class="search-box">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="Search on OraSwiss">
-        <button class="camera-icon">📷</button>
-    </div>
-</div>
 
 <h2>Luxury Collection</h2>
 <div id="luxury-container" class="grid">Loading...</div>
@@ -109,31 +94,14 @@
 
 <h2>Parts Collection</h2>
 <div id="parts-container" class="grid">Loading...</div>
-  
+
 <script>
   const supabase = window.supabase.createClient(
     "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
   );
+// Tani përdorni variablin 'supabase' kudo në kod
 
-async function checkLogin(event, page) {
-    event.preventDefault();
-
-    const { data } = await supabase.auth.getSession();
-
-    if (data.session) {
-        window.location.href = page;
-    } else {
-        window.location.href = "login.html";
-    }
-}
- 
-// Tani përdorni variablin 'supabase' kudo në kod 
-function requireLogin() {
-    localStorage.setItem("redirectAfterLogin", window.location.href);
-    window.location.href = "register.html";
-}
-  
 async function loadCategory(cat, containerId) {
     const container = document.getElementById(containerId);
     
@@ -278,169 +246,29 @@ loadUserCount();
 loadProductCount();
 
 </script>
+<div id="myOraSwissMenu" style="display: none; position: fixed; bottom: 80px; right: 10px; background: #222; border: 1px solid #444; padding: 10px; border-radius: 10px; z-index: 9999; width: 180px;">
+    <div class="menu-item" onclick="location.href='buy.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 Buy</div>
+    <div class="menu-item" onclick="location.href='messages.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">✉️ Messages</div>
+    <div class="menu-item" onclick="location.href='settings.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">⚙️ Settings</div>
+    <div class="menu-item" onclick="location.href='support.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🎧 Support</div>
+    <div class="menu-item" onclick="location.href='info.html'" style="padding: 10px; color: white; cursor: pointer;">ℹ️ Info</div>
+</div>
 
+<nav class="bottom-nav" style="position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-around; background: #000; padding: 15px 0; border-top: 1px solid #333; z-index: 9998; box-sizing: border-box;">
+    <a href="index.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">🏠<br>Home</a>
+    <a href="favorites.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">❤️<br>Favs</a>
+    <a href="collection.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">⌚<br>Col</a>
+    <a href="mysales.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">⌚<br>Sales</a>
+    <a href="sellnow.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">➕<br>Sell</a>
+    <button type="button" onclick="toggleMenu()" style="background: none; border: none; color: white; cursor: pointer; font-size: 13px; text-align: center;">👤<br>Menu</button>
+</nav>
 
 <script>
     function toggleMenu() {
         const menu = document.getElementById('myOraSwissMenu');
         menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
     }
- document.addEventListener("DOMContentLoaded", function () {
-
-    const isLoggedIn = localStorage.getItem("loggedIn") === "true";
-
-    if (!isLoggedIn) {
-        document.querySelectorAll("#bottomNav a").forEach(link => {
-            link.addEventListener("click", function (e) {
-                e.preventDefault();
-                requireLogin();
-            });
-        });
-    }
-
-}); 
-document.addEventListener("DOMContentLoaded", function() {
-    console.log("DOM është ngarkuar!"); // 1. Kontrolli i parë
-
-    const searchInput = document.getElementById("searchInput");
-    const cameraBtn = document.querySelector(".camera-icon");
-
-    if (!searchInput) {
-        console.error("Gabim: Nuk u gjet 'searchInput'!");
-    } else {
-        searchInput.addEventListener("focus", function(e) {
-            console.log("Input u klikua!");
-            // Këtu vendos logjikën tënde
-        });
-    }
-
-    if (!cameraBtn) {
-        console.error("Gabim: Nuk u gjet 'camera-icon'!");
-    } else {
-        cameraBtn.addEventListener("click", function(e) {
-            console.log("Kamera u klikua!");
-        });
-    }
-});
-
-// Funksioni që bën kërkimin real në Supabase
-document.addEventListener("DOMContentLoaded", function() {
-    const searchInput = document.getElementById("searchInput");
-    const container = document.getElementById("luxury-container");
-
-    searchInput.addEventListener("input", async function(e) {
-        const query = e.target.value;
-        
-        if (query.length > 0) {
-            // Kërkojmë në kolonën 'brand'
-            const { data, error } = await supabase
-                .from('oras')
-                .select('*')
-                .ilike('brand', `%${query}%`);
-
-            if (error) {
-                console.error("Gabim:", error);
-            } else {
-                console.log("Rezultatet:", data);
-                renderResults(data); // Funksioni që shfaq rezultatet
-            }
-        }
-    });
-});
-
-async function performSearch(query) {
-    // 1. Kërko te Supabase
-    const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .ilike('brand', `%${query}%`);
-
-    // 2. Trajto gabimet
-    if (error) {
-        console.error("Gabim në kërkim:", error);
-    } else {
-        // 3. Dërgoi rezultatet te funksioni i shfaqjes
-        renderResults(data); 
-    }
-}
-
-function renderResults(products) {
-    const container = document.getElementById("luxury-container");
-    container.innerHTML = ""; // Pastron pamjen
-
-    if (!products || products.length === 0) {
-        container.innerHTML = "<p>Nuk u gjet asnjë rezultat.</p>";
-        return;
-    }
-
-    products.forEach(product => {
-        // Kontrollojmë foton (kujdes: sigurohu që kolona quhet 'image_url')
-        const imageUrl = (product.image_url && product.image_url.length > 0) 
-            ? product.image_url[0] 
-            : 'https://oraswiss.com/placeholder.jpg';
-        
-        // Këtu po shfaqim 'brand' dhe 'price'
-        container.innerHTML += `
-            <a href="product.html?id=${product.id}" class="product-card" style="display:block; text-decoration:none; color:white; border:1px solid #444; margin:10px; padding:10px; border-radius:8px;">
-                <img src="${imageUrl}" alt="${product.brand}" style="width:120px; height:120px; object-fit:cover; border-radius:4px;">
-                <h3 style="margin: 10px 0 5px 0;">${product.brand}</h3>
-                <p style="margin: 0; color: #ff9900; font-weight: bold;">Çmimi: ${product.price ? product.price + ' €' : 'Me ofertë'}</p>
-            </a>
-        `;
-    });
-}
-
-</script>
-<script>
-    function toggleMenu() {
-        var menu = document.getElementById('myOraSwissMenu');
-        if (menu.style.display === 'none') {
-            menu.style.display = 'block';
-        } else {
-            menu.style.display = 'none';
-        }
-    }
-</script>
-<script>
-async function checkLogin(event, page) {
-    event.preventDefault();
-
-    const { data } = await supabase.auth.getSession();
-
-    if (data.session) {
-        window.location.href = page;
-    } else {
-        window.location.href = "login.html";
-    }
-}
-</script> 
-<script>
-    async function checkLogin(event, url) {
-        // 1. Parandalo veprimin default të linkut/butonit
-        event.preventDefault(); 
-
-        // 2. Kontrollo nëse ka një sesion aktiv në Supabase
-        const { data: { session } } = await supabase.auth.getSession();
-
-        if (session) {
-            // Nëse përdoruesi është i loguar, kalo te faqja përkatëse
-            window.location.href = url;
-        } else {
-            // Nëse nuk është i loguar, shfaq mesazhin ose dërgoje te logini
-            alert("Duhet të jesh i loguar për ta hapur këtë faqe!");
-            // Ose: window.location.href = 'login.html';
-        }
-    }
-</script>      
-<script>
-    // Ky kod kontrollon nëse në URL shkruhet ?showMenu=true
-    window.onload = function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('showMenu')) {
-            document.getElementById("myOraSwissMenu").style.display = "block";
-        }
-    };
-</script>
-
-</body>    
-</html
+  
+</script>  
+</body>
+</html>

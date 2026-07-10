@@ -5,8 +5,54 @@
     <title>My Sales - Ora Swiss</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        .sale-item { border: 1px solid #333; margin-bottom: 15px; padding: 10px; display: flex; align-items: center; gap: 15px; border-radius: 8px; }
-        .sale-item img { width: 100px; height: 100px; object-fit: cover; border-radius: 5px; cursor: pointer; }
+        body {
+            background-color: #0056b3; /* Sfondi blu */
+            color: black;              /* Shkronja të zeza */
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .sale-item { 
+            background-color: white;   /* Kartat e produkteve të bardha */
+            border: none; 
+            margin-bottom: 15px; 
+            padding: 15px; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .sale-item img { 
+            width: 100px; 
+            height: 100px; 
+            object-fit: cover; 
+            border-radius: 5px; 
+            cursor: pointer; 
+        }
+
+        /* Stili për butonat e bardhë me shkronja të zeza */
+        button {
+            background-color: white;
+            color: black;
+            border: 1px solid #000;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+
+        button:hover {
+            background-color: #f0f0f0;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -14,7 +60,7 @@
     <div id="salesList">Duke ngarkuar...</div>
 
     <script>
-        // Inicializimi
+        // Inicializimi i Supabase
         const myOraSwissClient = window.supabase.createClient(
             "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
             "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
@@ -45,20 +91,22 @@
                 return;
             }
 
-            // Gjenerimi i listës me imazhe të klikueshme
+            // Gjenerimi i listës me linka tek imazhi dhe titulli
             salesList.innerHTML = data.map(item => `
                 <div class="sale-item">
-                    <!-- Imazhi i klikueshëm -->
                     <a href="detajet.html?id=${item.id}">
                         <img src="${item.image_url && item.image_url[0] ? item.image_url[0] : 'placeholder.jpg'}" alt="${item.brand}">
                     </a>
 
                     <div>
-                        <strong>${item.brand} ${item.model}</strong><br>
+                        <a href="detajet.html?id=${item.id}">
+                            <strong>${item.brand} ${item.model}</strong>
+                        </a>
+                        <br>
                         <small>Çmimi: ${item.price} €</small>
                         <div style="margin-top:10px;">
                             <button onclick="window.location.href='detajet.html?id=${item.id}'">Shiko</button>
-                            <button onclick="window.location.href='edit.html?id=${item.id}'" style="background:#444; color:#fff;">Modifiko</button>
+                            <button onclick="window.location.href='edit.html?id=${item.id}'">Modifiko</button>
                         </div>
                     </div>
                 </div>

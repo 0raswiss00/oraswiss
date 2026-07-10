@@ -2595,111 +2595,17 @@ img {
 
 
 
-/* --- per te fsheur butonat pa loguar --- */
- .admin-actions { display: none; }     
-
-
-.products-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 kolona për celular */
-    gap: 20px;
-    padding: 20px;
-}
-
-@media (min-width: 1024px) {
-    .products-container {
-        grid-template-columns: repeat(4, 1fr); /* 4 kolona për desktop */
-    }
-}
-
-/* Renditja në 4 kolona */
-.grid {
-    display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 20px !important;
-    padding: 20px !important;
-}
-
-/* Kufizimi i fotove që të mos dalin jashtë */
-.grid img, .product-img {
-    width: 70% !important;
-    height: 150px !important; /* Kjo e rregullon madhësinë */
-    object-fit: cover !important;
-    display: block !important;
-    border-radius: 10px !important;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Kjo i ndan në 4 */
-    gap: 20px;
-}      
-
-
 .bottom-nav {
     display: none !important;
 }
 
-/* --- Navigimi Fundor --- */
-.bottom-nav {
-    display: none !important; /* E fshehur derisa JS ta shfaqë */
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 70px !important;
-    background: #000 !important;
-    overflow-x: auto !important;
-    white-space: nowrap !important;
-    display: flex !important;
-    align-items: center !important;
-    z-index: 9999 !important;
-    -webkit-overflow-scrolling: touch !important;
-}
 
-.bottom-nav a, .bottom-nav button {
-    flex: 0 0 auto !important;
-    min-width: 75px !important;
-    text-align: center;
-    color: #fff !important;
-    text-decoration: none;
-    font-size: 13px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-}
 
 .bottom-nav::-webkit-scrollbar {
     display: none;
 }
 
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Telefon: 2 në rresht */
-    gap: 10px;
-    padding: 10px;
-}
-
-/* Ekran mesatar (tablet/laptop) */
-@media (min-width: 768px) {
-    .grid {
-        grid-template-columns: repeat(3, 1fr); /* 3 në rresht */
-        gap: 15px;
-    }
-}
-
-/* Kompjuter i madh */
-@media (min-width: 1200px) {
-    .grid {
-        grid-template-columns: repeat(4, 1fr); /* 4 në rresht */
-        gap: 20px;
-    }
-}
 
 
 
@@ -2709,6 +2615,65 @@ body {
 
 .sale-item {
     background: #0b2d5c;
+}
+
+ .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 kolona për telefon */
+    gap: 10px;
+    padding: 10px;
+}
+
+/* Për Tablet */
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr); 
+    }
+}
+
+/* Për Desktop */
+@media (min-width: 1200px) {
+    .grid {
+        grid-template-columns: repeat(4, 1fr); 
+        gap: 20px;
+    }
+}
+
+.grid img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+}
+
+/* Navigimi Fundor */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: #000;
+    display: flex; /* E bëjmë flex për të rreshtuar elementet */
+    justify-content: space-around;
+    align-items: center;
+    z-index: 9999;
+    border-top: 2px solid #333;
+}
+
+.bottom-nav a, .bottom-nav button {
+    text-align: center;
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
 }
 
       

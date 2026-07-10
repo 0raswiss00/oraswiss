@@ -2679,26 +2679,24 @@ img {
 
 
 .grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  padding: 20px 12px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Telefon: 2 në rresht */
+    gap: 10px;
+    padding: 10px;
 }
 
-/* Tablet */
+/* Ekran mesatar (tablet/laptop) */
 @media (min-width: 768px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-  }
+    .grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 në rresht */
+        gap: 15px;
+    }
 }
 
 /* Kompjuter i madh */
 @media (min-width: 1200px) {
-  .grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-  }
+    .grid {
+        grid-template-columns: repeat(4, 1fr); /* 4 në rresht */
+        gap: 20px;
+    }
 }
-
-      

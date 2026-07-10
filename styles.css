@@ -2715,4 +2715,15 @@ body {
     z-index: 10000;
 }
 
+.bottom-nav {
+  display: flex !important;
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 60px !important;
+  background-color: #1a1a1a !important;
+  z-index: 999999 !important;
+  border-top: 1px solid #333;
+}
       

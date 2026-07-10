@@ -206,14 +206,16 @@ async function loadCategory(cat, containerId) {
 }
 // E vendosim tek 'window' që të jetë i aksesueshëm nga butoni në HTML
 window.trajtoKlikiminSell = async function() {
-    const { data: { session } } = await supabase.auth.getSession();
+  // Përdor getUser në vend të getSession
+  const { data: { user } } = await supabase.auth.getUser();
 
-    if (session) {
-        window.location.href = "dashboard.html";
-    } else {
-        localStorage.setItem("redirectAfterLogin", "dashboard.html");
-        window.location.href = "login.html";
-    }
+  if (user) {
+    // Nëse ka user, shko te faqja e shitjes
+    window.location.href = 'register.html'; 
+  } else {
+    // Nëse nuk ka user, dërgoje te logimi
+    window.location.href = 'login.html'; 
+  }
 };
 
 // Funksioni për ta shfaqur butonin vetëm kur përdoruesi është i loguar

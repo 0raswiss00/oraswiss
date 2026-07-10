@@ -20,38 +20,50 @@
 
 <script>
     const supabase = window.supabase.createClient(
-        "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-    );
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
 
-    async function loadMySales() {
-        const salesList = document.getElementById("salesList");
-
-        // 2. Merr vetëm produktet e këtij user-i
-        const { data, error } = await supabase
-            .from('oras')
-            .select('*')
-            .eq('user_id', user.id);
-
-        if (error) { salesList.innerHTML = "Gabim: " + error.message; return; }
-        if (data.length === 0) { salesList.innerHTML = "Nuk keni asnjë artikull në shitje."; return; }
-
-        // 3. Gjenero listën
-        salesList.innerHTML = data.map(item => `
-            <div class="sale-item">
-                <div>
-                    <strong>${item.brand} ${item.model}</strong><br>
-                    <small>Çmimi: ${item.price} €</small>
-                </div>
-                <div>
-                    <button onclick="window.location.href='detajet.html?id=${item.id}'">Shiko</button>
-                    <button onclick="window.location.href='edit.html?id=${item.id}'" style="background:#444; color:#fff;">Modifiko</button>
-                </div>
-            </div>
-        `).join('');
+async function loadMySales() {
+    const salesList = document.getElementById("salesList");
     
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        salesList.innerHTML = "Ju lutem logohuni për të parë shitjet tuaja.";
+        return;
+    }
 
-    loadMySales();
+    const { data, error } = await supabase
+        .from('oras')
+        .select('*')
+        .eq('user_id', user.id);
+
+    if (error) { 
+        salesList.innerHTML = "Gabim: " + error.message; 
+        return; 
+    }
+    
+    if (data.length === 0) { 
+        salesList.innerHTML = "Nuk keni asnjë artikull në shitje."; 
+        return; 
+    }
+
+    salesList.innerHTML = data.map(item => `
+        <div class="sale-item">
+            <div>
+                <strong>${item.brand} ${item.model}</strong><br>
+                <small>Çmimi: ${item.price} €</small>
+            </div>
+            <div>
+                <button onclick="window.location.href='detajet.html?id=${item.id}'">Shiko</button>
+                <button onclick="window.location.href='edit.html?id=${item.id}'" style="background:#444; color:#fff;">Modifiko</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+loadMySales();
+
 </script>
 </body>
 </html>

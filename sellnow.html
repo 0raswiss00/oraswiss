@@ -136,12 +136,13 @@
     'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
   );
 
-  const { data: { session } } = await supabase.auth.getSession();
-
-  if (!session) {
-      localStorage.setItem("redirectAfterLogin", "sell.html");
-      window.location.href = "login.html";
-  }
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN') {
+      console.log("Përdoruesi u logua me sukses");
+    } else if (!session) {
+      window.location.href = 'register.html';
+    }
+  });
 
   document.getElementById('sellForm').addEventListener('submit', async (e) => {
     e.preventDefault();

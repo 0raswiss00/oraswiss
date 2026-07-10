@@ -3,67 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <title>My Sales - Ora Swiss</title>
+    <!-- Vetëm një herë script-i i Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
-        .list-container { max-width: 800px; margin: auto; }
-        .sale-item { background: #111; border: 1px solid #333; padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-        button { cursor: pointer; padding: 8px 12px; }
-    </style>
 </head>
 <body>
 
-<div class="list-container">
-    <h1>Artikujt e mi në shitje</h1>
-    <div id="salesList">Duke ngarkuar...</div>
-</div>
+<div id="salesList">Duke ngarkuar...</div>
 
 <script>
+    // Inicializimi vetëm një herë
     const supabase = window.supabase.createClient(
-    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-);
+        "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+    );
 
-async function loadMySales() {
-    const salesList = document.getElementById("salesList");
-    
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-        salesList.innerHTML = "Ju lutem logohuni për të parë shitjet tuaja.";
-        return;
-    }
+    async function loadMySales() {
+        const salesList = document.getElementById("salesList");
+        
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (!user) {
+            salesList.innerHTML = "Ju lutem logohuni.";
+            return;
+        }
 
-    const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .eq('user_id', user.id);
+        const { data, error } = await supabase
+            .from('oras')
+            .select('*')
+            .eq('user_id', user.id);
 
-    if (error) { 
-        salesList.innerHTML = "Gabim: " + error.message; 
-        return; 
-    }
-    
-    if (data.length === 0) { 
-        salesList.innerHTML = "Nuk keni asnjë artikull në shitje."; 
-        return; 
-    }
+        if (error) {
+            salesList.innerHTML = "Gabim: " + error.message;
+            return;
+        }
 
-    salesList.innerHTML = data.map(item => `
-        <div class="sale-item">
+        if (!data || data.length === 0) {
+            salesList.innerHTML = "Nuk keni asnjë artikull.";
+            return;
+        }
+
+        salesList.innerHTML = data.map(item => `
             <div>
-                <strong>${item.brand} ${item.model}</strong><br>
-                <small>Çmimi: ${item.price} €</small>
-            </div>
-            <div>
+                <strong>${item.brand} ${item.model}</strong>
                 <button onclick="window.location.href='detajet.html?id=${item.id}'">Shiko</button>
-                <button onclick="window.location.href='edit.html?id=${item.id}'" style="background:#444; color:#fff;">Modifiko</button>
+                <button onclick="window.location.href='edit.html?id=${item.id}'">Modifiko</button>
             </div>
-        </div>
-    `).join('');
-}
+        `).join('');
+    }
 
-loadMySales();
-
+    loadMySales();
 </script>
 </body>
 </html>

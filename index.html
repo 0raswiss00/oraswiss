@@ -126,7 +126,7 @@ async function loadCategory(cat, containerId) {
         return;
     }
 
-    async function trajtoKlikiminSell() {
+    async function trajtoKlikiminSellNow() {
         // Kontrollo sesionin me klientin 'supabase' që ke krijuar në rreshtin 109
         const { data: { session } } = await supabase.auth.getSession();
 
@@ -196,13 +196,13 @@ async function loadCategory(cat, containerId) {
     }).join('');
 }
 // E vendosim tek 'window' që të jetë i aksesueshëm nga butoni në HTML
-window.trajtoKlikiminSell = async function() {
+window.trajtoKlikiminSellNow = async function() {
     // 1. Kontrollo statusin e logimit
     const { data: { session } } = await myOraSwissClient.auth.getSession();
 
     if (session) {
         // Nëse është i loguar, dërgoje te faqja e shitjes (sigurohu që emri i skedarit është i saktë)
-        window.location.href = 'sell.html'; 
+        window.location.href = 'sellnow.html'; 
     } else {
         // Nëse NUK është i loguar, dërgoje te faqja e Login
         window.location.href = 'login.html'; 

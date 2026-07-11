@@ -210,16 +210,29 @@ window.trajtoKlikiminSell = async function() {
 };
 
 // Funksioni për ta shfaqur butonin vetëm kur përdoruesi është i loguar
-async function kontrolloDheShfaqSellNow() {
+// 1. Funksioni që kontrollon nëse je loguar dhe shfaq butonin kur hapet faqja
+async function kontrolloSesionin() {
     const { data: { session } } = await supabase.auth.getSession();
     const btnSell = document.getElementById("btnSellNow");
+    
     if (session && btnSell) {
-        btnSell.style.display = "block"; 
+        btnSell.style.display = "inline-block"; // E shfaq butonin
     }
 }
 
-// E thërrasim funksionin sapo faqja të hapet
-kontrolloDheShfaqSellNow();
+// 2. Funksioni që aktivizohet KUR KLIKON butonin
+window.trajtoKlikiminSell = async function() {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (session) {
+        window.location.href = 'sell.html'; // Sigurohu që ky skedar ekziston
+    } else {
+        window.location.href = 'login.html';
+    }
+};
+
+// E thërrasim kontrollin sapo hapet faqja
+kontrolloSesionin();
   
     // Ngarkimi i kategorive
     loadCategory('luxury', 'luxury-container');

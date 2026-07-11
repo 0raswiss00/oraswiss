@@ -262,21 +262,16 @@ async function loadProductCount() {
 }
 
 // Funksioni për të numëruar përdoruesit
-/ Funksioni i saktë për të numëruar përdoruesit total nga tabela 'profiles'
 async function loadUserCount() {
     try {
-        // Numërojmë direkt rreshtat nga tabela 'profiles'
-        const { count, error } = await supabase
-            .from('profiles') // Sigurohu që emri i tabelës është ky (si në foto)
-            .select('*', { count: 'exact', head: true });
-
+        const { data, error, count } = await supabase
+            .from('oras')
+            .select('user_id', { count: 'exact' });
+        
         if (error) throw error;
-
-        // Vendosim numrin në HTML
-        const countElement = document.getElementById('count-users');
-        if (countElement) {
-            countElement.textContent = count || 0;
-        }
+        
+        const uniqueUsers = [...new Set(data?.map(w => w.user_id).filter(Boolean))];
+        document.getElementById('count-users').textContent = uniqueUsers.length;
     } catch (err) {
         console.error("Gabim te loadUserCount:", err);
     }

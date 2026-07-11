@@ -126,6 +126,19 @@ async function loadCategory(cat, containerId) {
         return;
     }
 
+    async function trajtoKlikiminSell() {
+        // Kontrollo sesionin me klientin 'supabase' që ke krijuar në rreshtin 109
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (session) {
+            // Nëse je loguar, të çon te faqja e shitjes
+            window.location.href = 'sell.html';
+        } else {
+            // Nëse NUK je loguar, të çon te login
+            window.location.href = 'login.html';
+        }
+    }
+  
     if (!data || data.length === 0) {
         container.innerHTML = "No items in this category.";
         return;

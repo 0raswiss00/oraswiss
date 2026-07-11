@@ -264,14 +264,16 @@ async function loadProductCount() {
 // Funksioni për të numëruar përdoruesit
 async function loadUserCount() {
     try {
-        const { data, error, count } = await supabase
-            .from('oras')
-            .select('user_id', { count: 'exact' });
-        
+        // Numërojmë të gjitha rreshtat nga tabela 'profiles' (ose tabela ku ruani përdoruesit)
+        const { count, error } = await supabase
+            .from('profiles') // Sigurohuni që emri i tabelës është ky
+            .select('*', { count: 'exact', head: true });
+
         if (error) throw error;
+
+        // Vendosim numrin direkt në elementin HTML
+        document.getElementById('count-users').textContent = count || 0;
         
-        const uniqueUsers = [...new Set(data?.map(w => w.user_id).filter(Boolean))];
-        document.getElementById('count-users').textContent = uniqueUsers.length;
     } catch (err) {
         console.error("Gabim te loadUserCount:", err);
     }

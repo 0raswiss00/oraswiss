@@ -267,7 +267,7 @@ async function loadUserCount() {
         // Numërojmë direkt rreshtat nga tabela 'profiles' 
         // Sigurohuni që tabela juaj e përdoruesve quhet 'profiles'
         const { count, error } = await supabase
-            .from('users') 
+            .from('Users') 
             .select('*', { count: 'exact', head: true });
 
         if (error) throw error;

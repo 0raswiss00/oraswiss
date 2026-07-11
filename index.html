@@ -240,23 +240,24 @@ kontrolloSesionin();
     loadCategory('parts', 'parts-container');
 
 // Funksioni për të numëruar produktet (orët)
-async function loadUserCount() {
+async function loadProductCount() {
     try {
-        // Numërojmë të gjitha rreshtat nga tabela 'profiles' 
-        // (Zëvendëso 'profiles' me emrin e saktë të tabelës ku ke 4 përdoruesit)
+        console.log("Duke u lidhur me Supabase për produkte...");
         const { count, error } = await supabase
-            .from('profiles') 
-            .select('*', { count: 'exact', head: true });
+            .from('oras') // Përdor tabelën 'oras' që konfirmuat
+            .select('*', { count: 'exact' });
 
-        if (error) throw error;
-
-        // Përditësojmë elementin në HTML
-        const userCountElement = document.getElementById('count-users');
-        if (userCountElement) {
-            userCountElement.textContent = count || 0;
+        if (error) {
+            console.error("GABIM SUPABASE:", error);
+        } else {
+            console.log("Numri i produkteve:", count);
+            const element = document.getElementById('count-products');
+            if (element) {
+                element.textContent = count || 0;
+            }
         }
     } catch (err) {
-        console.error("Gabim te loadUserCount:", err);
+        console.error("Gabim i papritur:", err);
     }
 }
 

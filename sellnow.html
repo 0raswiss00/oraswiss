@@ -220,6 +220,12 @@ Service Completed
 
 
 <label>
+<input id="service" type="checkbox">
+Service Completed
+</label>
+
+    
+<label>
 <input id="box_papers" type="checkbox">
 Box / Papers
 </label>
@@ -445,6 +451,8 @@ const oraData = {
 
     caliber: document.getElementById("caliber").value,
 
+    frekuen: document.getElementById("frekuen").value,
+    
     material: document.getElementById("material").value,
 
     case_size: document.getElementById("case_size").value,
@@ -459,6 +467,8 @@ const oraData = {
 
     service: document.getElementById("service").checked,
 
+    service_date: document.getElementById("service_date").value,
+    
     box_papers: document.getElementById("box_papers").checked,
 
     origin: document.getElementById("origin").value,

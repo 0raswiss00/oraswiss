@@ -526,62 +526,6 @@ window.location.href =
 
 
 
-// Ndryshon Reference / Caliber
-
-window.updateLabels = function(){
-
-
-const type = document.querySelector(
-'input[name="ref_type"]:checked'
-).value;
-
-
-
-document.getElementById(
-"reference-label"
-).innerText =
-type + ":";
-
-
-
-document.getElementById(
-"reference"
-).placeholder =
-type + " number";
-
-
-
-};
-
-
-
-
-// Ndryshon Case Size / Movement Size
-
-window.updateSizeLabel = function(){
-
-
-const sizeType = document.querySelector(
-'input[name="size_option"]:checked'
-).value;
-
-
-
-document.getElementById(
-"size-label"
-).innerText =
-sizeType + ":";
-
-
-
-document.getElementById(
-"size_input"
-).placeholder =
-sizeType + " (example: 40mm)";
-
-
-
-};
 
 
 </script>

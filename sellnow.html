@@ -467,7 +467,7 @@ const oraData = {
 
     service: document.getElementById("service").checked,
 
-    service_date: document.getElementById("service_date").value,
+    service_date: document.getElementById("service_date")?.value || null,
     
     box_papers: document.getElementById("box_papers").checked,
 

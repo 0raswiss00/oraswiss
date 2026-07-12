@@ -31,15 +31,33 @@
   <label>Price:</label>
   <input type="number" id="price" placeholder="Price in €" style="width:100%;margin-bottom:15px;padding:10px;">
 
-  <div class="row">
-      <label id="ref-cal-label" for="reference">Reference:</label>
-      <input type="text" id="reference" placeholder="Reference">
+  <div class="row">   
       <input type="text" id="material" placeholder="Material">
   </div>
 
-  <div class="row">
-      <label id="case-size-label" for="case_size">Case Size (e.g. 41mm):</label>
-      <input type="text" id="case_size" placeholder="Case Size (e.g. 41mm)">
+  <div class="row" style="margin-bottom: 15px;">
+      <label>
+          <input type="radio" name="ref_type" value="reference" checked onclick="updateLabels()"> Reference
+      </label>
+      <label style="margin-left: 20px;">
+          <input type="radio" name="ref_type" value="caliber" onclick="updateLabels()"> Caliber
+      </label>
+  </div>
+  
+  <div class="row" style="margin-bottom: 15px;">
+      <label>
+          <input type="radio" name="size_option" value="case" checked onclick="updateSizeLabel()"> Case Size
+      </label>
+      <label style="margin-left: 20px;">
+          <input type="radio" name="size_option" value="movement" onclick="updateSizeLabel()"> Movement Size
+      </label>
+  </div>
+
+  <!-- Kjo është kutia ku shkruani masën (p.sh. 20mm) -->
+  <label id="size-label" for="size_input">Case Size:</label>
+  <input type="text" id="size_input" placeholder="e.g. 40mm">
+  
+  <div class="row">    
       <input type="number" id="year" placeholder="Year">
   </div>
 

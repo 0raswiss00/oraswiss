@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<title>Movement Parts</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+body{
+    background:#0b0b0b;
+    color:white;
+    font-family:Arial;
+    padding:20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:#111;
+    border:1px solid #333;
+    border-radius:10px;
+    padding:15px;
+}
+
+.card img{
+    width:100%;
+    height:200px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+.price{
+    color:#25D366;
+    font-weight:bold;
+}
+
+a{
+    color:white;
+    text-decoration:none;
+}
+</style>
+
+</head>
+
+<body>
+
+<h2>Movement Parts Collection</h2>
+
+<div id="container" class="grid">
+Loading...
+</div>
+
+
+<script>
+
+const supabase = window.supabase.createClient(
+"https://gnwsrmelmeqduhhmfmoa.supabase.co",
+"sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
+
+
+
+async function loadParts(){
+
+const container=document.getElementById("container");
+
+
+const {data,error}=await supabase
+.from("oras")
+.select("*")
+.eq("category","Movement Parts");
+
+
+if(error){
+
+container.innerHTML="Gabim: "+error.message;
+return;
+
+}
+
+
+
+if(!data || data.length===0){
+
+container.innerHTML="Nuk ka pjesë mekanizmi.";
+return;
+
+}
+
+
+
+container.innerHTML=data.map(item=>`
+
+<div class="card">
+
+<a href="product.html?id=${item.id}">
+
+<img src="${item.image_url?.[0] || ''}">
+
+<h3>
+${item.brand || ""} ${item.model || ""}
+</h3>
+
+<div class="price">
+${item.price ? item.price+" €" : "Contact"}
+</div>
+
+</a>
+
+</div>
+
+`).join("");
+
+}
+
+
+loadParts();
+
+</script>
+
+</body>
+</html>

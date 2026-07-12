@@ -440,85 +440,41 @@ const oraData = {
 
     model: document.getElementById("model").value,
 
-    price: parseInt(
-        document.getElementById("price").value
-    ) || null,
+    price: parseInt(document.getElementById("price").value) || null,
 
+    reference: document.getElementById("reference").value,
 
-ref_type: document.querySelector(
-    'input[name="ref_type"]:checked'
-).value,
+    caliber: document.getElementById("caliber").value,
 
+    material: document.getElementById("material").value,
 
-reference: document.querySelector(
-    'input[name="ref_type"]:checked'
-).value === "Reference"
-? document.getElementById("reference").value
-: null,
+    case_size: document.getElementById("case_size").value,
 
+    movement_size: document.getElementById("movement_size").value,
 
-caliber: document.querySelector(
-    'input[name="ref_type"]:checked'
-).value === "Caliber"
-? document.getElementById("reference").value
-: null,
-
-
-material: document.getElementById("material").value,
-
-
-case_size: document.getElementById("case_size").value,
-
-movement_size: document.getElementById("movement_size").value,
-
-
-movement_size: document.querySelector(
-    'input[name="size_option"]:checked'
-).value === "Movement Size"
-? document.getElementById("size_input").value
-: null,
-
-
-    year: parseInt(
-        document.getElementById("year").value
-    ) || null,
-
+    year: parseInt(document.getElementById("year").value) || null,
 
     movement: document.getElementById("movement").value,
 
-
     function: document.getElementById("function").value,
-
 
     service: document.getElementById("service").checked,
 
-
     box_papers: document.getElementById("box_papers").checked,
-
 
     origin: document.getElementById("origin").value,
 
-
     work_status: document.getElementById("work_status").value,
-
 
     bracelet: document.getElementById("bracelet").value,
 
-
     warranty: document.getElementById("warranty").value,
 
+    warranty_months: document.getElementById("warranty_months").value || null,
 
-    warranty_months:
-    document.getElementById("warranty_months").value || null,
+    serial_number: document.getElementById("serial_number").value,
 
-
-    serial_number:
-    document.getElementById("serial_number").value,
-
-
-    description:
-    document.getElementById("description").value,
-
+    description: document.getElementById("description").value,
 
     image_url: imageUrls
 

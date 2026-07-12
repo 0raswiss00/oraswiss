@@ -487,23 +487,40 @@ const oraData = {
     ) || null,
 
 
-    ref_type: document.querySelector(
-        'input[name="ref_type"]:checked'
-    ).value,
+ref_type: document.querySelector(
+    'input[name="ref_type"]:checked'
+).value,
 
 
-    reference: document.getElementById("reference").value,
+reference: document.querySelector(
+    'input[name="ref_type"]:checked'
+).value === "Reference"
+? document.getElementById("reference").value
+: null,
 
 
-    material: document.getElementById("material").value,
+caliber: document.querySelector(
+    'input[name="ref_type"]:checked'
+).value === "Caliber"
+? document.getElementById("reference").value
+: null,
 
 
-    size_category: document.querySelector(
-        'input[name="size_option"]:checked'
-    ).value,
+material: document.getElementById("material").value,
 
 
-    size: document.getElementById("size_input").value,
+case_size: document.querySelector(
+    'input[name="size_option"]:checked'
+).value === "Case Size"
+? document.getElementById("size_input").value
+: null,
+
+
+movement_size: document.querySelector(
+    'input[name="size_option"]:checked'
+).value === "Movement Size"
+? document.getElementById("size_input").value
+: null,
 
 
     year: parseInt(

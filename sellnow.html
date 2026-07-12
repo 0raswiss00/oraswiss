@@ -467,11 +467,9 @@ caliber: document.querySelector(
 material: document.getElementById("material").value,
 
 
-case_size: document.querySelector(
-    'input[name="size_option"]:checked'
-).value === "Case Size"
-? document.getElementById("size_input").value
-: null,
+case_size: document.getElementById("case_size").value,
+
+movement_size: document.getElementById("movement_size").value,
 
 
 movement_size: document.querySelector(

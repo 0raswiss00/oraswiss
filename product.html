@@ -128,7 +128,7 @@
                        <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>
         
                        <hr>
-                       <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
+                       <p><strong>${(data.category === 'Parts' || data.category === 'Movement') ? 'Caliber:' : 'Reference:'}</strong> ${data.reference || 'N/A'}</p>
                        
                        <p><strong>Case Size:</strong> ${data.case_size || 'N/A'}</p>
 

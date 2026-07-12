@@ -135,33 +135,7 @@ button:hover {
 
 
 
-<div class="radio-row">
-
 <label>
-<input 
-type="radio"
-name="ref_type"
-value="Reference"
-checked
-onclick="updateLabels()">
-Reference
-</label>
-
-
-<label>
-<input 
-type="radio"
-name="ref_type"
-value="Caliber"
-onclick="updateLabels()">
-Caliber
-</label>
-
-</div>
-
-
-
-<label id="reference-label">
 Reference:
 </label>
 
@@ -171,53 +145,37 @@ type="text"
 placeholder="Reference number">
 
 
-<div class="radio-row">
 
 <label>
-<input
-type="radio"
-name="size_option"
-value="Case Size"
-checked
-onclick="updateSizeLabel()">
-
-Case Size
+Caliber:
 </label>
+
+<input 
+id="caliber"
+type="text"
+placeholder="Caliber number">
+
 
 
 <label>
-<input
-type="radio"
-name="size_option"
-value="Movement Cal"
-onclick="updateSizeLabel()">
-
-Movement Cal
-</label>
-
-
-<label>
-<input
-type="radio"
-name="size_option"
-value="Movement Size"
-onclick="updateSizeLabel()">
-
-Movement Size
-</label>
-
-</div>
-
-
-<label id="size-label">
 Case Size:
 </label>
 
-
 <input 
-id="size_input"
+id="case_size"
 type="text"
 placeholder="Example: 40mm">
+
+
+
+<label>
+Movement Size:
+</label>
+
+<input 
+id="movement_size"
+type="text"
+placeholder="Example: 18mm">
 
 
 <label>Year</label>

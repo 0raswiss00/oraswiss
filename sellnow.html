@@ -1,261 +1,773 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Sell Your Watch</title>
-  <style>
-    body { font-family: Arial; background: #000; color: #fff; padding: 20px; }
-    form { max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border-radius: 10px; }
-    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-    input, select, textarea { width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px; box-sizing: border-box;}
-    button { width: 100%; padding: 15px; background: gold; color: #000; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Add New Watch</title>
+
+<style>
+body {
+    background:#111;
+    color:white;
+    font-family:Arial, sans-serif;
+}
+
+form {
+    max-width:600px;
+    margin:30px auto;
+    background:#1b1b1b;
+    padding:25px;
+    border-radius:10px;
+}
+
+h2 {
+    text-align:center;
+}
+
+label {
+    display:block;
+    margin-top:12px;
+    margin-bottom:5px;
+    color:#ccc;
+}
+
+input, select, textarea {
+    width:100%;
+    padding:10px;
+    background:#222;
+    color:white;
+    border:1px solid #444;
+    border-radius:5px;
+    box-sizing:border-box;
+}
+
+.row {
+    display:flex;
+    gap:15px;
+    margin-top:10px;
+}
+
+.row > * {
+    flex:1;
+}
+
+.radio-row {
+    display:flex;
+    gap:20px;
+    margin-top:15px;
+}
+
+.radio-row label {
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+.radio-row input {
+    width:auto;
+}
+
+.checkbox-row {
+    display:flex;
+    justify-content:space-between;
+    margin-top:15px;
+}
+
+button {
+    width:100%;
+    margin-top:20px;
+    padding:12px;
+    background:#c9a227;
+    color:white;
+    border:none;
+    border-radius:5px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover {
+    opacity:.8;
+}
+
+@media(max-width:600px){
+    .row {
+        flex-direction:column;
+    }
+}
+</style>
+
 </head>
+
 <body>
+
 <form id="sellForm">
 
-  <h2>Add New Watch</h2>
+<h2>Add New Watch</h2>
 
-  <label>Category:</label>
-  <select id="category" style="width:100%;margin-bottom:15px;">
-    <option value="luxury">Luxury</option>
-    <option value="vintage">Vintage</option>
-    <option value="parts">Parts</option>
-  </select>
 
-  <div class="row">
-    <input type="text" id="brand" placeholder="Brand" required>
-    <input type="text" id="model" placeholder="Model" required>
-  </div>
+<label>Category:</label>
 
-  <label>Price:</label>
-  <input type="number" id="price" placeholder="Price in €" style="width:100%;margin-bottom:15px;padding:10px;">
+<select id="category">
+<option value="Luxury">Luxury</option>
+<option value="Vintage">Vintage</option>
+<option value="Parts">Parts</option>
+</select>
 
-  <div class="row">   
-      <input type="text" id="material" placeholder="Material">
-  </div>
 
-  <div class="row" style="margin-bottom: 15px;">
-      <label>
-          <input type="radio" name="ref_type" value="reference" checked onclick="updateLabels()"> Reference
-      </label>
-      <label style="margin-left: 20px;">
-          <input type="radio" name="ref_type" value="caliber" onclick="updateLabels()"> Caliber
-      </label>
-  </div>
-  
-  <div class="row" style="margin-bottom: 15px;">
-      <label>
-          <input type="radio" name="size_option" value="case" checked onclick="updateSizeLabel()"> Case Size
-      </label>
-      <label style="margin-left: 20px;">
-          <input type="radio" name="size_option" value="movement" onclick="updateSizeLabel()"> Movement Size
-      </label>
-  </div>
+<div class="row">
 
-  <!-- Kjo është kutia ku shkruani masën (p.sh. 20mm) -->
-  <label id="size-label" for="size_input">Case Size:</label>
-  <input type="text" id="size_input" placeholder="e.g. 40mm">
-  
-  <div class="row">    
-      <input type="number" id="year" placeholder="Year">
-  </div>
+<input id="brand" type="text" placeholder="Brand" required>
 
-  <label>Movement:</label>
-  <select id="movement">
-    <option value="Automatic">Automatic</option>
-    <option value="Manual">Manual</option>
-    <option value="Quartz">Quartz</option>
-  </select>
+<input id="model" type="text" placeholder="Model" required>
 
-  <label>Function:</label>
-  <select id="function">
-    <option value="Date">Date</option>
-    <option value="Chronometer">Chronometer</option>
-    <option value="Chronograph">Chronograph</option>
-    <option value="Chronograph">Chronograph Date</option>
-    <option value="Tourbillon">Tourbillon</option>
-    <option value="Only time">Only time</option>
-    <option value="No Date">No Date</option>
-  </select>
+</div>
 
-  <div class="row">
-    <label>
-      <input type="checkbox" id="service"> Service Completed
-    </label>
 
-    <label>
-      <input type="checkbox" id="box_papers"> Box / Papers
-    </label>
-  </div>
+<label>Price (€)</label>
 
-  <div class="row">
-    <select id="origin">
-      <option value="Switzerland">Switzerland</option>
-      <option value="Other">Other</option>
-    </select>
+<input id="price" type="number">
 
-    <select id="work_status">
-      <option value="Working">Working</option>
-      <option value="Not working">Not Working</option>
-      <option value="Not tested">Not Tested</option>
-    </select>
-  </div>
 
-  <div class="row">
-    <select id="bracelet">
-      <option value="Leather">Leather</option>
-      <option value="Nato">Nato</option>
-      <option value="Rubber">Rubber</option>
-      <option value="Bracelet">Bracelet</option>
-      <option value="Bracelet">No Bracelet Leather </option>
-    </select>
-  </div>
+<label>Material</label>
 
-  <label>Warranty:</label>
-  <select id="warranty">
-    <option value="No Warranty">No Warranty</option>
-    <option value="Warranty">Yes</option>
-  </select>
+<input id="material" type="text" placeholder="Steel, Gold, Titanium...">
 
-  <div style="margin-top:15px;">
-    <label>Warranty Period (Months):</label>
-    <input type="number" id="warranty_months" placeholder="Example: 12">
-  </div>
 
-  <div style="margin-top:15px">
-    <input type="text" id="serial_number" placeholder="Serial Number">
-  </div>
 
-  <textarea 
-    id="description" 
-    placeholder="Description..." 
-    rows="4"
-    style="width:100%;padding:10px;background:#222;color:#fff;border:1px solid #444;border-radius:5px;box-sizing:border-box;">
-  </textarea>
+<div class="radio-row">
 
-  <div style="margin-top:15px">
-    <label style="color:#aaa;font-size:14px;">
-      Upload Watch Photos:
-    </label>
+<label>
+<input 
+type="radio"
+name="ref_type"
+value="Reference"
+checked
+onclick="updateLabels()">
+Reference
+</label>
 
-    <input 
-      type="file" 
-      id="fileInput" 
-      name="images[]" 
-      accept="image/*" 
-      multiple>
-  </div>
 
-  <button type="submit">Sell Now</button>
+<label>
+<input 
+type="radio"
+name="ref_type"
+value="Caliber"
+onclick="updateLabels()">
+Caliber
+</label>
+
+</div>
+
+
+
+<label id="reference-label">
+Reference:
+</label>
+
+<input 
+id="reference"
+type="text"
+placeholder="Reference number">
+
+
+
+<div class="radio-row">
+
+<label>
+
+<input
+type="radio"
+name="size_option"
+value="Case Size"
+checked
+onclick="updateSizeLabel()">
+
+Case Size
+
+</label>
+
+
+<label>
+
+<input
+type="radio"
+name="size_option"
+value="Movement Size"
+onclick="updateSizeLabel()">
+
+Movement Size
+
+</label>
+
+
+</div>
+
+
+
+<label id="size-label">
+Case Size:
+</label>
+
+
+<input 
+id="size_input"
+type="text"
+placeholder="Example: 40mm">
+
+
+
+<label>Year</label>
+
+<input id="year" type="number">
+
+
+
+<label>Movement</label>
+
+<select id="movement">
+
+<option value="Automatic">Automatic</option>
+<option value="Manual">Manual</option>
+<option value="Quartz">Quartz</option>
+
+</select>
+
+
+
+<label>Function</label>
+
+<select id="function">
+
+<option>Date</option>
+<option>Chronometer</option>
+<option>Chronograph</option>
+<option>Chronograph Date</option>
+<option>Tourbillon</option>
+<option>Only time</option>
+<option>No Date</option>
+
+</select>
+
+
+
+<div class="checkbox-row">
+
+<label>
+<input id="service" type="checkbox">
+Service Completed
+</label>
+
+
+<label>
+<input id="box_papers" type="checkbox">
+Box / Papers
+</label>
+
+
+</div>
+
+
+
+<label>Origin</label>
+
+<select id="origin">
+
+<option>Switzerland</option>
+<option>Other</option>
+
+</select>
+
+
+
+<label>Work Status</label>
+
+<select id="work_status">
+
+<option>Working</option>
+<option>Not Working</option>
+<option>Not Tested</option>
+
+</select>
+
+
+
+<label>Bracelet</label>
+
+<select id="bracelet">
+
+<option>Leather</option>
+<option>Nato</option>
+<option>Rubber</option>
+<option>Bracelet</option>
+<option>No Bracelet Leather</option>
+
+</select>
+
+
+
+<label>Warranty</label>
+
+<select id="warranty">
+
+<option>No Warranty</option>
+<option>Warranty</option>
+
+</select>
+
+
+<label>Warranty Months</label>
+
+<input id="warranty_months" type="number">
+
+
+
+<label>Serial Number</label>
+
+<input id="serial_number" type="text">
+
+
+
+<label>Description</label>
+
+<textarea 
+id="description"
+rows="5"
+placeholder="Description">
+</textarea>
+
+
+
+<label>Upload Photos</label>
+
+<input 
+id="fileInput"
+type="file"
+accept="image/*"
+multiple>
+
+
+<button type="submit">
+Sell Now
+</button>
+
 
 </form>
+<script type="module">
+
+import { createClient } 
+from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+
+const supabase = createClient(
+
+'https://gnwsrmelmeqduhhmfmoa.supabase.co',
+
+'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
+
+);
+
+
+
+/*
+ Kontrollon nëse përdoruesi është i loguar
+*/
+
+const { data: { user } } = await supabase.auth.getUser();
+
+
+if(!user){
+
+    alert("Duhet të jesh i loguar!");
+
+    window.location.href="register.html";
+
+}
+
+
+
+/*
+ Submit Form
+*/
+
+document
+.getElementById("sellForm")
+.addEventListener("submit", async function(e){
+
+
+e.preventDefault();
+
+
+
+const files = document
+.getElementById("fileInput")
+.files;
+
+
+
+let imageUrls = [];
+
+
+
+/*
+ Upload fotot në Storage
+*/
+
+
+for(let i=0; i<files.length; i++){
+
+
+    const file = files[i];
+
+
+    const fileName = 
+    Date.now() + "" + i + "" + file.name;
+
+
+
+    const { error: uploadError } = await supabase
+    .storage
+    .from("or-images")
+    .upload(fileName,file);
+
+
+
+    if(uploadError){
+
+        alert(
+        "Gabim gjatë upload fotos: "
+        + uploadError.message
+        );
+
+        return;
+
+    }
+
+
+
+    const { data:urlData } =
+    supabase
+    .storage
+    .from("or-images")
+    .getPublicUrl(fileName);
+
+
+
+    imageUrls.push(
+        urlData.publicUrl
+    );
+
+
+}
+
+
+
+console.log(
+"Fotot:",
+imageUrls
+);
 
 <script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-  const supabase = createClient(
-    'https://gnwsrmelmeqduhhmfmoa.supabase.co',
-    'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
-  );
-
-  supabase.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN') {
-      console.log("Përdoruesi u logua me sukses");
-    } else if (!session) {
-      window.location.href = 'register.html';
-    }
-  });
-
-  document.getElementById('sellForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-      alert("Duhet të jesh i loguar!");
-      return;
-    }
+import { createClient } 
+from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
 
-    const files = document.getElementById('fileInput').files;
-    let imageUrls = [];
+const supabase = createClient(
+
+'https://gnwsrmelmeqduhhmfmoa.supabase.co',
+
+'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
+
+);
 
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const fileName = Date.now() + '' + i + '' + file.name;
 
-      const { error: uploadError } = await supabase
-        .storage.from('or-images')
-        .upload(fileName, file);
+/*
+ Kontrollon nëse përdoruesi është i loguar
+*/
 
-      if (uploadError) {
-        alert("Gabim foto: " + uploadError.message);
+const { data: { user } } = await supabase.auth.getUser();
+
+
+if(!user){
+
+    alert("Duhet të jesh i loguar!");
+
+    window.location.href="register.html";
+
+}
+
+
+
+/*
+ Submit Form
+*/
+
+document
+.getElementById("sellForm")
+.addEventListener("submit", async function(e){
+
+
+e.preventDefault();
+
+
+
+const files = document
+.getElementById("fileInput")
+.files;
+
+
+
+let imageUrls = [];
+
+
+
+/*
+ Upload fotot në Storage
+*/
+
+
+for(let i=0; i<files.length; i++){
+
+
+    const file = files[i];
+
+
+    const fileName = 
+    Date.now() + "" + i + "" + file.name;
+
+
+
+    const { error: uploadError } = await supabase
+    .storage
+    .from("or-images")
+    .upload(fileName,file);
+
+
+
+    if(uploadError){
+
+        alert(
+        "Gabim gjatë upload fotos: "
+        + uploadError.message
+        );
+
         return;
-      }
 
-      const { data: urlData } = supabase
-        .storage.from('or-images')
-        .getPublicUrl(fileName);
-
-      imageUrls.push(urlData.publicUrl);
-    }
-
-    // --- SHTO KËTË LOGJIKË KËTU (Mbi rreshtin 188) ---
-    document.getElementById('category').addEventListener('change', function() {
-        const isPart = (this.value === 'Parts' || this.value === 'Movement');
-    
-        // Ndrysho etiketat
-        const refLabel = document.querySelector('label[for="reference"]');
-        if (refLabel) refLabel.innerText = isPart ? "Caliber:" : "Reference:";
-    
-        const caseLabel = document.querySelector('label[for="case_size"]');
-        if (caseLabel) caseLabel.innerText = isPart ? "Movement Size:" : "Case Size (e.g. 41mm):";
-    });
-    // ------------------------------------------------
-
-    const oraData = {
-        user_id: user.id,
-        category: document.getElementById('category').value,
-        brand: document.getElementById('brand').value,
-        model: document.getElementById('model').value,
-        price: parseInt(document.getElementById('price').value) || null,
-        reference: document.getElementById('reference').value,
-        material: document.getElementById('material').value,
-        case_size: document.getElementById('case_size').value,
-        year: parseInt(document.getElementById('year').value) || null,
-        movement: document.getElementById('movement').value,
-        function: document.getElementById('function').value,
-        origin: document.getElementById('origin').value,
-        work_status: document.getElementById('work_status').value,
-        bracelet: document.getElementById('bracelet').value,
-        warranty: document.getElementById('warranty').value,
-        warranty_months: document.getElementById('warranty_months').value,
-        serial_number: document.getElementById('serial_number').value,
-        service: document.getElementById('service').checked,
-        box_papers: document.getElementById('box_papers').checked,
-        description: document.getElementById('description').value,
-        image_url: imageUrls
-    };
-
-    const { error } = await supabase
-      .from('oras')
-      .insert([oraData]);
-
-
-    if (error) {
-      alert("Gabim: " + error.message);
-      return;
     }
 
 
-    alert("Ora u publikua me sukses!");
-    window.location.href = 'dashboard.html';
 
-  });
+    const { data:urlData } =
+    supabase
+    .storage
+    .from("or-images")
+    .getPublicUrl(fileName);
+
+
+
+    imageUrls.push(
+        urlData.publicUrl
+    );
+
+
+}
+
+
+
+console.log(
+"Fotot:",
+imageUrls
+);
+// Krijimi i objektit të orës
+
+const oraData = {
+
+    user_id: user.id,
+
+    category: document.getElementById("category").value,
+
+    brand: document.getElementById("brand").value,
+
+    model: document.getElementById("model").value,
+
+    price: parseInt(
+        document.getElementById("price").value
+    ) || null,
+
+
+    ref_type: document.querySelector(
+        'input[name="ref_type"]:checked'
+    ).value,
+
+
+    reference: document.getElementById("reference").value,
+
+
+    material: document.getElementById("material").value,
+
+
+    size_category: document.querySelector(
+        'input[name="size_option"]:checked'
+    ).value,
+
+
+    size: document.getElementById("size_input").value,
+
+
+    year: parseInt(
+        document.getElementById("year").value
+    ) || null,
+
+
+    movement: document.getElementById("movement").value,
+
+
+    function: document.getElementById("function").value,
+
+
+    service: document.getElementById("service").checked,
+
+
+    box_papers: document.getElementById("box_papers").checked,
+
+
+    origin: document.getElementById("origin").value,
+
+
+    work_status: document.getElementById("work_status").value,
+
+
+    bracelet: document.getElementById("bracelet").value,
+
+
+    warranty: document.getElementById("warranty").value,
+
+
+    warranty_months:
+    document.getElementById("warranty_months").value || null,
+
+
+    serial_number:
+    document.getElementById("serial_number").value,
+
+
+    description:
+    document.getElementById("description").value,
+
+
+    image_url: imageUrls
+
+};
+
+
+
+console.log(
+"Po dërgoj:",
+oraData
+);
+
+
+
+// Futja në databazën Supabase
+
+const { error } = await supabase
+
+.from("oras")
+
+.insert([oraData]);
+
+
+
+if(error){
+
+    alert(
+    "Gabim gjatë publikimit: "
+    + error.message
+    );
+
+    return;
+
+}
+
+
+
+alert(
+"🏆 Ora u publikua me sukses!"
+);
+
+
+window.location.href =
+"dashboard.html";
+
+
+
+});
+
+
+
+// Ndryshon Reference / Caliber
+
+window.updateLabels = function(){
+
+
+const type = document.querySelector(
+'input[name="ref_type"]:checked'
+).value;
+
+
+
+document.getElementById(
+"reference-label"
+).innerText =
+type + ":";
+
+
+
+document.getElementById(
+"reference"
+).placeholder =
+type + " number";
+
+
+
+};
+
+
+
+
+// Ndryshon Case Size / Movement Size
+
+window.updateSizeLabel = function(){
+
+
+const sizeType = document.querySelector(
+'input[name="size_option"]:checked'
+).value;
+
+
+
+document.getElementById(
+"size-label"
+).innerText =
+sizeType + ":";
+
+
+
+document.getElementById(
+"size_input"
+).placeholder =
+sizeType + " (example: 40mm)";
+
+
+
+};
+
 
 </script>
 
 </body>
+
 </html>
+                  

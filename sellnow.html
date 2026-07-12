@@ -32,8 +32,9 @@
   <input type="number" id="price" placeholder="Price in €" style="width:100%;margin-bottom:15px;padding:10px;">
 
   <div class="row">
-    <input type="text" id="reference" placeholder="Reference">
-    <input type="text" id="material" placeholder="Material">
+      <label id="ref-cal-label">Reference:</label>
+      <input type="text" id="reference" placeholder="Reference">
+      <input type="text" id="material" placeholder="Material">
   </div>
 
   <div class="row">
@@ -184,33 +185,28 @@
 
 
     const oraData = {
-      user_id: user.id,
-      category: document.getElementById('category').value,
-      brand: document.getElementById('brand').value,
-      model: document.getElementById('model').value,
-      price: parseInt(document.getElementById('price').value) || null,
-      reference: document.getElementById('reference').value,
-      material: document.getElementById('material').value,
-      case_size: document.getElementById('case_size').value,
-      year: parseInt(document.getElementById('year').value) || null,
-      movement: document.getElementById('movement').value,
-      function: document.getElementById('function').value,
-
-      origin: document.getElementById('origin').value,
-      work_status: document.getElementById('work_status').value,
-      bracelet: document.getElementById('bracelet').value,
-
-      warranty: document.getElementById('warranty').value,
-      warranty_months: document.getElementById('warranty_months').value,
-
-      serial_number: document.getElementById('serial_number').value,
-
-      service: document.getElementById('service').checked,
-      box_papers: document.getElementById('box_papers').checked,
-      description: document.getElementById('description').value,
-      image_url: imageUrls
+        user_id: user.id,
+        category: document.getElementById('category').value,
+        brand: document.getElementById('brand').value,
+        model: document.getElementById('model').value,
+        price: parseInt(document.getElementById('price').value) || null,
+        reference: document.getElementById('reference').value,
+        material: document.getElementById('material').value,
+        case_size: document.getElementById('case_size').value,
+        year: parseInt(document.getElementById('year').value) || null,
+        movement: document.getElementById('movement').value,
+        function: document.getElementById('function').value,
+        origin: document.getElementById('origin').value,
+        work_status: document.getElementById('work_status').value,
+        bracelet: document.getElementById('bracelet').value,
+        warranty: document.getElementById('warranty').value,
+        warranty_months: document.getElementById('warranty_months').value,
+        serial_number: document.getElementById('serial_number').value,
+        service: document.getElementById('service').checked,
+        box_papers: document.getElementById('box_papers').checked,
+        description: document.getElementById('description').value,
+        image_url: imageUrls
     };
-
 
     const { error } = await supabase
       .from('oras')

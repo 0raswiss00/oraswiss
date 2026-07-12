@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sell Your Watch</title>
+  <style>
+    body { font-family: Arial; background: #000; color: #fff; padding: 20px; }
+    form { max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border-radius: 10px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+    input, select, textarea { width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px; box-sizing: border-box;}
+    button { width: 100%; padding: 15px; background: gold; color: #000; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+  </style>
+</head>
+<body>
+<form id="sellForm">
+
+  <h2>Add New Watch</h2>
+
+  <label>Category:</label>
+  <select id="category" style="width:100%;margin-bottom:15px;">
+    <option value="luxury">Luxury</option>
+    <option value="vintage">Vintage</option>
+    <option value="parts">Parts</option>
+  </select>
+
+  <div class="row">
+    <input type="text" id="brand" placeholder="Brand" required>
+    <input type="text" id="model" placeholder="Model" required>
+  </div>
+
+  <label>Price:</label>
+  <input type="number" id="price" placeholder="Price in €" style="width:100%;margin-bottom:15px;padding:10px;">
+
+  <div class="row">
+    <input type="text" id="reference" placeholder="Reference">
+    <input type="text" id="material" placeholder="Material">
+  </div>
+
+  <div class="row">
+    <input type="text" id="case_size" placeholder="Case Size (e.g. 41mm)">
+    <input type="number" id="year" placeholder="Year">
+  </div>
+
+  <label>Movement:</label>
+  <select id="movement">
+    <option value="Automatic">Automatic</option>
+    <option value="Manual">Manual</option>
+    <option value="Quartz">Quartz</option>
+  </select>
+
+  <label>Function:</label>
+  <select id="function">
+    <option value="Date">Date</option>
+    <option value="Chronometer">Chronometer</option>
+    <option value="Chronograph">Chronograph</option>
+    <option value="Chronograph">Chronograph Date</option>
+    <option value="Tourbillon">Tourbillon</option>
+    <option value="Only time">Only time</option>
+    <option value="No Date">No Date</option>
+  </select>
+
+  <div class="row">
+    <label>
+      <input type="checkbox" id="service"> Service Completed
+    </label>
+
+    <label>
+      <input type="checkbox" id="box_papers"> Box / Papers
+    </label>
+  </div>
+
+  <div class="row">
+    <select id="origin">
+      <option value="Switzerland">Switzerland</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <select id="work_status">
+      <option value="Working">Working</option>
+      <option value="Not working">Not Working</option>
+      <option value="Not tested">Not Tested</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <select id="bracelet">
+      <option value="Leather">Leather</option>
+      <option value="Nato">Nato</option>
+      <option value="Rubber">Rubber</option>
+      <option value="Bracelet">Bracelet</option>
+      <option value="Bracelet">No Bracelet Leather </option>
+    </select>
+  </div>
+
+  <label>Warranty:</label>
+  <select id="warranty">
+    <option value="No Warranty">No Warranty</option>
+    <option value="Warranty">Yes</option>
+  </select>
+
+  <div style="margin-top:15px;">
+    <label>Warranty Period (Months):</label>
+    <input type="number" id="warranty_months" placeholder="Example: 12">
+  </div>
+
+  <div style="margin-top:15px">
+    <input type="text" id="serial_number" placeholder="Serial Number">
+  </div>
+
+  <textarea 
+    id="description" 
+    placeholder="Description..." 
+    rows="4"
+    style="width:100%;padding:10px;background:#222;color:#fff;border:1px solid #444;border-radius:5px;box-sizing:border-box;">
+  </textarea>
+
+  <div style="margin-top:15px">
+    <label style="color:#aaa;font-size:14px;">
+      Upload Watch Photos:
+    </label>
+
+    <input 
+      type="file" 
+      id="fileInput" 
+      name="images[]" 
+      accept="image/*" 
+      multiple>
+  </div>
+
+  <button type="submit">Sell Now</button>
+
+</form>
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+  const supabase = createClient(
+    'https://gnwsrmelmeqduhhmfmoa.supabase.co',
+    'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
+  );
+
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN') {
+      console.log("Përdoruesi u logua me sukses");
+    } else if (!session) {
+      window.location.href = 'register.html';
+    }
+  });
+
+  document.getElementById('sellForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      alert("Duhet të jesh i loguar!");
+      return;
+    }
+
+
+    const files = document.getElementById('fileInput').files;
+    let imageUrls = [];
+
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const fileName = Date.now() + '' + i + '' + file.name;
+
+      const { error: uploadError } = await supabase
+        .storage.from('or-images')
+        .upload(fileName, file);
+
+      if (uploadError) {
+        alert("Gabim foto: " + uploadError.message);
+        return;
+      }
+
+      const { data: urlData } = supabase
+        .storage.from('or-images')
+        .getPublicUrl(fileName);
+
+      imageUrls.push(urlData.publicUrl);
+    }
+
+
+    const oraData = {
+      user_id: user.id,
+      category: document.getElementById('category').value,
+      brand: document.getElementById('brand').value,
+      model: document.getElementById('model').value,
+      price: parseInt(document.getElementById('price').value) || null,
+      reference: document.getElementById('reference').value,
+      material: document.getElementById('material').value,
+      case_size: document.getElementById('case_size').value,
+      year: parseInt(document.getElementById('year').value) || null,
+      movement: document.getElementById('movement').value,
+      function: document.getElementById('function').value,
+
+      origin: document.getElementById('origin').value,
+      work_status: document.getElementById('work_status').value,
+      bracelet: document.getElementById('bracelet').value,
+
+      warranty: document.getElementById('warranty').value,
+      warranty_months: document.getElementById('warranty_months').value,
+
+      serial_number: document.getElementById('serial_number').value,
+
+      service: document.getElementById('service').checked,
+      box_papers: document.getElementById('box_papers').checked,
+      description: document.getElementById('description').value,
+      image_url: imageUrls
+    };
+
+
+    const { error } = await supabase
+      .from('oras')
+      .insert([oraData]);
+
+
+    if (error) {
+      alert("Gabim: " + error.message);
+      return;
+    }
+
+
+    alert("Ora u publikua me sukses!");
+    window.location.href = 'dashboard.html';
+
+  });
+
+</script>
+
+</body>
+</html>

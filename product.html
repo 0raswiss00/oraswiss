@@ -511,26 +511,48 @@ ${data.category || "N/A"}
 
 <p>
 <strong>
-${data.ref_type || "Reference"}:
+${
+data.ref_type === "movement"
+?
+"Caliber"
+:
+"Reference"
+}:
 </strong>
 
-${data.reference || "N/A"}
+${
+data.ref_type === "movement"
+?
+(data.caliber || "N/A")
+:
+(data.reference || "N/A")
+}
 
 </p>
-
 
 
 
 <p>
 
 <strong>
-${data.size_category || "Case Size"}:
+${
+data.ref_type === "movement"
+?
+"Movement Size"
+:
+"Case Size"
+}:
 </strong>
 
-${data.size || "N/A"}
+${
+data.ref_type === "movement"
+?
+(data.movement_size || "N/A")
+:
+(data.case_size || "N/A")
+}
 
 </p>
-
 
 
 

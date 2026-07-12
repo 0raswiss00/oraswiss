@@ -32,14 +32,15 @@
   <input type="number" id="price" placeholder="Price in €" style="width:100%;margin-bottom:15px;padding:10px;">
 
   <div class="row">
-      <label id="ref-cal-label">Reference:</label>
+      <label id="ref-cal-label" for="reference">Reference:</label>
       <input type="text" id="reference" placeholder="Reference">
       <input type="text" id="material" placeholder="Material">
   </div>
 
   <div class="row">
-    <input type="text" id="case_size" placeholder="Case Size (e.g. 41mm)">
-    <input type="number" id="year" placeholder="Year">
+      <label id="case-size-label" for="case_size">Case Size (e.g. 41mm):</label>
+      <input type="text" id="case_size" placeholder="Case Size (e.g. 41mm)">
+      <input type="number" id="year" placeholder="Year">
   </div>
 
   <label>Movement:</label>
@@ -183,6 +184,18 @@
       imageUrls.push(urlData.publicUrl);
     }
 
+    // --- SHTO KËTË LOGJIKË KËTU (Mbi rreshtin 188) ---
+    document.getElementById('category').addEventListener('change', function() {
+        const isPart = (this.value === 'Parts' || this.value === 'Movement');
+    
+        // Ndrysho etiketat
+        const refLabel = document.querySelector('label[for="reference"]');
+        if (refLabel) refLabel.innerText = isPart ? "Caliber:" : "Reference:";
+    
+        const caseLabel = document.querySelector('label[for="case_size"]');
+        if (caseLabel) caseLabel.innerText = isPart ? "Movement Size:" : "Case Size (e.g. 41mm):";
+    });
+    // ------------------------------------------------
 
     const oraData = {
         user_id: user.id,

@@ -67,6 +67,10 @@
             </div>
             <div class="info-row"><span>Origin</span><span id="origin">-</span></div>
             <div class="info-row"><span>Bracelet</span><span id="bracelet">-</span></div>
+            <div class="info-row">
+                <span>Glass</span>
+                <span id="glass">-</span>
+            </div>
             <div class="info-row"><span>Warranty</span><span id="warranty">-</span></div>
             <div class="info-row"><span>Warranty Months</span><span id="warranty_months">-</span></div>
             <div class="info-row"><span>Box & Papers</span><span id="box_papers">-</span></div>
@@ -165,6 +169,9 @@ async function loadProduct() {
         document.getElementById("bracelet").innerText =
             data.bracelet || "N/A";
 
+        document.getElementById("glass").innerText =
+            data.glass || "N/A";
+        
         document.getElementById("warranty").innerText =
             data.warranty || "N/A";
 

@@ -41,7 +41,7 @@
 
     <div class="details">
         <div class="brand" id="brand">Loading...</div>
-        <div class="title" id="title">Loading...</div>
+        <div class="model" id="model">Loading...</div>
         <div class="price" id="price">...</div>
         <div class="top-actions">
             <div class="action" onclick="shareProduct()">🔗 Share</div>
@@ -130,7 +130,12 @@ async function loadProduct() {
 
         currentImgIndex = 0;
 
+        document.getElementById("brand").textContent = product.brand;
 
+        document.getElementById("model").textContent = product.model;
+
+        document.getElementById("price").textContent = product.price + " €";
+        
         document.getElementById("reference").innerText =
             data.reference || "N/A";
 

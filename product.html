@@ -76,12 +76,14 @@
 
     
 <script>
-const { createClient } = supabase;
+if (typeof window.supabaseClient === 'undefined') {
+    window.supabaseClient = window.supabase.createClient(
+        "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+    );
+}
 
-const supabaseClient = createClient(
-    'https://gnwsrmelmeqduhhmfmoa.supabase.co',
-    'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
-);
+const supabase = window.supabaseClient;
 
 let currentImageIndex = 0;
 let productImages = [];
@@ -89,17 +91,18 @@ let productImages = [];
 const productId = new URLSearchParams(window.location.search).get('id');
 
 
-async function fetchProduct() {
+async function loadProduct() {
 
     if (!productId) {
-        console.error("Nuk u gjet ID e produktit");
+        console.error("Nuk ka ID produkti");
         return;
     }
 
-    const { data, error } = await supabaseClient
-        .from('watches')
-        .select('*')
-        .eq('id', productId)
+
+    const { data, error } = await supabase
+        .from("watches")
+        .select("*")
+        .eq("id", productId)
         .single();
 
 
@@ -109,12 +112,12 @@ async function fetchProduct() {
     }
 
 
-    document.getElementById('brand').innerText = data.brand || 'N/A';
-    document.getElementById('title').innerText = data.model || 'N/A';
-    document.getElementById('price').innerText =
+    document.getElementById("brand").innerText = data.brand || "N/A";
+    document.getElementById("title").innerText = data.model || "N/A";
+    document.getElementById("price").innerText =
         data.price ? data.price + " €" : "N/A";
 
-    document.getElementById('description').innerText =
+    document.getElementById("description").innerText =
         data.description || "N/A";
 
 
@@ -124,6 +127,7 @@ async function fetchProduct() {
         "caliber",
         "condition",
         "case_size",
+        "frequency",
         "movement_size",
         "function",
         "origin",
@@ -134,20 +138,23 @@ async function fetchProduct() {
 
 
     fields.forEach(field => {
-        const element = document.getElementById(field);
-
-        if (element) {
-            element.innerText = data[field] || "N/A";
+        const el = document.getElementById(field);
+        if (el) {
+            el.innerText = data[field] || "N/A";
         }
     });
 
 
-    document.getElementById('service').innerText =
-        data.service ? "Yes (Serviced)" : "No";
+    const service = document.getElementById("service");
+    if (service) {
+        service.innerText = data.service ? "Yes (Serviced)" : "No";
+    }
 
 
-    document.getElementById('box_papers').innerText =
-        data.box_papers ? "Full Set" : "Watch Only";
+    const box = document.getElementById("box_papers");
+    if (box) {
+        box.innerText = data.box_papers ? "Full Set" : "Watch Only";
+    }
 
 
     productImages = data.images || [];
@@ -155,12 +162,11 @@ async function fetchProduct() {
     updateGallery();
 
 
-    const whatsapp = document.getElementById('whatsapp');
+    const whatsapp = document.getElementById("whatsapp");
 
     if (whatsapp) {
         whatsapp.href =
-        "https://wa.me/3556XXXXXXXX?text=Interesuar%20per%20" 
-        + data.model;
+        "https://wa.me/3556XXXXXXXX?text=Interesuar%20per%20" + data.model;
     }
 
 }
@@ -174,12 +180,12 @@ function updateGallery() {
     }
 
 
-    const mainPhoto = document.getElementById('main-photo');
-    const counter = document.getElementById('photo-count');
+    const photo = document.getElementById("main-photo");
+    const counter = document.getElementById("photo-count");
 
 
-    if (mainPhoto) {
-        mainPhoto.src = productImages[currentImageIndex];
+    if (photo) {
+        photo.src = productImages[currentImageIndex];
     }
 
 
@@ -199,8 +205,7 @@ function changeImage(direction) {
     }
 
 
-    currentImageIndex =
-    currentImageIndex + direction;
+    currentImageIndex += direction;
 
 
     if (currentImageIndex < 0) {
@@ -228,8 +233,7 @@ function shareProduct() {
 }
 
 
-
-fetchProduct();
+loadProduct();
 
 </script>
 

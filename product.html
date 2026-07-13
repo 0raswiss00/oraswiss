@@ -2,217 +2,133 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <title>Ora Swiss - Detajet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Details</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
-        .product-card { background: #111; border: 1px solid #333; padding: 20px; max-width: 500px; margin: auto; border-radius: 10px; }
-        .product-img { width: 100%; height: auto; border-radius: 10px; margin-bottom: 15px; object-fit: cover; }
-        .price { color: #25D366; font-weight: bold; font-size: 1.4em; margin: 10px 0; }
-        hr { border: 0; border-top: 1px solid #333; margin: 15px 0; }
-        .btn { display: block; text-align: center; text-decoration: none; font-weight: bold; border-radius: 5px; padding: 15px; margin-top: 10px; }
-        .btn-whatsapp { background: #25D366; color: white; }
-        .btn-paypal { background: #ffeb00; color: black; } /* Bërë i verdhë si te lista kryesore */
+        * { box-sizing: border-box; }
+        body { margin: 0; background: #050505; color: white; font-family: Arial, sans-serif; padding-bottom: 90px; }
+        .product-page { width: 100%; min-height: 100vh; }
+        .gallery { position: relative; width: 100%; height: 55vh; background: #000; overflow: hidden; }
+        .gallery img { width: 100%; height: 100%; object-fit: contain; }
+        .photo-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); border: none; color: white; font-size: 35px; width: 45px; height: 60px; border-radius: 10px; cursor: pointer; }
+        .photo-left { left: 15px; } .photo-right { right: 15px; }
+        .photo-counter { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.6); padding: 7px 15px; border-radius: 20px; }
+        .details { padding: 20px; max-width: 900px; margin: auto; }
+        .brand { font-size: 18px; color: #aaa; }
+        .title { font-size: 30px; margin: 5px 0; }
+        .price { font-size: 28px; color: #25D366; font-weight: bold; margin: 15px 0; }
+        .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; }
+        .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
+        .top-actions { display: flex; gap: 10px; margin-top: 15px; }
+        .action { background: #151515; padding: 12px 18px; border-radius: 25px; cursor: pointer; }
+        .buy-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #090909; border-top: 1px solid #333; padding: 10px; display: flex; gap: 8px; z-index: 999; max-width: 900px; margin-left: 50%; transform: translateX(-50%); }
+        .buy-btn { flex: 1; padding: 15px; border-radius: 10px; text-align: center; text-decoration: none; font-weight: bold; cursor: pointer; }
+        .whatsapp { background: #25D366; color: white; }
+        .buy { background: #ffd900; color: black; }
+        .offer { background: #333; color: white; }
     </style>
 </head>
 <body>
 
-    <div id="container">Duke ngarkuar...</div>
-    <a href="index.html" style="color:#ccc; text-align:center; display:block; margin-top:10px;">
-        ← Kthehu në Home
-    </a>
-    <div class="admin-actions" id="admin-controls-container" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #444;">
-        <h4 style="margin: 0 0 10px 0;">Admin Controls</h4>
-        <button onclick="editProduct(window.currentProductId)">Modifiko</button>
-        <button onclick="deleteProduct(window.currentProductId)" style="background: #ff4d4d; color: white;">Fshi Produktin</button>
+<div class="product-page">
+    <div class="gallery">
+        <button class="photo-btn photo-left" onclick="changeImage(-1)">❮</button>
+        <img id="main-photo" src="">
+        <button class="photo-btn photo-right" onclick="changeImage(1)">❯</button>
+        <div class="photo-counter" id="photo-count">1 / 1</div>
     </div>
 
-    <script>
-    // 1. Funksioni për të kontrolluar pronësinë
-    async function checkOwnership(watchOwnerId) {
-        const { data: { user } } = await supabase.auth.getUser();
-        const adminDiv = document.getElementById("admin-controls-container");
+    <div class="details">
+        <div class="brand" id="brand">Loading...</div>
+        <div class="title" id="title">Loading...</div>
+        <div class="price" id="price">...</div>
+        <div class="top-actions">
+            <div class="action" onclick="shareProduct()">🔗 Share</div>
+            <div class="action">❤️ Favorite</div>
+        </div>
+        <div class="info-box" id="specs">
+            <div class="info-row"><span>Reference</span><span id="reference">-</span></div>
+            <div class="info-row"><span>Movement</span><span id="movement">-</span></div>
+            <div class="info-row"><span>Caliber</span><span id="caliber">-</span></div>
+            <div class="info-row"><span>Condition</span><span id="condition">-</span></div>
+            <div class="info-row"><span>Case Size</span><span id="case_size">-</span></div>
+            <div class="info-row"><span>Frequency</span><span id="frequency">-</span></div>
+            <div class="info-row"><span>Movement Size</span><span id="movement_size">-</span></div>
+            <div class="info-row"><span>Function</span><span id="function">-</span></div>
+            <div class="info-row"><span>Service</span><span id="service">-</span></div>
+            <div class="info-row"><span>Origin</span><span id="origin">-</span></div>
+            <div class="info-row"><span>Bracelet</span><span id="bracelet">-</span></div>
+            <div class="info-row"><span>Warranty</span><span id="warranty">-</span></div>
+            <div class="info-row"><span>Warranty Months</span><span id="warranty_months">-</span></div>
+            <div class="info-row"><span>Box & Papers</span><span id="box_papers">-</span></div>
+        </div>
+        <div class="info-box"><h3>Description</h3><p id="description">Loading...</p></div>
+    </div>
+</div>
 
-        // Shfaq vetëm nëse user-i është i loguar dhe është pronari
-        if (user && user.id === watchOwnerId) {
-            adminDiv.style.display = "block";
-        } else {
-            adminDiv.style.display = "none";
+<div class="buy-bar">
+    <a class="buy-btn whatsapp" id="whatsapp">💬 WhatsApp</a>
+    <a class="buy-btn offer" id="offer">💰 Suggest Price</a>
+    <a class="buy-btn buy" id="buy">🛒 BUY</a>
+</div>
+
+<script>
+    // Inicializimi
+    const supabase = supabase.createClient('URL_YT', 'KEY_YT');
+    let currentImageIndex = 0;
+    let productImages = [];
+    const productId = new URLSearchParams(window.location.search).get('id');
+
+    async function fetchProduct() {
+        if (!productId) return;
+        const { data, error } = await supabase.from('watches').select('*').eq('id', productId).single();
+        if (error) { console.error(error); return; }
+
+        document.getElementById('brand').innerText = data.brand || 'N/A';
+        document.getElementById('title').innerText = data.model || 'N/A';
+        document.getElementById('price').innerText = data.price ? data.price + ' €' : 'N/A';
+        document.getElementById('description').innerText = data.description || 'N/A';
+        
+        document.getElementById('reference').innerHTML = data.reference || "N/A";
+        document.getElementById('movement').innerHTML = data.movement || "N/A";
+        document.getElementById('caliber').innerHTML = data.caliber || "N/A";
+        document.getElementById('condition').innerHTML = data.condition || "N/A";
+        document.getElementById("case_size").innerHTML = data.case_size || "N/A";
+        document.getElementById("frequency").innerHTML = data.frekuen || "N/A";
+        document.getElementById("movement_size").innerHTML = data.movement_size || "N/A";
+        document.getElementById("function").innerHTML = data.function || "N/A";
+        document.getElementById("service").innerHTML = data.service ? "Yes (Serviced)" : "No";
+        document.getElementById("origin").innerHTML = data.origin || "N/A";
+        document.getElementById("bracelet").innerHTML = data.bracelet || "N/A";
+        document.getElementById("warranty").innerHTML = data.warranty || "N/A";
+        document.getElementById("warranty_months").innerHTML = data.warranty_months || "N/A";
+        document.getElementById("box_papers").innerHTML = data.box_papers ? "Full Set" : "Watch Only";
+
+        productImages = data.images || [];
+        updateGallery();
+        document.getElementById('whatsapp').href = https://wa.me/3556XXXXXXXX?text=Interesuar për ${data.model};
+    }
+
+    function updateGallery() {
+        if (productImages.length > 0) {
+            document.getElementById('main-photo').src = productImages[currentImageIndex];
+            document.getElementById('photo-count').innerText = ${currentImageIndex + 1} / ${productImages.length};
         }
     }
 
-    </script>
-    
-    <script>
-        if (typeof window.supabaseClient === 'undefined') {
-            window.supabaseClient = window.supabase.createClient(
-                "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-                "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-            );
-        }
-        var supabase = window.supabaseClient;
-        const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-
-        async function loadProduct() {
-            const id = new URLSearchParams(window.location.search).get('id');
-            const container = document.getElementById("container");
-
-            if (!id) {
-                container.innerHTML = "Asnjë ID u gjet.";
-                return;
-            }
-
-    try {
-            const { data, error } = await supabase.from('oras').select('*').eq('id', id).single();
-            if (error) throw error;
-
-            // Thirr funksionin vetëm një herë
-            checkOwnership(data.user_id);
-        
-            // Ruaj ID-në për butonat
-            window.currentProductId = data.id; 
-        
-            // Logjika e galerisë
-            window.currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
-            window.currentImgIndex = 0;
-        
-        window.changeImage = function(step) {
-            // KONTROLLI I SIGURISË: Nëse nuk ka foto, mos bëj asgjë
-            if (!window.currentImages || window.currentImages.length === 0) return;
-
-            const baseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/";
-            window.currentImgIndex += step;
-
-            // Logjika për ta kthyer indeksin në 0 ose në fund të listës
-            if (window.currentImgIndex >= window.currentImages.length) window.currentImgIndex = 0;
-            if (window.currentImgIndex < 0) window.currentImgIndex = window.currentImages.length - 1;
-
-            const imgElement = document.getElementById("main-product-img");
-            const path = window.currentImages[window.currentImgIndex];
-            imgElement.src = path.startsWith('http') ? path : baseUrl + path;
-        };
-
-            // Këtë e thërrisni brenda funksionit loadProduct pasi të merrni të dhënat
-            function initGallery(imgArray) {
-                images = imgArray || [];
-                if(images.length === 0) images = ["https://placeholder.co/600x400/222/fff?text=No+Image"];
-                updateImageDisplay();
-            }
-
-            function changeImage(step) {
-                currentImgIndex += step;
-                if (currentImgIndex >= images.length) currentImgIndex = 0;
-                if (currentImgIndex < 0) currentImgIndex = images.length - 1;
-                updateImageDisplay();
-            }
-
-                // Kushti për butonin PayPal (shfaqet vetëm nëse ka çmim dhe link)
-                const paypalButton = (data.price && data.paypal_link) 
-                    ? `<a href="${data.paypal_link}" target="_blank" class="btn btn-paypal">
-                           🛒 BUY NOW (PayPal)
-                       </a>` 
-                    : '';
-                
-               container.innerHTML = `
-                   <div class="product-card">
-                       <div class="gallery-container">
-                           <img id="main-product-img" class="product-img" 
-                                src="${window.currentImages.length > 0 ? (window.currentImages[0].startsWith('http') ? window.currentImages[0] : 'https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/' + window.currentImages[0]) : ''}" 
-                                alt="${data.brand}">
-                            ${window.currentImages.length > 1 ? `
-                                <button class="nav-btn prev" onclick="changeImage(-1)">&#10094;</button>
-                                <button class="nav-btn next" onclick="changeImage(1)">&#10095;</button>
-                            ` : ''}
-                       </div>          
-                       <h1>${data.brand} - ${data.model}</h1>
-                       <div class="price">Price: ${data.price ? data.price + ' €' : 'Contact'}</div>
-        
-                       <hr>
-                       <p><strong>Reference:</strong> ${data.reference || 'N/A'}</p>
-                       
-                       <p><strong>Case Size:</strong> ${data.case_size || 'N/A'}</p>
-
-                       <p><strong>Caliber:</strong> ${data.caliber || 'N/A'}</p>
-
-                       <p><strong>Frekuenz:</strong> ${data.frekuen || 'N/A'}</p>
-  
-                       <p><strong>Movement Size:</strong> ${data.movement_size || 'N/A'}</p>
-
-                       <p><strong>Movement:</strong> ${data.movement || 'N/A'}</p>
-                       
-                       <p><strong>Function:</strong> ${data.function || 'N/A'}</p>
-
-                       <p><strong>Service:</strong> ${data.service ? 'Yes (Serviced)' : 'No'}</p>
-
-                       <p><strong>Service Date:</strong> ${data.service_date || 'N/A'}</p>
-                       
-                       <p><strong>Origin:</strong> ${data.origin || 'N/A'}</p>
-
-                       <p><strong>Work Status:</strong> ${data.work_status || 'N/A'}</p>
-
-                       <p><strong>Bracelet:</strong> ${data.bracelet || 'N/A'}</p>
-
-                       <p><strong>Warranty:</strong> ${data.warranty || 'N/A'}</p>
-
-                       <p><strong>Warranty Months:</strong> ${data.warranty_months || 'N/A'}</p>
-
-                       <p><strong>Serial Number:</strong> XXX</p>
-
-                       <p><strong>Box & Papers:</strong> ${data.box_papers ? 'Full Set' : 'Watch Only'}</p>
-
-                       <p><strong>Description:</strong> ${data.description || 'N/A'}</p>
-        
-                       <br>
-                       <a href="https://wa.me/35569XXXXXXX?text=I%20am%20interested%20in:%20${encodeURIComponent(data.brand + ' ' + data.model)}" class="btn btn-whatsapp">
-                          💬 ORDER ON WHATSAPP
-                       </a>
-
-                       ${paypalButton}
-                    </div>
-               `;
-            } catch (err) {
-                container.innerHTML = "GABIM: " + err.message;
-            }
-        }
-        loadProduct();
-    
-// Funksionet për Admin (Fshirje dhe Modifikim)
-async function deleteProduct(id) {
-    console.log("Duke fshirë ID-në:", id); // Kjo do shfaqet te Console (F12)
-    if (!confirm("A jeni i sigurt që doni ta fshini këtë produkt?")) return;
-    
-    const { data, error } = await supabase.from('oras').delete().eq('id', id);
-    
-    if (error) {
-        console.error("Gabim:", error); // Nëse ka gabim, do e shohësh këtu
-        alert("Gabim gjatë fshirjes: " + error.message);
-    } else {
-        console.log("Përgjigja:", data);
-        alert("Produkti u fshi me sukses!");
-        window.location.href = 'index.html'; 
+    function changeImage(dir) {
+        if (productImages.length === 0) return;
+        currentImageIndex = (currentImageIndex + dir + productImages.length) % productImages.length;
+        updateGallery();
     }
-}
-// Shto këtë funksion për modifikimin
-function editProduct(id) {
-    console.log("Duke shkuar te faqja e modifikimit për ID-në:", id);
-    // SHTO KËTË LINJË QË TË KALOJË FAQEN:
-    window.location.href = 'edit.html?id=' + id;
-}
 
-async function checkOwnership(watchOwnerId) {
-    const { data: { user } } = await supabase.auth.getUser();
-    const adminDivs = document.querySelectorAll(".admin-actions"); 
+    function shareProduct() {
+        navigator.clipboard.writeText(window.location.href);
+        alert("Linku u kopjua!");
+    }
 
-    adminDivs.forEach(div => {
-        // Shfaq vetëm nëse user-i ekziston dhe ID-ja përputhet
-        if (user && user.id === watchOwnerId) {
-            div.style.display = "block"; 
-        } else {
-            div.style.display = "none";
-        }
-    });
-}
-        
-</script>        
+    fetchProduct();
+</script>
 </body>
-</html>
+</html

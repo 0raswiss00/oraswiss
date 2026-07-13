@@ -156,9 +156,8 @@ async function loadProduct() {
         document.getElementById("warranty").innerText = data.warranty || "N/A";
 
 
-        document.getElementById("service").innerText =
-            data.service ? "Yes (Serviced)" : "No";
-
+        document.getElementById("service_display").innerText =
+            data.service ? "Yes" : "No";
 
         document.getElementById("box_papers").innerText =
             data.box_papers ? "Full Set" : "Watch Only";

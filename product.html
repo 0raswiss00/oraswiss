@@ -75,15 +75,26 @@
 
 <script>
     // Inicializimi
-    const supabase = supabase.createClient('sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9');
+    const { createClient } = supabase;
+    const supabaseClient = createClient('sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9');
     let currentImageIndex = 0;
     let productImages = [];
     const productId = new URLSearchParams(window.location.search).get('id');
 
     async function fetchProduct() {
         if (!productId) return;
-        const { data, error } = await supabase.from('watches').select('*').eq('id', productId).single();
-        if (error) { console.error(error); return; }
+
+        const { data, error } = await supabaseClient
+            .from('watches')
+            .select('*')
+            .eq('id', productId)
+            .single();
+
+        if (error) {
+            console.error("Gabim gjatë lidhjes me Supabase:", error);
+            return;
+        }
+
 
         document.getElementById('brand').innerText = data.brand || 'N/A';
         document.getElementById('title').innerText = data.model || 'N/A';

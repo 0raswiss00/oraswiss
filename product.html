@@ -32,6 +32,7 @@
 <body>
 
 <div class="product-page">
+
     <div class="gallery">
         <button class="photo-btn photo-left" onclick="changeImage(-1)">❮</button>
         <img id="main-photo" src="">
@@ -39,10 +40,35 @@
         <div class="photo-counter" id="photo-count">1 / 1</div>
     </div>
 
+
     <div class="details">
+
+        <div class="category" id="category">Loading...</div>
+
         <div class="brand" id="brand">Loading...</div>
+
         <div class="model" id="model">Loading...</div>
+
         <div class="price" id="price">...</div>
+
+
+        <div class="info-box" id="specs">
+
+            <div class="info-row">
+                <span>Serial Number</span>
+                <span id="serial_number">-</span>
+            </div>
+
+            <div class="info-row">
+                <span>Category</span>
+                <span id="product-category">-</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
         <div class="top-actions">
             <div class="action" onclick="shareProduct()">🔗 Share</div>
             <div class="action">❤️ Favorite</div>

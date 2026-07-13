@@ -571,3 +571,578 @@ window.location.href =
 
 </html>
                   
+
+selll
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Add New Watch</title>
+
+<style>
+body {
+    background:#111;
+    color:white;
+    font-family:Arial, sans-serif;
+}
+
+form {
+    max-width:600px;
+    margin:30px auto;
+    background:#1b1b1b;
+    padding:25px;
+    border-radius:10px;
+}
+
+h2 {
+    text-align:center;
+}
+
+label {
+    display:block;
+    margin-top:12px;
+    margin-bottom:5px;
+    color:#ccc;
+}
+
+input, select, textarea {
+    width:100%;
+    padding:10px;
+    background:#222;
+    color:white;
+    border:1px solid #444;
+    border-radius:5px;
+    box-sizing:border-box;
+}
+
+.row {
+    display:flex;
+    gap:15px;
+    margin-top:10px;
+}
+
+.row > * {
+    flex:1;
+}
+
+.radio-row {
+    display:flex;
+    gap:20px;
+    margin-top:15px;
+}
+
+.radio-row label {
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+.radio-row input {
+    width:auto;
+}
+
+.checkbox-row {
+    display:flex;
+    justify-content:space-between;
+    margin-top:15px;
+}
+
+button {
+    width:100%;
+    margin-top:20px;
+    padding:12px;
+    background:#c9a227;
+    color:white;
+    border:none;
+    border-radius:5px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover {
+    opacity:.8;
+}
+
+@media(max-width:600px){
+    .row {
+        flex-direction:column;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<form id="sellForm">
+
+<h2>Add New Watch</h2>
+
+
+  <label>Category:</label>
+  <select id="category" style="width:100%;margin-bottom:15px;">
+    <option value="luxury">Luxury</option>
+    <option value="vintage">Vintage</option>
+    <option value="parts">Parts</option>
+    <option value="parts">Movement Parts</option>  
+  </select>
+
+<div class="row">
+
+<input id="brand" type="text" placeholder="Brand" required>
+
+<input id="model" type="text" placeholder="Model" required>
+
+</div>
+
+
+<label>Price (€)</label>
+
+<input id="price" type="number">
+
+
+<label>Material</label>
+
+<input id="material" type="text" placeholder="Steel, Gold, Titanium...">
+
+
+
+<label>
+Reference:
+</label>
+
+<input 
+id="reference"
+type="text"
+placeholder="Reference number">
+
+
+
+<label>
+Caliber:
+</label>
+
+<input 
+id="caliber"
+type="text"
+placeholder="Caliber number">
+
+
+
+<label>
+Frekuenz:
+</label>
+
+<input 
+id="frekuen"
+type="text"
+placeholder="Example: 28800 vph">    
+
+    
+
+<label>
+Case Size:
+</label>
+
+<input 
+id="case_size"
+type="text"
+placeholder="Example: 40mm">
+
+
+
+<label>
+Movement Size:
+</label>
+
+<input 
+id="movement_size"
+type="text"
+placeholder="Example: 18mm">
+
+
+<label>Year</label>
+
+<input id="year" type="number">
+
+
+
+<label>Movement</label>
+
+<select id="movement">
+
+<option value="Automatic">Automatic</option>
+<option value="Manual">Manual</option>
+<option value="Quartz">Quartz</option>
+
+</select>
+
+
+
+<label>Function</label>
+
+<select id="function">
+
+<option>Date</option>
+<option>Chronometer</option>
+<option>Chronograph</option>
+<option>Chronograph Date</option>
+<option>Tourbillon</option>
+<option>Only time</option>
+<option>No Date</option>
+
+</select>
+
+
+
+<div class="checkbox-row">
+
+<label>
+<input id="service" type="checkbox">
+Service Completed
+</label>
+
+
+<label>
+<input id="service_date" type="date">
+Service Date
+</label>
+
+    
+<label>
+<input id="box_papers" type="checkbox">
+Box / Papers
+</label>
+
+
+</div>
+
+
+
+<label>Origin</label>
+
+<select id="origin">
+
+<option>Switzerland</option>
+<option>Other</option>
+
+</select>
+
+
+
+<label>Work Status</label>
+
+<select id="work_status">
+
+<option>Working</option>
+<option>Not Working</option>
+<option>Not Tested</option>
+
+</select>
+
+
+
+<label>Bracelet</label>
+
+<select id="bracelet">
+
+<option>Leather</option>
+<option>Nato</option>
+<option>Rubber</option>
+<option>Bracelet</option>
+<option>No Bracelet Leather</option>
+
+</select>
+
+
+
+<label>
+    Glass
+    <select id="glass">
+        <option value="">Select Glass</option>
+        <option value="Sapphire">Sapphire</option>
+        <option value="Mineral">Mineral</option>
+        <option value="Acrylic / Hesalite">Acrylic / Hesalite</option>
+        <option value="Hardlex">Hardlex</option>
+        <option value="K1 Mineral">K1 Mineral</option>
+    </select>
+</label>
+
+
+    
+
+<label>Warranty</label>
+
+<select id="warranty">
+
+<option>No Warranty</option>
+<option>Warranty</option>
+
+</select>
+
+
+<label>Warranty Months</label>
+
+<input id="warranty_months" type="number">
+
+
+
+<label>Serial Number</label>
+
+<input id="serial_number" type="text">
+
+
+
+<label>Description</label>
+
+<textarea 
+id="description"
+rows="5"
+placeholder="Description">
+</textarea>
+
+
+
+<label>Upload Photos</label>
+
+<input 
+id="fileInput"
+type="file"
+accept="image/*"
+multiple>
+
+
+<button type="submit">
+Sell Now
+</button>
+
+
+</form>
+<script type="module">
+
+import { createClient } 
+from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+
+const supabase = createClient(
+
+'https://gnwsrmelmeqduhhmfmoa.supabase.co',
+
+'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
+
+);
+
+
+
+/*
+ Kontrollon nëse përdoruesi është i loguar
+*/
+
+const { data: { user } } = await supabase.auth.getUser();
+
+
+if(!user){
+
+    alert("Duhet të jesh i loguar!");
+
+    window.location.href="register.html";
+
+}
+
+
+
+/*
+ Submit Form
+*/
+
+document
+.getElementById("sellForm")
+.addEventListener("submit", async function(e){
+
+
+e.preventDefault();
+
+
+
+const files = document
+.getElementById("fileInput")
+.files;
+
+
+
+let imageUrls = [];
+
+
+
+/*
+ Upload fotot në Storage
+*/
+
+
+for(let i=0; i<files.length; i++){
+
+
+    const file = files[i];
+
+
+    const fileName = 
+    Date.now() + "" + i + "" + file.name;
+
+
+
+    const { error: uploadError } = await supabase
+    .storage
+    .from("or-images")
+    .upload(fileName,file);
+
+
+
+    if(uploadError){
+
+        alert(
+        "Gabim gjatë upload fotos: "
+        + uploadError.message
+        );
+
+        return;
+
+    }
+
+
+
+    const { data:urlData } =
+    supabase
+    .storage
+    .from("or-images")
+    .getPublicUrl(fileName);
+
+
+
+    imageUrls.push(
+        urlData.publicUrl
+    );
+
+
+}
+
+
+
+console.log(
+"Fotot:",
+imageUrls
+);
+
+// Krijimi i objektit të orës
+
+const oraData = {
+
+    user_id: user.id,
+
+    category: document.getElementById("category").value,
+
+    brand: document.getElementById("brand").value,
+
+    model: document.getElementById("model").value,
+
+    price: parseInt(document.getElementById("price").value) || null,
+
+    reference: document.getElementById("reference").value,
+
+    caliber: document.getElementById("caliber").value,
+
+    frekuen: document.getElementById("frekuen").value,
+    
+    material: document.getElementById("material").value,
+
+    case_size: document.getElementById("case_size").value,
+
+    movement_size: document.getElementById("movement_size").value,
+
+    year: parseInt(document.getElementById("year").value) || null,
+
+    movement: document.getElementById("movement").value,
+
+    function: document.getElementById("function").value,
+
+    service: document.getElementById("service").checked,
+
+    service_date: document.getElementById("service_date")?.value || null,
+    
+    box_papers: document.getElementById("box_papers").checked,
+
+    origin: document.getElementById("origin").value,
+
+    work_status: document.getElementById("work_status").value,
+
+    bracelet: document.getElementById("bracelet").value,
+
+    glass: document.getElementById("glass").value,
+    
+    warranty: document.getElementById("warranty").value,
+
+    warranty_months: document.getElementById("warranty_months").value || null,
+
+    serial_number: document.getElementById("serial_number").value,
+
+    description: document.getElementById("description").value,
+
+    image_url: imageUrls
+
+};
+
+
+
+console.log(
+"Po dërgoj:",
+oraData
+);
+
+
+
+// Futja në databazën Supabase
+
+const { error } = await supabase
+
+.from("oras")
+
+.insert([oraData]);
+
+
+
+if(error){
+
+    alert(
+    "Gabim gjatë publikimit: "
+    + error.message
+    );
+
+    return;
+
+}
+
+
+
+alert(
+"🏆 Ora u publikua me sukses!"
+);
+
+
+window.location.href =
+"dashboard.html";
+
+
+
+});
+
+
+
+
+
+</script>
+
+</body>
+
+</html>
+                  

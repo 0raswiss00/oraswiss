@@ -40,12 +40,10 @@
         <div class="photo-counter" id="photo-count">1 / 1</div>
     </div>
 
+<div class="category" id="category"></div>
 
+    
 <div class="details">
-
-<div class="details">
-
-    <div class="category" id="category"></div>
 
     <div class="brand" id="brand"></div>
 
@@ -223,9 +221,6 @@ async function loadProduct() {
         currentImgIndex = 0;
 
         // Product main info
-        document.getElementById("category").textContent =
-            data.category || "N/A";
-
         document.getElementById("brand").textContent =
             data.brand || "N/A";
 

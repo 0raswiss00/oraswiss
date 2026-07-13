@@ -283,6 +283,21 @@ Box / Papers
 
 
 
+<label>
+    Glass
+    <select id="glass">
+        <option value="">Select Glass</option>
+        <option value="Sapphire">Sapphire</option>
+        <option value="Mineral">Mineral</option>
+        <option value="Acrylic / Hesalite">Acrylic / Hesalite</option>
+        <option value="Hardlex">Hardlex</option>
+        <option value="K1 Mineral">K1 Mineral</option>
+    </select>
+</label>
+
+
+    
+
 <label>Warranty</label>
 
 <select id="warranty">
@@ -488,6 +503,8 @@ const oraData = {
 
     bracelet: document.getElementById("bracelet").value,
 
+    glass: document.getElementById("glass").value,
+    
     warranty: document.getElementById("warranty").value,
 
     warranty_months: document.getElementById("warranty_months").value || null,

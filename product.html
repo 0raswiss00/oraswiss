@@ -74,9 +74,12 @@
 </div>
 
 <script>
-    // Inicializimi
-    URL-në dhe Key-n tënde):
-    const supabaseClient = createClient('https://KODI_YT.supabase.co', 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9');
+    // URL-në dhe Key-n tënde:
+    const supabaseClient = createClient(
+        'https://KODI_YT.supabase.co',
+        'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIc9y'
+    );
+
     let currentImageIndex = 0;
     let productImages = [];
     const productId = new URLSearchParams(window.location.search).get('id');

@@ -100,10 +100,10 @@ async function loadProduct() {
 
 
     const { data, error } = await supabase
-        .from("watches")
-        .select("*")
-        .eq("id", productId)
-        .single();
+    .from('oras')
+    .select('*')
+    .eq('number', id)
+    .single();
 
 
     if (error) {

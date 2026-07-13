@@ -102,32 +102,47 @@ async function fetchProduct() {
 
 
     if (error) {
-        console.error("Gabim nga Supabase:", error);
+        console.error("Gabim Supabase:", error);
         return;
     }
 
 
     document.getElementById('brand').innerText = data.brand || 'N/A';
     document.getElementById('title').innerText = data.model || 'N/A';
-    document.getElementById('price').innerText = data.price ? data.price + ' €' : 'N/A';
-    document.getElementById('description').innerText = data.description || 'N/A';
+    document.getElementById('price').innerText =
+        data.price ? data.price + " €" : "N/A";
+
+    document.getElementById('description').innerText =
+        data.description || "N/A";
 
 
-    document.getElementById('reference').innerText = data.reference || 'N/A';
-    document.getElementById('movement').innerText = data.movement || 'N/A';
-    document.getElementById('caliber').innerText = data.caliber || 'N/A';
-    document.getElementById('condition').innerText = data.condition || 'N/A';
-    document.getElementById('case_size').innerText = data.case_size || 'N/A';
-    document.getElementById('frequency').innerText = data.frekuen || 'N/A';
-    document.getElementById('movement_size').innerText = data.movement_size || 'N/A';
-    document.getElementById('function').innerText = data.function || 'N/A';
-    document.getElementById('origin').innerText = data.origin || 'N/A';
-    document.getElementById('bracelet').innerText = data.bracelet || 'N/A';
-    document.getElementById('warranty').innerText = data.warranty || 'N/A';
+    const fields = [
+        "reference",
+        "movement",
+        "caliber",
+        "condition",
+        "case_size",
+        "movement_size",
+        "function",
+        "origin",
+        "bracelet",
+        "warranty",
+        "warranty_months"
+    ];
+
+
+    fields.forEach(field => {
+        const element = document.getElementById(field);
+
+        if (element) {
+            element.innerText = data[field] || "N/A";
+        }
+    });
 
 
     document.getElementById('service').innerText =
         data.service ? "Yes (Serviced)" : "No";
+
 
     document.getElementById('box_papers').innerText =
         data.box_papers ? "Full Set" : "Watch Only";
@@ -138,50 +153,68 @@ async function fetchProduct() {
     updateGallery();
 
 
-const whatsapp = document.getElementById('whatsapp');
+    const whatsapp = document.getElementById('whatsapp');
 
-if (whatsapp) {
-    whatsapp.href =
-    "https://wa.me/3556XXXXXXXX?text=Interesuar%20për%20" + data.model;
+    if (whatsapp) {
+        whatsapp.href =
+        "https://wa.me/3556XXXXXXXX?text=Interesuar%20per%20" 
+        + data.model;
+    }
+
 }
 
-} // mbyll fetchProduct
 
 
 function updateGallery() {
 
-    if (!productImages.length) {
+    if (productImages.length === 0) {
         return;
     }
 
+
     const mainPhoto = document.getElementById('main-photo');
-    const count = document.getElementById('photo-count');
+    const counter = document.getElementById('photo-count');
+
 
     if (mainPhoto) {
         mainPhoto.src = productImages[currentImageIndex];
     }
 
-    if (count) {
-        count.innerText =
-        ${currentImageIndex + 1} / ${productImages.length};
+
+    if (counter) {
+        counter.innerText =
+        (currentImageIndex + 1) + " / " + productImages.length;
     }
 
 }
+
 
 
 function changeImage(direction) {
 
-    if (!productImages.length) {
+    if (productImages.length === 0) {
         return;
     }
 
+
     currentImageIndex =
-    (currentImageIndex + direction + productImages.length)
-    % productImages.length;
+    currentImageIndex + direction;
+
+
+    if (currentImageIndex < 0) {
+        currentImageIndex = productImages.length - 1;
+    }
+
+
+    if (currentImageIndex >= productImages.length) {
+        currentImageIndex = 0;
+    }
+
 
     updateGallery();
 
 }
+
 
 
 function shareProduct() {
@@ -191,6 +224,7 @@ function shareProduct() {
     alert("Linku u kopjua!");
 
 }
+
 
 
 fetchProduct();

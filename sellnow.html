@@ -319,6 +319,9 @@ Box / Papers
 <input id="serial_number" type="text">
 
 
+<label>PayPal Link</label>
+<input id="paypal_link" type="text" placeholder="PayPal payment link">
+    
 
 <label>Description</label>
 
@@ -473,6 +476,8 @@ const oraData = {
 
     price: parseInt(document.getElementById("price").value) || null,
 
+    paypal_link: document.getElementById("paypal_link").value,
+    
     reference: document.getElementById("reference").value,
 
     caliber: document.getElementById("caliber").value,

@@ -138,16 +138,18 @@ async function fetchProduct() {
     updateGallery();
 
 
-    const whatsapp = document.getElementById('whatsapp');
+   const whatsapp = document.getElementById('whatsapp');
 
     if (whatsapp) {
         whatsapp.href =
-        document.getElementById('whatsapp').href = "https://wa.me/3556XXXXXXXX?text=Interesuar%20për%20" + data.model;
+        "https://wa.me/3556XXXXXXXX?text=Interesuar%20për%20" + data.model;
     }
 
+    } // <-- KJO MUNGON
 
 
-function updateGallery() {
+    function updateGallery() {
+
 
     if (!productImages.length) {
         return;
@@ -162,13 +164,12 @@ function updateGallery() {
         mainPhoto.src = productImages[currentImageIndex];
     }
 
-
     if (count) {
         count.innerText =
         ${currentImageIndex + 1} / ${productImages.length};
     }
 
-}
+    }
 
 
 

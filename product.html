@@ -215,11 +215,11 @@ async function loadProduct() {
                 : [];
 
 
-currentImgIndex = 0;
+        currentImgIndex = 0;
 
-// Product main info
-document.getElementById("category").textContent =
-    data.category || "N/A";
+        // Product main info
+        document.getElementById("category").textContent =
+            data.category || "N/A";
 
         document.getElementById("brand").textContent =
             data.brand || "N/A";
@@ -230,9 +230,11 @@ document.getElementById("category").textContent =
         document.getElementById("price").textContent =
             (data.price || 0) + " €";
 
-        document.getElementById("serial_number").textContent =
+        document.getElementById("serial_number").innerText =
             data.serial_number || "N/A";
-        
+
+
+        // Watch specifications
         document.getElementById("reference").innerText =
             data.reference || "N/A";
 
@@ -242,17 +244,20 @@ document.getElementById("category").textContent =
         document.getElementById("caliber").innerText =
             data.caliber || "N/A";
 
-        document.getElementById("condition").innerText =
-            data.condition || "N/A";
-
-        document.getElementById("case_size").innerText =
-            data.case_size || "N/A";
-
         document.getElementById("frequency").innerText =
             data.frekuen || "N/A";
 
+        document.getElementById("material").innerText =
+            data.material || "N/A";
+
+        document.getElementById("case_size").innerText =
+           data.case_size || "N/A";
+
         document.getElementById("movement_size").innerText =
             data.movement_size || "N/A";
+
+        document.getElementById("year").innerText =
+            data.year || "N/A";
 
         document.getElementById("function").innerText =
             data.function || "N/A";
@@ -268,20 +273,29 @@ document.getElementById("category").textContent =
         document.getElementById("origin").innerText =
             data.origin || "N/A";
 
+        document.getElementById("work_status").innerText =
+            data.work_status || "N/A";
+
         document.getElementById("bracelet").innerText =
             data.bracelet || "N/A";
 
         document.getElementById("glass").innerText =
             data.glass || "N/A";
-        
+
+
         document.getElementById("warranty").innerText =
             data.warranty || "N/A";
 
         document.getElementById("warranty_months").innerText =
             data.warranty_months || "N/A";
 
+
         document.getElementById("box_papers").innerText =
             data.box_papers ? "Full Set" : "Watch Only";
+
+
+        document.getElementById("description").innerText =
+            data.description || "N/A";
 
 
         updateGallery();

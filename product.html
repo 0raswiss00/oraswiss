@@ -144,6 +144,12 @@ async function loadProduct() {
         document.getElementById("frequency").innerText = data.frekuen || "N/A";
         document.getElementById("movement_size").innerText = data.movement_size || "N/A";
         document.getElementById("function").innerText = data.function || "N/A";
+
+        document.getElementById("service_display").textContent =
+             document.getElementById("service").checked ? "Yes" : "No";
+        document.getElementById("service_date_display").textContent =
+             document.getElementById("service_date").value || "-";
+        
         document.getElementById("origin").innerText = data.origin || "N/A";
         document.getElementById("bracelet").innerText = data.bracelet || "N/A";
         document.getElementById("warranty").innerText = data.warranty || "N/A";

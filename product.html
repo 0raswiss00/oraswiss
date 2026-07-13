@@ -154,13 +154,23 @@ async function loadProduct() {
                 : [];
 
 
-        currentImgIndex = 0;
+currentImgIndex = 0;
 
-        document.getElementById("brand").textContent = product.brand;
+// Product main info
+document.getElementById("category").textContent =
+    data.category || "N/A";
 
-        document.getElementById("model").textContent = product.model;
+        document.getElementById("brand").textContent =
+            data.brand || "N/A";
 
-        document.getElementById("price").textContent = product.price + " €";
+        document.getElementById("model").textContent =
+            data.model || "N/A";
+
+        document.getElementById("price").textContent =
+            (data.price || 0) + " €";
+
+        document.getElementById("serial_number").textContent =
+            data.serial_number || "N/A";
         
         document.getElementById("reference").innerText =
             data.reference || "N/A";

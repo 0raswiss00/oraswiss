@@ -73,68 +73,138 @@
     <a class="buy-btn buy" id="buy">🛒 BUY</a>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
 <script>
-    // Inicializimi
-    const supabaseClient = createClient(
-        'https://KODI_YT.supabase.co',
-        'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIc9y'
-    );
+const supabaseClient = createClient(
+    'https://KODI_YT.supabase.co',
+    'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIc9y'
+);
 
-    let currentImageIndex = 0;
-    let productImages = [];
-    const productId = new URLSearchParams(window.location.search).get('id');
+let currentImageIndex = 0;
+let productImages = [];
 
-    async function fetchProduct() {
-        if (!productId) return;
+const productId = new URLSearchParams(window.location.search).get('id');
 
-        const { data, error } = await supabaseClient
-            .from('watches')
-            .select('*')
-            .eq('id', productId)
-            .single();
 
-        if (error) {
-            console.error("Gabim gjatë lidhjes me Supabase:", error);
-            return;
-        }
+async function fetchProduct() {
 
-       document.getElementById('brand').innerText = data.brand || 'N/A';
-        document.getElementById('title').innerText = data.model || 'N/A';
-        document.getElementById('price').innerText = data.price ? data.price + ' €' : 'N/A';
-        document.getElementById('description').innerText = data.description || 'N/A';
-        
-        document.getElementById('reference').innerHTML = data.reference || "N/A";
-        document.getElementById('movement').innerHTML = data.movement || "N/A";
-        document.getElementById('caliber').innerHTML = data.caliber || "N/A";
-        document.getElementById('condition').innerHTML = data.condition || "N/A";
-        document.getElementById("case_size").innerHTML = data.case_size || "N/A";
-        document.getElementById("frequency").innerHTML = data.frekuen || "N/A";
-        document.getElementById("movement_size").innerHTML = data.movement_size || "N/A";
-        document.getElementById("function").innerHTML = data.function || "N/A";
-        document.getElementById("service").innerHTML = data.service ? "Yes (Serviced)" : "No";
-        document.getElementById("origin").innerHTML = data.origin || "N/A";
-        document.getElementById("bracelet").innerHTML = data.bracelet || "N/A";
-        document.getElementById("warranty").innerHTML = data.warranty || "N/A";
-        document.getElementById("warranty_months").innerHTML = data.warranty_months || "N/A";
-        document.getElementById("box_papers").innerHTML = data.box_papers ? "Full Set" : "Watch Only";
-
- 
-        productImages = data.images || [];
-        updateGallery();
-
-        document.getElementById('whatsapp').href =
-            https://wa.me/3556XXXXXXXX?text=Interesuar për ${data.model};
+    if (!productId) {
+        console.error("Nuk u gjet ID e produktit");
+        return;
     }
 
-    function updateGallery() {
-        if (productImages.length > 0) {
-            document.getElementById('main-photo').src = productImages[currentImageIndex];
-            document.getElementById('photo-count').innerText =
-                ${currentImageIndex + 1} / ${productImages.length};
-        }
+    const { data, error } = await supabaseClient
+        .from('watches')
+        .select('*')
+        .eq('id', productId)
+        .single();
+
+
+    if (error) {
+        console.error("Gabim nga Supabase:", error);
+        return;
     }
 
-    fetchProduct();
+
+    document.getElementById('brand').innerText = data.brand || 'N/A';
+    document.getElementById('title').innerText = data.model || 'N/A';
+    document.getElementById('price').innerText = data.price ? data.price + ' €' : 'N/A';
+    document.getElementById('description').innerText = data.description || 'N/A';
+
+
+    document.getElementById('reference').innerText = data.reference || 'N/A';
+    document.getElementById('movement').innerText = data.movement || 'N/A';
+    document.getElementById('caliber').innerText = data.caliber || 'N/A';
+    document.getElementById('condition').innerText = data.condition || 'N/A';
+    document.getElementById('case_size').innerText = data.case_size || 'N/A';
+    document.getElementById('frequency').innerText = data.frekuen || 'N/A';
+    document.getElementById('movement_size').innerText = data.movement_size || 'N/A';
+    document.getElementById('function').innerText = data.function || 'N/A';
+    document.getElementById('origin').innerText = data.origin || 'N/A';
+    document.getElementById('bracelet').innerText = data.bracelet || 'N/A';
+    document.getElementById('warranty').innerText = data.warranty || 'N/A';
+
+
+    document.getElementById('service').innerText =
+        data.service ? "Yes (Serviced)" : "No";
+
+    document.getElementById('box_papers').innerText =
+        data.box_papers ? "Full Set" : "Watch Only";
+
+
+    productImages = data.images || [];
+
+    updateGallery();
+
+
+    const whatsapp = document.getElementById('whatsapp');
+
+    if (whatsapp) {
+        whatsapp.href =
+        https://wa.me/3556XXXXXXXX?text=Jam i interesuar per ${data.model};
+    }
+
+}
+
+
+
+function updateGallery() {
+
+    if (!productImages.length) {
+        return;
+    }
+
+
+    const mainPhoto = document.getElementById('main-photo');
+    const count = document.getElementById('photo-count');
+
+
+    if (mainPhoto) {
+        mainPhoto.src = productImages[currentImageIndex];
+    }
+
+
+    if (count) {
+        count.innerText =
+        ${currentImageIndex + 1} / ${productImages.length};
+    }
+
+}
+
+
+
+function changeImage(direction) {
+
+    if (!productImages.length) {
+        return;
+    }
+
+
+    currentImageIndex =
+    (currentImageIndex + direction + productImages.length)
+    % productImages.length;
+
+
+    updateGallery();
+
+}
+
+
+
+function shareProduct() {
+
+    navigator.clipboard.writeText(window.location.href);
+
+    alert("Linku u kopjua!");
+
+}
+
+
+
+fetchProduct();
+
 </script>
+
 </body>
 </html

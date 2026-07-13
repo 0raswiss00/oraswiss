@@ -138,27 +138,24 @@ async function fetchProduct() {
     updateGallery();
 
 
-   const whatsapp = document.getElementById('whatsapp');
+const whatsapp = document.getElementById('whatsapp');
 
-    if (whatsapp) {
-        whatsapp.href =
-        "https://wa.me/3556XXXXXXXX?text=Interesuar%20për%20" + data.model;
-    }
+if (whatsapp) {
+    whatsapp.href =
+    "https://wa.me/3556XXXXXXXX?text=Interesuar%20për%20" + data.model;
+}
 
-    } // <-- KJO MUNGON
+} // mbyll fetchProduct
 
 
-    function updateGallery() {
-
+function updateGallery() {
 
     if (!productImages.length) {
         return;
     }
 
-
     const mainPhoto = document.getElementById('main-photo');
     const count = document.getElementById('photo-count');
-
 
     if (mainPhoto) {
         mainPhoto.src = productImages[currentImageIndex];
@@ -169,26 +166,22 @@ async function fetchProduct() {
         ${currentImageIndex + 1} / ${productImages.length};
     }
 
+}
+
+
+function changeImage(direction) {
+
+    if (!productImages.length) {
+        return;
     }
-
-
-
-    function changeImage(direction) {
-
-        if (!productImages.length) {
-            return;
-    }
-
 
     currentImageIndex =
     (currentImageIndex + direction + productImages.length)
     % productImages.length;
 
-
     updateGallery();
 
 }
-
 
 
 function shareProduct() {
@@ -200,10 +193,10 @@ function shareProduct() {
 }
 
 
-
 fetchProduct();
 
 </script>
 
 </body>
-</html
+</html>
+

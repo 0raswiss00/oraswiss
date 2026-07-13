@@ -74,7 +74,7 @@
 </div>
 
 <script>
-    // URL-në dhe Key-n tënde:
+    // Inicializimi
     const supabaseClient = createClient(
         'https://KODI_YT.supabase.co',
         'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIc9y'
@@ -98,8 +98,7 @@
             return;
         }
 
-
-        document.getElementById('brand').innerText = data.brand || 'N/A';
+       document.getElementById('brand').innerText = data.brand || 'N/A';
         document.getElementById('title').innerText = data.model || 'N/A';
         document.getElementById('price').innerText = data.price ? data.price + ' €' : 'N/A';
         document.getElementById('description').innerText = data.description || 'N/A';
@@ -119,27 +118,20 @@
         document.getElementById("warranty_months").innerHTML = data.warranty_months || "N/A";
         document.getElementById("box_papers").innerHTML = data.box_papers ? "Full Set" : "Watch Only";
 
+ 
         productImages = data.images || [];
         updateGallery();
-        document.getElementById('whatsapp').href = https://wa.me/3556XXXXXXXX?text=Interesuar për ${data.model};
+
+        document.getElementById('whatsapp').href =
+            https://wa.me/3556XXXXXXXX?text=Interesuar për ${data.model};
     }
 
     function updateGallery() {
         if (productImages.length > 0) {
             document.getElementById('main-photo').src = productImages[currentImageIndex];
-            document.getElementById('photo-count').innerText = ${currentImageIndex + 1} / ${productImages.length};
+            document.getElementById('photo-count').innerText =
+                ${currentImageIndex + 1} / ${productImages.length};
         }
-    }
-
-    function changeImage(dir) {
-        if (productImages.length === 0) return;
-        currentImageIndex = (currentImageIndex + dir + productImages.length) % productImages.length;
-        updateGallery();
-    }
-
-    function shareProduct() {
-        navigator.clipboard.writeText(window.location.href);
-        alert("Linku u kopjua!");
     }
 
     fetchProduct();

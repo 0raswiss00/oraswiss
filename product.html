@@ -299,15 +299,13 @@ async function loadProduct() {
 
 // ... pas description.innerText
         
-        const buyBtnElement = document.getElementById("buy");
-
-        if (buyBtnElement) {
-            // Kontrollojme nese linku ekziston
+        const buyBtn = document.getElementById("buy");
+        if (buyBtn) {
             if (data.paypal_link && data.paypal_link !== "EMPTY" && data.paypal_link.trim() !== "") {
-                buyBtnElement.href = data.paypal_link;
-                buyBtnElement.style.display = "flex";
+                buyBtn.href = data.paypal_link;
+                buyBtn.style.display = "flex";
             } else {
-                buyBtnElement.style.display = "none";
+                buyBtn.style.display = "none";
             }
         }
 

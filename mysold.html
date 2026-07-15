@@ -78,7 +78,7 @@ async function loadMySold() {
 
     const {
         data: { user }
-    } = await supabase.auth.getUser();
+    } = await window.supabaseClient.auth.getUser();
 
     if (!user) {
         soldBody.innerHTML =

@@ -210,6 +210,8 @@ async function loadProduct() {
 
         if (error) throw error;
 
+        console.log("PRODUCT DATA:", data);
+        console.log("PAYPAL:", data.paypal_link);
 
         currentImages = Array.isArray(data.image_url)
             ? data.image_url

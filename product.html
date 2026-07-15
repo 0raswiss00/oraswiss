@@ -297,16 +297,20 @@ async function loadProduct() {
         document.getElementById("description").innerText =
             data.description || "N/A";
 
-    // Kjo logjikë kontrollon për NULL, "EMPTY", ose string bosh
-    const link = data.paypal_link;
+        // ... brenda funksionit ku i ngarkon të dhënat ...
 
-    // Nëse linku ekziston, nuk është "EMPTY" dhe nuk është bosh
-    if (link && typeof link === 'string' && link.trim().toUpperCase() !== "EMPTY" && link.trim() !== "") {
-        buyButton.href = link;
-        buyButton.style.display = "flex"; // Shfaq butonin
-    } else {
-        buyButton.style.display = "none"; // Fshihet nëse nuk ka link të vlefshëm
-    }
+        // 1. Deklarimi (këtu po e krijojmë variablin)
+        const buyButton = document.getElementById("buy");
+
+        // 2. Kontrolli (këtu po e përdorim)
+        if (data && data.paypal_link && data.paypal_link !== "EMPTY") {
+            buyButton.href = data.paypal_link;
+            buyButton.style.display = "flex"; // Shfaq butonin
+        } else {
+            buyButton.style.display = "none"; // Fshihe nëse nuk ka link
+        }
+
+        // ... vazhdo pjesën tjetër të kodit ...
 
         
         updateGallery();

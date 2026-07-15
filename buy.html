@@ -85,6 +85,19 @@ const { data, error } = await supabase
         }
     ]);
 
+    // Ndrysho statusin e orës pasi u ble
+    const { error: statusError } = await supabase
+        .from('oras')
+        .update({
+            status: 'sold'
+        })
+        .eq('id', productId);
+
+    if (statusError) {
+        console.error("Gabim gjatë ndryshimit të statusit:", statusError);
+    }
+
+    
     if (error) {
         console.error("Gabim gjatë blerjes:", error);
         alert("Blerja dështoi: " + error.message);

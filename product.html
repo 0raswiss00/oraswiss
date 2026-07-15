@@ -297,17 +297,19 @@ async function loadProduct() {
         document.getElementById("description").innerText =
             data.description || "N/A";
 
-  const buyButton = document.getElementById("buy");
+// ... pas description.innerText
+        
+        const buyBtnElement = document.getElementById("buy");
 
-// Kontrollojmë nëse butoni ekziston vërtet në faqe para se ta prekim
-if (buyButton) {
-    if (data && data.paypal_link && data.paypal_link !== "EMPTY") {
-        buyButton.href = data.paypal_link;
-        buyButton.style.display = "flex";
-    } else {
-        buyButton.style.display = "none";
-    }
-}
+        if (buyBtnElement) {
+            // Kontrollojme nese linku ekziston
+            if (data.paypal_link && data.paypal_link !== "EMPTY" && data.paypal_link.trim() !== "") {
+                buyBtnElement.href = data.paypal_link;
+                buyBtnElement.style.display = "flex";
+            } else {
+                buyBtnElement.style.display = "none";
+            }
+        }
 
         
         updateGallery();

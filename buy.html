@@ -26,7 +26,13 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 <script src="db-connect.js"></script>
-<script>  
+<script>
+const supabase = window.supabase.createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
+
+    
  async function loadOrders() {
     const ordersBody = document.getElementById('orders-body');
     if (!ordersBody) return;

@@ -297,15 +297,16 @@ async function loadProduct() {
         document.getElementById("description").innerText =
             data.description || "N/A";
 
-        const buyButton = document.getElementById("buy");
+    // Kjo logjikë kontrollon për NULL, "EMPTY", ose string bosh
+    const link = data.paypal_link;
 
-        // Kjo logjikë kontrollon nëse linku është i vlefshëm dhe nuk është "EMPTY"
-        if (data.paypal_link && data.paypal_link !== "EMPTY" && data.paypal_link.trim() !== "") {
-            buyButton.href = data.paypal_link;
-            buyButton.style.display = "flex"; // Butoni shfaqet
-        } else {
-            buyButton.style.display = "none"; // Butoni fshihet
-        }
+    // Nëse linku ekziston, nuk është "EMPTY" dhe nuk është bosh
+    if (link && typeof link === 'string' && link.trim().toUpperCase() !== "EMPTY" && link.trim() !== "") {
+        buyButton.href = link;
+        buyButton.style.display = "flex"; // Shfaq butonin
+    } else {
+        buyButton.style.display = "none"; // Fshihet nëse nuk ka link të vlefshëm
+    }
 
         
         updateGallery();

@@ -1,7 +1,7 @@
-// Mos krijo variabël të ri, përdor atë që jep biblioteka
-const supabaseUrl = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
-const supabaseKey = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'; 
-
+const supabase = window.supabase.createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
 // Kjo e krijon klientin vetëm nëse nuk ekziston
 if (!window.mySupabase) {
     window.mySupabase = supabase.createClient(supabaseUrl, supabaseKey);

@@ -297,20 +297,17 @@ async function loadProduct() {
         document.getElementById("description").innerText =
             data.description || "N/A";
 
-        // ... brenda funksionit ku i ngarkon të dhënat ...
+  const buyButton = document.getElementById("buy");
 
-        // 1. Deklarimi (këtu po e krijojmë variablin)
-        const buyButton = document.getElementById("buy");
-
-        // 2. Kontrolli (këtu po e përdorim)
-        if (data && data.paypal_link && data.paypal_link !== "EMPTY") {
-            buyButton.href = data.paypal_link;
-            buyButton.style.display = "flex"; // Shfaq butonin
-        } else {
-            buyButton.style.display = "none"; // Fshihe nëse nuk ka link
-        }
-
-        // ... vazhdo pjesën tjetër të kodit ...
+// Kontrollojmë nëse butoni ekziston vërtet në faqe para se ta prekim
+if (buyButton) {
+    if (data && data.paypal_link && data.paypal_link !== "EMPTY") {
+        buyButton.href = data.paypal_link;
+        buyButton.style.display = "flex";
+    } else {
+        buyButton.style.display = "none";
+    }
+}
 
         
         updateGallery();

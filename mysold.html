@@ -133,29 +133,29 @@ soldBody.innerHTML = data.map(order => {
     const trackingVal = order.tracing_number || ""; 
 
     return `
-<tr>
-    <td>${ora ? `<img src="${ora.image_url}" width="70">` : "Pa foto"}</td>
-    <td>${ora ? `${ora.brand} ${ora.model}` : `Ora #${order.product_id}`}</td>
-    <td>${order.id}</td>
-    <td>${order.status || "-"}</td>
+    <tr>
+        <td>${ora ? `<img src="${ora.image_url}" width="70">` : "Pa foto"}</td>
+        <td>${ora ? `${ora.brand} ${ora.model}` : `Ora #${order.product_id}`}</td>
+        <td>${order.id}</td>
+        <td>${order.status || "-"}</td>
     
-    <td id="track-cell-${order.id}">
-        ${trackingVal || "Nuk ka"}
-    </td>
+        <td id="track-cell-${order.id}">
+            ${trackingVal || "Nuk ka"}
+        </td>
 
-    <td>
-        <button onclick="openTrackingModal('${order.id}', '${trackingVal}')">
-            Shto/Edito
-        </button>
+        <td>
+            <button onclick="openTrackingModal('${order.id}', '${trackingVal}')">
+                Shto/Edito
+            </button>
 
-        <br>
+            <br>
 
-        <button class="btn-cancel" onclick="anulloPorosine('${order.id}')">
-            Anullo
-        </button>
-    </td>
-</tr>
-`;
+            <button class="btn-cancel" onclick="anulloPorosine('${order.id}')">
+                Anullo
+            </button>
+        </td>
+    </tr>
+    `;
 }).join("");
 
 async function anulloPorosine(orderId) {

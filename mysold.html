@@ -85,6 +85,9 @@ async function loadMySold() {
         "<tr><td colspan='10'>Duhet të jesh i loguar.</td></tr>";
         return;
     }
+
+    console.log("USER ID:", user.id);
+
     
     const { data, error } = await window.supabaseClient
     .from("orders")

@@ -364,6 +364,15 @@ function shareProduct(){
 }
 
 
+const buyButton = document.getElementById("buy");
+
+if (data.paypal && data.paypal.trim() !== "" && data.paypal !== "EMPTY") {
+    buyButton.href = data.paypal;
+    buyButton.style.display = "flex"; // Sigurohu që është i dukshëm
+} else {
+    buyButton.style.display = "none"; // Fshi butonin nëse nuk ka link
+}
+    
 
 loadProduct();
 

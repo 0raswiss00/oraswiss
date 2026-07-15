@@ -121,97 +121,38 @@ async function loadMySold() {
     }
 
 
-    soldBody.innerHTML = data.map(order => {
+// Gjej pjesën e 'map' në kodin tënd dhe zëvendësoje me këtë strukturë:
 
+soldBody.innerHTML = data.map(order => {
+    const ora = order.oras;
+    
+    // Sigurohu që po përdor emrin e saktë të kolonës që krijove (tracing_number ose tracking_number)
+    const trackingVal = order.tracing_number || ""; 
 
-        const ora = order.oras;
+    return `
+    <tr>
+        <td>${ora ? <img src="${ora.image_url}" width="70"> : "Pa foto"}</td>
+        <td>${ora ? ${ora.brand} ${ora.model} : "Ora #"+order.product_id}</td>
+        <td>${order.id}</td>
+        <td>${order.status || "-"}</td>
+        
+        <!-- Këtu shfaqet numri aktual -->
+        <td id="track-cell-${order.id}">${trackingVal || "Nuk ka"}</td>
 
-        return `
-        <tr>
-
-            <td>
-                ${
-                ora
-                ?
-                `
-                <a href="product.html?id=${order.product_id}">
-                    <img 
-                    src="${ora.image_url}" 
-                    width="70"
-                    style="border-radius:8px;">
-                </a>
-                `
-                :
-                "Pa foto"
-                }
-            </td>
-
-
-            <td>
-                ${
-                ora
-                ?
-                `
-                <a href="product.html?id=${order.product_id}">
-                    ${ora.brand} ${ora.model}
-                </a>
-                `
-                :
-                "Ora #"+order.product_id
-                }
-            </td>
-
-
-            <td>${order.id}</td>
-
-
-            <td>${order.status || "-"}</td>
-
-
-            <td>
-                ${order.tracking_number || "Nuk ka"}
-            </td>
-
-
-            <td>
-                ${order.payment_status || "Pending"}
-            </td>
-
-
-            <td>
-                ${order.payment_amount || "0"} €
-            </td>
-
-
-            <td>
-                ${
-                order.received_confirmed
-                ? "Po"
-                : "Jo"
-                }
-            </td>
-
-
-            <td>
-                ${
-                order.return_requested
-                ? order.return_reason || "Kërkesë kthimi"
-                : "Jo"
-                }
-            </td>
-
-
-            <td>
-                <button onclick="anulloPorosine('${order.id}')">
-                    Anullo
-                </button>
-            </td>
-
-        </tr>
-        `;
-
-    }).join("");
-}
+        <td>
+            <!-- Butoni që hap modalin -->
+            <button onclick="openTrackingModal('${order.id}', '${trackingVal}')" 
+                    style="background:gold; color:black; padding:5px; cursor:pointer;">
+                Shto/Edito
+            </button>
+            <br>
+            <button class="btn-cancel" onclick="anulloPorosine('${order.id}')" style="margin-top:5px;">
+                Anullo
+            </button>
+        </td>
+    </tr>
+    `;
+}).join("");
 
 async function anulloPorosine(orderId) {
 

@@ -299,8 +299,8 @@ async function loadProduct() {
 
         const buyButton = document.getElementById("buy");
 
-        // Kontrollojmë kolonën 'paypal_link' që sapo pamë në foto
-        if (data.paypal_link && data.paypal_link !== "EMPTY") {
+        // Kjo logjikë kontrollon nëse ka link, pavarësisht nëse është NULL ose "EMPTY"
+        if (data.paypal_link && data.paypal_link !== "EMPTY" && data.paypal_link.trim() !== "") {
             buyButton.href = data.paypal_link;
             buyButton.style.display = "flex"; // Butoni shfaqet
         } else {

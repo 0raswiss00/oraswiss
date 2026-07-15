@@ -323,9 +323,9 @@
     async function loadAllData() {
         try {
             // 1. Numërimi i Përdoruesve
-            const { count: userCount, error: userError } = await supabase
+            const { data: users, error } = await supabase
                 .from('profiles')
-                .select('*', { count: 'exact', head: true });
+                .select('*');
 
             // 2. Numërimi i Orëve (Ndryshimi është këtu)
             // Heqim 'head: true' për ta testuar, ose përdorim këtë formë:

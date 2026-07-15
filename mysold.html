@@ -133,29 +133,29 @@ soldBody.innerHTML = data.map(order => {
     const trackingVal = order.tracing_number || ""; 
 
     return `
-    <tr>
-        <td>${ora ? `<img src="${ora.image_url}" width="70">` : "Pa foto"}</td>
-        <td>${ora ? `${ora.brand} ${ora.model}` : `Ora #${order.product_id}`}</td>
-        <td>${order.id}</td>
-        <td>${order.status || "-"}</td>
-    `;
-        
-        <!-- Këtu shfaqet numri aktual -->
-        <td id="track-cell-${order.id}">${trackingVal || "Nuk ka"}</td>
+<tr>
+    <td>${ora ? `<img src="${ora.image_url}" width="70">` : "Pa foto"}</td>
+    <td>${ora ? `${ora.brand} ${ora.model}` : `Ora #${order.product_id}`}</td>
+    <td>${order.id}</td>
+    <td>${order.status || "-"}</td>
+    
+    <td id="track-cell-${order.id}">
+        ${trackingVal || "Nuk ka"}
+    </td>
 
-        <td>
-            <!-- Butoni që hap modalin -->
-            <button onclick="openTrackingModal('${order.id}', '${trackingVal}')" 
-                    style="background:gold; color:black; padding:5px; cursor:pointer;">
-                Shto/Edito
-            </button>
-            <br>
-            <button class="btn-cancel" onclick="anulloPorosine('${order.id}')" style="margin-top:5px;">
-                Anullo
-            </button>
-        </td>
-    </tr>
-    `;
+    <td>
+        <button onclick="openTrackingModal('${order.id}', '${trackingVal}')">
+            Shto/Edito
+        </button>
+
+        <br>
+
+        <button class="btn-cancel" onclick="anulloPorosine('${order.id}')">
+            Anullo
+        </button>
+    </td>
+</tr>
+`;
 }).join("");
 
 async function anulloPorosine(orderId) {

@@ -302,13 +302,59 @@ async function loadProduct() {
 // ... pas description.innerText
         
         const buyBtn = document.getElementById("buy");
+
         if (buyBtn) {
-            if (data.paypal_link && data.paypal_link !== "EMPTY" && data.paypal_link.trim() !== "") {
-                buyBtn.href = data.paypal_link;
-                buyBtn.style.display = "flex";
-            } else {
-                buyBtn.style.display = "none";
-            }
+
+            buyBtn.onclick = async function(e) {
+
+                e.preventDefault();
+
+                buyBtn.innerText = "⏳ Loading...";
+
+                try {
+
+                    const response = await fetch(
+                        "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                product_id: productId
+                            })
+                        }
+                    );
+
+
+                    const result = await response.json();
+
+
+                    if (result.paypal_link) {
+
+                        window.location.href = result.paypal_link;
+
+                    } else {
+
+                        alert("PayPal link nuk u krijua");
+
+                        buyBtn.innerText = "🛒 BUY";
+
+                    }
+
+
+                } catch(error) {
+
+                    console.error(error);
+
+                    alert("Gabim me PayPal");
+
+                    buyBtn.innerText = "🛒 BUY";
+
+                }
+
+            };
+
         }
 
         

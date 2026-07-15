@@ -366,11 +366,12 @@ function shareProduct(){
 
 const buyButton = document.getElementById("buy");
 
-if (data.paypal && data.paypal.trim() !== "" && data.paypal !== "EMPTY") {
-    buyButton.href = data.paypal;
-    buyButton.style.display = "flex"; // Sigurohu që është i dukshëm
+// Kontrollojmë kolonën 'paypal_link' që sapo pamë në foto
+if (data.paypal_link && data.paypal_link !== "EMPTY") {
+    buyButton.href = data.paypal_link;
+    buyButton.style.display = "flex"; // Butoni shfaqet
 } else {
-    buyButton.style.display = "none"; // Fshi butonin nëse nuk ka link
+    buyButton.style.display = "none"; // Butoni fshihet nëse nuk ka link
 }
     
 

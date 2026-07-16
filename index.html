@@ -81,12 +81,12 @@
         <span>⌚ Ora: <b id="count-products">0</b></span>
     </span>
     <a href="register.html">Register</a>
-    <button id="btnSellNow" style="display: none;" onclick="trajtoKlikiminSellNow()">Sell a watch</button>
+    <button id="btnSellNow" onclick="window.trajtoKlikiminSell()" style="background-color: gold; padding: 10px 20px; border-radius: 5px; cursor: pointer; border: none; font-weight: bold;">Sell Now</button>
     <a href="home.html">Home</a>
     <a href="luxury.html">Luxury</a>
     <a href="vintage.html">Vintage</a>
     <a href="parts.html">Parts</a>
-    <a href="movement-parts.html">Movement Parts</a>
+    <a href="separate-parts.html">Separate Parts</a>
     <a href="service.html">Service</a>
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
@@ -95,13 +95,7 @@
     <a href="sell.html">Sell</a>
   </nav>
 </header>
-    <div class="search-container">
-        <div class="search-box">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="searchInput" placeholder="Search on OraSwiss">
-            <button class="camera-icon" onclick="alert('Funksioni për foto së shpejti!')">📷</button>
-        </div>
-    </div>
+
 <h2>Luxury Collection</h2>
 <div id="luxury-container" class="grid">Loading...</div>
 
@@ -132,19 +126,6 @@ async function loadCategory(cat, containerId) {
         return;
     }
 
-    async function trajtoKlikiminSellNow() {
-        // Kontrollo sesionin me klientin 'supabase' që ke krijuar në rreshtin 109
-        const { data: { session } } = await supabase.auth.getSession();
-
-        if (session) {
-            // Nëse je loguar, të çon te faqja e shitjes
-            window.location.href = 'sellnow.html';
-        } else {
-            // Nëse NUK je loguar, të çon te login
-            window.location.href = 'login.html';
-        }
-    }
-  
     if (!data || data.length === 0) {
         container.innerHTML = "No items in this category.";
         return;
@@ -181,11 +162,11 @@ async function loadCategory(cat, containerId) {
                 
                 <button class="btn-main btn-secondary" style="width:100%; margin-top:5px;" onclick="event.stopPropagation();">Send Request</button>
                 
-                <button class="btn-main btn-buy" 
-                style="width:100%; margin-top:5px;"
-                onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}'">
-                🛒 Buy Now
-                </button>
+                ${ora.paypal_link ? `
+                <a href="${ora.paypal_link}" target="_blank" style="text-decoration:none;" onclick="event.stopPropagation();">
+                    <button class="btn-main btn-buy" style="width:100%; margin-top:5px;">🛒 Buy Now</button>
+                </a>
+                ` : ''}
 
                 <div style="display: flex; gap: 5px; margin-top: 5px;">
                     <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" 
@@ -202,43 +183,30 @@ async function loadCategory(cat, containerId) {
     }).join('');
 }
 // E vendosim tek 'window' që të jetë i aksesueshëm nga butoni në HTML
-window.trajtoKlikiminSellNow = async function() {
-    // 1. Kontrollo statusin e logimit
-    const { data: { session } } = await supabase.auth.getSession();
+window.trajtoKlikiminSell = async function() {
+  // Përdor getUser në vend të getSession
+  const { data: { user } } = await supabase.auth.getUser();
 
-    if (session) {
-        // Nëse është i loguar, dërgoje te faqja e shitjes (sigurohu që emri i skedarit është i saktë)
-        window.location.href = 'sellnow.html'; 
-    } else {
-        // Nëse NUK është i loguar, dërgoje te faqja e Login
-        window.location.href = 'login.html'; 
-    }
+  if (user) {
+    // Nëse ka user, shko te faqja e shitjes
+    window.location.href = 'register.html'; 
+  } else {
+    // Nëse nuk ka user, dërgoje te logimi
+    window.location.href = 'login.html'; 
+  }
 };
 
 // Funksioni për ta shfaqur butonin vetëm kur përdoruesi është i loguar
-// 1. Funksioni që kontrollon nëse je loguar dhe shfaq butonin kur hapet faqja
-async function kontrolloSesionin() {
+async function kontrolloDheShfaqSellNow() {
     const { data: { session } } = await supabase.auth.getSession();
     const btnSell = document.getElementById("btnSellNow");
-    
     if (session && btnSell) {
-        btnSell.style.display = "inline-block"; // E shfaq butonin
+        btnSell.style.display = "block"; 
     }
 }
 
-// 2. Funksioni që aktivizohet KUR KLIKON butonin
-window.trajtoKlikiminSell = async function() {
-    const { data: { session } } = await supabase.auth.getSession();
-    
-    if (session) {
-        window.location.href = 'sell.html'; // Sigurohu që ky skedar ekziston
-    } else {
-        window.location.href = 'login.html';
-    }
-};
-
-// E thërrasim kontrollin sapo hapet faqja
-kontrolloSesionin();
+// E thërrasim funksionin sapo faqja të hapet
+kontrolloDheShfaqSellNow();
   
     // Ngarkimi i kategorive
     loadCategory('luxury', 'luxury-container');
@@ -246,60 +214,50 @@ kontrolloSesionin();
     loadCategory('parts', 'parts-container');
 
 // Funksioni për të numëruar produktet (orët)
-// 1. Funksioni për të numëruar produktet (orët)
 async function loadProductCount() {
-    console.log("Duke u lidhur me Supabase për produkte...");
     try {
+        console.log("Duke u lidhur me Supabase për produkte...");
         const { count, error } = await supabase
-            .from('oras')
-            .select('*', { count: 'exact', head: true });
+            .from('oras') // Përdor tabelën 'oras' që konfirmuat
+            .select('*', { count: 'exact' });
 
-        if (error) throw error;
-
-        console.log("Numri i produkteve:", count);
-        const element = document.getElementById('count-products');
-        if (element) {
-            element.textContent = count || 0;
+        if (error) {
+            console.error("GABIM SUPABASE:", error);
+        } else {
+            console.log("Numri i produkteve:", count);
+            const element = document.getElementById('count-products');
+            if (element) {
+                element.textContent = count || 0;
+            }
         }
     } catch (err) {
-        console.error("Gabim te loadProductCount:", err);
+        console.error("Gabim i papritur:", err);
     }
 }
 
-// 2. Funksioni për të numëruar përdoruesit total
+// Funksioni për të numëruar përdoruesit
 async function loadUserCount() {
-    console.log("Duke u lidhur me Supabase për përdoruesit...");
-
     try {
-        const { count, error } = await supabase
-            .from('users')
-            .select('*', { count: 'exact', head: true });
-
+        const { data, error } = await supabase
+            .from('oras')
+            .select('user_id');
+        
         if (error) throw error;
-
-        console.log("Numri i përdoruesve:", count);
-
-        document.getElementById("users-container").innerHTML =
-        <div class="error">Gabim: ${error.message}</div>;
-
-        if (userCountElement) {
-            userCountElement.textContent = count || 0;
-        }
-
+        
+        const uniqueUsers = [...new Set(data?.map(w => w.user_id).filter(Boolean))];
+        document.getElementById('count-users').textContent = uniqueUsers.length;
     } catch (err) {
         console.error("Gabim te loadUserCount:", err);
     }
 }
 
-
-// Thirr funksionet sapo të hapet faqja
-loadProductCount();
+// Thirr funksionet këtu (jashtë çdo funksioni tjetër)
 loadUserCount();
+loadProductCount();
 
 </script>
 <div id="myOraSwissMenu" style="display: none; position: fixed; bottom: 80px; right: 10px; background: #222; border: 1px solid #444; padding: 10px; border-radius: 10px; z-index: 9999; width: 180px;">
     <div class="menu-item" onclick="location.href='buy.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 Buy</div>
-    <div class="menu-item" onclick="location.href='mysold.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 My Sold</div>
     <div class="menu-item" onclick="location.href='messages.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">✉️ Messages</div>
     <div class="menu-item" onclick="location.href='settings.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">⚙️ Settings</div>
     <div class="menu-item" onclick="location.href='support.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🎧 Support</div>
@@ -320,39 +278,6 @@ loadUserCount();
         const menu = document.getElementById('myOraSwissMenu');
         menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
     }
-
-    const searchInput = document.getElementById("searchInput");
-
-    searchInput.addEventListener("input", async function () {
-
-        const text = this.value.toLowerCase().trim();
-
-        const { data, error } = await supabase
-            .from("oras")
-            .select("*");
-
-        if (error) {
-            console.error(error);
-            return;
-        }
-
-        const filtered = data.filter(ora =>
-            (ora.brand || "").toLowerCase().includes(text) ||
-            (ora.model || "").toLowerCase().includes(text) ||
-            (ora.reference || "").toLowerCase().includes(text)
-        );
-
-        const container = document.getElementById("luxury-container");
-
-        container.innerHTML = filtered.map(ora => `
-            <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
-                <img src="${Array.isArray(ora.image_url) ? ora.image_url[0] : ora.image_url}">
-                <h3>${ora.brand || ""} - ${ora.model || ""}</h3>
-                <p>${ora.price || ""} €</p>
-            </div>
-        `).join("");
-
-    });
   
 </script>  
 </body>

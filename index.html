@@ -271,7 +271,7 @@ async function loadUserCount() {
     console.log("Duke u lidhur me Supabase për përdoruesit...");
 
     try {
-        const { data, error } = await supabase.rpc('get_users_count');
+        const { data, error } = await supabase.rpc('get_Users_count');
 
         if (error) {
             throw error;
@@ -279,7 +279,7 @@ async function loadUserCount() {
 
         console.log("Numri i përdoruesve:", data);
 
-        const userCountElement = document.getElementById('count-users');
+        const userCountElement = document.getElementById('count-Users');
 
         if (userCountElement) {
             userCountElement.textContent = data || 0;

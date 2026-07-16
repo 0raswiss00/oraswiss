@@ -269,26 +269,27 @@ async function loadProductCount() {
 // 2. Funksioni për të numëruar përdoruesit total
 async function loadUserCount() {
     console.log("Duke u lidhur me Supabase për përdoruesit...");
+
     try {
-        // Numërojmë direkt rreshtat nga tabela 'profiles' 
-        // Sigurohuni që tabela juaj e përdoruesve quhet 'profiles'
         const { count, error } = await supabase
-            .from('Users') 
+            .from('users')
             .select('*', { count: 'exact', head: true });
 
         if (error) throw error;
 
         console.log("Numri i përdoruesve:", count);
-        
-        // Përditësojmë elementin HTML
-        const userCountElement = document.getElementById('count-Users');
+
+        const userCountElement = document.getElementById('count-users');
+
         if (userCountElement) {
             userCountElement.textContent = count || 0;
         }
+
     } catch (err) {
         console.error("Gabim te loadUserCount:", err);
     }
 }
+
 
 // Thirr funksionet sapo të hapet faqja
 loadProductCount();

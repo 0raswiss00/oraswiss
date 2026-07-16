@@ -76,7 +76,7 @@
   <nav class="nav-scroll">
     <span class="site-title">ORA<br>SWISS</span>
     <span style="color: white; margin-left: 20px; display: flex; align-items: center; gap: 15px;">
-        <span>👤 User: <b id="count-users">0</b></span>
+        <span>👤 User: <b id="count-Users">0</b></span>
     
         <span>⌚ Ora: <b id="count-products">0</b></span>
     </span>
@@ -267,22 +267,28 @@ async function loadProductCount() {
 }
 
 // 2. Funksioni për të numëruar përdoruesit total
-// Funksioni për të numëruar përdoruesit
 async function loadUserCount() {
+    console.log("Duke u lidhur me Supabase për përdoruesit...");
     try {
-        const { data, error } = await supabase
-            .from('oras')
-            .select('user_id');
-        
+        // Numërojmë direkt rreshtat nga tabela 'profiles' 
+        // Sigurohuni që tabela juaj e përdoruesve quhet 'profiles'
+        const { count, error } = await supabase
+            .from('Users') 
+            .select('*', { count: 'exact', head: true });
+
         if (error) throw error;
+
+        console.log("Numri i përdoruesve:", count);
         
-        const uniqueUsers = [...new Set(data?.map(w => w.user_id).filter(Boolean))];
-        document.getElementById('count-users').textContent = uniqueUsers.length;
+        // Përditësojmë elementin HTML
+        const userCountElement = document.getElementById('count-Users');
+        if (userCountElement) {
+            userCountElement.textContent = count || 0;
+        }
     } catch (err) {
         console.error("Gabim te loadUserCount:", err);
     }
 }
-
 
 // Thirr funksionet sapo të hapet faqja
 loadProductCount();

@@ -318,6 +318,39 @@ loadUserCount();
         const menu = document.getElementById('myOraSwissMenu');
         menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
     }
+
+    const searchInput = document.getElementById("searchInput");
+
+    searchInput.addEventListener("input", async function () {
+
+        const text = this.value.toLowerCase().trim();
+
+        const { data, error } = await supabase
+            .from("oras")
+            .select("*");
+
+        if (error) {
+            console.error(error);
+            return;
+        }
+
+        const filtered = data.filter(ora =>
+            (ora.brand || "").toLowerCase().includes(text) ||
+            (ora.model || "").toLowerCase().includes(text) ||
+            (ora.reference || "").toLowerCase().includes(text)
+        );
+
+        const container = document.getElementById("luxury-container");
+
+        container.innerHTML = filtered.map(ora => `
+            <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
+                <img src="${Array.isArray(ora.image_url) ? ora.image_url[0] : ora.image_url}">
+                <h3>${ora.brand || ""} - ${ora.model || ""}</h3>
+                <p>${ora.price || ""} €</p>
+            </div>
+        `).join("");
+
+    });
   
 </script>  
 </body>

@@ -320,30 +320,52 @@
         document.getElementById('visitors-content').innerHTML = html || '<p style="color:#aaa;">Nuk ka vizitorë</p>';
     }
 
-    async function loadAllData() {
-        try {
-            // 1. Numërimi i Përdoruesve
-            const { data: users, error } = await supabase
-                .from('profiles')
-                .select('*');
+async function loadAllData() {
+    try {
+        const usersContainer = document.getElementById("users-container");
+        
+        // 1. Merr Përdoruesit (profiles)
+        const { data: users, count: userCount, error: userError } = await supabase
+            .from('profiles')
+            .select('*', { count: 'exact' });
 
-            // 2. Numërimi i Orëve (Ndryshimi është këtu)
-            // Heqim 'head: true' për ta testuar, ose përdorim këtë formë:
-            const { data, count, error: watchError } = await supabase
-                .from('watches')
+        if (userError) throw userError;
+        document.getElementById("count-users").textContent = userCount || 0;
+
+        // 2. Merr Orët (watches)
+        const { count: watchCount, error: watchError } = await supabase
+            .from('watches')
+            .select('*', { count: 'exact' });
+
+        if (watchError) throw watchError;
+        document.getElementById("count-products").textContent = watchCount || 0;
+
+            // 3. Merr Porositë (orders)
+            const { count: orderCount, error: orderError } = await supabase
+                .from('orders')
                 .select('*', { count: 'exact' });
 
-            if (watchError) {
-                console.error("Gabim te watches:", watchError);
+            if (orderError) console.error("Gabim te orders:", orderError);
+            document.getElementById("count-orders").textContent = orderCount || 0;
+
+            // 4. Shfaq listën e përdoruesve në UI
+            if (users && users.length > 0) {
+                usersContainer.innerHTML = users.map(user => `
+                    <div class="user-card">
+                        <div class="user-info">
+                            <h3>${user.full_name || 'Përdorues Anonim'}</h3>
+                            <p>Email: ${user.email || 'N/A'}</p>
+                            <p>ID: ${user.id}</p>
+                        </div>
+                    </div>
+                `).join('');
             } else {
-                console.log("Numri i orëve është:", count);
-                document.getElementById("count-products").textContent = count || 0;
+                usersContainer.innerHTML = '<p class="empty">Nuk ka përdorues të regjistruar.</p>';
             }
 
-            document.getElementById("count-users").textContent = userCount || 0;
-
         } catch (error) {
-            console.error("Gabim i përgjithshëm:", error);
+            console.error("Gabim në ngarkim:", error);
+            document.getElementById("users-container").innerHTML = <div class="error">Gabim: ${error.message}</div>;
         }
     }
     // ... kodi yt i mëparshëm ...

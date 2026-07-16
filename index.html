@@ -273,7 +273,9 @@ async function loadUserCount() {
     try {
         const { data, error } = await supabase.rpc('get_users_count');
 
-        if (error) throw error;
+        if (error) {
+            throw error;
+        }
 
         console.log("Numri i përdoruesve:", data);
 

@@ -279,7 +279,8 @@ async function loadUserCount() {
 
         console.log("Numri i përdoruesve:", count);
 
-        const userCountElement = document.getElementById('count-users');
+        document.getElementById("users-container").innerHTML =
+        <div class="error">Gabim: ${error.message}</div>;
 
         if (userCountElement) {
             userCountElement.textContent = count || 0;

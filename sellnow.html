@@ -115,6 +115,14 @@ button:hover {
 
 </select>
 
+<button 
+id="goBracelets"
+type="button"
+style="display:none;">
+Continue to Bracelets / Straps
+</button>
+
+    
 <div class="row">
 
 <input id="brand" type="text" placeholder="Brand" required>
@@ -384,6 +392,33 @@ if(!user){
 }
 
 
+document
+.getElementById("category")
+.addEventListener("change", function(){
+
+    const btn = document.getElementById("goBracelets");
+
+    if(this.value === "bracelets_straps"){
+
+        btn.style.display = "block";
+
+    } else {
+
+        btn.style.display = "none";
+
+    }
+
+});
+
+
+document
+.getElementById("goBracelets")
+.addEventListener("click", function(){
+
+    window.location.href = "bracelets-straps.html";
+
+});
+    
 
 /*
  Submit Form

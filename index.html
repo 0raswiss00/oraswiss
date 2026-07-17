@@ -76,7 +76,7 @@
   <nav class="nav-scroll">
     <span class="site-title">ORA<br>SWISS</span>
     <span style="color: white; margin-left: 20px; display: flex; align-items: center; gap: 15px;">
-        <span>👤 User: <b id="count-  users">0</b></span>
+        <span>👤 User: <b id="count-users">0</b></span>
     
         <span>⌚ Ora: <b id="count-products">0</b></span>
     </span>
@@ -268,33 +268,23 @@ async function loadProductCount() {
 
 // 2. Funksioni për të numëruar përdoruesit total
 async function loadUserCount() {
-    console.log("Duke u lidhur me Supabase për përdoruesit...");
-
     try {
-        const { data, error } = await supabase.rpc('get_users_count');
-
-        if (error) {
-            throw error;
-        }
-
-        console.log("Numri i përdoruesve:", data);
-
-        const userCountElement = document.getElementById('count-users');
-
-        if (userCountElement) {
-            userCountElement.textContent = data || 0;
-        }
-
+        const { data, error } = await supabase
+            .from('oras')
+            .select('user_id');
+        
+        if (error) throw error;
+        
+        const uniqueUsers = [...new Set(data?.map(w => w.user_id).filter(Boolean))];
+        document.getElementById('count-users').textContent = uniqueUsers.length;
     } catch (err) {
         console.error("Gabim te loadUserCount:", err);
     }
 }
 
-
-// Thirr funksionet sapo të hapet faqja
-loadProductCount();
+// Thirr funksionet këtu (jashtë çdo funksioni tjetër)
 loadUserCount();
-
+loadProductCount();
 </script>
 <div id="myOraSwissMenu" style="display: none; position: fixed; bottom: 80px; right: 10px; background: #222; border: 1px solid #444; padding: 10px; border-radius: 10px; z-index: 9999; width: 180px;">
     <div class="menu-item" onclick="location.href='buy.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 Buy</div>

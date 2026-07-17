@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="sq">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sell Bracelet / Strap - OraSwiss</title>
+
+<style>
+
+body{
+    background:#111;
+    color:white;
+    font-family:Arial,sans-serif;
+}
+
+
+form{
+
+    max-width:600px;
+    margin:30px auto;
+    background:#1b1b1b;
+    padding:25px;
+    border-radius:10px;
+
+}
+
+
+h2{
+    text-align:center;
+}
+
+
+label{
+
+    display:block;
+    margin-top:12px;
+    margin-bottom:5px;
+    color:#ccc;
+
+}
+
+
+input,select,textarea{
+
+    width:100%;
+    padding:10px;
+    background:#222;
+    color:white;
+    border:1px solid #444;
+    border-radius:5px;
+    box-sizing:border-box;
+
+}
+
+
+button{
+
+    width:100%;
+    margin-top:20px;
+    padding:12px;
+    background:#c9a227;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:16px;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<form id="braceletForm">
+
+
+<h2>Add Bracelet / Strap</h2>
+
+
+<label>Brand</label>
+<input id="brand" placeholder="Brand" required>
+
+
+<label>Reference Number</label>
+<input id="reference" placeholder="Reference number">
+
+
+<label>Price (€)</label>
+<input id="price" type="number" placeholder="Price">
+
+
+<label>Type</label>
+
+<select id="type">
+
+<option value="Bracelet">Bracelet</option>
+<option value="Strap">Strap</option>
+
+</select>
+
+
+
+<label>Condition</label>
+
+<select id="condition">
+
+<option value="New">New</option>
+<option value="Used">Used</option>
+
+</select>
+
+
+
+<label>Material</label>
+
+<select id="material">
+
+<option>Stainless Steel</option>
+<option>Titanium</option>
+<option>Gold</option>
+<option>White Gold</option>
+<option>Rose Gold</option>
+<option>Platinum</option>
+<option>Ceramic</option>
+<option>Leather</option>
+<option>Crocodile</option>
+<option>Alligator</option>
+<option>Rubber</option>
+<option>NATO</option>
+<option>Other</option>
+
+</select>
+
+
+
+<label>Gold Purity</label>
+
+<select id="gold_purity">
+
+<option value="">Select</option>
+<option>14K</option>
+<option>18K</option>
+<option>22K</option>
+<option>24K</option>
+
+</select>
+
+
+
+<label>Color</label>
+
+<select id="color">
+
+<option>Silver</option>
+<option>Black</option>
+<option>Gold</option>
+<option>Rose Gold</option>
+<option>Two-Tone</option>
+<option>Brown</option>
+<option>Blue</option>
+<option>Other</option>
+
+</select>
+
+
+
+<label>Lug Width (mm)</label>
+<input id="lug_width" placeholder="Example: 20mm">
+
+
+<label>Clasp / Buckle Width (mm)</label>
+<input id="clasp_width" placeholder="Example: 18mm">
+
+
+<label>Length (mm)</label>
+<input id="length" placeholder="Example: 120/75mm">
+
+
+<label>Thickness (mm)</label>
+<input id="thickness" placeholder="Example: 3.5mm">
+
+
+<label>Description</label>
+
+<textarea id="description" rows="5"></textarea>
+
+
+
+<label>Upload Photos</label>
+
+<input 
+id="fileInput"
+type="file"
+accept="image/*"
+multiple>
+
+
+<button type="submit">
+Sell Bracelet / Strap
+</button>
+
+
+</form>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+
+const supabase = window.supabase.createClient(
+
+"https://gnwsrmelmeqduhhmfmoa.supabase.co",
+
+"sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIY9"
+
+);
+
+
+
+let user;
+
+
+
+async function checkUser(){
+
+const {data:{user:currentUser}} =
+await supabase.auth.getUser();
+
+
+user=currentUser;
+
+
+if(!user){
+
+alert("Login required");
+
+window.location.href="login.html";
+
+}
+
+}
+
+
+checkUser();
+
+
+
+
+
+document
+.getElementById("braceletForm")
+.addEventListener("submit", async function(e){
+
+
+e.preventDefault();
+
+
+
+const files =
+document.getElementById("fileInput").files;
+
+
+let imageUrls=[];
+
+
+
+for(let i=0;i<files.length;i++){
+
+
+const file=files[i];
+
+
+const fileName =
+Date.now()+""+i+file.name;
+
+
+
+const {error}=await supabase
+
+.storage
+.from("or-images")
+.upload(fileName,file);
+
+
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+
+
+const {data:urlData}=
+
+supabase
+
+.storage
+
+.from("or-images")
+
+.getPublicUrl(fileName);
+
+
+
+imageUrls.push(urlData.publicUrl);
+
+
+}
+
+
+
+
+
+const braceletData={
+
+
+user_id:user.id,
+
+
+brand:
+brand.value,
+
+
+reference:
+reference.value,
+
+
+price:
+Number(price.value)||null,
+
+
+type:
+type.value,
+
+
+condition:
+condition.value,
+
+
+material:
+material.value,
+
+
+gold_purity:
+gold_purity.value,
+
+
+color:
+color.value,
+
+
+lug_width:
+lug_width.value,
+
+
+clasp_width:
+clasp_width.value,
+
+
+length:
+length.value,
+
+
+thickness:
+thickness.value,
+
+
+description:
+description.value,
+
+
+image_url:
+imageUrls
+
+
+};
+
+
+
+
+const {error}=await supabase
+
+.from("bracelets_straps")
+
+.insert([braceletData]);
+
+
+
+if(error){
+
+alert(error.message);
+
+return;
+
+}
+
+
+
+alert("Bracelet / Strap published successfully!");
+
+window.location.href="dashboard.html";
+
+
+
+});
+
+
+
+</script>
+
+
+</body>
+</html>
+Compose
+Shkruaj te Ora Swiss

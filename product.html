@@ -263,6 +263,39 @@ async function loadProduct() {
         console.log("PRODUCT DATA:", data);
         console.log("PAYPAL:", data.paypal_link);
 
+        if(data.category === "bracelets_straps"){
+
+            document.getElementById("bracelet-details").style.display = "block";
+
+            document.getElementById("b_type").innerText =
+            data.type || "N/A";
+
+            document.getElementById("b_condition").innerText =
+            data.condition || "N/A";
+
+            document.getElementById("b_material").innerText =
+            data.material || "N/A";
+
+            document.getElementById("b_gold_purity").innerText =
+            data.gold_purity || "N/A";
+
+            document.getElementById("b_color").innerText =
+            data.color || "N/A";
+
+            document.getElementById("b_lug_width").innerText =
+            data.lug_width || "N/A";
+
+            document.getElementById("b_clasp_width").innerText =
+            data.clasp_width || "N/A";
+
+            document.getElementById("b_length").innerText =
+            data.length || "N/A";
+
+            document.getElementById("b_thickness").innerText =
+            data.thickness || "N/A";
+
+        }
+        
         currentImages = Array.isArray(data.image_url)
             ? data.image_url
             : data.image_url

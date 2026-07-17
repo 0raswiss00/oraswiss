@@ -118,6 +118,20 @@
   );
 // Tani përdorni variablin 'supabase' kudo në kod
 
+async function loadUserCount() {
+    try {
+        const { data, error } = await supabase
+            .rpc('get_users_count');
+
+        if (error) throw error;
+
+        document.getElementById('count-users').textContent = data || 0;
+
+    } catch (err) {
+        console.error("Gabim te user count:", err);
+    }
+}
+  
 async function loadCategory(cat, containerId) {
     const container = document.getElementById(containerId);
     

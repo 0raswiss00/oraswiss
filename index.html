@@ -245,7 +245,6 @@ kontrolloSesionin();
     loadCategory('vintage', 'vintage-container');
     loadCategory('parts', 'parts-container');
 
-// Funksioni për të numëruar produktet (orët)
 // 1. Funksioni për të numëruar produktet (orët)
 async function loadProductCount() {
     console.log("Duke u lidhur me Supabase për produkte...");
@@ -267,23 +266,29 @@ async function loadProductCount() {
 }
 
 // Funksioni për të numëruar përdoruesit
-async function loadUserCount() {
+// Funksioni për të shfaqur tabelën e përdoruesve në konsolë
+async function loadUsersTable() {
     try {
+        // Marrim të gjithë përdoruesit nga tabela (sigurohu që tabela jote quhet 'users' ose 'profiles')
         const { data, error } = await supabase
-            .from('oras')
-            .select('user_id');
+            .from('profiles') // Ndryshoje në 'users' nëse ashtu e ke emrin e tabelës
+            .select('*');
         
         if (error) throw error;
         
-        const uniqueUsers = [...new Set(data?.map(w => w.user_id).filter(Boolean))];
-        document.getElementById('count-users').textContent = uniqueUsers.length;
+        // Kjo do të të shfaqë tabelën e plotë në Console (F12)
+        console.table(data); 
+        
+        // Nëse do ta mbash edhe shfaqjen e numrit në HTML, lëre këtë:
+        document.getElementById('count-users').textContent = data.length;
+        
     } catch (err) {
-        console.error("Gabim te loadUserCount:", err);
+        console.error("Gabim te loadUsersTable:", err);
     }
 }
 
-// Thirr funksionet këtu (jashtë çdo funksioni tjetër)
-loadUserCount();
+// Thirrje
+loadUsersTable();
 loadProductCount();
 
   

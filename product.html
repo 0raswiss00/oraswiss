@@ -321,7 +321,9 @@ async function loadProduct() {
                                 "Content-Type": "application/json"
                             },
                             body: JSON.stringify({
-                                product_id: productId
+                                product_id: productId,
+                                price: data.price,
+                                product_name: data.model
                             })
                         }
                     );

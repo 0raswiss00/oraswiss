@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<title>Pagesa u krye</title>
+</head>
+
+<body>
+
+<h2>Po konfirmohet pagesa...</h2>
+
+<script>
+
+async function capturePayment(){
+
+    const params = new URLSearchParams(window.location.search);
+
+    const paypalOrderId = params.get("token");
+
+
+    if(!paypalOrderId){
+        document.body.innerHTML = "Nuk u gjet PayPal Order ID";
+        return;
+    }
+
+
+    // Merr përdoruesin aktual
+    const { data } = await window.supabaseClient.auth.getUser();
+
+    const user = data.user;
+
+
+    if(!user){
+        document.body.innerHTML = "Duhet të jesh i loguar.";
+        return;
+    }
+
+
+
+    const productId = localStorage.getItem("buy_product_id");
+
+
+    const response = await fetch(
+        "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/capture-paypal-order",
+        {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                order_id: paypalOrderId,
+                product_id: productId,
+                buyer_id: user.id
+            })
+        }
+    );
+
+
+    const result = await response.json();
+
+
+    if(result.success){
+
+        document.body.innerHTML =
+        "<h2>Pagesa u krye me sukses ✅</h2>";
+
+    }else{
+
+        document.body.innerHTML =
+        "Gabim: " + result.error;
+
+    }
+
+}
+
+
+capturePayment();
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
+<script src="db-connect.js"></script>
+
+</body>
+</html>

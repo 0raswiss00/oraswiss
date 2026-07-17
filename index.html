@@ -271,11 +271,18 @@ async function loadUserCount() {
         const { data, error } = await supabase
             .from('oras')
             .select('user_id');
-        
+
         if (error) throw error;
 
-        const uniqueUsers = [...new Set(data?.map(w => w.user_id).filter(Boolean))];
-        document.getElementById('count-users').textContent = uniqueUsers.length;
+        const uniqueUsers = new Set(
+            data.map(item => item.user_id).filter(Boolean)
+        );
+
+        const element = document.getElementById('count-users');
+        if (element) {
+            element.textContent = uniqueUsers.size;
+        }
+
     } catch (err) {
         console.error("Gabim te loadUserCount:", err);
     }

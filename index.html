@@ -270,11 +270,11 @@ async function loadUserCount() {
     try {
         const { data, error } = await supabase
             .from('oras')
-            .select('users_id');
+            .select('user_id');
         
         if (error) throw error;
 
-        console.log("Numri i users:", count);
+        console.log("Numri i user:", count);
         const uniqueUsers = [...new Set(data?.map(w => w.user_id).filter(Boolean))];
         document.getElementById('count-users').textContent = uniqueUsers.length;
     } catch (err) {

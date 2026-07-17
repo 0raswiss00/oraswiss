@@ -274,7 +274,6 @@ async function loadUserCount() {
         
         if (error) throw error;
 
-        console.log("Numri i user:", count);
         const uniqueUsers = [...new Set(data?.map(w => w.user_id).filter(Boolean))];
         document.getElementById('count-users').textContent = uniqueUsers.length;
     } catch (err) {

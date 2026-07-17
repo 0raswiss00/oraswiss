@@ -56,7 +56,10 @@ async function finishPayment(){
 
     const result = await response.json();
 
+   console.log("CAPTURE RESPONSE:", result);
+   console.log("STATUS:", response.status);
 
+  
     if(result.success){
 
         document.body.innerHTML =

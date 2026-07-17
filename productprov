@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Details</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; background: #050505; color: white; font-family: Arial, sans-serif; padding-bottom: 90px; }
+        .product-page { width: 100%; min-height: 100vh; }
+        .gallery { position: relative; width: 100%; height: 55vh; background: #000; overflow: hidden; }
+        .gallery img { width: 100%; height: 100%; object-fit: contain; }
+        .photo-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); border: none; color: white; font-size: 35px; width: 45px; height: 60px; border-radius: 10px; cursor: pointer; }
+        .photo-left { left: 15px; } .photo-right { right: 15px; }
+        .photo-counter { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.6); padding: 7px 15px; border-radius: 20px; }
+        .details { padding: 20px; max-width: 900px; margin: auto; }
+        .brand { font-size: 18px; color: #aaa; }
+        .title { font-size: 30px; margin: 5px 0; }
+        .price { font-size: 28px; color: #25D366; font-weight: bold; margin: 15px 0; }
+        .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; }
+        .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
+        .top-actions { display: flex; gap: 10px; margin-top: 15px; }
+        .action { background: #151515; padding: 12px 18px; border-radius: 25px; cursor: pointer; }
+        .buy-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #090909; border-top: 1px solid #333; padding: 10px; display: flex; gap: 8px; z-index: 999; max-width: 900px; margin-left: 50%; transform: translateX(-50%); }
+        .buy-btn { flex: 1; padding: 15px; border-radius: 10px; text-align: center; text-decoration: none; font-weight: bold; cursor: pointer; }
+        .whatsapp { background: #25D366; color: white; }
+        .buy { background: #ffd900; color: black; }
+        .offer { background: #333; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="product-page">
+
+    <div class="gallery">
+        <button class="photo-btn photo-left" onclick="changeImage(-1)">❮</button>
+        <img id="main-photo" src="">
+        <button class="photo-btn photo-right" onclick="changeImage(1)">❯</button>
+        <div class="photo-counter" id="photo-count">1 / 1</div>
+    </div>
+
+<div class="category" id="category"></div>
+
+    
+<div class="details">
+
+    <div class="brand" id="brand"></div>
+
+    <div class="model" id="model"></div>
+
+    <div class="price" id="price"></div>
+
+</div>
+
+
+
+    <div class="top-actions">
+        <div class="action" onclick="shareProduct()">🔗 Share</div>
+        <div class="action">❤️ Favorite</div>
+    </div>
+
+
+    <div class="info-box" id="specs">
+
+        <div class="info-row">
+            <span>Reference</span>
+            <span id="reference">-</span>
+        </div>
+
+        <div class="info-row">
+            <span>Serial Number</span>
+            <span id="serial_number">-</span>
+        </div>
+        
+        <div class="info-row">
+            <span>Movement</span>
+            <span id="movement">-</span>
+        </div>
+
+        <div class="info-row">
+            <span>Caliber</span>
+            <span id="caliber">-</span>
+        </div>
+
+        <div class="info-row">
+            <span>Frequency</span>
+            <span id="frequency">-</span>
+        </div>
+
+        <div class="info-row">
+            <span>Material</span>
+            <span id="material">-</span>
+        </div>
+
+        <div class="info-row">
+            <span>Case Size</span>
+            <span id="case_size">-</span>
+        </div>
+
+        <div class="info-row">
+            <span>Movement Size</span>
+            <span id="movement_size">-</span>
+        </div>
+
+        <div class="info-row">
+            <span>Year</span>
+            <span id="year">-</span>
+        </div>
+
+        <div class="info-row">
+            <span>Function</span>
+            <span id="function">-</span>
+        </div>
+
+        <div class="info-row">
+            <span>Service</span>
+            <span id="service_display">-</span>
+        </div>
+
+        <div class="info-row">
+            <span>Service Date</span>
+            <span id="service_date_display">-</span>
+        </div>
+
+        <div class="info-row">
+            <span>Origin</span>
+            <span id="origin">-</span>
+        </div>
+
+        <div class="info-row">
+            <span>Work Status</span>
+            <span id="work_status">-</span>
+        </div>
+
+        <div class="info-row">
+            <span>Bracelet</span>
+            <span id="bracelet">-</span>
+        </div>
+
+        <div class="info-row">
+            <span>Glass</span>
+            <span id="glass">-</span>
+        </div>
+
+        <div class="info-row">
+            <span>Warranty</span>
+            <span id="warranty">-</span>
+        </div>
+
+        <div class="info-row">
+            <span>Warranty Months</span>
+            <span id="warranty_months">-</span>
+        </div>
+
+        <div class="info-row">
+            <span>Box & Papers</span>
+            <span id="box_papers">-</span>
+        </div>
+
+    </div>
+
+
+    <div class="info-box">
+        <h3>Description</h3>
+        <p id="description">Loading...</p>
+    </div>
+
+</div>
+    
+
+<div class="buy-bar">
+    <a class="buy-btn whatsapp" id="whatsapp">💬 WhatsApp</a>
+    <a class="buy-btn offer" id="offer">💰 Suggest Price</a>
+    <a class="buy-btn buy" id="buy">🛒 BUY</a>
+</div>
+
+
+<script>
+
+const supabaseClient = window.supabase.createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
+
+let currentImages = [];
+let currentImgIndex = 0;
+
+const productId = new URLSearchParams(window.location.search).get("id");
+
+
+async function loadProduct() {
+
+    const container = document.querySelector(".product-page");
+
+    if (!productId) {
+        container.innerHTML = "Nuk u gjet ID e produktit.";
+        return;
+    }
+
+
+    try {
+
+        const { data, error } = await supabaseClient
+            .from("oras")
+            .select("*")
+            .eq("id", productId)
+            .single();
+
+
+        if (error) throw error;
+
+        console.log("PRODUCT DATA:", data);
+        console.log("PAYPAL:", data.paypal_link);
+
+        currentImages = Array.isArray(data.image_url)
+            ? data.image_url
+            : data.image_url
+                ? [data.image_url]
+                : [];
+
+
+        currentImgIndex = 0;
+
+        // Product main info
+        document.getElementById("brand").textContent =
+            data.brand || "N/A";
+
+        document.getElementById("model").textContent =
+            data.model || "N/A";
+
+        document.getElementById("price").textContent =
+            (data.price || 0) + " €";
+
+        document.getElementById("serial_number").innerText =
+            data.serial_number || "N/A";
+
+
+        // Watch specifications
+        document.getElementById("reference").innerText =
+            data.reference || "N/A";
+
+        document.getElementById("movement").innerText =
+            data.movement || "N/A";
+
+        document.getElementById("caliber").innerText =
+            data.caliber || "N/A";
+
+        document.getElementById("frequency").innerText =
+            data.frekuen || "N/A";
+
+        document.getElementById("material").innerText =
+            data.material || "N/A";
+
+        document.getElementById("case_size").innerText =
+           data.case_size || "N/A";
+
+        document.getElementById("movement_size").innerText =
+            data.movement_size || "N/A";
+
+        document.getElementById("year").innerText =
+            data.year || "N/A";
+
+        document.getElementById("function").innerText =
+            data.function || "N/A";
+
+
+        document.getElementById("service_display").innerText =
+            data.service ? "Yes (Serviced)" : "No";
+
+        document.getElementById("service_date_display").innerText =
+            data.service_date || "-";
+
+
+        document.getElementById("origin").innerText =
+            data.origin || "N/A";
+
+        document.getElementById("work_status").innerText =
+            data.work_status || "N/A";
+
+        document.getElementById("bracelet").innerText =
+            data.bracelet || "N/A";
+
+        document.getElementById("glass").innerText =
+            data.glass || "N/A";
+
+
+        document.getElementById("warranty").innerText =
+            data.warranty || "N/A";
+
+        document.getElementById("warranty_months").innerText =
+            data.warranty_months || "N/A";
+
+
+        document.getElementById("box_papers").innerText =
+            data.box_papers ? "Full Set" : "Watch Only";
+
+
+        document.getElementById("description").innerText =
+            data.description || "N/A";
+
+// ... pas description.innerText
+        
+        const buyBtn = document.getElementById("buy");
+
+        if (buyBtn) {
+
+            buyBtn.onclick = async function(e) {
+
+                e.preventDefault();
+
+                buyBtn.innerText = "⏳ Loading...";
+
+                try {
+
+                    console.log("Produkti për PayPal:", data);
+                    
+                    const response = await fetch(
+                        "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                product_id: productId,
+                                price: data.price,
+                                product_name: data.model
+                            })
+                        }
+                    );
+
+
+                    const result = await response.json();
+
+
+                    if (result.paypal_link) {
+
+                        window.location.href = result.paypal_link;
+
+                    } else {
+
+                        alert("PayPal link nuk u krijua");
+
+                        buyBtn.innerText = "🛒 BUY";
+
+                    }
+
+
+                } catch(error) {
+
+                    console.error(error);
+
+                    alert("Gabim me PayPal");
+
+                    buyBtn.innerText = "🛒 BUY";
+
+                }
+
+            };
+
+        }
+
+        
+        updateGallery();
+
+
+        document.getElementById("whatsapp").href =
+            "https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per%20" +
+            encodeURIComponent(data.model);
+
+
+    } catch(err) {
+
+        console.error(err);
+        container.innerHTML = "Gabim: " + err.message;
+
+    }
+
+}
+
+
+
+function updateGallery(){
+
+    if(currentImages.length === 0) return;
+
+
+    document.getElementById("main-photo").src =
+        currentImages[currentImgIndex];
+
+
+    document.getElementById("photo-count").innerText =
+        (currentImgIndex + 1) + " / " + currentImages.length;
+
+}
+
+
+
+function changeImage(direction){
+
+    if(currentImages.length === 0) return;
+
+
+    currentImgIndex += direction;
+
+
+    if(currentImgIndex >= currentImages.length)
+        currentImgIndex = 0;
+
+
+    if(currentImgIndex < 0)
+        currentImgIndex = currentImages.length - 1;
+
+
+    updateGallery();
+
+}
+
+
+
+function shareProduct(){
+
+    navigator.clipboard.writeText(window.location.href);
+
+    alert("Linku u kopjua!");
+
+}
+    
+
+loadProduct();
+
+</script>
+
+</body>
+</html>

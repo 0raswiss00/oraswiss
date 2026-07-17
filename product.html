@@ -333,9 +333,10 @@ async function loadProduct() {
 
                     const result = await response.json();
 
-
                     if (result.paypal_link) {
 
+                        localStorage.setItem("buy_product_id", productId);
+                        
                         window.location.href = result.paypal_link;
 
                     } else {

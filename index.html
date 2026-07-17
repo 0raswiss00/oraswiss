@@ -269,18 +269,13 @@ async function loadProductCount() {
 async function loadUserCount() {
     try {
         const { data, error } = await supabase
-            .from('oras')
-            .select('user_id');
+            .rpc('get_users_count');
 
         if (error) throw error;
 
-        const uniqueUsers = new Set(
-            data.map(item => item.user_id).filter(Boolean)
-        );
-
         const element = document.getElementById('count-users');
         if (element) {
-            element.textContent = uniqueUsers.size;
+            element.textContent = data || 0;
         }
 
     } catch (err) {

@@ -87,7 +87,7 @@
     <a href="vintage.html">Vintage</a>
     <a href="parts.html">Parts</a>
     <a href="movement-parts.html">Movement Parts</a>
-    <a href="bracelet-strap-container">Bracelet Straps</a>
+    <a href="#product-bracelet-strap-container">Bracelet Straps</a>
     <a href="service.html">Service</a>
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
@@ -248,7 +248,39 @@ kontrolloSesionin();
 loadCategory('luxury', 'luxury-container');
 loadCategory('vintage', 'vintage-container');
 loadCategory('parts', 'parts-container');
-loadCategory('straps', 'product-bracelet-strap-container'); // Vendoseni këtu
+async function loadBraceletStraps() {
+
+    const container = document.getElementById("product-bracelet-strap-container");
+
+    const { data, error } = await supabase
+        .from("bracelets_straps")
+        .select("*");
+
+    if (error) {
+        console.log(error);
+        container.innerHTML = "Error loading bracelets";
+        return;
+    }
+
+    container.innerHTML = data.map(item => {
+
+        let img = item.image_url && item.image_url[0]
+            ? item.image_url[0]
+            : "placeholder.jpg";
+
+        return `
+        <div class="card" onclick="window.location.href='product-bracelet-strap.html?id=${item.id}'">
+            <img src="${img}">
+            <h3>${item.brand || ""} ${item.model || ""}</h3>
+            <div>${item.price || ""} €</div>
+        </div>
+        `;
+
+    }).join("");
+}
+
+loadBraceletStraps();
+
   
 // 1. Funksioni për të numëruar produktet (orët)
 async function loadProductCount() {

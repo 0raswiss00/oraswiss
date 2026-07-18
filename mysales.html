@@ -81,7 +81,7 @@
                 .eq('user_id', user.id);
 
             const { data: bracelets, error: braceletsError } = await myOraSwissClient
-                .from('bracelets_straps')
+                .from('bracelet_strap')
                 .select('*')
                 .eq('user_id', user.id);
 
@@ -89,7 +89,7 @@
 
             const data = [
                 ...(watches || []),
-                ...(bracelets || [])
+                ...(bracelet || [])
             ];
             
             if (error) {

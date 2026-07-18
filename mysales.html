@@ -79,19 +79,7 @@
                 .from('oras')
                 .select('*')
                 .eq('user_id', user.id);
-
-            const { data: bracelets, error: braceletsError } = await myOraSwissClient
-                .from('bracelet_strap')
-                .select('*')
-                .eq('user_id', user.id);
-
-            const error = watchesError || braceletsError;
-
-            const data = [
-                ...(watches || []),
-                ...(bracelet || [])
-            ];
-            
+        
             if (error) {
                 salesList.innerHTML = "Gabim: " + error.message;
                 return;

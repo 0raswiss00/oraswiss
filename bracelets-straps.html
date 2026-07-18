@@ -476,14 +476,18 @@ productData
 
 
 
-const {error} =
+const {data, error} =
 
 await window.supabaseClient
 
 .from("bracelets_straps")
 
-.insert([productData]);
+.insert([productData])
+.select();
 
+
+console.log("INSERT DATA:", data);
+console.log("INSERT ERROR:", error);
 
 
 

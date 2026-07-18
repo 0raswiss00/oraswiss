@@ -1,189 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Bracelet / Strap Details</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Add Bracelet / Strap</title>
 
 <style>
 
-*{
-    box-sizing:border-box;
-}
-
 body{
-    margin:0;
-    background:#050505;
+    background:#111;
     color:white;
     font-family:Arial,sans-serif;
-    padding-bottom:90px;
 }
 
 
-.product-page{
-    width:100%;
-    min-height:100vh;
+form{
+    max-width:600px;
+    margin:30px auto;
+    background:#1b1b1b;
+    padding:25px;
+    border-radius:12px;
 }
 
 
-.gallery{
-    position:relative;
-    width:100%;
-    height:55vh;
-    background:#000;
-    overflow:hidden;
-}
-
-
-.gallery img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-}
-
-
-.photo-btn{
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    background:rgba(255,255,255,.15);
-    border:none;
-    color:white;
-    font-size:35px;
-    width:45px;
-    height:60px;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-
-.photo-left{
-    left:15px;
-}
-
-
-.photo-right{
-    right:15px;
-}
-
-
-.photo-counter{
-    position:absolute;
-    bottom:15px;
-    left:50%;
-    transform:translateX(-50%);
-    background:rgba(0,0,0,.6);
-    padding:7px 15px;
-    border-radius:20px;
-}
-
-
-.details{
-    padding:20px;
-    max-width:900px;
-    margin:auto;
-}
-
-
-.brand{
-    font-size:18px;
-    color:#aaa;
-}
-
-
-.model{
-    font-size:30px;
-    margin:5px 0;
-}
-
-
-.price{
-    font-size:28px;
-    color:#25D366;
-    font-weight:bold;
-    margin:15px 0;
-}
-
-
-.info-box{
-    background:#111;
-    border-radius:15px;
-    padding:15px;
-    margin:15px;
-}
-
-
-.info-row{
-    display:flex;
-    justify-content:space-between;
-    padding:10px 0;
-    border-bottom:1px solid #222;
-}
-
-
-.top-actions{
-    display:flex;
-    gap:10px;
-    margin:15px;
-}
-
-
-.action{
-    background:#151515;
-    padding:12px 18px;
-    border-radius:25px;
-    cursor:pointer;
-}
-
-
-
-.buy-bar{
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    background:#090909;
-    border-top:1px solid #333;
-    padding:10px;
-    display:flex;
-    gap:8px;
-    z-index:999;
-}
-
-
-.buy-btn{
-    flex:1;
-    padding:15px;
-    border-radius:10px;
+h2{
     text-align:center;
-    text-decoration:none;
-    font-weight:bold;
+    color:#c9a227;
+}
+
+
+label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:5px;
+    color:#ccc;
+}
+
+
+input, select, textarea{
+
+    width:100%;
+    padding:12px;
+    background:#222;
+    color:white;
+    border:1px solid #444;
+    border-radius:6px;
+    box-sizing:border-box;
+
+}
+
+
+button{
+
+    width:100%;
+    margin-top:25px;
+    padding:14px;
+    background:#c9a227;
+    color:white;
+    border:none;
+    border-radius:6px;
+    font-size:17px;
     cursor:pointer;
+
 }
 
 
-.whatsapp{
-    background:#25D366;
-    color:white;
+.section-title{
+
+    margin-top:25px;
+    color:#c9a227;
+    border-bottom:1px solid #333;
+    padding-bottom:5px;
+
 }
-
-
-.offer{
-    background:#333;
-    color:white;
-}
-
-
-.buy{
-    background:#ffd900;
-    color:black;
-}
-
 
 </style>
 
@@ -193,192 +84,420 @@ body{
 <body>
 
 
-<div class="product-page">
+<form id="braceletForm">
 
 
-<div class="gallery">
+<h2>Add Bracelet / Strap</h2>
 
-<button class="photo-btn photo-left" onclick="changeImage(-1)">
-❮
+
+<div class="section-title">
+Basic Information
+</div>
+
+
+<label>Brand</label>
+
+<input 
+id="brand"
+type="text"
+placeholder="Brand name"
+required>
+
+
+<label>Model</label>
+
+<input 
+id="model"
+type="text"
+placeholder="Model name">
+
+
+<label>Price (€)</label>
+
+<input 
+id="price"
+type="number"
+min="1"
+placeholder="Price">
+
+
+<label>Reference / Part Number</label>
+
+<input 
+id="reference"
+type="text"
+placeholder="Reference number">
+
+
+<label>Type</label>
+
+<select id="type">
+
+<option value="Bracelet">
+Bracelet
+</option>
+
+<option value="Strap">
+Strap
+</option>
+
+<option value="Bracelet + Strap">
+Bracelet + Strap
+</option>
+
+</select>
+
+
+<label>Condition</label>
+
+<select id="condition">
+
+<option>New</option>
+<option>Like New</option>
+<option>Excellent</option>
+<option>Very Good</option>
+<option>Good</option>
+
+</select>
+
+
+<div class="section-title">
+Specifications
+</div>
+
+
+<label>Material</label>
+
+<select id="material">
+
+<option>Stainless Steel</option>
+<option>Titanium</option>
+<option>Gold</option>
+<option>White Gold</option>
+<option>Rose Gold</option>
+<option>Platinum</option>
+<option>Ceramic</option>
+<option>Carbon</option>
+<option>Silver</option>
+<option>Leather</option>
+<option>Crocodile</option>
+<option>Rubber</option>
+<option>NATO</option>
+<option>Textile</option>
+
+</select>
+
+
+<label>Gold Purity</label>
+
+<select id="gold_purity">
+
+<option value="">
+Select
+</option>
+
+<option>14K</option>
+<option>18K</option>
+<option>22K</option>
+<option>24K</option>
+
+</select>
+
+
+<label>Color</label>
+
+<select id="color">
+
+<option>Silver</option>
+<option>Black</option>
+<option>Gold</option>
+<option>Rose Gold</option>
+<option>Two-Tone</option>
+<option>Brown</option>
+<option>Blue</option>
+
+</select>
+
+
+<label>Lug Width (mm)</label>
+
+<input
+id="lug_width"
+placeholder="Example: 20mm">
+
+
+<label>Clasp Width (mm)</label>
+
+<input
+id="clasp_width"
+placeholder="Example: 18mm">
+
+
+<label>Length (mm)</label>
+
+<input
+id="length"
+placeholder="Example: 120/75mm">
+
+
+<label>Thickness (mm)</label>
+
+<input
+id="thickness"
+placeholder="Example: 3.5mm">
+
+
+<div class="section-title">
+Description
+</div>
+
+
+<label>Description</label>
+
+<textarea
+id="description"
+rows="5"
+placeholder="Product description">
+</textarea>
+
+
+<label>Upload Photos</label>
+
+<input
+id="fileInput"
+type="file"
+accept="image/*"
+multiple>
+
+
+<button type="submit">
+Publish Bracelet / Strap
 </button>
 
 
-<img id="main-photo" src="">
+</form>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 
-
-<button class="photo-btn photo-right" onclick="changeImage(1)">
-❯
-</button>
-
-
-<div class="photo-counter" id="photo-count">
-1 / 1
-</div>
-
-
-</div>
-
-
-
-<div class="details">
-
-
-<div class="brand" id="brand"></div>
-
-<div class="model" id="model"></div>
-
-<div class="price" id="price"></div>
-
-
-</div>
-
-
-
-<div class="top-actions">
-
-<div class="action" onclick="shareProduct()">
-🔗 Share
-</div>
-
-
-<div class="action">
-❤️ Favorite
-</div>
-
-
-</div>
-<div class="info-box">
-
-<h3>Bracelet / Strap Details</h3>
-
-
-<div class="info-row">
-<span>Reference</span>
-<span id="reference">-</span>
-</div>
-
-
-<div class="info-row">
-<span>Type</span>
-<span id="type">-</span>
-</div>
-
-
-<div class="info-row">
-<span>Condition</span>
-<span id="condition">-</span>
-</div>
-
-
-<div class="info-row">
-<span>Material</span>
-<span id="material">-</span>
-</div>
-
-
-<div class="info-row">
-<span>Gold Purity</span>
-<span id="gold_purity">-</span>
-</div>
-
-
-<div class="info-row">
-<span>Color</span>
-<span id="color">-</span>
-</div>
-
-
-<div class="info-row">
-<span>Lug Width</span>
-<span id="lug_width">-</span>
-</div>
-
-
-<div class="info-row">
-<span>Clasp Width</span>
-<span id="clasp_width">-</span>
-</div>
-
-
-<div class="info-row">
-<span>Length</span>
-<span id="length">-</span>
-</div>
-
-
-<div class="info-row">
-<span>Thickness</span>
-<span id="thickness">-</span>
-</div>
-
-
-</div>
-
-
-
-<div class="info-box">
-
-<h3>Description</h3>
-
-<p id="description">
-Loading...
-</p>
-
-
-</div>
-
-
-
-<div class="buy-bar">
-
-<a class="buy-btn whatsapp" id="whatsapp">
-💬 WhatsApp
-</a>
-
-
-<a class="buy-btn offer" id="offer">
-💰 Suggest Price
-</a>
-
-
-<a class="buy-btn buy" id="buy">
-🛒 BUY
-</a>
-
-
-</div>
-
-
-
-
+<script src="db-connect.js"></script>
 
 <script>
 
+const supabaseClient = window.supabaseClient;
 
-const supabaseClient = window.supabase.createClient(
 
-"https://gnwsrmelmeqduhhmfmoa.supabase.co",
+async function checkUser(){
 
-"sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+    const { data:{user} } = 
+    await supabaseClient.auth.getUser();
 
+
+    if(!user){
+
+        alert("You must be logged in");
+
+        window.location.href="register.html";
+
+        return null;
+
+    }
+
+
+    return user;
+
+}
+
+
+
+document
+.getElementById("braceletForm")
+.addEventListener("submit", async function(e){
+
+
+e.preventDefault();
+
+
+
+const user = await checkUser();
+
+
+if(!user) return;
+
+
+
+const files = 
+document.getElementById("fileInput").files;
+
+
+
+let imageUrls = [];
+
+
+
+// Upload images
+
+for(let i = 0; i < files.length; i++){
+
+
+    const file = files[i];
+
+
+    const fileName =
+    Date.now() + "" + i + "" + file.name;
+
+
+
+    const { error:uploadError } =
+
+    await supabaseClient
+    .storage
+    .from("or-images")
+    .upload(fileName,file);
+
+
+
+    if(uploadError){
+
+        alert(
+        "Image upload error: " 
+        + uploadError.message
+        );
+
+        return;
+
+    }
+
+
+
+    const {data:urlData} =
+
+    supabaseClient
+    .storage
+    .from("or-images")
+    .getPublicUrl(fileName);
+
+
+
+    imageUrls.push(
+        urlData.publicUrl
+    );
+
+
+}
+
+
+
+
+const productData = {
+
+
+user_id:user.id,
+
+
+category:
+"bracelets_straps",
+
+
+brand:
+document
+.getElementById("brand")
+.value,
+
+
+model:
+document
+.getElementById("model")
+.value,
+
+
+price:
+Number(
+document
+.getElementById("price")
+.value
+) || null,
+
+
+reference:
+document
+.getElementById("reference")
+.value,
+
+
+type:
+document
+.getElementById("type")
+.value,
+
+
+condition:
+document
+.getElementById("condition")
+.value,
+
+
+material:
+document
+.getElementById("material")
+.value,
+
+
+gold_purity:
+document
+.getElementById("gold_purity")
+.value,
+
+
+color:
+document
+.getElementById("color")
+.value,
+
+
+lug_width:
+document
+.getElementById("lug_width")
+.value,
+
+
+clasp_width:
+document
+.getElementById("clasp_width")
+.value,
+
+
+length:
+document
+.getElementById("length")
+.value,
+
+
+thickness:
+document
+.getElementById("thickness")
+.value,
+
+
+description:
+document
+.getElementById("description")
+.value,
+
+
+image_url:
+imageUrls
+
+};
+
+
+
+
+
+console.log(
+"Sending product:",
+productData
 );
 
 
-
-let currentImages=[];
-
-let currentImgIndex=0;
-
-
-
-const productId = 
-new URLSearchParams(window.location.search).get("id");
-
-
-
-
-
-async function loadProduct(){
 
 
 
@@ -386,235 +505,53 @@ const {data,error}=
 
 await supabaseClient
 
-.from("bracelets_straps")
+.from("oras")
 
-.select("*")
+.insert([
+    productData
+])
 
-.eq("id",productId)
+.select();
 
 
+
+
+console.log("DATA:",data);
+
+console.log("ERROR:",error);
 
 
 
 
 if(error){
 
-document.querySelector(".product-page").innerHTML =
-"Product not found";
+
+alert(
+"Database error: "
++
+error.message
+);
+
 
 return;
 
+
 }
 
 
 
-
-currentImages = Array.isArray(data.image_url)
-
-? data.image_url
-
-: data.image_url
-
-? [data.image_url]
-
-: [];
-
-
-
-
-document.getElementById("brand").innerText =
-data.brand || "N/A";
-
-
-document.getElementById("model").innerText =
-data.model || "N/A";
-
-
-document.getElementById("price").innerText =
-(data.price || 0) + " €";
-
-
-
-document.getElementById("reference").innerText =
-data.reference || "N/A";
-
-
-document.getElementById("type").innerText =
-data.type || "N/A";
-
-
-document.getElementById("condition").innerText =
-data.condition || "N/A";
-
-
-document.getElementById("material").innerText =
-data.material || "N/A";
-
-
-document.getElementById("gold_purity").innerText =
-data.gold_purity || "N/A";
-
-
-document.getElementById("color").innerText =
-data.color || "N/A";
-
-
-document.getElementById("lug_width").innerText =
-data.lug_width || "N/A";
-
-
-document.getElementById("clasp_width").innerText =
-data.clasp_width || "N/A";
-
-
-document.getElementById("length").innerText =
-data.length || "N/A";
-
-
-document.getElementById("thickness").innerText =
-data.thickness || "N/A";
-
-
-
-document.getElementById("description").innerText =
-data.description || "N/A";
-
-
-
-
-
-document.getElementById("whatsapp").href =
-
-"https://wa.me/35569XXXXXXX?text=" +
-
-encodeURIComponent(
-
-"I am interested in " + data.brand + " " + data.model
-
+alert(
+"Bracelet / Strap published successfully!"
 );
 
 
 
+window.location.href =
+"dashboard.html";
 
 
-document.getElementById("offer").onclick=function(){
 
-let msg =
-
-"Hello, I would like to suggest a price for " +
-
-data.brand + " " + data.model;
-
-
-
-window.open(
-
-"https://wa.me/35569XXXXXXX?text="
-
-+ encodeURIComponent(msg)
-
-);
-
-};
-
-
-
-
-
-document.getElementById("buy").onclick=function(){
-
-alert("Payment process starting...");
-
-};
-
-
-
-
-updateGallery();
-
-
-
-}
-
-
-
-
-
-
-
-function updateGallery(){
-
-
-if(currentImages.length===0)return;
-
-
-document.getElementById("main-photo").src =
-currentImages[currentImgIndex];
-
-
-document.getElementById("photo-count").innerText =
-
-(currentImgIndex+1)+" / "+currentImages.length;
-
-
-}
-
-
-
-
-
-
-function changeImage(direction){
-
-
-if(currentImages.length===0)return;
-
-
-
-currentImgIndex += direction;
-
-
-
-if(currentImgIndex >= currentImages.length)
-
-currentImgIndex=0;
-
-
-
-if(currentImgIndex < 0)
-
-currentImgIndex=currentImages.length-1;
-
-
-
-updateGallery();
-
-
-}
-
-
-
-
-
-
-
-function shareProduct(){
-
-
-navigator.clipboard.writeText(window.location.href);
-
-
-alert("Link copied");
-
-
-}
-
-
-
-
-
-loadProduct();
-
+});
 
 
 </script>

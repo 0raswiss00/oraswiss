@@ -36,19 +36,20 @@
         }
 
         document.getElementById('product-details').innerHTML = `
-               <img src="${Array.isArray(data.image_url) ? data.image_url[0] : (data.image_url || '')}" style="width:100%; border-radius:8px;">
-               <h1>${data.brand}</h1>
-               <p>${data.description || 'Nuk ka përshkrim.'}</p>
-               <div class="price" style="font-size: 24px; color: #4CAF50; font-weight: bold; margin: 15px 0;">${data.price} €</div>
+                <img src="${Array.isArray(data.image_url) ? data.image_url[0] : (data.image_url || '')}" style="width:100%; border-radius:8px;">
+                <h1>${data.brand}</h1>
+                <p>${data.description || 'Nuk ka përshkrim.'}</p>
+                <div class="price" style="font-size: 24px; color: #4CAF50; font-weight: bold; margin: 15px 0;">${data.price} €</div>
         
-               <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 10px;">
-                   <button onclick="alert('Duke u lidhur me pagesën...')" style="width: 100%; padding: 15px; background: gold; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Buy Now</button>
-                   <button onclick="window.history.back()" style="width: 100%; padding: 15px; background: #333; color: white; border: none; border-radius: 5px; cursor: pointer;">Kthehu mbrapa</button>
-               </div>
-         `;
+                <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 10px;">
+                    <button onclick="alert('Duke u lidhur me pagesën...')" style="width: 100%; padding: 15px; background: gold; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Buy Now</button>
+                    <button onclick="window.history.back()" style="width: 100%; padding: 15px; background: #333; color: white; border: none; border-radius: 5px; cursor: pointer;">Kthehu mbrapa</button>
+                </div>
+           `;
         }
 
-    showProduct();
+       showProduct();
+
 </script>
 </body>
 </html>

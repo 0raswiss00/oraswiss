@@ -117,13 +117,13 @@ document.getElementById("bracelets-container");
 
 
 
-const {data,error}=await client
+const { data, error } = await client
+    .from("bracelets_straps")
+    .select("*")
+    .order("created_at", { ascending: false });
 
-.from("bracelets_straps")
+console.log("Këtu janë produktet:", data); // Shiko në Console (F12) nëse dalin produktet
 
-.select("*")
-
-.order("created_at",{ascending:false});
 
 
 

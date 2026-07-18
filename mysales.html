@@ -75,15 +75,17 @@
                 return;
             }
 
-            const { data, error } = await myOraSwissClient
+            const { data: watches, error: watchesError } = await myOraSwissClient
                 .from('oras')
                 .select('*')
                 .eq('user_id', user.id);
 
-            const { data: bracelets } = await myOraSwissClient
+            const { data: bracelets, error: braceletsError } = await myOraSwissClient
                 .from('bracelets_straps')
                 .select('*')
                 .eq('user_id', user.id);
+
+            const error = watchesError || braceletsError;
 
             const data = [
                 ...(watches || []),

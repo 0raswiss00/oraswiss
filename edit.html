@@ -50,18 +50,20 @@ async function fetchWatch() {
     const tableName = (type === 'straps') ? 'bracelets_straps' : 'oras';
 
     const { data, error } = await supabase
-        .from(tableName) // Këtu kemi ndryshuar 'oras' me tableName
+        .from(tableName)
         .select('*')
         .eq('id', id)
         .single();
-    
-    
-    if (error || !data) {
-        console.log(error);
+
+    if (error) {
+        console.error("Gabim:", error);
         return;
     }
 
-    // form fields
+    // SHTO KËTË RRESHT QË TË MOS HUMBASIM VLERAT PËR BUTONIN RUJA:
+    window.produktData = data; 
+
+    // MBUSHJA E INPUTEVE (Sigurohu që i ke këto rreshta):
     document.getElementById('brand').value = data.brand || "";
     document.getElementById('model').value = data.model || "";
     document.getElementById('price').value = data.price || "";

@@ -79,13 +79,14 @@
                 .from('oras')
                 .select('*')
                 .eq('user_id', user.id);
-        
-            if (error) {
-                salesList.innerHTML = "Gabim: " + error.message;
+
+
+            if (watchesError) {
+                salesList.innerHTML = "Gabim: " + watchesError.message;
                 return;
             }
 
-            if (!data || data.length === 0) {
+             if (!watches || watches.length === 0) {
                 salesList.innerHTML = "Nuk keni asnjë artikull në shitje.";
                 return;
             }

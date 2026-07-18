@@ -112,6 +112,9 @@
 <h2>Parts Collection</h2>
 <div id="parts-container" class="grid">Loading...</div>
 
+<h2>Bracelets / Straps Collection</h2>
+<div id="straps-container" class="grid">Loading...</div>
+  
 <script>
   const supabase = window.supabase.createClient(
     "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
@@ -245,7 +248,8 @@ kontrolloSesionin();
     loadCategory('luxury', 'luxury-container');
     loadCategory('vintage', 'vintage-container');
     loadCategory('parts', 'parts-container');
-
+    loadCategory('bracelets_straps', 'straps-container');
+  
 // 1. Funksioni për të numëruar produktet (orët)
 async function loadProductCount() {
     console.log("Duke u lidhur me Supabase për produkte...");

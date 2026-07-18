@@ -145,7 +145,7 @@ document.getElementById('editForm').addEventListener('submit', async (e) => {
 
     // MODIFIKIMI KRYESOR:
     // Përdorim .eq('user_id', user.id) për të siguruar që RLS na lejon update-in
-    const { error } = await supabase.from(tableName).update({⁠
+    const { error } = await supabase.from(tableName).update({
         brand: document.getElementById('brand').value,
         model: document.getElementById('model').value,
         price: parseInt(document.getElementById('price').value),
@@ -153,7 +153,7 @@ document.getElementById('editForm').addEventListener('submit', async (e) => {
         image_url: imageUrls
     })
     .eq('id', id)
-    .eq('user_id', user.id); // KY ËSHTË KRYESORI: Siguron pronësinë
+    .eq('user_id', user.id);
 
     if (error) {
         console.error("Gabim:", error);

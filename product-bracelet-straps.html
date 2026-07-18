@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Details - Ora Swiss</title>
+    <style>
+        body { background: #000; color: #fff; font-family: Arial, sans-serif; padding: 20px; }
+        .details-container { max-width: 600px; margin: auto; }
+        img { width: 100%; border-radius: 8px; }
+        .price { color: #25D366; font-size: 24px; font-weight: bold; margin: 15px 0; }
+    </style>
+</head>
+<body>
+
+<div class="details-container" id="product-details">
+    <p>Po ngarkojmë detajet...</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="db-connect.js"></script> <!-- Sigurohu që e ke këtë skedar për klientin -->
+<script>
+    async function showProduct() {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+
+        // Marrim të dhënat nga tabela ku sapo publikove produktin
+        const { data, error } = await window.supabaseClient
+            .from('bracelets_straps')
+            .select('*')
+            .eq('id', id)
+            .single();
+
+        if (error || !data) {
+            document.getElementById('product-details').innerHTML = "Ky produkt nuk u gjet.";
+            return;
+        }
+
+        document.getElementById('product-details').innerHTML = `
+            <img src="${data.image_url || ''}">
+            <h1>${data.brand}</h1>
+            <p>${data.description || 'Nuk ka përshkrim.'}</p>
+            <div class="price">${data.price} €</div>
+            <button onclick="window.history.back()">Kthehu mbrapa</button>
+        `;
+    }
+    showProduct();
+</script>
+</body>
+</html>

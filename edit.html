@@ -145,7 +145,6 @@ document.getElementById('editForm').addEventListener('submit', async (e) => {
 
     // MODIFIKIMI KRYESOR:
     // Përdorim .eq('user_id', user.id) për të siguruar që RLS na lejon update-in
-    const tableName = (type === 'straps') ? 'bracelets_straps' : 'oras';
     const { error } = await supabase.from(tableName).update({⁠
         brand: document.getElementById('brand').value,
         model: document.getElementById('model').value,

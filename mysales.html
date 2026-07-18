@@ -80,6 +80,16 @@
                 .select('*')
                 .eq('user_id', user.id);
 
+            const { data: bracelets } = await myOraSwissClient
+                .from('bracelets_straps')
+                .select('*')
+                .eq('user_id', user.id);
+
+            const data = [
+                ...(watches || []),
+                ...(bracelets || [])
+            ];
+            
             if (error) {
                 salesList.innerHTML = "Gabim: " + error.message;
                 return;

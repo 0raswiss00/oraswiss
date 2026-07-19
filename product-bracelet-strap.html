@@ -553,7 +553,7 @@ async function loadProduct() {
 
     // 2. Bëj fetch nga Supabase
     const { data, error } = await supabaseClient
-        .from("product-bracelet-strap-container")
+        .from("bracelets_straps")
         .select("*")
         .eq("id", productId)
         .single();
@@ -573,7 +573,7 @@ async function loadProduct() {
     
 const {data,error}= await supabaseClient
 
-.from("bracelets_straps")
+.from("product-bracelet-strap-container")
 
 .select("*")
 

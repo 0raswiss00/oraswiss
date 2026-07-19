@@ -376,7 +376,8 @@ async function loadProduct(idToLoad) {
     }
     
     console.log("Produkti u gjet:", data);
-
+    productData = data;
+    
     // Këtu i mbushim fushat, sepse tani 'data' ekziston
     document.getElementById("brand").innerText = data.brand || "N/A";
     document.getElementById("model").innerText = data.model || "N/A";

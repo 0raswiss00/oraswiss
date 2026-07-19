@@ -166,56 +166,6 @@
         <p id="description">Loading...</p>
     </div>
 
-
- <div class="info-box" id="bracelet-details" style="display:none;">
-
-    <h3>Bracelet / Strap Details</h3>
-
-    <div class="info-row">
-        <span>Type</span>
-        <span id="b_type">-</span>
-    </div>
-
-    <div class="info-row">
-        <span>Condition</span>
-        <span id="b_condition">-</span>
-    </div>
-
-    <div class="info-row">
-        <span>Material</span>
-        <span id="b_material">-</span>
-    </div>
-
-    <div class="info-row">
-        <span>Gold Purity</span>
-        <span id="b_gold_purity">-</span>
-    </div>
-
-    <div class="info-row">
-        <span>Color</span>
-        <span id="b_color">-</span>
-    </div>
-
-    <div class="info-row">
-        <span>Lug Width</span>
-        <span id="b_lug_width">-</span>
-    </div>
-
-    <div class="info-row">
-        <span>Clasp Width</span>
-        <span id="b_clasp_width">-</span>
-    </div>
-
-    <div class="info-row">
-        <span>Length</span>
-        <span id="b_length">-</span>
-    </div>
-
-    <div class="info-row">
-        <span>Thickness</span>
-        <span id="b_thickness">-</span>
-    </div>
-   
 </div>
     
 
@@ -252,7 +202,7 @@ async function loadProduct() {
     try {
 
         const { data, error } = await supabaseClient
-            .from("product-bracelet-strap-container")
+            .from("oras")
             .select("*")
             .eq("id", productId)
             .single();
@@ -263,39 +213,6 @@ async function loadProduct() {
         console.log("PRODUCT DATA:", data);
         console.log("PAYPAL:", data.paypal_link);
 
-        if(data.category === "bracelets_straps"){
-
-            document.getElementById("bracelet-details").style.display = "block";
-
-            document.getElementById("b_type").innerText =
-            data.type || "N/A";
-
-            document.getElementById("b_condition").innerText =
-            data.condition || "N/A";
-
-            document.getElementById("b_material").innerText =
-            data.material || "N/A";
-
-            document.getElementById("b_gold_purity").innerText =
-            data.gold_purity || "N/A";
-
-            document.getElementById("b_color").innerText =
-            data.color || "N/A";
-
-            document.getElementById("b_lug_width").innerText =
-            data.lug_width || "N/A";
-
-            document.getElementById("b_clasp_width").innerText =
-            data.clasp_width || "N/A";
-
-            document.getElementById("b_length").innerText =
-            data.length || "N/A";
-
-            document.getElementById("b_thickness").innerText =
-            data.thickness || "N/A";
-
-        }
-        
         currentImages = Array.isArray(data.image_url)
             ? data.image_url
             : data.image_url
@@ -416,10 +333,9 @@ async function loadProduct() {
 
                     const result = await response.json();
 
+
                     if (result.paypal_link) {
 
-                        localStorage.setItem("buy_product_id", productId);
-                        
                         window.location.href = result.paypal_link;
 
                     } else {

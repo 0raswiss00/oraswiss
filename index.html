@@ -248,32 +248,8 @@ kontrolloSesionin();
 loadCategory('luxury', 'luxury-container');
 loadCategory('vintage', 'vintage-container');
 loadCategory('parts', 'parts-container');
-async function loadBracelet-Strap() {
-
-    const container = document.getElementById("product-bracelet-strap-container");
-
-    const { data, error } = await supabase
-        .from("bracelets_straps")
-        .select("*");
-
-    if (error) {
-        console.log(error);
-        container.innerHTML = "Error loading bracelets";
-        return;
-    }
-
-    // Kontrolloni funksionin që mbush 'product-bracelet-strap-container'
-        container.innerHTML = data.map(item => {
-        return `
-        <div class="card" onclick="window.location.href='product-bracelet-strap.html?id=${item.id}'" style="cursor:pointer;">
-           <img src="${item.image_url}" alt="Product">
-           <h3>${item.brand || ""} ${item.model || ""}</h3>
-           <div>${item.price || ""} €</div>
-        </div>`;
-    }).join("");
-    }
-loadBraceletStraps();
-
+loadCategory('bracelets_straps', 'product-bracelet-strap-container');
+  
   
 // 1. Funksioni për të numëruar produktet (orët)
 async function loadProductCount() {

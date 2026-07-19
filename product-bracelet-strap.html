@@ -371,41 +371,36 @@ let currentImgIndex=0;
 
 
 
-const productId = 
-new URLSearchParams(window.location.search).get("id");
+// 1. Merr ID-në nga URL
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get("id");
 
+console.log("ID që po kërkojmë është:", productId);
 
-
-
-
-async function loadProduct(){
-
-
-console.log("ID që po kërkojmë është:", productId); // SHTO KËTË RRESHT
-const {data, error}=
-
-await supabaseClient
-
-.from("bracelets_straps")
-
-.select("*")
-
-.eq("id",productId)
-
-.single();
-
-
-
-
-if(error){
-
-document.querySelector(".product-page").innerHTML =
-"Product not found";
-
-return;
-
+// 2. Kontrollo nëse ID ekziston para se të bësh kërkesën
+if (!productId) {
+    console.error("ID mungon! Kontrollo linkun tek index.html");
+} else {
+    // 3. Nëse ID ekziston, thirr funksionin për të ngarkuar produktin
+    loadProduct(productId);
 }
 
+// 4. Ndrysho funksionin loadProduct që ta pranojë ID-në si argument
+async function loadProduct(idToLoad) {
+    const {data, error} = await supabaseClient
+        .from("bracelets_straps")
+        .select("*")
+        .eq("id", idToLoad) // Përdor ID-në që kaluam këtu
+        .single();
+
+    if (error) {
+        console.error("Gabim nga Supabase:", error);
+        return;
+    }
+    
+    // Këtu vendos kodin që shfaq të dhënat në faqe
+    console.log("Produkti u gjet:", data);
+}
 
 
 

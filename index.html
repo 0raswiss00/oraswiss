@@ -268,11 +268,11 @@ async function loadBraceletStraps() {
         console.log("Duke krijuar kartë për ID:", item.id); 
     
         return `
-        ⁠<div class="card" onclick="window.location.href='product-bracelet-strap.html?id=${item.id}'">⁠
-            <img src="${item.image_url}">
-            <h3>${item.brand || ""} ${item.model || ""}</h3>
+        <div class="card" onclick="window.location.href='product-bracelet-strap.html?id=${item.id}'">
+           <img src="${item.image_url}" alt="Product">
+           <h3>${item.brand || ""} ${item.model || ""}</h3>
             <div>${item.price || ""} €</div>
-        </div>
+        </div>⁠
         `;
     }).join("");
     }

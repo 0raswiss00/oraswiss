@@ -534,22 +534,28 @@ const supabaseClient = window.supabase.createClient(
 
 );
 
-// 1. Merr ID-në nga URL-ja
+
+// 1. Merr ID-në nga URL-ja (P.sh. faqja.html?id=123)
 const productId = new URLSearchParams(window.location.search).get('id');
 
-// 2. Pastaj thërret funksionin
-loadProduct();
-
+// 2. Variablat e tjera që të nevojiten
 let currentImages = [];
 let currentImgIndex = 0;
-
-
-
 let productData = null;
 
+// 3. Funksioni për të ngarkuar produktin
+async function loadProduct() {
+    if (!productId) {
+        document.querySelector(".product-page").innerHTML = "Nuk u gjet ID e produktit.";
+        return;
+    }
+    
+    // Këtu vazhdon pjesa jote e kodit që bën fetch nga Supabase...
+    console.log("ID e gjetur:", productId);
+}
 
-
-async function loadProduct(){
+// 4. Thirr funksionin në fund
+loadProduct();
 
 
 if(!productId){

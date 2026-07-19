@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="sq">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Product Details</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:#050505;
+    color:white;
+    font-family:Arial,sans-serif;
+    padding-bottom:90px;
+}
+
+
+.product-page{
+    width:100%;
+    min-height:100vh;
+}
+
+
+.gallery{
+    position:relative;
+    width:100%;
+    height:55vh;
+    background:#000;
+    overflow:hidden;
+}
+
+
+.gallery img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+
+.photo-btn{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    background:rgba(255,255,255,.15);
+    border:none;
+    color:white;
+    font-size:35px;
+    width:45px;
+    height:60px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+
+.photo-left{
+    left:15px;
+}
+
+
+.photo-right{
+    right:15px;
+}
+
+
+.photo-counter{
+    position:absolute;
+    bottom:15px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(0,0,0,.6);
+    padding:7px 15px;
+    border-radius:20px;
+}
+
+
+.category{
+    padding:15px 20px 0;
+    color:#aaa;
+    font-size:15px;
+}
+
+
+.details{
+    padding:20px;
+    max-width:900px;
+    margin:auto;
+}
+
+
+.brand{
+    font-size:18px;
+    color:#aaa;
+}
+
+
+.model{
+    font-size:30px;
+    margin:5px 0;
+}
+
+
+.price{
+    font-size:28px;
+    color:#25D366;
+    font-weight:bold;
+    margin:15px 0;
+}
+
+
+.top-actions{
+    display:flex;
+    gap:10px;
+    padding:0 20px;
+}
+
+
+.action{
+    background:#151515;
+    padding:12px 18px;
+    border-radius:25px;
+    cursor:pointer;
+}
+
+
+
+.info-box{
+
+    background:#111;
+    border-radius:15px;
+    padding:15px;
+    margin:15px 20px;
+
+}
+
+
+
+.info-row{
+
+    display:flex;
+    justify-content:space-between;
+    padding:10px 0;
+    border-bottom:1px solid #222;
+
+}
+
+
+.info-row:last-child{
+    border-bottom:none;
+}
+
+
+
+.buy-bar{
+
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+
+    background:#090909;
+
+    border-top:1px solid #333;
+
+    padding:10px;
+
+    display:flex;
+    gap:8px;
+
+    z-index:999;
+
+}
+
+
+
+.buy-btn{
+
+    flex:1;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
+
+
+
+.whatsapp{
+
+    background:#25D366;
+    color:white;
+
+}
+
+
+
+.offer{
+
+    background:#333;
+    color:white;
+
+}
+
+
+
+.buy{
+
+    background:#ffd900;
+    color:black;
+
+}
+
+
+
+.hidden{
+
+    display:none;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="product-page">
+
+
+<div class="gallery">
+
+
+<button class="photo-btn photo-left" onclick="changeImage(-1)">
+❮
+</button>
+
+
+<img id="main-photo">
+
+
+<button class="photo-btn photo-right" onclick="changeImage(1)">
+❯
+</button>
+
+
+<div class="photo-counter" id="photo-count">
+1 / 1
+</div>
+
+
+</div>
+
+
+<div class="category" id="category"></div>
+
+
+
+<div class="details">
+
+<div class="brand" id="brand"></div>
+
+<div class="model" id="model"></div>
+
+<div class="price" id="price"></div>
+
+
+</div>
+
+
+<div class="top-actions">
+
+
+<div class="action" onclick="shareProduct()">
+🔗 Share
+</div>
+
+
+<div class="action">
+❤️ Favorite
+</div>
+
+
+</div>
+
+<div class="info-box">
+
+<h3>Product Details</h3>
+
+
+<div class="info-row">
+<span>Reference</span>
+<span id="reference">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Serial Number</span>
+<span id="serial_number">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Movement</span>
+<span id="movement">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Caliber</span>
+<span id="caliber">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Frequency</span>
+<span id="frequency">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Material</span>
+<span id="material">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Case Size</span>
+<span id="case_size">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Movement Size</span>
+<span id="movement_size">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Year</span>
+<span id="year">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Function</span>
+<span id="function">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Service</span>
+<span id="service_display">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Service Date</span>
+<span id="service_date_display">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Origin</span>
+<span id="origin">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Work Status</span>
+<span id="work_status">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Bracelet</span>
+<span id="bracelet">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Glass</span>
+<span id="glass">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Warranty</span>
+<span id="warranty">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Warranty Months</span>
+<span id="warranty_months">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Box & Papers</span>
+<span id="box_papers">-</span>
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- BRACELET / STRAP DETAILS -->
+
+<div class="info-box hidden" id="bracelet-details">
+
+
+<h3>Bracelet / Strap Details</h3>
+
+
+
+<div class="info-row">
+<span>Type</span>
+<span id="b_type">-</span>
+</div>
+
+
+
+<div class="info-row">
+<span>Condition</span>
+<span id="b_condition">-</span>
+</div>
+
+
+
+<div class="info-row">
+<span>Material</span>
+<span id="b_material">-</span>
+</div>
+
+
+
+<div class="info-row">
+<span>Gold Purity</span>
+<span id="b_gold_purity">-</span>
+</div>
+
+
+
+<div class="info-row">
+<span>Color</span>
+<span id="b_color">-</span>
+</div>
+
+
+
+<div class="info-row">
+<span>Lug Width</span>
+<span id="b_lug_width">-</span>
+</div>
+
+
+
+<div class="info-row">
+<span>Clasp Width</span>
+<span id="b_clasp_width">-</span>
+</div>
+
+
+
+<div class="info-row">
+<span>Length</span>
+<span id="b_length">-</span>
+</div>
+
+
+
+<div class="info-row">
+<span>Thickness</span>
+<span id="b_thickness">-</span>
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="info-box">
+
+<h3>Description</h3>
+
+<p id="description">
+Loading...
+</p>
+
+</div>
+
+
+<div class="buy-bar">
+    <a class="buy-btn whatsapp" id="whatsapp">💬 WhatsApp</a>
+    <a class="buy-btn offer" id="offer">💰 Suggest Price</a>
+    <a class="buy-btn buy" id="buy">🛒 BUY</a>
+</div>
+
+
+</div>
+
+<script>
+
+const supabaseClient = window.supabase.createClient(
+
+"https://gnwsrmelmeqduhhmfmoa.supabase.co",
+
+"sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIy9"
+
+);
+
+
+
+let currentImages = [];
+let currentImgIndex = 0;
+
+
+const productId = new URLSearchParams(window.location.search).get("id");
+
+let productData = null;
+
+
+
+async function loadProduct(){
+
+
+if(!productId){
+
+document.querySelector(".product-page").innerHTML =
+"Nuk u gjet ID e produktit.";
+
+return;
+
+}
+
+
+
+const {data,error}= await supabaseClient
+
+.from("product-bracelet-strap-container")
+
+.select("*")
+
+.eq("id",productId)
+
+.single();
+
+
+
+if(error || !data){
+
+console.error(error);
+
+return;
+
+}
+
+
+
+productData=data;
+
+
+
+console.log("PRODUCT:",data);
+
+
+
+
+
+// CATEGORY
+
+document.getElementById("category").innerText =
+
+data.category === "bracelets_straps"
+
+? "Bracelet / Strap"
+
+: "Watch";
+
+
+
+
+
+// MAIN INFO
+
+
+document.getElementById("brand").innerText =
+data.brand || "N/A";
+
+
+document.getElementById("model").innerText =
+data.model || "N/A";
+
+
+document.getElementById("price").innerText =
+(data.price || 0) + " €";
+
+
+
+
+
+// IMAGES
+
+
+currentImages = Array.isArray(data.image_url)
+
+? data.image_url
+
+: data.image_url
+
+? [data.image_url]
+
+: [];
+
+
+
+currentImgIndex=0;
+
+updateGallery();
+
+
+
+
+
+
+// WATCH DETAILS
+
+
+
+document.getElementById("reference").innerText =
+data.reference || "N/A";
+
+
+document.getElementById("serial_number").innerText =
+data.serial_number || "N/A";
+
+
+document.getElementById("movement").innerText =
+data.movement || "N/A";
+
+
+document.getElementById("caliber").innerText =
+data.caliber || "N/A";
+
+
+document.getElementById("frequency").innerText =
+data.frekuen || "N/A";
+
+
+document.getElementById("material").innerText =
+data.material || "N/A";
+
+
+document.getElementById("case_size").innerText =
+data.case_size || "N/A";
+
+
+document.getElementById("movement_size").innerText =
+data.movement_size || "N/A";
+
+
+document.getElementById("year").innerText =
+data.year || "N/A";
+
+
+document.getElementById("function").innerText =
+data.function || "N/A";
+
+
+
+document.getElementById("service_display").innerText =
+
+data.service
+
+? "Yes (Serviced)"
+
+: "No";
+
+
+
+document.getElementById("service_date_display").innerText =
+data.service_date || "-";
+
+
+document.getElementById("origin").innerText =
+data.origin || "N/A";
+
+
+document.getElementById("work_status").innerText =
+data.work_status || "N/A";
+
+
+document.getElementById("bracelet").innerText =
+data.bracelet || "N/A";
+
+
+document.getElementById("glass").innerText =
+data.glass || "N/A";
+
+
+document.getElementById("warranty").innerText =
+data.warranty || "N/A";
+
+
+document.getElementById("warranty_months").innerText =
+data.warranty_months || "N/A";
+
+
+document.getElementById("box_papers").innerText =
+
+data.box_papers
+
+? "Full Set"
+
+: "Watch Only";
+
+
+
+
+
+
+
+// BRACELET DETAILS
+
+
+if(data.category === "bracelets_straps"){
+
+
+document.getElementById("bracelet-details")
+
+.classList.remove("hidden");
+
+
+
+document.getElementById("b_type").innerText =
+data.type || "N/A";
+
+
+document.getElementById("b_condition").innerText =
+data.condition || "N/A";
+
+
+document.getElementById("b_material").innerText =
+data.material || "N/A";
+
+
+document.getElementById("b_gold_purity").innerText =
+data.gold_purity || "N/A";
+
+
+document.getElementById("b_color").innerText =
+data.color || "N/A";
+
+
+document.getElementById("b_lug_width").innerText =
+data.lug_width || "N/A";
+
+
+document.getElementById("b_clasp_width").innerText =
+data.clasp_width || "N/A";
+
+
+document.getElementById("b_length").innerText =
+data.length || "N/A";
+
+
+document.getElementById("b_thickness").innerText =
+data.thickness || "N/A";
+
+
+
+}
+
+
+
+
+// DESCRIPTION
+
+
+document.getElementById("description").innerText =
+
+data.description || "N/A";
+
+
+
+
+
+
+// WHATSAPP
+
+
+document.getElementById("whatsapp").href =
+
+"https://wa.me/35569XXXXXXX?text=" +
+
+encodeURIComponent(
+
+"Hello, I am interested in "
+
++ data.brand
+
++ " "
+
++ data.model
+
+);
+
+
+
+
+
+
+
+// OFFER PRICE
+
+
+document.getElementById("offer").onclick=function(){
+
+
+let msg =
+
+"Hello, I would like to suggest a price for "
+
++ data.brand
+
++ " "
+
++ data.model;
+
+
+
+window.open(
+
+"https://wa.me/35569XXXXXXX?text="
+
++ encodeURIComponent(msg)
+
+);
+
+
+};
+
+
+
+
+
+
+// PAYPAL BUY
+
+
+document.getElementById("buy").onclick = async function(e){
+
+
+e.preventDefault();
+
+
+
+let btn=document.getElementById("buy");
+
+btn.innerText="⏳ Loading...";
+
+
+
+try{
+
+
+const response = await fetch(
+
+"https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
+
+{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+
+body:JSON.stringify({
+
+product_id:productId,
+
+price:data.price,
+
+product_name:data.model
+
+})
+
+
+}
+
+);
+
+
+
+const result=await response.json();
+
+
+
+if(result.paypal_link){
+
+
+localStorage.setItem(
+
+"buy_product_id",
+
+productId
+
+);
+
+
+
+window.location.href=result.paypal_link;
+
+
+}
+
+else{
+
+
+alert("PayPal link nuk u krijua");
+
+btn.innerText="🛒 BUY";
+
+
+}
+
+
+
+}
+
+catch(err){
+
+
+console.error(err);
+
+alert("Gabim me PayPal");
+
+btn.innerText="🛒 BUY";
+
+
+}
+
+
+
+};
+
+
+
+}
+
+
+
+
+
+
+function updateGallery(){
+
+
+if(currentImages.length===0)
+return;
+
+
+
+document.getElementById("main-photo").src =
+
+currentImages[currentImgIndex];
+
+
+
+document.getElementById("photo-count").innerText =
+
+(currentImgIndex+1)
+
++" / "
+
++currentImages.length;
+
+
+}
+
+
+
+
+
+function changeImage(direction){
+
+
+if(currentImages.length===0)
+return;
+
+
+
+currentImgIndex += direction;
+
+
+
+if(currentImgIndex >= currentImages.length)
+
+currentImgIndex=0;
+
+
+
+if(currentImgIndex < 0)
+
+currentImgIndex=currentImages.length-1;
+
+
+
+updateGallery();
+
+
+}
+
+
+
+
+
+function shareProduct(){
+
+
+navigator.clipboard.writeText(window.location.href);
+
+
+alert("Linku u kopjua!");
+
+}
+
+
+
+
+loadProduct();
+
+
+</script>

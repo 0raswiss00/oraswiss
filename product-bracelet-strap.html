@@ -516,20 +516,40 @@ window.open(
 
 
 
-document.getElementById("buy").onclick=function(){
+document.getElementById("buy").onclick = async function(e) {
+    e.preventDefault();
+    const buyBtn = document.getElementById("buy");
+    buyBtn.innerText = "⏳ Loading...";
 
-alert("Payment process starting...");
+    try {
+        const response = await fetch(
+            "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    product_id: productId,
+                    price: data.price,
+                    product_name: data.model
+                })
+            }
+        );
 
+        const result = await response.json();
+
+        if (result.paypal_link) {
+            window.location.href = result.paypal_link;
+        } else {
+            alert("Gabim: Linku i pagesës nuk u gjenerua.");
+            buyBtn.innerText = "🛒 BUY";
+        }
+    } catch(error) {
+        console.error(error);
+        alert("Gabim me lidhjen me PayPal.");
+        buyBtn.innerText = "🛒 BUY";
+    }
 };
 
-
-
-
-updateGallery();
-
-
-
-}
 
 
 

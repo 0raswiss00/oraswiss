@@ -274,6 +274,36 @@ async function loadBraceletStraps() {
 loadBraceletStraps();
   
   
+// 1. Funksioni për të numëruar produktet (orët)
+async function loadProductCount() {
+    console.log("Duke u lidhur me Supabase për produkte...");
+    try {
+        // Numërojmë orët
+        const { count: countOras, error: errorOras } = await supabase
+            .from('oras')
+            .select('*', { count: 'exact', head: true });
+            
+        // Numërojmë rripat (bracelets/straps)
+        const { count: countStraps, error: errorStraps } = await supabase
+            .from('bracelets_straps')
+            .select('*', { count: 'exact', head: true });
+
+        if (errorOras) throw errorOras;
+        if (errorStraps) throw errorStraps;
+
+        // Mbledhim totalin
+        const total = (countOras || 0) + (countStraps || 0);
+        console.log("Numri total i produkteve:", total);
+
+        const element = document.getElementById('count-products');
+        if (element) {
+            element.textContent = total;
+        }
+    } catch (err) {
+        console.error("Gabim te loadProductCount:", err);
+    }
+}
+
 // Funksioni për të numëruar përdoruesit
 async function loadUserCount() {
     try {

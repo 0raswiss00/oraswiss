@@ -545,30 +545,32 @@ let productData = null;
 
 // 3. Funksioni për të ngarkuar produktin
 async function loadProduct() {
+    // 1. Kontrollo ID-në
     if (!productId) {
         document.querySelector(".product-page").innerHTML = "Nuk u gjet ID e produktit.";
-        return;
+        return; // Ky është brenda if, brenda funksionit, është korrekt.
     }
-    
-    // Këtu vazhdon pjesa jote e kodit që bën fetch nga Supabase...
+
+    // 2. Bëj fetch nga Supabase
+    const { data, error } = await supabaseClient
+        .from("product-bracelet-strap-container")
+        .select("*")
+        .eq("id", productId)
+        .single();
+
+    // 3. Kontrollo për gabime
+    if (error || !data) {
+        console.error(error);
+        return; // Ky është brenda if, brenda funksionit, është korrekt.
+    }
+
+    // 4. Vazhdo me logjikën nëse gjithçka është OK
+    productData = data;
     console.log("ID e gjetur:", productId);
+    // ... pjesa tjetër e kodit tënd
 }
 
-// 4. Thirr funksionin në fund
-loadProduct();
-
-
-if(!productId){
-
-document.querySelector(".product-page").innerHTML =
-"Nuk u gjet ID e produktit.";
-
-return;
-
-}
-
-
-
+    
 const {data,error}= await supabaseClient
 
 .from("bracelets_straps")

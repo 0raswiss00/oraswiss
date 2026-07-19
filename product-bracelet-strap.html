@@ -534,13 +534,18 @@ const supabaseClient = window.supabase.createClient(
 
 );
 
+// 1. Merr ID-në nga URL-ja
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get('id');
 
+// 2. Pastaj thërret funksionin
+loadProduct();
 
 let currentImages = [];
 let currentImgIndex = 0;
 
 
-const productId = new URLSearchParams(window.location.search).get("id");
+const productId = new URLSearchParams(window.location.search).get('id');
 
 let productData = null;
 

@@ -252,7 +252,7 @@ async function loadProduct() {
     try {
 
         const { data, error } = await supabaseClient
-            .from("bracelets_straps")
+            .from("product-bracelet-strap-container")
             .select("*")
             .eq("id", productId)
             .single();

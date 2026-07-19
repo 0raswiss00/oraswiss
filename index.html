@@ -269,7 +269,7 @@ async function loadBraceletStraps() {
     
         return `
         ⁠<div class="card" onclick="window.location.href='product-bracelet-strap.html?id=${item.id}'">⁠
-            <img src="${img}">
+            <img src="${item.image_url}">
             <h3>${item.brand || ""} ${item.model || ""}</h3>
             <div>${item.price || ""} €</div>
         </div>

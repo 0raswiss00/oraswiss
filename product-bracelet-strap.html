@@ -344,129 +344,55 @@ Loading...
 
 
 <script>
-
-
 const supabaseClient = window.supabase.createClient(
-
-"https://gnwsrmelmeqduhhmfmoa.supabase.co",
-
-"sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
 );
 
-
-
-let currentImages=[];
-
-let currentImgIndex=0;
-
-
-
-// 1. Merr ID-në nga URL
 const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get("id");
 
-console.log("ID që po kërkojmë është:", productId);
-
-// 2. Kontrollo nëse ID ekziston para se të bësh kërkesën
-if (!productId) {
-    console.error("ID mungon! Kontrollo linkun tek index.html");
-} else {
-    // 3. Nëse ID ekziston, thirr funksionin për të ngarkuar produktin
+// Thirr funksionin vetëm një herë
+if (productId) {
     loadProduct(productId);
+} else {
+    console.error("ID mungon!");
 }
 
-// 4. Ndrysho funksionin loadProduct që ta pranojë ID-në si argument
 async function loadProduct(idToLoad) {
     const {data, error} = await supabaseClient
         .from("bracelets_straps")
         .select("*")
-        .eq("id", idToLoad) // Përdor ID-në që kaluam këtu
+        .eq("id", idToLoad)
         .single();
 
-    if (error) {
+    if (error || !data) {
         console.error("Gabim nga Supabase:", error);
         return;
     }
     
-    // Këtu vendos kodin që shfaq të dhënat në faqe
     console.log("Produkti u gjet:", data);
+
+    // Këtu i mbushim fushat, sepse tani 'data' ekziston
+    document.getElementById("brand").innerText = data.brand || "N/A";
+    document.getElementById("model").innerText = data.model || "N/A";
+    document.getElementById("price").innerText = (data.price || 0) + " €";
+    document.getElementById("reference").innerText = data.reference || "N/A";
+    document.getElementById("type").innerText = data.type || "N/A";
+    document.getElementById("condition").innerText = data.condition || "N/A";
+    document.getElementById("material").innerText = data.material || "N/A";
+    document.getElementById("gold_purity").innerText = data.gold_purity || "N/A";
+    document.getElementById("color").innerText = data.color || "N/A";
+    document.getElementById("lug_width").innerText = data.lug_width || "N/A";
+    document.getElementById("clasp_width").innerText = data.clasp_width || "N/A";
+    document.getElementById("length").innerText = data.length || "N/A";
+    document.getElementById("thickness").innerText = data.thickness || "N/A";
+    document.getElementById("description").innerText = data.description || "N/A";
+
+    // Përditëso fotot
+    currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
+    updateGallery();
 }
-
-
-
-currentImages = Array.isArray(data.image_url)
-
-? data.image_url
-
-: data.image_url
-
-? [data.image_url]
-
-: [];
-
-
-
-
-document.getElementById("brand").innerText =
-data.brand || "N/A";
-
-
-document.getElementById("model").innerText =
-data.model || "N/A";
-
-
-document.getElementById("price").innerText =
-(data.price || 0) + " €";
-
-
-
-document.getElementById("reference").innerText =
-data.reference || "N/A";
-
-
-document.getElementById("type").innerText =
-data.type || "N/A";
-
-
-document.getElementById("condition").innerText =
-data.condition || "N/A";
-
-
-document.getElementById("material").innerText =
-data.material || "N/A";
-
-
-document.getElementById("gold_purity").innerText =
-data.gold_purity || "N/A";
-
-
-document.getElementById("color").innerText =
-data.color || "N/A";
-
-
-document.getElementById("lug_width").innerText =
-data.lug_width || "N/A";
-
-
-document.getElementById("clasp_width").innerText =
-data.clasp_width || "N/A";
-
-
-document.getElementById("length").innerText =
-data.length || "N/A";
-
-
-document.getElementById("thickness").innerText =
-data.thickness || "N/A";
-
-
-
-document.getElementById("description").innerText =
-data.description || "N/A";
-
-
-
 
 
 document.getElementById("whatsapp").href =

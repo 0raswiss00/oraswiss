@@ -192,58 +192,35 @@ body{
 
 <body>
 
-
 <div class="product-page">
 
+    <div class="gallery">
+        <button class="photo-btn photo-left" onclick="changeImage(-1)">❮</button>
+        <img id="main-photo" src="">
+        <button class="photo-btn photo-right" onclick="changeImage(1)">❯</button>
+        <div class="photo-counter" id="photo-count">1 / 1</div>
+    </div>
 
-<div class="gallery">
+<div class="category" id="category"></div>
 
-<button class="photo-btn photo-left" onclick="changeImage(-1)">
-❮
-</button>
-
-
-<img id="main-photo" src="">
-
-
-<button class="photo-btn photo-right" onclick="changeImage(1)">
-❯
-</button>
-
-
-<div class="photo-counter" id="photo-count">
-1 / 1
-</div>
-
-
-</div>
-
-
-
+    
 <div class="details">
 
+    <div class="brand" id="brand"></div>
 
-<div class="brand" id="brand"></div>
+    <div class="model" id="model"></div>
 
-<div class="model" id="model"></div>
-
-<div class="price" id="price"></div>
-
+    <div class="price" id="price"></div>
 
 </div>
 
 
 
-<div class="top-actions">
+    <div class="top-actions">
+        <div class="action" onclick="shareProduct()">🔗 Share</div>
+        <div class="action">❤️ Favorite</div>
+    </div>
 
-<div class="action" onclick="shareProduct()">
-🔗 Share
-</div>
-
-
-<div class="action">
-❤️ Favorite
-</div>
 
 
 </div>

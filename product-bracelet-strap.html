@@ -349,6 +349,10 @@ const supabaseClient = window.supabase.createClient(
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
 );
 
+let currentImages = [];
+let currentImgIndex = 0;
+let productData = null;
+    
 const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get("id");
 

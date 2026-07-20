@@ -85,29 +85,23 @@ async function fetchProduct() {
     document.getElementById("description").value = product.description || "";
 
 
-    let images = [];
+let images = [];
 
-    if (Array.isArray(product.image_url)) {
+if (Array.isArray(product.image_url)) {
 
-        images = product.image_url;
+    images = product.image_url;
 
-    } else if (typeof product.image_url === "string") {
+} else if (product.image_url) {
 
-        try {
-            images = JSON.parse(product.image_url);
-        } catch {
-            images = product.image_url
-                .split(",")
-                .filter(Boolean);
-        }
-    }
+    images = [product.image_url];
 
-
-    window.produktData.image_url = images;
-
-
-    showImages(images);
 }
+
+
+window.produktData.image_url = images;
+
+
+showImages(images);
 
 
 

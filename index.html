@@ -366,11 +366,10 @@ document.getElementById("searchInput").addEventListener("input", async function(
     }
 
     try {
-        // Përdorim 'supabase' (emri i saktë që ke lart në kod) dhe shtojmë thonjëzat te .or()
         const { data, error } = await supabase
             .from("oras")
             .select("*")
-            .or(brand.ilike.%${query}%,model.ilike.%${query}%,reference.ilike.%${query}%);
+            .or(`brand.ilike.%${query}%,model.ilike.%${query}\%,reference.ilike.\%${query}%`);
 
         if (error) throw error;
 
@@ -393,7 +392,7 @@ document.getElementById("searchInput").addEventListener("input", async function(
                 item.innerHTML = `
                     <div onclick="window.location.href='product.html?id=${product.id}'" style="cursor:pointer;">
                         <img src="${imgUrl}" alt="${product.model || ''}" style="width:100%; height:auto;">
-                        <h3>${product.brand || ''} - ${product.model || ''}</h3>
+                        <h3>${product.brand \vert{}\vert{} ''} -${product.model || ''}</h3>
                         <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${product.reference || '/'}</p>
                         <div class="price">${product.price ? product.price + ' €' : 'Contact for price'}</div>
                     </div>

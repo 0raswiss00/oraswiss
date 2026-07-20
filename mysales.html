@@ -104,7 +104,7 @@
 
 
             // Gjenerimi i listës me linka tek imazhi dhe titulli
-            salesList.innerHTML = watches.map(item => `
+            salesList.innerHTML = items.map(item => `
                 <div class="sale-item">
   
                     <a href="${item.category === 'bracelet' ? 'product-bracelet-strap.html' : 'product.html'}?id=${item.id}">

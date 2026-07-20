@@ -252,7 +252,7 @@ async function loadBraceletStraps() {
 
     const container = document.getElementById("product-bracelet-strap-container");
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from("bracelets_straps")
         .select("*");
 

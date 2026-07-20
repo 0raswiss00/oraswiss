@@ -40,6 +40,17 @@
         "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
     );
 
+    await myOraSwissClient
+    .from(table)
+    .update({
+        brand,
+        model,
+        price,
+        description,
+        image_url: images
+    })
+    .eq("id", id);
+    
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get('id');
 const type = urlParams.get('type') || 'oras'; // Nëse s'ka type, përdor 'oras'

@@ -33,173 +33,283 @@
     </div>
    
 <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-    const supabase = createClient(
-        "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-    );
+const supabase = createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
 
-    await myOraSwissClient
-    .from(table)
-    .update({
-        brand,
-        model,
-        price,
-        description,
-        image_url: images
-    })
-    .eq("id", id);
-    
+
 const urlParams = new URLSearchParams(window.location.search);
+
 const id = urlParams.get('id');
-const type = urlParams.get('type') || 'oras'; // Nëse s'ka type, përdor 'oras'
+const type = urlParams.get('type') || 'watch';
 
-// Rreshti 45: Funksioni fetchWatch
-async function fetchWatch() {
-    // Përcakto tabelën bazuar te 'type'
-    const tableName = (type === 'straps') ? 'bracelets_straps' : 'oras';
+const tableName = (type === 'bracelet')
+    ? 'bracelets_straps'
+    : 'oras';
 
-    const { data: product, error } = await myOraSwissClient
-        .from(table)
+
+window.produktData = {
+    image_url: []
+};
+
+
+// =========================
+// MERR PRODUKTIN
+// =========================
+
+async function fetchProduct() {
+
+    const { data: product, error } = await supabase
+        .from(tableName)
         .select("*")
         .eq("id", id)
         .single();
 
 
     if (error) {
-        console.log(error);
+        console.error(error);
+        alert("Gabim gjatë marrjes së produktit");
         return;
     }
 
 
-    // mbush fushat
+    window.produktData = product;
+
+
     document.getElementById("brand").value = product.brand || "";
     document.getElementById("model").value = product.model || "";
     document.getElementById("price").value = product.price || "";
     document.getElementById("description").value = product.description || "";
 
 
-    // shfaq fotot ekzistuese
-    document.getElementById("oldImages").innerHTML =
-    (product.image_url || []).map(img => `
-        <img src="${img}" width="100">
-    `).join("");
-
-    // =========================
-    // GALERIA E SAKTË
-    // =========================
-    const gallery = document.getElementById('gallery-container');
-    gallery.innerHTML = "";
-
     let images = [];
 
-    if (Array.isArray(data.image_url)) {
-        images = data.image_url;
-    } else if (typeof data.image_url === "string") {
+    if (Array.isArray(product.image_url)) {
+
+        images = product.image_url;
+
+    } else if (typeof product.image_url === "string") {
+
         try {
-            images = JSON.parse(data.image_url);
+            images = JSON.parse(product.image_url);
         } catch {
-            images = data.image_url.split(",").filter(Boolean);
+            images = product.image_url
+                .split(",")
+                .filter(Boolean);
         }
     }
 
-    if (!images.length) {
-        gallery.innerHTML = "<p>No images</p>";
-        return;
-    }
 
-    images.forEach((url, index) => {
-        const img = document.createElement("img");
+    window.produktData.image_url = images;
 
-        img.src = url.startsWith("http")
-            ? url
-            : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + url;
 
-        img.style.width = "100px";
-        img.style.cursor = "pointer";
-        img.style.marginRight = "10px";
-
-        img.onclick = () => {
-            const moved = images.splice(index, 1)[0];
-            images.unshift(moved);
-            window.produktData.image_url = images;
-            alert("Foto u bë kryesore");
-        };
-
-        gallery.appendChild(img);
-    });
+    showImages(images);
 }
 
-// 2. Ruaj ndryshimet
-document.getElementById('editForm').addEventListener('submit', async (e) => {
+
+
+// =========================
+// SHFAQ FOTOT
+// =========================
+
+function showImages(images) {
+
+    const gallery = document.getElementById("gallery-container");
+
+    if (!gallery) return;
+
+
+    gallery.innerHTML = "";
+
+
+    images.forEach((url, index) => {
+
+        const img = document.createElement("img");
+
+        img.src = url;
+        img.style.width = "100px";
+        img.style.margin = "5px";
+        img.style.cursor = "pointer";
+
+
+        img.onclick = () => {
+
+            const moved = images.splice(index,1)[0];
+
+            images.unshift(moved);
+
+            window.produktData.image_url = images;
+
+            showImages(images);
+
+        };
+
+
+        gallery.appendChild(img);
+
+    });
+
+}
+
+
+
+// =========================
+// RUAJ NDRYSHIMET
+// =========================
+
+document.getElementById("editForm")
+.addEventListener("submit", async (e)=>{
+
+
     e.preventDefault();
-    
-    // SHTESË: Merr informacionin e përdoruesit të loguar
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-    
-    if (userError || !user) {
-        alert("Duhet të jesh i loguar për të bërë ndryshime!");
+
+
+    const { data:{user} } = await supabase.auth.getUser();
+
+
+    if(!user){
+
+        alert("Duhet të jesh i loguar");
         return;
+
     }
 
-    const tableName = (type === 'straps') ? 'bracelets_straps' : 'oras';
-    
-    let imageUrls = window.produktData?.image_url || [];
-    const fileInput = document.getElementById('image_input');
 
-    if (fileInput.files.length > 0) {
-        for (let i = 0; i < fileInput.files.length; i++) {
-            const file = fileInput.files[i];
+
+    let imageUrls = window.produktData.image_url || [];
+
+
+    const fileInput = document.getElementById("image_input");
+
+
+    if(fileInput && fileInput.files.length > 0){
+
+
+        for(const file of fileInput.files){
+
+
             const fileName = ${Date.now()}_${file.name};
-            await supabase.storage.from('or-images').upload(fileName, file);
-            const { data } = supabase.storage.from('or-images').getPublicUrl(fileName);
-            imageUrls.push(data.publicUrl);
+
+
+            const {error:uploadError}=await supabase
+            .storage
+            .from("or-images")
+            .upload(fileName,file);
+
+
+
+            if(uploadError){
+
+                console.error(uploadError);
+                continue;
+
+            }
+
+
+
+            const {data:urlData}=supabase
+            .storage
+            .from("or-images")
+            .getPublicUrl(fileName);
+
+
+
+            imageUrls.push(urlData.publicUrl);
+
         }
+
     }
 
-    // MODIFIKIMI KRYESOR:
-    // Përdorim .eq('user_id', user.id) për të siguruar që RLS na lejon update-in
-    const { error } = await supabase.from(tableName).update({
-        brand: document.getElementById('brand').value,
-        model: document.getElementById('model').value,
-        price: parseInt(document.getElementById('price').value),
-        description: document.getElementById('description').value,
+
+
+
+    const {error}=await supabase
+    .from(tableName)
+    .update({
+
+        brand: document.getElementById("brand").value,
+
+        model: document.getElementById("model").value,
+
+        price: Number(document.getElementById("price").value),
+
+        description: document.getElementById("description").value,
+
         image_url: imageUrls
+
     })
-    .eq('id', id)
-    .eq('user_id', user.id);
+    .eq("id",id)
+    .eq("user_id",user.id);
 
-    if (error) {
-        console.error("Gabim:", error);
-        alert("Gabim gjatë ruajtjes: " + error.message);
-    } else {
-        alert("Ora u modifikua me sukses!");
-        window.location.href = 'dashboard.html';
+
+
+    if(error){
+
+        console.error(error);
+
+        alert("Gabim gjatë ruajtjes: "+error.message);
+
+    }else{
+
+        alert("Ndryshimet u ruajtën me sukses!");
+
+        window.location.href="dashboard.html";
+
     }
+
+
 });
-document.getElementById('deleteBtn').addEventListener('click', async () => {
-    if (!confirm("A jeni i sigurt që doni ta fshini këtë orë?")) return;
 
-const { data: { user } } = await supabase.auth.getUser();
 
-    // Shto këtë rresht për të përcaktuar tabelën:
-    const tableName = (type === 'straps') ? 'bracelets_straps' : 'oras';
 
-    const { error } = await supabase
-        .from(tableName) // Ndryshoje këtu në 'tableName'
-        .delete()
-        .eq('id', id)
-        .eq('user_id', user.id);
+// =========================
+// FSHI PRODUKTIN
+// =========================
 
-    if (error) {
-        alert("Gabim gjatë fshirjes: " + error.message);
-    } else {
-        alert("Ora u fshi me sukses!");
-        window.location.href = 'dashboard.html';
+document.getElementById("deleteBtn")
+.addEventListener("click",async()=>{
+
+
+    if(!confirm("A jeni i sigurt që doni ta fshini?"))
+        return;
+
+
+
+    const {data:{user}} = await supabase.auth.getUser();
+
+
+
+    const {error}=await supabase
+    .from(tableName)
+    .delete()
+    .eq("id",id)
+    .eq("user_id",user.id);
+
+
+
+    if(error){
+
+        alert(error.message);
+
+    }else{
+
+        alert("Produkti u fshi!");
+
+        window.location.href="dashboard.html";
+
     }
+
+
 });
-fetchWatch();
+
+
+
+fetchProduct();
+
 </script>
+
 </body>
 </html>

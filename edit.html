@@ -191,7 +191,7 @@ document.getElementById("editForm")
         for(const file of fileInput.files){
 
 
-            const fileName = ${Date.now()}_${file.name};
+            const fileName = `${Date.now()}_${file.name}`;
 
 
             const {error:uploadError}=await supabase

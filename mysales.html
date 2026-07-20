@@ -75,21 +75,33 @@
                 return;
             }
 
-            const { data: watches, error: watchesError } = await myOraSwissClient
-                .from('oras')
-                .select('*')
-                .eq('user_id', user.id);
+            const [
+                { data: watches, error: watchesError },
+                { data: bracelets, error: braceletsError }
+            ] = await Promise.all([
+                myOraSwissClient
+                    .from("oras")
+                    .select("*")
+                    .eq("user_id", user.id),
 
+                myOraSwissClient
+                    .from("bracelets_straps")
+                    .select("*")
+                    .eq("user_id", user.id)
+            ]);
 
-            if (watchesError) {
-                salesList.innerHTML = "Gabim: " + watchesError.message;
+            if (watchesError || braceletsError) {
+                salesList.innerHTML =
+                    "Gabim: " +
+                    (watchesError?.message || braceletsError?.message);
                 return;
             }
 
-             if (!watches || watches.length === 0) {
-                 salesList.innerHTML = "Nuk keni asnjë artikull në shitje.";
-                 return;
-            }
+            const items = [
+                ...(watches || []),
+                ...(bracelets || [])
+            ];
+
 
             // Gjenerimi i listës me linka tek imazhi dhe titulli
             salesList.innerHTML = watches.map(item => `

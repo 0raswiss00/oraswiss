@@ -232,9 +232,13 @@ async function loadProduct() {
         document.getElementById("price").textContent =
             (data.price || 0) + " €";
 
-        document.getElementById("serial_number").innerText =
-            data.serial_number || "N/A";
-
+        const serial = data.serial_number || "";
+        const maskedSerial = serial.length > 3 
+            ? serial.substring(0, 3) + 'X'.repeat(serial.length - 3) 
+            : (serial || "N/A");
+            
+        document.getElementById("serial_number").innerText = maskedSerial;
+    
 
         // Watch specifications
         document.getElementById("reference").innerText =

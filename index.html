@@ -357,48 +357,52 @@ loadProductCount();
 document.getElementById("searchInput").addEventListener("input", async function(e) {
     const query = e.target.value.trim();
 
-    // Zgjidh kontejnerët ku shfaqen orët në index
     const luxuryContainer = document.getElementById("luxury-container");
     const vintageContainer = document.getElementById("vintage-container");
     const partsContainer = document.getElementById("parts-container");
 
     if (query.length === 0) {
-        // Nëse fusha është bosh, ringarko faqen ose listën e plotë
         location.reload(); 
         return;
     }
 
     try {
-        const { data, error } = await supabaseClient
+        // Përdorim 'supabase' (emri i saktë që ke lart në kod) dhe shtojmë thonjëzat te .or()
+        const { data, error } = await supabase
             .from("oras")
             .select("*")
             .or(brand.ilike.%${query}%,model.ilike.%${query}%,reference.ilike.%${query}%);
 
         if (error) throw error;
 
-        // Pastron kontejnerët e tjerë dhe shfaq rezultatet te Luxury Collection (ose ku të dëshirosh)
         if (luxuryContainer) {
             luxuryContainer.innerHTML = "";
-            if (data.length === 0) {
+            if (!data || data.length === 0) {
                 luxuryContainer.innerHTML = "<p>Nuk u gjet asnjë orë.</p>";
                 return;
             }
 
             data.forEach(product => {
+                let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+                let primaryImage = Array.isArray(product.image_url) ? product.image_url[0] : product.image_url;
+                if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
+                    imgUrl = primaryImage.startsWith('http') ? primaryImage : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
+                }
+
                 const item = document.createElement("div");
-                item.className = "product-card";
+                item.className = "card";
                 item.innerHTML = `
-                    <a href="product.html?id=${product.id}">
-                        <img src="${Array.isArray(product.image_url) ? product.image_url[0] : product.image_url}" alt="${product.model}">
-                        <h3>${product.brand} - ${product.model}</h3>
-                        <p>${product.price} €</p>
-                    </a>
+                    <div onclick="window.location.href='product.html?id=${product.id}'" style="cursor:pointer;">
+                        <img src="${imgUrl}" alt="${product.model || ''}" style="width:100%; height:auto;">
+                        <h3>${product.brand || ''} - ${product.model || ''}</h3>
+                        <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${product.reference || '/'}</p>
+                        <div class="price">${product.price ? product.price + ' €' : 'Contact for price'}</div>
+                    </div>
                 `;
                 luxuryContainer.appendChild(item);
             });
         }
 
-        // Boshatis vintage dhe parts gjatë kërkimit që të mos ngatërrohen
         if (vintageContainer) vintageContainer.innerHTML = "";
         if (partsContainer) partsContainer.innerHTML = "";
 
@@ -406,7 +410,7 @@ document.getElementById("searchInput").addEventListener("input", async function(
         console.error("Gabim në kërkim:", err);
     }
 });
+</script>
 
- </script>   
 </body>
 </html>

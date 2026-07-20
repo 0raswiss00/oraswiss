@@ -2,119 +2,258 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <title>My Sales - Ora Swiss</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>Modifiko Produktin</title>
     <style>
-        body {
-            background-color: #0056b3; /* Sfondi i faqes */
-            color: white;              /* Teksti kryesor i bardhë që të duket mbi blunë */
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            margin: 0;
+        body { font-family: Arial; background: #000; color: #fff; padding: 20px; }
+        form { max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border-radius: 10px; box-sizing: border-box; }
+        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: gold; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; }
+        .gallery-item {
+            position: relative;
+            display: inline-block;
         }
-
-        .sale-item { 
-            background-color: #0056b3; /* Karta e produktit tani është e njëjtë me sfondin */
-            border: 2px solid #003d82; /* Një kornizë pak më e errët për ta ndarë produktin */
-            margin-bottom: 15px; 
-            padding: 15px; 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            border-radius: 8px; 
-        }
-
-        .sale-item img { 
-            width: 100px; 
-            height: 100px; 
-            object-fit: cover; 
-            border-radius: 5px; 
-            cursor: pointer; 
-        }
-
-        /* Butonat mbeten të bardhë me shkronja të zeza */
-        button {
-            background-color: white;
-            color: black;
+        .delete-img-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
             border: none;
-            padding: 8px 15px;
+            padding: 2px 6px;
             cursor: pointer;
-            font-weight: bold;
-            border-radius: 4px;
-            margin-right: 5px;
-        }
-
-        button:hover {
-            background-color: #e0e0e0;
-        }
-
-        a {
-            text-decoration: none;
-            color: white; /* Teksti i linkut i bardhë */
+            font-size: 12px;
+            border-bottom-left-radius: 5px;
         }
     </style>
 </head>
 <body>
+<a href="dashboard.html"
+    style="color:#ccc; text-align:center; display:block; margin-top:10px; margin-bottom: 20px; text-decoration: none;">
+    ← Back 
+</a>
+<form id="editForm">
+    <h2 id="formTitle">Modifiko Produktin</h2>
+    <input type="text" id="brand" placeholder="Brand / Lloji" required>
+    
+    <!-- Fushat specifike për rripat (bracelets_straps) -->
+    <div id="strapFields" style="display: none;">
+        <select id="bracelet_type">
+            <option value="">Zgjidh llojin e rripit</option>
+            <option value="Leather">Leather (Lëkurë)</option>
+            <option value="Steel">Steel (Çelik)</option>
+            <option value="Rubber">Rubber (Silikon/Gomë)</option>
+            <option value="NATO">NATO / Textil</option>
+            <option value="Other">Tjetër</option>
+        </select>
+    </div>
 
-    <div id="salesList">Duke ngarkuar...</div>
+    <input type="text" id="model" placeholder="Modeli / Përmasa">
+    <input type="number" id="price" placeholder="Price (€)" required>
+    <textarea id="description" placeholder="Description"></textarea>
+    
+    <label for="image_input">Shto ose ndrysho fotot:</label>
+    <input type="file" id="image_input" multiple accept="image/*">
+    <button type="submit">Ruaj Ndryshimet</button>
+    <button type="button" id="deleteBtn" style="background: #ff4d4d; color: white; width: 100%; padding: 15px; border: none; cursor: pointer; margin-top: 10px; border-radius: 5px;">
+        Fshi Produktin
+    </button>
+</form>
 
-    <script>
-        // Inicializimi i Supabase
-        const myOraSwissClient = window.supabase.createClient(
-            "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-            "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-        );
+<div id="gallery-container" style="max-width: 600px; margin: 15px auto; display: flex; gap: 10px; flex-wrap: wrap;">
+</div>
+   
+<script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-        async function loadMySales() {
-            const salesList = document.getElementById("salesList");
-            
-            const { data: { user } } = await myOraSwissClient.auth.getUser();
-            
-            if (!user) {
-                salesList.innerHTML = "Ju lutem logohuni.";
-                return;
-            }
+    const supabase = createClient(
+        "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+    );
 
-            const { data: watches, error: watchesError } = await myOraSwissClient
-                .from('oras')
-                .select('*')
-                .eq('user_id', user.id);
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    const type = urlParams.get('type') || 'oras'; 
 
+    async function fetchItem() {
+        const tableName = (type === 'straps') ? 'bracelets_straps' : 'oras';
 
-            if (watchesError) {
-                salesList.innerHTML = "Gabim: " + watchesError.message;
-                return;
-            }
-
-             if (!watches || watches.length === 0) {
-                 salesList.innerHTML = "Nuk keni asnjë artikull në shitje.";
-                 return;
-            }
-
-            // Gjenerimi i listës me linka tek imazhi dhe titulli
-            salesList.innerHTML = watches.map(item => `
-                <div class="sale-item">
-  
-                    <a href="${item.category === 'bracelet' ? 'product-bracelet-strap.html' : 'product.html'}?id=${item.id}">
-                        <img src="${item.image_url && item.image_url[0] ? item.image_url[0] : 'placeholder.jpg'}">
-                    </a>            
-                <div>
-                    <a href="${item.category === 'bracelet' ? 'product-bracelet-strap.html' : 'product.html'}?id=${item.id}">
-                         <strong>${item.brand} ${item.model}</strong>
-                     </a>
-                    <br>
-                        <small>Çmimi: ${item.price} €</small>
-                        <div style="margin-top:10px;">
-                            <button onclick="window.location.href='product.html?id=${item.id}'">Shiko</button>
-                            <button onclick="window.location.href='edit.html?id=${item.id}'">Modifiko</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+        if (type === 'straps') {
+            document.getElementById('formTitle').textContent = "Modifiko Rripin / Byzylykun";
+            document.getElementById('strapFields').style.display = 'block';
+        } else {
+            document.getElementById('formTitle').textContent = "Modifiko Orën";
+            document.getElementById('strapFields').style.display = 'none';
         }
 
-        // Thirrja e funksionit
-        loadMySales();
-    </script>
+        const { data, error } = await supabase
+            .from(tableName)
+            .select('*')
+            .eq('id', id)
+            .single();
+
+        if (error) {
+            console.error("Gabim:", error);
+            alert("Artikulli nuk u gjet!");
+            return;
+        }
+
+        window.produktData = data; 
+
+        document.getElementById('brand').value = data.brand || "";
+        document.getElementById('model').value = data.model || "";
+        document.getElementById('price').value = data.price || "";
+        document.getElementById('description').value = data.description || "";
+        
+        if (type === 'straps') {
+            const braceletTypeSelect = document.getElementById('bracelet_type');
+            if (braceletTypeSelect) {
+                braceletTypeSelect.value = data.bracelet_type || "";
+            }
+        }
+
+        renderGallery();
+    }
+
+    function renderGallery() {
+        const gallery = document.getElementById('gallery-container');
+        gallery.innerHTML = "";
+
+        let images = [];
+        const rawImages = window.produktData?.image_url;
+
+        if (Array.isArray(rawImages)) {
+            images = rawImages;
+        } else if (typeof rawImages === "string") {
+            try {
+                images = JSON.parse(rawImages);
+            } catch {
+                images = rawImages.split(",").filter(Boolean);
+            }
+        }
+
+        if (!images.length) {
+            gallery.innerHTML = "<p style='color: #888;'>No images</p>";
+            return;
+        }
+
+        images.forEach((url, index) => {
+            const wrapper = document.createElement("div");
+            wrapper.className = "gallery-item";
+
+            const img = document.createElement("img");
+            img.src = url.startsWith("http")
+                ? url
+                : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + url;
+
+            img.style.width = "100px";
+            img.style.height = "100px";
+            img.style.objectFit = "cover";
+            img.style.borderRadius = "5px";
+            img.style.cursor = "pointer";
+            
+            if (index === 0) {
+                img.style.border = "2px solid gold";
+            }
+
+            img.title = "Kliko për ta bërë foto kryesore";
+            img.onclick = () => {
+                const moved = images.splice(index, 1)[0];
+                images.unshift(moved);
+                window.produktData.image_url = images;
+                renderGallery();
+            };
+
+            const delBtn = document.createElement("button");
+            delBtn.className = "delete-img-btn";
+            delBtn.textContent = "×";
+            delBtn.title = "Fshi këtë foto";
+            delBtn.onclick = (e) => {
+                e.stopPropagation();
+                images.splice(index, 1);
+                window.produktData.image_url = images;
+                renderGallery();
+            };
+
+            wrapper.appendChild(img);
+            wrapper.appendChild(delBtn);
+            gallery.appendChild(wrapper);
+        });
+    }
+
+    document.getElementById('editForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        
+        if (userError || !user) {
+            alert("Duhet të jesh i loguar për të bërë ndryshime!");
+            return;
+        }
+
+        const tableName = (type === 'straps') ? 'bracelets_straps' : 'oras';
+        
+        let imageUrls = window.produktData?.image_url || [];
+        const fileInput = document.getElementById('image_input');
+
+        if (fileInput.files.length > 0) {
+            for (let i = 0; i < fileInput.files.length; i++) {
+                const file = fileInput.files[i];
+                const fileName = ${Date.now()}_${file.name};
+                const { error: uploadError } = await supabase.storage.from('or-images').upload(fileName, file);
+                
+                if (!uploadError) {
+                    const { data } = supabase.storage.from('or-images').getPublicUrl(fileName);
+                    imageUrls.push(data.publicUrl);
+                }
+            }
+        }
+
+        const updateData = {
+            brand: document.getElementById('brand').value,
+            model: document.getElementById('model').value,
+            price: parseInt(document.getElementById('price').value) || 0,
+            description: document.getElementById('description').value,
+            image_url: imageUrls
+        };
+
+        if (type === 'straps') {
+            updateData.bracelet_type = document.getElementById('bracelet_type').value;
+        }
+
+        const { error } = await supabase.from(tableName).update(updateData)
+        .eq('id', id)
+        .eq('user_id', user.id);
+
+        if (error) {
+            console.error("Gabim:", error);
+            alert("Gabim gjatë ruajtjes: " + error.message);
+        } else {
+            alert("Produkti u modifikua me sukses!");
+            window.location.href = 'dashboard.html';
+        }
+    });
+
+    document.getElementById('deleteBtn').addEventListener('click', async () => {
+        if (!confirm("A jeni i sigurt që doni ta fshini këtë produkt?")) return;
+
+        const { data: { user } } = await supabase.auth.getUser();
+        const tableName = (type === 'straps') ? 'bracelets_straps' : 'oras';
+
+        const { error } = await supabase
+            .from(tableName)
+            .delete()
+            .eq('id', id)
+            .eq('user_id', user.id);
+
+        if (error) {
+            alert("Gabim gjatë fshirjes: " + error.message);
+        } else {
+            alert("Produkti u fshi me sukses!");
+            window.location.href = 'dashboard.html';
+        }
+    });
+
+    fetchItem();
+</script>
 </body>
 </html>

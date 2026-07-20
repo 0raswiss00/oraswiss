@@ -510,34 +510,21 @@ document.getElementById("photo-count").innerText =
 
 
 
-function changeImage(direction){
+function changeImage(direction) {
+    if(currentImages.length === 0) return;
 
+    currentImgIndex += direction;
 
-if(currentImages.length===0)return;
+    if(currentImgIndex >= currentImages.length) {
+        currentImgIndex = 0;
+    }
 
+    if(currentImgIndex < 0) {
+        currentImgIndex = currentImages.length - 1;
+    }
 
-
-currentImgIndex += direction;
-
-
-
-if(currentImgIndex >= currentImages.length)
-
-currentImgIndex=0;
-
-
-
-if(currentImgIndex < 0)
-
-currentImgIndex=currentImages.length-1;
-
-
-
-updateGallery();
-
-
+    updateGallery();
 }
-
 
 
 

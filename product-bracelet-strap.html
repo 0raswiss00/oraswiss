@@ -58,38 +58,7 @@
 </div>
 
 <script>
-    const supabase = window.supabase.createClient(
-        "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-    );
 
-    async function loadBraceletDetails() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const productId = urlParams.get('id');
-
-        if (!productId) {
-            document.getElementById('product-title').innerText = "Nuk u gjet ID";
-            return;
-        }
-
-        const { data, error } = await supabase
-            .from('bracelets_straps')
-            .select('*')
-            .eq('id', productId)
-            .single();
-
-        if (error || !data) {
-            document.getElementById('product-title').innerText = "Gabim: Produkti nuk u gjet";
-            return;
-        }
-
-        // Mbushja e elementeve
-        document.getElementById('product-title').innerText = (data.brand || "") + " " + (data.model || "");
-        document.getElementById('product-price').innerText = (data.price || "0") + " €";
-        document.getElementById('product-image').src = data.image_url;
-    }
-
-    loadBraceletDetails();
 </script>
 </body>
 </html>

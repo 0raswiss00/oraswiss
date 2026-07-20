@@ -87,27 +87,27 @@ async function fetchProduct() {
 
     let images = [];
 
-    if (type === "bracelet") {
+    if (Array.isArray(product.image_url)) {
 
-        // bracelets_straps - jsonb
-        if (Array.isArray(product.image_url)) {
-            images = product.image_url;
-        } else if (product.image_url) {
-            images = Object.values(product.image_url);
+        images = product.image_url;
+
+    } else if (typeof product.image_url === "string") {
+
+        try {
+            images = JSON.parse(product.image_url);
+        } catch {
+            images = product.image_url
+                .split(",")
+                .filter(Boolean);
         }
-
-    } else {
-
-        // oras - text[]
-        if (Array.isArray(product.image_url)) {
-            images = product.image_url;
-        }
-
     }
+
 
     window.produktData.image_url = images;
 
+
     showImages(images);
+}
 
 
 

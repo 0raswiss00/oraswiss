@@ -49,27 +49,31 @@ async function fetchWatch() {
     // Përcakto tabelën bazuar te 'type'
     const tableName = (type === 'straps') ? 'bracelets_straps' : 'oras';
 
-    const { data, error } = await supabase
-        .from(tableName)
-        .select('*')
-        .eq('id', id)
+    const { data: product, error } = await myOraSwissClient
+        .from(table)
+        .select("*")
+        .eq("id", id)
         .single();
 
+
     if (error) {
-        console.error("Gabim:", error);
+        console.log(error);
         return;
     }
 
-    // SHTO KËTË RRESHT QË TË MOS HUMBASIM VLERAT PËR BUTONIN RUJA:
-    window.produktData = data; 
 
-    // MBUSHJA E INPUTEVE (Sigurohu që i ke këto rreshta):
-    document.getElementById('brand').value = data.brand || "";
-    document.getElementById('model').value = data.model || "";
-    document.getElementById('price').value = data.price || "";
-    document.getElementById('description').value = data.description || "";
+    // mbush fushat
+    document.getElementById("brand").value = product.brand || "";
+    document.getElementById("model").value = product.model || "";
+    document.getElementById("price").value = product.price || "";
+    document.getElementById("description").value = product.description || "";
 
-    window.produktData = data;
+
+    // shfaq fotot ekzistuese
+    document.getElementById("oldImages").innerHTML =
+    (product.image_url || []).map(img => `
+        <img src="${img}" width="100">
+    `).join("");
 
     // =========================
     // GALERIA E SAKTË

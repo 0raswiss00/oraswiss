@@ -1,64 +1,252 @@
 <!DOCTYPE html>
-<html lang="sq">
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watch Details</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        * { box-sizing: border-box; }
-        body { margin: 0; background: #050505; color: white; font-family: Arial, sans-serif; padding-bottom: 90px; }
-        .product-page { width: 100%; min-height: 100vh; }
-        .gallery { position: relative; width: 100%; height: 55vh; background: #000; overflow: hidden; }
-        .gallery img { width: 100%; height: 100%; object-fit: contain; }
-        .photo-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); border: none; color: white; font-size: 35px; width: 45px; height: 60px; border-radius: 10px; cursor: pointer; }
-        .photo-left { left: 15px; } .photo-right { right: 15px; }
-        .photo-counter { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.6); padding: 7px 15px; border-radius: 20px; }
-        .details { padding: 20px; max-width: 900px; margin: auto; }
-        .brand { font-size: 18px; color: #aaa; }
-        .title { font-size: 30px; margin: 5px 0; }
-        .price { font-size: 28px; color: #25D366; font-weight: bold; margin: 15px 0; }
-        .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; }
-        .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
-        .top-actions { display: flex; gap: 10px; margin-top: 15px; }
-        .action { background: #151515; padding: 12px 18px; border-radius: 25px; cursor: pointer; }
-        .buy-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #090909; border-top: 1px solid #333; padding: 10px; display: flex; gap: 8px; z-index: 999; max-width: 900px; margin-left: 50%; transform: translateX(-50%); }
-        .buy-btn { flex: 1; padding: 15px; border-radius: 10px; text-align: center; text-decoration: none; font-weight: bold; cursor: pointer; }
-        .whatsapp { background: #25D366; color: white; }
-        .buy { background: #ffd900; color: black; }
-        .offer { background: #333; color: white; }
-    </style>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Bracelet / Strap Details</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:#050505;
+    color:white;
+    font-family:Arial,sans-serif;
+    padding-bottom:90px;
+}
+
+
+.product-page{
+    width:100%;
+    min-height:100vh;
+}
+
+
+.gallery{
+    position:relative;
+    width:100%;
+    height:55vh;
+    background:#000;
+    overflow:hidden;
+}
+
+
+.gallery img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+
+.photo-btn{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    background:rgba(255,255,255,.15);
+    border:none;
+    color:white;
+    font-size:35px;
+    width:45px;
+    height:60px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+
+.photo-left{
+    left:15px;
+}
+
+
+.photo-right{
+    right:15px;
+}
+
+
+.photo-counter{
+    position:absolute;
+    bottom:15px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(0,0,0,.6);
+    padding:7px 15px;
+    border-radius:20px;
+}
+
+
+.details{
+    padding:20px;
+    max-width:900px;
+    margin:auto;
+}
+
+
+.brand{
+    font-size:18px;
+    color:#aaa;
+}
+
+
+.model{
+    font-size:30px;
+    margin:5px 0;
+}
+
+
+.price{
+    font-size:28px;
+    color:#25D366;
+    font-weight:bold;
+    margin:15px 0;
+}
+
+
+.info-box{
+    background:#111;
+    border-radius:15px;
+    padding:15px;
+    margin:15px;
+}
+
+
+.info-row{
+    display:flex;
+    justify-content:space-between;
+    padding:10px 0;
+    border-bottom:1px solid #222;
+}
+
+
+.top-actions{
+    display:flex;
+    gap:10px;
+    margin:15px;
+}
+
+
+.action{
+    background:#151515;
+    padding:12px 18px;
+    border-radius:25px;
+    cursor:pointer;
+}
+
+
+
+.buy-bar{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:#090909;
+    border-top:1px solid #333;
+    padding:10px;
+    display:flex;
+    gap:8px;
+    z-index:999;
+}
+
+
+.buy-btn{
+    flex:1;
+    padding:15px;
+    border-radius:10px;
+    text-align:center;
+    text-decoration:none;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.whatsapp{
+    background:#25D366;
+    color:white;
+}
+
+
+.offer{
+    background:#333;
+    color:white;
+}
+
+
+.buy{
+    background:#ffd900;
+    color:black;
+}
+
+
+</style>
+
 </head>
+
+
 <body>
+
 
 <div class="product-page">
 
-    <div class="gallery">
-        <button class="photo-btn photo-left" onclick="changeImage(-1)">❮</button>
-        <img id="main-photo" src="">
-        <button class="photo-btn photo-right" onclick="changeImage(1)">❯</button>
-        <div class="photo-counter" id="photo-count">1 / 1</div>
-    </div>
 
-<div class="category" id="category"></div>
+<div class="gallery">
 
-    
+<button class="photo-btn photo-left" onclick="changeImage(-1)">
+❮
+</button>
+
+
+<img id="main-photo" src="">
+
+
+<button class="photo-btn photo-right" onclick="changeImage(1)">
+❯
+</button>
+
+
+<div class="photo-counter" id="photo-count">
+1 / 1
+</div>
+
+
+</div>
+
 <div class="details">
 
-    <div class="brand" id="brand"></div>
+    <div class="brand" id="brand">
+        -
+    </div>
 
-    <div class="model" id="model"></div>
+    <div class="model" id="model">
+        -
+    </div>
 
-    <div class="price" id="price"></div>
+    <div class="price" id="price">
+        -
+    </div>
+
+</div>
 
 </div>
 
 
+<div class="top-actions">
 
-    <div class="top-actions">
-        <div class="action" onclick="shareProduct()">🔗 Share</div>
-        <div class="action">❤️ Favorite</div>
-    </div>
+<div class="action" onclick="shareProduct()">
+🔗 Share
+</div>
+
+
+<div class="action">
+❤️ Favorite
+</div>
 
 
 </div>
@@ -142,17 +330,31 @@ Loading...
 
 </div>
 
-    
+
 
 <div class="buy-bar">
-    <a class="buy-btn whatsapp" id="whatsapp">💬 WhatsApp</a>
-    <a class="buy-btn offer" id="offer">💰 Suggest Price</a>
-    <a class="buy-btn buy" id="buy">🛒 BUY</a>
+
+<a class="buy-btn whatsapp" id="whatsapp">
+💬 WhatsApp
+</a>
+
+
+<!-- Ndrysho rreshtin 344 nga <a> në <button> -->
+<button class="buy-btn offer" id="offer" type="button">💰 Suggest Price</button>
+</a>
+
+
+<button class="buy-btn buy" id="buy" type="button">🛒 BUY</button>
+</a>
+
+
 </div>
 
 
-<script>
 
+
+
+<script>
 const supabaseClient = window.supabase.createClient(
     "https://gnwsrmelmeqduhhmfmoa.supabase.co",
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
@@ -160,44 +362,34 @@ const supabaseClient = window.supabase.createClient(
 
 let currentImages = [];
 let currentImgIndex = 0;
+let productData = null;
+    
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get("id");
 
-const productId = new URLSearchParams(window.location.search).get("id");
+// Thirr funksionin vetëm një herë
+if (productId) {
+    loadProduct(productId);
+} else {
+    console.error("ID mungon!");
+}
 
+async function loadProduct(idToLoad) {
+    const {data, error} = await supabaseClient
+        .from("bracelets_straps")
+        .select("*")
+        .eq("id", idToLoad)
+        .single();
 
-async function loadProduct() {
-
-    const container = document.querySelector(".product-page");
-
-    if (!productId) {
-        container.innerHTML = "Nuk u gjet ID e produktit.";
+    if (error || !data) {
+        console.error("Gabim nga Supabase:", error);
         return;
     }
-
-
-    try {
-
-        const { data, error } = await supabaseClient
-            .from("bracelets_straps")
-            .select("*")
-            .eq("id", productId)
-            .single();
-
-
-        if (error) throw error;
-
-        console.log("PRODUCT DATA:", data);
-        console.log("PAYPAL:", data.paypal_link);
-
-        currentImages = Array.isArray(data.image_url)
-            ? data.image_url
-            : data.image_url
-                ? [data.image_url]
-                : [];
-
-
-        currentImgIndex = 0;
-
-        // Product main info
+    
+    console.log("Produkti u gjet:", data);
+    productData = data;
+    
+    // Këtu i mbushim fushat, sepse tani 'data' ekziston
     document.getElementById("brand").innerText = data.brand || "N/A";
     document.getElementById("model").innerText = data.model || "N/A";
     document.getElementById("price").innerText = (data.price || 0) + " €";
@@ -214,140 +406,166 @@ async function loadProduct() {
     document.getElementById("description").innerText = data.description || "N/A";
 
     // Përditëso fotot
-
-
-// ... pas description.innerText
-        
-        const buyBtn = document.getElementById("buy");
-
-        if (buyBtn) {
-
-            buyBtn.onclick = async function(e) {
-
-                e.preventDefault();
-
-                buyBtn.innerText = "⏳ Loading...";
-
-                try {
-
-                    console.log("Produkti për PayPal:", data);
-                    
-                    const response = await fetch(
-                        "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
-                        {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                product_id: productId,
-                                price: data.price,
-                                product_name: data.model
-                            })
-                        }
-                    );
-
-
-                    const result = await response.json();
-
-
-                    if (result.paypal_link) {
-
-                        window.location.href = result.paypal_link;
-
-                    } else {
-
-                        alert("PayPal link nuk u krijua");
-
-                        buyBtn.innerText = "🛒 BUY";
-
-                    }
-
-
-                } catch(error) {
-
-                    console.error(error);
-
-                    alert("Gabim me PayPal");
-
-                    buyBtn.innerText = "🛒 BUY";
-
-                }
-
-            };
-
-        }
-
-        
-        updateGallery();
-
-
-        document.getElementById("whatsapp").href =
-            "https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per%20" +
-            encodeURIComponent(data.model);
-
-
-    } catch(err) {
-
-        console.error(err);
-        container.innerHTML = "Gabim: " + err.message;
-
-    }
-
+    currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
+    updateGallery();
 }
+
+
+document.getElementById("whatsapp").href =
+
+"https://wa.me/35569XXXXXXX?text=" +
+
+encodeURIComponent(
+
+"I am interested in " + productData.brand + " " + productData.model
+
+);
+
+
+
+document.getElementById("offer").onclick=function(){
+
+let msg =
+
+"Hello, I would like to suggest a price for " +
+
+data.brand + " " + data.model;
+
+
+
+window.open(
+
+"https://wa.me/35569XXXXXXX?text="
+
++ encodeURIComponent(msg)
+
+);
+
+};
+
+
+
+
+
+document.getElementById("buy").onclick = async function(e) {
+    e.preventDefault();
+    const buyBtn = document.getElementById("buy");
+    buyBtn.innerText = "⏳ Loading...";
+
+    try {
+        const response = await fetch(
+            "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    product_id: productId,
+                    price: data.price,
+                    product_name: data.model
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        if (result.paypal_link) {
+            window.location.href = result.paypal_link;
+        } else {
+            alert("Gabim: Linku i pagesës nuk u gjenerua.");
+            buyBtn.innerText = "🛒 BUY";
+        }
+    } catch(error) {
+        console.error(error);
+        alert("Gabim me lidhjen me PayPal.");
+        buyBtn.innerText = "🛒 BUY";
+    }
+};
+
+
+
+
+
 
 
 
 function updateGallery(){
 
-    if(currentImages.length === 0) return;
+
+if(currentImages.length===0)return;
 
 
-    document.getElementById("main-photo").src =
-        currentImages[currentImgIndex];
+document.getElementById("main-photo").src =
+currentImages[currentImgIndex];
 
 
-    document.getElementById("photo-count").innerText =
-        (currentImgIndex + 1) + " / " + currentImages.length;
+document.getElementById("photo-count").innerText =
+
+(currentImgIndex+1)+" / "+currentImages.length;
+
 
 }
+
+
+
 
 
 
 function changeImage(direction){
 
-    if(currentImages.length === 0) return;
+
+if(currentImages.length===0)return;
 
 
-    currentImgIndex += direction;
+
+currentImgIndex += direction;
 
 
-    if(currentImgIndex >= currentImages.length)
-        currentImgIndex = 0;
+
+if(currentImgIndex >= currentImages.length)
+
+currentImgIndex=0;
 
 
-    if(currentImgIndex < 0)
-        currentImgIndex = currentImages.length - 1;
+
+if(currentImgIndex < 0)
+
+currentImgIndex=currentImages.length-1;
 
 
-    updateGallery();
+
+updateGallery();
+
 
 }
+
+
+
+
 
 
 
 function shareProduct(){
 
-    navigator.clipboard.writeText(window.location.href);
 
-    alert("Linku u kopjua!");
+navigator.clipboard.writeText(window.location.href);
+
+
+alert("Link copied");
+
 
 }
-    
+
+
+
+
 
 loadProduct();
 
+
+
 </script>
 
+
 </body>
+
 </html>

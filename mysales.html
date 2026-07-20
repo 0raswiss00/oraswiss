@@ -66,73 +66,73 @@
         );
 
         async function loadMySales() {
-    const salesList = document.getElementById("salesList");
+            const salesList = document.getElementById("salesList");
 
-    const { data: { user } } = await myOraSwissClient.auth.getUser();
+            const { data: { user } } = await myOraSwissClient.auth.getUser();
 
-    if (!user) {
-        salesList.innerHTML = "Ju lutem logohuni.";
-        return;
-    }
+            if (!user) {
+                salesList.innerHTML = "Ju lutem logohuni.";
+                return;
+            }
 
-    const [
-        { data: watches, error: watchesError },
-        { data: bracelets, error: braceletsError }
-    ] = await Promise.all([
-        myOraSwissClient
-            .from("oras")
-            .select("*")
-            .eq("user_id", user.id),
+            const [
+                { data: watches, error: watchesError },
+                { data: bracelets, error: braceletsError }
+            ] = await Promise.all([
+                myOraSwissClient
+                    .from("oras")
+                    .select("*")
+                    .eq("user_id", user.id),
 
-        myOraSwissClient
-            .from("bracelets_straps")
-            .select("*")
-            .eq("user_id", user.id)
-    ]);
+                myOraSwissClient
+                    .from("bracelets_straps")
+                    .select("*")
+                    .eq("user_id", user.id)
+            ]);
 
-    if (watchesError || braceletsError) {
-        salesList.innerHTML = "Gabim: " + (watchesError?.message || braceletsError?.message);
-        return;
-    }
+            if (watchesError || braceletsError) {
+                salesList.innerHTML = "Gabim: " + (watchesError?.message || braceletsError?.message);
+                return;
+            }
 
-    const items = [
-        ...(watches || []).map(item => ({ ...item, type: "watch" })),
-        ...(bracelets || []).map(item => ({ ...item, type: "bracelet" }))
-    ];
+            const items = [
+                ...(watches || []).map(item => ({ ...item, type: "watch" })),
+                ...(bracelets || []).map(item => ({ ...item, type: "bracelet" }))
+            ];
 
-    if (items.length === 0) {
-        salesList.innerHTML = "Nuk keni asnjë artikull në shitje.";
-        return;
-    }
+            if (items.length === 0) {
+                salesList.innerHTML = "Nuk keni asnjë artikull në shitje.";
+                return;
+            }
 
-    salesList.innerHTML = items.map(item => `
-        <div class="sale-item">
+            salesList.innerHTML = items.map(item => `
+                <div class="sale-item">
 
-            <a href="${item.type === 'bracelet' ? 'product-bracelet-strap.html' : 'product.html'}?id=${item.id}">
-                <img src="${item.image_url?.[0] || 'placeholder.jpg'}">
-            </a>
+                    <a href="${item.type === 'bracelet' ? 'product-bracelet-strap.html' : 'product.html'}?id=${item.id}">
+                        <img src="${item.image_url?.[0] || 'placeholder.jpg'}">
+                    </a>
 
-            <div>
-                <a href="${item.type === 'bracelet' ? 'product-bracelet-strap.html' : 'product.html'}?id=${item.id}">
-                    <strong>${item.brand} ${item.model}</strong>
-                </a>
-                <br>
-                <small>Çmimi: ${item.price} €</small>
+                    <div>
+                        <a href="${item.type === 'bracelet' ? 'product-bracelet-strap.html' : 'product.html'}?id=${item.id}">
+                            <strong>${item.brand} ${item.model}</strong>
+                        </a>
+                        <br>
+                        <small>Çmimi: ${item.price} €</small>
 
-                <div style="margin-top:10px;">
-                    <button onclick="window.location.href='${item.type === 'bracelet' ? 'product-bracelet-strap.html' : 'product.html'}?id=${item.id}'">
-                        Shiko
-                    </button>
+                        <div style="margin-top:10px;">
+                            <button onclick="window.location.href='${item.type === 'bracelet' ? 'product-bracelet-strap.html' : 'product.html'}?id=${item.id}'">
+                                Shiko
+                            </button>
 
-                    <button onclick="window.location.href='edit.html?id=${item.id}'">
-                        Modifiko
-                    </button>
+                            <button onclick="window.location.href='edit.html?id=${item.id}'">
+                                Modifiko
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
-            </div>
-
-        </div>
-    `).join("");
-}
+            `).join("");
+        }
         // Thirrja e funksionit
         loadMySales();
     </script>

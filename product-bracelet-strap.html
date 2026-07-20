@@ -338,9 +338,15 @@ Loading...
 💬 WhatsApp
 </a>
 
+
+<!-- Ndrysho rreshtin 344 nga <a> në <button> -->
 <button class="buy-btn offer" id="offer" type="button">💰 Suggest Price</button>
+</a>
+
 
 <button class="buy-btn buy" id="buy" type="button">🛒 BUY</button>
+</a>
+
 
 </div>
 
@@ -361,6 +367,7 @@ let productData = null;
 const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get("id");
 
+// Thirr funksionin vetëm një herë
 if (productId) {
     loadProduct(productId);
 } else {
@@ -382,6 +389,7 @@ async function loadProduct(idToLoad) {
     console.log("Produkti u gjet:", data);
     productData = data;
     
+    // Këtu i mbushim fushat, sepse tani 'data' ekziston
     document.getElementById("brand").innerText = data.brand || "N/A";
     document.getElementById("model").innerText = data.model || "N/A";
     document.getElementById("price").innerText = (data.price || 0) + " €";
@@ -397,28 +405,50 @@ async function loadProduct(idToLoad) {
     document.getElementById("thickness").innerText = data.thickness || "N/A";
     document.getElementById("description").innerText = data.description || "N/A";
 
-    currentImages = Array.isArray(data.image_url) 
-        ? data.image_url 
-        : (typeof data.image_url === 'object' && data.image_url !== null 
-            ? Object.values(data.image_url) 
-            : (data.image_url ? [data.image_url] : []));
-
+    // Përditëso fotot
+    currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
     updateGallery();
-
-    document.getElementById("whatsapp").href =
-        "https://wa.me/35569XXXXXXX?text=" +
-        encodeURIComponent("I am interested in " + productData.brand + " " + productData.model);
 }
 
-document.getElementById("offer").onclick = function() {
-    if (!productData) return;
-    let msg = "Hello, I would like to suggest a price for " + productData.brand + " " + productData.model;
-    window.open("https://wa.me/35569XXXXXXX?text=" + encodeURIComponent(msg));
+
+document.getElementById("whatsapp").href =
+
+"https://wa.me/35569XXXXXXX?text=" +
+
+encodeURIComponent(
+
+"I am interested in " + productData.brand + " " + productData.model
+
+);
+
+
+
+document.getElementById("offer").onclick=function(){
+
+let msg =
+
+"Hello, I would like to suggest a price for " +
+
+data.brand + " " + data.model;
+
+
+
+window.open(
+
+"https://wa.me/35569XXXXXXX?text="
+
++ encodeURIComponent(msg)
+
+);
+
 };
+
+
+
+
 
 document.getElementById("buy").onclick = async function(e) {
     e.preventDefault();
-    if (!productData) return;
     const buyBtn = document.getElementById("buy");
     buyBtn.innerText = "⏳ Loading...";
 
@@ -430,8 +460,8 @@ document.getElementById("buy").onclick = async function(e) {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     product_id: productId,
-                    price: productData.price,
-                    product_name: productData.model
+                    price: data.price,
+                    product_name: data.model
                 })
             }
         );
@@ -451,31 +481,87 @@ document.getElementById("buy").onclick = async function(e) {
     }
 };
 
-function updateGallery() {
-    if (currentImages.length === 0) return;
 
-    document.getElementById("main-photo").src = currentImages[currentImgIndex];
-    document.getElementById("photo-count").innerText = (currentImgIndex + 1) + " / " + currentImages.length;
+
+
+
+
+
+
+function updateGallery(){
+
+
+if(currentImages.length===0)return;
+
+
+document.getElementById("main-photo").src =
+currentImages[currentImgIndex];
+
+
+document.getElementById("photo-count").innerText =
+
+(currentImgIndex+1)+" / "+currentImages.length;
+
+
 }
 
-function changeImage(direction) {
-    if (currentImages.length === 0) return;
 
-    currentImgIndex += direction;
 
-    if (currentImgIndex >= currentImages.length)
-        currentImgIndex = 0;
 
-    if (currentImgIndex < 0)
-        currentImgIndex = currentImages.length - 1;
 
-    updateGallery();
+
+function changeImage(direction){
+
+
+if(currentImages.length===0)return;
+
+
+
+currentImgIndex += direction;
+
+
+
+if(currentImgIndex >= currentImages.length)
+
+currentImgIndex=0;
+
+
+
+if(currentImgIndex < 0)
+
+currentImgIndex=currentImages.length-1;
+
+
+
+updateGallery();
+
+
 }
 
-function shareProduct() {
-    navigator.clipboard.writeText(window.location.href);
-    alert("Link copied");
+
+
+
+
+
+
+function shareProduct(){
+
+
+navigator.clipboard.writeText(window.location.href);
+
+
+alert("Link copied");
+
+
 }
+
+
+
+
+
+loadProduct();
+
+
 
 </script>
 

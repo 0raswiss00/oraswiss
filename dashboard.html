@@ -9,32 +9,8 @@
             background: #000; 
             color: #fff; 
             padding: 20px; 
-            padding-bottom: 80px; 
+            padding-bottom: 80px; /* Lë hapësirë që përmbajtja të mos mbulohet nga shiriti i poshtëm */
             margin: 0;
-        }
-        .search-container { margin-bottom: 20px; }
-        .search-box {
-            display: flex;
-            align-items: center;
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 8px 12px;
-        }
-        .search-box input {
-            background: transparent;
-            border: none;
-            color: #fff;
-            outline: none;
-            width: 100%;
-            font-size: 14px;
-            margin-left: 8px;
-        }
-        .camera-icon {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
         }
         .profile-header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 20px; }
         .btn-sell { background: gold; color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 5px; cursor: pointer; width: 100%; margin-bottom: 20px; }
@@ -52,10 +28,6 @@
             align-items: center;
             padding: 12px 0;
             z-index: 1000;
-            transition: transform 0.3s ease;
-        }
-        .bottom-nav.hidden {
-            transform: translateY(100%);
         }
         .bottom-nav-item {
             color: #fff;
@@ -74,7 +46,7 @@
         .my-oraswiss-menu { 
             display: none; 
             position: fixed;
-            bottom: 70px; 
+            bottom: 70px; /* Shfaqet fiks mbi shiritin e poshtëm */
             left: 5%;
             width: 90%;
             background: #111; 
@@ -138,7 +110,7 @@
         const { data: { user } } = await supabase.auth.getUser();
 
         if (!user) {
-            window.location.href = "login.html";
+            window.location.href = "index.html";
             return false;
         }
 
@@ -161,6 +133,7 @@
 
     window.checkLogin = checkLogin;
     
+    // 1. Deklaro funksionin si të zakonshëm
     async function ngarkoArtikujt() {
         const lista = document.getElementById("myWatchesList");
         lista.innerHTML = "Po ngarkojmë artikujt...";
@@ -171,11 +144,13 @@
             return;
         }
 
+        // 1. Merr orët
         const { data: watches, error: errorW } = await supabase
             .from('oras')
             .select('*')
             .eq('user_id', user.id);
 
+        // 2. Merr rripat
         const { data: straps, error: errorS } = await supabase
             .from('bracelets_straps')
             .select('*')
@@ -186,6 +161,7 @@
             return;
         }
 
+        // 3. Bashkoji të dyja listat
         const teGjitha = [...(watches || []), ...(straps || [])];
 
         lista.innerHTML = "";
@@ -193,17 +169,17 @@
             lista.innerHTML = "<li>Nuk keni asnjë artikull në shitje.</li>";
         } else {
             teGjitha.forEach(item => {
-                const isStrap = straps && straps.some(s => s.id === item.id);
-                const typeParam = isStrap ? '&type=straps' : '';
+                // Përcakto nëse është rrip për të shtuar parametrin 'type' në URL
+                const isStrap = item.hasOwnProperty('bracelet_type') || (item.id && !item.brand); // Përshtate me kolonën që dallon rripat
+                // Ose më thjesht: nese artikulli vjen nga 'bracelets_straps'
+                const typeParam = (straps && straps.includes(item)) ? '&type=straps' : '';
 
                 const li = document.createElement("li");
                 li.className = "watch-card";
                 li.innerHTML = `
-                    <a href="edit.html?id=${item.id}${typeParam}" style="text-decoration:none; color:inherit; display:flex; align-items:center; width:100%;">
-                        <img src="${item.image_url && item.image_url[0] ? item.image_url[0] : ''}" alt="${item.brand || 'Artikull'}" style="width:100px; height:auto; margin-right:15px; object-fit:cover;">
-                        <div>
-                            <strong>${item.brand || 'Rrip'}</strong> - ${item.price} €
-                        </div>
+                    <a href="edit.html?id=${item.id}${typeParam}" style="text-decoration:none; color:inherit; display:flex; align-items:center;">
+                        <img src="${item.image_url && item.image_url[0] ? item.image_url[0] : ''}" alt="${item.brand || 'Artikull'}" style="width:100px; height:auto; margin-right:15px;">
+                        <strong>${item.brand || 'Rrip'}</strong> - ${item.price} €
                     </a>
                 `;
                 lista.appendChild(li);
@@ -211,16 +187,18 @@
         }
     }
 
-    function toggleMenu(menuId) {
-        const menu = document.getElementById(menuId);
-        if (!menu) return; 
 
+    // 2. Funksioni për hapjen/mbylljen e menusë "My OraSwiss"
+    function toggleMenu() {
+        const menu = document.getElementById('myOraSwissMenu');
         menu.classList.toggle('active');
     }
 
+    // 3. Bëj funksionet të aksesueshme nga onclick="" në HTML
     window.ngarkoArtikujt = ngarkoArtikujt;
     window.toggleMenu = toggleMenu;
 
+    // 4. Lidh eventet pasi DOM të jetë ngarkuar plotësisht
     document.addEventListener('DOMContentLoaded', async () => {
         const { data: { user } } = await supabase.auth.getUser();
 
@@ -229,21 +207,28 @@
             return;
         }
 
-        ngarkoArtikujt();
+        const btn = document.getElementById('btnNgarko');
+
+        if (btn) {
+            btn.addEventListener('click', ngarkoArtikujt);
+        } else {
+            ngarkoArtikujt();
+        }
     });
 
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.addEventListener('keyup', function(e) {
-            const termi = e.target.value.toLowerCase();
-            const lista = document.getElementById("myWatchesList");
-            const artikujt = lista.getElementsByClassName("watch-card");
-            for (let i = 0; i < artikujt.length; i++) {
-                let tekst = artikujt[i].textContent.toLowerCase();
-                artikujt[i].style.display = tekst.includes(termi) ? "" : "none";
-            }
-        });
-    }
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function(e) {
+                const termi = e.target.value.toLowerCase();
+                const lista = document.getElementById("myWatchesList");
+                const artikujt = lista.getElementsByClassName("watch-card");
+                for (let i = 0; i < artikujt.length; i++) {
+                    let tekst = artikujt[i].textContent.toLowerCase();
+                    artikujt[i].style.display = tekst.includes(termi) ? "" : "none";
+                }
+            });
+        }
+    
 </script>
 <script>
     let lastScrollTop = 0;
@@ -253,13 +238,51 @@
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
         if (scrollTop > lastScrollTop) {
+            // Scroll poshtë - fshihte navigimin
             nav.classList.add('hidden');
         } else {
+            // Scroll lart - shfaqe navigimin
             nav.classList.remove('hidden');
         }
         
-        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Për të evituar gabime në Safari
     }, false);
+</script>
+<script>
+    function checkLogin(event, targetUrl) {
+        event.preventDefault(); // Ndalon butonin të hapet direkt
+    
+        // Këtu vendos logjikën tënde. Për shembull:
+        const isLoggedIn = localStorage.getItem('isLoggedIn'); // ose kontrolli yt
+    
+        if (isLoggedIn === 'true') {
+            window.location.href = targetUrl;
+        } else {
+            alert("Duhet të jesh i loguar për ta hapur këtë faqe!");
+            // Ose: window.location.href = 'login.html';
+        }
+    }
+</script>    
+<script>
+  window.toggleMenu = function(menuId) {
+      var menu = document.getElementById(menuId);
+      if (!menu) return; 
+
+      // Mbyll çdo menu tjetër që ka klasën 'menu-content'
+      var allMenus = document.querySelectorAll('.menu-content');
+      allMenus.forEach(function(m) {
+          if (m.id !== menuId) {
+              m.style.display = 'none';
+          }
+      });
+
+      // Logjika: Klikim për hapje, klikim për mbyllje
+      if (menu.style.display === 'block') {
+          menu.style.display = 'none';
+      } else {
+          menu.style.display = 'block';
+      }
+  };
 </script>
 </body>       
 </html>

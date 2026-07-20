@@ -174,3 +174,321 @@ fetchWatch();
 </script>
 </body>
 </html>
+
+
+
+
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifiko Orën</title>
+    <style>
+        body { font-family: Arial; background: #000; color: #fff; padding: 20px; }
+        form { max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border-radius: 10px; }
+        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px; }
+        button { width: 100%; padding: 15px; background: gold; border: none; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+<a href="dashboard.html"
+    style="color:#ccc; text-align:center; display:block; margin-top:10px;">
+    ← Back 
+</a>
+<form id="editForm">
+    <h2>Modifiko Orën</h2>
+    <input type="text" id="brand" placeholder="Brand" required>
+    <input type="text" id="model" placeholder="Model" required>
+    <input type="number" id="price" placeholder="Price">
+    <textarea id="description" placeholder="Description"></textarea>
+    <label for="image_input">Shto ose ndrysho fotot:</label>
+    <input type="file" id="image_input" multiple accept="image/*">
+    <button type="submit">Ruaj Ndryshimet</button>
+    <button type="button" id="deleteBtn" style="background: #ff4d4d; color: white; width: 100%; padding: 15px; border: none; cursor: pointer; margin-top: 10px;">
+        Fshi Produktin
+    </button>
+</form>
+
+<div id="gallery-container" style="margin: 15px 0; display: flex; gap: 10px; flex-wrap: wrap;">
+    </div>
+   
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const supabase = createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
+
+
+const urlParams = new URLSearchParams(window.location.search);
+
+const id = urlParams.get('id');
+const type = urlParams.get('type') || 'watch';
+
+const tableName = (type === 'bracelet')
+    ? 'bracelets_straps'
+    : 'oras';
+
+
+window.produktData = {
+    image_url: []
+};
+
+
+// =========================
+// MERR PRODUKTIN
+// =========================
+
+async function fetchProduct() {
+
+    const { data: product, error } = await supabase
+        .from(tableName)
+        .select("*")
+        .eq("id", id)
+        .single();
+
+
+    if (error) {
+        console.error(error);
+        alert("Gabim gjatë marrjes së produktit");
+        return;
+    }
+
+
+    window.produktData = product;
+
+
+    document.getElementById("brand").value = product.brand || "";
+    document.getElementById("model").value = product.model || "";
+    document.getElementById("price").value = product.price || "";
+    document.getElementById("description").value = product.description || "";
+
+
+    let images = [];
+
+    if (Array.isArray(product.image_url)) {
+
+        images = product.image_url;
+
+    } else if (typeof product.image_url === "string") {
+
+        try {
+            images = JSON.parse(product.image_url);
+        } catch {
+            images = product.image_url
+                .split(",")
+                .filter(Boolean);
+        }
+    }
+
+
+    window.produktData.image_url = images;
+
+
+    showImages(images);
+}
+
+
+
+// =========================
+// SHFAQ FOTOT
+// =========================
+
+function showImages(images) {
+
+    const gallery = document.getElementById("gallery-container");
+
+    if (!gallery) return;
+
+
+    gallery.innerHTML = "";
+
+
+    images.forEach((url, index) => {
+
+        const img = document.createElement("img");
+
+        img.src = url;
+        img.style.width = "100px";
+        img.style.margin = "5px";
+        img.style.cursor = "pointer";
+
+
+        img.onclick = () => {
+
+            const moved = images.splice(index,1)[0];
+
+            images.unshift(moved);
+
+            window.produktData.image_url = images;
+
+            showImages(images);
+
+        };
+
+
+        gallery.appendChild(img);
+
+    });
+
+}
+
+
+
+// =========================
+// RUAJ NDRYSHIMET
+// =========================
+
+document.getElementById("editForm")
+.addEventListener("submit", async (e)=>{
+
+
+    e.preventDefault();
+
+
+    const { data:{user} } = await supabase.auth.getUser();
+
+
+    if(!user){
+
+        alert("Duhet të jesh i loguar");
+        return;
+
+    }
+
+
+
+    let imageUrls = window.produktData.image_url || [];
+
+
+    const fileInput = document.getElementById("image_input");
+
+
+    if(fileInput && fileInput.files.length > 0){
+
+
+        for(const file of fileInput.files){
+
+
+            const fileName = `${Date.now()}_${file.name}`;
+
+
+            const {error:uploadError}=await supabase
+            .storage
+            .from("or-images")
+            .upload(fileName,file);
+
+
+
+            if(uploadError){
+
+                console.error(uploadError);
+                continue;
+
+            }
+
+
+
+            const {data:urlData}=supabase
+            .storage
+            .from("or-images")
+            .getPublicUrl(fileName);
+
+
+
+            imageUrls.push(urlData.publicUrl);
+
+        }
+
+    }
+
+
+
+
+    const {error}=await supabase
+    .from(tableName)
+    .update({
+
+        brand: document.getElementById("brand").value,
+
+        model: document.getElementById("model").value,
+
+        price: Number(document.getElementById("price").value),
+
+        description: document.getElementById("description").value,
+
+        image_url: imageUrls
+
+    })
+    .eq("id",id)
+    .eq("user_id",user.id);
+
+
+
+    if(error){
+
+        console.error(error);
+
+        alert("Gabim gjatë ruajtjes: "+error.message);
+
+    }else{
+
+        alert("Ndryshimet u ruajtën me sukses!");
+
+        window.location.href="dashboard.html";
+
+    }
+
+
+});
+
+
+
+// =========================
+// FSHI PRODUKTIN
+// =========================
+
+document.getElementById("deleteBtn")
+.addEventListener("click",async()=>{
+
+
+    if(!confirm("A jeni i sigurt që doni ta fshini?"))
+        return;
+
+
+
+    const {data:{user}} = await supabase.auth.getUser();
+
+
+
+    const {error}=await supabase
+    .from(tableName)
+    .delete()
+    .eq("id",id)
+    .eq("user_id",user.id);
+
+
+
+    if(error){
+
+        alert(error.message);
+
+    }else{
+
+        alert("Produkti u fshi!");
+
+        window.location.href="dashboard.html";
+
+    }
+
+
+});
+
+
+
+fetchProduct();
+
+</script>
+</body>
+</html>

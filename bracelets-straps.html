@@ -331,16 +331,14 @@ document.getElementById("fileInput").files;
 
 let imageUrls = [];
 
-// Merr fajlat nga fileInput pa e deklaruar përsëri fjalën 'files' nëse është deklaruar lart
+// Merr fajlat nga fileInput
 const fileInput = document.getElementById("fileInput");
 const selectedFiles = fileInput ? fileInput.files : [];
 
 // Upload photos
-for(let i = 0; i < selectedFiles.length; i++){
+for (let i = 0; i < selectedFiles.length; i++) {
     const file = selectedFiles[i];
-
-    const fileName = 
-        Date.now() + "" + i + "" + file.name;
+    const fileName = Date.now() + "_" + i + "_" + file.name;
 
     const { error: uploadError } = 
         await window.supabaseClient
@@ -358,9 +356,28 @@ for(let i = 0; i < selectedFiles.length; i++){
         .from("or-images")
         .getPublicUrl(fileName);
 
-    if (urlData) {
+    if (urlData && urlData.publicUrl) {
         imageUrls.push(urlData.publicUrl);
     }
+}
+
+// Përgatitja e të dhënave të produktit
+const productData = {
+    length: document.getElementById("lengthInput")?.value || 160, // Merr vlerën nga inputi i gjatësisë
+    thickness: document.getElementById("thicknessInput")?.value || 3, // Merr vlerën nga inputi i trashësisë
+    images: imageUrls // Këtu ruhet array i linkeve, i cili zgjidh problemin e databazës
+};
+
+// Dërgimi i të dhënave në tabelën tuaj (p.sh. treguesi "products")
+const { data, error: insertError } = await window.supabaseClient
+    .from("products") // Zëvendësoje me emrin e saktë të tabelës tënde
+    .insert([productData]);
+
+if (insertError) {
+    console.error("Gabim gjatë ruajtjes në databazë:", insertError);
+} else {
+    console.log("Produkti u publikua me sukses!", data);
+    alert("U publikua me sukses!");
 }
 
 

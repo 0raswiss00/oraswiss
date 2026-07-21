@@ -331,59 +331,37 @@ document.getElementById("fileInput").files;
 
 let imageUrls = [];
 
-
+// Merri fajlat nga ID-ja e saktë në HTML (fileInput)
+const fileInput = document.getElementById("fileInput");
+const files = fileInput ? fileInput.files : [];
 
 // Upload photos
-
 for(let i = 0; i < files.length; i++){
-
-
     const file = files[i];
 
+    const fileName = 
+        Date.now() + "_" + i + "_" + file.name;
 
-    const fileName =
-    Date.now() + "" + i + "" + file.name;
+    const { error: uploadError } = 
+        await window.supabaseClient
+            .storage
+            .from("or-images")
+            .upload(fileName, file);
 
-
-
-    const { error:uploadError } =
-
-    await supabase
-    .storage
-    .from("or-images")
-    .upload(fileName,file);
-
-
-
-    if(uploadError){
-
-        alert(
-        "Photo upload error: " 
-        + uploadError.message
-        );
-
-        return;
-
+    if (uploadError) {
+        console.error("Gabim në upload:", uploadError);
+        continue;
     }
 
+    const { data: urlData } = window.supabaseClient
+        .storage
+        .from("or-images")
+        .getPublicUrl(fileName);
 
-
-    const {data:urlData} =
-
-    window.supabaseClient
-    .storage
-    .from("or-images")
-    .getPublicUrl(fileName);
-
-
-
-    imageUrls.push(
-        urlData.publicUrl
-    );
-
-
+    if (urlData) {
+        imageUrls.push(urlData.publicUrl);
+    }
 }
-
 
 
 

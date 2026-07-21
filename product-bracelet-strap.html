@@ -128,9 +128,10 @@ body{
 
 .top-actions{
     position:absolute;
-    top:15px;
+    top:90px;
     right:15px;
     display:flex;
+    flex-direction:column;
     gap:8px;
     z-index:10;
     margin:0;
@@ -138,12 +139,16 @@ body{
 
 
 .action{
+    width:36px;
+    height:36px;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
     background:#151515;
-    padding:12px 18px;
-    border-radius:25px;
-    cursor:pointer;
+    font-size:18px;
 }
-
 
 
 .buy-bar{

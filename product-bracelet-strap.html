@@ -417,7 +417,7 @@ async function loadProduct(idToLoad) {
     document.getElementById("top-price").innerText = (data.price || 0) + " €";
     // Merr vendin e shitësit
     const { data: seller } = await supabaseClient
-        .from("profiles")
+        .from("profile")
         .select("country")
         .eq("id", data.user_id)
         .single();

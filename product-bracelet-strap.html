@@ -419,13 +419,12 @@ async function loadProduct(idToLoad) {
     document.getElementById("top-price").innerText = (data.price || 0) + " €";
     // Merr vendin e shitësit
     document.getElementById("seller-country").innerText =
-    data.country === "Albania" ? "🇦🇱 AL" :
-    data.country === "Switzerland" ? "🇨🇭 CH" :
-    data.country === "Italy" ? "🇮🇹 IT" :
-    data.country === "Germany" ? "🇩🇪 DE" :
-    "-";
+        data.country === "Albania" ? "🇦🇱 AL" :
+        data.country === "Switzerland" ? "🇨🇭 CH" :
+        data.country === "Italy" ? "🇮🇹 IT" :
+        data.country === "Germany" ? "🇩🇪 DE" :
+        "-";
 
-    
     // Mbushja e fushave në tabelën e detajeve
     document.getElementById("brand").innerText = data.brand || "N/A";
     document.getElementById("model").innerText = data.model || "N/A";

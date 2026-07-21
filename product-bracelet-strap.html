@@ -418,26 +418,9 @@ async function loadProduct(idToLoad) {
     document.getElementById("top-model").innerText = data.model || "N/A";
     document.getElementById("top-price").innerText = (data.price || 0) + " €";
     // Merr vendin e shitësit
-    const { data: seller, error: sellerError } = await supabaseClient
-        .from("profiles")
-        .select("country")
-        .eq("id", data.user_id)
-        .maybeSingle();
+    document.getElementById("seller-country").innerText =
+        data.country ? "🇦🇱 " + data.country : "-";
 
-    console.log("Seller:", seller);
-    console.log("Seller error:", sellerError);
-
-    if (seller) {
-        const countries = {
-            "Albania": "🇦🇱 Albania",
-            "Switzerland": "🇨🇭 Switzerland",
-            "Italy": "🇮🇹 Italy",
-            "Germany": "🇩🇪 Germany"
-        };
-
-        document.getElementById("seller-country").innerText =
-            countries[seller.country] || seller.country;
-    }
     
     // Mbushja e fushave në tabelën e detajeve
     document.getElementById("brand").innerText = data.brand || "N/A";

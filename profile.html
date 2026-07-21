@@ -120,12 +120,13 @@
     nameEl.textContent = meta.full_name || "-";
     phoneEl.textContent = meta.phone || "-";
     const countries = {
-      "Albania": "🇦🇱 AL Albania",
-      "Switzerland": "🇨🇭 CH Switzerland",
-      "Italy": "🇮🇹 IT Italy",
-      "Germany": "🇩🇪 DE Germany"
-    };
+  "Albania": "🇦🇱 AL",
+  "Switzerland": "🇨🇭 CH",
+  "Italy": "🇮🇹 IT",
+  "Germany": "🇩🇪 DE"
+};
 
+countryEl.textContent = countries[meta.country] || "-";
     countryEl.textContent = countries[meta.country] || "-";
 
     streetEl.textContent = meta.street || "-";

@@ -373,7 +373,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             length: document.getElementById("length").value,
             thickness: document.getElementById("thickness").value,
             description: document.getElementById("description").value,
-            image_url: imageUrls[0] || null
+            image_url: imageUrls.length > 0 ? [imageUrls[0]] : null
         };
 
         console.log("Po dërgohen të dhënat:", productData);

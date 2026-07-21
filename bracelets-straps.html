@@ -331,16 +331,16 @@ document.getElementById("fileInput").files;
 
 let imageUrls = [];
 
-// Merri fajlat nga ID-ja e saktë në HTML (fileInput)
+// Merr fajlat nga fileInput pa e deklaruar përsëri fjalën 'files' nëse është deklaruar lart
 const fileInput = document.getElementById("fileInput");
-const files = fileInput ? fileInput.files : [];
+const selectedFiles = fileInput ? fileInput.files : [];
 
 // Upload photos
-for(let i = 0; i < files.length; i++){
-    const file = files[i];
+for(let i = 0; i < selectedFiles.length; i++){
+    const file = selectedFiles[i];
 
     const fileName = 
-        Date.now() + "_" + i + "_" + file.name;
+        Date.now() + "" + i + "" + file.name;
 
     const { error: uploadError } = 
         await window.supabaseClient

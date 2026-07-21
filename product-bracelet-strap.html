@@ -273,6 +273,18 @@ body{
 
 
 <div class="info-row">
+<span>Year</span>
+<span id="year">-</span>
+</div>
+
+
+<div class="info-row">
+<span>Price</span>
+<span id="price">-</span>
+</div>    
+
+    
+<div class="info-row">
 <span>Type</span>
 <span id="type">-</span>
 </div>
@@ -402,8 +414,9 @@ async function loadProduct(idToLoad) {
     // Mbushja e fushave
     document.getElementById("brand").innerText = data.brand || "N/A";
     document.getElementById("model").innerText = data.model || "N/A";
-    document.getElementById("price").innerText = (data.price || 0) + " €";
     document.getElementById("reference").innerText = data.reference || "N/A";
+    document.getElementById("year").innerText = data.year || "N/A";
+    document.getElementById("price").innerText = (data.price || 0) + " €";
     document.getElementById("type").innerText = data.type || "N/A";
     document.getElementById("condition").innerText = data.condition || "N/A";
     document.getElementById("material").innerText = data.material || "N/A";

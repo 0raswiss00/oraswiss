@@ -2745,6 +2745,30 @@ body {
    profil scroll sales watches
    =============================== */
 .watch-scroll{
+  max-height:350px;
+  overflow-y:auto;
+  border:1px solid #333;
+  border-radius:12px;
+  padding:10px;
+  background:#111;
+}
+
+.watch-scroll ul{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+.watch-scroll li{
+  padding:12px;
+  margin-bottom:10px;
+  background:#1a1a1a;
+  border-radius:10px;
+  border:1px solid #333;
+}
+
+      
+.watch-scroll{
     max-height:420px;
     overflow-y:auto;
     border:1px solid #333;

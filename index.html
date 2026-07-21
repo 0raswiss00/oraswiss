@@ -262,17 +262,16 @@ async function loadBraceletStraps() {
     }
 
     container.innerHTML = data.map(item => `
-    <div class="card" onclick="window.location.href='product-bracelet-strap.html?id=${item.id}'">
-        <div class="image-slider">
-            ${item.image_url && item.image_url.length > 0 
-                ? item.image_url.map(url => `<img src="${url}" alt="Strap Image">`).join('') 
-                : '<img src="default-placeholder.png" alt="No image">'}
+        <div class="card" onclick="window.location.href='product-bracelet-strap.html?id=${item.id}'">
+            <div class="image-slider">
+                ${item.image_url && item.image_url.length > 0 
+                    ? item.image_url.map(url => `<img src="${url}" alt="Strap Image">`).join('') 
+                    : '<img src="default-placeholder.png" alt="No image">'}
+            </div>
+            <h3>${item.brand || ""} ${item.model || ""}</h3>
+            <div>${item.price || ""} €</div>
         </div>
-        <h3>${item.brand || ""} ${item.model || ""}</h3>
-        <div>${item.price || ""} €</div>
-    </div>
-`).join('');
-
+    `).join('');
 }
 
 loadBraceletStraps();

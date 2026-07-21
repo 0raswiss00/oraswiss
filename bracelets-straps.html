@@ -293,104 +293,108 @@ Sell Now
 
 </form>
 
-<script type="module">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
+<script src="db-connect.js"></script>
 
-// Funksion ndihmës që pret derisa Supabase të jetë gati
-function getSupabaseClient() {
-    return new Promise((resolve) => {
-        if (window.supabaseClient) {
-            return resolve(window.supabaseClient);
-        }
-        const interval = setInterval(() => {
-            if (window.supabaseClient) {
-                clearInterval(interval);
-                resolve(window.supabaseClient);
+<script>
+// Përdorim eventinDOMContentLoaded për t'u siguruar që HTML është gati
+document.addEventListener("DOMContentLoaded", async function() {
+
+    // Kontrollojmë nëse klienti është ngarkuar direkt nga db-connect.js
+    if (!window.supabaseClient) {
+        console.error("Supabase client nuk u gjet!");
+        alert("Gabim në lidhjen me databazën.");
+        return;
+    }
+
+    const { data: { user }, error: authError } = await window.supabaseClient.auth.getUser();
+
+    if (authError || !user) {
+        alert("Duhet të jesh i loguar!");
+        window.location.href = "register.html";
+        return;
+    }
+
+    const form = document.getElementById("braceletForm");
+    if (!form) {
+        console.error("Formulari braceletForm nuk u gjet!");
+        return;
+    }
+
+    form.addEventListener("submit", async function(e) {
+        e.preventDefault();
+        console.log("U klikua butoni për të dërguar formën...");
+
+        const fileInput = document.getElementById("fileInput");
+        const selectedFiles = fileInput ? fileInput.files : [];
+        let imageUrls = [];
+
+        // Upload photos
+        for (let i = 0; i < selectedFiles.length; i++) {
+            const file = selectedFiles[i];
+            const fileName = Date.now() + "_" + i + "_" + file.name;
+
+            const { error: uploadError } = 
+                await window.supabaseClient
+                    .storage
+                    .from("or-images")
+                    .upload(fileName, file);
+
+            if (uploadError) {
+                console.error("Gabim në upload të fotos:", uploadError);
+                continue;
             }
-        }, 50);
+
+            const { data: urlData } = window.supabaseClient
+                .storage
+                .from("or-images")
+                .getPublicUrl(fileName);
+
+            if (urlData && urlData.publicUrl) {
+                imageUrls.push(urlData.publicUrl);
+            }
+        }
+
+        const productData = {
+            user_id: user.id,
+            category: "bracelets_straps",
+            brand: document.getElementById("brand").value,
+            model: document.getElementById("model").value,
+            reference: document.getElementById("reference").value,
+            year: Number(document.getElementById("year").value) || null,
+            price: Number(document.getElementById("price").value) || null,
+            type: document.getElementById("type").value,
+            condition: document.getElementById("condition").value,
+            material: document.getElementById("material").value,
+            gold_purity: document.getElementById("gold_purity").value,
+            color: document.getElementById("color").value,
+            lug_width: document.getElementById("lug_width").value,
+            clasp_width: document.getElementById("clasp_width").value,
+            length: document.getElementById("length").value,
+            thickness: document.getElementById("thickness").value,
+            description: document.getElementById("description").value,
+            image_url: imageUrls[0] || null
+        };
+
+        console.log("Po dërgohen të dhënat:", productData);
+
+        const { data, error } = await window.supabaseClient
+            .from("bracelets_straps")
+            .insert([productData])
+            .select();
+
+        if (error) {
+            console.error("Gabim nga databaza Supabase:", error);
+            alert("Database error: " + error.message);
+            return;
+        }
+
+        console.log("U publikua me sukses:", data);
+        alert("Bracelet / Strap published successfully!");
+        window.location.href = "dashboard.html";
     });
-}
-
-const supabase = await getSupabaseClient();
-
-const { data: { user } } = await supabase.auth.getUser();
-
-if(!user){
-    alert("You must be logged in");
-    window.location.href="register.html";
-}
-
-document
-.getElementById("braceletForm")
-.addEventListener("submit", async function(e){
-
-e.preventDefault();
-
-const fileInput = document.getElementById("fileInput");
-const selectedFiles = fileInput ? fileInput.files : [];
-let imageUrls = [];
-
-// Upload photos
-for (let i = 0; i < selectedFiles.length; i++) {
-    const file = selectedFiles[i];
-    const fileName = Date.now() + "_" + i + "_" + file.name;
-
-    const { error: uploadError } = 
-        await supabase
-            .storage
-            .from("or-images")
-            .upload(fileName, file);
-
-    if (uploadError) {
-        console.error("Gabim në upload:", uploadError);
-        continue;
-    }
-
-    const { data: urlData } = supabase
-        .storage
-        .from("or-images")
-        .getPublicUrl(fileName);
-
-    if (urlData && urlData.publicUrl) {
-        imageUrls.push(urlData.publicUrl);
-    }
-}
-
-const productData = {
-    user_id: user.id,
-    category: "bracelets_straps",
-    brand: document.getElementById("brand").value,
-    model: document.getElementById("model").value,
-    reference: document.getElementById("reference").value,
-    year: Number(document.getElementById("year").value) || null,
-    price: Number(document.getElementById("price").value) || null,
-    type: document.getElementById("type").value,
-    condition: document.getElementById("condition").value,
-    material: document.getElementById("material").value,
-    gold_purity: document.getElementById("gold_purity").value,
-    color: document.getElementById("color").value,
-    lug_width: document.getElementById("lug_width").value,
-    clasp_width: document.getElementById("clasp_width").value,
-    length: document.getElementById("length").value,
-    thickness: document.getElementById("thickness").value,
-    description: document.getElementById("description").value,
-    image_url: imageUrls[0] || null
-};
-
-const { data, error } = await supabase
-    .from("bracelets_straps")
-    .insert([productData])
-    .select();
-
-if(error){
-    alert("Database error: " + error.message);
-    return;
-}
-
-alert("Bracelet / Strap published successfully!");
-window.location.href = "dashboard.html";
 
 });
-
 </script>
 
 

@@ -31,17 +31,16 @@
     <p>Kodi Postar: <b id="userZip">-</b></p>
 
     <p>Te regjistruar gjithsej: <b id="userCount">0</b></p>
-    
-        <h3>Artikujt e shitësit</h3>
-
-    <div class="watch-scroll">
-        <div id="sellerWatches" class="watch-grid"></div>
-    </div>
 
     <button id="btnLogout" type="button">Logout</button>
     <p id="msg" style="margin-top:12px;"></p>
-  </div>
 
+    <h3>Artikujt e shitësit:</h3>
+
+    <div class="watch-scroll">
+      <ul id="sellerWatches"></ul>
+    </div>
+  
 <script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
 

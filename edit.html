@@ -112,7 +112,7 @@ async function fetchProduct() {
 
 
 // =========================
-// SHFAQ FOTOT
+// SHFAQ DHE FSHIJ FOTOT
 // =========================
 
 function showImages(images) {
@@ -121,38 +121,65 @@ function showImages(images) {
 
     if (!gallery) return;
 
-
     gallery.innerHTML = "";
-
 
     images.forEach((url, index) => {
 
-        const img = document.createElement("img");
+        // Krijojmë një kontejner të vogël për çdo foto dhe butonin e fshirjes
+        const wrapper = document.createElement("div");
+        wrapper.style.position = "relative";
+        wrapper.style.display = "inline-block";
 
+        const img = document.createElement("img");
         img.src = url;
         img.style.width = "100px";
-        img.style.margin = "5px";
+        img.style.height = "100px";
+        img.style.objectFit = "cover";
+        img.style.borderRadius = "8px";
         img.style.cursor = "pointer";
 
-
+        // Mundësia për ta bërë foto kryesore kur klikohet te fotoja
         img.onclick = () => {
-
-            const moved = images.splice(index,1)[0];
-
+            const moved = images.splice(index, 1)[0];
             images.unshift(moved);
-
             window.produktData.image_url = images;
-
             showImages(images);
-
         };
 
+        // Butoni "×" për të fshirë foton
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerHTML = "×";
+        deleteBtn.type = "button";
+        deleteBtn.style.position = "absolute";
+        deleteBtn.style.top = "2px";
+        deleteBtn.style.right = "5px";
+        deleteBtn.style.background = "rgba(255, 0, 0, 0.85)";
+        deleteBtn.style.color = "white";
+        deleteBtn.style.border = "none";
+        deleteBtn.style.borderRadius = "50%";
+        deleteBtn.style.width = "24px";
+        deleteBtn.style.height = "24px";
+        deleteBtn.style.cursor = "pointer";
+        deleteBtn.style.fontSize = "16px";
+        deleteBtn.style.fontWeight = "bold";
+        deleteBtn.style.lineHeight = "1";
 
-        gallery.appendChild(img);
+        // Kur klikohet "×", hiqet fotoja nga vargu dhe rifreskohet galeria
+        deleteBtn.onclick = (e) => {
+            e.stopPropagation(); // Ndalon klikimin e fotos poshtë saj
+            images.splice(index, 1);
+            window.produktData.image_url = images;
+            showImages(images);
+        };
+
+        wrapper.appendChild(img);
+        wrapper.appendChild(deleteBtn);
+        gallery.appendChild(wrapper);
 
     });
 
 }
+
 
 
 

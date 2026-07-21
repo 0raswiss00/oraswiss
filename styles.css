@@ -2737,3 +2737,57 @@ body {
 body {
     padding-bottom: 90px;
 }
+
+
+
+      
+/* ===============================
+   profil scroll sales watches
+   =============================== */
+.watch-scroll{
+    max-height:420px;
+    overflow-y:auto;
+    border:1px solid #333;
+    border-radius:12px;
+    padding:10px;
+    background:#111;
+    margin-top:10px;
+}
+
+.watch-grid{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.watch-card{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    background:#1a1a1a;
+    border-radius:10px;
+    padding:10px;
+    border:1px solid #2c2c2c;
+}
+
+.watch-card img{
+    width:85px;
+    height:85px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+.watch-info{
+    flex:1;
+}
+
+.watch-brand{
+    font-size:17px;
+    font-weight:bold;
+}
+
+.watch-price{
+    color:#d4af37;
+    font-size:18px;
+    margin-top:5px;
+}      

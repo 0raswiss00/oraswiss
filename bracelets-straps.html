@@ -295,8 +295,14 @@ Sell Now
 
 <script type="module">
 
-const { data:{user} } = 
-await window.supabaseClient.auth.getUser();
+// Sigurohemi që supabaseClient ekziston para se të thërrasim metodat e tij
+if (!window.supabaseClient) {
+    alert("Database connection failed to load.");
+    throw new Error("Supabase client is not initialized.");
+}
+
+const { data: { user } } = await window.supabaseClient.auth.getUser();
+
 
 if(!user){
     alert("You must be logged in");

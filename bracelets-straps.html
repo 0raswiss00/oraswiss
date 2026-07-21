@@ -295,14 +295,24 @@ Sell Now
 
 <script type="module">
 
-// Sigurohemi që supabaseClient ekziston para se të thërrasim metodat e tij
-if (!window.supabaseClient) {
-    alert("Database connection failed to load.");
-    throw new Error("Supabase client is not initialized.");
+// Funksion ndihmës që pret derisa Supabase të jetë gati
+function getSupabaseClient() {
+    return new Promise((resolve) => {
+        if (window.supabaseClient) {
+            return resolve(window.supabaseClient);
+        }
+        const interval = setInterval(() => {
+            if (window.supabaseClient) {
+                clearInterval(interval);
+                resolve(window.supabaseClient);
+            }
+        }, 50);
+    });
 }
 
-const { data: { user } } = await window.supabaseClient.auth.getUser();
+const supabase = await getSupabaseClient();
 
+const { data: { user } } = await supabase.auth.getUser();
 
 if(!user){
     alert("You must be logged in");
@@ -325,7 +335,7 @@ for (let i = 0; i < selectedFiles.length; i++) {
     const fileName = Date.now() + "_" + i + "_" + file.name;
 
     const { error: uploadError } = 
-        await window.supabaseClient
+        await supabase
             .storage
             .from("or-images")
             .upload(fileName, file);
@@ -335,7 +345,7 @@ for (let i = 0; i < selectedFiles.length; i++) {
         continue;
     }
 
-    const { data: urlData } = window.supabaseClient
+    const { data: urlData } = supabase
         .storage
         .from("or-images")
         .getPublicUrl(fileName);
@@ -345,7 +355,6 @@ for (let i = 0; i < selectedFiles.length; i++) {
     }
 }
 
-// Deklarimi i vetëm i productData me fushat e duhura të formularit
 const productData = {
     user_id: user.id,
     category: "bracelets_straps",
@@ -367,17 +376,10 @@ const productData = {
     image_url: imageUrls[0] || null
 };
 
-console.log("Sending:", productData);    
-console.log("AUTH USER:", user);
-console.log("PRODUCT USER ID:", productData.user_id);
-
-const { data, error } = await window.supabaseClient
+const { data, error } = await supabase
     .from("bracelets_straps")
     .insert([productData])
     .select();
-
-console.log("INSERT DATA:", data);
-console.log("INSERT ERROR:", error);
 
 if(error){
     alert("Database error: " + error.message);
@@ -390,6 +392,7 @@ window.location.href = "dashboard.html";
 });
 
 </script>
+
 
 </body>
 

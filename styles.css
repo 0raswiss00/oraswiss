@@ -2823,3 +2823,12 @@ body {
  /* ===============================
    per share dhe lik te dyja
    =============================== */     
+.top-actions{
+    position:absolute;
+    top:20px;
+    right:20px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    z-index:9999;
+}

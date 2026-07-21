@@ -45,19 +45,21 @@
     
 <div class="details">
 
-    <div class="brand" id="brand"></div>
-
-    <div class="model" id="model"></div>
-
-    <div class="price" id="price"></div>
-
-</div>
-
-
-
     <div class="top-actions">
-        <div class="action" onclick="shareProduct()">🔗 Share</div>
-        <div class="action">❤️ Favorite</div>
+        <div class="action" onclick="shareProduct()">🔗</div>
+        <div class="action">♡</div>
+    </div>
+
+    <div id="seller-country">
+        -
+    </div>
+
+    <div class="brand" id="brand">
+        -
+    </div>
+
+    <div class="model" id="model">
+        -
     </div>
 
     <div class="info-box" id="specs">
@@ -211,6 +213,13 @@ async function loadProduct() {
         console.log("PRODUCT DATA:", data);
         console.log("PAYPAL:", data.paypal_link);
 
+        document.getElementById("seller-country").innerText =
+            data.country === "Albania" ? "🇦🇱 AL" :
+            data.country === "Switzerland" ? "🇨🇭 CH" :
+            data.country === "Italy" ? "🇮🇹 IT" :
+            data.country === "Germany" ? "🇩🇪 DE" :
+            "-";
+        
         currentImages = Array.isArray(data.image_url)
             ? data.image_url
             : data.image_url

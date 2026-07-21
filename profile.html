@@ -119,7 +119,15 @@
     emailEl.textContent = user.email;
     nameEl.textContent = meta.full_name || "-";
     phoneEl.textContent = meta.phone || "-";
-    countryEl.textContent = meta.country || "-";
+    const countries = {
+      "Albania": "🇦🇱 AL Albania",
+      "Switzerland": "🇨🇭 CH Switzerland",
+      "Italy": "🇮🇹 IT Italy",
+      "Germany": "🇩🇪 DE Germany"
+    };
+
+    countryEl.textContent = countries[meta.country] || "-";
+
     streetEl.textContent = meta.street || "-";
     houseEl.textContent = meta.house_number || "-";
     zipEl.textContent = meta.zip_code || "-";

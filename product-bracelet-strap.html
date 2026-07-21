@@ -410,8 +410,6 @@ async function loadProduct(idToLoad) {
     
     console.log("Produkti u gjet:", data);
     productData = data;
-    document.getElementById("seller-country").innerText =
-    data.country || "-";
     
     // Mbushja e fushave sipër
     document.getElementById("top-brand").innerText = data.brand || "N/A";

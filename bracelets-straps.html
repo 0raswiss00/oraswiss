@@ -293,47 +293,25 @@ Sell Now
 
 </form>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-
-<script src="db-connect.js"></script>
-
-
 <script type="module">
-
 
 const { data:{user} } = 
 await window.supabaseClient.auth.getUser();
 
-
 if(!user){
-
     alert("You must be logged in");
-
     window.location.href="register.html";
-
 }
-
-
 
 document
 .getElementById("braceletForm")
 .addEventListener("submit", async function(e){
 
-
 e.preventDefault();
 
-
-
-const files = 
-document.getElementById("fileInput").files;
-
-
-
-let imageUrls = [];
-
-// Merr fajlat nga fileInput
 const fileInput = document.getElementById("fileInput");
 const selectedFiles = fileInput ? fileInput.files : [];
+let imageUrls = [];
 
 // Upload photos
 for (let i = 0; i < selectedFiles.length; i++) {
@@ -361,175 +339,51 @@ for (let i = 0; i < selectedFiles.length; i++) {
     }
 }
 
-// Përgatitja e të dhënave të produktit
+// Deklarimi i vetëm i productData me fushat e duhura të formularit
 const productData = {
-    length: document.getElementById("lengthInput")?.value || 160, // Merr vlerën nga inputi i gjatësisë
-    thickness: document.getElementById("thicknessInput")?.value || 3, // Merr vlerën nga inputi i trashësisë
-    images: imageUrls // Këtu ruhet array i linkeve, i cili zgjidh problemin e databazës
+    user_id: user.id,
+    category: "bracelets_straps",
+    brand: document.getElementById("brand").value,
+    model: document.getElementById("model").value,
+    reference: document.getElementById("reference").value,
+    year: Number(document.getElementById("year").value) || null,
+    price: Number(document.getElementById("price").value) || null,
+    type: document.getElementById("type").value,
+    condition: document.getElementById("condition").value,
+    material: document.getElementById("material").value,
+    gold_purity: document.getElementById("gold_purity").value,
+    color: document.getElementById("color").value,
+    lug_width: document.getElementById("lug_width").value,
+    clasp_width: document.getElementById("clasp_width").value,
+    length: document.getElementById("length").value,
+    thickness: document.getElementById("thickness").value,
+    description: document.getElementById("description").value,
+    image_url: imageUrls[0] || null
 };
-
-// Dërgimi i të dhënave në tabelën tuaj (p.sh. treguesi "products")
-const { data, error: insertError } = await window.supabaseClient
-    .from("products") // Zëvendësoje me emrin e saktë të tabelës tënde
-    .insert([productData]);
-
-if (insertError) {
-    console.error("Gabim gjatë ruajtjes në databazë:", insertError);
-} else {
-    console.log("Produkti u publikua me sukses!", data);
-    alert("U publikua me sukses!");
-}
-
-
-
-const productData = {
-
-
-user_id:user.id,
-
-
-category:
-"bracelets_straps",
-
-
-brand:
-document.getElementById("brand").value,
-
-
-model: 
-document.getElementById("model").value,
-
-
-reference:
-document.getElementById("reference").value,
-
-   
-year: 
-Number(document.getElementById("year").value) || null,
-
-    
-price:
-Number(
-document.getElementById("price").value
-) || null,
-
-
-type:
-document.getElementById("type").value,
-
-
-condition:
-document.getElementById("condition").value,
-
-
-material:
-document.getElementById("material").value,
-
-
-gold_purity:
-document.getElementById("gold_purity").value,
-
-
-color:
-document.getElementById("color").value,
-
-
-lug_width:
-document.getElementById("lug_width").value,
-
-
-clasp_width:
-document.getElementById("clasp_width").value,
-
-
-length:
-document.getElementById("length").value,
-
-
-thickness:
-document.getElementById("thickness").value,
-
-
-description:
-document.getElementById("description").value,
-
-
-image_url:
-imageUrls[0] || null
-
-
-};
-
-
-
-
-console.log(
-"Sending:",
-productData
-);
-
-
-    
 
 console.log("Sending:", productData);    
-    
 console.log("AUTH USER:", user);
 console.log("PRODUCT USER ID:", productData.user_id);
 
-    
-
-
-const {data, error} =
-
-await window.supabaseClient
-
-.from("bracelets_straps")
-
-.insert([productData])
-.select();
-
+const { data, error } = await window.supabaseClient
+    .from("bracelets_straps")
+    .insert([productData])
+    .select();
 
 console.log("INSERT DATA:", data);
 console.log("INSERT ERROR:", error);
 
-
-
-
 if(error){
-
-
-alert(
-"Database error: "
-+
-error.message
-);
-
-
-return;
-
-
+    alert("Database error: " + error.message);
+    return;
 }
 
-
-
-
-alert(
-"Bracelet / Strap published successfully!"
-);
-
-
-
-window.location.href =
-"dashboard.html";
-
-
+alert("Bracelet / Strap published successfully!");
+window.location.href = "dashboard.html";
 
 });
 
-
-
 </script>
-
 
 </body>
 

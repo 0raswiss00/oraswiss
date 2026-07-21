@@ -63,100 +63,138 @@
 
     <div class="info-box" id="specs">
 
+        {{#if reference}}
         <div class="info-row">
             <span>Reference</span>
-            <span id="reference">-</span>
+            <span id="reference">{{reference}}</span>
         </div>
+        {{/if}}
 
+        {{#if serial_number}}
         <div class="info-row">
             <span>Serial Number</span>
-            <span id="serial_number">-</span>
+            <span id="serial_number">{{serial_number}}</span>
         </div>
-        
+        {{/if}}
+
+        {{#if movement}}
         <div class="info-row">
             <span>Movement</span>
-            <span id="movement">-</span>
+            <span id="movement">{{movement}}</span>
         </div>
+        {{/if}}
 
+        {{#if caliber}}
         <div class="info-row">
             <span>Caliber</span>
-            <span id="caliber">-</span>
+            <span id="caliber">{{caliber}}</span>
         </div>
+        {{/if}}
 
+        {{#if frequency}}
         <div class="info-row">
             <span>Frequency</span>
-            <span id="frequency">-</span>
+            <span id="frequency">{{frequency}}</span>
         </div>
+        {{/if}}
 
+        {{#if material}}
         <div class="info-row">
             <span>Material</span>
-            <span id="material">-</span>
+            <span id="material">{{material}}</span>
         </div>
+        {{/if}}
 
+        {{#if case_size}}
         <div class="info-row">
             <span>Case Size</span>
-            <span id="case_size">-</span>
+            <span id="case_size">{{case_size}}</span>
         </div>
+        {{/if}}
 
+        {{#if movement_size}}
         <div class="info-row">
             <span>Movement Size</span>
-            <span id="movement_size">-</span>
+            <span id="movement_size">{{movement_size}}</span>
         </div>
+        {{/if}}
 
+        {{#if year}}
         <div class="info-row">
             <span>Year</span>
-            <span id="year">-</span>
+            <span id="year">{{year}}</span>
         </div>
+        {{/if}}
 
+        {{#if function}}
         <div class="info-row">
             <span>Function</span>
-            <span id="function">-</span>
+            <span id="function">{{function}}</span>
         </div>
+        {{/if}}
 
+        {{#if service_display}}
         <div class="info-row">
             <span>Service</span>
-            <span id="service_display">-</span>
+            <span id="service_display">{{service_display}}</span>
         </div>
+        {{/if}}
 
+        {{#if service_date_display}}
         <div class="info-row">
-            <span>Service Date</span>
-            <span id="service_date_display">-</span>
+             <span>Service Date</span>
+             <span id="service_date_display">{{service_date_display}}</span>
         </div>
+        {{/if}}
 
+        {{#if origin}}
         <div class="info-row">
             <span>Origin</span>
-            <span id="origin">-</span>
+            <span id="origin">{{origin}}</span>
         </div>
+        {{/if}}
 
+        {{#if work_status}}
         <div class="info-row">
             <span>Work Status</span>
-            <span id="work_status">-</span>
+            <span id="work_status">{{work_status}}</span>
         </div>
+        {{/if}}
 
+        {{#if bracelet}}
         <div class="info-row">
             <span>Bracelet</span>
-            <span id="bracelet">-</span>
+            <span id="bracelet">{{bracelet}}</span>
         </div>
+        {{/if}}
 
+        {{#if glass}}
         <div class="info-row">
             <span>Glass</span>
-            <span id="glass">-</span>
+            <span id="glass">{{glass}}</span>
         </div>
+        {{/if}}
 
+        {{#if warranty}}
         <div class="info-row">
             <span>Warranty</span>
-            <span id="warranty">-</span>
+            <span id="warranty">{{warranty}}</span>
         </div>
+        {{/if}}
 
+        {{#if warranty_months}}
         <div class="info-row">
             <span>Warranty Months</span>
-            <span id="warranty_months">-</span>
+            <span id="warranty_months">{{warranty_months}}</span>
         </div>
+        {{/if}}
 
+        {{#if box_papers}}
         <div class="info-row">
             <span>Box & Papers</span>
-            <span id="box_papers">-</span>
+            <span id="box_papers">{{box_papers}}</span>
         </div>
+        {{/if}}
 
     </div>
 

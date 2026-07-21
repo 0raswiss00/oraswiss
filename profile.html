@@ -18,8 +18,6 @@
 
     <h1 id="sellerTitle">Dyqani i Shitësit</h1>
 
-    <h3>Orët në shitje:</h3>
-    <ul id="sellerWatches"></ul>
 
     <h3>Feedback-u i blerësve:</h3>
     <ul id="feedbackList"></ul>
@@ -33,6 +31,12 @@
     <p>Kodi Postar: <b id="userZip">-</b></p>
 
     <p>Te regjistruar gjithsej: <b id="userCount">0</b></p>
+    
+        <h3>Artikujt e shitësit</h3>
+
+    <div class="watch-scroll">
+        <div id="sellerWatches" class="watch-grid"></div>
+    </div>
 
     <button id="btnLogout" type="button">Logout</button>
     <p id="msg" style="margin-top:12px;"></p>
@@ -60,21 +64,40 @@
 
   // NGARKO ORËT E SHITËSIT NGA SUPABASE
   async function loadWatches(uid) {
-    const { data: watches, error } = await supabase
-      .from('oras')
-      .select('*')
-      .eq('user_id', uid);
 
     watchList.innerHTML = "";
-    if (error) {
-      console.error(error);
-      return;
+
+    const tables = [
+      { table: "oras", label: "⌚" },
+      { table: "bracelets_straps", label: "🪢" }
+    ];
+
+    for (const item of tables) {
+
+      const { data, error } = await supabase
+        .from(item.table)
+        .select("*")
+        .eq('user_id', uid);
+
+      if (error) {
+        console.error(error);
+        continue;
+      }
+
+      data?.forEach(product => {
+
+        const li = document.createElement("li");
+
+        li.innerHTML = `
+          <b>${product.brand || ""}</b>
+          ${product.model || ""}
+          - ${product.price || "-"}€
+        `;
+
+        watchList.appendChild(li);
+
+      });
     }
-    watches?.forEach(w => {
-      const li = document.createElement('li');
-      li.innerHTML = `<b>${w.brand}</b> - ${w.price}€`;
-      watchList.appendChild(li);
-    });
   }
 
   // LOGJIKA KRYESORE

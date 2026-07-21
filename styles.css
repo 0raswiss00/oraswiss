@@ -2824,14 +2824,10 @@ body {
    per share dhe lik top action
    =============================== */     
 .top-actions{
-    position:absolute;
-    top:200px;
-    right:15px;
     display:flex;
-    flex-direction:column;
+    justify-content:flex-end;
     gap:8px;
-    z-index:10;
-    margin:0;
+    margin:0 0 5px 0;
 }
 .action{
     width:36px;

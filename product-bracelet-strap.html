@@ -220,15 +220,15 @@ body{
 
 <div class="details">
 
-    <div class="brand" id="brand">
+    <div class="brand" id="top-brand">
         -
     </div>
 
-    <div class="model" id="model">
+    <div class="model" id="top-model">
         -
     </div>
 
-    <div class="price" id="price">
+    <div class="price" id="top-price">
         -
     </div>
 
@@ -361,15 +361,9 @@ Loading...
 💬 WhatsApp
 </a>
 
-
-<!-- Ndrysho rreshtin 344 nga <a> në <button> -->
 <button class="buy-btn offer" id="offer" type="button">💰 Suggest Price</button>
-</a>
-
 
 <button class="buy-btn buy" id="buy" type="button">🛒 BUY</button>
-</a>
-
 
 </div>
 
@@ -411,7 +405,12 @@ async function loadProduct(idToLoad) {
     console.log("Produkti u gjet:", data);
     productData = data;
     
-    // Mbushja e fushave
+    // Mbushja e fushave sipër
+    document.getElementById("top-brand").innerText = data.brand || "N/A";
+    document.getElementById("top-model").innerText = data.model || "N/A";
+    document.getElementById("top-price").innerText = (data.price || 0) + " €";
+
+    // Mbushja e fushave në tabelën e detajeve
     document.getElementById("brand").innerText = data.brand || "N/A";
     document.getElementById("model").innerText = data.model || "N/A";
     document.getElementById("reference").innerText = data.reference || "N/A";
@@ -433,7 +432,7 @@ async function loadProduct(idToLoad) {
         "https://wa.me/35569XXXXXXX?text=" + 
         encodeURIComponent("I am interested in " + data.brand + " " + data.model);
 
-    // Përditëso fotot
+    // Përditëso fotot (duke marrë parasysh që image_url është array text[])
     currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
     updateGallery();
 }
@@ -514,3 +513,4 @@ function shareProduct() {
 </body>
 
 </html>
+

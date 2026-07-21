@@ -113,6 +113,11 @@ readonly>
 
 
 
+<label>Year</label>
+<input id="year" type="number" placeholder="Year">
+
+    
+
 <label>Price (€)</label>
 
 <input 
@@ -403,7 +408,11 @@ document.getElementById("model").value,
 reference:
 document.getElementById("reference").value,
 
+   
+year: 
+Number(document.getElementById("year").value) || null,
 
+    
 price:
 Number(
 document.getElementById("price").value

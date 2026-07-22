@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<title>Admin Users - Ora Swiss</title>
+
+<style>
+body{
+  background:#000;
+  color:#fff;
+  font-family:Arial;
+}
+
+.container{
+  max-width:900px;
+  margin:30px auto;
+  padding:20px;
+}
+
+.user{
+  border:1px solid #555;
+  padding:15px;
+  margin:10px 0;
+  border-radius:10px;
+}
+button{
+  padding:8px 12px;
+  border-radius:8px;
+  background:#111;
+  color:#fff;
+  border:1px solid #777;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>👥 Përdoruesit Ora Swiss</h2>
+
+<div id="usersList">
+Duke ngarkuar...
+</div>
+
+</div>
+
+
+<script type="module">
+
+import { createClient } 
+from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
+
+
+const supabaseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+const supabaseKey = "VENDOS_KEY_TEND";
+
+const supabase = createClient(
+supabaseUrl,
+supabaseKey
+);
+
+
+const list = document.getElementById("usersList");
+
+
+async function loadUsers(){
+
+const {data,error}= await supabase
+.from("profiles")
+.select("*")
+.order("created_at",{ascending:false});
+
+
+if(error){
+ console.log(error);
+ list.innerHTML="Gabim gjatë ngarkimit";
+ return;
+}
+
+
+list.innerHTML="";
+
+
+data.forEach(user=>{
+
+list.innerHTML += `
+
+<div class="user">
+
+<b>${user.full_name || "-"}</b><br>
+
+Email:
+${user.email || "-"}<br>
+
+Telefon:
+${user.phone || "-"}<br>
+
+Shtet:
+${user.country || "-"}<br>
+
+Roli:
+${user.role || "-"}<br>
+
+<button>
+Hap profilin
+</button>
+
+</div>
+
+`;
+
+});
+
+
+}
+
+
+loadUsers();
+
+
+</script>
+
+</body>
+</html>

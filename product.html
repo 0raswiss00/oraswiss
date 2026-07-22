@@ -272,9 +272,12 @@ async function loadProduct() {
         const maskedSerial = serial.length > 3 
             ? serial.substring(0, 3) + 'X'.repeat(serial.length - 3) 
             : (serial || "N/A");
-            
-        document.getElementById("serial_number").innerText =
-            data.serial_number || "N/A";
+
+        const serialElement = document.getElementById("serial_number");
+
+        if (serialElement) {
+            serialElement.innerText = maskedSerial;
+        }
     
         // Watch specifications
         document.getElementById("reference").innerText =

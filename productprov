@@ -20,13 +20,27 @@
         .price { font-size: 28px; color: #25D366; font-weight: bold; margin: 15px 0; }
         .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; }
         .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
-        .top-actions { display: flex; gap: 10px; margin-top: 15px; }
-        .action { background: #151515; padding: 12px 18px; border-radius: 25px; cursor: pointer; }
+        .top-actions { display: flex; gap: 30px; margin-top: 15px; }
+        .top-actions {
+           display: flex;
+           justify-content: flex-end;
+           gap: 8px;
+           margin: 15px 0 5px 0;
+        }
+
         .buy-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #090909; border-top: 1px solid #333; padding: 10px; display: flex; gap: 8px; z-index: 999; max-width: 900px; margin-left: 50%; transform: translateX(-50%); }
         .buy-btn { flex: 1; padding: 15px; border-radius: 10px; text-align: center; text-decoration: none; font-weight: bold; cursor: pointer; }
         .whatsapp { background: #25D366; color: white; }
         .buy { background: #ffd900; color: black; }
-        .offer { background: #333; color: white; }
+        .country-row{
+            display:flex;
+            justify-content:flex-end;
+            margin-top:5px;
+        }
+
+        #seller-country{
+            font-size:14px;
+        }
     </style>
 </head>
 <body>
@@ -45,25 +59,37 @@
     
 <div class="details">
 
-    <div class="brand" id="brand"></div>
-
-    <div class="model" id="model"></div>
-
-    <div class="price" id="price"></div>
-
-</div>
-
-
-
     <div class="top-actions">
-        <div class="action" onclick="shareProduct()">🔗 Share</div>
-        <div class="action">❤️ Favorite</div>
+        <div class="action" onclick="shareProduct()">🔗</div>
+        <div class="action">♡</div>
     </div>
 
+    <div class="brand" id="brand">
+        -
+    </div>
 
+    <div class="model" id="model">
+        -
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="price" id="top-price">-</div>
+
+        <div id="seller-country" style="
+            background:#111;
+            padding:8px 12px;
+            border-radius:20px;
+            font-size:14px;
+        ">
+            🌍 -
+        </div>
+    </div>
+
+</div>
+    
     <div class="info-box" id="specs">
-
-        <div class="info-row">
+    
+    <div class="info-row">
             <span>Reference</span>
             <span id="reference">-</span>
         </div>
@@ -160,7 +186,6 @@
 
     </div>
 
-
     <div class="info-box">
         <h3>Description</h3>
         <p id="description">Loading...</p>
@@ -213,6 +238,16 @@ async function loadProduct() {
         console.log("PRODUCT DATA:", data);
         console.log("PAYPAL:", data.paypal_link);
 
+        console.log("DATA:", data);
+        console.log("COUNTRY:", data.seller_country);
+
+        document.getElementById("seller-country").innerText =
+            data.seller_country === "AL" ? "🇦🇱 AL" :
+            data.seller_country === "CH" ? "🇨🇭 CH" :
+            data.seller_country === "IT" ? "🇮🇹 IT" :
+            data.seller_country === "DE" ? "🇩🇪 DE" :
+            "-";
+        
         currentImages = Array.isArray(data.image_url)
             ? data.image_url
             : data.image_url
@@ -232,10 +267,18 @@ async function loadProduct() {
         document.getElementById("price").textContent =
             (data.price || 0) + " €";
 
-        document.getElementById("serial_number").innerText =
-            data.serial_number || "N/A";
+             
+        const serial = data.serial_number || "";
+        const maskedSerial = serial.length > 3 
+            ? serial.substring(0, 3) + 'X'.repeat(serial.length - 3) 
+            : (serial || "N/A");
 
+        const serialElement = document.getElementById("serial_number");
 
+        if (serialElement) {
+            serialElement.innerText = maskedSerial;
+        }
+    
         // Watch specifications
         document.getElementById("reference").innerText =
             data.reference || "N/A";

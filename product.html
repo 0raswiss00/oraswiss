@@ -257,14 +257,15 @@ async function loadProduct() {
         document.getElementById("price").textContent =
             (data.price || 0) + " €";
 
-               console.log("DATA:", data);
-        console.log("COUNTRY:", data.country);
-    
+        
+        console.log("DATA:", data);
+        console.log("COUNTRY:", data.seller_country);
+
         document.getElementById("seller-country").innerText =
-            data.country === "Albania" ? "🇦🇱 AL" :
-            data.country === "Switzerland" ? "🇨🇭 CH" :
-            data.country === "Italy" ? "🇮🇹 IT" :
-            data.country === "Germany" ? "🇩🇪 DE" :
+            data.seller_country === "AL" ? "🇦🇱 AL" :
+            data.seller_country === "CH" ? "🇨🇭 CH" :
+            data.seller_country === "IT" ? "🇮🇹 IT" :
+            data.seller_country === "DE" ? "🇩🇪 DE" :
             "-";
         
         const serial = data.serial_number || "";

@@ -264,10 +264,9 @@ async function loadProduct() {
         document.getElementById("model").textContent =
             data.model || "N/A";
 
-        document.getElementById("price").textContent =
+        document.getElementById("top-price").textContent =
             (data.price || 0) + " €";
-
-             
+          
         const serial = data.serial_number || "";
         const maskedSerial = serial.length > 3 
             ? serial.substring(0, 3) + 'X'.repeat(serial.length - 3) 

@@ -236,6 +236,7 @@ async function loadProduct() {
         console.log("PRODUCT DATA:", data);
         console.log("PAYPAL:", data.paypal_link);
 
+        console.log("COUNTRY:", data.country);
         document.getElementById("seller-country").innerText =
             data.country === "Albania" ? "🇦🇱 AL" :
             data.country === "Switzerland" ? "🇨🇭 CH" :

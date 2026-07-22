@@ -95,6 +95,27 @@
           }
         });
         if (error) throw error;
+
+        if (data.user) {
+          const { error: profileError } = await supabase
+            .from("profiles")
+            .insert({
+              user_id: data.user.id,
+              email: email,
+              full_name: fullName,
+              phone: phone,
+              country: country,
+              street: street,
+              house_number: houseNumber,
+              zip_code: zipCode,
+              role: "buyer"
+            });
+
+          if (profileError) {
+            console.error(profileError);
+          }
+        }
+
         alert("Regjistrimi u krye! Konfirmo emailin.");
       } catch (e) {
         alert(e.message);

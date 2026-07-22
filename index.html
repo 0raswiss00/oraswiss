@@ -435,7 +435,20 @@ async function checkPage(event, page) {
     window.location.href = page;
 }
 </script>
-  
+<script> 
+async function checkMenu(event) {
+    event.preventDefault();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        document.getElementById("loginModal").style.display = "flex";
+        return;
+    }
+
+    toggleMenu();
+}  
+</script>  
 <script>  
 async function openProduct(productId) {
     const { data: { user } } = await supabase.auth.getUser();

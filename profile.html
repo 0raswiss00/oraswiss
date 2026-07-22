@@ -211,17 +211,23 @@ countryEl.textContent = countries[meta.country] || "-";
       }
 
 
-      const { error } = await supabase
-        .from("identity_verifications")
-        .insert({
-          user_id: user.id,
-          document_type: documentType,
-          document_number: documentNumber,
-          photo_front: frontPath,
-          photo_back: backPath,
-          verification_status: "pending"
-        });
+const documentType = document.getElementById("documentType").value;
 
+if (!documentType) {
+  msg.textContent = "Zgjidh dokumentin.";
+  return;
+}
+
+    const { error } = await supabase
+      .from("identity_verifications")
+      .insert({
+        user_id: user.id,
+        document_type: documentType,
+        document_number: documentNumber,
+        photo_front: frontPath,
+        photo_back: backPath,
+        verification_status: "pending"
+      });
 
       if (error) {
         console.error(error);

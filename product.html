@@ -237,16 +237,6 @@ async function loadProduct() {
 
         console.log("PRODUCT DATA:", data);
         console.log("PAYPAL:", data.paypal_link);
-
-        console.log("DATA:", data);
-        console.log("COUNTRY:", data.country);
-    
-        document.getElementById("seller-country").innerText =
-            data.country === "Albania" ? "🇦🇱 AL" :
-            data.country === "Switzerland" ? "🇨🇭 CH" :
-            data.country === "Italy" ? "🇮🇹 IT" :
-            data.country === "Germany" ? "🇩🇪 DE" :
-            "-";
         
         currentImages = Array.isArray(data.image_url)
             ? data.image_url
@@ -267,6 +257,16 @@ async function loadProduct() {
         document.getElementById("price").textContent =
             (data.price || 0) + " €";
 
+               console.log("DATA:", data);
+        console.log("COUNTRY:", data.country);
+    
+        document.getElementById("seller-country").innerText =
+            data.country === "Albania" ? "🇦🇱 AL" :
+            data.country === "Switzerland" ? "🇨🇭 CH" :
+            data.country === "Italy" ? "🇮🇹 IT" :
+            data.country === "Germany" ? "🇩🇪 DE" :
+            "-";
+        
         const serial = data.serial_number || "";
         const maskedSerial = serial.length > 3 
             ? serial.substring(0, 3) + 'X'.repeat(serial.length - 3) 

@@ -397,7 +397,7 @@ document.getElementById("searchInput").addEventListener("input", async function(
                 const item = document.createElement("div");
                 item.className = "card";
                 item.innerHTML = `
-                    <div onclick="window.location.href='product.html?id=${product.id}'" style="cursor:pointer;">
+                    <div onclick="openProduct('${product.id}')" style="cursor:pointer;">
                         <img src="${imgUrl}" alt="${product.model || ''}" style="width:100%; height:auto;">
                         <h3>${product.brand || ''} - ${product.model || ''}</h3>
                         <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${product.reference || '/'}</p>
@@ -416,6 +416,32 @@ document.getElementById("searchInput").addEventListener("input", async function(
     }
 });
 </script>
+<script>
+async function openProduct(productId) {
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        document.getElementById("loginModal").style.display = "flex";
+        return;
+    }
+
+    window.location.href = "product.html?id=" + productId;
+}
+</script>
+
+<div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center;z-index:99999;">
+    <div style="background:#1a1a1a;padding:25px;border-radius:12px;text-align:center;max-width:320px;width:90%;color:#fff;">
+        <h2>Login Required</h2>
+        <p>Please sign in or create an account to continue.</p>
+
+        <button onclick="location.href='login.html'">Login</button>
+        <button onclick="location.href='register.html'">Register</button>
+        <br><br>
+        <button onclick="document.getElementById('loginModal').style.display='none'">Cancel</button>
+    </div>
+</div>
 
 </body>
 </html>
+
+  

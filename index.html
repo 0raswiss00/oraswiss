@@ -174,7 +174,7 @@ async function loadCategory(cat, containerId) {
           }
       
         return `
-            <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
+            <div class="card" onclick="openProduct('${ora.id}')">
                 <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
                 <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
                 <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>

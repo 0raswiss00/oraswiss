@@ -342,8 +342,8 @@ loadProductCount();
 </div>
 
 <nav class="bottom-nav" style="position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-around; background: #000; padding: 15px 0; border-top: 1px solid #333; z-index: 9998; box-sizing: border-box;">
-    <a href="dashboard.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">🏠<br>Home</a>
-    <a href="favorites.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">❤️<br>Favs</a>
+    <a href="#" onclick="checkPage(event,'dashboard.html')" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">🏠<br>Home</a>
+    <a href="#" onclick="checkPage(event,'favorites.html')" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">❤️<br>Favs</a>
     <a href="collection.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">⌚<br>Col</a>
     <a href="mysales.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">⌚<br>Sales</a>
     <a href="sellnow.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">➕<br>Sell</a>
@@ -418,6 +418,21 @@ document.getElementById("searchInput").addEventListener("input", async function(
 });
 </script>
 <script>
+async function checkPage(event, page) {
+    event.preventDefault();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        document.getElementById("loginModal").style.display = "flex";
+        return;
+    }
+
+    window.location.href = page;
+}
+</script>
+  
+<script>  
 async function openProduct(productId) {
     const { data: { user } } = await supabase.auth.getUser();
 

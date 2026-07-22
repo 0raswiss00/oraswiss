@@ -414,6 +414,8 @@ async function loadProduct(idToLoad) {
     document.getElementById("top-model").innerText = data.model || "N/A";
     document.getElementById("top-price").innerText = (data.price || 0) + " €";
     // Merr vendin e shitësit
+    console.log("COUNTRY:", data.country);
+    
     document.getElementById("seller-country").innerText =
         data.country === "Albania" ? "🇦🇱 AL" :
         data.country === "Switzerland" ? "🇨🇭 CH" :

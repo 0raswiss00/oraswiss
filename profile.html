@@ -236,6 +236,21 @@ countryEl.textContent = countries[meta.country] || "-";
       }
 
 
+      const { data: emailData, error: emailError } = await supabase.functions.invoke(
+        "send-email-notification",
+        {
+          body: {
+            subject: "Kërkesë e re verifikimi",
+            message: `Dokumenti: ${documentType}
+      Numri: ${documentNumber}`
+          }
+        }
+      );
+
+      console.log("EMAIL DATA:", emailData);
+      console.log("EMAIL ERROR:", emailError);
+      
+
       // Dërgo email njoftimi
       await supabase.functions.invoke("send-email-notification", {
         body: {

@@ -453,14 +453,7 @@ async function checkMenu(event) {
 }  
 </script>  
 <script>  
-async function openProduct(productId) {
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-        document.getElementById("loginModal").style.display = "flex";
-        return;
-    }
-
+function openProduct(productId) {
     window.location.href = "product.html?id=" + productId;
 }
 </script>

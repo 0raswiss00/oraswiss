@@ -273,9 +273,9 @@ async function loadProduct() {
             ? serial.substring(0, 3) + 'X'.repeat(serial.length - 3) 
             : (serial || "N/A");
             
-        document.getElementById("serial_number").innerText = maskedSerial;
+        document.getElementById("serial_number").innerText =
+            data.serial_number || "N/A";
     
-
         // Watch specifications
         document.getElementById("reference").innerText =
             data.reference || "N/A";

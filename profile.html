@@ -186,6 +186,10 @@ countryEl.textContent = countries[meta.country] || "-";
       const frontFile = document.getElementById("photoFront").files[0];
       const backFile = document.getElementById("photoBack").files[0];
 
+      console.log("NUMBER:", documentNumber);
+      console.log("FRONT:", frontFile);
+      console.log("BACK:", backFile);
+      
       const msg = document.getElementById("verifyMsg");
 
       if (!documentType || !documentNumber || !frontFile || !backFile) {

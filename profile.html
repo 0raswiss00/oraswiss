@@ -214,17 +214,20 @@ countryEl.textContent = countries[meta.country] || "-";
       }
 
 
-    const { error } = await supabase
-      .from("identity_verifications")
-      .insert({
-        user_id: user.id,
-        document_type: documentType,
-        document_number: documentNumber,
-        photo_front: frontPath,
-        photo_back: backPath,
-        verification_status: "pending"
-      });
-      .select(
+      const { data, error } = await supabase
+        .from("identity_verifications")
+        .insert({
+          user_id: user.id,
+          document_type: documentType,
+          document_number: documentNumber,
+          photo_front: frontPath,
+          photo_back: backPath,
+          verification_status: "pending"
+        })
+        .select();
+
+      console.log("SAVED DATA:", data);
+      console.log("ERROR:", error);
       
       if (error) {
         console.error(error);

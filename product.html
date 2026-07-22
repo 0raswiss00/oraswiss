@@ -76,13 +76,8 @@
         -
     </div>
 
-    <div id="seller-country" style="
-        background:#111;
-        padding:8px 12px;
-        border-radius:20px;
-        font-size:14px;
-    ">
-        -
+    <div class="country-row">
+        <div id="seller-country">-</div>
     </div>
     
     <div class="info-box" id="specs">
@@ -236,7 +231,6 @@ async function loadProduct() {
         console.log("PRODUCT DATA:", data);
         console.log("PAYPAL:", data.paypal_link);
 
-        console.log("COUNTRY:", data.country);
         document.getElementById("seller-country").innerText =
             data.country === "Albania" ? "🇦🇱 AL" :
             data.country === "Switzerland" ? "🇨🇭 CH" :

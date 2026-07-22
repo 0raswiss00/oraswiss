@@ -401,3 +401,155 @@ document.addEventListener("DOMContentLoaded", async function() {
 </body>
 
 </html>
+
+
+
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile - Ora Swiss</title>
+
+  <style>
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
+    .wrap{max-width:520px;margin:30px auto;padding:0 16px}
+    button{padding:10px 14px;border-radius:10px;border:1px solid #777;background:#111;color:#fff;cursor:pointer}
+  </style>
+</head>
+
+<body style="visibility:hidden;">
+  <div class="wrap">
+    <h2>Profili</h2>
+
+    <h1 id="sellerTitle">Dyqani i Shitësit</h1>
+
+
+    <h3>Feedback-u i blerësve:</h3>
+    <ul id="feedbackList"></ul>
+
+    <p>Email: <b id="userEmail"></b></p>
+    <p>Emri: <b id="userName">-</b></p>
+    <p>Telefon: <b id="userPhone">-</b></p>
+    <p>Shteti: <b id="userCountry">-</b></p>
+    <p>Rruga: <b id="userStreet">-</b></p>
+    <p>Nr. Shtëpisë: <b id="userHouseNumber">-</b></p>
+    <p>Kodi Postar: <b id="userZip">-</b></p>
+
+    <p>Te regjistruar gjithsej: <b id="userCount">0</b></p>
+
+    <button id="btnLogout" type="button">Logout</button>
+    <p id="msg" style="margin-top:12px;"></p>
+
+    <h3>Artikujt e shitësit:</h3>
+
+    <div class="watch-scroll">
+      <ul id="sellerWatches"></ul>
+    </div>
+  
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
+
+  const supabaseUrl = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
+  const supabaseKey = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9';
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  // ELEMENTET
+  const emailEl = document.getElementById("userEmail");
+  const nameEl = document.getElementById("userName");
+  const phoneEl = document.getElementById("userPhone");
+  const countryEl = document.getElementById("userCountry");
+  const streetEl = document.getElementById("userStreet");
+  const houseEl = document.getElementById("userHouseNumber");
+  const zipEl = document.getElementById("userZip");
+  const countEl = document.getElementById("userCount");
+  const msgEl = document.getElementById("msg");
+  const logoutBtn = document.getElementById("btnLogout");
+  const watchList = document.getElementById("sellerWatches");
+
+  // NGARKO ORËT E SHITËSIT NGA SUPABASE
+  async function loadWatches(uid) {
+
+    watchList.innerHTML = "";
+
+    const tables = [
+      { table: "oras", label: "⌚" },
+      { table: "bracelets_straps", label: "🪢" }
+    ];
+
+    for (const item of tables) {
+
+      const { data, error } = await supabase
+        .from(item.table)
+        .select("*")
+        .eq('user_id', uid);
+
+      if (error) {
+        console.error(error);
+        continue;
+      }
+
+      data?.forEach(product => {
+
+        const li = document.createElement("li");
+
+        li.innerHTML = `
+          <b>${product.brand || ""}</b>
+          ${product.model || ""}
+          - ${product.price || "-"}€
+        `;
+
+        watchList.appendChild(li);
+
+      });
+    }
+  }
+
+  // LOGJIKA KRYESORE
+  window.addEventListener("DOMContentLoaded", async () => {
+    const { data: { user }, error } = await supabase.auth.getUser();
+
+    if (error || !user) {
+      window.location.href = "index.html";
+      return;
+    }
+
+    if (error || !user) {
+      window.location.href = "index.html";
+      return;
+    }
+
+    document.body.style.visibility = "visible";
+    const meta = user.user_metadata || {};
+
+    emailEl.textContent = user.email;
+    nameEl.textContent = meta.full_name || "-";
+    phoneEl.textContent = meta.phone || "-";
+    const countries = {
+      "Albania": "🇦🇱 AL",
+      "Switzerland": "🇨🇭 CH",
+      "Italy": "🇮🇹 IT",
+      "Germany": "🇩🇪 DE"
+    };
+
+countryEl.textContent = countries[meta.country] || "-";
+    countryEl.textContent = countries[meta.country] || "-";
+
+    streetEl.textContent = meta.street || "-";
+    houseEl.textContent = meta.house_number || "-";
+    zipEl.textContent = meta.zip_code || "-";
+
+    // Numri total i të regjistruarve (kërkon RPC/tabelë; shih shënimin poshtë)
+    // countEl.textContent = ...;
+
+    await loadWatches(user.id);
+  });
+
+  // LOGOUT
+  logoutBtn.addEventListener("click", async () => {
+    await supabase.auth.signOut();
+    window.location.href = "index.html";
+  });
+</script>
+</body>
+</html>

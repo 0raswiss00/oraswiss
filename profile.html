@@ -178,6 +178,9 @@ countryEl.textContent = countries[meta.country] || "-";
       const { data: { user } } = await supabase.auth.getUser();
 
       const documentType = document.getElementById("documentType").value;
+
+      console.log("DOCUMENT TYPE:", documentType);
+      
       const documentNumber = document.getElementById("documentNumber").value;
 
       const frontFile = document.getElementById("photoFront").files[0];

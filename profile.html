@@ -229,6 +229,26 @@ countryEl.textContent = countries[meta.country] || "-";
           verification_status: "pending"
         });
 
+      if (error) {
+        console.error(error);
+        msg.textContent = "Gabim gjatë dërgimit.";
+        return;
+      }
+
+
+      // Dërgo email njoftimi
+      await supabase.functions.invoke("send-email-notification", {
+        body: {
+          subject: "Kërkesë e re verifikimi",
+          message: `U dërgua një kërkesë e re për verifikim.
+      Dokumenti: ${documentType}
+      Numri: ${documentNumber}`
+        }
+      });
+
+
+      msg.textContent = "Kërkesa u dërgua për verifikim.";
+
       console.log("ERROR:", error);
       
       if (error) {

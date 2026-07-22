@@ -32,6 +32,34 @@
 
     <p>Te regjistruar gjithsej: <b id="userCount">0</b></p>
 
+    <h3>🔒 Verifikimi i identitetit</h3>
+
+    <select id="documentType">
+      <option value="">Zgjidh dokumentin</option>
+      <option value="ID">Kartë ID</option>
+      <option value="Passport">Pasaportë</option>
+    </select>
+
+    <p>
+    <input id="documentNumber" placeholder="Numri i dokumentit">
+    </p>
+
+    <p>
+    <label>Foto përpara:</label><br>
+    <input id="photoFront" type="file" accept="image/*">
+    </p>
+
+    <p>
+    <label>Foto mbrapa:</label><br>
+    <input id="photoBack" type="file" accept="image/*">
+    </p>
+
+    <button id="btnVerify" type="button">
+    Dërgo për verifikim
+    </button>
+
+    <p id="verifyMsg"></p>
+    
     <button id="btnLogout" type="button">Logout</button>
     <p id="msg" style="margin-top:12px;"></p>
 

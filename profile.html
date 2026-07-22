@@ -211,13 +211,6 @@ countryEl.textContent = countries[meta.country] || "-";
       }
 
 
-    const documentType = document.getElementById("documentType").value;
-
-    if (!documentType) {
-      msg.textContent = "Zgjidh dokumentin.";
-      return;
-    }
-
     const { error } = await supabase
       .from("identity_verifications")
       .insert({

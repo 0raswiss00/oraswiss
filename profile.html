@@ -167,6 +167,74 @@ countryEl.textContent = countries[meta.country] || "-";
     await loadWatches(user.id);
   });
 
+  // VERIFIKIMI I IDENTITETIT
+
+  const verifyBtn = document.getElementById("btnVerify");
+
+  if (verifyBtn) {
+
+    verifyBtn.addEventListener("click", async () => {
+
+      const { data: { user } } = await supabase.auth.getUser();
+
+      const documentType = document.getElementById("documentType").value;
+      const documentNumber = document.getElementById("documentNumber").value;
+
+      const frontFile = document.getElementById("photoFront").files[0];
+      const backFile = document.getElementById("photoBack").files[0];
+
+      const msg = document.getElementById("verifyMsg");
+
+      if (!documentType || !documentNumber || !frontFile || !backFile) {
+        msg.textContent = "Plotëso të gjitha fushat dhe ngarko të dy fotot.";
+        return;
+      }
+
+
+      const frontPath = ${user.id}/front_${Date.now()};
+      const backPath = ${user.id}/back_${Date.now()};
+
+
+      const frontUpload = await supabase.storage
+        .from("identity_documents")
+        .upload(frontPath, frontFile);
+
+
+      const backUpload = await supabase.storage
+        .from("identity_documents")
+        .upload(backPath, backFile);
+
+
+      if (frontUpload.error || backUpload.error) {
+        msg.textContent = "Gabim gjatë ngarkimit të fotove.";
+        return;
+      }
+
+
+      const { error } = await supabase
+        .from("identity_verifications")
+        .insert({
+          user_id: user.id,
+          document_type: documentType,
+          document_number: documentNumber,
+          photo_front: frontPath,
+          photo_back: backPath,
+          verification_status: "pending"
+        });
+
+
+      if (error) {
+        console.error(error);
+        msg.textContent = "Gabim gjatë dërgimit.";
+        return;
+      }
+
+
+      msg.textContent = "Kërkesa u dërgua për verifikim.";
+    });
+
+  }
+  
   // LOGOUT
   logoutBtn.addEventListener("click", async () => {
     await supabase.auth.signOut();

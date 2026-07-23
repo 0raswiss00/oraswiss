@@ -240,7 +240,8 @@ async function loadProduct() {
 
         console.log("DATA:", data);
         console.log("COUNTRY:", data.seller_country);
-
+        console.log("USER ID I SHITESIT:", data.user_id);
+        
         // MERR TE DHENAT E SHITESIT
         const { data: seller, error: sellerError } = await supabaseClient.auth.admin
         

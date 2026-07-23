@@ -208,8 +208,8 @@ countryEl.textContent = countries[meta.country] || "-";
       }
 
 
-      const frontPath = ${user.id}/front_${Date.now()};
-      const backPath = ${user.id}/back_${Date.now()};
+      const frontPath = `${user.id}/front_${Date.now()}`;
+      const backPath = `${user.id}/back_${Date.now()}`;
 
 
       const frontUpload = await supabase.storage

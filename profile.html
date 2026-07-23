@@ -144,10 +144,28 @@
     const profileId = sellerIdFromUrl || user.id;
 
     console.log("PROFILE ID:", profileId);
+    let sellerMeta = user.user_metadata || {};
+    let sellerEmail = user.email;
+    let sellerCreated = user.created_at;
 
+    if (profileId !== user.id) {
 
+      const { data: sellerData, error: sellerError } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", profileId)
+        .single();
+
+      if (!sellerError && sellerData) {
+        sellerMeta = sellerData;
+        sellerEmail = sellerData.email;
+        sellerCreated = sellerData.created_at;
+      }
+
+    }
+    
     document.body.style.visibility = "visible";
-    const meta = user.user_metadata || {};
+    const meta = sellerMeta;
 
 
     const sellerTitle = document.getElementById("sellerTitle");

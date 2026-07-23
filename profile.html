@@ -251,9 +251,13 @@ countryEl.textContent = countries[meta.country] || "-";
         {
           body: {
             subject: "Kërkesë e re verifikimi",
-            message: `Dokumenti: ${documentType}
-      Numri: ${documentNumber}`
-          }
+            message: `U dërgua një kërkesë e re për verifikim.
+
+          Email i përdoruesit: ${user.email}
+
+          Dokumenti: ${documentType}
+          Numri: ${documentNumber}`
+         }
         }
       );
 
@@ -266,6 +270,9 @@ countryEl.textContent = countries[meta.country] || "-";
         body: {
           subject: "Kërkesë e re verifikimi",
           message: `U dërgua një kërkesë e re për verifikim.
+
+      Email i përdoruesit: ${user.email}
+
       Dokumenti: ${documentType}
       Numri: ${documentNumber}`
         }

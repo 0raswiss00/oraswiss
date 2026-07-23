@@ -208,55 +208,56 @@ countryEl.textContent = countries[meta.country] || "-";
 
       
       // NGARKO FOTON PËRPARA
-      const frontUpload = await supabase.storage
-        .from("identity_documents")
-        .upload(frontPath, frontFile);
+      // NGARKO FOTOT
+const frontUpload = await supabase.storage
+  .from("identity_documents")
+  .upload(frontPath, frontFile);
+
+const backUpload = await supabase.storage
+  .from("identity_documents")
+  .upload(backPath, backFile);
 
 
-      // NGARKO FOTON MBRAPA
-      const backUpload = await supabase.storage
-        .from("identity_documents")
-        .upload(backPath, backFile);
+console.log("FRONT PATH:", frontPath);
+console.log("FRONT UPLOAD DATA:", frontUpload.data);
+
+console.log("BACK PATH:", backPath);
+console.log("BACK UPLOAD DATA:", backUpload.data);
 
 
-      // KONTROLLO UPLOAD
-      console.log("FRONT UPLOAD:", frontUpload);
-      console.log("BACK UPLOAD:", backUpload);
+if (frontUpload.error || backUpload.error) {
+  console.error(frontUpload.error);
+  console.error(backUpload.error);
+  msg.textContent = "Gabim gjatë ngarkimit të fotove.";
+  return;
+}
 
 
-      if (frontUpload.error || backUpload.error) {
-        console.error("FRONT UPLOAD ERROR:", frontUpload.error);
-        console.error("BACK UPLOAD ERROR:", backUpload.error);
+// KRIJO LINKET
+const { data: frontUrl, error: frontError } = await supabase.storage
+  .from("identity_documents")
+  .createSignedUrl(frontUpload.data.path, 3600);
 
-        msg.textContent = "Gabim gjatë ngarkimit të fotove.";
-        return;
-      }
-
-
-      // KRIJO LINKET PËR FOTOT
-      const frontUpload = await supabase.storage
-        .from("identity_documents")
-        .upload(frontPath, frontFile);
-
-      const backUpload = await supabase.storage
-        .from("identity_documents")
-        .upload(backPath, backFile);
+const { data: backUrl, error: backError } = await supabase.storage
+  .from("identity_documents")
+  .createSignedUrl(backUpload.data.path, 3600);
 
 
-      console.log("BACK PATH:", backPath);
-      console.log("BACK UPLOAD DATA:", backUpload.data);
+console.log("FRONT LINK:", frontUrl);
+console.log("BACK LINK:", backUrl);
 
-      
-      const { error } = await supabase
-        .from("identity_verifications")
-        .insert({
-          user_id: user.id,
-          document_type: documentType,
-          document_number: documentNumber,
-          photo_front: frontPath,
-          photo_back: backPath,
-          verification_status: "pending"
-        });
+
+// RUAJ KËRKESËN
+const { error } = await supabase
+  .from("identity_verifications")
+  .insert({
+    user_id: user.id,
+    document_type: documentType,
+    document_number: documentNumber,
+    photo_front: frontUpload.data.path,
+    photo_back: backUpload.data.path,
+    verification_status: "pending"
+  });
 
       if (error) {
         console.error(error);

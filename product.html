@@ -473,6 +473,126 @@ function shareProduct(){
 loadProduct();
 
 </script>
+<!-- ORAWISS SELLER CARD -->
+<div class="oraswiss-seller-wrapper">
+    <div class="oraswiss-seller-card">
+        <div class="oraswiss-header">
+            <div class="oraswiss-info">
+                <div class="oraswiss-avatar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+                <div>
+                    <h3>oraswiss <span>(Pro)</span></h3>
+                    <p class="oraswiss-green">100% Positive Feedback</p>
+                </div>
+            </div>
+        </div>
+        <div class="oraswiss-joined">Joined July 2018</div>
+        <div class="oraswiss-actions">
+            <button class="oraswiss-btn-blue" id="os-items">Seller's other items (500+)</button>
+            <button class="oraswiss-btn-white" id="os-contact">Contact seller</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.oraswiss-seller-wrapper {
+    all: initial;
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 30px auto;
+    max-width: 480px;
+    width: 100%;
+}
+.oraswiss-seller-card {
+    background-color: #ffffff !important;
+    color: #111111 !important;
+    border: 1px solid #e1e1e1 !important;
+    border-radius: 16px !important;
+    padding: 24px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+    box-sizing: border-box !important;
+}
+.oraswiss-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 12px !important;
+}
+.oraswiss-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+.oraswiss-avatar {
+    width: 40px !important;
+    height: 40px !important;
+    background: #f0f0f0 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #333 !important;
+}
+.oraswiss-info h3 {
+    margin: 0 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #111 !important;
+}
+.oraswiss-info h3 span {
+    font-weight: normal !important;
+    color: #666 !important;
+    font-size: 13px !important;
+}
+.oraswiss-green {
+    margin: 2px 0 0 0 !important;
+    font-size: 12px !important;
+    color: #2e7d32 !important;
+    font-weight: 600 !important;
+}
+.oraswiss-joined {
+    font-size: 13px !important;
+    color: #555 !important;
+    margin-bottom: 16px !important;
+}
+.oraswiss-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+}
+.oraswiss-btn-blue, .oraswiss-btn-white {
+    width: 100% !important;
+    padding: 12px !important;
+    border-radius: 24px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+}
+.oraswiss-btn-blue {
+    background: #0066cc !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+.oraswiss-btn-white {
+    background: #ffffff !important;
+    color: #0066cc !important;
+    border: 1px solid #0066cc !important;
+}
+</style>
+
+<script>
+(function() {
+    document.getElementById('os-items')?.addEventListener('click', () => {
+        window.location.href = '/';
+    });
+    document.getElementById('os-contact')?.addEventListener('click', () => {
+        window.location.href = 'mailto:info@oraswiss.com?subject=Inquiry regarding watch';
+    });
+})();
+</script>
 
 </body>
 </html>

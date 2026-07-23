@@ -204,38 +204,51 @@ countryEl.textContent = countries[meta.country] || "-";
 
 
       const frontPath = `${user.id}/front_${Date.now()}`;
-      const backPath = `${user.id}/back_${Date.now()}`;
+const backPath = `${user.id}/back_${Date.now()}`;
 
 
-      const frontUpload = await supabase.storage
-        .from("identity_documents")
-        .upload(frontPath, frontFile);
+// NGARKO FOTON PËRPARA
+const frontUpload = await supabase.storage
+  .from("identity_documents")
+  .upload(frontPath, frontFile);
 
 
-      const backUpload = await supabase.storage
-        .from("identity_documents")
-        .upload(backPath, backFile);
+// NGARKO FOTON MBRAPA
+const backUpload = await supabase.storage
+  .from("identity_documents")
+  .upload(backPath, backFile);
 
 
-      if (frontUpload.error || backUpload.error) {
-        msg.textContent = "Gabim gjatë ngarkimit të fotove.";
-        return;
-      }
+// KONTROLLO UPLOAD
+console.log("FRONT UPLOAD:", frontUpload);
+console.log("BACK UPLOAD:", backUpload);
 
-      const { data: frontUrl, error: frontError } = await supabase.storage
-        .from("identity_documents")
-        .createSignedUrl(frontPath, 3600);
 
-      const { data: backUrl, error: backError } = await supabase.storage
-        .from("identity_documents")
-        .createSignedUrl(backPath, 3600);
+if (frontUpload.error || backUpload.error) {
+  console.error("FRONT UPLOAD ERROR:", frontUpload.error);
+  console.error("BACK UPLOAD ERROR:", backUpload.error);
 
-      console.log("FRONT LINK:", frontUrl);
-      console.log("FRONT ERROR:", frontError);
+  msg.textContent = "Gabim gjatë ngarkimit të fotove.";
+  return;
+}
 
-      console.log("BACK LINK:", backUrl);
-      console.log("BACK ERROR:", backError);
 
+// KRIJO LINKET PËR FOTOT
+const { data: frontUrl, error: frontError } = await supabase.storage
+  .from("identity_documents")
+  .createSignedUrl(frontPath, 3600);
+
+
+const { data: backUrl, error: backError } = await supabase.storage
+  .from("identity_documents")
+  .createSignedUrl(backPath, 3600);
+
+
+console.log("FRONT LINK:", frontUrl);
+console.log("FRONT ERROR:", frontError);
+
+console.log("BACK LINK:", backUrl);
+console.log("BACK ERROR:", backError);
       const { error } = await supabase
         .from("identity_verifications")
         .insert({

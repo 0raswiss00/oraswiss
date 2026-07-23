@@ -130,6 +130,7 @@
 
   // LOGJIKA KRYESORE
   window.addEventListener("DOMContentLoaded", async () => {
+
     const { data: { user }, error } = await supabase.auth.getUser();
 
     if (error || !user) {
@@ -137,10 +138,13 @@
       return;
     }
 
-    if (error || !user) {
-      window.location.href = "index.html";
-      return;
-    }
+    const params = new URLSearchParams(window.location.search);
+    const sellerIdFromUrl = params.get("id");
+
+    const profileId = sellerIdFromUrl || user.id;
+
+    console.log("PROFILE ID:", profileId);
+
 
     document.body.style.visibility = "visible";
     const meta = user.user_metadata || {};
@@ -186,7 +190,7 @@ countryEl.textContent = countries[meta.country] || "-";
     // Numri total i të regjistruarve (kërkon RPC/tabelë; shih shënimin poshtë)
     // countEl.textContent = ...;
 
-    await loadWatches(user.id);
+    await loadWatches(profileId);
   });
 
   // VERIFIKIMI I IDENTITETIT

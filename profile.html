@@ -53,6 +53,11 @@
     <label>Foto mbrapa:</label><br>
     <input id="photoBack" type="file" accept="image/*">
     </p>
+
+    <p>
+    <label>Email:</label><br>
+    <input id="email" type="email" placeholder="Email-i juaj" required>
+    </p>
     
     <button id="btnVerify" type="button">
     Dërgo për verifikim
@@ -203,8 +208,8 @@ countryEl.textContent = countries[meta.country] || "-";
       }
 
 
-      const frontPath = `${user.id}/front_${Date.now()}`;
-      const backPath = `${user.id}/back_${Date.now()}`;
+      const frontPath = ${user.id}/front_${Date.now()};
+      const backPath = ${user.id}/back_${Date.now()};
 
 
       const frontUpload = await supabase.storage
@@ -246,13 +251,9 @@ countryEl.textContent = countries[meta.country] || "-";
         {
           body: {
             subject: "Kërkesë e re verifikimi",
-            message: `U dërgua një kërkesë e re për verifikim.
-
-          Email i përdoruesit: ${user.email}
-
-          Dokumenti: ${documentType}
-          Numri: ${documentNumber}`
-         }
+            message: `Dokumenti: ${documentType}
+      Numri: ${documentNumber}`
+          }
         }
       );
 
@@ -265,9 +266,6 @@ countryEl.textContent = countries[meta.country] || "-";
         body: {
           subject: "Kërkesë e re verifikimi",
           message: `U dërgua një kërkesë e re për verifikim.
-
-      Email i përdoruesit: ${user.email}
-
       Dokumenti: ${documentType}
       Numri: ${documentNumber}`
         }

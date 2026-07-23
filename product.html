@@ -241,6 +241,28 @@ async function loadProduct() {
         console.log("DATA:", data);
         console.log("COUNTRY:", data.seller_country);
         console.log("USER ID I SHITESIT:", data.user_id);
+
+        // SELLER CARD
+
+        const sellerName = data.seller_name || "Seller";
+
+        document.getElementById("os-name").innerHTML =
+            sellerName + "-oraswiss <span>(Pro)</span>";
+
+
+        const joined = new Date(data.created_at);
+
+        document.getElementById("os-joined").textContent =
+            "Joined " +
+            joined.toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric"
+            });
+
+
+        document.getElementById("os-items").onclick = () => {
+            window.location.href = "profile.html?id=" + data.user_id;
+        };
         
         // MERR TE DHENAT E SHITESIT
         const { data: seller, error: sellerError } = await supabaseClient.auth.admin

@@ -241,6 +241,9 @@ async function loadProduct() {
         console.log("DATA:", data);
         console.log("COUNTRY:", data.seller_country);
 
+        // MERR TE DHENAT E SHITESIT
+        const { data: seller, error: sellerError } = await supabaseClient.auth.admin
+        
         document.getElementById("seller-country").innerText =
             data.seller_country === "AL" ? "🇦🇱 AL" :
             data.seller_country === "CH" ? "🇨🇭 CH" :

@@ -222,13 +222,13 @@ countryEl.textContent = countries[meta.country] || "-";
         return;
       }
 
-      const { data: frontUrl } = supabase.storage
+      const { data: frontUrl } = await supabase.storage
         .from("identity_documents")
-        .getPublicUrl(frontPath);
+        .createSignedUrl(frontPath, 3600);
 
-      const { data: backUrl } = supabase.storage
+      const { data: backUrl } = await supabase.storage
         .from("identity_documents")
-        .getPublicUrl(backPath);
+        .createSignedUrl(backPath, 3600);
 
       const { error } = await supabase
         .from("identity_verifications")

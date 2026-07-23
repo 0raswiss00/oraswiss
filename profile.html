@@ -206,58 +206,57 @@ countryEl.textContent = countries[meta.country] || "-";
       const frontPath = `${user.id}/front_${Date.now()}_${frontFile.name}`;
       const backPath = `${user.id}/back_${Date.now()}_${backFile.name}`;
 
-      
-      // NGARKO FOTON PËRPARA
+    
       // NGARKO FOTOT
-const frontUpload = await supabase.storage
-  .from("identity_documents")
-  .upload(frontPath, frontFile);
+      const frontUpload = await supabase.storage
+        .from("identity_documents")
+        .upload(frontPath, frontFile);
 
-const backUpload = await supabase.storage
-  .from("identity_documents")
-  .upload(backPath, backFile);
-
-
-console.log("FRONT PATH:", frontPath);
-console.log("FRONT UPLOAD DATA:", frontUpload.data);
-
-console.log("BACK PATH:", backPath);
-console.log("BACK UPLOAD DATA:", backUpload.data);
+      const backUpload = await supabase.storage
+        .from("identity_documents")
+        .upload(backPath, backFile);
 
 
-if (frontUpload.error || backUpload.error) {
-  console.error(frontUpload.error);
-  console.error(backUpload.error);
-  msg.textContent = "Gabim gjatë ngarkimit të fotove.";
-  return;
-}
+      console.log("FRONT PATH:", frontPath);
+      console.log("FRONT UPLOAD DATA:", frontUpload.data);
+
+      console.log("BACK PATH:", backPath);
+      console.log("BACK UPLOAD DATA:", backUpload.data);
 
 
-// KRIJO LINKET
-const { data: frontUrl, error: frontError } = await supabase.storage
-  .from("identity_documents")
-  .createSignedUrl(frontUpload.data.path, 3600);
-
-const { data: backUrl, error: backError } = await supabase.storage
-  .from("identity_documents")
-  .createSignedUrl(backUpload.data.path, 3600);
+      if (frontUpload.error || backUpload.error) {
+        console.error(frontUpload.error);
+        console.error(backUpload.error);
+        msg.textContent = "Gabim gjatë ngarkimit të fotove.";
+        return;
+      }
 
 
-console.log("FRONT LINK:", frontUrl);
-console.log("BACK LINK:", backUrl);
+      // KRIJO LINKET
+      const { data: frontUrl, error: frontError } = await supabase.storage
+        .from("identity_documents")
+        .createSignedUrl(frontUpload.data.path, 3600);
+
+      const { data: backUrl, error: backError } = await supabase.storage
+        .from("identity_documents")
+        .createSignedUrl(backUpload.data.path, 3600);
 
 
-// RUAJ KËRKESËN
-const { error } = await supabase
-  .from("identity_verifications")
-  .insert({
-    user_id: user.id,
-    document_type: documentType,
-    document_number: documentNumber,
-    photo_front: frontUpload.data.path,
-    photo_back: backUpload.data.path,
-    verification_status: "pending"
-  });
+      console.log("FRONT LINK:", frontUrl);
+      console.log("BACK LINK:", backUrl);
+
+
+      // RUAJ KËRKESËN
+      const { error } = await supabase
+        .from("identity_verifications")
+        .insert({
+          user_id: user.id,
+          document_type: documentType,
+          document_number: documentNumber,
+          photo_front: frontUpload.data.path,
+          photo_back: backUpload.data.path,
+          verification_status: "pending"
+       });
 
       if (error) {
         console.error(error);

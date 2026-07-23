@@ -177,7 +177,12 @@ countryEl.textContent = countries[meta.country] || "-";
 
       const { data: { user } } = await supabase.auth.getUser();
 
-      const documentType = document.getElementById("documentType").value;
+      const docElement = document.getElementById("documentType");
+
+      console.log("SELECT ELEMENT:", docElement);
+      console.log("SELECT VALUE:", docElement.value);
+
+      const documentType = docElement.value;
 
       console.log("DOCUMENT TYPE:", documentType);
       

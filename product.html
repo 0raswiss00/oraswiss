@@ -486,14 +486,16 @@ loadProduct();
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 </div>
                 <div>
-                    <h3>oraswiss <span>(Pro)</span></h3>
+                    <h3 id="os-name">- <span>(Pro)</span></h3>
                     <p class="oraswiss-green">100% Positive Feedback</p>
                 </div>
             </div>
         </div>
-        <div class="oraswiss-joined">Joined July 2018</div>
+        <div class="oraswiss-joined" id="os-joined">Joined -</div>
         <div class="oraswiss-actions">
-            <button class="oraswiss-btn-blue" id="os-items">Seller's other items (500+)</button>
+            <button class="oraswiss-btn-blue" id="os-items">
+            Seller's other items (<span id="os-count">0</span>)
+            </button>
             <button class="oraswiss-btn-white" id="os-contact">Contact seller</button>
         </div>
     </div>

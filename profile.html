@@ -234,21 +234,21 @@ countryEl.textContent = countries[meta.country] || "-";
 
 
       // KRIJO LINKET PËR FOTOT
-      const { data: frontUrl, error: frontError } = await supabase.storage
+      const frontUpload = await supabase.storage
         .from("identity_documents")
-        .createSignedUrl(frontPath, 3600);
+        .upload(frontPath, frontFile);
 
-
-      const { data: backUrl, error: backError } = await supabase.storage
+      const backUpload = await supabase.storage
         .from("identity_documents")
-        .createSignedUrl(backPath, 3600);
+        .upload(backPath, backFile);
 
 
-      console.log("FRONT LINK:", frontUrl);
-      console.log("FRONT ERROR:", frontError);
+      console.log("FRONT PATH:", frontPath);
+      console.log("FRONT UPLOAD DATA:", frontUpload.data);
 
-      console.log("BACK LINK:", backUrl);
-      console.log("BACK ERROR:", backError);
+      console.log("BACK PATH:", backPath);
+      console.log("BACK UPLOAD DATA:", backUpload.data);
+
       
       const { error } = await supabase
         .from("identity_verifications")

@@ -143,11 +143,32 @@
     }
 
     document.body.style.visibility = "visible";
-    const meta = user.user_metadata || {};
+const meta = user.user_metadata || {};
 
-    emailEl.textContent = user.email;
-    nameEl.textContent = meta.full_name || "-";
-    phoneEl.textContent = meta.phone || "-";
+
+const sellerTitle = document.getElementById("sellerTitle");
+
+sellerTitle.textContent =
+  (meta.full_name || "Seller") + "-oraswiss";
+
+
+const created = new Date(user.created_at);
+
+const joinedText = document.createElement("p");
+
+joinedText.textContent =
+  "Joined " +
+  created.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric"
+  });
+
+sellerTitle.insertAdjacentElement("afterend", joinedText);
+
+
+emailEl.textContent = user.email;
+nameEl.textContent = meta.full_name || "-";
+phoneEl.textContent = meta.phone || "-"
     const countries = {
       "Albania": "🇦🇱 AL",
       "Switzerland": "🇨🇭 CH",

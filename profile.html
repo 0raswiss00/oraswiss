@@ -203,10 +203,10 @@ countryEl.textContent = countries[meta.country] || "-";
       }
 
 
-      const frontPath = `${user.id}/front_${Date.now()}`;
-      const backPath = `${user.id}/back_${Date.now()}`;
+      const frontPath = `${user.id}/front_${Date.now()}_${frontFile.name}`;
+      const backPath = `${user.id}/back_${Date.now()}_${backFile.name}`;
 
-
+      
       // NGARKO FOTON PËRPARA
       const frontUpload = await supabase.storage
         .from("identity_documents")

@@ -219,6 +219,11 @@ document.getElementById("sendBtn").onclick = async () => {
 
 async function loadMessages() {
 
+    if (!sellerId) {
+        console.log("No conversation selected");
+        return;
+    }
+    
     const { data: { user }, error } = await supabase.auth.getUser();
 
     if (error || !user) {

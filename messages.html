@@ -81,6 +81,58 @@ let conversationId = null;
     
 console.log("SELLER ID:", sellerId);
 
+let conversationId = null;
+
+
+async function getConversation(userId) {
+
+    const { data: existing, error } = await supabase
+        .from("conversations")
+        .select("*")
+        .eq("listing_id", listingId)
+        .eq("buyer_id", userId)
+        .eq("seller_id", sellerId)
+        .maybeSingle();
+
+
+    if (error) {
+        console.error(error);
+        return null;
+    }
+
+
+    if (existing) {
+        conversationId = existing.id;
+        return existing;
+    }
+
+
+    const { data: newConversation, error: createError } =
+        await supabase
+        .from("conversations")
+        .insert({
+            listing_id: listingId,
+            buyer_id: userId,
+            seller_id: sellerId,
+            last_message: "",
+            unread_count: 0
+        })
+        .select()
+        .single();
+
+
+    if (createError) {
+        console.error(createError);
+        return null;
+    }
+
+
+    conversationId = newConversation.id;
+
+    return newConversation;
+
+}
+    
 
 if (sellerId) {
     document.getElementById("chatTitle").innerText = "Chat with seller";

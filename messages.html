@@ -134,7 +134,7 @@ document.getElementById("sendBtn").onclick = async () => {
     if (imageFile) {
 
 
-        const filePath = `${user.id}/${Date.now()}_${imageFile.name}`;
+        const filePath = user.id + "/" + Date.now() + "_" + imageFile.name;
 
 
         const { error: uploadError } = await supabase.storage

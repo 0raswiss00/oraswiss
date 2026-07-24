@@ -123,6 +123,40 @@ document.getElementById("sendBtn").onclick = async () => {
             return;
         }
 
+// Gjej ose krijo bisedën
+
+let { data: conversation } = await supabase
+    .from("conversations")
+    .select("*")
+    .eq("listing_id", listingId)
+    .eq("buyer_id", user.id)
+    .eq("seller_id", sellerId)
+    .maybeSingle();
+
+
+if (!conversation) {
+
+    const { data: newConversation, error: convError } = await supabase
+        .from("conversations")
+        .insert({
+            listing_id: listingId,
+            buyer_id: user.id,
+            seller_id: sellerId,
+            last_message: text,
+            unread_count: 0
+        })
+        .select()
+        .single();
+
+
+    if (convError) {
+        console.error(convError);
+        return;
+    }
+
+    conversation = newConversation;
+
+}
 
         const { data } = supabase.storage
             .from("chat-images")

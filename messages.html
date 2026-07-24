@@ -53,13 +53,6 @@ body {
 style="width:100%; height:80px; margin-top:15px;"></textarea>
 
 
-<input type="file" id="imageFile" accept="image/*" style="margin-top:10px;">
-
-<button id="sendBtn"
-style="margin-top:10px; padding:10px; width:100%;">
-Send
-</button>
-
 <script type="module">
 
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
@@ -197,6 +190,7 @@ async function loadMessages() {
 loadMessages();
 
 </script>
+
 
 </body>
 </html>

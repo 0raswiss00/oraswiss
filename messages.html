@@ -223,7 +223,7 @@ async function loadMessages() {
     const { data: messages, error: msgError } = await supabase
         .from("messages")
         .select("*")
-        .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
+        .or(`and(sender_id.eq.${user.id},receiver_id.eq.${sellerId}),and(sender_id.eq.${sellerId},receiver_id.eq.${user.id})`)
         .order("created_at", { ascending: true });
 
 

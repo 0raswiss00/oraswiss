@@ -68,7 +68,8 @@ Send
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
 
 const supabaseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-const supabaseKey = "SB_KEY_YOUR";
+const supabaseKey = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIy9Y";
+
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 
@@ -92,10 +93,119 @@ if (sellerId) {
 }
 
 
-// KËTU POSHTË VENDOS KODIN E SEND
+
 document.getElementById("sendBtn").onclick = async () => {
 
-    // kodi yt i dërgimit këtu
+
+    const text = document.getElementById("messageText").value.trim();
+
+    const imageFile = document.getElementById("imageFile").files[0];
+
+
+    const { data: { user }, error: userError } =
+        await supabase.auth.getUser();
+
+
+    if (userError || !user) {
+
+        alert("Duhet të jesh i kyçur");
+
+        return;
+
+    }
+
+
+    if (!sellerId) {
+
+        alert("Nuk u gjet shitësi");
+
+        return;
+
+    }
+
+
+
+    let imageUrl = null;
+
+
+
+    // NGARKO FOTO NË STORAGE
+
+    if (imageFile) {
+
+
+        const filePath = ${user.id}/${Date.now()}_${imageFile.name};
+
+
+        const { error: uploadError } = await supabase.storage
+            .from("chat-images")
+            .upload(filePath, imageFile);
+
+
+
+        if (uploadError) {
+
+            console.error(uploadError);
+
+            alert("Gabim gjatë ngarkimit të fotos");
+
+            return;
+
+        }
+
+
+
+        const { data: publicData } = supabase.storage
+            .from("chat-images")
+            .getPublicUrl(filePath);
+
+
+
+        imageUrl = publicData.publicUrl;
+
+
+    }
+
+
+
+
+    // RUAJ MESAZHIN
+
+    const { error } = await supabase
+        .from("messages")
+        .insert({
+
+            sender_id: user.id,
+
+            receiver_id: sellerId,
+
+            message: text,
+
+            image_url: imageUrl
+
+        });
+
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert("Gabim gjatë dërgimit të mesazhit");
+
+        return;
+
+    }
+
+
+
+    document.getElementById("messageText").value = "";
+
+    document.getElementById("imageFile").value = "";
+
+
+    alert("Message sent");
+
 
 };
 

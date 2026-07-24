@@ -144,11 +144,10 @@
     const profileId = sellerIdFromUrl || user.id;
 
     console.log("PROFILE ID:", profileId);
-    let sellerMeta = user.user_metadata || {};
-    let sellerEmail = user.email;
-    let sellerCreated = user.created_at;
 
-    .eq("user_id", profileId)
+      let sellerMeta = user.user_metadata || {};
+      let sellerEmail = user.email;
+      let sellerCreated = user.created_at;
 
       const { data: sellerData, error: sellerError } = await supabase
         .from("profiles")

@@ -226,6 +226,9 @@ async function loadMessages() {
         return;
     }
 
+    console.log("User ID:", user.id);
+    console.log("Seller ID:", sellerId);
+
 
     const { data: messages, error: msgError } = await supabase
         .from("messages")

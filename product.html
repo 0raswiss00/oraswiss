@@ -242,6 +242,14 @@ async function loadProduct() {
         console.log("COUNTRY:", data.seller_country);
         console.log("USER ID I SHITESIT:", data.user_id);
 
+        const contactBtn = document.getElementById("os-contact");
+
+        if (contactBtn) {
+            contactBtn.onclick = () => {
+                window.location.href = messages.html?seller=${data.user_id};
+            };
+        }
+        
         // SELLER CARD
 
         const sellerName = data.seller_name || "Seller";

@@ -473,6 +473,43 @@ function openProduct(productId) {
     </div>
 </div>
 
+<script>
+
+async function loadMessageCount() {
+
+    const { data: { user }, error } = await supabase.auth.getUser();
+
+    if (error || !user) {
+        return;
+    }
+
+
+    const { count, error: countError } = await supabase
+        .from("messages")
+        .select("*", { count: "exact", head: true })
+        .eq("receiver_id", user.id);
+
+
+    if (countError) {
+        console.error(countError);
+        return;
+    }
+
+
+    const counter = document.getElementById("messageCount");
+
+    if (counter) {
+        counter.innerText = count || 0;
+    }
+
+}
+
+
+loadMessageCount();
+
+</script>
+
+  
 </body>
 </html>
 

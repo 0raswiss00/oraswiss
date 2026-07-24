@@ -69,176 +69,114 @@ const supabaseKey = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-    
 const params = new URLSearchParams(window.location.search);
-
 const sellerId = params.get("seller");
 
+console.log("SELLER ID:", sellerId);
 
-if (!sellerId) {
-    console.log("No seller selected");
-}    
 
 if (sellerId) {
-
-    document.getElementById("chatTitle").innerText =
-    "Chat with seller";
-
-    console.log("SELLER ID:", sellerId);
-
+    document.getElementById("chatTitle").innerText = "Chat with seller";
 } else {
-
-    document.getElementById("chatTitle").innerText =
-    "No conversation selected";
-
+    document.getElementById("chatTitle").innerText = "No conversation selected";
 }
-
 
 
 document.getElementById("sendBtn").onclick = async () => {
 
-
     const text = document.getElementById("messageText").value.trim();
-
     const imageFile = document.getElementById("imageFile").files[0];
 
-
-    const { data: { user }, error: userError } =
-        await supabase.auth.getUser();
+    const { data: { user }, error } = await supabase.auth.getUser();
 
 
-    if (userError || !user) {
-
-        const currentPage = window.location.pathname + window.location.search;
-
-        window.location.href =
-        "index.html?redirect=" + encodeURIComponent(currentPage);
-
+    if (error || !user) {
+        console.log("User nuk u gjet", error);
         return;
     }
 
 
     if (!sellerId) {
-
         alert("Nuk u gjet shitësi");
-
         return;
-
     }
-
 
 
     let imageUrl = null;
 
 
-
-    // NGARKO FOTO NË STORAGE
-
     if (imageFile) {
 
-
         const filePath = user.id + "/" + Date.now() + "_" + imageFile.name;
-
 
         const { error: uploadError } = await supabase.storage
             .from("chat-images")
             .upload(filePath, imageFile);
 
 
-
         if (uploadError) {
-
             console.error(uploadError);
-
-            alert("Gabim gjatë ngarkimit të fotos");
-
             return;
-
         }
 
 
-
-        const { data: publicData } = supabase.storage
+        const { data } = supabase.storage
             .from("chat-images")
             .getPublicUrl(filePath);
 
-
-
-        imageUrl = publicData.publicUrl;
-
-
+        imageUrl = data.publicUrl;
     }
 
 
 
-
-    // RUAJ MESAZHIN
-
-    const { error } = await supabase
+    const { error: insertError } = await supabase
         .from("messages")
         .insert({
-
             sender_id: user.id,
-
             receiver_id: sellerId,
-
             message: text,
-
             image_url: imageUrl
-
         });
 
 
-
-    if (error) {
-
-        console.error(error);
-
-        alert("Gabim gjatë dërgimit të mesazhit");
-
+    if (insertError) {
+        console.error(insertError);
         return;
-
     }
-
 
 
     document.getElementById("messageText").value = "";
-
     document.getElementById("imageFile").value = "";
 
-    await loadMessages();
-    
-    alert("Message sent");
-
+    loadMessages();
 
 };
 
+
+
 async function loadMessages() {
 
-    if (!sellerId) {
-        console.log("No conversation selected");
-        return;
-    }
-    
+
     const { data: { user }, error } = await supabase.auth.getUser();
 
+
     if (error || !user) {
+        console.log("Pa user");
         return;
     }
-
-    console.log("User ID:", user.id);
-    console.log("Seller ID:", sellerId);
 
 
     const { data: messages, error: msgError } = await supabase
         .from("messages")
         .select("*")
-        .order("created_at", { ascending: true });
+        .or(
+        `and(sender_id.eq.${user.id},receiver_id.eq.${sellerId}),and(sender_id.eq.${sellerId},receiver_id.eq.${user.id})`
+        )
+        .order("created_at", { ascending:true });
+
 
     if (msgError) {
-
         console.error(msgError);
-
         return;
     }
 
@@ -255,29 +193,20 @@ async function loadMessages() {
         div.className = "message";
 
 
-        if (msg.sender_id === user.id) {
-
-            div.innerHTML = `
-                <b>You:</b><br>
-                ${msg.message || ""}
-            `;
-
-        } else {
-
-            div.innerHTML = `
-                <b>Seller:</b><br>
-                ${msg.message || ""}
-            `;
-        }
+        div.innerHTML = `
+            <b>${msg.sender_id === user.id ? "You" : "Seller"}:</b><br>
+            ${msg.message || ""}
+        `;
 
 
         if (msg.image_url) {
 
             div.innerHTML += `
-                <br>
-                <img src="${msg.image_url}" 
-                style="max-width:200px;border-radius:10px;margin-top:10px;">
+            <br>
+            <img src="${msg.image_url}"
+            style="max-width:200px;border-radius:10px;">
             `;
+
         }
 
 
@@ -288,21 +217,21 @@ async function loadMessages() {
 }
 
 
-// ngarko mesazhet kur hapet faqja
+
 loadMessages();
 
 
-// REALTIME - merr mesazhet e reja automatikisht
+
 supabase
 .channel("messages-channel")
 .on(
     "postgres_changes",
     {
-        event: "INSERT",
-        schema: "public",
-        table: "messages"
+        event:"INSERT",
+        schema:"public",
+        table:"messages"
     },
-    (payload) => {
+    (payload)=>{
 
         console.log("Mesazh i ri:", payload.new);
 
@@ -312,7 +241,7 @@ supabase
 )
 .subscribe();
 
-</script>
 
+</script>
 </body>
 </html>

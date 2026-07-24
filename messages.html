@@ -205,7 +205,8 @@ document.getElementById("sendBtn").onclick = async () => {
 
     document.getElementById("imageFile").value = "";
 
-
+    await loadMessages();
+    
     alert("Message sent");
 
 

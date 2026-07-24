@@ -108,7 +108,9 @@ document.getElementById("sendBtn").onclick = async () => {
 
     if (userError || !user) {
 
-        alert("Duhet të jesh i kyçur");
+        const currentPage = window.location.pathname + window.location.search;
+
+        window.location.href = "login.html?redirect=" + encodeURIComponent(currentPage);
 
         return;
 

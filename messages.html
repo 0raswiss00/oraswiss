@@ -211,6 +211,77 @@ document.getElementById("sendBtn").onclick = async () => {
 
 };
 
+async function loadMessages() {
+
+    const { data: { user }, error } = await supabase.auth.getUser();
+
+    if (error || !user) {
+        return;
+    }
+
+
+    const { data: messages, error: msgError } = await supabase
+        .from("messages")
+        .select("*")
+        .or(sender_id.eq.${user.id},receiver_id.eq.${user.id})
+        .order("created_at", { ascending: true });
+
+
+    if (msgError) {
+
+        console.error(msgError);
+
+        return;
+    }
+
+
+    const box = document.getElementById("messages");
+
+    box.innerHTML = "";
+
+
+    messages.forEach(msg => {
+
+        const div = document.createElement("div");
+
+        div.className = "message";
+
+
+        if (msg.sender_id === user.id) {
+
+            div.innerHTML = `
+                <b>You:</b><br>
+                ${msg.message || ""}
+            `;
+
+        } else {
+
+            div.innerHTML = `
+                <b>Seller:</b><br>
+                ${msg.message || ""}
+            `;
+        }
+
+
+        if (msg.image_url) {
+
+            div.innerHTML += `
+                <br>
+                <img src="${msg.image_url}" 
+                style="max-width:200px;border-radius:10px;margin-top:10px;">
+            `;
+        }
+
+
+        box.appendChild(div);
+
+    });
+
+}
+
+
+// ngarko mesazhet kur hapet faqja
+loadMessages();
 
 </script>
 

@@ -70,8 +70,12 @@ const supabaseKey = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const params = new URLSearchParams(window.location.search);
-const sellerId = params.get("seller");
 
+const listingId = params.get("listing");
+console.log("LISTING ID:", listingId);
+    
+const sellerId = params.get("seller");
+    
 console.log("SELLER ID:", sellerId);
 
 

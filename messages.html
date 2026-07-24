@@ -63,7 +63,14 @@ style="margin-top:10px; padding:10px; width:100%;">
 Send
 </button>
 
-<script>
+<script type="module">
+
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
+
+const supabaseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+const supabaseKey = "SB_KEY_YOUR";
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 
 const params = new URLSearchParams(window.location.search);
 
@@ -83,6 +90,15 @@ if (sellerId) {
     "No conversation selected";
 
 }
+
+
+// KËTU POSHTË VENDOS KODIN E SEND
+document.getElementById("sendBtn").onclick = async () => {
+
+    // kodi yt i dërgimit këtu
+
+};
+
 
 </script>
 

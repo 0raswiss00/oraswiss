@@ -74,6 +74,14 @@ const params = new URLSearchParams(window.location.search);
 
 const sellerId = params.get("seller");
 
+const params = new URLSearchParams(window.location.search);
+
+const sellerId = params.get("seller");
+
+
+if (!sellerId) {
+    console.log("No seller selected");
+}    
 
 if (sellerId) {
 

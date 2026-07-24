@@ -289,6 +289,27 @@ async function loadMessages() {
 // ngarko mesazhet kur hapet faqja
 loadMessages();
 
+
+// REALTIME - merr mesazhet e reja automatikisht
+supabase
+.channel("messages-channel")
+.on(
+    "postgres_changes",
+    {
+        event: "INSERT",
+        schema: "public",
+        table: "messages"
+    },
+    (payload) => {
+
+        console.log("Mesazh i ri:", payload.new);
+
+        loadMessages();
+
+    }
+)
+.subscribe();
+
 </script>
 
 </body>

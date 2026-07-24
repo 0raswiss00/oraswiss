@@ -171,12 +171,21 @@ if (forgotPasswordLink) {
 }
 </script>
 <script>
-async function register() {
-   // kodi i regjistrimit
-}
-
 async function login() {
-   // kodi i hyrjes
+
+   // kodi yt i hyrjes këtu
+
+
+   const params = new URLSearchParams(window.location.search);
+
+   const redirect = params.get("redirect");
+
+   if (redirect) {
+       window.location.href = redirect;
+   } else {
+       window.location.href = "index.html";
+   }
+
 }
 </script>      
 </body>      

@@ -242,6 +242,11 @@ async function loadProduct() {
         console.log("COUNTRY:", data.seller_country);
         console.log("USER ID I SHITESIT:", data.user_id);
 
+        document.getElementById('os-contact')?.addEventListener('click', () => {
+            window.location.href = profile.html?id=${data.user_id};
+        });
+
+        
         const contactBtn = document.getElementById("os-contact");
 
         if (contactBtn) {

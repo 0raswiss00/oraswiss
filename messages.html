@@ -74,7 +74,10 @@ const params = new URLSearchParams(window.location.search);
 const listingId = params.get("listing");
 console.log("LISTING ID:", listingId);
     
+const listingId = params.get("listing");
 const sellerId = params.get("seller");
+
+let conversationId = null;
     
 console.log("SELLER ID:", sellerId);
 

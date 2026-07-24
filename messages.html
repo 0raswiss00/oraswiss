@@ -138,6 +138,7 @@ document.getElementById("sendBtn").onclick = async () => {
         .insert({
             sender_id: user.id,
             receiver_id: sellerId,
+            listing_id: listingId,
             message: text,
             image_url: imageUrl
         });

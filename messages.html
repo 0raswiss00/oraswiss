@@ -148,6 +148,7 @@ document.getElementById("sendBtn").onclick = async () => {
 
     const { data: { user }, error } = await supabase.auth.getUser();
 
+    await getConversation(user.id);
 
     if (error || !user) {
         console.log("User nuk u gjet", error);

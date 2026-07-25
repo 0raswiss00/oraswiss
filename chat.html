@@ -146,38 +146,7 @@ async function initChat() {
         return;
     }
     currentUserId = user.id;
-
-    if (!conversationId) {
-        alert("Bisedë e pavlefshme!");
-        return;
-    }
-
-    // 1. Merr të dhënat e bisedës (zakonisht e ke diku në fillim)
-    const { data: conversation, error } = await supabase
-        .from("conversations")
-        .select("*")
-        .eq("id", conversationId)
-        .single();
-
-    if (conversation && conversation.listing_id) {
-        // 2. Këtu e vendos kodin për të marrë detajet e orës dhe me mbush header-in
-        const { data: listing } = await supabase
-            .from("listings")
-            .select("title, price, image_url")
-            .eq("id", conversation.listing_id)
-            .single();
-
-        if (listing) {
-            document.getElementById("headerTitle").textContent = listing.title;
-            document.getElementById("headerPrice").textContent = listing.price + " €";
-        
-            const imgEl = document.getElementById("headerImg");
-            if (imgEl && listing.image_url) {
-                imgEl.src = listing.image_url;
-            }
-        }
-    }
-    
+  
     const { data: chats, error: chatError } = await supabase
         .from("conversations")
         .select("*")

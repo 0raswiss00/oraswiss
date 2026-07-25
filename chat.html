@@ -137,108 +137,42 @@ const urlParams = new URLSearchParams(window.location.search);
 const conversationId = urlParams.get("conversation");
 let currentUserId = null;
 
-async function initChat() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-        window.location.href = "login.html";
-        return;
-    }
-    currentUserId = user.id;
-
-    if (!conversationId) {
-        alert("Bisedë e pavlefshme!");
-        return;
-    }
-
-    const { data: chat, error: chatError } = await supabase
+async function updateConversationOnSend(textForDb, isUserOne) {
+    const { data: convData } = await supabase
         .from("conversations")
-        .select("*")
+        .select("unread_user_one, unread_user_two")
         .eq("id", conversationId)
         .single();
 
-    if (chatError || !chat) {
-        console.error(chatError);
-        return;
-    }
+    let updateData = {
+        last_message: textForDb,
+        updated_at: new Date().toISOString()
+    };
 
-    if (chat.listing_id) {
-        const { data: watch } = await supabase
-            .from("oras")
-            .select("brand, model, price, image_url")
-            .eq("id", chat.listing_id)
-            .single();
-
-        if (watch) {
-            let img = Array.isArray(watch.image_url) ? watch.image_url[0] : watch.image_url;
-            document.getElementById("headerImg").src = img || "";
-            document.getElementById("headerTitle").innerText = `${watch.brand || ""} ${watch.model || ""}`;
-            document.getElementById("headerPrice").innerText = `${watch.price || 0} €`;
+    if (convData) {
+        if (isUserOne) {
+            updateData.unread_user_two = (convData.unread_user_two || 0) + 1;
+        } else {
+            updateData.unread_user_one = (convData.unread_user_one || 0) + 1;
         }
     }
 
-    await loadMessages();
-    setupRealtimeSubscription();
+    await supabase
+        .from("conversations")
+        .update(updateData)
+        .eq("id", conversationId);
 }
 
-async function loadMessages() {
-    const { data: messages, error } = await supabase
-        .from("messages")
-        .select("*")
-        .eq("conversation_id", conversationId)
-        .order("created_at", { ascending: true });
-
-    const chatBox = document.getElementById("chatBox");
-    chatBox.innerHTML = "";
-
-    if (error || !messages) return;
-
-    messages.forEach(msg => {
-        appendMessageToUI(msg);
-    });
-
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-function appendMessageToUI(msg) {
-    const chatBox = document.getElementById("chatBox");
-    const div = document.createElement("div");
-    div.className = "message " + (msg.sender_id === currentUserId ? "sent" : "received");
-
-    const text = msg.message_text || "";
-    if (text.startsWith("http://") || text.startsWith("https://") || text.match(/\.(jpeg|jpg|png|gif|webp)$/i)) {
-        div.innerHTML = `<img src="${text}" onclick="window.open(this.src)" style="max-width:200px; border-radius:8px; display:block; cursor:pointer;">`;
-    } else {
-        div.innerText = text;
-    }
-
-    chatBox.appendChild(div);
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-// Lidhja Realtime që mesazhet të vijnë vetë pa rifreskuar faqen
-function setupRealtimeSubscription() {
-    supabase
-        .channel("public:messages")
-        .on(
-            "postgres_changes",
-            {
-                event: "INSERT",
-                schema: "public",
-                table: "messages",
-                filter: `conversation_id=eq.${conversationId}`
-            },
-            (payload) => {
-                appendMessageToUI(payload.new);
-            }
-        )
-        .subscribe();
-}
-
-// Dërgimi i tekstit
 document.getElementById("sendBtn").onclick = async () => {
     const input = document.getElementById("messageInput");
     const text = input.value.trim();
     if (!text) return;
+
+    const { data: chatInfo } = await supabase
+        .from("conversations")
+        .select("user_one, user_two")
+        .eq("id", conversationId)
+        .single();
 
     const { error } = await supabase.from("messages").insert({
         conversation_id: Number(conversationId),
@@ -251,10 +185,14 @@ document.getElementById("sendBtn").onclick = async () => {
         return;
     }
 
+    if (chatInfo) {
+        const isUserOne = (chatInfo.user_one === currentUserId);
+        await updateConversationOnSend(text, isUserOne);
+    }
+
     input.value = "";
 };
 
-// Trajtimi i dërgimit të fotove
 const attachBtn = document.getElementById("attachBtn");
 const imageInput = document.getElementById("imageInput");
 
@@ -270,7 +208,6 @@ imageInput.onchange = async (e) => {
 
     attachBtn.innerText = "⏳";
 
-    // Ngarkimi i fotos te Supabase Storage (te bucket-i yt, p.sh. "oras" ose "images")
     const { error: uploadError } = await supabase.storage
         .from("oras") 
         .upload(filePath, file);
@@ -281,19 +218,28 @@ imageInput.onchange = async (e) => {
         return;
     }
 
-    // Marrja e linkut publik të fotos
     const { data: publicURLData } = supabase.storage
         .from("oras")
         .getPublicUrl(filePath);
 
     const imageUrl = publicURLData.publicUrl;
 
-    // Ruajtja e linkut të fotos si mesazh në databazë
+    const { data: chatInfo } = await supabase
+        .from("conversations")
+        .select("user_one, user_two")
+        .eq("id", conversationId)
+        .single();
+
     const { error: insertError } = await supabase.from("messages").insert({
         conversation_id: Number(conversationId),
         sender_id: currentUserId,
         message_text: imageUrl
     });
+
+    if (chatInfo) {
+        const isUserOne = (chatInfo.user_one === currentUserId);
+        await updateConversationOnSend("📷 [Foto]", isUserOne);
+    }
 
     attachBtn.innerText = "📷";
     imageInput.value = "";
@@ -305,7 +251,6 @@ imageInput.onchange = async (e) => {
 
 initChat();
 </script>
-
 
 </body>
 </html>

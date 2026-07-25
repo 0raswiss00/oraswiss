@@ -12,7 +12,6 @@ body{
     flex-direction:column;
     height:100vh;
 }
-/* Header-i i orës sipër si në vizatim */
 .product-header{
     background:#fff;
     padding:10px 15px;
@@ -37,7 +36,6 @@ body{
     font-size:13px;
     font-weight:bold;
 }
-/* Zona e mesazheve */
 #chatBox{
     flex:1;
     padding:15px;
@@ -69,7 +67,6 @@ body{
     display:block;
     cursor:pointer;
 }
-/* Zona e dërgimit poshtë */
 .chat-input-area{
     padding:10px;
     background:#fff;
@@ -97,7 +94,6 @@ body{
 </head>
 <body>
 
-<!-- Header me foton dhe detajet e orës -->
 <div class="product-header" id="productHeader">
     <img id="headerImg" src="" alt="">
     <div class="product-info">
@@ -106,10 +102,8 @@ body{
     </div>
 </div>
 
-<!-- Kutia e mesazheve -->
 <div id="chatBox"></div>
 
-<!-- Fusha e shkrimit dhe dërgimit -->
 <div class="chat-input-area">
     <input type="file" id="imageInput" accept="image/*" style="display:none;">
     <button type="button" id="attachBtn">📷</button>
@@ -140,7 +134,6 @@ async function initChat() {
         return;
     }
 
-    // 1. Marrëm të dhënat e bisedës dhe orës përkatëse
     const { data: chat, error: chatError } = await supabase
         .from("conversations")
         .select("*")
@@ -162,8 +155,8 @@ async function initChat() {
         if (watch) {
             let img = Array.isArray(watch.image_url) ? watch.image_url[0] : watch.image_url;
             document.getElementById("headerImg").src = img || "";
-            document.getElementById("headerTitle").innerText = ${watch.brand || ""} ${watch.model || ""};
-            document.getElementById("headerPrice").innerText = ${watch.price || 0} €;
+            document.getElementById("headerTitle".trim()).innerText = `${watch.brand || ""} ${watch.model || ""}`;
+            document.getElementById("headerPrice").innerText = `${watch.price || 0} €`;
         }
     }
 
@@ -186,10 +179,10 @@ async function loadMessages(currentUserId) {
         const div = document.createElement("div");
         div.className = "message " + (msg.sender_id === currentUserId ? "sent" : "received");
 
-        if (msg.message_text.includes("message-images") || msg.message_text.match(/\.(jpeg|jpg|png|gif)$/i)) {
-            div.innerHTML = <img src="${msg.message_text}" onclick="window.open(this.src)">;
+        if (msg.message_text && (msg.message_text.includes("message-images") || msg.message_text.match(/\.(jpeg|jpg|png|gif)$/i))) {
+            div.innerHTML = `<img src="${msg.message_text}" onclick="window.open(this.src)">`;
         } else {
-            div.innerText = msg.message_text;
+            div.innerText = msg.message_text || "";
         }
 
         chatBox.appendChild(div);
@@ -198,7 +191,6 @@ async function loadMessages(currentUserId) {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Dërgimi i mesazhit tekst
 document.getElementById("sendBtn").onclick = async () => {
     const input = document.getElementById("messageInput");
     const text = input.value.trim();
@@ -212,13 +204,10 @@ document.getElementById("sendBtn").onclick = async () => {
         message_text: text
     });
 
-    await supabase.from("conversations").update({ last_message: text, updated_at: new Date() }).eq("id", conversationId);
-
     input.value = "";
     loadMessages(user.id);
 };
 
-// Dërgimi i fotos
 const attachBtn = document.getElementById("attachBtn");
 const imageInput = document.getElementById("imageInput");
 
@@ -229,7 +218,7 @@ imageInput.onchange = async (e) => {
     if (!file) return;
 
     const { data: { user } } = await supabase.auth.getUser();
-    const filePath = ${Date.now()}_${file.name};
+    const filePath = `${Date.now()}_${file.name}`;
 
     const { error: uploadError } = await supabase.storage.from("message-images").upload(filePath, file);
     if (uploadError) {
@@ -246,24 +235,11 @@ imageInput.onchange = async (e) => {
         message_text: imageUrl
     });
 
-    await supabase.from("conversations").update({ last_message: "📷 [Foto]", updated_at: new Date() }).eq("id", conversationId);
-
     imageInput.value = "";
     loadMessages(user.id);
 };
 
 initChat();
-
-// Realtime për mesazhet e reja në këtë bisedë
-supabase.channel("realtime_messages")
-.on("postgres_changes", { event: "INSERT", schema: "public", table: "messages", filter: conversation_id=eq.${conversationId} }, 
-    async () => {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) loadMessages(user.id);
-    }
-)
-.subscribe();
-
 </script>
 </body>
 </html>

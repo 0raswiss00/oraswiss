@@ -534,17 +534,23 @@ loadMessageCount();
 async function updateIndexMessageCount() {
     try {
         const { data: { user }, error } = await supabase.auth.getUser();
-        if (error || !user) return;
+        if (error || !user) {
+            console.log("Nuk ka përdorues të loguar");
+            return;
+        }
 
-        // 1. Marrim bisedat ku përdoruesi është i përfshirë
+        // Marrim të gjitha bisedat ku ky user është ose user_one ose user_two
         const { data: userConvs, error: convError } = await supabase
-        .from("conversations")
-        .select("id, user_one, user_two, unread_user_one, unread_user_two")
-        .or(`user_one.eq.${user.id},user_two.eq.${user.id}`);
+            .from("conversations")
+            .select("id, user_one, user_two, unread_user_one, unread_user_two")
+            .or(`user_one.eq.${user.id},user_two.eq.${user.id}`);
 
-        if (convError || !userConvs) return;
+        if (convError || !userConvs) {
+            console.error("Gabim në marrjen e bisedave:", convError);
+            return;
+        }
 
-        // 2. Llogarisim totalin e mesazheve të palexuara
+        // Llogarisim totalin vetëm për bisedat e këtij useri
         let totalUnread = 0;
         userConvs.forEach(conv => {
             if (conv.user_one === user.id) {
@@ -554,14 +560,14 @@ async function updateIndexMessageCount() {
             }
         });
 
-        // 3. Përditësojmë numrin te Menuja
+        // Përditësojmë elementin në menu
         const menuBadge = document.getElementById("messageCount");
         if (menuBadge) {
             menuBadge.innerText = totalUnread;
             menuBadge.style.background = totalUnread > 0 ? "red" : "#444";
         }
 
-        // 4. Përditësojmë numrin te Butoni i poshtëm (navMessageCount ose bottomBadge)
+        // Përditësojmë elementin te butoni poshtë
         const navBadge = document.getElementById("navMessageCount") || document.getElementById("bottomBadge");
         if (navBadge) {
             navBadge.innerText = totalUnread;
@@ -569,26 +575,10 @@ async function updateIndexMessageCount() {
         }
 
     } catch (err) {
-        console.error("Gabim në leximin e mesazheve:", err);
+        console.error("Gabim:", err);
     }
 }
 
-// Ekzekutoje sapo të ngarkohet faqja dhe dëgjo në kohë reale
-document.addEventListener("DOMContentLoaded", () => {
-    updateIndexMessageCount();
-
-    supabase
-        .channel("index_conversations_changes")
-        .on(
-            "postgres_changes",
-            { event: "*", schema: "public", table: "conversations" },
-            () => {
-                updateIndexMessageCount();
-            }
-        )
-        .subscribe();
-});
-</script>
   
 </body>
 </html>

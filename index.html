@@ -540,6 +540,65 @@ async function loadMessageCount() {
 // Thirre funksionin për të ngarkuar numrin e mesazheve
 loadMessageCount();
 </script>
+<script>
+async function updateIndexMessageCount() {
+    try {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error || !user) return;
+
+        // 1. Gjejmë bisedat ku përdoruesi është user_one ose user_two
+        const { data: userConvs, error: convError } = await supabase
+            .from("conversations")
+            .select("id, user_one, user_two, unread_user_one, unread_user_two")
+            .or(`user_one.eq.${user.id},user_two.eq.${user.id}`);
+
+        if (convError || !userConvs) return;
+
+        // 2. Llogarisim totalin e mesazheve të palexuara nga kolonat e duhura
+        let totalUnread = 0;
+        userConvs.forEach(conv => {
+            if (conv.user_one === user.id) {
+                totalUnread += conv.unread_user_one || 0;
+            } else if (conv.user_two === user.id) {
+                totalUnread += conv.unread_user_two || 0;
+            }
+        });
+
+        // 3. Përditësojmë numrin te menuja e fshehur (messageCount)
+        const menuBadge = document.getElementById("messageCount");
+        if (menuBadge) {
+            menuBadge.innerText = totalUnread;
+        }
+
+        // 4. Përditësojmë numrin te shiriti i poshtëm (navMessageCount)
+        const navBadge = document.getElementById("navMessageCount");
+        if (navBadge) {
+            navBadge.innerText = totalUnread;
+            navBadge.style.display = totalUnread > 0 ? "inline-block" : "none";
+        }
+
+    } catch (err) {
+        console.error("Gabim në leximin e mesazheve për index:", err);
+    }
+}
+
+// Ekzekutoje sapo të ngarkohet faqja index
+document.addEventListener("DOMContentLoaded", () => {
+    updateIndexMessageCount();
+
+    // Dëgjo në kohë reale për ndryshime te bisedat
+    supabase
+        .channel("index_conversations_changes")
+        .on(
+            "postgres_changes",
+            { event: "*", schema: "public", table: "conversations" },
+            () => {
+                updateIndexMessageCount();
+            }
+        )
+        .subscribe();
+});
+</script>
 
   
 </body>

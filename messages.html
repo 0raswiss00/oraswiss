@@ -59,53 +59,37 @@ body{
 
 <script type="module">
 
-
 import { createClient }
 from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
 
 
-
-const supabase =
-createClient(
-
+const supabase = createClient(
 "https://gnwsrmelmeqduhhmfmoa.supabase.co",
-
 "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-
 );
-
-
 
 
 
 async function loadChats(){
 
 
-const {data:{user},error}
-=
+const {data:{user}, error} =
 await supabase.auth.getUser();
 
 
+if(error || !user){
+    window.location.href="login.html";
+    return;
+}
 
-if(error || !user)
-return;
 
 
-
-const {data:conversations,error:convError}
-=
+const {data: conversations, error: convError} =
 await supabase
 .from("conversations")
 .select("*")
-.or(
-user_one_id.eq.${user.id},user_two_id.eq.${user.id}
-)
-.order(
-"updated_at",
-{
-ascending:false
-}
-);
+.or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
+.order("updated_at",{ascending:false});
 
 
 
@@ -118,10 +102,7 @@ return;
 
 
 
-
-const box =
-document.getElementById("chatList");
-
+const box = document.getElementById("chatList");
 
 box.innerHTML="";
 
@@ -131,65 +112,100 @@ for(const chat of conversations){
 
 
 
-let otherUser;
-
-
-
-if(chat.user_one_id === user.id){
-
-otherUser =
-chat.user_two_id;
-
-}
-else{
-
-otherUser =
-chat.user_one_id;
-
-}
-
-
-
-
-const {count}
-=
+const {data: watch, error: watchError} =
 await supabase
-.from("messages")
-.select(
-"*",
-{
-count:"exact",
-head:true
+.from("oras")
+.select(`
+brand,
+model,
+price,
+image_url,
+reference
+`)
+.eq("id", chat.listing_id)
+.single();
+
+
+
+if(watchError){
+    console.log(watchError);
+    continue;
 }
-)
-.eq(
-"conversation_id",
-chat.id
-);
 
 
 
-const div =
-document.createElement("div");
 
+let unread = 0;
+
+
+if(chat.buyer_id === user.id){
+
+    unread = chat.unread_buyer || 0;
+
+}else{
+
+    unread = chat.unread_seller || 0;
+
+}
+
+
+
+
+const image = Array.isArray(watch.image_url)
+? watch.image_url[0]
+: watch.image_url;
+
+
+
+const div = document.createElement("div");
 
 div.className="chat";
 
 
 
-div.innerHTML=`
+div.innerHTML = `
 
-<b>User:</b> ${otherUser}
+<div style="display:flex;gap:15px;align-items:center;">
+
+
+<img src="${image || ''}"
+style="
+width:70px;
+height:70px;
+border-radius:10px;
+object-fit:cover;
+">
+
+
+<div>
+
+<b>
+${watch.brand || ""} ${watch.model || ""}
+</b>
 
 <br>
 
+<span>
+${watch.price || 0} €
+</span>
+
+<br>
+
+<small>
 ${chat.last_message || "No messages"}
+</small>
+
+
+</div>
+
+
+</div>
+
 
 <span class="count">
-
-${count || 0}
-
+${unread}
 </span>
+
 
 `;
 
@@ -197,13 +213,8 @@ ${count || 0}
 
 div.onclick=()=>{
 
-
 window.location.href =
-
-"messages.html?conversation="
-
-+chat.id;
-
+"chat.html?conversation=" + chat.id;
 
 };
 
@@ -216,7 +227,9 @@ box.appendChild(div);
 }
 
 
+
 }
+
 
 
 
@@ -224,8 +237,10 @@ loadChats();
 
 
 
+
+
 supabase
-.channel("conversation-update")
+.channel("messages-update")
 .on(
 "postgres_changes",
 {
@@ -234,9 +249,7 @@ schema:"public",
 table:"conversations"
 },
 ()=>{
-
 loadChats();
-
 }
 )
 .subscribe();
@@ -244,7 +257,6 @@ loadChats();
 
 
 </script>
-
 
 </body>
 

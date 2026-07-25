@@ -251,7 +251,7 @@ imageInput.onchange = async (e) => {
     if (!file) return;
 
     const fileExt = file.name.split(".").pop();
-    const fileName = `${Math.random().toString(36.substring(2)}_${Date.now()}.${fileExt}`;
+    const fileName = `img_${Date.now()}.${fileExt}`;
     const filePath = `chat-images/${fileName}`;
 
     attachBtn.innerText = "⏳";

@@ -482,19 +482,27 @@ async function loadMessageCount() {
         return;
     }
 
-    const { count, error: countError } = await supabase
-        .from("messages")
-        .select("*", { count: "exact", head: true })
-        .eq("receiver_id", user.id);
+    const { data: userConvs, error: convError } = await supabase
+    .from("conversations")
+    .select("id")
+    .or(buyer_id.eq.${user.id},seller_id.eq.${user.id});
 
-    if (countError) {
-        console.error("Gabim te numërimi i mesazheve:", countError);
-        return;
-    }
+if (!convError && userConvs) {
+    const convIds = userConvs.map(c => c.id);
+    
+    if (convIds.length > 0) {
+        const { count, error: countError } = await supabase
+            .from("messages")
+            .select("*", { count: "exact", head: true })
+            .in("conversation_id", convIds);
 
-    const counter = document.getElementById("messageCount");
-    if (counter) {
-        counter.innerText = count || 0;
+        const counter = document.getElementById("messageCount");
+        if (counter && !countError) {
+            counter.innerText = Messages ${count || 0};
+        }
+    } else {
+        const counter = document.getElementById("messageCount");
+        if (counter) counter.innerText = "Messages 0";
     }
 }
 

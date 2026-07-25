@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<title>Chat - Oraswiss</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f5f5f5;
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+}
+.product-header{
+    background:#fff;
+    padding:10px 15px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    border-bottom:1px solid #ddd;
+    box-shadow:0 2px 4px rgba(0,0,0,0.05);
+}
+.product-header img{
+    width:50px;
+    height:50px;
+    border-radius:8px;
+    object-fit:cover;
+}
+.product-info .brand{
+    font-weight:bold;
+    font-size:15px;
+}
+.product-info .price{
+    color:#009900;
+    font-size:13px;
+    font-weight:bold;
+}
+#chatBox{
+    flex:1;
+    padding:15px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+.message{
+    max-width:70%;
+    padding:10px 14px;
+    border-radius:12px;
+    font-size:14px;
+    word-break:break-word;
+}
+.message.sent{
+    background:#000;
+    color:#fff;
+    align-self:flex-end;
+}
+.message.received{
+    background:#e5e5ea;
+    color:#000;
+    align-self:flex-start;
+}
+.message img{
+    max-width:200px;
+    border-radius:8px;
+    display:block;
+    cursor:pointer;
+}
+.chat-input-area{
+    padding: 8px 10px;
+    background: #fff;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    border-top: 1px solid #ddd;
+}
+.chat-input-area input[type="text"]{
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+    font-size: 14px;
+}
+.chat-input-area button{
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#attachBtn {
+    background: #e5e5ea;
+    color: #000;
+    font-size: 16px;
+    padding: 8px 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="product-header" id="productHeader">
+    <img id="headerImg" src="" alt="">
+    <div class="product-info">
+        <div class="brand" id="headerTitle">Duke ngarkuar...</div>
+        <div class="price" id="headerPrice"></div>
+    </div>
+</div>
+
+<div id="chatBox"></div>
+
+<div class="chat-input-area">
+    <input type="file" id="imageInput" accept="image/*" style="display:none;">
+    <button type="button" id="attachBtn" title="Dërgo foto">📷</button>
+    <input type="text" id="messageInput" placeholder="Shkruaj një mesazh...">
+    <button type="button" id="sendBtn">Dërgo</button>
+</div>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
+
+const supabase = createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
+
+const urlParams = new URLSearchParams(window.location.search);
+const conversationId = urlParams.get("conversation");
+let currentUserId = null;
+
+async function initChat() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        window.location.href = "login.html";
+        return;
+    }
+    currentUserId = user.id;
+
+    if (!conversationId) {
+        alert("Bisedë e pavlefshme!");
+        return;
+    }
+
+    const { data: chats, error: chatError } = await supabase
+        .from("conversations")
+        .select("*")
+        .eq("id", conversationId);
+
+    if (chatError || !chats || chats.length === 0) {
+        console.error("Gabim te biseda:", chatError);
+        return;
+    }
+    const chat = chats[0];
+
+    if (chat.listing_id) {
+        const { data: watch } = await supabase
+            .from("oras")
+            .select("brand, model, price, image_url")
+            .eq("id", chat.listing_id)
+            .single();
+
+        if (watch) {
+            let img = Array.isArray(watch.image_url) ? watch.image_url[0] : watch.image_url;
+            document.getElementById("headerImg").src = img || "";
+            document.getElementById("headerTitle").innerText = `${watch.brand || ""} ${watch.model || ""}`;
+            document.getElementById("headerPrice").innerText = `${watch.price || 0} €`;
+        }
+    }
+
+    await loadMessages();
+    setupRealtimeSubscription();
+}
+
+async function loadMessages() {
+    const { data: messages, error } = await supabase
+        .from("messages")
+        .select("*")
+        .eq("conversation_id", conversationId)
+        .order("created_at", { ascending: true });
+
+    const chatBox = document.getElementById("chatBox");
+    chatBox.innerHTML = "";
+
+    if (error || !messages) return;
+
+    messages.forEach(msg => {
+        appendMessageToUI(msg);
+    });
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function appendMessageToUI(msg) {
+    const chatBox = document.getElementById("chatBox");
+    const div = document.createElement("div");
+    div.className = "message " + (msg.sender_id === currentUserId ? "sent" : "received");
+
+    const text = msg.message_text || "";
+    if (text.startsWith("http://") || text.startsWith("https://") || text.match(/\.(jpeg|jpg|png|gif|webp)$/i)) {
+        div.innerHTML = `<img src="${text}" onclick="window.open(this.src)" style="max-width:200px; border-radius:8px; display:block; cursor:pointer;">`;
+    } else {
+        div.innerText = text;
+    }
+
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function setupRealtimeSubscription() {
+    supabase
+        .channel("public:messages")
+        .on(
+            "postgres_changes",
+            {
+                event: "INSERT",
+                schema: "public",
+                table: "messages",
+                filter: `conversation_id=eq.${conversationId}`
+            },
+            (payload) => {
+                appendMessageToUI(payload.new);
+            }
+        )
+        .subscribe();
+}
+
+document.getElementById("sendBtn").onclick = async () => {
+    const input = document.getElementById("messageInput");
+    const text = input.value.trim();
+    if (!text) return;
+
+    const { error } = await supabase.from("messages").insert({
+        conversation_id: Number(conversationId),
+        sender_id: currentUserId,
+        message_text: text
+    });
+
+    if (error) {
+        alert("Gabim: " + error.message);
+        return;
+    }
+
+    await supabase
+        .from("conversations")
+        .update({
+            last_message: text,
+            updated_at: new Date().toISOString()
+        })
+        .eq("id", conversationId);
+
+    input.value = "";
+};
+
+const attachBtn = document.getElementById("attachBtn");
+const imageInput = document.getElementById("imageInput");
+
+attachBtn.onclick = () => imageInput.click();
+
+imageInput.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const fileExt = file.name.split(".").pop();
+    const fileName = `img_${Date.now()}.${fileExt}`;
+    const filePath = `chat-images/${fileName}`;
+
+    attachBtn.innerText = "⏳";
+
+    const { error: uploadError } = await supabase.storage
+        .from("oras") 
+        .upload(filePath, file);
+
+    if (uploadError) {
+        alert("Gabim gjatë ngarkimit të fotos: " + uploadError.message);
+        attachBtn.innerText = "📷";
+        return;
+    }
+
+    const { data: publicURLData } = supabase.storage
+        .from("oras")
+        .getPublicUrl(filePath);
+
+    const imageUrl = publicURLData.publicUrl;
+
+    const { error: insertError } = await supabase.from("messages").insert({
+        conversation_id: Number(conversationId),
+        sender_id: currentUserId,
+        message_text: imageUrl
+    });
+
+    await supabase
+        .from("conversations")
+        .update({
+            last_message: "📷 [Foto]",
+            updated_at: new Date().toISOString()
+        })
+        .eq("id", conversationId);
+
+    attachBtn.innerText = "📷";
+    imageInput.value = "";
+
+    if (insertError) {
+        alert("Gabim në dërgimin e fotos: " + insertError.message);
+    }
+};
+
+initChat();
+</script>
+
+</body>
+</html>

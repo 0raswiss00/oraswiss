@@ -518,63 +518,58 @@ if (!convError && userConvs) {
     }
 }
 
-loadMessageCount();
-async function updateUnreadMessagesCount() {
+<div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center;z-index:99999;">
+    <div style="background:#1a1a1a;padding:25px;border-radius:12px;text-align:center;max-width:320px;width:90%;color:#fff;">
+        <h2>Login Required</h2>
+        <p>Please sign in or create an account to continue.</p>
+
+        <button onclick="location.href='register.html'">
+            Login / Register
+        </button>
+        <br><br>
+        <button onclick="document.getElementById('loginModal').style.display='none'">Cancel</button>
+    </div>
+</div>
+
+<script>
+async function loadMessageCount() {
     try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
+        const { data: { user }, error } = await supabase.auth.getUser();
 
-        // Merr numrin e mesazheve të palexuara ku ti je marrësi
-        const { count, error } = await supabase
-            .from('messages')
-            .select('*', { count: 'exact', head: true })
-            .eq('receiver_id', user.id)
-            .eq('is_read', false);
-
-        if (error) throw error;
-
-        const totalUnread = count || 0;
-
-        // 1. Përditëso te menuja (myOraSwissMenu)
-        const menuBadge = document.getElementById('messageCount');
-        if (menuBadge) {
-            menuBadge.innerText = totalUnread;
+        if (error || !user) {
+            return;
         }
 
-        // 2. Përditëso te shiriti i poshtëm (bottom-nav)
-        const navBadge = document.getElementById('navMessageCount');
-        if (navBadge) {
-            navBadge.innerText = totalUnread;
-            navBadge.style.display = totalUnread > 0 ? 'inline-block' : 'none';
-        }
+        // Marrim të gjitha ID-të e bisedave ku përdoruesi është blerës ose shitës
+        const { data: userConvs, error: convError } = await supabase
+            .from("conversations")
+            .select("id")
+            .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`);
 
+        const counter = document.getElementById("messageCount");
+
+        if (!convError && userConvs && userConvs.length > 0) {
+            const convIds = userConvs.map(c => c.id);
+            
+            // Numërojmë mesazhet për këto biseda
+            const { count, error: countError } = await supabase
+                .from("messages")
+                .select("*", { count: "exact", head: true })
+                .in("conversation_id", convIds);
+
+            if (counter && !countError) {
+                counter.innerText = `Messages ${count || 0}`;
+            }
+        } else {
+            if (counter) counter.innerText = "Messages 0";
+        }
     } catch (err) {
-        console.error("Gabim në leximin e mesazheve:", err);
+        console.error("Gabim te loadMessageCount:", err);
     }
 }
 
-// Ekzekutoje sapo të ngarkohet faqja dhe aktivizo Realtime
-document.addEventListener("DOMContentLoaded", () => {
-    updateUnreadMessagesCount();
-
-    // Dëgjo në kohë reale për mesazhe të reja
-    supabase
-        .channel('public:nav_messages')
-        .on('postgres_changes', { 
-            event: 'INSERT', 
-            schema: 'public', 
-            table: 'messages' 
-        }, payload => {
-            supabase.auth.getUser().then(({ data: { user } }) => {
-                if (user && payload.new.receiver_id === user.id) {
-                    updateUnreadMessagesCount(); // Rifreskon numrin në të dyja vendet menjëherë
-                }
-            });
-        })
-        .subscribe();
-});
-
-
+// Thirre funksionin për të ngarkuar numrin e mesazheve
+loadMessageCount();
 </script>
 
   

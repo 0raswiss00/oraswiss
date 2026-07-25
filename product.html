@@ -281,6 +281,9 @@ async function loadProduct() {
 
                 // Nëse nuk ekziston, krijoje bisedën e re
                 if (!conversation) {
+
+                    const currentUrl = window.location.href;
+
                     const { data: newConversation, error: createError } =
                         await supabaseClient
                         .from("conversations")
@@ -288,12 +291,20 @@ async function loadProduct() {
                             listing_id: productId,
                             buyer_id: user.id,
                             seller_id: data.user_id,
-                            last_message: "Jam i interesuar për këtë orë",
+                            last_message: "Përshëndetje, jam i interesuar për këtë artikull: " + currentUrl,
                             unread_buyer: 0,
-                            unread_seller: 1 // Rrit numrin e njoftimeve për shitësin
+                            unread_seller: 1
                         })
                         .select()
                         .single();
+
+                   if (createError) {
+                       console.error(createError);
+                       return;
+                   }
+
+                   conversation = newConversation;
+}
 
                     if (createError) {
                         console.error(createError);

@@ -245,56 +245,55 @@ async function loadProduct() {
         
         const contactBtn = document.getElementById("os-contact");
 
-        if (contactBtn) {
-            contactBtn.onclick = async () => {
-                const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+if (contactBtn) {
+    contactBtn.onclick = async () => {
+        const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
 
-                if (userError || !user) {
-                    window.location.href = "login.html";
-                    return;
-                }
-
-                // Sigurohu që 'data' është objekti i produktit që ke marrë te faqja e produktit
-                if (user.id === data.user_id) {
-                    alert("Ky është produkti yt!");
-                    return;
-                }
-
-                // Kontrollojmë nëse ekziston një bisedë për këtë produkt mes këtyre dy përdoruesve
-                const { data: existingChat } = await supabaseClient
-                    .from("conversations")
-                    .select("id")
-                    .eq("listing_id", data.id)
-                    .or(and(buyer_id.eq.${user.id},seller_id.eq.${data.user_id}),and(buyer_id.eq.${data.user_id},seller_id.eq.${user.id}))
-                    .maybeSingle();
-
-                if (existingChat) {
-                    // Nëse biseda ekziston, thjesht futu aty
-                    window.location.href = "chat.html?conversation=" + existingChat.id;
-                    return;
-                }
-
-                // Nëse nuk ekziston, e krijojmë tani duke ruajtur ID-në e produktit dhe palët
-                const { data: newConversation, error } = await supabaseClient
-                   .from("conversations")
-                   .insert({
-                        listing_id: data.id,
-                        buyer_id: user.id,
-                        seller_id: data.user_id,
-                        last_message: "Bisedë e re filluar"
-                    })
-                    .select()
-                    .single();
-
-                if (error) {
-                    console.error("Gabim:", error);
-                    alert("Gabim gjatë krijimit të bisedës: " + error.message);
-                    return;
-                }
-
-                window.location.href = "chat.html?conversation=" + newConversation.id;
-            };
+        if (userError || !user) {
+            window.location.href = "login.html";
+            return;
         }
+
+        if (user.id === data.user_id) {
+            alert("Ky është produkti yt!");
+            return;
+        }
+
+        // Kërkojmë nëse biseda ekziston tashmë
+        const { data: existingChat } = await supabaseClient
+            .from("conversations")
+            .select("id")
+            .eq("listing_id", data.id)
+            .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
+            .maybeSingle();
+
+        if (existingChat) {
+            window.location.href = "chat.html?conversation=" + existingChat.id;
+            return;
+        }
+
+        // Krijojmë bisedën e re
+        const { data: newConversation, error } = await supabaseClient
+            .from("conversations")
+            .insert({
+                listing_id: data.id,
+                buyer_id: user.id,
+                seller_id: data.user_id,
+                last_message: "Bisedë e re"
+            })
+            .select()
+            .single();
+
+        if (error) {
+            console.error("Gabim:", error);
+            alert("Gabim: " + error.message);
+            return;
+        }
+
+        window.location.href = "chat.html?conversation=" + newConversation.id;
+    };
+}
+
    
         // SELLER CARD
 

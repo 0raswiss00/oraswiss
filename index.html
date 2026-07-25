@@ -519,6 +519,60 @@ if (!convError && userConvs) {
 }
 
 loadMessageCount();
+async function updateUnreadMessagesCount() {
+    try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        // Merr numrin e mesazheve të palexuara ku ti je marrësi
+        const { count, error } = await supabase
+            .from('messages')
+            .select('*', { count: 'exact', head: true })
+            .eq('receiver_id', user.id)
+            .eq('is_read', false);
+
+        if (error) throw error;
+
+        const totalUnread = count || 0;
+
+        // 1. Përditëso te menuja (myOraSwissMenu)
+        const menuBadge = document.getElementById('messageCount');
+        if (menuBadge) {
+            menuBadge.innerText = totalUnread;
+        }
+
+        // 2. Përditëso te shiriti i poshtëm (bottom-nav)
+        const navBadge = document.getElementById('navMessageCount');
+        if (navBadge) {
+            navBadge.innerText = totalUnread;
+            navBadge.style.display = totalUnread > 0 ? 'inline-block' : 'none';
+        }
+
+    } catch (err) {
+        console.error("Gabim në leximin e mesazheve:", err);
+    }
+}
+
+// Ekzekutoje sapo të ngarkohet faqja dhe aktivizo Realtime
+document.addEventListener("DOMContentLoaded", () => {
+    updateUnreadMessagesCount();
+
+    // Dëgjo në kohë reale për mesazhe të reja
+    supabase
+        .channel('public:nav_messages')
+        .on('postgres_changes', { 
+            event: 'INSERT', 
+            schema: 'public', 
+            table: 'messages' 
+        }, payload => {
+            supabase.auth.getUser().then(({ data: { user } }) => {
+                if (user && payload.new.receiver_id === user.id) {
+                    updateUnreadMessagesCount(); // Rifreskon numrin në të dyja vendet menjëherë
+                }
+            });
+        })
+        .subscribe();
+});
 
 
 </script>

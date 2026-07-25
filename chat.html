@@ -102,7 +102,6 @@ body{
     font-size: 16px;
     padding: 8px 10px;
 }
-
 </style>
 </head>
 <body>
@@ -124,7 +123,6 @@ body{
     <button type="button" id="sendBtn">Dërgo</button>
 </div>
 
-
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
 
@@ -136,6 +134,102 @@ const supabase = createClient(
 const urlParams = new URLSearchParams(window.location.search);
 const conversationId = urlParams.get("conversation");
 let currentUserId = null;
+
+async function initChat() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        window.location.href = "login.html";
+        return;
+    }
+    currentUserId = user.id;
+
+    if (!conversationId) {
+        alert("Bisedë e pavlefshme!");
+        return;
+    }
+
+    const { data: chat, error: chatError } = await supabase
+        .from("conversations")
+        .select("*")
+        .eq("id", conversationId)
+        .single();
+
+    if (chatError || !chat) {
+        console.error(chatError);
+        return;
+    }
+
+    if (chat.listing_id) {
+        const { data: watch } = await supabase
+            .from("oras")
+            .select("brand, model, price, image_url")
+            .eq("id", chat.listing_id)
+            .single();
+
+        if (watch) {
+            let img = Array.isArray(watch.image_url) ? watch.image_url[0] : watch.image_url;
+            document.getElementById("headerImg").src = img || "";
+            document.getElementById("headerTitle").innerText = `${watch.brand || ""} ${watch.model || ""}`;
+            document.getElementById("headerPrice").innerText = `${watch.price || 0} €`;
+        }
+    }
+
+    await loadMessages();
+    setupRealtimeSubscription();
+}
+
+async function loadMessages() {
+    const { data: messages, error } = await supabase
+        .from("messages")
+        .select("*")
+        .eq("conversation_id", conversationId)
+        .order("created_at", { ascending: true });
+
+    const chatBox = document.getElementById("chatBox");
+    chatBox.innerHTML = "";
+
+    if (error || !messages) return;
+
+    messages.forEach(msg => {
+        appendMessageToUI(msg);
+    });
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function appendMessageToUI(msg) {
+    const chatBox = document.getElementById("chatBox");
+    const div = document.createElement("div");
+    div.className = "message " + (msg.sender_id === currentUserId ? "sent" : "received");
+
+    const text = msg.message_text || "";
+    if (text.startsWith("http://") || text.startsWith("https://") || text.match(/\.(jpeg|jpg|png|gif|webp)$/i)) {
+        div.innerHTML = `<img src="${text}" onclick="window.open(this.src)" style="max-width:200px; border-radius:8px; display:block; cursor:pointer;">`;
+    } else {
+        div.innerText = text;
+    }
+
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function setupRealtimeSubscription() {
+    supabase
+        .channel("public:messages")
+        .on(
+            "postgres_changes",
+            {
+                event: "INSERT",
+                schema: "public",
+                table: "messages",
+                filter: `conversation_id=eq.${conversationId}`
+            },
+            (payload) => {
+                appendMessageToUI(payload.new);
+            }
+        )
+        .subscribe();
+}
 
 async function updateConversationOnSend(textForDb, isUserOne) {
     const { data: convData } = await supabase

@@ -166,31 +166,10 @@ async function loadChats(){
     }
 }
 
-loadChats();
-
-// Realtime update për mesazhet dhe njoftimet e reja
-supabase
-.channel("conversation_changes")
-.on(
-    "postgres_changes",
-    { event: "*", schema: "public", table: "conversations" },
-    () => { loadChats(); }
-)
-.subscribe();
-
-
-        div.onclick = () => {
-            window.location.href = "chat.html?conversation=" + chat.id;
-        };
-
-        box.appendChild(div);
-    }
-}
-
 // Thirr funksionin për të ngarkuar bisedat
 loadChats();
 
-// Dëgjo në kohë reale për ndryshime
+// Dëgjo në kohë reale për ndryshime pa gabime sintakse
 supabase
     .channel("public:conversations_realtime")
     .on(
@@ -208,8 +187,9 @@ supabase
         }
     )
     .subscribe();
-
 </script>
+
+
 
 </body>
 </html>

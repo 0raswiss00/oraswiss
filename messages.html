@@ -113,22 +113,20 @@ async function loadChats(){
     }
 
     for(const chat of conversations){
-        const { data: watch, error: watchError } = await supabase
-            .from("oras")
-            .select("brand, model, price, reference, image_url")
-            .eq("id", chat.listing_id)
-            .single();
-
-        if(watchError){
-            console.log(watchError);
-            continue;
+        // Nëse biseda ka listing_id, e nxjerrim orën; nëse jo, e kalojmë që të mos ndalojë ciklin
+        let watch = null;
+        if(chat.listing_id){
+            const { data: watchData } = await supabase
+                .from("oras")
+                .select("brand, model, price, reference, image_url")
+                .eq("id", chat.listing_id)
+                .single();
+            watch = watchData;
         }
 
         let image = "";
-        if(Array.isArray(watch.image_url)){
-            image = watch.image_url[0];
-        } else {
-            image = watch.image_url;
+        if(watch && watch.image_url){
+            image = Array.isArray(watch.image_url) ? watch.image_url[0] : watch.image_url;
         }
 
         let unread = 0;
@@ -138,6 +136,12 @@ async function loadChats(){
             unread = chat.unread_seller || 0;
         }
 
+        // Përpunojmë shfaqjen e mesazhit të fundit (nëse është foto, shfaqet si [Foto])
+        let lastMsgText = chat.last_message || "No messages";
+        if(lastMsgText.includes("message-images") || lastMsgText.match(/\.(jpeg|jpg|png|gif)$/i)){
+            lastMsgText = "📷 [Foto]";
+        }
+
         const div = document.createElement("div");
         div.className = "chat";
 
@@ -145,10 +149,10 @@ async function loadChats(){
             <div style="display:flex;gap:15px;align-items:center;">
                 <img src="${image || ''}">
                 <div class="chat-info">
-                    <div class="brand">${watch.brand || ""} ${watch.model || ""}</div>
-                    <div>Reference: ${watch.reference || "-"}</div>
-                    <div class="price">${watch.price || 0} €</div>
-                    <div class="last-message">${chat.last_message || "No messages"}</div>
+                    <div class="brand">${watch ? (watch.brand || "") + " " + (watch.model || "") : "Bisedë"}</div>
+                    <div>Reference: ${watch && watch.reference ? watch.reference : "-"}</div>
+                    <div class="price">${watch && watch.price ? watch.price : 0} €</div>
+                    <div class="last-message">${lastMsgText}</div>
                 </div>
             </div>
             ${unread > 0 ? `<span class="count">${unread}</span>` : ""}

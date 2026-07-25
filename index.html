@@ -335,11 +335,12 @@ loadUserCount();
 loadProductCount();
   
 </script>
-<div id="myOraSwissMenu" style="display: none; position: fixed; bottom: 80px; right: 10px; background: #222; border: 1px solid #444; padding: 10px; border-radius: 10px; z-index: 9999; width: 180px;">
+<div id="myOraSwissMenu" style="display: none; position: fixed; bottom: 80px; right: 10px; background: #222; border: 1px solid #444; padding: 10px; border-radius: 10px; z-index: 9999; width: 200px;">
     <div class="menu-item" onclick="location.href='buy.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 Buy</div>
     <div class="menu-item" onclick="location.href='mysold.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 My Sold</div>
-    <div class="menu-item" onclick="location.href='messages.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">
-    ✉️ Messages <span id="messageCount">0</span>
+    <div class="menu-item" onclick="location.href='messages.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444; display: flex; justify-content: space-between; align-items: center;">
+        <span>✉️ Messages</span> 
+        <span id="messageCount" style="background: red; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold;">0</span>
     </div>
     <div class="menu-item" onclick="location.href='settings.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">⚙️ Settings</div>
     <div class="menu-item" onclick="location.href='support.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🎧 Support</div>
@@ -535,15 +536,15 @@ async function updateIndexMessageCount() {
         const { data: { user }, error } = await supabase.auth.getUser();
         if (error || !user) return;
 
-        // 1. Gjejmë bisedat ku përdoruesi është user_one ose user_two
+        // 1. Marrim bisedat ku përdoruesi është i përfshirë
         const { data: userConvs, error: convError } = await supabase
             .from("conversations")
             .select("id, user_one, user_two, unread_user_one, unread_user_two")
-            .or(`user_one.eq.${user.id},user_two.eq.${user.id}`);
+            .or(user_one.eq.${user.id},user_two.eq.${user.id});
 
         if (convError || !userConvs) return;
 
-        // 2. Llogarisim totalin e mesazheve të palexuara nga kolonat e duhura
+        // 2. Llogarisim totalin e mesazheve të palexuara
         let totalUnread = 0;
         userConvs.forEach(conv => {
             if (conv.user_one === user.id) {
@@ -553,29 +554,29 @@ async function updateIndexMessageCount() {
             }
         });
 
-        // 3. Përditësojmë numrin te menuja e fshehur (messageCount)
+        // 3. Përditësojmë numrin te Menuja
         const menuBadge = document.getElementById("messageCount");
         if (menuBadge) {
             menuBadge.innerText = totalUnread;
+            menuBadge.style.background = totalUnread > 0 ? "red" : "#444";
         }
 
-        // 4. Përditësojmë numrin te shiriti i poshtëm (navMessageCount)
-        const navBadge = document.getElementById("navMessageCount");
+        // 4. Përditësojmë numrin te Butoni i poshtëm (navMessageCount ose bottomBadge)
+        const navBadge = document.getElementById("navMessageCount") || document.getElementById("bottomBadge");
         if (navBadge) {
             navBadge.innerText = totalUnread;
             navBadge.style.display = totalUnread > 0 ? "inline-block" : "none";
         }
 
     } catch (err) {
-        console.error("Gabim në leximin e mesazheve për index:", err);
+        console.error("Gabim në leximin e mesazheve:", err);
     }
 }
 
-// Ekzekutoje sapo të ngarkohet faqja index
+// Ekzekutoje sapo të ngarkohet faqja dhe dëgjo në kohë reale
 document.addEventListener("DOMContentLoaded", () => {
     updateIndexMessageCount();
 
-    // Dëgjo në kohë reale për ndryshime te bisedat
     supabase
         .channel("index_conversations_changes")
         .on(
@@ -587,53 +588,6 @@ document.addEventListener("DOMContentLoaded", () => {
         )
         .subscribe();
 });
-async function loadUnreadCount() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-
-    const { data: convs, error } = await supabase
-        .from("conversations")
-        .select("unread_user_one, unread_user_two, user_one, user_two");
-
-    if (error || !convs) return;
-
-    let totalUnread = 0;
-    convs.forEach(c => {
-        if (c.user_one === user.id) totalUnread += (c.unread_user_one || 0);
-        if (c.user_two === user.id) totalUnread += (c.unread_user_two || 0);
-    });
-
-    // Përditëso te menuja
-    const menuCount = document.getElementById("messageCount");
-    if (menuCount) {
-        menuCount.innerText = totalUnread;
-        menuCount.style.background = totalUnread > 0 ? "red" : "transparent";
-        menuCount.style.color = "white";
-        menuCount.style.padding = totalUnread > 0 ? "2px 6px" : "0";
-        menuCount.style.borderRadius = "10px";
-        menuCount.style.fontSize = "11px";
-    }
-
-    // Përditëso te butoni i mesazheve poshtë
-    let badge = document.getElementById("bottomBadge");
-    const msgNavBtn = document.getElementById("msgNavBtn");
-    
-    if (totalUnread > 0 && msgNavBtn) {
-        if (!badge) {
-            badge = document.createElement("span");
-            badge.id = "bottomBadge";
-            badge.style.cssText = "position:absolute; top:2px; right:20%; background:red; color:white; border-radius:50%; padding:2px 6px; font-size:10px; font-weight:bold;";
-            msgNavBtn.appendChild(badge);
-        }
-        badge.innerText = totalUnread;
-        badge.style.display = "inline-block";
-    } else if (badge) {
-        badge.style.display = "none";
-    }
-}
-
-loadUnreadCount();
-
 </script>
   
 </body>

@@ -245,69 +245,69 @@ async function loadProduct() {
         
         const contactBtn = document.getElementById("os-contact");
 
-if (contactBtn) {
-    contactBtn.onclick = async () => {
+        if (contactBtn) {
+            contactBtn.onclick = async () => {
 
-        const { data: { user }, error: userError } =
-            await supabaseClient.auth.getUser();
+                const { data: { user }, error: userError } =
+                    await supabaseClient.auth.getUser();
 
-        if (userError || !user) {
-            window.location.href = "login.html";
-            return;
+                if (userError || !user) {
+                    window.location.href = "login.html";
+                    return;
+                }
+
+                // Mos lejo që t'i shkruash vetes tënde
+                if (user.id === data.user_id) {
+                    alert("Ky është produkti yt!");
+                    return;
+                }
+
+                // Kontrollo nëse ekziston një bisedë e mëparshme për këtë produkt
+                const { data: existing, error: findError } =
+                    await supabaseClient
+                    .from("conversations")
+                    .select("*")
+                    .eq("listing_id", productId)
+                    .eq("buyer_id", user.id)
+                    .eq("seller_id", data.user_id)
+                    .maybeSingle();
+
+                if (findError) {
+                    console.error(findError);
+                    return;
+                }
+
+                let conversation = existing;
+
+                // Nëse nuk ekziston, krijoje bisedën e re
+                if (!conversation) {
+                    const { data: newConversation, error: createError } =
+                        await supabaseClient
+                        .from("conversations")
+                        .insert({
+                            listing_id: productId,
+                            buyer_id: user.id,
+                            seller_id: data.user_id,
+                            last_message: "Jam i interesuar për këtë orë",
+                            unread_buyer: 0,
+                            unread_seller: 1 // Rrit numrin e njoftimeve për shitësin
+                        })
+                        .select()
+                        .single();
+
+                    if (createError) {
+                        console.error(createError);
+                        alert("Gabim gjatë krijimit të bisedës.");
+                        return;
+                    }
+
+                    conversation = newConversation;
+                }
+
+                // Ridrejto te faqja e mesazheve
+                window.location.href = "messages.html?conversation=" + conversation.id;
+            };
         }
-
-        // Mos lejo që t'i shkruash vetes tënde
-        if (user.id === data.user_id) {
-            alert("Ky është produkti yt!");
-            return;
-        }
-
-        // Kontrollo nëse ekziston një bisedë e mëparshme për këtë produkt
-        const { data: existing, error: findError } =
-            await supabaseClient
-            .from("conversations")
-            .select("*")
-            .eq("listing_id", productId)
-            .eq("buyer_id", user.id)
-            .eq("seller_id", data.user_id)
-            .maybeSingle();
-
-        if (findError) {
-            console.error(findError);
-            return;
-        }
-
-        let conversation = existing;
-
-        // Nëse nuk ekziston, krijoje bisedën e re
-        if (!conversation) {
-            const { data: newConversation, error: createError } =
-                await supabaseClient
-                .from("conversations")
-                .insert({
-                    listing_id: productId,
-                    buyer_id: user.id,
-                    seller_id: data.user_id,
-                    last_message: "Jam i interesuar për këtë orë",
-                    unread_buyer: 0,
-                    unread_seller: 1 // Rrit numrin e njoftimeve për shitësin
-                })
-                .select()
-                .single();
-
-            if (createError) {
-                console.error(createError);
-                alert("Gabim gjatë krijimit të bisedës.");
-                return;
-            }
-
-            conversation = newConversation;
-        }
-
-        // Ridrejto te faqja e mesazheve
-        window.location.href = "messages.html?conversation=" + conversation.id;
-    };
-}
 
         
         // SELLER CARD

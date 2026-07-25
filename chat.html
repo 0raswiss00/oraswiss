@@ -148,11 +148,16 @@ async function initChat() {
         return;
     }
 
-    const { data: chat, error: chatError } = await supabase
+    const { data: chats, error: chatError } = await supabase
         .from("conversations")
         .select("*")
-        .eq("id", conversationId)
-        .single();
+        .eq("id", conversationId);
+
+    if (chatError || !chats || chats.length === 0) {
+        console.error("Gabim te biseda:", chatError);
+        return;
+    }
+    const chat = chats[0];
 
     if (chatError || !chat) {
         console.error(chatError);

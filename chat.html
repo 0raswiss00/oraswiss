@@ -121,6 +121,7 @@ const supabase = createClient(
 
 const urlParams = new URLSearchParams(window.location.search);
 const conversationId = urlParams.get("conversation");
+let currentUserId = null;
 
 async function initChat() {
     const { data: { user } } = await supabase.auth.getUser();
@@ -128,6 +129,7 @@ async function initChat() {
         window.location.href = "login.html";
         return;
     }
+    currentUserId = user.id;
 
     if (!conversationId) {
         alert("Bisedë e pavlefshme!");
@@ -160,10 +162,11 @@ async function initChat() {
         }
     }
 
-    loadMessages(user.id);
+    await loadMessages();
+    setupRealtimeSubscription();
 }
 
-async function loadMessages(currentUserId) {
+async function loadMessages() {
     const { data: messages, error } = await supabase
         .from("messages")
         .select("*")
@@ -176,53 +179,119 @@ async function loadMessages(currentUserId) {
     if (error || !messages) return;
 
     messages.forEach(msg => {
-        const div = document.createElement("div");
-        div.className = "message " + (msg.sender_id === currentUserId ? "sent" : "received");
-
-        if (msg.message_text && (msg.message_text.includes("message-images") || msg.message_text.match(/\.(jpeg|jpg|png|gif)$/i))) {
-            div.innerHTML = `<img src="${msg.message_text}" onclick="window.open(this.src)">`;
-        } else {
-            div.innerText = msg.message_text || "";
-        }
-
-        chatBox.appendChild(div);
+        appendMessageToUI(msg);
     });
 
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
+function appendMessageToUI(msg) {
+    const chatBox = document.getElementById("chatBox");
+    const div = document.createElement("div");
+    div.className = "message " + (msg.sender_id === currentUserId ? "sent" : "received");
+
+    const text = msg.message_text || "";
+    if (text.startsWith("http://") || text.startsWith("https://") || text.match(/\.(jpeg|jpg|png|gif|webp)$/i)) {
+        div.innerHTML = `<img src="${text}" onclick="window.open(this.src)" style="max-width:200px; border-radius:8px; display:block; cursor:pointer;">`;
+    } else {
+        div.innerText = text;
+    }
+
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Lidhja Realtime që mesazhet të vijnë vetë pa rifreskuar faqen
+function setupRealtimeSubscription() {
+    supabase
+        .channel("public:messages")
+        .on(
+            "postgres_changes",
+            {
+                event: "INSERT",
+                schema: "public",
+                table: "messages",
+                filter: `conversation_id=eq.${conversationId}`
+            },
+            (payload) => {
+                appendMessageToUI(payload.new);
+            }
+        )
+        .subscribe();
+}
+
+// Dërgimi i tekstit
 document.getElementById("sendBtn").onclick = async () => {
     const input = document.getElementById("messageInput");
     const text = input.value.trim();
     if (!text) return;
 
-    if (!conversationId) {
-        alert("ID e bisedës mungon!");
-        return;
-    }
-
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-    
-    // Këtu u ndryshua nga 'message' në 'message_text' për t'iu përshtatur databazës
     const { error } = await supabase.from("messages").insert({
         conversation_id: Number(conversationId),
-        sender_id: user.id,
+        sender_id: currentUserId,
         message_text: text
     });
 
     if (error) {
-        console.error("Gabim në ruajtje:", error);
         alert("Gabim: " + error.message);
         return;
     }
 
     input.value = "";
-    loadMessages(user.id);
+};
+
+// Trajtimi i dërgimit të fotove
+const attachBtn = document.getElementById("attachBtn");
+const imageInput = document.getElementById("imageInput");
+
+attachBtn.onclick = () => imageInput.click();
+
+imageInput.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${Math.random().toString(36.substring(2)}_${Date.now()}.${fileExt}`;
+    const filePath = `chat-images/${fileName}`;
+
+    attachBtn.innerText = "⏳";
+
+    // Ngarkimi i fotos te Supabase Storage (te bucket-i yt, p.sh. "oras" ose "images")
+    const { error: uploadError } = await supabase.storage
+        .from("oras") 
+        .upload(filePath, file);
+
+    if (uploadError) {
+        alert("Gabim gjatë ngarkimit të fotos: " + uploadError.message);
+        attachBtn.innerText = "📷";
+        return;
+    }
+
+    // Marrja e linkut publik të fotos
+    const { data: publicURLData } = supabase.storage
+        .from("oras")
+        .getPublicUrl(filePath);
+
+    const imageUrl = publicURLData.publicUrl;
+
+    // Ruajtja e linkut të fotos si mesazh në databazë
+    const { error: insertError } = await supabase.from("messages").insert({
+        conversation_id: Number(conversationId),
+        sender_id: currentUserId,
+        message_text: imageUrl
+    });
+
+    attachBtn.innerText = "📷";
+    imageInput.value = "";
+
+    if (insertError) {
+        alert("Gabim në dërgimin e fotos: " + insertError.message);
+    }
 };
 
 initChat();
 </script>
+
 
 </body>
 </html>

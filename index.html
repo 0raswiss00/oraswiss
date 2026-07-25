@@ -473,22 +473,23 @@ function openProduct(productId) {
     </div>
 </div>
 
-<script>
+</script>
 
 <div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center;z-index:99999;">
     <div style="background:#1a1a1a;padding:25px;border-radius:12px;text-align:center;max-width:320px;width:90%;color:#fff;">
         <h2>Login Required</h2>
         <p>Please sign in or create an account to continue.</p>
 
-        <button onclick="location.href='register.html'">
+        <button onclick="location.href='register.html'" style="padding:10px 20px;background:#000;color:#fff;border:none;border-radius:6px;cursor:pointer;">
             Login / Register
         </button>
         <br><br>
-        <button onclick="document.getElementById('loginModal').style.display='none'">Cancel</button>
+        <button onclick="document.getElementById('loginModal').style.display='none'" style="padding:8px 15px;background:#444;color:#fff;border:none;border-radius:6px;cursor:pointer;">Cancel</button>
     </div>
 </div>
 
 <script>
+
 async function loadMessageCount() {
     try {
         const { data: { user }, error } = await supabase.auth.getUser();

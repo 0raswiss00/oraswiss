@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<title>Chat - Oraswiss</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f5f5f5;
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+}
+/* Header-i i orës sipër si në vizatim */
+.product-header{
+    background:#fff;
+    padding:10px 15px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    border-bottom:1px solid #ddd;
+    box-shadow:0 2px 4px rgba(0,0,0,0.05);
+}
+.product-header img{
+    width:50px;
+    height:50px;
+    border-radius:8px;
+    object-fit:cover;
+}
+.product-info .brand{
+    font-weight:bold;
+    font-size:15px;
+}
+.product-info .price{
+    color:#009900;
+    font-size:13px;
+    font-weight:bold;
+}
+/* Zona e mesazheve */
+#chatBox{
+    flex:1;
+    padding:15px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+.message{
+    max-width:70%;
+    padding:10px 14px;
+    border-radius:12px;
+    font-size:14px;
+    word-break:break-word;
+}
+.message.sent{
+    background:#000;
+    color:#fff;
+    align-self:flex-end;
+}
+.message.received{
+    background:#e5e5ea;
+    color:#000;
+    align-self:flex-start;
+}
+.message img{
+    max-width:200px;
+    border-radius:8px;
+    display:block;
+    cursor:pointer;
+}
+/* Zona e dërgimit poshtë */
+.chat-input-area{
+    padding:10px;
+    background:#fff;
+    display:flex;
+    gap:10px;
+    border-top:1px solid #ddd;
+}
+.chat-input-area input[type="text"]{
+    flex:1;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:20px;
+    outline:none;
+}
+.chat-input-area button{
+    background:#000;
+    color:#fff;
+    border:none;
+    padding:10px 16px;
+    border-radius:20px;
+    cursor:pointer;
+    font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<!-- Header me foton dhe detajet e orës -->
+<div class="product-header" id="productHeader">
+    <img id="headerImg" src="" alt="">
+    <div class="product-info">
+        <div class="brand" id="headerTitle">Duke ngarkuar...</div>
+        <div class="price" id="headerPrice"></div>
+    </div>
+</div>
+
+<!-- Kutia e mesazheve -->
+<div id="chatBox"></div>
+
+<!-- Fusha e shkrimit dhe dërgimit -->
+<div class="chat-input-area">
+    <input type="file" id="imageInput" accept="image/*" style="display:none;">
+    <button type="button" id="attachBtn">📷</button>
+    <input type="text" id="messageInput" placeholder="Shkruaj një mesazh...">
+    <button type="button" id="sendBtn">Dërgo</button>
+</div>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
+
+const supabase = createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
+
+const urlParams = new URLSearchParams(window.location.search);
+const conversationId = urlParams.get("conversation");
+
+async function initChat() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    if (!conversationId) {
+        alert("Bisedë e pavlefshme!");
+        return;
+    }
+
+    // 1. Marrëm të dhënat e bisedës dhe orës përkatëse
+    const { data: chat, error: chatError } = await supabase
+        .from("conversations")
+        .select("*")
+        .eq("id", conversationId)
+        .single();
+
+    if (chatError || !chat) {
+        console.error(chatError);
+        return;
+    }
+
+    if (chat.listing_id) {
+        const { data: watch } = await supabase
+            .from("oras")
+            .select("brand, model, price, image_url")
+            .eq("id", chat.listing_id)
+            .single();
+
+        if (watch) {
+            let img = Array.isArray(watch.image_url) ? watch.image_url[0] : watch.image_url;
+            document.getElementById("headerImg").src = img || "";
+            document.getElementById("headerTitle").innerText = ${watch.brand || ""} ${watch.model || ""};
+            document.getElementById("headerPrice").innerText = ${watch.price || 0} €;
+        }
+    }
+
+    loadMessages(user.id);
+}
+
+async function loadMessages(currentUserId) {
+    const { data: messages, error } = await supabase
+        .from("messages")
+        .select("*")
+        .eq("conversation_id", conversationId)
+        .order("created_at", { ascending: true });
+
+    const chatBox = document.getElementById("chatBox");
+    chatBox.innerHTML = "";
+
+    if (error || !messages) return;
+
+    messages.forEach(msg => {
+        const div = document.createElement("div");
+        div.className = "message " + (msg.sender_id === currentUserId ? "sent" : "received");
+
+        if (msg.message_text.includes("message-images") || msg.message_text.match(/\.(jpeg|jpg|png|gif)$/i)) {
+            div.innerHTML = <img src="${msg.message_text}" onclick="window.open(this.src)">;
+        } else {
+            div.innerText = msg.message_text;
+        }
+
+        chatBox.appendChild(div);
+    });
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Dërgimi i mesazhit tekst
+document.getElementById("sendBtn").onclick = async () => {
+    const input = document.getElementById("messageInput");
+    const text = input.value.trim();
+    if (!text) return;
+
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    await supabase.from("messages").insert({
+        conversation_id: conversationId,
+        sender_id: user.id,
+        message_text: text
+    });
+
+    await supabase.from("conversations").update({ last_message: text, updated_at: new Date() }).eq("id", conversationId);
+
+    input.value = "";
+    loadMessages(user.id);
+};
+
+// Dërgimi i fotos
+const attachBtn = document.getElementById("attachBtn");
+const imageInput = document.getElementById("imageInput");
+
+attachBtn.onclick = () => imageInput.click();
+
+imageInput.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const { data: { user } } = await supabase.auth.getUser();
+    const filePath = ${Date.now()}_${file.name};
+
+    const { error: uploadError } = await supabase.storage.from("message-images").upload(filePath, file);
+    if (uploadError) {
+        alert("Gabim në ngarkimin e fotos!");
+        return;
+    }
+
+    const { data: pubUrl } = supabase.storage.from("message-images").getPublicUrl(filePath);
+    const imageUrl = pubUrl.publicUrl;
+
+    await supabase.from("messages").insert({
+        conversation_id: conversationId,
+        sender_id: user.id,
+        message_text: imageUrl
+    });
+
+    await supabase.from("conversations").update({ last_message: "📷 [Foto]", updated_at: new Date() }).eq("id", conversationId);
+
+    imageInput.value = "";
+    loadMessages(user.id);
+};
+
+initChat();
+
+// Realtime për mesazhet e reja në këtë bisedë
+supabase.channel("realtime_messages")
+.on("postgres_changes", { event: "INSERT", schema: "public", table: "messages", filter: conversation_id=eq.${conversationId} }, 
+    async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) loadMessages(user.id);
+    }
+)
+.subscribe();
+
+</script>
+</body>
+</html>

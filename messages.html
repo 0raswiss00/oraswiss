@@ -27,6 +27,9 @@ body{
     cursor:pointer;
     position:relative;
     box-shadow:0 2px 8px rgba(0,0,0,.1);
+    display:flex;
+    gap:15px;
+    align-items:center;
 }
 .chat img{
     width:80px;
@@ -93,11 +96,9 @@ async function loadChats(){
         return;
     }
 
-    // Përdorimi i emrave të saktë të kolonave: user_one dhe user_two
     const { data: conversations, error } = await supabase
         .from("conversations")
         .select("*")
-        .or(`user_one.eq.${user.id},user_two.eq.${user.id}`)
         .order("updated_at", { ascending: false });
 
     if(error){
@@ -129,14 +130,6 @@ async function loadChats(){
             image = Array.isArray(watch.image_url) ? watch.image_url[0] : watch.image_url;
         }
 
-        // Përdorimi i saktë i kolonave unread për user_one dhe user_two
-        let unread = 0;
-        if(chat.user_one === user.id){
-            unread = chat.unread_user_one || 0;
-        } else {
-            unread = chat.unread_user_two || 0;
-        }
-
         let lastMsgText = chat.last_message || "Bisedë e re";
         if(lastMsgText.includes("message-images") || lastMsgText.match(/\.(jpeg|jpg|png|gif)$/i)){
             lastMsgText = "📷 [Foto]";
@@ -146,16 +139,13 @@ async function loadChats(){
         div.className = "chat";
 
         div.innerHTML = `
-            <div style="display:flex;gap:15px;align-items:center;">
-                <img src="${image || ''}">
-                <div class="chat-info">
-                    <div class="brand">${watch ? (watch.brand || "") + " " + (watch.model || "") : "Bisedë"}</div>
-                    <div>Reference: ${watch && watch.reference ? watch.reference : "-"}</div>
-                    <div class="price">${watch && watch.price ? watch.price : 0} €</div>
-                    <div class="last-message">${lastMsgText}</div>
-                </div>
+            <img src="${image || ''}">
+            <div class="chat-info">
+                <div class="brand">${watch ? (watch.brand || "") + " " + (watch.model || "") : "Bisedë"}</div>
+                <div>Reference: ${watch && watch.reference ? watch.reference : "-"}</div>
+                <div class="price">${watch && watch.price ? watch.price : 0} €</div>
+                <div class="last-message">${lastMsgText}</div>
             </div>
-            ${unread > 0 ? `<span class="count">${unread}</span>` : ""}
         `;
 
         div.onclick = () => {
@@ -166,27 +156,7 @@ async function loadChats(){
     }
 }
 
-// Thirr funksionin për të ngarkuar bisedat
 loadChats();
-
-// Dëgjo në kohë reale për ndryshime
-supabase
-    .channel("public:conversations_realtime")
-    .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "conversations" },
-        () => {
-            loadChats();
-        }
-    )
-    .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "messages" },
-        () => {
-            loadChats();
-        }
-    )
-    .subscribe();
 </script>
 
 </body>

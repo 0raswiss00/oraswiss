@@ -2,21 +2,15 @@
 <html lang="sq">
 
 <head>
-
 <title>Messages - Oraswiss</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <style>
-
 body{
     margin:0;
     font-family:Arial,sans-serif;
     background:#f5f5f5;
     padding-bottom:80px;
 }
-
-
 .header{
     background:#000;
     color:white;
@@ -25,8 +19,6 @@ body{
     font-size:20px;
     font-weight:bold;
 }
-
-
 .chat{
     background:white;
     margin:12px;
@@ -36,41 +28,29 @@ body{
     position:relative;
     box-shadow:0 2px 8px rgba(0,0,0,.1);
 }
-
-
 .chat img{
     width:80px;
     height:80px;
     border-radius:12px;
     object-fit:cover;
 }
-
-
 .chat-info{
     flex:1;
 }
-
-
 .brand{
     font-weight:bold;
     font-size:16px;
 }
-
-
 .price{
     color:#009900;
     font-weight:bold;
     margin-top:5px;
 }
-
-
 .last-message{
     color:#666;
     margin-top:8px;
     font-size:14px;
 }
-
-
 .count{
     position:absolute;
     right:15px;
@@ -81,286 +61,120 @@ body{
     border-radius:20px;
     font-size:12px;
 }
-
-
 .empty{
     text-align:center;
     margin-top:50px;
     color:#777;
 }
-
 </style>
-
 </head>
 
-
 <body>
-
 
 <div class="header">
 💬 Messages
 </div>
 
-
 <div id="chatList"></div>
 
-
-
 <script type="module">
-
-
-import { createClient }
-from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
-
-
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
 
 const supabase = createClient(
-
-"https://gnwsrmelmeqduhhmfmoa.supabase.co",
-
-"sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
 );
 
-
-
-
 async function loadChats(){
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
 
+    if(userError || !user){
+        window.location.href = "login.html";
+        return;
+    }
 
+    const { data: conversations, error } = await supabase
+        .from("conversations")
+        .select("*")
+        .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
+        .order("updated_at", { ascending: false });
 
-const {data:{user}, error:userError}
-=
-await supabase.auth.getUser();
+    if(error){
+        console.error(error);
+        return;
+    }
 
+    const box = document.getElementById("chatList");
+    box.innerHTML = "";
 
+    if(!conversations || conversations.length === 0){
+        box.innerHTML = `<div class="empty">Nuk ke ende mesazhe</div>`;
+        return;
+    }
 
-if(userError || !user){
+    for(const chat of conversations){
+        const { data: watch, error: watchError } = await supabase
+            .from("oras")
+            .select("brand, model, price, reference, image_url")
+            .eq("id", chat.listing_id)
+            .single();
 
-window.location.href="login.html";
+        if(watchError){
+            console.log(watchError);
+            continue;
+        }
 
-return;
+        let image = "";
+        if(Array.isArray(watch.image_url)){
+            image = watch.image_url[0];
+        } else {
+            image = watch.image_url;
+        }
 
+        let unread = 0;
+        if(chat.buyer_id === user.id){
+            unread = chat.unread_buyer || 0;
+        } else {
+            unread = chat.unread_seller || 0;
+        }
+
+        const div = document.createElement("div");
+        div.className = "chat";
+
+        div.innerHTML = `
+            <div style="display:flex;gap:15px;align-items:center;">
+                <img src="${image || ''}">
+                <div class="chat-info">
+                    <div class="brand">${watch.brand || ""} ${watch.model || ""}</div>
+                    <div>Reference: ${watch.reference || "-"}</div>
+                    <div class="price">${watch.price || 0} €</div>
+                    <div class="last-message">${chat.last_message || "No messages"}</div>
+                </div>
+            </div>
+            ${unread > 0 ? `<span class="count">${unread}</span>` : ""}
+        `;
+
+        div.onclick = () => {
+            window.location.href = "chat.html?conversation=" + chat.id;
+        };
+
+        box.appendChild(div);
+    }
 }
-
-
-
-
-const {data: conversations, error}
-=
-await supabase
-.from("conversations")
-.select("*")
-.or(buyer_id.eq.${user.id},seller_id.eq.${user.id})
-.order("updated_at",{ascending:false});
-
-
-
-
-if(error){
-
-console.error(error);
-return;
-
-}
-
-
-
-
-const box=document.getElementById("chatList");
-
-box.innerHTML="";
-
-
-
-if(!conversations || conversations.length===0){
-
-box.innerHTML=
-`
-<div class="empty">
-Nuk ke ende mesazhe
-</div>
-`;
-
-return;
-
-}
-
-
-
-
-for(const chat of conversations){
-
-
-
-const {data: watch,error:watchError}
-=
-await supabase
-.from("oras")
-.select(
-`
-brand,
-model,
-price,
-reference,
-image_url
-`
-)
-.eq("id",chat.listing_id)
-.single();
-
-
-
-
-if(watchError){
-
-console.log(watchError);
-continue;
-
-}
-
-
-
-
-let image="";
-
-
-if(Array.isArray(watch.image_url)){
-
-image=watch.image_url[0];
-
-}else{
-
-image=watch.image_url;
-
-}
-
-
-
-
-let unread=0;
-
-
-if(chat.buyer_id===user.id){
-
-unread=chat.unread_buyer || 0;
-
-}else{
-
-unread=chat.unread_seller || 0;
-
-}
-
-
-
-
-const div=document.createElement("div");
-
-div.className="chat";
-
-
-
-div.innerHTML=`
-
-<div style="display:flex;gap:15px;align-items:center;">
-
-
-<img src="${image || ''}">
-
-
-<div class="chat-info">
-
-
-<div class="brand">
-${watch.brand || ""} ${watch.model || ""}
-</div>
-
-
-<div>
-Reference: ${watch.reference || "-"}
-</div>
-
-
-<div class="price">
-${watch.price || 0} €
-</div>
-
-
-<div class="last-message">
-${chat.last_message || "No messages"}
-</div>
-
-
-</div>
-
-
-</div>
-
-
-${unread > 0 
-? <span class="count">${unread}</span>
-: ""
-}
-
-
-
-`;
-
-
-
-
-div.onclick=()=>{
-
-window.location.href=
-"chat.html?conversation="+chat.id;
-
-};
-
-
-
-box.appendChild(div);
-
-
-
-}
-
-
-
-}
-
-
-
 
 loadChats();
 
-
-
-
-
-// realtime update
-
+// Realtime update për mesazhet dhe njoftimet e reja
 supabase
 .channel("conversation_changes")
 .on(
-"postgres_changes",
-{
-event:"*",
-schema:"public",
-table:"conversations"
-},
-()=>{
-
-loadChats();
-
-}
+    "postgres_changes",
+    { event: "*", schema: "public", table: "conversations" },
+    () => { loadChats(); }
 )
 .subscribe();
 
-
-
 </script>
 
-
 </body>
-
 </html>

@@ -259,20 +259,16 @@ async function loadProduct() {
                     return;
                 }
 
-                const currentUrl = window.location.href;
-
-                // Krijojmë direkt rreshtin e ri pa kërkuar ekzistencën paraprake që bllokohet nga tipat e ID-ve
-                const { data: newConversation, error: createError } = await supabaseClient
+                // Krijojmë bisedën krejtësisht bosh që të mos ngatërrojë asnjë lloj tipi të dhënash
+                const { data: newConversation, error } = await supabaseClient
                     .from("conversations")
-                    .insert({
-                        last_message: "Përshëndetje, jam i interesuar për këtë artikull: " + currentUrl
-                    })
+                    .insert({})
                     .select()
                     .single();
 
-                if (createError) {
-                    console.error("Gabim detajuar:", createError);
-                    alert("Gabim gjatë krijimit të bisedës.");
+                if (error) {
+                    console.error("Gabim nga Supabase:", error);
+                    alert("Gabim: " + error.message);
                     return;
                 }
 

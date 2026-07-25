@@ -155,7 +155,7 @@ async function initChat() {
         if (watch) {
             let img = Array.isArray(watch.image_url) ? watch.image_url[0] : watch.image_url;
             document.getElementById("headerImg").src = img || "";
-            document.getElementById("headerTitle".trim()).innerText = `${watch.brand || ""} ${watch.model || ""}`;
+            document.getElementById("headerTitle").innerText = `${watch.brand || ""} ${watch.model || ""}`;
             document.getElementById("headerPrice").innerText = `${watch.price || 0} €`;
         }
     }
@@ -196,18 +196,19 @@ document.getElementById("sendBtn").onclick = async () => {
     const text = input.value.trim();
     if (!text) return;
 
-    if (!conversationId || isNaN(Number(conversationId))) {
-        alert("ID e bisedës mungon ose është e gabuar!");
+    if (!conversationId) {
+        alert("ID e bisedës mungon!");
         return;
     }
 
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
     
+    // Këtu u ndryshua nga 'message' në 'message_text' për t'iu përshtatur databazës
     const { error } = await supabase.from("messages").insert({
         conversation_id: Number(conversationId),
         sender_id: user.id,
-        message: text
+        message_text: text
     });
 
     if (error) {
@@ -222,5 +223,6 @@ document.getElementById("sendBtn").onclick = async () => {
 
 initChat();
 </script>
+
 </body>
 </html>

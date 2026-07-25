@@ -538,9 +538,9 @@ async function updateIndexMessageCount() {
 
         // 1. Marrim bisedat ku përdoruesi është i përfshirë
         const { data: userConvs, error: convError } = await supabase
-            .from("conversations")
-            .select("id, user_one, user_two, unread_user_one, unread_user_two")
-            .or(user_one.eq.${user.id},user_two.eq.${user.id});
+        .from("conversations")
+        .select("id, user_one, user_two, unread_user_one, unread_user_two")
+        .or(`user_one.eq.${user.id},user_two.eq.${user.id}`);
 
         if (convError || !userConvs) return;
 

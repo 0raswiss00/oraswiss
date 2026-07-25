@@ -1,186 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sq">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - Ora Swiss</title>
-
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-KD2ZZ3MJYY');
-    </script>
-
-    <style>
-        body {
-            background-color: #000000;
-            color: #e0e0e0;
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
-        h1, h2 {
-            color: #ffb347;
-        }
-        a {
-            color: #ffb347;
-            text-decoration: none;
-        }
-        a:hover {
-            color: #ffc87c;
-            text-decoration: underline;
-        }
-        .site-header {
-            padding: 20px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        main {
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 20px;
-        }
-        .contact-box {
-            margin-top: 20px;
-            padding: 20px;
-            border: 1px solid #ffb347;
-            border-radius: 6px;
-        }
-        strong {
-            color: #ffb347;
-        }
-    </style>
+<title>Chat - Oraswiss</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f5f5f5;
+    padding-bottom:80px;
+}
+.header{
+    background:#000;
+    color:white;
+    padding:18px;
+    text-align:center;
+    font-size:20px;
+    font-weight:bold;
+}
+#messagesContainer{
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.message{
+    padding: 10px 15px;
+    border-radius: 12px;
+    max-width: 75%;
+    word-break: break-word;
+}
+.sent{
+    background: #000;
+    color: white;
+    align-self: flex-end;
+}
+.received{
+    background: white;
+    color: black;
+    align-self: flex-start;
+    border: 1px solid #ddd;
+}
+.chat-input-bar{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+}
+.chat-input-bar input{
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+}
+.chat-input-bar button{
+    background: black;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+</style>
 </head>
 
 <body>
 
-<header class="site-header">
-    <a href="index.html">← Back to Home</a>
-    <h1>Contact Us</h1>
-</header>
+<div class="header" id="chatHeader">💬 Chat</div>
 
-<main>
+<div id="messagesContainer"></div>
 
-    <h2>Get in Touch</h2>
-    <p>
-        If you have questions about our products, orders, or authentication services, 
-        please contact us. We respond within <strong>24–48 hours</strong>.
-    </p>
+<div class="chat-input-bar">
+    <input type="text" id="messageInput" placeholder="Shkruaj një mesazh...">
+    <button id="sendButton">Dërgo</button>
+</div>
 
-    <div class="contact-box">
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
 
-        <h2>Contact Information</h2>
+const supabase = createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
 
-        <p><strong>Business Name:</strong><br>
-           OraSwiss
-        </p>
+const urlParams = new URLSearchParams(window.location.search);
+const conversationId = urlParams.get("conversation");
 
-        <p><strong>Business Owner:</strong><br>
-           Ardian Cela
-        </p>
+async function initChat() {
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if(userError || !user){
+        window.location.href = "login.html";
+        return;
+    }
 
-        <p><strong>Address:</strong><br>
-           Rruga Engjell Agalliu,<br>
-           Ura Vajgurore, Berat,<br>
-           Albania
-        </p>
+    if(!conversationId){
+        document.getElementById("messagesContainer").innerHTML = "<p style='text-align:center;'>Biseda nuk u gjet.</p>";
+        return;
+    }
 
-<h2>📍 Location</h2>
+    await fetchMessages(user.id);
 
-<p>Rruga Engjell Agalliu, Dimal, Berat</p>
+    document.getElementById("sendButton").onclick = () => sendMessage(user.id);
+    document.getElementById("messageInput").onkeypress = (e) => {
+        if(e.key === 'Enter') sendMessage(user.id);
+    };
+}
 
-<p>
-    <a href="https://maps.app.goo.gl/NiKAsQtBhWQAyGSw7?g_st=ipc" 
-       target="_blank" 
-       style="display:inline-block; 
-              padding:10px 16px; 
-              background:#ff9900; 
-              color:#000; 
-              font-weight:bold; 
-              border-radius:6px; 
-              text-decoration:none;">
-        📍 View on Google Maps
-    </a>
-</p>
+async function fetchMessages(currentUserId) {
+    const { data: messages, error } = await supabase
+        .from("messages")
+        .select("*")
+        .eq("conversation_id", conversationId)
+        .order("created_at", { ascending: true });
 
-<iframe
-    src="https://www.google.com/maps?q=Rruga+Engjell+Agalliu,+Dimal,+Berat,+Albania&output=embed"
-    width="100%"
-    height="300"
-    style="border:0; margin-top:10px; border-radius:8px;"
-    allowfullscreen=""
-    loading="lazy">
-</iframe>
+    if(error){
+        console.error("Gabim në leximin e mesazheve:", error);
+        return;
+    }
 
-        <p><strong>Phone Numbers:</strong><br>
-            📞 <a href="tel:+355683039763">+355 68 303 9763</a><br>
-            📞 <a href="tel:+355692408065">+355 69 240 8065</a><br>
-            📞 <a href="tel:+35536120042">+355 36 120 042</a>     
-        </p>
+    const container = document.getElementById("messagesContainer");
+    container.innerHTML = "";
 
+    if(!messages || messages.length === 0){
+        container.innerHTML = "<p style='text-align:center; color:#777; margin-top:20px;'>Nuk ka ende mesazhe në këtë bisedë.</p>";
+        return;
+    }
 
-<strong>Custom Support:</strong><br>
-<a href="https://mail.google.com/mail/?view=cm&fs=1&to=oraswisssupport@gmail.com" target="_blank">
-oraswisssuport00@gmail.com
-</a>
+    for(const msg of messages){
+        const div = document.createElement("div");
+        div.className = "message " + (msg.sender_id === currentUserId ? "sent" : "received");
+        div.textContent = msg.message_text;
+        container.appendChild(div);
+    }
 
-<p>
-  <strong>Additional Emails:</strong><br>
+    window.scrollTo(0, document.body.scrollHeight);
+}
 
-  <a href="https://mail.google.com/mail/?view=cm&fs=1&to=cela9317@gmail.com" target="_blank">
-    cela9317@gmail.com
-  </a><br>
+async function sendMessage(currentUserId) {
+    const input = document.getElementById("messageInput");
+    const text = input.value.trim();
+    if(!text) return;
 
-  <a href="https://mail.google.com/mail/?view=cm&fs=1&to=celaaridian42@gmail.com" target="_blank">
-    celaaridian42@gmail.com
-  </a>
-</p>
+    const { error } = await supabase.from("messages").insert([
+        {
+            conversation_id: conversationId,
+            sender_id: currentUserId,
+            message_text: text
+        }
+    ]);
 
+    if(!error){
+        input.value = "";
         
-<h3>Follow Us</h3>
+        await supabase.from("conversations")
+            .update({ last_message: text, updated_at: new Date() })
+            .eq("id", conversationId);
 
-    <p>
-  📘 Facebook:
-  <a href="https://share.google/ckncL3jqVutjzpYWm" target="_blank">
-    Ora Swiss Official Facebook
-  </a>
-</p>
- 
+        await fetchMessages(currentUserId);
+    } else {
+        console.error("Gabim në dërgim:", error.message);
+    }
+}
 
-  <h3>Social Media</h3>   
-        <p><strong>Instagram:</strong><br>
-            📸 <a href="https://www.instagram.com/ora_vintage/" target="_blank">@ora_vintage</a>
-        </p>
-
-
-        
-        <p><strong>Business Hours:</strong><br>
-           Monday – Friday: 09:00 – 18:00<br>
-           Saturday: 10:00 – 14:00
-        </p>
-
-    </div>
-
-    <h2>Customer Support</h2>
-    <p>
-        For returns, authentication requests, or documentation 
-        (including certificates from The Watch Register or ownership transfers 
-        from Enquirus for watches over 1,500 €), please include:
-    </p>
-
-    <ul>
-        <li>Your full name</li>
-        <li>Order number</li>
-        <li>Date of purchase</li>
-        <li>Photos or documents related to the watch</li>
-    </ul>
-
-</main>
+initChat();
+</script>
 
 </body>
 </html>
-

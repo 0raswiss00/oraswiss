@@ -259,36 +259,19 @@ async function loadProduct() {
                     return;
                 }
 
-                // Kontrollo nëse ekziston biseda për këtë produkt dhe përdorues
-                const { data: existing } = await supabaseClient
-                    .from("conversations")
-                    .select("*")
-                    .eq("buyer_id", user.id)
-                    .eq("seller_id", data.user_id)
-                    .maybeSingle();
-
-                if (existing) {
-                    window.location.href = "messages.html?conversation=" + existing.id;
-                    return;
-                }
-
                 const currentUrl = window.location.href;
 
-                // Krijo bisedën vetëm me përdoruesit dhe linkun te mesazhi, pa prekur listing_id
+                // Krijojmë direkt rreshtin e ri pa kërkuar ekzistencën paraprake që bllokohet nga tipat e ID-ve
                 const { data: newConversation, error: createError } = await supabaseClient
                     .from("conversations")
                     .insert({
-                        buyer_id: user.id,
-                        seller_id: data.user_id,
-                        last_message: "Përshëndetje, jam i interesuar për këtë artikull: " + currentUrl,
-                        unread_buyer: 0,
-                        unread_seller: 1
+                        last_message: "Përshëndetje, jam i interesuar për këtë artikull: " + currentUrl
                     })
                     .select()
                     .single();
 
                 if (createError) {
-                    console.error(createError);
+                    console.error("Gabim detajuar:", createError);
                     alert("Gabim gjatë krijimit të bisedës.");
                     return;
                 }
@@ -296,8 +279,7 @@ async function loadProduct() {
                 window.location.href = "messages.html?conversation=" + newConversation.id;
             };
         }
-    
-        
+   
         // SELLER CARD
 
         const sellerName = data.seller_name || "Seller";

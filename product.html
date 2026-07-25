@@ -277,7 +277,7 @@ async function loadProduct() {
                 const { data: newConversation, error: createError } = await supabaseClient
                     .from("conversations")
                     .insert({
-                        listing_id: productId,
+                        listing_id: Number(productId), // E detyrojmë të jetë numër i pastër
                         buyer_id: user.id,
                         seller_id: data.user_id,
                         last_message: "Përshëndetje, jam i interesuar për këtë artikull: " + currentUrl,

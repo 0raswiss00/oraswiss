@@ -159,11 +159,6 @@ async function initChat() {
     }
     const chat = chats[0];
 
-    if (chatError || !chat) {
-        console.error(chatError);
-        return;
-    }
-
     if (chat.listing_id) {
         const { data: watch } = await supabase
             .from("oras")
@@ -236,42 +231,10 @@ function setupRealtimeSubscription() {
         .subscribe();
 }
 
-async function updateConversationOnSend(textForDb, isUserOne) {
-    const { data: convData } = await supabase
-        .from("conversations")
-        .select("unread_user_one, unread_user_two")
-        .eq("id", conversationId)
-        .single();
-
-    let updateData = {
-        last_message: textForDb,
-        updated_at: new Date().toISOString()
-    };
-
-    if (convData) {
-        if (isUserOne) {
-            updateData.unread_user_two = (convData.unread_user_two || 0) + 1;
-        } else {
-            updateData.unread_user_one = (convData.unread_user_one || 0) + 1;
-        }
-    }
-
-    await supabase
-        .from("conversations")
-        .update(updateData)
-        .eq("id", conversationId);
-}
-
 document.getElementById("sendBtn").onclick = async () => {
     const input = document.getElementById("messageInput");
     const text = input.value.trim();
     if (!text) return;
-
-    const { data: chatInfo } = await supabase
-        .from("conversations")
-        .select("user_one, user_two")
-        .eq("id", conversationId)
-        .single();
 
     const { error } = await supabase.from("messages").insert({
         conversation_id: Number(conversationId),
@@ -284,10 +247,13 @@ document.getElementById("sendBtn").onclick = async () => {
         return;
     }
 
-    if (chatInfo) {
-        const isUserOne = (chatInfo.user_one === currentUserId);
-        await updateConversationOnSend(text, isUserOne);
-    }
+    await supabase
+        .from("conversations")
+        .update({
+            last_message: text,
+            updated_at: new Date().toISOString()
+        })
+        .eq("id", conversationId);
 
     input.value = "";
 };
@@ -323,22 +289,19 @@ imageInput.onchange = async (e) => {
 
     const imageUrl = publicURLData.publicUrl;
 
-    const { data: chatInfo } = await supabase
-        .from("conversations")
-        .select("user_one, user_two")
-        .eq("id", conversationId)
-        .single();
-
     const { error: insertError } = await supabase.from("messages").insert({
         conversation_id: Number(conversationId),
         sender_id: currentUserId,
         message_text: imageUrl
     });
 
-    if (chatInfo) {
-        const isUserOne = (chatInfo.user_one === currentUserId);
-        await updateConversationOnSend("📷 [Foto]", isUserOne);
-    }
+    await supabase
+        .from("conversations")
+        .update({
+            last_message: "📷 [Foto]",
+            updated_at: new Date().toISOString()
+        })
+        .eq("id", conversationId);
 
     attachBtn.innerText = "📷";
     imageInput.value = "";

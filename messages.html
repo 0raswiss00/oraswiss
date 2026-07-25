@@ -178,6 +178,37 @@ supabase
 )
 .subscribe();
 
+
+        div.onclick = () => {
+            window.location.href = "chat.html?conversation=" + chat.id;
+        };
+
+        box.appendChild(div);
+    }
+}
+
+// Thirr funksionin për të ngarkuar bisedat
+loadChats();
+
+// Dëgjo në kohë reale për ndryshime
+supabase
+    .channel("public:conversations_realtime")
+    .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "conversations" },
+        () => {
+            loadChats();
+        }
+    )
+    .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "messages" },
+        () => {
+            loadChats();
+        }
+    )
+    .subscribe();
+
 </script>
 
 </body>

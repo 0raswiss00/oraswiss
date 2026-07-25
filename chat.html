@@ -196,46 +196,27 @@ document.getElementById("sendBtn").onclick = async () => {
     const text = input.value.trim();
     if (!text) return;
 
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    await supabase.from("messages").insert({
-        conversation_id: conversationId,
-        sender_id: user.id,
-        message_text: text
-    });
-
-    input.value = "";
-    loadMessages(user.id);
-};
-
-const attachBtn = document.getElementById("attachBtn");
-const imageInput = document.getElementById("imageInput");
-
-attachBtn.onclick = () => imageInput.click();
-
-imageInput.onchange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const { data: { user } } = await supabase.auth.getUser();
-    const filePath = `${Date.now()}_${file.name}`;
-
-    const { error: uploadError } = await supabase.storage.from("message-images").upload(filePath, file);
-    if (uploadError) {
-        alert("Gabim në ngarkimin e fotos!");
+    if (!conversationId || isNaN(Number(conversationId))) {
+        alert("ID e bisedës mungon ose është e gabuar!");
         return;
     }
 
-    const { data: pubUrl } = supabase.storage.from("message-images").getPublicUrl(filePath);
-    const imageUrl = pubUrl.publicUrl;
-
-    await supabase.from("messages").insert({
-        conversation_id: conversationId,
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    
+    const { error } = await supabase.from("messages").insert({
+        conversation_id: Number(conversationId),
         sender_id: user.id,
-        message_text: imageUrl
+        message: text
     });
 
-    imageInput.value = "";
+    if (error) {
+        console.error("Gabim në ruajtje:", error);
+        alert("Gabim: " + error.message);
+        return;
+    }
+
+    input.value = "";
     loadMessages(user.id);
 };
 

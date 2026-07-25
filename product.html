@@ -254,25 +254,45 @@ async function loadProduct() {
                     return;
                 }
 
+                // Sigurohu që 'data' është objekti i produktit që ke marrë te faqja e produktit
                 if (user.id === data.user_id) {
                     alert("Ky është produkti yt!");
                     return;
                 }
 
-                // Krijojmë bisedën krejtësisht bosh që të mos ngatërrojë asnjë lloj tipi të dhënash
-                const { data: newConversation, error } = await supabaseClient
+                // Kontrollojmë nëse ekziston një bisedë për këtë produkt mes këtyre dy përdoruesve
+                const { data: existingChat } = await supabaseClient
                     .from("conversations")
-                    .insert({})
+                    .select("id")
+                    .eq("listing_id", data.id)
+                    .or(and(buyer_id.eq.${user.id},seller_id.eq.${data.user_id}),and(buyer_id.eq.${data.user_id},seller_id.eq.${user.id}))
+                    .maybeSingle();
+
+                if (existingChat) {
+                    // Nëse biseda ekziston, thjesht futu aty
+                    window.location.href = "chat.html?conversation=" + existingChat.id;
+                    return;
+                }
+
+                // Nëse nuk ekziston, e krijojmë tani duke ruajtur ID-në e produktit dhe palët
+                const { data: newConversation, error } = await supabaseClient
+                   .from("conversations")
+                   .insert({
+                        listing_id: data.id,
+                        buyer_id: user.id,
+                        seller_id: data.user_id,
+                        last_message: "Bisedë e re filluar"
+                    })
                     .select()
                     .single();
 
                 if (error) {
-                    console.error("Gabim nga Supabase:", error);
-                    alert("Gabim: " + error.message);
+                    console.error("Gabim:", error);
+                    alert("Gabim gjatë krijimit të bisedës: " + error.message);
                     return;
                 }
 
-                window.location.href = "messages.html?conversation=" + newConversation.id;
+                window.location.href = "chat.html?conversation=" + newConversation.id;
             };
         }
    

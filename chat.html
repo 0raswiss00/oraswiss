@@ -68,7 +68,7 @@ body{
     cursor:pointer;
 }
 .chat-input-area{
-    padding: 6px 10px; /* E ulëm pak hapësirën lart-poshtë */
+    padding: 8px 10px;
     background: #fff;
     display: flex;
     gap: 8px;
@@ -77,7 +77,7 @@ body{
 }
 .chat-input-area input[type="text"]{
     flex: 1;
-    padding: 8px 12px; /* E bëmë inputin më të hollë */
+    padding: 8px 12px;
     border: 1px solid #ccc;
     border-radius: 20px;
     outline: none;
@@ -87,12 +87,22 @@ body{
     background: #000;
     color: #fff;
     border: none;
-    padding: 8px 14px; /* Zvogëluam butonin që të jetë në nivel me inputin */
+    padding: 8px 12px;
     border-radius: 20px;
     cursor: pointer;
     font-weight: bold;
     font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+#attachBtn {
+    background: #e5e5ea;
+    color: #000;
+    font-size: 16px;
+    padding: 8px 10px;
+}
+
 </style>
 </head>
 <body>
@@ -109,10 +119,11 @@ body{
 
 <div class="chat-input-area">
     <input type="file" id="imageInput" accept="image/*" style="display:none;">
-    <button type="button" id="attachBtn">📷</button>
+    <button type="button" id="attachBtn" title="Dërgo foto">📷</button>
     <input type="text" id="messageInput" placeholder="Shkruaj një mesazh...">
     <button type="button" id="sendBtn">Dërgo</button>
 </div>
+
 
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";

@@ -115,11 +115,7 @@ body{
 </div>
 
 <div id="chatBox"></div>
-<div class="chat-input-bar">
-    <input type="text" id="messageInput" placeholder="Shkruaj një mesazh...">
-    <button id="paypalBtn" style="background: #0070ba; color: white;">💳 PayPal</button>
-    <button id="sendButton">Dërgo</button>
-</div>
+
 <div class="chat-input-area">
     <input type="file" id="imageInput" accept="image/*" style="display:none;">
     <button type="button" id="attachBtn" title="Dërgo foto">📷</button>
@@ -146,7 +142,12 @@ async function initChat() {
         return;
     }
     currentUserId = user.id;
-  
+
+    if (!conversationId) {
+        alert("Bisedë e pavlefshme!");
+        return;
+    }
+
     const { data: chats, error: chatError } = await supabase
         .from("conversations")
         .select("*")

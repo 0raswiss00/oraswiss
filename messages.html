@@ -99,6 +99,7 @@ async function loadChats(){
     const { data: conversations, error } = await supabase
         .from("conversations")
         .select("*")
+        .or(`user_one.eq.${user.id},user_two.eq.${user.id}`)
         .order("updated_at", { ascending: false });
 
     if(error){

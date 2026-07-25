@@ -487,37 +487,6 @@ function openProduct(productId) {
 
 <script>
 
-async function loadMessageCount() {
-    const { data: { user }, error } = await supabase.auth.getUser();
-
-    if (error || !user) {
-        return;
-    }
-
-    const { data: userConvs, error: convError } = await supabase
-    .from("conversations")
-    .select("id")
-    .or(buyer_id.eq.${user.id},seller_id.eq.${user.id});
-
-if (!convError && userConvs) {
-    const convIds = userConvs.map(c => c.id);
-    
-    if (convIds.length > 0) {
-        const { count, error: countError } = await supabase
-            .from("messages")
-            .select("*", { count: "exact", head: true })
-            .in("conversation_id", convIds);
-
-        const counter = document.getElementById("messageCount");
-        if (counter && !countError) {
-            counter.innerText = Messages ${count || 0};
-        }
-    } else {
-        const counter = document.getElementById("messageCount");
-        if (counter) counter.innerText = "Messages 0";
-    }
-}
-
 <div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center;z-index:99999;">
     <div style="background:#1a1a1a;padding:25px;border-radius:12px;text-align:center;max-width:320px;width:90%;color:#fff;">
         <h2>Login Required</h2>

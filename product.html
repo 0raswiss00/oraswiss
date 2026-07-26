@@ -18,28 +18,28 @@
         .brand { font-size: 18px; color: #aaa; }
         .title { font-size: 30px; margin: 5px 0; }
         .price { font-size: 28px; color: #25D366; font-weight: bold; margin: 15px 0; }
-        .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; }
+        .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; max-width: 900px; margin-left: auto; margin-right: auto; }
         .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
+        
         .top-actions {
-           display: flex;
-           justify-content: flex-end;
-           gap: 8px;
-           margin: 15px 0 5px 0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin: 15px 0 5px 0;
+            cursor: pointer;
+        }
+        .top-actions .action {
+            background: #111;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 16px;
         }
 
         .buy-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #090909; border-top: 1px solid #333; padding: 10px; display: flex; gap: 8px; z-index: 999; max-width: 900px; margin-left: 50%; transform: translateX(-50%); }
         .buy-btn { flex: 1; padding: 15px; border-radius: 10px; text-align: center; text-decoration: none; font-weight: bold; cursor: pointer; }
         .whatsapp { background: #25D366; color: white; }
         .buy { background: #ffd900; color: black; }
-        .country-row{
-            display:flex;
-            justify-content:flex-end;
-            margin-top:5px;
-        }
-
-        #seller-country{
-            font-size:14px;
-        }
+        .offer { background: #222; color: white; border: 1px solid #444; }
 
         /* ORAWISS SELLER CARD CSS */
         .oraswiss-seller-wrapper {
@@ -86,6 +86,7 @@
             font-size: 16px !important;
             font-weight: 700 !important;
             color: #fff !important;
+            cursor: pointer;
         }
         .oraswiss-info h3 span {
             font-weight: normal !important;
@@ -97,6 +98,7 @@
             font-size: 12px !important;
             color: #25D366 !important;
             font-weight: 600 !important;
+            cursor: pointer;
         }
         .oraswiss-joined {
             font-size: 13px !important;
@@ -143,13 +145,11 @@
         <button class="photo-btn photo-right" onclick="changeImage(1)">❯</button>
         <div class="photo-counter" id="photo-count">1 / 1</div>
     </div>
-
-    <div class="category" id="category"></div>
     
     <div class="details">
         <div class="top-actions">
-            <div class="action" onclick="shareProduct()">🔗</div>
-            <div class="action">♡</div>
+            <div class="action" onclick="shareProduct()" title="Kopjo linkun">🔗 Share</div>
+            <div class="action" title="Ruaj në të preferuarat">♡</div>
         </div>
 
         <div class="brand" id="brand">-</div>
@@ -206,11 +206,11 @@
                 </div>
                 <div>
                     <h3 id="os-name">- <span>(Pro)</span></h3>
-                    <p class="oraswiss-green">100% Positive Feedback</p>
+                    <p class="oraswiss-green" id="os-feedback">100% Positive Feedback</p>
                 </div>
             </div>
         </div>
-        <div class="oraswiss-joined" id="os-joined">Joined -</div>
+        <div class="oraswiss-joined" id="os-joined">Anëtar që nga -</div>
         <div class="oraswiss-actions">
             <button class="oraswiss-btn-blue" id="os-items">
                 Seller's other items (<span id="os-count">0</span>)
@@ -249,17 +249,45 @@ async function loadProduct() {
 
         if (error) throw error;
 
-        // SELLER CARD & CONTACT SETUP
+        // Lidhja e emrit dhe feedback-ut të shitësit me profilin e tij
         const sellerName = data.seller_name || "Seller";
-        document.getElementById("os-name").innerHTML = sellerName + "-oraswiss <span>(Pro)</span>";
+        const sellerProfileUrl = "profile.html?id=" + data.user_id;
 
-        const joined = new Date(data.created_at);
-        document.getElementById("os-joined").textContent = "Joined " + joined.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+        const osNameEl = document.getElementById("os-name");
+        osNameEl.innerHTML = sellerName + "-oraswiss <span>(Pro)</span>";
+        osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
 
+        const osFeedbackEl = document.getElementById("os-feedback");
+        osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
+
+        // Llogaritja e numrit të artikujve të tjerë të shitësit nga tabelat 'oras' dhe 'bracelets_straps'
+        let totalItemsCount = 0;
+        if (data.user_id) {
+            const { count: countOras } = await supabaseClient
+                .from("oras")
+                .select("*", { count: 'exact', head: true })
+                .eq("user_id", data.user_id);
+
+            const { count: countBracelets } = await supabaseClient
+                .from("bracelets_straps")
+                .select("*", { count: 'exact', head: true })
+                .eq("user_id", data.user_id);
+
+            totalItemsCount = (countOras || 0) + (countBracelets || 0);
+        }
+        document.getElementById("os-count").textContent = totalItemsCount;
+
+        // Butoni blu për artikujt e tjerë
         document.getElementById("os-items").onclick = () => {
-            window.location.href = "profile.html?id=" + data.user_id;
+            window.location.href = sellerProfileUrl;
         };
 
+        // Data e anëtarësimit në shqip
+        const joined = new Date(data.created_at || Date.now());
+        const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
+        document.getElementById("os-joined").textContent = "Anëtar që nga " + formattedJoined;
+
+        // Kontakti i shitësit (Chat)
         const contactBtn = document.getElementById("os-contact");
         if (contactBtn) {
             contactBtn.onclick = async () => {
@@ -299,7 +327,6 @@ async function loadProduct() {
                     .single();
 
                 if (createError) {
-                    console.error("Gabim:", createError);
                     alert("Gabim: " + createError.message);
                     return;
                 }
@@ -308,12 +335,18 @@ async function loadProduct() {
             };
         }
 
-        document.getElementById("seller-country").innerText =
-            data.seller_country === "AL" ? "🇦🇱 AL" :
-            data.seller_country === "CH" ? "🇨🇭 CH" :
-            data.seller_country === "IT" ? "🇮🇹 IT" :
-            data.seller_country === "DE" ? "🇩🇪 DE" :
-            "-";
+        const countries = {
+            "Albania": "🇦🇱 Shqipëri",
+            "Switzerland": "🇨🇭 Zvicër",
+            "Italy": "🇮🇹 Itali",
+            "Germany": "🇩🇪 Gjermani",
+            "AL": "🇦🇱 Shqipëri",
+            "CH": "🇨🇭 Zvicër",
+            "IT": "🇮🇹 Itali",
+            "DE": "🇩🇪 Gjermani"
+        };
+        const sCountry = data.seller_country || "-";
+        document.getElementById("seller-country").innerText = "🌍 " + (countries[sCountry] || sCountry);
 
         currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
         currentImgIndex = 0;
@@ -321,7 +354,7 @@ async function loadProduct() {
         document.getElementById("brand").textContent = data.brand || "N/A";
         document.getElementById("model").textContent = data.model || "N/A";
         document.getElementById("top-price").textContent = (data.price || 0) + " €";
-          
+        
         const serial = data.serial_number || "";
         const maskedSerial = serial.length > 3 ? serial.substring(0, 3) + 'X'.repeat(serial.length - 3) : (serial || "N/A");
         const serialElement = document.getElementById("serial_number");

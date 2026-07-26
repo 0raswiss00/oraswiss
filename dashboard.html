@@ -106,8 +106,18 @@
         }
         .my-oraswiss-menu.active { display: block; }
     
-        .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 10px; border-bottom: 1px solid #222; cursor: pointer; }
-        .menu-item:last-child { border-bottom: none; }
+        .menu-content .menu-item, .my-oraswiss-menu .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 10px;
+            border-bottom: 1px solid #222;
+            cursor: pointer;
+        }
+
+        .menu-content .menu-item:last-child, .my-oraswiss-menu .menu-item:last-child {
+            border-bottom: none;
+        }
     
         .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; }
     </style>

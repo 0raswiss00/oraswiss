@@ -9,7 +9,7 @@
     body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
     .wrap{max-width:520px;margin:30px auto;padding:0 16px}
     button{padding:10px 14px;border-radius:10px;border:1px solid #777;background:#111;color:#fff;cursor:pointer}
-    .private-field { display: none; } /* Për të fshehur të dhënat private kur shikohet si blerës */
+    .private-field { display: none; } /* Fsheh të dhënat private për vizitorët/blerësit */
   </style>
 </head>
 
@@ -24,7 +24,7 @@
     <h3>Feedback-u i blerësve:</h3>
     <ul id="feedbackList"><li>Nuk ka ende feedback.</li></ul>
 
-    <!-- Të dhënat private që do të duken vetëm për pronarin e profilit -->
+    <!-- TË DHËNAT PRIVATE (Duken vetëm kur pronari hap profilin e vet) -->
     <div id="ownerSection" class="private-field">
       <p>Email: <b id="userEmail"></b></p>
       <p>Emri: <b id="userName">-</b></p>
@@ -35,10 +35,10 @@
       <p>Te regjistruar gjithsej: <b id="userCount">0</b></p>
     </div>
 
-    <!-- Të dhënat që i duhen edhe blerësit (Shteti) -->
+    <!-- SHTETI (Duket për të gjithë) -->
     <p>Shteti: <b id="userCountry">-</b></p>
 
-    <!-- Seksioni i verifikimit (vetëm për pronarin) -->
+    <!-- SEKSIONI I VERIFIKIMIT DHE LOGOUT (Duket vetëm për pronarin) -->
     <div id="verificationSection" class="private-field">
       <h3>🔒 Verifikimi i identitetit</h3>
       <select id="documentType">
@@ -51,6 +51,7 @@
       <p><label>Foto mbrapa:</label><br><input id="photoBack" type="file" accept="image/*"></p>
       <button id="btnVerify" type="button">Dërgo për verifikim</button>
       <p id="verifyMsg"></p>
+      <br>
       <button id="btnLogout" type="button">Logout</button>
     </div>
 
@@ -104,21 +105,34 @@
   }
 
   window.addEventListener("DOMContentLoaded", async () => {
-    // Kontrollojmë nëse ka përdorues të loguar (mund të jetë vizitor ose vetë shitësi)
+    // 1. Marrim përdoruesin e loguar aktualisht në shfletues
     const { data: { user } } = await supabase.auth.getUser();
 
+    // 2. Lexojmë URL-në për të parë nëse ka ID (p.sh. profile.html?id=xxx)
     const params = new URLSearchParams(window.location.search);
     const sellerIdFromUrl = params.get("id");
 
-    // Përcaktojmë se profilin e kujt po shikojmë
-    const profileId = sellerIdFromUrl || (user ? user.id : null);
+    // Logjika e njohjes së pronarit:
+    // - Nëse URL ka një ID (dhe është e ndryshme nga e jona, ose s'jemi të loguar lain), jemi si Blerës/Vizitor.
+    // - Nëse URL NUK ka ID, atëherë jemi te profili ynë (kërkohet që përdoruesi të jetë i loguar).
+    let profileId = sellerIdFromUrl;
 
     if (!profileId) {
-      window.location.href = "index.html";
-      return;
+      if (!user) {
+        // Nëse s'ka ID në URL dhe s'jemi të loguar, kthehu te faqja kryesore
+        window.location.href = "index.html";
+        return;
+      }
+      profileId = user.id; // Është profili ynë
     }
 
-    // Puna e databazës për të marrë profilin e shitësit
+    // A është ky përdorues që po shikon profilin e tij personal?
+    const isOwner = user && user.id === profileId;
+
+    console.log("PROFILE ID:", profileId);
+    console.log("A ËSHTË KY PRONARI?", isOwner);
+
+    // 3. Marrim të dhënat e profilit nga tabela "profiles"
     const { data: sellerData, error: sellerError } = await supabase
       .from("profiles")
       .select("*")
@@ -133,17 +147,18 @@
 
     document.body.style.visibility = "visible";
 
+    // 4. Vendosja e titullit (Emri i personalizuar + .oraswiss)
     const sellerTitle = document.getElementById("sellerTitle");
-    
-    // Krijimi i emrit në formatin: "emri_i_personalizuar.oraswiss" (ose nga kolona custom_username nëse e keni krijuar, ose full_name)
     const usernameBase = sellerData.custom_username || sellerData.full_name || "seller";
     sellerTitle.textContent = `${usernameBase}.oraswiss`;
 
+    // Data e regjistrimit (Joined...)
     const created = new Date(sellerData.created_at || Date.now());
     const joinedText = document.createElement("p");
     joinedText.textContent = "Joined " + created.toLocaleDateString("en-US", { month: "long", year: "numeric" });
     sellerTitle.insertAdjacentElement("afterend", joinedText);
 
+    // Shteti (Duket për të gjithë)
     const countries = {
       "Albania": "🇦🇱 AL",
       "Switzerland": "🇨🇭 CH",
@@ -152,11 +167,8 @@
     };
     countryEl.textContent = countries[sellerData.country] || sellerData.country || "-";
 
-    // Kontrollojmë nëse shikuesi është pronari i profilit
-    const isOwner = user && user.id === profileId;
-
+    // 5. NËSE ËSHTË PRONARI: Shfaqim të dhënat e plota dhe seksionin e verifikimit/logout
     if (isOwner) {
-      // Shfaq të dhënat private dhe opsionin e verifikimit vetëm nëse është vetë profili yt
       document.querySelectorAll(".private-field").forEach(el => el.style.display = "block");
 
       emailEl.textContent = user.email;
@@ -167,10 +179,11 @@
       zipEl.textContent = sellerData.zip_code || "-";
     }
 
+    // 6. Ngarkojmë artikujt e këtij shitësi
     await loadWatches(profileId);
   });
 
-  // VERIFIKIMI I IDENTITETIT (Nëse ekziston butoni)
+  // VERIFIKIMI I IDENTITETIT
   const verifyBtn = document.getElementById("btnVerify");
   if (verifyBtn) {
     verifyBtn.addEventListener("click", async () => {

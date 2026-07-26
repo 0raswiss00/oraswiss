@@ -175,6 +175,7 @@ async function initChat() {
     }
 
     await loadMessages();
+    await markMessagesAsRead(); // Shënon mesazhet e kësaj bisede si të lexuara sapo hapen
     setupRealtimeSubscription();
 }
 
@@ -195,6 +196,16 @@ async function loadMessages() {
     });
 
     chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Funksioni që kalon mesazhet e marra në is_read = true kur hapet chat-i
+async function markMessagesAsRead() {
+    await supabase
+        .from("messages")
+        .update({ is_read: true })
+        .eq("conversation_id", conversationId)
+        .neq("sender_id", currentUserId)
+        .eq("is_read", false);
 }
 
 function appendMessageToUI(msg) {
@@ -226,6 +237,10 @@ function setupRealtimeSubscription() {
             },
             (payload) => {
                 appendMessageToUI(payload.new);
+                // Nëse mesazhi vjen nga pala tjetër ndërkohë që jemi brenda, e shënojmë menjëherë të lexuar
+                if (payload.new.sender_id !== currentUserId) {
+                    markMessagesAsRead();
+                }
             }
         )
         .subscribe();
@@ -239,7 +254,8 @@ document.getElementById("sendBtn").onclick = async () => {
     const { error } = await supabase.from("messages").insert({
         conversation_id: Number(conversationId),
         sender_id: currentUserId,
-        message_text: text
+        message_text: text,
+        is_read: false
     });
 
     if (error) {
@@ -292,7 +308,8 @@ imageInput.onchange = async (e) => {
     const { error: insertError } = await supabase.from("messages").insert({
         conversation_id: Number(conversationId),
         sender_id: currentUserId,
-        message_text: imageUrl
+        message_text: imageUrl,
+        is_read: false
     });
 
     await supabase

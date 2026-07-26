@@ -103,18 +103,10 @@ async function loadConversations() {
         return;
     }
 
+    // 1. Marrim bisedat pa lidhje të detyruar me tabelat e tjera (shmang çdo gabim PGRST200)
     const { data: convs, error } = await supabase
         .from("conversations")
-        .select(`
-            id,
-            last_message,
-            updated_at,
-            buyer_id,
-            seller_id,
-            user_one,
-            user_two,
-            oras ( brand, model, price, image_url )
-        `)
+        .select("*")
         .or(`user_one.eq.${user.id},user_two.eq.${user.id},buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
         .order("updated_at", { ascending: false });
 
@@ -134,18 +126,28 @@ async function loadConversations() {
 
     for (const conv of convs) {
         let watchImg = "";
-        let watchTitle = "Bisedë e re";
+        let watchTitle = "Bisedë";
         let watchPrice = 0;
-        
-        if (conv.oras) {
-            let imgArr = conv.oras.image_url;
-            watchImg = Array.isArray(imgArr) ? imgArr[0] : imgArr;
-            watchTitle = `${conv.oras.brand || ""} ${conv.oras.model || ""}`.trim();
-            watchPrice = conv.oras.price || 0;
+
+        // 2. Tërheqim të dhënat e orës veçmas nëse biseda ka listing_id
+        if (conv.listing_id) {
+            const { data: watch } = await supabase
+                .from("oras")
+                .select("brand, model, price, image_url")
+                .eq("id", conv.listing_id)
+                .single();
+
+            if (watch) {
+                let imgArr = watch.image_url;
+                watchImg = Array.isArray(imgArr) ? imgArr[0] : imgArr;
+                watchTitle = `${watch.brand || ""} ${watch.model || ""}`.trim();
+                watchPrice = watch.price || 0;
+            }
         }
 
+        // 3. Gjejmë emrin e personit tjetër (blerësit/shitësit)
         let otherUserId = (conv.buyer_id === user.id) ? conv.seller_id : (conv.user_one === user.id ? conv.user_two : conv.buyer_id);
-        let buyerName = "Blerës";
+        let buyerName = "Përdorues";
 
         if (otherUserId) {
             const { data: profile } = await supabase
@@ -154,7 +156,7 @@ async function loadConversations() {
                 .eq("id", otherUserId)
                 .single();
             if (profile) {
-                buyerName = profile.full_name || profile.username || "Blerës";
+                buyerName = profile.full_name || profile.username || "Përdorues";
             }
         }
 

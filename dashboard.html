@@ -166,24 +166,27 @@
     <ul id="myWatchesList" style="list-style: none; padding: 0;"></ul>
 
     <!-- Menuja që hapet (Buy, Messages, etj.) -->
-    <div id="myOraSwissMenu" class="my-oraswiss-menu">
-        <div class="menu-item" onclick="location.href='buy.html'"><span>🛒 Buy</span> <span>></span></div>
-        <div class="menu-item" onclick="location.href='mysold.html'"><span>🛒 my sold</span> <span>></span></div>
-        <div class="menu-item" onclick="location.href='messages.html'"><span>✉️ Messages</span> <span>></span></div>
-        <div class="menu-item" onclick="location.href='settings.html'"><span>⚙️ Account Settings</span> <span>></span></div>
-        <div class="menu-item" onclick="location.href='support.html'"><span>🎧 Support</span> <span>></span></div>
-        <div class="menu-item" onclick="location.href='info.html'"><span>ℹ️ Info</span> <span>></span></div>
+    <div id="myOraSwissMenu" class="my-oraswiss-menu" style="display: none; position: fixed; bottom: 80px; right: 10px; background: #222; border: 1px solid #444; padding: 10px; border-radius: 10px; z-index: 9999; width: 200px;">
+        <div class="menu-item" onclick="location.href='buy.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444; display: flex; justify-content: space-between; align-items: center;"><span>🛒 Buy</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='mysold.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444; display: flex; justify-content: space-between; align-items: center;"><span>🛒 my sold</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='messages.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444; display: flex; justify-content: space-between; align-items: center;">
+            <span style="display: flex; align-items: center; gap: 6px;">✉️ Messages</span>
+            <span id="messageCount" style="background: red; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold;">0</span>
+        </div>
+        <div class="menu-item" onclick="location.href='settings.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444; display: flex; justify-content: space-between; align-items: center;"><span>⚙️ Account Settings</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='support.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444; display: flex; justify-content: space-between; align-items: center;"><span>🎧 Support</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='info.html'" style="padding: 10px; color: white; cursor: pointer; display: flex; justify-content: space-between; align-items: center;"><span>ℹ️ Info</span> <span>></span></div>
     </div>
 
     <!-- Shiriti i navigimit i rregulluar -->
-    <nav class="bottom-nav">
-      <a href="index.html" class="bottom-nav-item">OraSwiss</a>
-      <a href="profile.html" class="bottom-nav-item">Profile</a>
-      <a href="favorites.html" class="bottom-nav-item">Favorites</a>
-      <a href="collection.html" class="bottom-nav-item">Collection</a>
-      <a href="mysales.html" class="bottom-nav-item">Sales</a>
-      <a href="sellnow.html" class="bottom-nav-item">Sell</a>
-      <a href="javascript:void(0)" class="bottom-nav-item" onclick="toggleMenu('myOraSwissMenu')">My OraSwiss</a>
+    <nav class="bottom-nav" style="position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-around; background: #000; padding: 15px 0; border-top: 1px solid #333; z-index: 9998; box-sizing: border-box;">
+      <a href="index.html" class="bottom-nav-item" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">OraSwiss</a>
+      <a href="profile.html" class="bottom-nav-item" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">Profile</a>
+      <a href="favorites.html" class="bottom-nav-item" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">Favorites</a>
+      <a href="collection.html" class="bottom-nav-item" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">Collection</a>
+      <a href="mysales.html" class="bottom-nav-item" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">Sales</a>
+      <a href="sellnow.html" class="bottom-nav-item" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">Sell</a>
+      <a href="javascript:void(0)" class="bottom-nav-item" onclick="toggleMenu('myOraSwissMenu')" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">My OraSwiss</a>
     </nav>
 
 <script type="module">

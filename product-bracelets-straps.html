@@ -144,7 +144,7 @@
         const container = document.getElementById("content-container");
 
         if (itemId) {
-            // NËSE KA ID NË URL: Shfaq detajet e këtij produkti specifik
+            // NËSE KA ID: Shfaq detajet e plota të këtij rripi/byzylyku
             const { data, error } = await supabase
                 .from('bracelets_straps')
                 .select('*')
@@ -152,7 +152,7 @@
                 .single();
 
             if (error || !data) {
-                container.innerHTML = "<h2 style='color:red; text-align:center;'>Produkt produkti ose u gjet gabim!</h2>";
+                container.innerHTML = "<h2 style='color:red; text-align:center;'>Produkti nuk u gjest ose ndodhi një gabim!</h2>";
                 return;
             }
 
@@ -167,15 +167,26 @@
             container.innerHTML = `
                 <div style="max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border-radius: 10px; border: 1px solid #333;">
                     <img src="${imgUrl}" alt="${data.brand || 'Strap'}" style="width:100%; height: 300px; object-fit: cover; border-radius: 8px;">
-                    <h2 style="margin-top: 15px;">${data.brand || 'Bracelet / Strap'}</h2>
-                    <p style="color:#aaa; font-size:16px;">Material: ${data.material || '/'}</p>
-                    <div class="price" style="font-weight:bold; color:gold; font-size: 22px; margin: 15px 0;">${data.price ? data.price + ' €' : 'Contact for price'}</div>
-                    <p style="color: #ccc; line-height: 1.5;">${data.description || 'Nuk ka përshkrim shtesë për këtë produkt.'}</p>
-                    <button class="btn-main btn-buy" style="width:100%; margin-top:20px;" onclick="alert('Kërkesa u dërgua me sukses!')">🛒 Buy Now / Order</button>
+                    
+                    <h2 style="margin-top: 15px;">${data.brand || 'Bracelet / Strap'} - ${data.model || ''}</h2>
+                    
+                    <p style="color:#aaa; font-size:14px; margin:5px 0;">Material: ${data.material || '/'}</p>
+                    <p style="color:#aaa; font-size:14px; margin:5px 0;">Condition: ${data.condition || '/'}</p>
+                    
+                    <div class="price" style="font-weight:bold; color:gold; font-size: 22px; margin: 15px 0;">
+                        ${data.price ? data.price + ' €' : 'Contact for price'}
+                    </div>
+
+                    <div style="background: #1a1a1a; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #333;">
+                        <h4 style="margin: 0 0 10px 0; color: #fff;">Description</h4>
+                        <p style="color: #ccc; line-height: 1.5; margin: 0; white-space: pre-line;">${data.description || data.detajet || 'Nuk ka përshkrim shtesë për këtë produkt.'}</p>
+                    </div>
+
+                    <button class="btn-main btn-buy" style="width:100%; margin-top:10px;" onclick="alert('Kërkesa u dërgua me sukses!')">🛒 Buy Now</button>
                 </div>
             `;
         } else {
-            // NËSE NUK KA ID: Shfaq listën e plotë të rripave (Vitrinën)
+            // NËSE NUK KA ID: Shfaq listën e plotë (Vitrinën)
             container.innerHTML = `<h2 style="padding-left: 0;">Bracelets & Straps Collection</h2><div id="straps-container" class="grid">Loading...</div>`;
             const gridContainer = document.getElementById("straps-container");
 

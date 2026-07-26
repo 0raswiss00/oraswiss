@@ -119,20 +119,27 @@
             display: block !important;
         }
 
-        /* OPSIONET BRENDA MENUSË */
-        .my-oraswiss-menu .menu-item, .menu-content .menu-item { 
-            display: flex !important; 
-            justify-content: space-between !important; 
-            align-items: center !important; 
-            padding: 15px 10px !important; 
-            border-bottom: 1px solid #222 !important; 
-            cursor: pointer !important; 
-            color: #fff !important;
-            text-decoration: none !important;
+        .my-oraswiss-menu, .menu-content {
+            display: none !important;
+            position: fixed !important;
+            bottom: 105px !important;
+            left: auto !important;
+            right: 15px !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            transform: none !important;
+            width: 220px !important;
+            max-width: 220px !important;
+            background: #1a1a1a !important;
+            border-radius: 15px !important;
+            border: 1px solid #333 !important;
+            padding: 10px !important;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.😎 !important;
+            z-index: 9999999 !important;
         }
 
-        .my-oraswiss-menu .menu-item:last-child, .menu-content .menu-item:last-child { 
-            border-bottom: none !important; 
+        .my-oraswiss-menu.active, .menu-content.active {
+            display: block !important;
         }
 
         /* HAPËSIRA NË FUND TË FAQES */

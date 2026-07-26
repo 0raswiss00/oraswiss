@@ -21,11 +21,20 @@
     .nav-scroll a:hover{color:gold}
     .site-title{font-weight:700;line-height:1.05;margin-right:10px}
 
-    .grid {
+.grid {
         display: grid; 
-        grid-template-columns: 1fr 1fr; 
+        /* Parazgjedhja për celularë: 2 artikuj për rresht */
+        grid-template-columns: repeat(2, 1fr); 
         gap: 10px; 
         padding: 10px;
+    }
+
+    /* Për kompjutera dhe ekrane të mëdha (mbi 768px) */
+    @media (min-width: 768px) {
+        .grid {
+            /* Ndryshoje në 4 nëse do 4 në një rresht, ose në 3 nëse i do 3 */
+            grid-template-columns: repeat(4, 1fr); 
+        }
     }
 
     .card {
@@ -37,13 +46,13 @@
 
     .card img {
         width: 100%;
-        height: 140px; /* Ndryshoni vlerën nga 220px në 140px */
+        height: 140px;
         object-fit: cover;
         display: block;
         border-radius: 8px;
     }
 
-    /* Stilet për butonat që mungonin */
+    /* Stilet për butonat */
     .btn-main {
       padding: 10px;
       border: none;
@@ -64,9 +73,9 @@
       background: gold;
       color: #000;
     }
-      .btn-buy:hover {
-          background: #e6c200;
-      }
+    .btn-buy:hover {
+        background: #e6c200;
+    }
     /* ===============================
        NAVIGIMI FUNDOR (I ngritur dhe i rregulluar)
        =============================== */

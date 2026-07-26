@@ -102,9 +102,18 @@ button:hover {
 <body>
 
 <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; margin-bottom: 15px;">
-    <button type="button" onclick="window.location.href='index.html'" style="background: none; border: none; font-size: 14px; font-weight: bold; cursor: pointer; padding: 5px 10px;">Back</button>
-    <h2 style="margin: 0; font-size: 18px; text-align: center; flex-grow: 1;">Add New Watch</h2>
-    <div style="width: 50px;"></div> <!-- Kjo e mban titullin fiks në mes duke balancuar butonin majtas -->
+    <!-- Butoni 'Back' shkon në të majtë -->
+    <button type="button" onclick="window.location.href='index.html'" style="background: none; border: 1px solid #fff; color: #fff; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; padding: 8px 16px; transition: all 0.3s ease;">
+        Back
+    </button>
+
+    <!-- Titulli 'Add New Watch' shkon në qendër -->
+    <h2 style="margin: 0; font-size: 18px; color: #fff; text-align: center;">
+        Add New Watch
+    </h2>
+
+    <!-- Ky element bosh balancon butonin për të siguruar që titulli të jetë fiks në qendër -->
+    <div style="width: 80px;"></div>
 </div>
 
 <form id="sellForm">

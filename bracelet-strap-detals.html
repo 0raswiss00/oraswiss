@@ -125,8 +125,10 @@ async function loadProduct(idToLoad) {
     document.getElementById("length").innerText = data.length || "N/A";
     document.getElementById("description").innerText = data.description || "N/A";
 
+    // Përditësimi i numrit të WhatsApp-it duke marrë numrin e shitësit nga databaza (kolona user_phone ose phone)
+    const phoneNum = data.user_phone || data.phone || "35569XXXXXXX";
     document.getElementById("whatsapp").href = 
-        "https://wa.me/35569XXXXXXX?text=" + 
+        "https://wa.me/" + phoneNum + "?text=" + 
         encodeURIComponent("I am interested in " + data.brand + " " + data.model);
 
     currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
@@ -135,8 +137,9 @@ async function loadProduct(idToLoad) {
 
 document.getElementById("offer").onclick = function() {
     if (!productData) return;
+    const phoneNum = productData.user_phone || productData.phone || "35569XXXXXXX";
     let msg = "Hello, I would like to suggest a price for " + productData.brand + " " + productData.model;
-    window.open("https://wa.me/35569XXXXXXX?text=" + encodeURIComponent(msg));
+    window.open("https://wa.me/" + phoneNum + "?text=" + encodeURIComponent(msg));
 };
 
 document.getElementById("buy").onclick = function() {

@@ -54,16 +54,6 @@ body{
     margin-top:8px;
     font-size:14px;
 }
-.count{
-    position:absolute;
-    right:15px;
-    top:15px;
-    background:#000;
-    color:white;
-    padding:5px 10px;
-    border-radius:20px;
-    font-size:12px;
-}
 .empty{
     text-align:center;
     margin-top:50px;
@@ -75,8 +65,8 @@ body{
 <body>
 
 <div class="header" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; position: relative;">
-    <button onclick="window.location.href='index.html'" style="background: none; border: none; font-size: 14px; font-weight: bold; cursor: pointer; padding: 5px 10px;">Back</button>
-    <span style="position: absolute; left: 50%; transform: translateX(-50%);">💬 Messages</span>
+    <button onclick="window.location.href='index.html'" style="background: #d4af37; color: #000; border: none; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer; padding: 4px 10px;">Back</button>
+    <span style="position: absolute; left: 50%; transform: translateX(-50%); font-size: 18px;">💬 Messages</span>
     <div></div>
 </div>
 
@@ -90,76 +80,60 @@ const supabase = createClient(
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
 );
 
-async function loadChats(){
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-
-    if(userError || !user){
-        window.location.href = "login.html";
-        return;
-    }
-
-    const { data: conversations, error } = await supabase
+async function loadConversations() {
+    const { data: convs, error } = await supabase
         .from("conversations")
-        .select("*")
-        .or(`user_one.eq.${user.id},user_two.eq.${user.id},buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
+        .select(`
+            id,
+            last_message,
+            updated_at,
+            listing_id,
+            oras ( brand, model, price, image_url )
+        `)
         .order("updated_at", { ascending: false });
 
-    if(error){
-        console.error(error);
+    const chatList = document.getElementById("chatList");
+    chatList.innerHTML = "";
+
+    if (error || !convs || convs.length === 0) {
+        chatList.innerHTML = "<p style='padding:15px; color:#666; text-align:center;'>Nuk keni biseda aktive.</p>";
         return;
     }
 
-    const box = document.getElementById("chatList");
-    box.innerHTML = "";
-
-    if(!conversations || conversations.length === 0){
-        box.innerHTML = `<div class="empty">Nuk ke ende mesazhe</div>`;
-        return;
-    }
-
-    for(const chat of conversations){
-        let watch = null;
-        if(chat.listing_id){
-            const { data: watchData } = await supabase
-                .from("oras")
-                .select("brand, model, price, reference, image_url")
-                .eq("id", chat.listing_id)
-                .single();
-            watch = watchData;
-        }
-
-        let image = "";
-        if(watch && watch.image_url){
-            image = Array.isArray(watch.image_url) ? watch.image_url[0] : watch.image_url;
-        }
-
-        let lastMsgText = chat.last_message || "Bisedë e re";
-        if(lastMsgText.includes("message-images") || lastMsgText.match(/\.(jpeg|jpg|png|gif)$/i)){
-            lastMsgText = "📷 [Foto]";
+    convs.forEach(conv => {
+        let watchImg = "";
+        let watchTitle = "Bisedë e përgjithshme";
+        let watchPrice = 0;
+        
+        if (conv.oras) {
+            let imgArr = conv.oras.image_url;
+            watchImg = Array.isArray(imgArr) ? imgArr[0] : imgArr;
+            watchTitle = `${conv.oras.brand || ""} ${conv.oras.model || ""}`.trim();
+            watchPrice = conv.oras.price || 0;
         }
 
         const div = document.createElement("div");
         div.className = "chat";
+        div.onclick = () => window.location.href = `chat.html?conversation=${conv.id}`;
+
+        let lastMsgText = conv.last_message || "Kliko për të parë mesazhet...";
+        if(lastMsgText.includes("message-images") || lastMsgText.match(/\.(jpeg|jpg|png|gif)$/i)){
+            lastMsgText = "📷 [Foto]";
+        }
 
         div.innerHTML = `
-            <img src="${image || ''}">
+            ${watchImg ? `<img src="${watchImg}">` : `<div style="width:80px; height:80px; background:#ddd; border-radius:12px; display:flex; align-items:center; justify-content:center;">⌚</div>`}
             <div class="chat-info">
-                <div class="brand">${watch ? (watch.brand || "") + " " + (watch.model || "") : "Bisedë"}</div>
-                <div>Reference: ${watch && watch.reference ? watch.reference : "-"}</div>
-                <div class="price">${watch && watch.price ? watch.price : 0} €</div>
+                <div class="brand">${watchTitle || "Bisedë"}</div>
+                <div class="price">${watchPrice} €</div>
                 <div class="last-message">${lastMsgText}</div>
             </div>
         `;
-
-        div.onclick = () => {
-            window.location.href = "chat.html?conversation=" + chat.id;
-        };
-
-        box.appendChild(div);
-    }
+        chatList.appendChild(div);
+    });
 }
 
-loadChats();
+loadConversations();
 </script>
 
 </body>

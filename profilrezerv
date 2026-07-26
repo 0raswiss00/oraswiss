@@ -942,26 +942,178 @@ tetri fundit
   <title>Profile - Ora Swiss</title>
 
   <style>
-    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
-    .wrap{max-width:520px;margin:30px auto;padding:0 16px}
-    button{padding:10px 14px;border-radius:10px;border:1px solid #777;background:#111;color:#fff;cursor:pointer}
+    :root {
+      --bg-color: #0a0a0a;
+      --card-bg: #141414;
+      --border-color: #262626;
+      --text-main: #ffffff;
+      --text-muted: #a3a3a3;
+      --accent: #d4af37;
+      --accent-hover: #b3922f;
+      --danger: #ef4444;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    .wrap {
+      max-width: 560px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.3rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      color: var(--accent);
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      color: var(--accent);
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      margin: 8px 0;
+      color: var(--text-muted);
+    }
+
+    p b {
+      color: var(--text-main);
+    }
+
+    #sellerTitle {
+      font-size: 1.8rem;
+      margin: 0 0 4px 0;
+      color: var(--text-main);
+    }
+
+    .joined-date {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: #1f1f1f;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      box-sizing: border-box;
+      margin-bottom: 12px;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    input[type="file"] {
+      padding: 8px;
+      background: #1a1a1a;
+      cursor: pointer;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: none;
+      background: var(--accent);
+      color: #000;
+      font-weight: bold;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 8px;
+    }
+
+    button:hover {
+      background: var(--accent-hover);
+    }
+
+    #btnLogout {
+      background: transparent;
+      border: 1px solid var(--danger);
+      color: var(--danger);
+      margin-top: 16px;
+    }
+
+    #btnLogout:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #sellerWatches li {
+      background: #1f1f1f;
+      border: 1px solid var(--border-color);
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #feedbackList li {
+      background: #1a1a1a;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+    }
+
     .private-field { display: none; }
+    
+    #verifyMsg, #profileMsg, #msg {
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-top: 8px;
+    }
   </style>
 </head>
 
 <body style="visibility:hidden;">
   <div class="wrap">
-    <h2>Profili</h2>
+    
+    <!-- Koka e Profilit -->
+    <div class="card">
+      <h1 id="sellerTitle">-</h1>
+      <p id="sellerJoined" class="joined-date">-</p>
+      <p>Shteti: <b id="userCountry">-</b></p>
+    </div>
 
-    <h1 id="sellerTitle">-</h1>
-    <p id="sellerJoined">-</p>
-    <p id="sellerBadge"></p>
-
-    <h3>Feedback-u i blerësve:</h3>
-    <ul id="feedbackList"><li>Nuk ka ende feedback.</li></ul>
-
-    <!-- Këto të dhëna private do të duken vetëm kur e hap ti vetë profilin tënd -->
-    <div id="ownerDetails" class="private-field">
+    <!-- Të Dhënat Private (Vetëm për pronarin) -->
+    <div id="ownerDetails" class="card private-field">
+      <h2>Të dhënat e llogarisë</h2>
       <p>Email: <b id="userEmail"></b></p>
       <p>Emri: <b id="userName">-</b></p>
       <p>Telefon: <b id="userPhone">-</b></p>
@@ -970,35 +1122,77 @@ tetri fundit
       <p>Kodi Postar: <b id="userZip">-</b></p>
     </div>
 
-    <!-- Shteti duket edhe për blerësit -->
-    <p>Shteti: <b id="userCountry">-</b></p>
-    <p>Te regjistruar gjithsej: <b id="userCount">0</b></p>
+    <!-- Seksioni i Modifikimit të Profilit -->
+    <div id="editProfileSection" class="card private-field">
+      <h2>Modifiko Profilin</h2>
+      
+      <label style="font-size: 0.85rem; color: var(--text-muted);">Emri i plotë:</label>
+      <input id="editFullName" placeholder="Emri i plotë">
 
-    <!-- Seksioni i verifikimit (vetëm për pronarin) -->
-    <div id="verificationSection" class="private-field">
-      <h3>🔒 Verifikimi i identitetit</h3>
+      <label style="font-size: 0.85rem; color: var(--text-muted);">Username i faqes:</label>
+      <input id="editCustomUsername" placeholder="Username">
+
+      <label style="font-size: 0.85rem; color: var(--text-muted);">Telefoni:</label>
+      <input id="editPhone" placeholder="Numri i telefonit">
+
+      <label style="font-size: 0.85rem; color: var(--text-muted);">Shteti:</label>
+      <input id="editCountry" placeholder="Shteti">
+
+      <label style="font-size: 0.85rem; color: var(--text-muted);">Rruga:</label>
+      <input id="editStreet" placeholder="Rruga">
+
+      <label style="font-size: 0.85rem; color: var(--text-muted);">Nr. Shtëpisë:</label>
+      <input id="editHouseNumber" placeholder="Nr. Shtëpisë">
+
+      <label style="font-size: 0.85rem; color: var(--text-muted);">Kodi Postar:</label>
+      <input id="editZip" placeholder="Kodi Postar">
+
+      <label style="font-size: 0.85rem; color: var(--text-muted);">Foto e Profilit (Imazhi):</label>
+      <input id="editImageFile" type="file" accept="image/*">
+
+      <button id="btnSaveProfile" type="button">Ruaj ndryshimet</button>
+      <p id="profileMsg"></p>
+    </div>
+
+    <!-- Feedback-u -->
+    <div class="card">
+      <h3>Feedback-u i blerësve</h3>
+      <ul id="feedbackList"><li>Nuk ka ende feedback.</li></ul>
+    </div>
+
+    <!-- Artikujt e shitësit -->
+    <div class="card">
+      <h3>Artikujt e shitësit</h3>
+      <div class="watch-scroll">
+        <ul id="sellerWatches"><li>Nuk ka artikuj ende.</li></ul>
+      </div>
+    </div>
+
+    <!-- Verifikimi i Identitetit & Logout -->
+    <div id="verificationSection" class="card private-field">
+      <h3>🔒 Verifikimi i Identitetit</h3>
+      
       <select id="documentType">
         <option value="">Zgjidh dokumentin</option>
         <option value="ID">Kartë ID</option>
         <option value="Passport">Pasaportë</option>
       </select>
 
-      <p><input id="documentNumber" placeholder="Numri i dokumentit"></p>
-      <p><label>Foto përpara:</label><br><input id="photoFront" type="file" accept="image/*"></p>
-      <p><label>Foto mbrapa:</label><br><input id="photoBack" type="file" accept="image/*"></p>
+      <input id="documentNumber" placeholder="Numri i dokumentit">
+
+      <label style="font-size: 0.85rem; color: var(--text-muted);">Foto përpara:</label>
+      <input id="photoFront" type="file" accept="image/*">
+
+      <label style="font-size: 0.85rem; color: var(--text-muted);">Foto mbrapa:</label>
+      <input id="photoBack" type="file" accept="image/*">
 
       <button id="btnVerify" type="button">Dërgo për verifikim</button>
       <p id="verifyMsg"></p>
-      <br>
-      <button id="btnLogout" type="button">Logout</button>
+
+      <button id="btnLogout" type="button">Dil nga llogaria (Logout)</button>
     </div>
 
-    <p id="msg" style="margin-top:12px;"></p>
-
-    <h3>Artikujt e shitësit:</h3>
-    <div class="watch-scroll">
-      <ul id="sellerWatches"></ul>
-    </div>
+    <p id="msg"></p>
   </div>
   
 <script type="module">
@@ -1025,6 +1219,8 @@ tetri fundit
       { table: "bracelets_straps", label: "🪢" }
     ];
 
+    let hasItems = false;
+
     for (const item of tables) {
       const { data, error } = await supabase
         .from(item.table)
@@ -1034,10 +1230,15 @@ tetri fundit
       if (error) continue;
 
       data?.forEach(product => {
+        hasItems = true;
         const li = document.createElement("li");
-        li.innerHTML = `<b>${product.brand || ""}</b> ${product.model || ""} - ${product.price || "-"}€`;
+        li.innerHTML = `<span><b>${item.label} ${product.brand || ""}</b> ${product.model || ""}</span> <b>${product.price || "-"}€</b>`;
         watchList.appendChild(li);
       });
+    }
+
+    if (!hasItems) {
+      watchList.innerHTML = "<li>Nuk ka artikuj aktivë.</li>";
     }
   }
 
@@ -1047,7 +1248,6 @@ tetri fundit
     const params = new URLSearchParams(window.location.search);
     const sellerIdFromUrl = params.get("id");
 
-    // Përcaktojmë ID-në e profilit që po shikojmë
     const profileId = sellerIdFromUrl || (user ? user.id : null);
 
     if (!profileId) {
@@ -1055,10 +1255,8 @@ tetri fundit
       return;
     }
 
-    // A është ky përdorues që po shikon profilin e tij personal?
     const isOwner = user && user.id === profileId;
 
-    // Marrim të dhënat nga tabela profiles
     const { data: sellerData, error: sellerError } = await supabase
       .from("profiles")
       .select("*")
@@ -1073,25 +1271,28 @@ tetri fundit
 
     document.body.style.visibility = "visible";
 
-    // Titulli i profilit (Emri i personalizuar + .oraswiss)
     const sellerTitle = document.getElementById("sellerTitle");
     const customName = meta.custom_username || meta.full_name || "Seller";
     sellerTitle.textContent = `${customName}.oraswiss`;
 
     const created = new Date(meta.created_at || (user ? user.created_at : Date.now()));
-    const joinedText = document.createElement("p");
-    joinedText.textContent = "Joined " + created.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-    sellerTitle.insertAdjacentElement("afterend", joinedText);
+    const joinedText = document.getElementById("sellerJoined");
+    joinedText.textContent = "Anëtar që nga " + created.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
 
     const countries = {
-      "Albania": "🇦🇱 AL",
-      "Switzerland": "🇨🇭 CH",
-      "Italy": "🇮🇹 IT",
-      "Germany": "🇩🇪 DE"
+      "Albania": "🇦🇱 Shqipëri",
+      "Switzerland": "🇨🇭 Zvicër",
+      "Italy": "🇮🇹 Itali",
+      "Germany": "🇩🇪 Gjermani",
+      "AL": "🇦🇱 Shqipëri",
+      "CH": "🇨🇭 Zvicër",
+      "IT": "🇮🇹 Itali",
+      "DE": "🇩🇪 Gjermani"
     };
-    countryEl.textContent = countries[meta.country] || meta.country || "-";
 
-    // NËSE ËSHTË PRONARI: Shfaqim fushat private dhe të dhënat e plota
+    const rawCountry = meta.country || meta.shteti || meta.country_name || (user?.user_metadata ? (user.user_metadata.country || user.user_metadata.shteti) : null) || "-";
+    countryEl.textContent = countries[rawCountry] || rawCountry;
+    
     if (isOwner && user) {
       document.querySelectorAll(".private-field").forEach(el => el.style.display = "block");
 
@@ -1101,12 +1302,87 @@ tetri fundit
       streetEl.textContent = meta.street || "-";
       houseEl.textContent = meta.house_number || "-";
       zipEl.textContent = meta.zip_code || "-";
+
+      // Mbushja e fushave në formën e modifikimit
+      document.getElementById("editFullName").value = meta.full_name || "";
+      document.getElementById("editCustomUsername").value = meta.custom_username || "";
+      document.getElementById("editPhone").value = meta.phone || "";
+      document.getElementById("editCountry").value = meta.country || meta.shteti || "";
+      document.getElementById("editStreet").value = meta.street || "";
+      document.getElementById("editHouseNumber").value = meta.house_number || "";
+      document.getElementById("editZip").value = meta.zip_code || "";
     }
 
     await loadWatches(profileId);
   });
 
-  // VERIFIKIMI I IDENTITETIT
+  // Ruajtja e ndryshimeve të profilit (përfshirë kolonën image)
+  const saveProfileBtn = document.getElementById("btnSaveProfile");
+  if (saveProfileBtn) {
+    saveProfileBtn.addEventListener("click", async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      const msg = document.getElementById("profileMsg");
+
+      const fullName = document.getElementById("editFullName").value;
+      const customUsername = document.getElementById("editCustomUsername").value;
+      const phone = document.getElementById("editPhone").value;
+      const country = document.getElementById("editCountry").value;
+      const street = document.getElementById("editStreet").value;
+      const houseNumber = document.getElementById("editHouseNumber").value;
+      const zipCode = document.getElementById("editZip").value;
+      const imageFile = document.getElementById("editImageFile").files[0];
+
+      msg.style.color = "var(--text-main)";
+      msg.textContent = "Duke ruajtur ndryshimet...";
+
+      const { data: currentProfile } = await supabase
+        .from("profiles")
+        .select("image, photo")
+        .eq("id", user.id)
+        .single();
+
+      let imagePath = currentProfile?.image || currentProfile?.photo || null;
+
+      if (imageFile) {
+        const filePath = `${user.id}/profile_${Date.now()}_${imageFile.name}`;
+        const uploadRes = await supabase.storage.from("identity_documents").upload(filePath, imageFile);
+        
+        if (uploadRes.error) {
+          msg.style.color = "var(--danger)";
+          msg.textContent = "Gabim gjatë ngarkimit të imazhit.";
+          return;
+        }
+        imagePath = uploadRes.data.path;
+      }
+
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          full_name: fullName,
+          custom_username: customUsername,
+          phone: phone,
+          country: country,
+          street: street,
+          house_number: houseNumber,
+          zip_code: zipCode,
+          image: imagePath,
+          updated_at: new Date()
+        })
+        .eq("id", user.id);
+
+      if (error) {
+        msg.style.color = "var(--danger)";
+        msg.textContent = "Gabim gjatë përditësimit: " + error.message;
+        return;
+      }
+
+      msg.style.color = "var(--accent)";
+      msg.textContent = "Profili u përditësua me sukses!";
+      setTimeout(() => window.location.reload(), 1500);
+    });
+  }
+
+  // Verifikimi i Identitetit dhe dërgimi i email-it
   const verifyBtn = document.getElementById("btnVerify");
   if (verifyBtn) {
     verifyBtn.addEventListener("click", async () => {
@@ -1118,9 +1394,13 @@ tetri fundit
       const msg = document.getElementById("verifyMsg");
 
       if (!documentType || !documentNumber || !frontFile || !backFile) {
+        msg.style.color = "var(--danger)";
         msg.textContent = "Plotëso të gjitha fushat dhe ngarko të dy fotot.";
         return;
       }
+
+      msg.style.color = "var(--text-main)";
+      msg.textContent = "Duke dërguar verifikimin...";
 
       const frontPath = `${user.id}/front_${Date.now()}_${frontFile.name}`;
       const backPath = `${user.id}/back_${Date.now()}_${backFile.name}`;
@@ -1129,9 +1409,19 @@ tetri fundit
       const backUpload = await supabase.storage.from("identity_documents").upload(backPath, backFile);
 
       if (frontUpload.error || backUpload.error) {
+        msg.style.color = "var(--danger)";
         msg.textContent = "Gabim gjatë ngarkimit të fotove.";
         return;
       }
+
+      // Krijimi i linkove të firmosura për fotot që të shkojnë në email
+      const { data: frontUrl } = await supabase.storage
+        .from("identity_documents")
+        .createSignedUrl(frontUpload.data.path, 3600);
+
+      const { data: backUrl } = await supabase.storage
+        .from("identity_documents")
+        .createSignedUrl(backUpload.data.path, 3600);
 
       const { error } = await supabase
         .from("identity_verifications")
@@ -1145,15 +1435,35 @@ tetri fundit
         });
 
       if (error) {
-        msg.textContent = "Gabim gjatë dërgimit.";
+        msg.style.color = "var(--danger)";
+        msg.textContent = "Gabim gjatë dërgimit të kërkesës.";
         return;
       }
 
-      msg.textContent = "Kërkesa u dërgua për verifikim.";
+      // Dërgimi i email-it përmes Supabase Functions
+      await supabase.functions.invoke("send-email-notification", {
+        body: {
+          subject: "Kërkesë e re verifikimi",
+          message: `U dërgua një kërkesë e re për verifikim.
+
+Email: ${user.email}
+
+Dokumenti: ${documentType}
+Numri: ${documentNumber}
+
+Foto përpara:
+${frontUrl?.signedUrl || ""}
+
+Foto mbrapa:
+${backUrl?.signedUrl || ""}`
+        }
+      });
+
+      msg.style.color = "var(--accent)";
+      msg.textContent = "Kërkesa u dërgua me sukses për verifikim!";
     });
   }
   
-  // LOGOUT
   if (logoutBtn) {
     logoutBtn.addEventListener("click", async () => {
       await supabase.auth.signOut();

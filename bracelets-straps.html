@@ -384,16 +384,19 @@ document.addEventListener("DOMContentLoaded", async function() {
             .select();
 
         if (error) {
-            console.error("Gabim nga databaza Supabase:", error);
-            alert("Database error: " + error.message);
+            alert(
+                "Gabim gjatë publikimit: " + error.message
+            );
             return;
         }
 
-        console.log("U publikua me sukses:", data);
-        alert("Bracelet / Strap published successfully!");
+        alert(
+            "🏆 Bracelet / Strap u publikua me sukses!"
+        );
+
+        // Kjo e dërgon përdoruesin te Dashboard-i
         window.location.href = "dashboard.html";
     });
-
 });
 </script>
 

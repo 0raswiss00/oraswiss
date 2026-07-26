@@ -2647,45 +2647,6 @@ body {
     display: block;
 }
 
-
-.menu-content {
-    display: none; /* Fillohen të gjitha të mbyllura */
-    position: fixed;
-    bottom: 70px; /* Mbi shiritin e navigimit */
-    left: 10px;
-    right: 10px;
-    background: #1a1a1a;
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
-    z-index: 10000;
-}
-
-.bottom-nav {
-  display: flex !important;
-  position: fixed !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 60px !important;
-  background-color: #1a1a1a !important;
-  z-index: 999999 !important;
-  border-top: 1px solid #333;
-}
-      
-.buy-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 999;
-}
-body {
-    padding-bottom: 90px;
-}
-
-
-
       
 /* ===============================
    profil scroll sales watches

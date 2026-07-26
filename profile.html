@@ -186,7 +186,7 @@
       <p>Kodi Postar: <b id="userZip">-</b></p>
     </div>
 
-    <!-- Seksioni i Modifikimit të Profilit (Përfshin kolonën e Imazhit) -->
+    <!-- Seksioni i Modifikimit të Profilit -->
     <div id="editProfileSection" class="card private-field">
       <h2>Modifiko Profilin</h2>
       
@@ -399,7 +399,6 @@
       msg.style.color = "var(--text-main)";
       msg.textContent = "Duke ruajtur ndryshimet...";
 
-      // Marrë të dhënat ekzistuese të profilit për të ruajtur imazhin e vjetër nëse nuk ngarkohet një i ri
       const { data: currentProfile } = await supabase
         .from("profiles")
         .select("image, photo")
@@ -447,7 +446,7 @@
     });
   }
 
-  // Verifikimi i Identitetit
+  // Verifikimi i Identitetit dhe dërgimi i email-it
   const verifyBtn = document.getElementById("btnVerify");
   if (verifyBtn) {
     verifyBtn.addEventListener("click", async () => {
@@ -479,6 +478,15 @@
         return;
       }
 
+      // Krijimi i linkove të firmosura për fotot që të shkojnë në email
+      const { data: frontUrl } = await supabase.storage
+        .from("identity_documents")
+        .createSignedUrl(frontUpload.data.path, 3600);
+
+      const { data: backUrl } = await supabase.storage
+        .from("identity_documents")
+        .createSignedUrl(backUpload.data.path, 3600);
+
       const { error } = await supabase
         .from("identity_verifications")
         .insert({
@@ -495,6 +503,25 @@
         msg.textContent = "Gabim gjatë dërgimit të kërkesës.";
         return;
       }
+
+      // Dërgimi i email-it përmes Supabase Functions
+      await supabase.functions.invoke("send-email-notification", {
+        body: {
+          subject: "Kërkesë e re verifikimi",
+          message: `U dërgua një kërkesë e re për verifikim.
+
+Email: ${user.email}
+
+Dokumenti: ${documentType}
+Numri: ${documentNumber}
+
+Foto përpara:
+${frontUrl?.signedUrl || ""}
+
+Foto mbrapa:
+${backUrl?.signedUrl || ""}`
+        }
+      });
 
       msg.style.color = "var(--accent)";
       msg.textContent = "Kërkesa u dërgua me sukses për verifikim!";

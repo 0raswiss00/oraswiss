@@ -354,8 +354,8 @@
       "DE": "🇩🇪 Gjermani"
     };
 
-    const userCountry = meta.country || meta.shteti || "-";
-    countryEl.textContent = countries[userCountry] || userCountry;
+    const rawCountry = meta.country || meta.shteti || meta.country_name || (user?.user_metadata ? (user.user_metadata.country || user.user_metadata.shteti) : null) || "-";
+    countryEl.textContent = countries[rawCountry] || rawCountry;
     
     if (isOwner && user) {
       document.querySelectorAll(".private-field").forEach(el => el.style.display = "block");

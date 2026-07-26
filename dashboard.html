@@ -90,26 +90,7 @@
         .bottom-nav-item:hover { color: gold; }
 
  
-        /* 1. Ngritja e shiritit të navigimit më lart nga fundi */
-        .bottom-nav {
-            position: fixed !important;
-            bottom: 30px !important; /* E ngritur mjaftueshëm që të mos mbulohet në tel ose komputer */
-            left: 15px !important;
-            right: 15px !important;
-            width: auto !important;
-            height: 65px !important;
-            background-color: #1a1a1a !important;
-            display: flex !important;
-            justify-content: space-around !important;
-            align-items: center !important;
-            padding: 0 5px !important;
-            border-radius: 20px !important;
-            border: 1px solid #333 !important;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.😎 !important;
-            z-index: 999999 !important;
-        }
-
-        /* 2. Menuja që hapet djathtas */
+        /* 1. Menuja që hapet djathtas (E vendosur e para që të ketë prioritet) */
         .my-oraswiss-menu, .menu-content {
             display: none !important;
             position: fixed !important;
@@ -121,18 +102,15 @@
             border-radius: 15px !important;
             border: 1px solid #333 !important;
             padding: 10px !important;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.😎 !important;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.5) !important;
             z-index: 1000000 !important;
         }
 
         .my-oraswiss-menu.active, .menu-content.active {
             display: block !important;
         }
-        .my-oraswiss-menu.active, .menu-content.active {
-            display: block !important;
-        }
 
-        /* 3. Stili i brendshëm i opsioneve të menusë */
+        /* Stili i brendshëm i opsioneve të menusë */
         .my-oraswiss-menu .menu-item, .menu-content .menu-item { 
             display: flex !important; 
             justify-content: space-between !important; 
@@ -142,6 +120,25 @@
             cursor: pointer !important; 
             color: #fff !important;
             text-decoration: none !important;
+        }
+
+/* 2. Ngritja e shiritit të navigimit më lart nga fundi */
+        .bottom-nav {
+            position: fixed !important;
+            bottom: 30px !important;
+            left: 15px !important;
+            right: 15px !important;
+            width: auto !important;
+            height: 65px !important;
+            background-color: #1a1a1a !important;
+            display: flex !important;
+            justify-content: space-around !important;
+            align-items: center !important;
+            padding: 0 5px !important;
+            border-radius: 20px !important;
+            border: 1px solid #333 !important;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
+            z-index: 999999 !important;
         }
 
         .my-oraswiss-menu .menu-item:last-child, .menu-content .menu-item:last-child { 

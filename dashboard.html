@@ -251,18 +251,20 @@
 
         const teGjitha = [...(watches || []), ...(straps || [])];
 
-        lista.innerHTML = "";
+lista.innerHTML = "";
         if (teGjitha.length === 0) {
             lista.innerHTML = "<li>Nuk keni asnjë artikull në shitje.</li>";
         } else {
             teGjitha.forEach(item => {
                 const isStrap = straps && straps.some(s => s.id === item.id);
-                const typeParam = isStrap ? '&type=straps' : '';
+                
+                // Këtu përcaktohet faqja e detajeve bazuar te lloji i artikullit
+                const detailPage = isStrap ? 'bracelet-details.html' : 'watch-details.html';
 
                 const li = document.createElement("li");
                 li.className = "watch-card";
                 li.innerHTML = `
-                    <a href="edit.html?id=${item.id}${typeParam}" style="text-decoration:none; color:inherit; display:flex; align-items:center; width:100%;">
+                    <a href="${detailPage}?id=${item.id}" style="text-decoration:none; color:inherit; display:flex; align-items:center; width:100%;">
                         <img src="${item.image_url && item.image_url[0] ? item.image_url[0] : ''}" alt="${item.brand || 'Artikull'}" style="width:100px; height:auto; margin-right:15px; object-fit:cover;">
                         <div>
                             <strong>${item.brand || 'Rrip'}</strong> - ${item.price} €

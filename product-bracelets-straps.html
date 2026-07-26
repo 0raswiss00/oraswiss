@@ -83,9 +83,6 @@ let productData = null;
 const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get("id");
 
-// Deklarohet vetëm një herë këtu
-let productData = null;
-
 if (productId) {
     loadProduct(productId);
 } else {
@@ -105,11 +102,10 @@ async function loadProduct(idToLoad) {
         return;
     }
     
-    // Përdoret direkt pa 'let' ose 'const' sepse është deklaruar lart
     productData = data;
     console.log("Produkti u ngarkua:", productData);
-}
-    
+
+    // Mbushja e elementeve HTML kryhet këtu brenda ku ekziston 'data'
     document.getElementById("top-brand").innerText = data.brand || "N/A";
     document.getElementById("top-model").innerText = data.model || "N/A";
     document.getElementById("top-price").innerText = (data.price || 0) + " €";

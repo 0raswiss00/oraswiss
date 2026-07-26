@@ -310,14 +310,20 @@
     const joinedText = document.getElementById("sellerJoined");
     joinedText.textContent = "Anëtar që nga " + created.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
 
-    const countries = {
+   const countries = {
       "Albania": "🇦🇱 Shqipëri",
       "Switzerland": "🇨🇭 Zvicër",
       "Italy": "🇮🇹 Itali",
-      "Germany": "🇩🇪 Gjermani"
+      "Germany": "🇩🇪 Gjermani",
+      "AL": "🇦🇱 Shqipëri",
+      "CH": "🇨🇭 Zvicër",
+      "IT": "🇮🇹 Itali",
+      "DE": "🇩🇪 Gjermani"
     };
-    countryEl.textContent = countries[meta.country] || meta.country || "-";
 
+    const userCountry = meta.country || meta.shteti || "-";
+    countryEl.textContent = countries[userCountry] || userCountry;
+    
     if (isOwner && user) {
       document.querySelectorAll(".private-field").forEach(el => el.style.display = "block");
 

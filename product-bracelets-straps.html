@@ -101,9 +101,6 @@ async function loadProduct(idToLoad) {
         console.error("Gabim nga Supabase:", error);
         return;
     }
-    
-    productData = data;
-    console.log("Produkti u ngarkua:", productData);
 
     // Mbushja e elementeve HTML kryhet këtu brenda ku ekziston 'data'
     document.getElementById("top-brand").innerText = data.brand || "N/A";

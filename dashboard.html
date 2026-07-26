@@ -106,19 +106,47 @@
         }
         .my-oraswiss-menu.active { display: block; }
     
-        .menu-content .menu-item, .my-oraswiss-menu .menu-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 10px;
-            border-bottom: 1px solid #222;
-            cursor: pointer;
+        /* Kutia e menusë në anën e djathtë */
+        .my-oraswiss-menu, .menu-content {
+            display: none; 
+            position: fixed !important;
+            bottom: 80px !important; 
+            right: 10px !important; 
+            left: auto !important; 
+            width: 220px !important; 
+            background: #1a1a1a !important;
+            border-radius: 15px !important;
+            border: 1px solid #333 !important;
+            padding: 10px !important;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.😎 !important;
+            z-index: 1000000 !important;
         }
 
-        .menu-content .menu-item:last-child, .my-oraswiss-menu .menu-item:last-child {
-            border-bottom: none;
+        .my-oraswiss-menu.active, .menu-content.active {
+            display: block !important;
         }
-    
+
+        /* Stili i çdo opsioni brenda menusë (menu-item) */
+        .my-oraswiss-menu .menu-item, .menu-content .menu-item { 
+            display: flex !important; 
+            justify-content: space-between !important; 
+            align-items: center !important; 
+            padding: 15px 10px !important; 
+            border-bottom: 1px solid #222 !important; 
+            cursor: pointer !important; 
+            color: #fff !important;
+            text-decoration: none !important;
+        }
+
+        /* Hiq vijën ndarëse te elementi i fundit */
+        .my-oraswiss-menu .menu-item:last-child, .menu-content .menu-item:last-child { 
+            border-bottom: none !important; 
+        }
+
+        body {
+            padding-bottom: 110px !important;
+        }
+        
         .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; }
     </style>
 </head>

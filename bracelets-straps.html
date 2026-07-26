@@ -1,403 +1,122 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<!doctype html>
+<html lang="sq">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Sell Bracelet / Strap</title>
-
-<style>
-
-body{
-    background:#111;
-    color:white;
-    font-family:Arial,sans-serif;
-}
-
-
-form{
-
-    max-width:600px;
-    margin:30px auto;
-    background:#1b1b1b;
-    padding:25px;
-    border-radius:10px;
-
-}
-
-
-h2{
-
-    text-align:center;
-
-}
-
-
-label{
-
-    display:block;
-    margin-top:12px;
-    margin-bottom:5px;
-    color:#ccc;
-
-}
-
-
-input,select,textarea{
-
-    width:100%;
-    padding:10px;
-    background:#222;
-    color:white;
-    border:1px solid #444;
-    border-radius:5px;
-    box-sizing:border-box;
-
-}
-
-
-button{
-
-    width:100%;
-    margin-top:20px;
-    padding:12px;
-    background:#c9a227;
-    color:white;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-    font-size:16px;
-
-}
-
-
-button:hover{
-
-    opacity:.8;
-
-}
-
-
-</style>
-
+  <meta charset="utf-8"/>
+  <title>Bracelets & Straps - Ora Swiss</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KD2ZZ3MJYY');
+  </script>
+  <style>
+    body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
+    .nav-filters { margin-bottom: 30px; }
+    .nav-filters a { background: #2a2a8e; color: #fff; padding: 8px 15px; border-radius: 20px; text-decoration: none; margin-right: 10px; font-weight: bold; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+    .card { background: #111; padding: 15px; border-radius: 10px; border: 1px solid #333; }
+    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
+    .price { color: #25D366; font-weight: bold; margin-top: 10px; font-size: 1.2em; }
+  </style>
 </head>
-
-
 <body>
 
-
-<form id="braceletForm">
-
-
-<h2>Add Bracelet / Strap</h2>
-
-
-<label>Category</label>
-
-<input 
-id="category"
-value="Bracelets / Straps"
-readonly>
-
-
-<label>Brand</label>
-<input id="brand" type="text" placeholder="Brand" required>
-
-<label>Model</label>
-<input id="model" type="text" placeholder="Model">
-
-<label>Reference Number</label>
-<input id="reference" type="text" placeholder="Reference number">
-
-
-
-<label>Year</label>
-<input id="year" type="number" placeholder="Year">
-
-    
-
-<label>Price (€)</label>
-
-<input 
-id="price"
-type="number"
-placeholder="Price">
-
-
-
-<label>Type</label>
-
-<select id="type">
-
-<option value="Bracelet">
-Bracelet
-</option>
-
-<option value="Strap">
-Strap
-</option>
-
-</select>
-
-
-
-<label>Condition</label>
-
-<select id="condition">
-
-<option value="New">
-New
-</option>
-
-<option value="Used">
-Used
-</option>
-
-</select>
-
-
-
-<label>Material</label>
-
-<select id="material">
-
-<option>Stainless Steel</option>
-<option>Titanium</option>
-<option>Gold</option>
-<option>White Gold</option>
-<option>Rose Gold</option>
-<option>Platinum</option>
-<option>Ceramic</option>
-<option>Carbon</option>
-<option>Silver</option>
-<option>Two-Tone</option>
-<option>Leather</option>
-<option>Crocodile</option>
-<option>Alligator</option>
-<option>Snake</option>
-<option>Rubber</option>
-<option>NATO</option>
-<option>Textile</option>
-<option>Other</option>
-
-</select>
-
-
-
-<label>Gold Purity</label>
-
-<select id="gold_purity">
-
-<option value="">
-Select
-</option>
-
-<option>
-18K
-</option>
-
-<option>
-14K
-</option>
-
-<option>
-22K
-</option>
-
-<option>
-24K
-</option>
-
-</select>
-
-
-
-<label>Color</label>
-
-<select id="color">
-
-<option>Silver</option>
-<option>Black</option>
-<option>Gold</option>
-<option>Rose Gold</option>
-<option>Two-Tone</option>
-<option>Brown</option>
-<option>Blue</option>
-<option>Other</option>
-
-</select>
-
-
-
-<label>Lug Width (mm)</label>
-
-<input 
-id="lug_width"
-type="text"
-placeholder="Example: 20mm">
-
-
-
-<label>Clasp / Buckle Width (mm)</label>
-
-<input 
-id="clasp_width"
-type="text"
-placeholder="Example: 18mm">
-
-
-
-<label>Length (mm)</label>
-
-<input 
-id="length"
-type="text"
-placeholder="Example: 120/75mm">
-
-
-
-<label>Thickness (mm)</label>
-
-<input 
-id="thickness"
-type="text"
-placeholder="Example: 3.5mm">
-
-
-
-<label>Description</label>
-
-<textarea
-id="description"
-rows="5"
-placeholder="Description">
-</textarea>
-
-
-
-<label>Upload Photos</label>
-
-<input 
-id="fileInput"
-type="file"
-accept="image/*"
-multiple>
-
-
-<button type="submit">
-Sell Now
-</button>
-
-
-</form>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-<script src="db-connect.js"></script>
-
-<script>
-// Përdorim eventinDOMContentLoaded për t'u siguruar që HTML është gati
-document.addEventListener("DOMContentLoaded", async function() {
-
-    // Kontrollojmë nëse klienti është ngarkuar direkt nga db-connect.js
-    if (!window.supabaseClient) {
-        console.error("Supabase client nuk u gjet!");
-        alert("Gabim në lidhjen me databazën.");
+  <div class="nav-filters">
+    <a href="luxury.html">Luxury</a>
+    <a href="vintage.html">Vintage</a>
+    <a href="parts.html">Parts</a>
+    <a href="bracelets.html">Bracelets & Straps</a>
+  </div>
+
+  <h1>Bracelets & Straps Collection</h1>
+  <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
+  <script>
+    const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
+    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function loadOras() {
+      const container = document.getElementById("oras-container");
+      
+      // Marrim të dhënat nga tabela e re e rripave
+      const { data, error } = await client
+        .from('bracelets_straps')
+        .select('*');
+
+      if (error) {
+        container.innerHTML = "Gabim: " + error.message;
         return;
-    }
+      }
 
-    const { data: { user }, error: authError } = await window.supabaseClient.auth.getUser();
-
-    if (authError || !user) {
-        alert("Duhet të jesh i loguar!");
-        window.location.href = "register.html";
+      container.innerHTML = "";
+      
+      if (!data || data.length === 0) {
+        container.innerHTML = "<p>Nuk ka artikuj në këtë kategori.</p>";
         return;
-    }
+      }
 
-    const form = document.getElementById("braceletForm");
-    if (!form) {
-        console.error("Formulari braceletForm nuk u gjet!");
-        return;
-    }
+      let cardsHtml = "";
 
-    form.addEventListener("submit", async function(e) {
-        e.preventDefault();
-        console.log("U klikua butoni për të dërguar formën...");
+      data.forEach(ora => {
+        let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+        let primaryImage = "";
 
-        const fileInput = document.getElementById("fileInput");
-        const selectedFiles = fileInput ? fileInput.files : [];
-        let imageUrls = [];
+        if (ora.image_url && ora.image_url.length > 0) {
+            primaryImage = Array.isArray(ora.image_url) ? ora.image_url[0] : ora.image_url;
+        }
 
-        // Upload photos
-        for (let i = 0; i < selectedFiles.length; i++) {
-            const file = selectedFiles[i];
-            const fileName = Date.now() + "_" + i + "_" + file.name;
-
-            const { error: uploadError } = 
-                await window.supabaseClient
-                    .storage
-                    .from("or-images")
-                    .upload(fileName, file);
-
-            if (uploadError) {
-                console.error("Gabim në upload të fotos:", uploadError);
-                continue;
-            }
-
-            const { data: urlData } = window.supabaseClient
-                .storage
-                .from("or-images")
-                .getPublicUrl(fileName);
-
-            if (urlData && urlData.publicUrl) {
-                imageUrls.push(urlData.publicUrl);
+        if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
+            if (primaryImage.startsWith('http')) {
+                imgUrl = primaryImage;
+            } else {
+                imgUrl = SUPABASE_URL + "/storage/v1/object/public/or-images/" + primaryImage;
             }
         }
 
-        const productData = {
-            user_id: user.id,
-            category: "bracelets_straps",
-            brand: document.getElementById("brand").value,
-            model: document.getElementById("model").value,
-            reference: document.getElementById("reference").value,
-            year: Number(document.getElementById("year").value) || null,
-            price: Number(document.getElementById("price").value) || null,
-            type: document.getElementById("type").value,
-            condition: document.getElementById("condition").value,
-            material: document.getElementById("material").value,
-            gold_purity: document.getElementById("gold_purity").value,
-            color: document.getElementById("color").value,
-            lug_width: document.getElementById("lug_width").value,
-            clasp_width: document.getElementById("clasp_width").value,
-            length: document.getElementById("length").value,
-            thickness: document.getElementById("thickness").value,
-            description: document.getElementById("description").value,
-            image_url: imageUrls.length > 0 ? [imageUrls[0]] : null
-        };
+        const buyNowButton = ora.price 
+            ? `<a href="${ora.paypal_link || '#'}" target="_blank" style="text-decoration:none;" onclick="event.stopPropagation();">
+                 <button class="btn-main btn-buy" style="margin-top:5px; width:100%; background-color:#ffeb00; color:#000; font-weight:bold; padding:10px; border:none; border-radius:5px; cursor:pointer;">
+                     🛒 Buy Now
+                 </button>
+               ` : ''; 
 
-        console.log("Po dërgohen të dhënat:", productData);
+        cardsHtml += `
+        <div class="card" onclick="window.location.href='product.html?id=${ora.id}'" style="cursor:pointer;">
+            <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
+            <img src="${imgUrl}" style="width:100%; height:200px; object-fit:cover; border-radius:5px; margin-top:5px;">
+            <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
 
-        const { data, error } = await window.supabaseClient
-            .from("bracelets_straps")
-            .insert([productData])
-            .select();
+            <input type="email" id="email_parts_${ora.id}" placeholder="Emaili yt" style="width:100%; margin:5px 0; padding:8px; box-sizing:border-box; background:#222; border:1px solid #444; color:#fff; border-radius:5px;" onclick="event.stopPropagation();">
+            
+            <button class="btn-main btn-secondary" style="width:100%; padding:10px; margin-bottom:5px; border-radius:5px; border:1px solid #555; background:#333; color:#fff; cursor:pointer;" 
+                onclick="event.stopPropagation(); const emailVal = document.getElementById('email_parts_${ora.id}').value; if(!emailVal){ alert('Ju lutem vendosni email-in!'); return; } alert('Kërkesa u dërgua: ' + emailVal);">
+                Send Request
+            </button>
 
-        if (error) {
-            console.error("Gabim nga databaza Supabase:", error);
-            alert("Database error: " + error.message);
-            return;
-        }
+            ${buyNowButton}
 
-        console.log("U publikua me sukses:", data);
-        alert("Bracelet / Strap published successfully!");
-        window.location.href = "dashboard.html";
-    });
+            <div style="display: flex; gap:5px; margin-top:5px;">
+                <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('Liked!')" style="flex:1; padding:8px; background:#222; color:#fff; border:1px solid #444; border-radius:5px; cursor:pointer;">
+                    ❤️ Like
+                </button>
+                <button class="btn-main btn-secondary" style="flex:1; padding:8px; background:#222; color:#fff; border:1px solid #444; border-radius:5px; cursor:pointer;" 
+                    onclick="event.stopPropagation(); const productUrl = window.location.origin + '/product.html?id=${ora.id}'; navigator.clipboard.writeText(productUrl).then(() => { alert('Linku u kopjua!'); }).catch(() => { alert('Gabim gjatë kopjimit!'); });">
+                    🔗 Share
+                </button>
+            </div>
+        </div>
+        `;
+      });
 
-});
-</script>
+      container.innerHTML = cardsHtml;
+    }
 
+    loadOras();
+  </script>
 
 </body>
-
 </html>

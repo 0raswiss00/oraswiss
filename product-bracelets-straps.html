@@ -83,7 +83,8 @@ let productData = null;
 const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get("id");
 
-let productData = null; // Sigurohu që e ke deklaruar këtë diku lart
+// Deklarohet vetëm një herë këtu
+let productData = null;
 
 if (productId) {
     loadProduct(productId);
@@ -93,7 +94,6 @@ if (productId) {
 }
 
 async function loadProduct(idToLoad) {
-    // Përdorim tabelën e saktë nga Supabase: bracelets_straps
     const { data, error } = await supabaseClient
         .from("bracelets_straps")
         .select("*")
@@ -105,11 +105,9 @@ async function loadProduct(idToLoad) {
         return;
     }
     
+    // Përdoret direkt pa 'let' ose 'const' sepse është deklaruar lart
     productData = data;
     console.log("Produkti u ngarkua:", productData);
-
-    // Këtu vendos kodin për të mbushur elementet HTML (p.sh. emrin, çmimin, foton)
-    // shembull: document.getElementById('product-title').innerText = productData.brand;
 }
     
     document.getElementById("top-brand").innerText = data.brand || "N/A";

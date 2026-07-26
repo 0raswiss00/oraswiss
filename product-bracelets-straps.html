@@ -83,10 +83,13 @@ let productData = null;
 const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get("id");
 
+let productData = null; // Sigurohu që e ke deklaruar këtë diku lart
+
 if (productId) {
     loadProduct(productId);
 } else {
     console.error("ID mungon!");
+    alert("ID mungon në URL!");
 }
 
 async function loadProduct(idToLoad) {
@@ -103,6 +106,11 @@ async function loadProduct(idToLoad) {
     }
     
     productData = data;
+    console.log("Produkti u ngarkua:", productData);
+
+    // Këtu vendos kodin për të mbushur elementet HTML (p.sh. emrin, çmimin, foton)
+    // shembull: document.getElementById('product-title').innerText = productData.brand;
+}
     
     document.getElementById("top-brand").innerText = data.brand || "N/A";
     document.getElementById("top-model").innerText = data.model || "N/A";

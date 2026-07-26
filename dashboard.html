@@ -251,15 +251,15 @@
 
         const teGjitha = [...(watches || []), ...(straps || [])];
 
-lista.innerHTML = "";
+        lista.innerHTML = "";
         if (teGjitha.length === 0) {
             lista.innerHTML = "<li>Nuk keni asnjë artikull në shitje.</li>";
         } else {
             teGjitha.forEach(item => {
                 const isStrap = straps && straps.some(s => s.id === item.id);
                 
-                // Këtu përcaktohet faqja e detajeve bazuar te lloji i artikullit
-                const detailPage = isStrap ? 'bracelet-details.html' : 'watch-details.html';
+                // Përcaktojmë faqen e saktë të detajeve
+                const detailPage = isStrap ? 'bracelet-strap-detals.html' : 'watch-details.html';
 
                 const li = document.createElement("li");
                 li.className = "watch-card";
@@ -275,7 +275,6 @@ lista.innerHTML = "";
             });
         }
     }
-
     function toggleMenu(menuId) {
         const menu = document.getElementById(menuId);
         if (!menu) return; 

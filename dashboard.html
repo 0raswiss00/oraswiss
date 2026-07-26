@@ -8,8 +8,9 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; 
             background: #000; 
             color: #fff; 
-            padding: 20px; 
-            padding-bottom: 80px; 
+            padding: 15px; 
+            padding-top: 15px; 
+            padding-bottom: 120px; /* Hapësirë e madhe poshtë që të mos mbulohet asgjë nga nav-bar */
             margin: 0;
         }
         .search-container { margin-bottom: 20px; }
@@ -19,7 +20,7 @@
             background: #111;
             border: 1px solid #333;
             border-radius: 8px;
-            padding: 8px 12px;
+            padding: 10px 12px;
         }
         .search-box input {
             background: transparent;
@@ -30,51 +31,69 @@
             font-size: 14px;
             margin-left: 8px;
         }
-        .camera-icon {
+            .camera-icon {
             background: none;
             border: none;
             cursor: pointer;
             font-size: 16px;
         }
-        .profile-header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 20px; }
-        .btn-sell { background: gold; color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 5px; cursor: pointer; width: 100%; margin-bottom: 20px; }
-        
-        /* SHIRITI I POSHTËM FIKS (Bottom Navigation) */
+        .profile-header { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            border-bottom: 1px solid #333; 
+            padding-bottom: 20px; 
+        }
+        .btn-sell { 
+            background: gold; 
+            color: #000; 
+            font-weight: bold; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            width: 100%; 
+            margin-bottom: 20px; 
+        }
+    
+        /* SHIRITI I POSHTËM FIKS (I ngritur më lart që të mos bllokohet nga telefoni) */
         .bottom-nav {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
+            bottom: 15px; /* E ngritur pak nga fundi i ekranit */
+            left: 3%;
+            width: 94%;
             background: #111;
-            border-top: 1px solid #333;
+            border: 1px solid #333;
+            border-radius: 12px;
             display: flex;
             justify-content: space-around;
             align-items: center;
             padding: 12px 0;
             z-index: 1000;
+            box-shadow: 0px 5px 20px rgba(0,0,0,0.8);
             transition: transform 0.3s ease;
         }
         .bottom-nav.hidden {
-            transform: translateY(100%);
+            transform: translateY(150%);
         }
         .bottom-nav-item {
             color: #fff;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 11px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 3px;
             cursor: pointer;
             background: none;
             border: none;
         }
         .bottom-nav-item:hover { color: gold; }
 
-        /* MENUJA "MY ORASWISS" (E fshehur fillimisht) */
+        /* MENUJA "MY ORASWISS" */
         .my-oraswiss-menu { 
             display: none; 
             position: fixed;
-            bottom: 70px; 
+            bottom: 85px; 
             left: 5%;
             width: 90%;
             background: #111; 
@@ -83,13 +102,13 @@
             z-index: 999;
             padding: 10px;
             box-sizing: border-box;
-            box-shadow: 0px -5px 15px rgba(0,0,0,0.5);
+            box-shadow: 0px -5px 15px rgba(0,0,0,0.8);
         }
         .my-oraswiss-menu.active { display: block; }
-        
+    
         .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 10px; border-bottom: 1px solid #222; cursor: pointer; }
         .menu-item:last-child { border-bottom: none; }
-        
+    
         .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; }
     </style>
 </head>

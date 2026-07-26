@@ -126,14 +126,15 @@
         }
 
         /* 2. Menuja që hapet djathtas, e vendosur saktësisht mbi shirit */
+        /* 2. Menuja që hapet djathtas */
         .my-oraswiss-menu, .menu-content {
-            display: none; 
+            display: none !important;
             position: fixed !important;
-            bottom: 105px !important; /* Fiks sipër shiritit të ngritur */
-            right: 15px !important; /* E ankoruar në të djathtë */
-            left: auto !important; 
-            width: 220px !important; 
-    background: #1a1a1a !important;
+            bottom: 105px !important;
+            right: 15px !important;
+            left: auto !important;
+            width: 220px !important;
+            background: #1a1a1a !important;
             border-radius: 15px !important;
             border: 1px solid #333 !important;
             padding: 10px !important;
@@ -141,6 +142,9 @@
             z-index: 1000000 !important;
         }
 
+        .my-oraswiss-menu.active, .menu-content.active {
+            display: block !important;
+        }
         .my-oraswiss-menu.active, .menu-content.active {
             display: block !important;
         }

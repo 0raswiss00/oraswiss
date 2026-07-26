@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="sq">
+<head>
+  <meta charset="utf-8"/>
+  <title>Bracelets & Straps - Ora Swiss</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
+    .nav-filters { margin-bottom: 30px; }
+    .nav-filters a { background: #2a2a8e; color: #fff; padding: 8px 15px; border-radius: 20px; text-decoration: none; margin-right: 10px; font-weight: bold; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+    .card { background: #111; padding: 15px; border-radius: 10px; border: 1px solid #333; cursor: pointer; }
+    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
+    .price { color: #25D366; font-weight: bold; margin-top: 10px; font-size: 1.2em; }
+  </style>
+</head>
+<body>
+
+  <div class="nav-filters">
+    <a href="luxury.html">Luxury</a>
+    <a href="vintage.html">Vintage</a>
+    <a href="parts.html">Parts</a>
+    <a href="bracelets.html">Bracelets & Straps</a>
+  </div>
+
+  <h1>Bracelets & Straps Collection</h1>
+  <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
+  <script>
+    const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"; 
+    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function loadOras() {
+      const container = document.getElementById("oras-container");
+      
+      const { data, error } = await client
+        .from('bracelets_straps')
+        .select('*');
+
+      if (error) {
+        container.innerHTML = "Gabim: " + error.message;
+        return;
+      }
+
+      container.innerHTML = "";
+      
+      if (!data || data.length === 0) {
+        container.innerHTML = "<p>Nuk ka artikuj në këtë kategori.</p>";
+        return;
+      }
+
+      let cardsHtml = "";
+
+      data.forEach(item => {
+        let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+        let primaryImage = "";
+
+        if (item.image_url && item.image_url.length > 0) {
+            primaryImage = Array.isArray(item.image_url) ? item.image_url[0] : item.image_url;
+        }
+
+        if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
+            imgUrl = primaryImage;
+        }
+
+        cardsHtml += `
+        <div class="card" onclick="window.location.href='product.html?id=${item.id}'">
+            <h3>${item.brand || ''} - ${item.model || ''}</h3>
+            <img src="${imgUrl}">
+            <div class="price">${item.price ? item.price + ' €' : 'Contact'}</div>
+        </div>
+        `;
+      });
+
+      container.innerHTML = cardsHtml;
+    }
+
+    loadOras();
+  </script>
+
+</body>
+</html>

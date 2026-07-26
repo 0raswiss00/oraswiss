@@ -9,6 +9,7 @@
     body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
     .wrap{max-width:520px;margin:30px auto;padding:0 16px}
     button{padding:10px 14px;border-radius:10px;border:1px solid #777;background:#111;color:#fff;cursor:pointer}
+    .private-field { display: none; } /* Për të fshehur të dhënat private kur shikohet si blerës */
   </style>
 </head>
 
@@ -21,54 +22,45 @@
     <p id="sellerBadge"></p>
 
     <h3>Feedback-u i blerësve:</h3>
-    <ul id="feedbackList"></ul>
+    <ul id="feedbackList"><li>Nuk ka ende feedback.</li></ul>
 
-    <p>Email: <b id="userEmail"></b></p>
-    <p>Emri: <b id="userName">-</b></p>
-    <p>Telefon: <b id="userPhone">-</b></p>
+    <!-- Të dhënat private që do të duken vetëm për pronarin e profilit -->
+    <div id="ownerSection" class="private-field">
+      <p>Email: <b id="userEmail"></b></p>
+      <p>Emri: <b id="userName">-</b></p>
+      <p>Telefon: <b id="userPhone">-</b></p>
+      <p>Rruga: <b id="userStreet">-</b></p>
+      <p>Nr. Shtëpisë: <b id="userHouseNumber">-</b></p>
+      <p>Kodi Postar: <b id="userZip">-</b></p>
+      <p>Te regjistruar gjithsej: <b id="userCount">0</b></p>
+    </div>
+
+    <!-- Të dhënat që i duhen edhe blerësit (Shteti) -->
     <p>Shteti: <b id="userCountry">-</b></p>
-    <p>Rruga: <b id="userStreet">-</b></p>
-    <p>Nr. Shtëpisë: <b id="userHouseNumber">-</b></p>
-    <p>Kodi Postar: <b id="userZip">-</b></p>
 
-    <p>Te regjistruar gjithsej: <b id="userCount">0</b></p>
+    <!-- Seksioni i verifikimit (vetëm për pronarin) -->
+    <div id="verificationSection" class="private-field">
+      <h3>🔒 Verifikimi i identitetit</h3>
+      <select id="documentType">
+        <option value="">Zgjidh dokumentin</option>
+        <option value="ID">Kartë ID</option>
+        <option value="Passport">Pasaportë</option>
+      </select>
+      <p><input id="documentNumber" placeholder="Numri i dokumentit"></p>
+      <p><label>Foto përpara:</label><br><input id="photoFront" type="file" accept="image/*"></p>
+      <p><label>Foto mbrapa:</label><br><input id="photoBack" type="file" accept="image/*"></p>
+      <button id="btnVerify" type="button">Dërgo për verifikim</button>
+      <p id="verifyMsg"></p>
+      <button id="btnLogout" type="button">Logout</button>
+    </div>
 
-    <h3>🔒 Verifikimi i identitetit</h3>
-
-    <select id="documentType">
-      <option value="">Zgjidh dokumentin</option>
-      <option value="ID">Kartë ID</option>
-      <option value="Passport">Pasaportë</option>
-    </select>
-
-    <p>
-    <input id="documentNumber" placeholder="Numri i dokumentit">
-    </p>
-
-    <p>
-    <label>Foto përpara:</label><br>
-    <input id="photoFront" type="file" accept="image/*">
-    </p>
-
-    <p>
-    <label>Foto mbrapa:</label><br>
-    <input id="photoBack" type="file" accept="image/*">
-    </p>
-
-    <button id="btnVerify" type="button">
-    Dërgo për verifikim
-    </button>
-
-    <p id="verifyMsg"></p>
-    
-    <button id="btnLogout" type="button">Logout</button>
     <p id="msg" style="margin-top:12px;"></p>
 
     <h3>Artikujt e shitësit:</h3>
-
     <div class="watch-scroll">
       <ul id="sellerWatches"></ul>
     </div>
+  </div>
   
 <script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
@@ -85,157 +77,108 @@
   const streetEl = document.getElementById("userStreet");
   const houseEl = document.getElementById("userHouseNumber");
   const zipEl = document.getElementById("userZip");
-  const countEl = document.getElementById("userCount");
-  const msgEl = document.getElementById("msg");
   const logoutBtn = document.getElementById("btnLogout");
   const watchList = document.getElementById("sellerWatches");
 
-  // NGARKO ORËT E SHITËSIT NGA SUPABASE
   async function loadWatches(uid) {
-
     watchList.innerHTML = "";
-
     const tables = [
       { table: "oras", label: "⌚" },
       { table: "bracelets_straps", label: "🪢" }
     ];
 
     for (const item of tables) {
-
       const { data, error } = await supabase
         .from(item.table)
         .select("*")
         .eq('user_id', uid);
 
-      if (error) {
-        console.error(error);
-        continue;
-      }
+      if (error) continue;
 
       data?.forEach(product => {
-
         const li = document.createElement("li");
-
-        li.innerHTML = `
-          <b>${product.brand || ""}</b>
-          ${product.model || ""}
-          - ${product.price || "-"}€
-        `;
-
+        li.innerHTML = `<b>${product.brand || ""}</b> ${product.model || ""} - ${product.price || "-"}€`;
         watchList.appendChild(li);
-
       });
     }
   }
 
-  // LOGJIKA KRYESORE
   window.addEventListener("DOMContentLoaded", async () => {
-
-    const { data: { user }, error } = await supabase.auth.getUser();
-
-    if (error || !user) {
-      window.location.href = "index.html";
-      return;
-    }
+    // Kontrollojmë nëse ka përdorues të loguar (mund të jetë vizitor ose vetë shitësi)
+    const { data: { user } } = await supabase.auth.getUser();
 
     const params = new URLSearchParams(window.location.search);
     const sellerIdFromUrl = params.get("id");
 
-    const profileId = sellerIdFromUrl || user.id;
+    // Përcaktojmë se profilin e kujt po shikojmë
+    const profileId = sellerIdFromUrl || (user ? user.id : null);
 
-    console.log("PROFILE ID:", profileId);
+    if (!profileId) {
+      window.location.href = "index.html";
+      return;
+    }
 
-      let sellerMeta = user.user_metadata || {};
-      let sellerEmail = user.email;
-      let sellerCreated = user.created_at;
+    // Puna e databazës për të marrë profilin e shitësit
+    const { data: sellerData, error: sellerError } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", profileId)
+      .single();
 
-      const { data: sellerData, error: sellerError } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", profileId)
-        .single();
+    if (sellerError || !sellerData) {
+      document.body.style.visibility = "visible";
+      document.getElementById("sellerTitle").textContent = "Përdoruesi nuk u gjet";
+      return;
+    }
 
-      if (!sellerError && sellerData) {
-        sellerMeta = sellerData;
-        sellerEmail = sellerData.email;
-        sellerCreated = sellerData.created_at;
-      }
-    
     document.body.style.visibility = "visible";
-    const meta = sellerMeta;
-
 
     const sellerTitle = document.getElementById("sellerTitle");
+    
+    // Krijimi i emrit në formatin: "emri_i_personalizuar.oraswiss" (ose nga kolona custom_username nëse e keni krijuar, ose full_name)
+    const usernameBase = sellerData.custom_username || sellerData.full_name || "seller";
+    sellerTitle.textContent = `${usernameBase}.oraswiss`;
 
-    sellerTitle.textContent =
-      (meta.full_name || "Seller") + "-oraswiss";
-
-
-    const created = new Date(sellerCreated);
-
+    const created = new Date(sellerData.created_at || Date.now());
     const joinedText = document.createElement("p");
-
-    joinedText.textContent =
-      "Joined " +
-      created.toLocaleDateString("en-US", {
-        month: "long",
-        year: "numeric"
-      });
-
+    joinedText.textContent = "Joined " + created.toLocaleDateString("en-US", { month: "long", year: "numeric" });
     sellerTitle.insertAdjacentElement("afterend", joinedText);
 
-
-    emailEl.textContent = user.email;
-    nameEl.textContent = meta.full_name || "-";
-    phoneEl.textContent = meta.phone || "-"
     const countries = {
       "Albania": "🇦🇱 AL",
       "Switzerland": "🇨🇭 CH",
       "Italy": "🇮🇹 IT",
       "Germany": "🇩🇪 DE"
     };
+    countryEl.textContent = countries[sellerData.country] || sellerData.country || "-";
 
-countryEl.textContent = countries[meta.country] || "-";
-    countryEl.textContent = countries[meta.country] || "-";
+    // Kontrollojmë nëse shikuesi është pronari i profilit
+    const isOwner = user && user.id === profileId;
 
-    streetEl.textContent = meta.street || "-";
-    houseEl.textContent = meta.house_number || "-";
-    zipEl.textContent = meta.zip_code || "-";
+    if (isOwner) {
+      // Shfaq të dhënat private dhe opsionin e verifikimit vetëm nëse është vetë profili yt
+      document.querySelectorAll(".private-field").forEach(el => el.style.display = "block");
 
-    // Numri total i të regjistruarve (kërkon RPC/tabelë; shih shënimin poshtë)
-    // countEl.textContent = ...;
+      emailEl.textContent = user.email;
+      nameEl.textContent = sellerData.full_name || "-";
+      phoneEl.textContent = sellerData.phone || "-";
+      streetEl.textContent = sellerData.street || "-";
+      houseEl.textContent = sellerData.house_number || "-";
+      zipEl.textContent = sellerData.zip_code || "-";
+    }
 
     await loadWatches(profileId);
   });
 
-  // VERIFIKIMI I IDENTITETIT
-
+  // VERIFIKIMI I IDENTITETIT (Nëse ekziston butoni)
   const verifyBtn = document.getElementById("btnVerify");
-
   if (verifyBtn) {
-
     verifyBtn.addEventListener("click", async () => {
-
       const { data: { user } } = await supabase.auth.getUser();
-
-      const docElement = document.getElementById("documentType");
-
-      console.log("SELECT ELEMENT:", docElement);
-      console.log("SELECT VALUE:", docElement.value);
-
-      const documentType = docElement.value;
-
-      console.log("DOCUMENT TYPE:", documentType);
-      
+      const documentType = document.getElementById("documentType").value;
       const documentNumber = document.getElementById("documentNumber").value;
-
       const frontFile = document.getElementById("photoFront").files[0];
       const backFile = document.getElementById("photoBack").files[0];
-
-      console.log("NUMBER:", documentNumber);
-      console.log("FRONT:", frontFile);
-      console.log("BACK:", backFile);
-      
       const msg = document.getElementById("verifyMsg");
 
       if (!documentType || !documentNumber || !frontFile || !backFile) {
@@ -243,48 +186,17 @@ countryEl.textContent = countries[meta.country] || "-";
         return;
       }
 
-
       const frontPath = `${user.id}/front_${Date.now()}_${frontFile.name}`;
       const backPath = `${user.id}/back_${Date.now()}_${backFile.name}`;
 
-    
-      // NGARKO FOTOT
-      const frontUpload = await supabase.storage
-        .from("identity_documents")
-        .upload(frontPath, frontFile);
-
-      const backUpload = await supabase.storage
-        .from("identity_documents")
-        .upload(backPath, backFile);
-
-
-      console.log("FRONT UPLOAD DATA:", frontUpload.data);
-      console.log("BACK UPLOAD DATA:", backUpload.data);
-
+      const frontUpload = await supabase.storage.from("identity_documents").upload(frontPath, frontFile);
+      const backUpload = await supabase.storage.from("identity_documents").upload(backPath, backFile);
 
       if (frontUpload.error || backUpload.error) {
-        console.error(frontUpload.error);
-        console.error(backUpload.error);
         msg.textContent = "Gabim gjatë ngarkimit të fotove.";
         return;
       }
 
-
-      // KRIJO LINKET
-      const { data: frontUrl, error: frontError } = await supabase.storage
-        .from("identity_documents")
-        .createSignedUrl(frontUpload.data.path, 3600);
-
-      const { data: backUrl, error: backError } = await supabase.storage
-        .from("identity_documents")
-        .createSignedUrl(backUpload.data.path, 3600);
-
-
-      console.log("FRONT LINK:", frontUrl);
-      console.log("BACK LINK:", backUrl);
-
-
-      // RUAJ KËRKESËN
       const { error } = await supabase
         .from("identity_verifications")
         .insert({
@@ -294,71 +206,24 @@ countryEl.textContent = countries[meta.country] || "-";
           photo_front: frontUpload.data.path,
           photo_back: backUpload.data.path,
           verification_status: "pending"
-       });
+        });
 
       if (error) {
-        console.error(error);
         msg.textContent = "Gabim gjatë dërgimit.";
         return;
       }
-
-
-      const { data: emailData, error: emailError } = await supabase.functions.invoke(
-        "send-email-notification",
-        {
-          body: {
-            subject: "Kërkesë e re verifikimi",
-            message: `Dokumenti: ${documentType}
-      Numri: ${documentNumber}`
-          }
-        }
-      );
-
-      console.log("EMAIL DATA:", emailData);
-      console.log("EMAIL ERROR:", emailError);
-      
-
-      // Dërgo email njoftimi
-      await supabase.functions.invoke("send-email-notification", {
-        body: {
-          subject: "Kërkesë e re verifikimi",
-          message: `U dërgua një kërkesë e re për verifikim.
-
-          Email: ${user.email}
-
-          Dokumenti: ${documentType}
-          Numri: ${documentNumber}
-
-          Foto përpara:
-          ${frontUrl.signedUrl}
-
-          Foto mbrapa:
-          ${backUrl.signedUrl}`
-        }
-      });
-
-
-      msg.textContent = "Kërkesa u dërgua për verifikim.";
-
-      console.log("ERROR:", error);
-      
-      if (error) {
-        console.error(error);
-        msg.textContent = "Gabim gjatë dërgimit.";
-        return;
-      }
-
 
       msg.textContent = "Kërkesa u dërgua për verifikim.";
     });
-
   }
-  
+
   // LOGOUT
-  logoutBtn.addEventListener("click", async () => {
-    await supabase.auth.signOut();
-    window.location.href = "index.html";
-  });
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      await supabase.auth.signOut();
+      window.location.href = "index.html";
+    });
+  }
 </script>
 </body>
 </html>

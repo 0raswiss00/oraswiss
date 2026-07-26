@@ -55,61 +55,12 @@
             margin-bottom: 20px; 
         }
     
-        /* SHIRITI I POSHTËM FIKS (I ngritur më lart që të mos bllokohet nga telefoni) */
-        .bottom-nav {
-            position: fixed;
-            bottom: 75px; /* E ngritur pak nga fundi i ekranit */
-            left: 3%;
-            width: 94%;
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 12px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 12px 0;
-            z-index: 1000;
-            box-shadow: 0px 5px 20px rgba(0,0,0,0.8);
-            transition: transform 0.3s ease;
-        }
-        .bottom-nav.hidden {
-            transform: translateY(150%);
-        }
-        .bottom-nav-item {
-            color: #fff;
-            text-decoration: none;
-            font-size: 11px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-        .bottom-nav-item:hover { color: gold; }
-
-        /* MENUJA "MY ORASWISS" */
-        .my-oraswiss-menu { 
-            display: none; 
-            position: fixed;
-            bottom: 120px; 
-            left: 5%;
-            width: 90%;
-            background: #111; 
-            border: 1px solid #333;
-            border-radius: 8px; 
-            z-index: 999;
-            padding: 10px;
-            box-sizing: border-box;
-            box-shadow: 0px -5px 15px rgba(0,0,0,0.8);
-        }
-        .my-oraswiss-menu.active { display: block; }
-    
-        /* 1. Ngritja e shiritit të navigimit më lart nga fundi */
+        /* ===============================
+           NAVIGIMI FUNDOR DHE MENUJA E DJATHTË
+           =============================== */
         .bottom-nav {
             position: fixed !important;
-            bottom: 30px !important; /* E ngritur mjaftueshëm që të mos mbulohet në tel ose komputer */
+            bottom: 30px !important;
             left: 15px !important;
             right: 15px !important;
             width: auto !important;
@@ -123,10 +74,32 @@
             border: 1px solid #333 !important;
             box-shadow: 0 5px 20px rgba(0,0,0,0.😎 !important;
             z-index: 999999 !important;
+            transition: transform 0.3s ease;
         }
 
-        /* 2. Menuja që hapet djathtas, e vendosur saktësisht mbi shirit */
-        /* 2. Menuja që hapet djathtas */
+        .bottom-nav.hidden {
+            transform: translateY(150%);
+        }
+
+        .bottom-nav-item, .bottom-nav a, .bottom-nav button {
+            color: #fff !important;
+            text-decoration: none !important;
+            font-size: 11px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 3px !important;
+            cursor: pointer !important;
+            background: none !important;
+            border: none !important;
+            flex: 1 !important;
+        }
+
+        .bottom-nav-item:hover, .bottom-nav a:hover, .bottom-nav button:hover { 
+            color: gold !important; 
+        }
+
+        /* MENUJA QË HAPET DJATHTAS */
         .my-oraswiss-menu, .menu-content {
             display: none !important;
             position: fixed !important;
@@ -145,11 +118,8 @@
         .my-oraswiss-menu.active, .menu-content.active {
             display: block !important;
         }
-        .my-oraswiss-menu.active, .menu-content.active {
-            display: block !important;
-        }
 
-        /* 3. Stili i brendshëm i opsioneve të menusë */
+        /* OPSIONET BRENDA MENUSË */
         .my-oraswiss-menu .menu-item, .menu-content .menu-item { 
             display: flex !important; 
             justify-content: space-between !important; 
@@ -163,13 +133,13 @@
 
         .my-oraswiss-menu .menu-item:last-child, .menu-content .menu-item:last-child { 
             border-bottom: none !important; 
-         }
+        }
 
-         /* 4. Hapësira në fund të faqes që të mos mbulohet asnjë orë gjatë scroll-it */
-         body {
+        /* HAPËSIRA NË FUND TË FAQES */
+        body {
             padding-bottom: 120px !important;
-         }
-        
+        }
+    
         .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; }
     </style>
 </head>

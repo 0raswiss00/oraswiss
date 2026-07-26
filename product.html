@@ -14,25 +14,39 @@
         .photo-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); border: none; color: white; font-size: 35px; width: 45px; height: 60px; border-radius: 10px; cursor: pointer; }
         .photo-left { left: 15px; } .photo-right { right: 15px; }
         .photo-counter { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.6); padding: 7px 15px; border-radius: 20px; }
-        .details { padding: 20px; max-width: 900px; margin: auto; }
-        .brand { font-size: 18px; color: #aaa; }
-        .title { font-size: 30px; margin: 5px 0; }
-        .price { font-size: 28px; color: #25D366; font-weight: bold; margin: 15px 0; }
+        
+        .details { padding: 20px; max-width: 900px; margin: auto; position: relative; }
+        
+        /* Rregullimi i Brendit dhe Modelit që të mos jenë ngjitur */
+        .brand { font-size: 18px; color: #aaa; margin-bottom: 4px; }
+        .model { font-size: 30px; font-weight: bold; margin-bottom: 15px; display: block; }
+        
+        .price-country-row { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+        .price { font-size: 28px; color: #25D366; font-weight: bold; }
+        
         .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; max-width: 900px; margin-left: auto; margin-right: auto; }
         .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
         
+        /* Stili për Share dhe Like (Zemrën) */
         .top-actions {
             display: flex;
             justify-content: flex-end;
             gap: 12px;
-            margin: 15px 0 5px 0;
-            cursor: pointer;
+            margin: 10px 0;
         }
         .top-actions .action {
             background: #111;
-            padding: 8px 12px;
+            padding: 8px 14px;
             border-radius: 20px;
-            font-size: 16px;
+            font-size: 15px;
+            cursor: pointer;
+            border: 1px solid #222;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .top-actions .action:hover {
+            background: #222;
         }
 
         .buy-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #090909; border-top: 1px solid #333; padding: 10px; display: flex; gap: 8px; z-index: 999; max-width: 900px; margin-left: 50%; transform: translateX(-50%); }
@@ -147,17 +161,18 @@
     </div>
     
     <div class="details">
+        <!-- Share dhe Like të vendosura bukur -->
         <div class="top-actions">
-            <div class="action" onclick="shareProduct()" title="Kopjo linkun">🔗 Share</div>
-            <div class="action" title="Ruaj në të preferuarat">♡</div>
+            <div class="action" onclick="shareProduct()">🔗 Share</div>
+            <div class="action" onclick="toggleLike(this)" title="Ruaj në të preferuarat">♡ Like</div>
         </div>
 
         <div class="brand" id="brand">-</div>
         <div class="model" id="model">-</div>
 
-        <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="price-country-row">
             <div class="price" id="top-price">-</div>
-            <div id="seller-country" style="background:#111; padding:8px 12px; border-radius:20px; font-size:14px;">🌍 -</div>
+            <div id="seller-country" style="background:#111; padding:8px 12px; border-radius:20px; font-size:14px; border: 1px solid #222;">🌍 -</div>
         </div>
     </div>
     
@@ -249,7 +264,6 @@ async function loadProduct() {
 
         if (error) throw error;
 
-        // Lidhja e emrit dhe feedback-ut të shitësit me profilin e tij
         const sellerName = data.seller_name || "Seller";
         const sellerProfileUrl = "profile.html?id=" + data.user_id;
 
@@ -260,7 +274,6 @@ async function loadProduct() {
         const osFeedbackEl = document.getElementById("os-feedback");
         osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
 
-        // Llogaritja e numrit të artikujve të tjerë të shitësit nga tabelat 'oras' dhe 'bracelets_straps'
         let totalItemsCount = 0;
         if (data.user_id) {
             const { count: countOras } = await supabaseClient
@@ -277,17 +290,14 @@ async function loadProduct() {
         }
         document.getElementById("os-count").textContent = totalItemsCount;
 
-        // Butoni blu për artikujt e tjerë
         document.getElementById("os-items").onclick = () => {
             window.location.href = sellerProfileUrl;
         };
 
-        // Data e anëtarësimit në shqip
         const joined = new Date(data.created_at || Date.now());
         const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
         document.getElementById("os-joined").textContent = "Anëtar që nga " + formattedJoined;
 
-        // Kontakti i shitësit (Chat)
         const contactBtn = document.getElementById("os-contact");
         if (contactBtn) {
             contactBtn.onclick = async () => {
@@ -353,7 +363,10 @@ async function loadProduct() {
 
         document.getElementById("brand").textContent = data.brand || "N/A";
         document.getElementById("model").textContent = data.model || "N/A";
-        document.getElementById("top-price").textContent = (data.price || 0) + " €";
+        
+        // Rregullimi i shfaqjes së çmimit dhe valutës saktë
+        const currencySymbol = data.currency || "€";
+        document.getElementById("top-price").textContent = (data.price || 0) + " " + currencySymbol;
         
         const serial = data.serial_number || "";
         const maskedSerial = serial.length > 3 ? serial.substring(0, 3) + 'X'.repeat(serial.length - 3) : (serial || "N/A");
@@ -442,6 +455,16 @@ function changeImage(direction) {
 function shareProduct() {
     navigator.clipboard.writeText(window.location.href);
     alert("Linku u kopjua!");
+}
+
+function toggleLike(element) {
+    if(element.innerText.includes("♡")) {
+        element.innerHTML = "❤️ Liked";
+        element.style.borderColor = "#25D366";
+    } else {
+        element.innerHTML = "♡ Like";
+        element.style.borderColor = "#222";
+    }
 }
 
 loadProduct();

@@ -43,26 +43,31 @@ body{
 .brand{
     font-weight:bold;
     font-size:16px;
+    color:#000;
+}
+.buyer-name{
+    font-size: 13px;
+    font-weight: bold;
+    color: #007bff;
+    margin-top: 3px;
 }
 .price{
     color:#009900;
     font-weight:bold;
-    margin-top:5px;
+    margin-top:3px;
+    font-size: 13px;
 }
 .last-message{
-    color:#666;
-    margin-top:8px;
-    font-size:14px;
-}
-.count{
-    position:absolute;
-    right:15px;
-    top:15px;
-    background:#000;
-    color:white;
-    padding:5px 10px;
-    border-radius:20px;
-    font-size:12px;
+    background: #f9f9f9;
+    border-left: 3px solid #d4af37;
+    padding: 6px 8px;
+    margin-top: 6px;
+    border-radius: 4px;
+    color:#333;
+    font-size:13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .empty{
     text-align:center;
@@ -74,8 +79,10 @@ body{
 
 <body>
 
-<div class="header">
-💬 Messages
+<div class="header" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; position: relative;">
+    <button onclick="window.location.href='index.html'" style="background: #d4af37; color: #000; border: none; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer; padding: 4px 10px;">Back</button>
+    <span style="position: absolute; left: 50%; transform: translateX(-50%); font-size: 18px;">💬 Messages</span>
+    <div></div>
 </div>
 
 <div id="chatList"></div>
@@ -88,7 +95,7 @@ const supabase = createClient(
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
 );
 
-async function loadChats(){
+async function loadConversations() {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
 
     if(userError || !user){
@@ -96,68 +103,86 @@ async function loadChats(){
         return;
     }
 
-    const { data: conversations, error } = await supabase
+    // 1. Marrim bisedat pa lidhje të detyruar me tabelat e tjera (shmang çdo gabim PGRST200)
+    const { data: convs, error } = await supabase
         .from("conversations")
         .select("*")
         .or(`user_one.eq.${user.id},user_two.eq.${user.id},buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
         .order("updated_at", { ascending: false });
 
-    if(error){
-        console.error(error);
+    const chatList = document.getElementById("chatList");
+    chatList.innerHTML = "";
+
+    if (error) {
+        console.error("Supabase Error:", error);
+        chatList.innerHTML = `<div class='empty'>Gabim në ngarkimin e bisedave.</div>`;
         return;
     }
 
-    const box = document.getElementById("chatList");
-    box.innerHTML = "";
-
-    if(!conversations || conversations.length === 0){
-        box.innerHTML = `<div class="empty">Nuk ke ende mesazhe</div>`;
+    if (!convs || convs.length === 0) {
+        chatList.innerHTML = `<div class='empty'>Nuk ke ende mesazhe</div>`;
         return;
     }
 
-    for(const chat of conversations){
-        let watch = null;
-        if(chat.listing_id){
-            const { data: watchData } = await supabase
+    for (const conv of convs) {
+        let watchImg = "";
+        let watchTitle = "Bisedë";
+        let watchPrice = 0;
+
+        // 2. Tërheqim të dhënat e orës veçmas nëse biseda ka listing_id
+        if (conv.listing_id) {
+            const { data: watch } = await supabase
                 .from("oras")
-                .select("brand, model, price, reference, image_url")
-                .eq("id", chat.listing_id)
+                .select("brand, model, price, image_url")
+                .eq("id", conv.listing_id)
                 .single();
-            watch = watchData;
+
+            if (watch) {
+                let imgArr = watch.image_url;
+                watchImg = Array.isArray(imgArr) ? imgArr[0] : imgArr;
+                watchTitle = `${watch.brand || ""} ${watch.model || ""}`.trim();
+                watchPrice = watch.price || 0;
+            }
         }
 
-        let image = "";
-        if(watch && watch.image_url){
-            image = Array.isArray(watch.image_url) ? watch.image_url[0] : watch.image_url;
+        // 3. Gjejmë emrin e personit tjetër (blerësit/shitësit)
+        let otherUserId = (conv.buyer_id === user.id) ? conv.seller_id : (conv.user_one === user.id ? conv.user_two : conv.buyer_id);
+        let buyerName = "Përdorues";
+
+        if (otherUserId) {
+            const { data: profile } = await supabase
+                .from("profiles")
+                .select("full_name, username")
+                .eq("id", otherUserId)
+                .single();
+            if (profile) {
+                buyerName = profile.full_name || profile.username || "Përdorues";
+            }
         }
 
-        let lastMsgText = chat.last_message || "Bisedë e re";
+        let lastMsgText = conv.last_message || "Kliko për të parë mesazhin...";
         if(lastMsgText.includes("message-images") || lastMsgText.match(/\.(jpeg|jpg|png|gif)$/i)){
-            lastMsgText = "📷 [Foto]";
+            lastMsgText = "📷 [Ka dërguar një foto]";
         }
 
         const div = document.createElement("div");
         div.className = "chat";
+        div.onclick = () => window.location.href = `chat.html?conversation=${conv.id}`;
 
         div.innerHTML = `
-            <img src="${image || ''}">
+            ${watchImg ? `<img src="${watchImg}">` : `<div style="width:80px; height:80px; background:#ddd; border-radius:12px; display:flex; align-items:center; justify-content:center;">⌚</div>`}
             <div class="chat-info">
-                <div class="brand">${watch ? (watch.brand || "") + " " + (watch.model || "") : "Bisedë"}</div>
-                <div>Reference: ${watch && watch.reference ? watch.reference : "-"}</div>
-                <div class="price">${watch && watch.price ? watch.price : 0} €</div>
-                <div class="last-message">${lastMsgText}</div>
+                <div class="brand">${watchTitle}</div>
+                <div class="buyer-name">👤 Blerësi: ${buyerName}</div>
+                <div class="price">${watchPrice} €</div>
+                <div class="last-message">💬 "${lastMsgText}"</div>
             </div>
         `;
-
-        div.onclick = () => {
-            window.location.href = "chat.html?conversation=" + chat.id;
-        };
-
-        box.appendChild(div);
+        chatList.appendChild(div);
     }
 }
 
-loadChats();
+loadConversations();
 </script>
 
 </body>

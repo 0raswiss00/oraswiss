@@ -9,7 +9,7 @@
     body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
     .wrap{max-width:520px;margin:30px auto;padding:0 16px}
     button{padding:10px 14px;border-radius:10px;border:1px solid #777;background:#111;color:#fff;cursor:pointer}
-    .private-field { display: none; } /* Fsheh të dhënat private për vizitorët/blerësit */
+    .private-field { display: none; }
   </style>
 </head>
 
@@ -24,7 +24,7 @@
     <h3>Feedback-u i blerësve:</h3>
     <ul id="feedbackList"><li>Nuk ka ende feedback.</li></ul>
 
-    <!-- TË DHËNAT PRIVATE (Duken vetëm kur pronari hap profilin e vet) -->
+    <!-- TË DHËNAT PRIVATE -->
     <div id="ownerSection" class="private-field">
       <p>Email: <b id="userEmail"></b></p>
       <p>Emri: <b id="userName">-</b></p>
@@ -35,10 +35,10 @@
       <p>Te regjistruar gjithsej: <b id="userCount">0</b></p>
     </div>
 
-    <!-- SHTETI (Duket për të gjithë) -->
+    <!-- SHTETI -->
     <p>Shteti: <b id="userCountry">-</b></p>
 
-    <!-- SEKSIONI I VERIFIKIMIT DHE LOGOUT (Duket vetëm për pronarin) -->
+    <!-- SEKSIONI I VERIFIKIMIT DHE LOGOUT -->
     <div id="verificationSection" class="private-field">
       <h3>🔒 Verifikimi i identitetit</h3>
       <select id="documentType">
@@ -70,7 +70,6 @@
   const supabaseKey = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9';
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  // ELEMENTET
   const emailEl = document.getElementById("userEmail");
   const nameEl = document.getElementById("userName");
   const phoneEl = document.getElementById("userPhone");
@@ -104,61 +103,61 @@
     }
   }
 
+  // KETU FILLON PJESA QE DUHET ZËVENDËSUAR NË KODIN TËND
   window.addEventListener("DOMContentLoaded", async () => {
-    // 1. Marrim përdoruesin e loguar aktualisht në shfletues
     const { data: { user } } = await supabase.auth.getUser();
 
-    // 2. Lexojmë URL-në për të parë nëse ka ID (p.sh. profile.html?id=xxx)
     const params = new URLSearchParams(window.location.search);
     const sellerIdFromUrl = params.get("id");
 
-    // Logjika e njohjes së pronarit:
-    // - Nëse URL ka një ID (dhe është e ndryshme nga e jona, ose s'jemi të loguar lain), jemi si Blerës/Vizitor.
-    // - Nëse URL NUK ka ID, atëherë jemi te profili ynë (kërkohet që përdoruesi të jetë i loguar).
     let profileId = sellerIdFromUrl;
 
     if (!profileId) {
       if (!user) {
-        // Nëse s'ka ID në URL dhe s'jemi të loguar, kthehu te faqja kryesore
         window.location.href = "index.html";
         return;
       }
-      profileId = user.id; // Është profili ynë
+      profileId = user.id; 
     }
 
-    // A është ky përdorues që po shikon profilin e tij personal?
     const isOwner = user && user.id === profileId;
 
     console.log("PROFILE ID:", profileId);
     console.log("A ËSHTË KY PRONARI?", isOwner);
 
-    // 3. Marrim të dhënat e profilit nga tabela "profiles"
-    const { data: sellerData, error: sellerError } = await supabase
+    // Këtu u largua .single() për të shmangur gabimin 406
+    const { data: profilesData, error: sellerError } = await supabase
       .from("profiles")
       .select("*")
-      .eq("id", profileId)
-      .single();
+      .eq("id", profileId);
+
+    const sellerData = profilesData && profilesData.length > 0 ? profilesData[0] : null;
 
     if (sellerError || !sellerData) {
+      console.error("Gabim gjatë leximit të profilit:", sellerError);
       document.body.style.visibility = "visible";
-      document.getElementById("sellerTitle").textContent = "Përdoruesi nuk u gjet";
+      
+      if (isOwner && user) {
+        document.querySelectorAll(".private-field").forEach(el => el.style.display = "block");
+        document.getElementById("sellerTitle").textContent = "Profile i ri - oraswiss";
+        document.getElementById("userEmail").textContent = user.email;
+      } else {
+        document.getElementById("sellerTitle").textContent = "Përdoruesi nuk u gjet";
+      }
       return;
     }
 
     document.body.style.visibility = "visible";
 
-    // 4. Vendosja e titullit (Emri i personalizuar + .oraswiss)
     const sellerTitle = document.getElementById("sellerTitle");
     const usernameBase = sellerData.custom_username || sellerData.full_name || "seller";
     sellerTitle.textContent = `${usernameBase}.oraswiss`;
 
-    // Data e regjistrimit (Joined...)
     const created = new Date(sellerData.created_at || Date.now());
     const joinedText = document.createElement("p");
     joinedText.textContent = "Joined " + created.toLocaleDateString("en-US", { month: "long", year: "numeric" });
     sellerTitle.insertAdjacentElement("afterend", joinedText);
 
-    // Shteti (Duket për të gjithë)
     const countries = {
       "Albania": "🇦🇱 AL",
       "Switzerland": "🇨🇭 CH",
@@ -167,7 +166,6 @@
     };
     countryEl.textContent = countries[sellerData.country] || sellerData.country || "-";
 
-    // 5. NËSE ËSHTË PRONARI: Shfaqim të dhënat e plota dhe seksionin e verifikimit/logout
     if (isOwner) {
       document.querySelectorAll(".private-field").forEach(el => el.style.display = "block");
 
@@ -179,11 +177,10 @@
       zipEl.textContent = sellerData.zip_code || "-";
     }
 
-    // 6. Ngarkojmë artikujt e këtij shitësi
     await loadWatches(profileId);
   });
+  // FUNDI I PJESËS QË ZËVENDËSOHET
 
-  // VERIFIKIMI I IDENTITETIT
   const verifyBtn = document.getElementById("btnVerify");
   if (verifyBtn) {
     verifyBtn.addEventListener("click", async () => {
@@ -230,7 +227,6 @@
     });
   }
 
-  // LOGOUT
   if (logoutBtn) {
     logoutBtn.addEventListener("click", async () => {
       await supabase.auth.signOut();

@@ -74,9 +74,10 @@ body{
 
 <body>
 
-<div class="header" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 15px;">
-    <span>💬 Messages</span>
+<div class="header" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; position: relative;">
     <button onclick="window.location.href='index.html'" style="background: none; border: none; font-size: 14px; font-weight: bold; cursor: pointer; padding: 5px 10px;">Back</button>
+    <span style="position: absolute; left: 50%; transform: translateX(-50%);">💬 Messages</span>
+    <div></div>
 </div>
 
 <div id="chatList"></div>

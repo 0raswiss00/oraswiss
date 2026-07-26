@@ -10,7 +10,7 @@
             color: #fff; 
             padding: 15px; 
             padding-top: 15px; 
-            padding-bottom: 120px; /* Hapësirë e madhe poshtë që të mos mbulohet asgjë nga nav-bar */
+            padding-bottom: 120px; 
             margin: 0;
         }
         .search-container { margin-bottom: 20px; }
@@ -55,7 +55,6 @@
             margin-bottom: 20px; 
         }
     
-        /* Menuja që hapet djathtas */
         .my-oraswiss-menu {
             display: none;
             position: fixed;
@@ -74,7 +73,6 @@
             display: block;
         }
 
-        /* Stili i brendshëm i opsioneve të menusë */
         .my-oraswiss-menu .menu-item { 
             display: flex; 
             justify-content: space-between; 
@@ -90,7 +88,6 @@
             border-bottom: none; 
         }
 
-        /* Shiriti i navigimit fiks poshtë */
         .bottom-nav {
             position: fixed;
             bottom: 30px;
@@ -142,7 +139,6 @@
 
     <ul id="myWatchesList" style="list-style: none; padding: 0;"></ul>
 
-    <!-- Menuja që hapet (Buy, Messages, etj.) -->
     <div id="myOraSwissMenu" class="my-oraswiss-menu">
         <div class="menu-item" onclick="location.href='buy.html'"><span>🛒 Buy</span> <span>></span></div>
         <div class="menu-item" onclick="location.href='mysold.html'"><span>🛒 my sold</span> <span>></span></div>
@@ -155,7 +151,6 @@
         <div class="menu-item" onclick="location.href='info.html'"><span>ℹ️ Info</span> <span>></span></div>
     </div>
 
-    <!-- Shiriti i navigimit i rregulluar -->
     <nav class="bottom-nav">
       <a href="index.html" class="bottom-nav-item">OraSwiss</a>
       <a href="profile.html" class="bottom-nav-item">Profile</a>
@@ -233,11 +228,10 @@
             lista.innerHTML = "<li>Nuk keni asnjë artikull në shitje.</li>";
         } else {
             teGjitha.forEach(item => {
-                // Kontrollim më i saktë për të gjetur nëse artikulli është te tabela 'bracelets_straps'
                 const isStrap = straps && straps.some(s => s.id === item.id);
                 
-                // Përcaktojmë faqen e saktë të detajeve (u rregullua gabimi në shkrim te skajimi i skedarit)
-                const detailPage = isStrap ? 'bracelet-strap-details.html' : 'watch-details.html';
+                // Përdoret emri i saktë i skedarit të detajeve për rripat që krijuam
+                const detailPage = isStrap ? 'product-bracelets-straps.html' : 'watch-details.html';
 
                 const li = document.createElement("li");
                 li.className = "watch-card";
@@ -277,7 +271,7 @@
 
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
-        searchInput.addEventListener('keyup', function(e) {
+        searchInput.getElementById = searchInput.addEventListener('keyup', function(e) {
             const termi = e.target.value.toLowerCase();
             const lista = document.getElementById("myWatchesList");
             const artikujt = lista.getElementsByClassName("watch-card");

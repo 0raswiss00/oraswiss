@@ -16,26 +16,37 @@ body{
     font-family:Arial,sans-serif;
 }
 
+
 form{
+
     max-width:600px;
     margin:30px auto;
     background:#1b1b1b;
     padding:25px;
     border-radius:10px;
+
 }
+
 
 h2{
+
     text-align:center;
+
 }
 
+
 label{
+
     display:block;
     margin-top:12px;
     margin-bottom:5px;
     color:#ccc;
+
 }
 
+
 input,select,textarea{
+
     width:100%;
     padding:10px;
     background:#222;
@@ -43,9 +54,12 @@ input,select,textarea{
     border:1px solid #444;
     border-radius:5px;
     box-sizing:border-box;
+
 }
 
+
 button{
+
     width:100%;
     margin-top:20px;
     padding:12px;
@@ -55,30 +69,38 @@ button{
     border-radius:5px;
     cursor:pointer;
     font-size:16px;
+
 }
 
+
 button:hover{
+
     opacity:.8;
+
 }
+
 
 </style>
 
 </head>
 
+
 <body>
 
-<div style="display: flex; align-items: center; justify-content: space-between; padding: 5px 20px; margin-top: 15px;">
-    <button type="button" onclick="window.location.href='bracelets.html'" style="width: auto; background: #d4af37; color: #000; border: none; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer; padding: 6px 12px; margin: 0;">
-        Back
-    </button>
-</div>
 
 <form id="braceletForm">
 
+
 <h2>Add Bracelet / Strap</h2>
 
+
 <label>Category</label>
-<input id="category" value="Bracelets / Straps" readonly>
+
+<input 
+id="category"
+value="Bracelets / Straps"
+readonly>
+
 
 <label>Brand</label>
 <input id="brand" type="text" placeholder="Brand" required>
@@ -89,86 +111,185 @@ button:hover{
 <label>Reference Number</label>
 <input id="reference" type="text" placeholder="Reference number">
 
+
+
 <label>Year</label>
 <input id="year" type="number" placeholder="Year">
 
+    
+
 <label>Price (€)</label>
-<input id="price" type="number" placeholder="Price">
+
+<input 
+id="price"
+type="number"
+placeholder="Price">
+
+
 
 <label>Type</label>
+
 <select id="type">
-    <option value="Bracelet">Bracelet</option>
-    <option value="Strap">Strap</option>
+
+<option value="Bracelet">
+Bracelet
+</option>
+
+<option value="Strap">
+Strap
+</option>
+
 </select>
+
+
 
 <label>Condition</label>
+
 <select id="condition">
-    <option value="New">New</option>
-    <option value="Used">Used</option>
+
+<option value="New">
+New
+</option>
+
+<option value="Used">
+Used
+</option>
+
 </select>
+
+
 
 <label>Material</label>
+
 <select id="material">
-    <option>Stainless Steel</option>
-    <option>Titanium</option>
-    <option>Gold</option>
-    <option>White Gold</option>
-    <option>Rose Gold</option>
-    <option>Platinum</option>
-    <option>Ceramic</option>
-    <option>Carbon</option>
-    <option>Silver</option>
-    <option>Two-Tone</option>
-    <option>Leather</option>
-    <option>Crocodile</option>
-    <option>Alligator</option>
-    <option>Snake</option>
-    <option>Rubber</option>
-    <option>NATO</option>
-    <option>Textile</option>
-    <option>Other</option>
+
+<option>Stainless Steel</option>
+<option>Titanium</option>
+<option>Gold</option>
+<option>White Gold</option>
+<option>Rose Gold</option>
+<option>Platinum</option>
+<option>Ceramic</option>
+<option>Carbon</option>
+<option>Silver</option>
+<option>Two-Tone</option>
+<option>Leather</option>
+<option>Crocodile</option>
+<option>Alligator</option>
+<option>Snake</option>
+<option>Rubber</option>
+<option>NATO</option>
+<option>Textile</option>
+<option>Other</option>
+
 </select>
+
+
 
 <label>Gold Purity</label>
+
 <select id="gold_purity">
-    <option value="">Select</option>
-    <option>18K</option>
-    <option>14K</option>
-    <option>22K</option>
-    <option>24K</option>
+
+<option value="">
+Select
+</option>
+
+<option>
+18K
+</option>
+
+<option>
+14K
+</option>
+
+<option>
+22K
+</option>
+
+<option>
+24K
+</option>
+
 </select>
+
+
 
 <label>Color</label>
+
 <select id="color">
-    <option>Silver</option>
-    <option>Black</option>
-    <option>Gold</option>
-    <option>Rose Gold</option>
-    <option>Two-Tone</option>
-    <option>Brown</option>
-    <option>Blue</option>
-    <option>Other</option>
+
+<option>Silver</option>
+<option>Black</option>
+<option>Gold</option>
+<option>Rose Gold</option>
+<option>Two-Tone</option>
+<option>Brown</option>
+<option>Blue</option>
+<option>Other</option>
+
 </select>
 
+
+
 <label>Lug Width (mm)</label>
-<input id="lug_width" type="text" placeholder="Example: 20mm">
+
+<input 
+id="lug_width"
+type="text"
+placeholder="Example: 20mm">
+
+
 
 <label>Clasp / Buckle Width (mm)</label>
-<input id="clasp_width" type="text" placeholder="Example: 18mm">
+
+<input 
+id="clasp_width"
+type="text"
+placeholder="Example: 18mm">
+
+
 
 <label>Length (mm)</label>
-<input id="length" type="text" placeholder="Example: 120/75mm">
+
+<input 
+id="length"
+type="text"
+placeholder="Example: 120/75mm">
+
+
 
 <label>Thickness (mm)</label>
-<input id="thickness" type="text" placeholder="Example: 3.5mm">
+
+<input 
+id="thickness"
+type="text"
+placeholder="Example: 3.5mm">
+
+
 
 <label>Description</label>
-<textarea id="description" rows="5" placeholder="Description"></textarea>
+
+<textarea
+id="description"
+rows="5"
+placeholder="Description">
+</textarea>
+
+
 
 <label>Upload Photos</label>
-<input id="fileInput" type="file" accept="image/*" multiple>
 
-<button type="submit">Sell Now</button>
+<input 
+id="fileInput"
+type="file"
+accept="image/*"
+multiple>
+
+
+<button type="submit">
+Sell Now
+</button>
+
 
 </form>
 
@@ -176,8 +297,10 @@ button:hover{
 <script src="db-connect.js"></script>
 
 <script>
+// Përdorim eventinDOMContentLoaded për t'u siguruar që HTML është gati
 document.addEventListener("DOMContentLoaded", async function() {
 
+    // Kontrollojmë nëse klienti është ngarkuar direkt nga db-connect.js
     if (!window.supabaseClient) {
         console.error("Supabase client nuk u gjet!");
         alert("Gabim në lidhjen me databazën.");
@@ -206,6 +329,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         const selectedFiles = fileInput ? fileInput.files : [];
         let imageUrls = [];
 
+        // Upload photos
         for (let i = 0; i < selectedFiles.length; i++) {
             const file = selectedFiles[i];
             const fileName = Date.now() + "_" + i + "_" + file.name;
@@ -249,7 +373,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             length: document.getElementById("length").value,
             thickness: document.getElementById("thickness").value,
             description: document.getElementById("description").value,
-            image_url: imageUrls
+            image_url: imageUrls.length > 0 ? [imageUrls[0]] : null
         };
 
         console.log("Po dërgohen të dhënat:", productData);
@@ -267,11 +391,12 @@ document.addEventListener("DOMContentLoaded", async function() {
 
         console.log("U publikua me sukses:", data);
         alert("Bracelet / Strap published successfully!");
-        window.location.href = "bracelets.html";
+        window.location.href = "dashboard.html";
     });
 
 });
 </script>
+
 
 </body>
 

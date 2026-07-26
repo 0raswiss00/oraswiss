@@ -21,38 +21,54 @@ body{
     border-bottom:1px solid #ddd;
     box-shadow:0 2px 4px rgba(0,0,0,0.05);
 }
+.header-left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+.back-btn{
+    background:none;
+    border:none;
+    font-size:18px;
+    cursor:pointer;
+    padding:5px 8px;
+    border-radius:6px;
+}
+.back-btn:hover{
+    background:#f0f0f0;
+}
 .product-info-wrapper{
     display:flex;
     align-items:center;
-    gap:15px;
+    gap:12px;
 }
 .product-header img{
-    width:50px;
-    height:50px;
+    width:45px;
+    height:45px;
     border-radius:8px;
     object-fit:cover;
 }
 .product-info .brand{
     font-weight:bold;
-    font-size:15px;
+    font-size:14px;
 }
 .product-info .price{
     color:#009900;
-    font-size:13px;
+    font-size:12px;
     font-weight:bold;
 }
 .header-actions{
     display:flex;
-    gap:10px;
+    gap:8px;
 }
 .delete-chat-btn{
     background:#ff3b30;
     color:#fff;
     border:none;
-    padding:6px 12px;
+    padding:6px 10px;
     border-radius:6px;
     cursor:pointer;
-    font-size:13px;
+    font-size:12px;
     font-weight:bold;
 }
 #chatBox{
@@ -148,11 +164,14 @@ body{
 <body>
 
 <div class="product-header" id="productHeader">
-    <div class="product-info-wrapper">
-        <img id="headerImg" src="" alt="">
-        <div class="product-info">
-            <div class="brand" id="headerTitle">Duke ngarkuar...</div>
-            <div class="price" id="headerPrice"></div>
+    <div class="header-left">
+        <button class="back-btn" id="backBtn" title="Kthehu mbrapsht">⬅️</button>
+        <div class="product-info-wrapper">
+            <img id="headerImg" src="" alt="">
+            <div class="product-info">
+                <div class="brand" id="headerTitle">Duke ngarkuar...</div>
+                <div class="price" id="headerPrice"></div>
+            </div>
         </div>
     </div>
     <div class="header-actions">
@@ -180,6 +199,11 @@ const supabase = createClient(
 const urlParams = new URLSearchParams(window.location.search);
 const conversationId = urlParams.get("conversation");
 let currentUserId = null;
+
+// Funksioni i butonit Back (kthehet te lista e mesazheve ose faqja e mëparshme)
+document.getElementById("backBtn").onclick = () => {
+    window.location.href = "messages.html"; // Ndryshoje nëse faqja e listës së mesazheve ka emër tjetër
+};
 
 async function initChat() {
     const { data: { user } } = await supabase.auth.getUser();
@@ -221,7 +245,7 @@ async function initChat() {
     }
 
     await loadMessages();
-    await markMessagesAsRead(); // Shënon mesazhet e kësaj bisede si të lexuara sapo hapen (zbritja e badge)
+    await markMessagesAsRead();
     setupRealtimeSubscription();
 }
 
@@ -244,7 +268,6 @@ async function loadMessages() {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Funksioni që kalon mesazhet në is_read = true (Kjo ndikon te zbritja e numrit/badge)
 async function markMessagesAsRead() {
     await supabase
         .from("messages")
@@ -273,7 +296,6 @@ function appendMessageToUI(msg) {
 
     container.appendChild(div);
 
-    // Mundëso fshirjen e mesazhit individual nëse është i yti (ose i të dyjëve)
     const deleteBtn = document.createElement("button");
     deleteBtn.className = "delete-msg-btn";
     deleteBtn.innerText = "Fshi";
@@ -284,7 +306,6 @@ function appendMessageToUI(msg) {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Funksioni për të fshirë një mesazh specifik
 async function deleteMessage(messageId) {
     if (!confirm("A jeni i sigurt që doni ta fshini këtë mesazh?")) return;
 
@@ -298,19 +319,14 @@ async function deleteMessage(messageId) {
         return;
     }
 
-    // Hiq elementin nga pamja (UI)
     const el = document.getElementById(`msg-${messageId}`);
     if (el) el.remove();
 }
 
-// Funksioni për të fshirë gjithë bisedën
 document.getElementById("deleteChatBtn").onclick = async () => {
     if (!confirm("Dëshironi ta fshini përgjithmonë këtë bisedë dhe të gjithë mesazhet?")) return;
 
-    // Së pari fshi mesazhet brenda bisedës
     await supabase.from("messages").delete().eq("conversation_id", conversationId);
-    
-    // Pastaj fshi vetë bisedën ose kthehu te faqja kryesore e mesazheve
     const { error } = await supabase.from("conversations").delete().eq("id", conversationId);
 
     if (error) {
@@ -318,7 +334,7 @@ document.getElementById("deleteChatBtn").onclick = async () => {
         return;
     }
 
-    window.location.href = "messages.html"; // Ndryshoje nëse faqja e listës së mesazheve ka emër tjetër
+    window.location.href = "messages.html";
 };
 
 function setupRealtimeSubscription() {
@@ -347,7 +363,6 @@ function setupRealtimeSubscription() {
                 table: "messages"
             },
             (payload) => {
-                // Nëse fshihet një mesazh nga ndonjë pajisje/përdorues tjetër, hiqe nga ekrani
                 const el = document.getElementById(`msg-${payload.old.id}`);
                 if (el) el.remove();
             }

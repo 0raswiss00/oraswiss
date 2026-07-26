@@ -54,10 +54,13 @@
         }
     </style>
 </head>
-<body>
+<div style="display: flex; align-items: center; padding: 10px 0; margin-bottom: 15px; position: relative;">
+    <button type="button" onclick="window.location.href='index.html'" style="background: none; border: none; font-size: 14px; font-weight: bold; cursor: pointer; padding: 5px 10px;">Back</button>
+    <div style="margin: 0 auto; font-size: 18px; font-weight: bold; position: absolute; left: 50%; transform: translateX(-50%);">Sales</div>
+</div>
 
-    <div id="salesList">Duke ngarkuar...</div>
-
+<div id="salesList">Duke ngarkuar...</div>
+    
     <script>
         // Inicializimi i Supabase
         const myOraSwissClient = window.supabase.createClient(

@@ -17,9 +17,14 @@ body{
     padding:10px 15px;
     display:flex;
     align-items:center;
-    gap:15px;
+    justify-content:space-between;
     border-bottom:1px solid #ddd;
     box-shadow:0 2px 4px rgba(0,0,0,0.05);
+}
+.product-info-wrapper{
+    display:flex;
+    align-items:center;
+    gap:15px;
 }
 .product-header img{
     width:50px;
@@ -36,6 +41,20 @@ body{
     font-size:13px;
     font-weight:bold;
 }
+.header-actions{
+    display:flex;
+    gap:10px;
+}
+.delete-chat-btn{
+    background:#ff3b30;
+    color:#fff;
+    border:none;
+    padding:6px 12px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:bold;
+}
 #chatBox{
     flex:1;
     padding:15px;
@@ -44,28 +63,50 @@ body{
     flex-direction:column;
     gap:10px;
 }
-.message{
+.message-container{
+    display:flex;
+    flex-direction:column;
     max-width:70%;
+}
+.message-container.sent{
+    align-self:flex-end;
+}
+.message-container.received{
+    align-self:flex-start;
+}
+.message{
     padding:10px 14px;
     border-radius:12px;
     font-size:14px;
     word-break:break-word;
+    position:relative;
 }
 .message.sent{
     background:#000;
     color:#fff;
-    align-self:flex-end;
 }
 .message.received{
     background:#e5e5ea;
     color:#000;
-    align-self:flex-start;
 }
 .message img{
     max-width:200px;
     border-radius:8px;
     display:block;
     cursor:pointer;
+}
+.delete-msg-btn{
+    background:none;
+    border:none;
+    font-size:11px;
+    color:#888;
+    cursor:pointer;
+    margin-top:2px;
+    align-self:flex-end;
+    padding:0;
+}
+.delete-msg-btn:hover{
+    color:#ff3b30;
 }
 .chat-input-area{
     padding: 8px 10px;
@@ -107,10 +148,15 @@ body{
 <body>
 
 <div class="product-header" id="productHeader">
-    <img id="headerImg" src="" alt="">
-    <div class="product-info">
-        <div class="brand" id="headerTitle">Duke ngarkuar...</div>
-        <div class="price" id="headerPrice"></div>
+    <div class="product-info-wrapper">
+        <img id="headerImg" src="" alt="">
+        <div class="product-info">
+            <div class="brand" id="headerTitle">Duke ngarkuar...</div>
+            <div class="price" id="headerPrice"></div>
+        </div>
+    </div>
+    <div class="header-actions">
+        <button class="delete-chat-btn" id="deleteChatBtn" title="Fshi gjithë bisedën">Fshi Bisedën</button>
     </div>
 </div>
 
@@ -175,7 +221,7 @@ async function initChat() {
     }
 
     await loadMessages();
-    await markMessagesAsRead(); // Shënon mesazhet e kësaj bisede si të lexuara sapo hapen
+    await markMessagesAsRead(); // Shënon mesazhet e kësaj bisede si të lexuara sapo hapen (zbritja e badge)
     setupRealtimeSubscription();
 }
 
@@ -198,7 +244,7 @@ async function loadMessages() {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Funksioni që kalon mesazhet e marra në is_read = true kur hapet chat-i
+// Funksioni që kalon mesazhet në is_read = true (Kjo ndikon te zbritja e numrit/badge)
 async function markMessagesAsRead() {
     await supabase
         .from("messages")
@@ -210,6 +256,11 @@ async function markMessagesAsRead() {
 
 function appendMessageToUI(msg) {
     const chatBox = document.getElementById("chatBox");
+    
+    const container = document.createElement("div");
+    container.className = "message-container " + (msg.sender_id === currentUserId ? "sent" : "received");
+    container.id = `msg-${msg.id}`;
+
     const div = document.createElement("div");
     div.className = "message " + (msg.sender_id === currentUserId ? "sent" : "received");
 
@@ -220,9 +271,55 @@ function appendMessageToUI(msg) {
         div.innerText = text;
     }
 
-    chatBox.appendChild(div);
+    container.appendChild(div);
+
+    // Mundëso fshirjen e mesazhit individual nëse është i yti (ose i të dyjëve)
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "delete-msg-btn";
+    deleteBtn.innerText = "Fshi";
+    deleteBtn.onclick = () => deleteMessage(msg.id);
+    container.appendChild(deleteBtn);
+
+    chatBox.appendChild(container);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
+
+// Funksioni për të fshirë një mesazh specifik
+async function deleteMessage(messageId) {
+    if (!confirm("A jeni i sigurt që doni ta fshini këtë mesazh?")) return;
+
+    const { error } = await supabase
+        .from("messages")
+        .delete()
+        .eq("id", messageId);
+
+    if (error) {
+        alert("Gabim gjatë fshirjes: " + error.message);
+        return;
+    }
+
+    // Hiq elementin nga pamja (UI)
+    const el = document.getElementById(`msg-${messageId}`);
+    if (el) el.remove();
+}
+
+// Funksioni për të fshirë gjithë bisedën
+document.getElementById("deleteChatBtn").onclick = async () => {
+    if (!confirm("Dëshironi ta fshini përgjithmonë këtë bisedë dhe të gjithë mesazhet?")) return;
+
+    // Së pari fshi mesazhet brenda bisedës
+    await supabase.from("messages").delete().eq("conversation_id", conversationId);
+    
+    // Pastaj fshi vetë bisedën ose kthehu te faqja kryesore e mesazheve
+    const { error } = await supabase.from("conversations").delete().eq("id", conversationId);
+
+    if (error) {
+        alert("Gabim gjatë fshirjes së bisedës: " + error.message);
+        return;
+    }
+
+    window.location.href = "messages.html"; // Ndryshoje nëse faqja e listës së mesazheve ka emër tjetër
+};
 
 function setupRealtimeSubscription() {
     supabase
@@ -237,10 +334,22 @@ function setupRealtimeSubscription() {
             },
             (payload) => {
                 appendMessageToUI(payload.new);
-                // Nëse mesazhi vjen nga pala tjetër ndërkohë që jemi brenda, e shënojmë menjëherë të lexuar
                 if (payload.new.sender_id !== currentUserId) {
                     markMessagesAsRead();
                 }
+            }
+        )
+        .on(
+            "postgres_changes",
+            {
+                event: "DELETE",
+                schema: "public",
+                table: "messages"
+            },
+            (payload) => {
+                // Nëse fshihet një mesazh nga ndonjë pajisje/përdorues tjetër, hiqe nga ekrani
+                const el = document.getElementById(`msg-${payload.old.id}`);
+                if (el) el.remove();
             }
         )
         .subscribe();

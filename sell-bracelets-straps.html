@@ -1,403 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Sell Bracelet / Strap</title>
-
+<title>Add New Bracelet / Strap</title>
 <style>
-
-body{
-    background:#111;
-    color:white;
-    font-family:Arial,sans-serif;
-}
-
-
-form{
-
-    max-width:600px;
-    margin:30px auto;
-    background:#1b1b1b;
-    padding:25px;
-    border-radius:10px;
-
-}
-
-
-h2{
-
-    text-align:center;
-
-}
-
-
-label{
-
-    display:block;
-    margin-top:12px;
-    margin-bottom:5px;
-    color:#ccc;
-
-}
-
-
-input,select,textarea{
-
-    width:100%;
-    padding:10px;
-    background:#222;
-    color:white;
-    border:1px solid #444;
-    border-radius:5px;
-    box-sizing:border-box;
-
-}
-
-
-button{
-
-    width:100%;
-    margin-top:20px;
-    padding:12px;
-    background:#c9a227;
-    color:white;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-    font-size:16px;
-
-}
-
-
-button:hover{
-
-    opacity:.8;
-
-}
-
-
+body { background:#111; color:white; font-family:Arial, sans-serif; }
+form { max-width:600px; margin:30px auto; background:#1b1b1b; padding:25px; border-radius:10px; }
+h2 { text-align:center; }
+label { display:block; margin-top:12px; margin-bottom:5px; color:#ccc; }
+input, select, textarea { width:100%; padding:10px; background:#222; color:white; border:1px solid #444; border-radius:5px; box-sizing:border-box; }
+.row { display:flex; gap:15px; margin-top:10px; }
+.row > * { flex:1; }
+button { width:100%; margin-top:20px; padding:12px; background:#c9a227; color:white; border:none; border-radius:5px; font-size:16px; cursor:pointer; }
+button:hover { opacity:.8; }
 </style>
-
 </head>
-
-
 <body>
 
-
-<form id="braceletForm">
-
-
-<h2>Add Bracelet / Strap</h2>
-
-
-<label>Category</label>
-
-<input 
-id="category"
-value="Bracelets / Straps"
-readonly>
-
-
-<label>Brand</label>
-<input id="brand" type="text" placeholder="Brand" required>
-
-<label>Model</label>
-<input id="model" type="text" placeholder="Model">
-
-<label>Reference Number</label>
-<input id="reference" type="text" placeholder="Reference number">
-
-
-
-<label>Year</label>
-<input id="year" type="number" placeholder="Year">
-
-    
-
-<label>Price (€)</label>
-
-<input 
-id="price"
-type="number"
-placeholder="Price">
-
-
-
-<label>Type</label>
-
-<select id="type">
-
-<option value="Bracelet">
-Bracelet
-</option>
-
-<option value="Strap">
-Strap
-</option>
-
-</select>
-
-
-
-<label>Condition</label>
-
-<select id="condition">
-
-<option value="New">
-New
-</option>
-
-<option value="Used">
-Used
-</option>
-
-</select>
-
-
-
-<label>Material</label>
-
-<select id="material">
-
-<option>Stainless Steel</option>
-<option>Titanium</option>
-<option>Gold</option>
-<option>White Gold</option>
-<option>Rose Gold</option>
-<option>Platinum</option>
-<option>Ceramic</option>
-<option>Carbon</option>
-<option>Silver</option>
-<option>Two-Tone</option>
-<option>Leather</option>
-<option>Crocodile</option>
-<option>Alligator</option>
-<option>Snake</option>
-<option>Rubber</option>
-<option>NATO</option>
-<option>Textile</option>
-<option>Other</option>
-
-</select>
-
-
-
-<label>Gold Purity</label>
-
-<select id="gold_purity">
-
-<option value="">
-Select
-</option>
-
-<option>
-18K
-</option>
-
-<option>
-14K
-</option>
-
-<option>
-22K
-</option>
-
-<option>
-24K
-</option>
-
-</select>
-
-
-
-<label>Color</label>
-
-<select id="color">
-
-<option>Silver</option>
-<option>Black</option>
-<option>Gold</option>
-<option>Rose Gold</option>
-<option>Two-Tone</option>
-<option>Brown</option>
-<option>Blue</option>
-<option>Other</option>
-
-</select>
-
-
-
-<label>Lug Width (mm)</label>
-
-<input 
-id="lug_width"
-type="text"
-placeholder="Example: 20mm">
-
-
-
-<label>Clasp / Buckle Width (mm)</label>
-
-<input 
-id="clasp_width"
-type="text"
-placeholder="Example: 18mm">
-
-
-
-<label>Length (mm)</label>
-
-<input 
-id="length"
-type="text"
-placeholder="Example: 120/75mm">
-
-
-
-<label>Thickness (mm)</label>
-
-<input 
-id="thickness"
-type="text"
-placeholder="Example: 3.5mm">
-
-
-
-<label>Description</label>
-
-<textarea
-id="description"
-rows="5"
-placeholder="Description">
-</textarea>
-
-
-
-<label>Upload Photos</label>
-
-<input 
-id="fileInput"
-type="file"
-accept="image/*"
-multiple>
-
-
-<button type="submit">
-Sell Now
-</button>
-
-
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 5px 0; margin-bottom: 15px;">
+    <button type="button" onclick="window.location.href='index.html'" style="background: #d4af37; color: #000; border: none; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer; padding: 4px 10px;">Back</button>
+</div>
+<h2 style="margin: 0; font-size: 18px; color: #fff; text-align: center;">Add New Bracelet / Strap</h2>
+
+<form id="sellBraceletForm">
+    <input type="hidden" id="category" value="bracelets_straps">
+
+    <div class="row">
+        <input id="brand" type="text" placeholder="Brand (e.g., Rolex, Omega)" required>
+        <input id="model" type="text" placeholder="Model / Series" required>
+    </div>
+
+    <label>Price (€)</label>
+    <input id="price" type="number" required>
+
+    <label>Type</label>
+    <select id="type">
+        <option value="Bracelet">Bracelet</option>
+        <option value="Strap">Strap</option>
+        <option value="Buckle">Buckle</option>
+    </select>
+
+    <label>Condition</label>
+    <select id="condition">
+        <option value="New">New</option>
+        <option value="Mint">Mint</option>
+        <option value="Used">Used</option>
+    </select>
+
+    <div class="row">
+        <div>
+            <label>Material</label>
+            <input id="material" type="text" placeholder="Steel, Leather, Rubber...">
+        </div>
+        <div>
+            <label>Color</label>
+            <input id="color" type="text" placeholder="Black, Brown, Silver...">
+        </div>
+    </div>
+
+    <div class="row">
+        <div>
+            <label>Lug Width (mm)</label>
+            <input id="lug_width" type="text" placeholder="20mm">
+        </div>
+        <div>
+            <label>Length (cm)</label>
+            <input id="length" type="text" placeholder="19cm">
+        </div>
+    </div>
+
+    <label>Country</label>
+    <select id="country">
+        <option value="Albania">Albania</option>
+        <option value="Switzerland">Switzerland</option>
+        <option value="Italy">Italy</option>
+        <option value="Germany">Germany</option>
+    </select>
+
+    <label>Reference Number</label>
+    <input id="reference" type="text" placeholder="Reference">
+
+    <label>Year</label>
+    <input id="year" type="number">
+
+    <label>Description</label>
+    <textarea id="description" rows="5" placeholder="Description..."></textarea>
+
+    <label>Upload Photos</label>
+    <input id="fileInput" type="file" accept="image/*" multiple>
+
+    <button type="submit">Publish Bracelet / Strap</button>
 </form>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-<script src="db-connect.js"></script>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-<script>
-// Përdorim eventinDOMContentLoaded për t'u siguruar që HTML është gati
-document.addEventListener("DOMContentLoaded", async function() {
+const supabase = createClient(
+    'https://gnwsrmelmeqduhhmfmoa.supabase.co',
+    'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
+);
 
-    // Kontrollojmë nëse klienti është ngarkuar direkt nga db-connect.js
-    if (!window.supabaseClient) {
-        console.error("Supabase client nuk u gjet!");
-        alert("Gabim në lidhjen me databazën.");
-        return;
-    }
+const { data: { user } } = await supabase.auth.getUser();
+if(!user){
+    alert("Duhet të jesh i loguar!");
+    window.location.href="register.html";
+}
 
-    const { data: { user }, error: authError } = await window.supabaseClient.auth.getUser();
+document.getElementById("sellBraceletForm").addEventListener("submit", async function(e){
+    e.preventDefault();
 
-    if (authError || !user) {
-        alert("Duhet të jesh i loguar!");
-        window.location.href = "register.html";
-        return;
-    }
+    const files = document.getElementById("fileInput").files;
+    let imageUrls = [];
 
-    const form = document.getElementById("braceletForm");
-    if (!form) {
-        console.error("Formulari braceletForm nuk u gjet!");
-        return;
-    }
+    for(let i=0; i<files.length; i++){
+        const file = files[i];
+        const fileName = Date.now() + "_" + i + "_" + file.name;
 
-    form.addEventListener("submit", async function(e) {
-        e.preventDefault();
-        console.log("U klikua butoni për të dërguar formën...");
+        const { error: uploadError } = await supabase.storage
+            .from("or-images")
+            .upload(fileName, file);
 
-        const fileInput = document.getElementById("fileInput");
-        const selectedFiles = fileInput ? fileInput.files : [];
-        let imageUrls = [];
-
-        // Upload photos
-        for (let i = 0; i < selectedFiles.length; i++) {
-            const file = selectedFiles[i];
-            const fileName = Date.now() + "_" + i + "_" + file.name;
-
-            const { error: uploadError } = 
-                await window.supabaseClient
-                    .storage
-                    .from("or-images")
-                    .upload(fileName, file);
-
-            if (uploadError) {
-                console.error("Gabim në upload të fotos:", uploadError);
-                continue;
-            }
-
-            const { data: urlData } = window.supabaseClient
-                .storage
-                .from("or-images")
-                .getPublicUrl(fileName);
-
-            if (urlData && urlData.publicUrl) {
-                imageUrls.push(urlData.publicUrl);
-            }
-        }
-
-        const productData = {
-            user_id: user.id,
-            category: "bracelets_straps",
-            brand: document.getElementById("brand").value,
-            model: document.getElementById("model").value,
-            reference: document.getElementById("reference").value,
-            year: Number(document.getElementById("year").value) || null,
-            price: Number(document.getElementById("price").value) || null,
-            type: document.getElementById("type").value,
-            condition: document.getElementById("condition").value,
-            material: document.getElementById("material").value,
-            gold_purity: document.getElementById("gold_purity").value,
-            color: document.getElementById("color").value,
-            lug_width: document.getElementById("lug_width").value,
-            clasp_width: document.getElementById("clasp_width").value,
-            length: document.getElementById("length").value,
-            thickness: document.getElementById("thickness").value,
-            description: document.getElementById("description").value,
-            image_url: imageUrls.length > 0 ? [imageUrls[0]] : null
-        };
-
-        console.log("Po dërgohen të dhënat:", productData);
-
-        const { data, error } = await window.supabaseClient
-            .from("bracelets_straps")
-            .insert([productData])
-            .select();
-
-        if (error) {
-            console.error("Gabim nga databaza Supabase:", error);
-            alert("Database error: " + error.message);
+        if(uploadError){
+            alert("Gabim gjatë upload fotos: " + uploadError.message);
             return;
         }
 
-        console.log("U publikua me sukses:", data);
-        alert("Bracelet / Strap published successfully!");
-        window.location.href = "dashboard.html";
-    });
+        const { data: urlData } = supabase.storage
+            .from("or-images")
+            .getPublicUrl(fileName);
 
+        imageUrls.push(urlData.publicUrl);
+    }
+
+    const itemData = {
+        user_id: user.id,
+        category: "bracelets_straps",
+        brand: document.getElementById("brand").value,
+        model: document.getElementById("model").value,
+        price: parseFloat(document.getElementById("price").value) || null,
+        type: document.getElementById("type").value,
+        condition: document.getElementById("condition").value,
+        material: document.getElementById("material").value,
+        color: document.getElementById("color").value,
+        lug_width: document.getElementById("lug_width").value,
+        length: document.getElementById("length").value,
+        country: document.getElementById("country").value,
+        reference: document.getElementById("reference").value,
+        year: parseInt(document.getElementById("year").value) || null,
+        description: document.getElementById("description").value,
+        image_url: imageUrls
+    };
+
+    const { error } = await supabase.from("bracelets_straps").insert([itemData]);
+
+    if(error){
+        alert("Gabim gjatë publikimit: " + error.message);
+        return;
+    }
+
+    alert("🏆 Rripi u publikua me sukses!");
+    window.location.href = "bracelets.html";
 });
 </script>
 
-
 </body>
-
 </html>

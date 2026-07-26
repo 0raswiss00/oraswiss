@@ -90,6 +90,7 @@ if (productId) {
 }
 
 async function loadProduct(idToLoad) {
+    // Përdorim tabelën e saktë nga Supabase: bracelets_straps
     const { data, error } = await supabaseClient
         .from("bracelets_straps")
         .select("*")
@@ -125,7 +126,6 @@ async function loadProduct(idToLoad) {
     document.getElementById("length").innerText = data.length || "N/A";
     document.getElementById("description").innerText = data.description || "N/A";
 
-    // Përditësimi i numrit të WhatsApp-it duke marrë numrin e shitësit nga databaza (kolona user_phone ose phone)
     const phoneNum = data.user_phone || data.phone || "35569XXXXXXX";
     document.getElementById("whatsapp").href = 
         "https://wa.me/" + phoneNum + "?text=" + 

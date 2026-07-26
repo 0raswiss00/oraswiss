@@ -200,6 +200,9 @@
 async function loadCategory(cat, containerId) {
     const container = document.getElementById(containerId);
     
+    // Nëse kontejneri nuk ekziston në këtë faqe, ndalo ketu që të mos japë gabim
+    if (!container) return; 
+    
     const { data, error } = await supabase
         .from('oras')
         .select('*')

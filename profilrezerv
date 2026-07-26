@@ -931,6 +931,234 @@ countryEl.textContent = countries[meta.country] || "-";
 
 
 
+tetri fundit
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile - Ora Swiss</title>
 
+  <style>
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
+    .wrap{max-width:520px;margin:30px auto;padding:0 16px}
+    button{padding:10px 14px;border-radius:10px;border:1px solid #777;background:#111;color:#fff;cursor:pointer}
+    .private-field { display: none; }
+  </style>
+</head>
 
+<body style="visibility:hidden;">
+  <div class="wrap">
+    <h2>Profili</h2>
+
+    <h1 id="sellerTitle">-</h1>
+    <p id="sellerJoined">-</p>
+    <p id="sellerBadge"></p>
+
+    <h3>Feedback-u i blerësve:</h3>
+    <ul id="feedbackList"><li>Nuk ka ende feedback.</li></ul>
+
+    <!-- Këto të dhëna private do të duken vetëm kur e hap ti vetë profilin tënd -->
+    <div id="ownerDetails" class="private-field">
+      <p>Email: <b id="userEmail"></b></p>
+      <p>Emri: <b id="userName">-</b></p>
+      <p>Telefon: <b id="userPhone">-</b></p>
+      <p>Rruga: <b id="userStreet">-</b></p>
+      <p>Nr. Shtëpisë: <b id="userHouseNumber">-</b></p>
+      <p>Kodi Postar: <b id="userZip">-</b></p>
+    </div>
+
+    <!-- Shteti duket edhe për blerësit -->
+    <p>Shteti: <b id="userCountry">-</b></p>
+    <p>Te regjistruar gjithsej: <b id="userCount">0</b></p>
+
+    <!-- Seksioni i verifikimit (vetëm për pronarin) -->
+    <div id="verificationSection" class="private-field">
+      <h3>🔒 Verifikimi i identitetit</h3>
+      <select id="documentType">
+        <option value="">Zgjidh dokumentin</option>
+        <option value="ID">Kartë ID</option>
+        <option value="Passport">Pasaportë</option>
+      </select>
+
+      <p><input id="documentNumber" placeholder="Numri i dokumentit"></p>
+      <p><label>Foto përpara:</label><br><input id="photoFront" type="file" accept="image/*"></p>
+      <p><label>Foto mbrapa:</label><br><input id="photoBack" type="file" accept="image/*"></p>
+
+      <button id="btnVerify" type="button">Dërgo për verifikim</button>
+      <p id="verifyMsg"></p>
+      <br>
+      <button id="btnLogout" type="button">Logout</button>
+    </div>
+
+    <p id="msg" style="margin-top:12px;"></p>
+
+    <h3>Artikujt e shitësit:</h3>
+    <div class="watch-scroll">
+      <ul id="sellerWatches"></ul>
+    </div>
+  </div>
+  
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
+
+  const supabaseUrl = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
+  const supabaseKey = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9';
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  const emailEl = document.getElementById("userEmail");
+  const nameEl = document.getElementById("userName");
+  const phoneEl = document.getElementById("userPhone");
+  const countryEl = document.getElementById("userCountry");
+  const streetEl = document.getElementById("userStreet");
+  const houseEl = document.getElementById("userHouseNumber");
+  const zipEl = document.getElementById("userZip");
+  const logoutBtn = document.getElementById("btnLogout");
+  const watchList = document.getElementById("sellerWatches");
+
+  async function loadWatches(uid) {
+    watchList.innerHTML = "";
+    const tables = [
+      { table: "oras", label: "⌚" },
+      { table: "bracelets_straps", label: "🪢" }
+    ];
+
+    for (const item of tables) {
+      const { data, error } = await supabase
+        .from(item.table)
+        .select("*")
+        .eq('user_id', uid);
+
+      if (error) continue;
+
+      data?.forEach(product => {
+        const li = document.createElement("li");
+        li.innerHTML = `<b>${product.brand || ""}</b> ${product.model || ""} - ${product.price || "-"}€`;
+        watchList.appendChild(li);
+      });
+    }
+  }
+
+  window.addEventListener("DOMContentLoaded", async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+
+    const params = new URLSearchParams(window.location.search);
+    const sellerIdFromUrl = params.get("id");
+
+    // Përcaktojmë ID-në e profilit që po shikojmë
+    const profileId = sellerIdFromUrl || (user ? user.id : null);
+
+    if (!profileId) {
+      window.location.href = "index.html";
+      return;
+    }
+
+    // A është ky përdorues që po shikon profilin e tij personal?
+    const isOwner = user && user.id === profileId;
+
+    // Marrim të dhënat nga tabela profiles
+    const { data: sellerData, error: sellerError } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", profileId);
+
+    let meta = {};
+    if (!sellerError && sellerData && sellerData.length > 0) {
+      meta = sellerData[0];
+    } else if (isOwner && user) {
+      meta = user.user_metadata || {};
+    }
+
+    document.body.style.visibility = "visible";
+
+    // Titulli i profilit (Emri i personalizuar + .oraswiss)
+    const sellerTitle = document.getElementById("sellerTitle");
+    const customName = meta.custom_username || meta.full_name || "Seller";
+    sellerTitle.textContent = `${customName}.oraswiss`;
+
+    const created = new Date(meta.created_at || (user ? user.created_at : Date.now()));
+    const joinedText = document.createElement("p");
+    joinedText.textContent = "Joined " + created.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+    sellerTitle.insertAdjacentElement("afterend", joinedText);
+
+    const countries = {
+      "Albania": "🇦🇱 AL",
+      "Switzerland": "🇨🇭 CH",
+      "Italy": "🇮🇹 IT",
+      "Germany": "🇩🇪 DE"
+    };
+    countryEl.textContent = countries[meta.country] || meta.country || "-";
+
+    // NËSE ËSHTË PRONARI: Shfaqim fushat private dhe të dhënat e plota
+    if (isOwner && user) {
+      document.querySelectorAll(".private-field").forEach(el => el.style.display = "block");
+
+      emailEl.textContent = user.email;
+      nameEl.textContent = meta.full_name || "-";
+      phoneEl.textContent = meta.phone || "-";
+      streetEl.textContent = meta.street || "-";
+      houseEl.textContent = meta.house_number || "-";
+      zipEl.textContent = meta.zip_code || "-";
+    }
+
+    await loadWatches(profileId);
+  });
+
+  // VERIFIKIMI I IDENTITETIT
+  const verifyBtn = document.getElementById("btnVerify");
+  if (verifyBtn) {
+    verifyBtn.addEventListener("click", async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      const documentType = document.getElementById("documentType").value;
+      const documentNumber = document.getElementById("documentNumber").value;
+      const frontFile = document.getElementById("photoFront").files[0];
+      const backFile = document.getElementById("photoBack").files[0];
+      const msg = document.getElementById("verifyMsg");
+
+      if (!documentType || !documentNumber || !frontFile || !backFile) {
+        msg.textContent = "Plotëso të gjitha fushat dhe ngarko të dy fotot.";
+        return;
+      }
+
+      const frontPath = `${user.id}/front_${Date.now()}_${frontFile.name}`;
+      const backPath = `${user.id}/back_${Date.now()}_${backFile.name}`;
+
+      const frontUpload = await supabase.storage.from("identity_documents").upload(frontPath, frontFile);
+      const backUpload = await supabase.storage.from("identity_documents").upload(backPath, backFile);
+
+      if (frontUpload.error || backUpload.error) {
+        msg.textContent = "Gabim gjatë ngarkimit të fotove.";
+        return;
+      }
+
+      const { error } = await supabase
+        .from("identity_verifications")
+        .insert({
+          user_id: user.id,
+          document_type: documentType,
+          document_number: documentNumber,
+          photo_front: frontUpload.data.path,
+          photo_back: backUpload.data.path,
+          verification_status: "pending"
+        });
+
+      if (error) {
+        msg.textContent = "Gabim gjatë dërgimit.";
+        return;
+      }
+
+      msg.textContent = "Kërkesa u dërgua për verifikim.";
+    });
+  }
+  
+  // LOGOUT
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      await supabase.auth.signOut();
+      window.location.href = "index.html";
+    });
+  }
+</script>
+</body>
+</html>
 

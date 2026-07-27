@@ -180,7 +180,7 @@
                 </div>
             `;
 
-            const buyBtn = document.getElementById("buy-bracelet-btn");
+           const buyBtn = document.getElementById("buy-bracelet-btn");
             if (buyBtn) {
                 buyBtn.onclick = async function(e) {
                     e.preventDefault();
@@ -194,8 +194,7 @@
                                 body: JSON.stringify({
                                     product_id: itemId,
                                     price: data.price,
-                                    product_name: (data.brand || 'Strap') + ' ' + (data.model || ''),
-                                    table: "bracelets_straps"
+                                    product_name: (data.brand || 'Strap') + ' ' + (data.model || '')
                                 })
                             }
                         );

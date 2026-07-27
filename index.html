@@ -4,15 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ora Swiss</title>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-KD2ZZ3MJYY');
-</script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KD2ZZ3MJYY');
+  </script>
   <style>
     body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
     .site-header{position:sticky;top:0;z-index:9999;background:#111}
@@ -21,18 +20,15 @@
     .nav-scroll a:hover{color:gold}
     .site-title{font-weight:700;line-height:1.05;margin-right:10px}
 
-.grid {
+    .grid {
         display: grid; 
-        /* Parazgjedhja për celularë: 2 artikuj për rresht */
         grid-template-columns: repeat(2, 1fr); 
         gap: 10px; 
         padding: 10px;
     }
 
-    /* Për kompjutera dhe ekrane të mëdha (mbi 768px) */
     @media (min-width: 768px) {
         .grid {
-            /* Ndryshoje në 4 nëse do 4 në një rresht, ose në 3 nëse i do 3 */
             grid-template-columns: repeat(4, 1fr); 
         }
     }
@@ -52,7 +48,6 @@
         border-radius: 8px;
     }
 
-    /* Stilet për butonat */
     .btn-main {
       padding: 10px;
       border: none;
@@ -76,12 +71,10 @@
     .btn-buy:hover {
         background: #e6c200;
     }
-    /* ===============================
-       NAVIGIMI FUNDOR (I ngritur dhe i rregulluar)
-       =============================== */
+
     .bottom-nav {
       position: fixed !important;
-      bottom: 20px !important; /* E ngritur lart nga fundi i telefonit */
+      bottom: 20px !important;
       left: 15px !important;
       right: 15px !important;
       width: auto !important;
@@ -91,9 +84,9 @@
       justify-content: space-around !important;
       align-items: center !important;
       padding: 0 5px !important;
-      border-radius: 20px !important; /* Këndet e rrumbullakosura si kartë */
+      border-radius: 20px !important;
       border: 1px solid #333 !important;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.😎 !important;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.8) !important;
       z-index: 999999 !important;
     }
 
@@ -117,27 +110,8 @@
       color: gold !important;
     }
 
-    /* Menuja që hapet sipër shiritit */
-    .my-oraswiss-menu, .menu-content {
-        display: none; 
-        position: fixed !important;
-        bottom: 95px !important; /* E vendosur saktë mbi shiritin e ngritur */
-        left: 15px !important;
-        right: 15px !important;
-        background: #1a1a1a !important;
-        border-radius: 15px !important;
-        border: 1px solid #333 !important;
-        padding: 15px !important;
-        box-shadow: 0 -5px 20px rgba(0,0,0,0.😎 !important;
-        z-index: 1000000 !important;
-    }
-
-    .my-oraswiss-menu.active {
-        display: block !important;
-    }
-
     body {
-        padding-bottom: 110px !important; /* Që të mos mbulohet asnjë artikull në fund */
+        padding-bottom: 110px !important;
     }
   </style>  
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
@@ -149,12 +123,9 @@
     <span class="site-title">ORA<br>SWISS</span>
     <span style="color: white; margin-left: 20px; display: flex; align-items: center; gap: 15px;">
         <span>👤 User: <b id="count-users">0</b></span>
-    
         <span>⌚ Ora: <b id="count-products">0</b></span>
     </span>
-    <button onclick="location.href='register.html'">
-        Login / Register
-    </button>
+    <button onclick="location.href='register.html'">Login / Register</button>
     <button id="btnSellNow" style="display: none;" onclick="trajtoKlikiminSellNow()">Sell a watch</button>
     <a href="home.html">Home</a>
     <a href="luxury.html">Luxury</a>
@@ -166,18 +137,18 @@
     <a href="contact.html">Contact</a>
     <a href="policy.html">Policy</a>
     <a href="sell.html">Sell</a>
-    <a href="admin_users.html">
-      <button>👥 Përdoruesit</button>
-    </a>
+    <a href="admin_users.html"><button>👥 Përdoruesit</button></a>
   </nav>
 </header>
-    <div class="search-container">
-        <div class="search-box">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="searchInput" placeholder="Search on OraSwiss">
-            <button class="camera-icon" onclick="alert('Funksioni për foto së shpejti!')">📷</button>
-        </div>
+
+<div class="search-container" style="padding: 10px;">
+    <div class="search-box" style="display: flex; background: #111; border: 1px solid #333; border-radius: 8px; padding: 8px; align-items: center;">
+        <span class="search-icon" style="margin-right: 8px;">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search on OraSwiss" style="background: transparent; border: none; color: #fff; width: 100%; outline: none;">
+        <button class="camera-icon" onclick="alert('Funksioni për foto së shpejti!')" style="background: none; border: none; cursor: pointer;">📷</button>
     </div>
+</div>
+
 <h2>Luxury Collection</h2>
 <div id="luxury-container" class="grid">Loading...</div>
 
@@ -186,23 +157,55 @@
 
 <h2>Parts Collection</h2>
 <div id="parts-container" class="grid">Loading...</div>  
+
+<div id="myOraSwissMenu" style="display: none; position: fixed; bottom: 95px; right: 15px; left: 15px; background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 15px; z-index: 1000000; box-shadow: 0 -5px 20px rgba(0,0,0,0.8);">
+    <div class="menu-item" onclick="location.href='buy.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 Buy</div>
+    <div class="menu-item" onclick="location.href='mysold.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 My Sold</div>
+    <div class="menu-item" onclick="location.href='messages.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444; display: flex; justify-content: space-between; align-items: center;">
+        <span>✉️ Messages</span> 
+        <span id="messageCount" style="background: #444; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold;">0</span>
+    </div>
+    <div class="menu-item" onclick="location.href='settings.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">⚙️ Settings</div>
+    <div class="menu-item" onclick="location.href='support.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🎧 Support</div>
+    <div class="menu-item" onclick="location.href='info.html'" style="padding: 10px; color: white; cursor: pointer;">ℹ️ Info</div>
+</div>
+
+<nav class="bottom-nav">
+    <a href="#" onclick="checkPage(event,'dashboard.html')">🏠<br>Home</a>
+    <a href="#" onclick="checkPage(event,'favorites.html')">❤️<br>Favs</a>
+    <a href="messages.html" style="position: relative;">
+        ✉️<br>messg
+        <span id="menuMessageCount" style="position: absolute; top: 0; right: 5px; background: red; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px; font-weight: bold; display: none;">0</span>
+    </a>
+    <a href="mysales.html">⌚<br>Sales</a>
+    <a href="sellnow.html">➕<br>Sell</a>
+    <button type="button" onclick="checkMenu(event)">👤<br>Menu</button>  
+</nav>
+
+<div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center;z-index:99999;">
+    <div style="background:#1a1a1a;padding:25px;border-radius:12px;text-align:center;max-width:320px;width:90%;color:#fff;">
+        <h2>Login Required</h2>
+        <p>Please sign in or create an account to continue.</p>
+        <button onclick="location.href='register.html'" style="padding:10px 20px;background:#fff;color:#000;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">Login / Register</button>
+        <br><br>
+        <button onclick="document.getElementById('loginModal').style.display='none'" style="padding:8px 15px;background:#444;color:#fff;border:none;border-radius:6px;cursor:pointer;">Cancel</button>
+    </div>
+</div>
+
 <script>
   const supabase = window.supabase.createClient(
     "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
   );
-// Tani përdorni variablin 'supabase' kudo në kod
 
-async function loadCategory(cat, containerId) {
+  async function loadCategory(cat, containerId) {
     const container = document.getElementById(containerId);
-    
-    // Nëse kontejneri nuk ekziston në këtë faqe, ndalo ketu që të mos japë gabim
-    if (!container) return; 
+    if (!container) return;  
     
     const { data, error } = await supabase
         .from('oras')
         .select('*')
-        .eq('category', cat); 
+        .eq('category', cat);  
 
     if (error) {
         console.error("Gabim gjatë marrjes së të dhënave:", error);
@@ -215,7 +218,6 @@ async function loadCategory(cat, containerId) {
         return;
     }
 
-    // Ndërtimi i kartave dinamike
     container.innerHTML = data.map(ora => {
         let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
         let primaryImage = "";
@@ -233,7 +235,7 @@ async function loadCategory(cat, containerId) {
         }
       
         return `
-            <div class="card" onclick="window.location.href='product.html?id=${ora.id}'" style="cursor: pointer;">
+            <div class="card" onclick="openProduct('${ora.id}')" style="cursor: pointer;">
                 <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
                 <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
                 <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>
@@ -243,168 +245,81 @@ async function loadCategory(cat, containerId) {
                 
                 <button class="btn-main btn-secondary" style="width:100%; margin-top:5px;" onclick="event.stopPropagation();">Send Request</button>
                 
-                <button class="btn-main btn-buy" 
-                style="width:100%; margin-top:5px;"
-                onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}'">
+                <button class="btn-main btn-buy" style="width:100%; margin-top:5px;" onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}'">
                 🛒 Buy Now
                 </button>
 
                 <div style="display: flex; gap: 5px; margin-top: 5px;">
-                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" 
-                        onclick="event.stopPropagation(); this.style.background = this.style.background === 'rgb(220, 53, 69)' ? '#222' : '#dc3545';">
+                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" onclick="event.stopPropagation(); this.style.background = this.style.background === 'rgb(220, 53, 69)' ? '#222' : '#dc3545';">
                         ❤️ Like
                     </button>
-                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" 
-                        onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.origin + '/product.html?id=${ora.id}'); alert('Link copied to clipboard!');">
+                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.origin + '/product.html?id=${ora.id}'); alert('Link copied to clipboard!');">
                         🔗 Share
                     </button>
                 </div>
             </div>
         `;
     }).join('');
-}
-// E vendosim tek 'window' që të jetë i aksesueshëm nga butoni në HTML
-window.trajtoKlikiminSellNow = async function() {
-    // 1. Kontrollo statusin e logimit
-    const { data: { session } } = await supabase.auth.getSession();
+  }
 
+  window.trajtoKlikiminSellNow = async function() {
+    const { data: { session } } = await supabase.auth.getSession();
     if (session) {
-        // Nëse është i loguar, dërgoje te faqja e shitjes (sigurohu që emri i skedarit është i saktë)
         window.location.href = 'sellnow.html'; 
     } else {
-        // Nëse NUK është i loguar, dërgoje te faqja e Login
         window.location.href = 'login.html'; 
     }
-};
+  };
 
-// Funksioni për ta shfaqur butonin vetëm kur përdoruesi është i loguar
-// 1. Funksioni që kontrollon nëse je loguar dhe shfaq butonin kur hapet faqja
-async function kontrolloSesionin() {
+  async function kontrolloSesionin() {
     const { data: { session } } = await supabase.auth.getSession();
     const btnSell = document.getElementById("btnSellNow");
-    
     if (session && btnSell) {
-        btnSell.style.display = "inline-block"; // E shfaq butonin
+        btnSell.style.display = "inline-block";
     }
-}
+  }
 
-// 2. Funksioni që aktivizohet KUR KLIKON butonin
-window.trajtoKlikiminSell = async function() {
-    const { data: { session } } = await supabase.auth.getSession();
-    
-    if (session) {
-        window.location.href = 'sell.html'; // Sigurohu që ky skedar ekziston
-    } else {
-        window.location.href = 'login.html';
-    }
-};
+  kontrolloSesionin();
+  
+  loadCategory('luxury', 'luxury-container');
+  loadCategory('vintage', 'vintage-container');
+  loadCategory('parts', 'parts-container');
 
-// E thërrasim kontrollin sapo hapet faqja
-kontrolloSesionin();
-  
-// Ngarkimi i kategorive
-loadCategory('luxury', 'luxury-container');
-loadCategory('vintage', 'vintage-container');
-loadCategory('parts', 'parts-container');
-loadCategory('bracelets-straps', 'product-bracelet-strap-container');
-  
-  
-// 1. Funksioni për të numëruar produktet (orët)
-async function loadProductCount() {
-    console.log("Duke u lidhur me Supabase për të numëruar të gjithë artikujt...");
+  async function loadProductCount() {
     try {
-        // Numërojmë orët
-        const { count: countOras, error: errorOras } = await supabase
-            .from('oras')
-            .select('*', { count: 'exact', head: true });
-            
-        // Numërojmë rripat
-        const { count: countStraps, error: errorStraps } = await supabase
-            .from('bracelets_straps')
-            .select('*', { count: 'exact', head: true });
-
-        if (errorOras) throw errorOras;
-        if (errorStraps) throw errorStraps;
-
-        // Mbledhim totalin e të dyjave
+        const { count: countOras } = await supabase.from('oras').select('*', { count: 'exact', head: true });
+        const { count: countStraps } = await supabase.from('bracelets_straps').select('*', { count: 'exact', head: true });
         const total = (countOras || 0) + (countStraps || 0);
-        console.log("Numri total i artikujve (Ora + Bracelets):", total);
-
         const element = document.getElementById('count-products');
-        if (element) {
-            element.textContent = total;
-        }
+        if (element) element.textContent = total;
     } catch (err) {
         console.error("Gabim te loadProductCount:", err);
     }
-}
+  }
 
-
-// Funksioni për të numëruar përdoruesit
-async function loadUserCount() {
+  async function loadUserCount() {
     try {
-        const { data, error } = await supabase
-            .rpc('get_users_count');
-
-        if (error) throw error;
-
+        const { data } = await supabase.rpc('get_users_count');
         const element = document.getElementById('count-users');
-        if (element) {
-            element.textContent = data || 0;
-        }
-
+        if (element) element.textContent = data || 0;
     } catch (err) {
         console.error("Gabim te loadUserCount:", err);
     }
-}
+  }
 
-// Thirr funksionet këtu (jashtë çdo funksioni tjetër)
-loadUserCount();
-loadProductCount();
-  
-</script>
-<div id="myOraSwissMenu" style="display: none; position: fixed; bottom: 80px; right: 10px; background: #222; border: 1px solid #444; padding: 10px; border-radius: 10px; z-index: 9999; width: 200px;">
-    <div class="menu-item" onclick="location.href='buy.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 Buy</div>
-    <div class="menu-item" onclick="location.href='mysold.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 My Sold</div>
-    <div class="menu-item" onclick="location.href='messages.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444; display: flex; justify-content: space-between; align-items: center;">
-        <span>✉️ Messages</span> 
-        <span id="messageCount" style="background: red; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold;">0</span>
-    </div>
-    <div class="menu-item" onclick="location.href='settings.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">⚙️ Settings</div>
-    <div class="menu-item" onclick="location.href='support.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🎧 Support</div>
-    <div class="menu-item" onclick="location.href='info.html'" style="padding: 10px; color: white; cursor: pointer;">ℹ️ Info</div>
-</div>
+  loadUserCount();
+  loadProductCount();
 
-<nav class="bottom-nav" style="position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-around; background: #000; padding: 15px 0; border-top: 1px solid #333; z-index: 9998; box-sizing: border-box;">
-    <a href="#" onclick="checkPage(event,'dashboard.html')" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">🏠<br>Home</a>
-    <a href="#" onclick="checkPage(event,'favorites.html')" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">❤️<br>Favs</a>
-    <a href="messages.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center; position: relative;">
-        ✉️<br>messg
-        <span id="menuMessageCount" style="position: absolute; top: -5px; right: -10px; background: red; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px; font-weight: bold; display: none;">0</span>
-    </a>
-    <a href="mysales.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">⌚<br>Sales</a>
-    <a href="sellnow.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">➕<br>Sell</a>
-    <button type="button" onclick="checkMenu(event)" style="background: none; border: none; color: white; cursor: pointer; font-size: 13px; text-align: center;">
-    👤<br>Menu
-    </button>  
-</nav>
+  function toggleMenu() {
+      const menu = document.getElementById('myOraSwissMenu');
+      menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+  }
 
-<script>
-    function toggleMenu() {
-        const menu = document.getElementById('myOraSwissMenu');
-        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-    }
-  
-</script>  
-<script>
-document.getElementById("searchInput").addEventListener("input", async function(e) {
+  document.getElementById("searchInput").addEventListener("input", async function(e) {
     const query = e.target.value.trim();
-
     const luxuryContainer = document.getElementById("luxury-container");
     const vintageContainer = document.getElementById("vintage-container");
     const partsContainer = document.getElementById("parts-container");
-    // Heqja e 'const' të dytë, duke përdorur një emër tjetër për kontejnerin e rripave
-    const strapContainer = document.getElementById("product-bracelet-strap-container");
   
     if (query.length === 0) {
         location.reload(); 
@@ -412,7 +327,6 @@ document.getElementById("searchInput").addEventListener("input", async function(
     }
 
     try {
-        // Përdorim thonjëza të zakonshme me plus (+) që të shmangim çdo gabim sintakse
         const { data, error } = await supabase
             .from("oras")
             .select("*")
@@ -438,7 +352,7 @@ document.getElementById("searchInput").addEventListener("input", async function(
                 item.className = "card";
                 item.innerHTML = `
                     <div onclick="openProduct('${product.id}')" style="cursor:pointer;">
-                        <img src="${imgUrl}" alt="${product.model || ''}" style="width:100%; height:auto;">
+                        <img src="${imgUrl}" alt="${product.model || ''}">
                         <h3>${product.brand || ''} - ${product.model || ''}</h3>
                         <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${product.reference || '/'}</p>
                         <div class="price">${product.price ? product.price + ' €' : 'Contact for price'}</div>
@@ -454,132 +368,44 @@ document.getElementById("searchInput").addEventListener("input", async function(
     } catch (err) {
         console.error("Gabim në kërkim:", err);
     }
-});
-</script>
-<script>
-async function checkPage(event, page) {
+  });
+
+  async function checkPage(event, page) {
     event.preventDefault();
-
     const { data: { user } } = await supabase.auth.getUser();
-
     if (!user) {
         document.getElementById("loginModal").style.display = "flex";
         return;
     }
-
     window.location.href = page;
-}
-</script>
-<script> 
-async function checkMenu(event) {
+  }
+
+  async function checkMenu(event) {
     event.preventDefault();
-
     const { data: { user } } = await supabase.auth.getUser();
-
     if (!user) {
         document.getElementById("loginModal").style.display = "flex";
         return;
     }
-
     toggleMenu();
-}  
-</script>  
-<script>  
-function openProduct(productId) {
+  }
+
+  function openProduct(productId) {
     window.location.href = "product.html?id=" + productId;
-}
-</script>
+  }
 
-<div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center;z-index:99999;">
-    <div style="background:#1a1a1a;padding:25px;border-radius:12px;text-align:center;max-width:320px;width:90%;color:#fff;">
-        <h2>Login Required</h2>
-        <p>Please sign in or create an account to continue.</p>
-
-        <button onclick="location.href='register.html'">
-            Login / Register
-        </button>
-        <br><br>
-        <button onclick="document.getElementById('loginModal').style.display='none'">Cancel</button>
-    </div>
-</div>
-
-</script>
-
-<div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center;z-index:99999;">
-    <div style="background:#1a1a1a;padding:25px;border-radius:12px;text-align:center;max-width:320px;width:90%;color:#fff;">
-        <h2>Login Required</h2>
-        <p>Please sign in or create an account to continue.</p>
-
-        <button onclick="location.href='register.html'" style="padding:10px 20px;background:#000;color:#fff;border:none;border-radius:6px;cursor:pointer;">
-            Login / Register
-        </button>
-        <br><br>
-        <button onclick="document.getElementById('loginModal').style.display='none'" style="padding:8px 15px;background:#444;color:#fff;border:none;border-radius:6px;cursor:pointer;">Cancel</button>
-    </div>
-</div>
-
-<script>
-
-async function loadMessageCount() {
+  async function loadMessageCount() {
     try {
         const { data: { user }, error } = await supabase.auth.getUser();
+        if (error || !user) return;
 
-        if (error || !user) {
-            return;
-        }
-
-        // Marrim të gjitha ID-të e bisedave ku përdoruesi është blerës ose shitës
-        const { data: userConvs, error: convError } = await supabase
-            .from("conversations")
-            .select("id")
-            .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`);
-
-        const counter = document.getElementById("messageCount");
-
-        if (!convError && userConvs && userConvs.length > 0) {
-            const convIds = userConvs.map(c => c.id);
-            
-            // Numërojmë mesazhet për këto biseda
-            const { count, error: countError } = await supabase
-                .from("messages")
-                .select("*", { count: "exact", head: true })
-                .in("conversation_id", convIds);
-
-            if (counter && !countError) {
-                counter.innerText = `Messages ${count || 0}`;
-            }
-        } else {
-            if (counter) counter.innerText = "Messages 0";
-        }
-    } catch (err) {
-        console.error("Gabim te loadMessageCount:", err);
-    }
-}
-
-// Thirre funksionin për të ngarkuar numrin e mesazheve
-loadMessageCount();
-</script>
-<script>
-async function updateIndexMessageCount() {
-    try {
-        const { data: { user }, error } = await supabase.auth.getUser();
-        if (error || !user) {
-            console.log("Nuk ka përdorues të loguar");
-            return;
-        }
-
-        // Marrim të gjitha bisedat ku ky user është ose user_one ose user_two
         const { data: userConvs, error: convError } = await supabase
             .from("conversations")
             .select("id, user_one, user_two, unread_user_one, unread_user_two")
             .or(`user_one.eq.${user.id},user_two.eq.${user.id}`);
 
-        if (convError || !userConvs) {
-            console.error("Gabim në marrjen e bisedave:", convError);
-            return;
-        }
+        if (convError || !userConvs) return;
 
-        // Llogarisim totalin vetëm për bisedat e këtij useri
         let totalUnread = 0;
         userConvs.forEach(conv => {
             if (conv.user_one === user.id) {
@@ -589,27 +415,24 @@ async function updateIndexMessageCount() {
             }
         });
 
-        // Përditësojmë elementin në menu
         const menuBadge = document.getElementById("messageCount");
         if (menuBadge) {
             menuBadge.innerText = totalUnread;
             menuBadge.style.background = totalUnread > 0 ? "red" : "#444";
         }
 
-        // Përditësojmë elementin te butoni poshtë
-        const navBadge = document.getElementById("navMessageCount") || document.getElementById("bottomBadge");
+        const navBadge = document.getElementById("menuMessageCount");
         if (navBadge) {
             navBadge.innerText = totalUnread;
             navBadge.style.display = totalUnread > 0 ? "inline-block" : "none";
         }
-
     } catch (err) {
-        console.error("Gabim:", err);
+        console.error("Gabim tek mesazhet:", err);
     }
-}
+  }
 
-</script>  
+  loadMessageCount();
+</script>
+
 </body>
 </html>
-
-  

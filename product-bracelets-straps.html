@@ -49,6 +49,14 @@
             border-radius: 8px;
         }
 
+        /* Galeria e Fotove në Detaje */
+        .gallery-container { position: relative; width: 100%; height: 350px; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .gallery-container img { width: 100%; height: 100%; object-fit: contain; }
+        .gallery-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: 1px solid #444; font-size: 20px; padding: 10px; cursor: pointer; border-radius: 50%; z-index: 10; }
+        .gallery-btn.prev { left: 10px; }
+        .gallery-btn.next { right: 10px; }
+        .photo-counter { position: absolute; bottom: 10px; background: rgba(0,0,0,0.7); padding: 4px 10px; border-radius: 10px; font-size: 12px; }
+
         .btn-main {
             padding: 12px;
             border: none;
@@ -158,6 +166,9 @@
 </div>
 
 <script>
+    let currentImages = [];
+    let currentImgIndex = 0;
+
     document.addEventListener("DOMContentLoaded", async function() {
         if (!window.supabaseClient) {
             console.error("Supabase client nuk u gjet!");
@@ -169,7 +180,6 @@
         const container = document.getElementById("content-container");
 
         if (itemId) {
-            // NËSE KA ID: Shfaqim detajet e plota, butonin e PayPal dhe Send Request
             const { data, error } = await window.supabaseClient
                 .from('bracelets_straps')
                 .select('*')
@@ -181,17 +191,30 @@
                 return;
             }
 
-            let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-            if (data.image_url && data.image_url.length > 0) {
-                let primaryImage = Array.isArray(data.image_url) ? data.image_url[0] : data.image_url;
-                if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
-                    imgUrl = primaryImage.startsWith('http') ? primaryImage : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
-                }
+            // Përpunimi i të gjitha fotove (Array ose String i ndarë)
+            let rawImages = data.image_url;
+            if (typeof rawImages === 'string') {
+                try { rawImages = JSON.parse(rawImages); } catch(e) { rawImages = [rawImages]; }
             }
+
+            currentImages = Array.isArray(rawImages) ? rawImages.filter(img => img && img !== 'null' && img !== '') : [];
+            if (currentImages.length === 0) {
+                currentImages = ["https://placeholder.co/600x400/222/fff?text=No+Image"];
+            } else {
+                currentImages = currentImages.map(img => 
+                    img.startsWith('http') ? img : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + img
+                );
+            }
+            currentImgIndex = 0;
 
             container.innerHTML = `
                 <div style="max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border-radius: 10px; border: 1px solid #333;">
-                    <img src="${imgUrl}" alt="${data.brand || 'Strap'}" style="width:100%; height: 300px; object-fit: cover; border-radius: 8px;">
+                    <div class="gallery-container">
+                        <button class="gallery-btn prev" onclick="changeImage(-1)">❮</button>
+                        <img id="main-product-img" src="${currentImages[0]}" alt="${data.brand || 'Strap'}">
+                        <button class="gallery-btn next" onclick="changeImage(1)">❯</button>
+                        <div class="photo-counter" id="photo-counter-text">1 / ${currentImages.length}</div>
+                    </div>
                     
                     <h2 style="margin-top: 15px;">${data.brand || 'Bracelet / Strap'} ${data.model || ''}</h2>
                     
@@ -222,6 +245,7 @@
                 </div>
             `;
 
+            // Lidhja e PayPal
             const buyBtn = document.getElementById("buy-bracelet-btn");
             if (buyBtn) {
                 buyBtn.onclick = async function(e) {
@@ -255,6 +279,7 @@
                 };
             }
 
+            // Lidhja e mesazheve
             const requestBtn = document.getElementById("send-request-btn");
             if (requestBtn) {
                 requestBtn.onclick = function() {
@@ -263,7 +288,7 @@
             }
 
         } else {
-            // NËSE NUK KA ID: Shfaqim listën e plotë të rripave/byzylyqeve
+            // NËSE NUK KA ID: Shfaqim listën e plotë
             container.innerHTML = '<h2 style="padding-left: 0;">Bracelets & Straps Collection</h2><div id="straps-container" class="grid">Loading...</div>';
             const gridContainer = document.getElementById("straps-container");
 
@@ -271,13 +296,7 @@
                 .from('bracelets_straps')
                 .select('*');
 
-            if (error) {
-                console.error("Gabim gjatë marrjes së rripave:", error);
-                gridContainer.innerHTML = "Error loading items.";
-                return;
-            }
-
-            if (!data || data.length === 0) {
+            if (error || !data || data.length === 0) {
                 gridContainer.innerHTML = "No bracelets or straps available.";
                 return;
             }
@@ -286,16 +305,21 @@
                 let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
                 let primaryImage = "";
 
-                if (item.image_url && item.image_url.length > 0) {
-                    primaryImage = Array.isArray(item.image_url) ? item.image_url[0] : item.image_url;
+                if (item.image_url) {
+                    if (Array.isArray(item.image_url) && item.image_url.length > 0) {
+                        primaryImage = item.image_url[0];
+                    } else if (typeof item.image_url === 'string') {
+                        try {
+                            let parsed = JSON.parse(item.image_url);
+                            primaryImage = Array.isArray(parsed) ? parsed[0] : item.image_url;
+                        } catch(e) {
+                            primaryImage = item.image_url;
+                        }
+                    }
                 }
 
                 if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
-                    if (primaryImage.startsWith('http')) {
-                        imgUrl = primaryImage;
-                    } else {
-                        imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
-                    }
+                    imgUrl = primaryImage.startsWith('http') ? primaryImage : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
                 }
 
                 return `
@@ -315,6 +339,17 @@
             }).join('');
         }
     });
+
+    // Funksioni për të lëvizur fotot me shigjeta
+    function changeImage(direction) {
+        if (currentImages.length <= 1) return;
+        currentImgIndex += direction;
+        if (currentImgIndex >= currentImages.length) currentImgIndex = 0;
+        if (currentImgIndex < 0) currentImgIndex = currentImages.length - 1;
+        
+        document.getElementById("main-product-img").src = currentImages[currentImgIndex];
+        document.getElementById("photo-counter-text").innerText = (currentImgIndex + 1) + " / " + currentImages.length;
+    }
 </script>
 
 <nav class="bottom-nav">

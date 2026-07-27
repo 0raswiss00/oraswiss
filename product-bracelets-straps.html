@@ -69,6 +69,30 @@
         }
         .btn-buy:hover { background: #e6c200; }
 
+        /* Stilimi i butonave të zgjedhjes së Bracelet/Strap */
+        .bracelet-options-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+        .bracelet-pill {
+            background: #222;
+            color: #ccc;
+            border: 1px solid #444;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .bracelet-pill:hover, .bracelet-pill.active {
+            background: gold;
+            color: #000;
+            border-color: gold;
+            font-weight: bold;
+        }
+
         .bottom-nav {
             position: fixed !important;
             bottom: 20px !important;
@@ -144,7 +168,7 @@
         const container = document.getElementById("content-container");
 
         if (itemId) {
-            // NËSE KA ID: Shfaq detajet e plota të këtij rripi/byzylyku
+            // NËSE KA ID: Shfaq detajet e plota të këtij rripi/byzylyku dhe mundësinë e blerjes me PayPal
             const { data, error } = await supabase
                 .from('bracelets_straps')
                 .select('*')
@@ -172,6 +196,21 @@
                     
                     <p style="color:#aaa; font-size:14px; margin:5px 0;">Material: ${data.material || '/'}</p>
                     <p style="color:#aaa; font-size:14px; margin:5px 0;">Condition: ${data.condition || '/'}</p>
+
+                    <!-- Butonat e zgjedhjes së llojit të rripit (Bracelet Type options) -->
+                    <div style="margin: 15px 0;">
+                        <label style="font-size: 13px; color: #aaa; display: block; margin-bottom: 5px;">Zgjidh Llojin e Rripit / Bracelet Type:</label>
+                        <div class="bracelet-options-container">
+                            <button type="button" class="bracelet-pill ${data.material === 'Steel' ? 'active' : ''}" onclick="selectBraceletType(this, 'Steel')">Steel</button>
+                            <button type="button" class="bracelet-pill ${data.material === 'Leather' ? 'active' : ''}" onclick="selectBraceletType(this, 'Leather')">Leather</button>
+                            <button type="button" class="bracelet-pill ${data.material === 'Rubber' ? 'active' : ''}" onclick="selectBraceletType(this, 'Rubber')">Rubber</button>
+                            <button type="button" class="bracelet-pill ${data.material === 'Nato' ? 'active' : ''}" onclick="selectBraceletType(this, 'Nato')">Nato</button>
+                            <button type="button" class="bracelet-pill ${data.material === 'Gold' ? 'active' : ''}" onclick="selectBraceletType(this, 'Gold')">Gold</button>
+                            <button type="button" class="bracelet-pill ${data.material === 'Titanium' ? 'active' : ''}" onclick="selectBraceletType(this, 'Titanium')">Titanium</button>
+                            <button type="button" class="bracelet-pill ${data.material === 'Mesh' ? 'active' : ''}" onclick="selectBraceletType(this, 'Mesh')">Mesh</button>
+                            <button type="button" class="bracelet-pill ${data.material === 'Alligator' ? 'active' : ''}" onclick="selectBraceletType(this, 'Alligator')">Alligator</button>
+                        </div>
+                    </div>
                     
                     <div class="price" style="font-weight:bold; color:gold; font-size: 22px; margin: 15px 0;">
                         ${data.price ? data.price + ' €' : 'Contact for price'}
@@ -182,9 +221,45 @@
                         <p style="color: #ccc; line-height: 1.5; margin: 0; white-space: pre-line;">${data.description || data.detajet || 'Nuk ka përshkrim shtesë për këtë produkt.'}</p>
                     </div>
 
-                    <button class="btn-main btn-buy" style="width:100%; margin-top:10px;" onclick="alert('Kërkesa u dërgua me sukses!')">🛒 Buy Now</button>
+                    <!-- Butoni i PayPal lidhur njëlloj si te produktet e tjera -->
+                    <button id="buy-bracelet-btn" class="btn-main btn-buy" style="width:100%; margin-top:10px;">🛒 Buy Now (PayPal)</button>
                 </div>
             `;
+
+            // Lidhja funksionale e butonit të blerjes me endpoint-in e PayPal
+            const buyBtn = document.getElementById("buy-bracelet-btn");
+            if (buyBtn) {
+                buyBtn.onclick = async function(e) {
+                    e.preventDefault();
+                    buyBtn.innerText = "⏳ Loading...";
+                    try {
+                        const response = await fetch(
+                            "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
+                            {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    product_id: itemId,
+                                    price: data.price,
+                                    product_name: (data.brand || 'Strap') + ' ' + (data.model || '')
+                                })
+                            }
+                        );
+                        const result = await response.json();
+                        if (result.paypal_link) {
+                            window.location.href = result.paypal_link;
+                        } else {
+                            alert("PayPal link nuk u krijua");
+                            buyBtn.innerText = "🛒 Buy Now (PayPal)";
+                        }
+                    } catch(error) {
+                        console.error(error);
+                        alert("Gabim me PayPal");
+                        buyBtn.innerText = "🛒 Buy Now (PayPal)";
+                    }
+                };
+            }
+
         } else {
             // NËSE NUK KA ID: Shfaq listën e plotë (Vitrinën)
             container.innerHTML = `<h2 style="padding-left: 0;">Bracelets & Straps Collection</h2><div id="straps-container" class="grid">Loading...</div>`;
@@ -237,6 +312,14 @@
                 `;
             }).join('');
         }
+    }
+
+    // Funksioni për zgjedhjen vizuale të opsioneve të rripit
+    function selectBraceletType(element, typeName) {
+        const container = element.parentElement;
+        container.querySelectorAll('.bracelet-pill').forEach(btn => btn.classList.remove('active'));
+        element.classList.add('active');
+        console. u zgjodh lloji: + typeName;
     }
 
     initPage();

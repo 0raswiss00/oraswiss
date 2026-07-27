@@ -37,23 +37,6 @@
             cursor: pointer;
             font-size: 16px;
         }
-        .profile-header { 
-            text-align: center; 
-            margin-bottom: 30px; 
-            border-bottom: 1px solid #333; 
-            padding-bottom: 20px; 
-        }
-        .btn-sell { 
-            background: gold; 
-            color: #000; 
-            font-weight: bold; 
-            border: none; 
-            padding: 12px; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            width: 100%; 
-            margin-bottom: 20px; 
-        }
     
         .my-oraswiss-menu {
             display: none;
@@ -137,12 +120,13 @@
         </div>
     </div>
 
-    <!-- Seksioni ku do të shfaqen artikujt e ngarkuar -->
+    <!-- Seksioni i artikujve të mi -->
     <div style="margin-bottom: 20px;">
         <h2>Artikujt e mi</h2>
         <ul id="myWatchesList" style="padding: 0; margin: 0;"></ul>
     </div>
 
+    <!-- Menuja e My OraSwiss me butonin e saktë të mesazheve -->
     <div id="myOraSwissMenu" class="my-oraswiss-menu">
         <div class="menu-item" onclick="location.href='buy.html'"><span>🛒 Buy</span> <span>></span></div>
         <div class="menu-item" onclick="location.href='mysold.html'"><span>🛒 my sold</span> <span>></span></div>
@@ -155,6 +139,7 @@
         <div class="menu-item" onclick="location.href='info.html'"><span>ℹ️ Info</span> <span>></span></div>
     </div>
 
+    <!-- Shiriti i poshtëm i navigimit -->
     <nav class="bottom-nav">
       <a href="index.html" class="bottom-nav-item">OraSwiss</a>
       <a href="profile.html" class="bottom-nav-item">Profile</a>
@@ -175,35 +160,19 @@
 
     async function protectPage() {
         const { data: { user } } = await supabase.auth.getUser();
-
         if (!user) {
             window.location.href = "login.html";
             return false;
         }
-
         return true;
     }
 
     protectPage();
   
-    async function checkLogin(event, page) {
-        event.preventDefault();
-
-        const { data } = await supabase.auth.getSession();
-
-        if (data.session) {
-            window.location.href = page;
-        } else {
-            window.location.href = "login.html";
-        }
-    }
-
-    window.checkLogin = checkLogin;
-    
     async function ngarkoArtikujt() {
         const lista = document.getElementById("myWatchesList");
         if (!lista) return;
-        lista.innerHTML = "Po ngarkojmë artikujt...";
+        lista.innerHTML = "<li>Po ngarkojmë artikujt...</li>";
 
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
@@ -234,16 +203,23 @@
         } else {
             teGjitha.forEach(item => {
                 const isStrap = straps && straps.some(s => s.id === item.id);
-                
                 const detailPage = isStrap ? 'product-bracelets-straps.html' : 'watch-details.html';
+                
+                let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+                if (item.image_url) {
+                    let primaryImg = Array.isArray(item.image_url) ? item.image_url[0] : item.image_url;
+                    if (primaryImg && primaryImg !== 'null' && primaryImg !== '') {
+                        imgUrl = primaryImg.startsWith('http') ? primaryImg : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImg;
+                    }
+                }
 
                 const li = document.createElement("li");
                 li.className = "watch-card";
                 li.innerHTML = `
                     <a href="${detailPage}?id=${item.id}" style="text-decoration:none; color:inherit; display:flex; align-items:center; width:100%;">
-                        <img src="${item.image_url && item.image_url[0] ? item.image_url[0] : ''}" alt="${item.brand || 'Artikull'}" style="width:100px; height:auto; margin-right:15px; object-fit:cover;">
+                        <img src="${imgUrl}" alt="${item.brand || 'Artikull'}" style="width:80px; height:80px; margin-right:15px; object-fit:cover; border-radius:6px;">
                         <div>
-                            <strong>${item.brand || 'Rrip'}</strong> - ${item.price} €
+                            <strong style="font-size:16px;">${item.brand || 'Artikull'}</strong> - <span style="color:gold;">${item.price || '0'} €</span>
                         </div>
                     </a>
                 `;
@@ -255,22 +231,54 @@
     function toggleMenu(menuId) {
         const menu = document.getElementById(menuId);
         if (!menu) return; 
-
         menu.classList.toggle('active');
     }
 
-    window.ngarkoArtikujt = ngarkoArtikujt;
     window.toggleMenu = toggleMenu;
+
+    async function loadMessageCount() {
+        try {
+            const { data: { user }, error } = await supabase.auth.getUser();
+            if (error || !user) return;
+
+            const { data: userConvs, error: convError } = await supabase
+                .from("conversations")
+                .select("id")
+                .or(`user_one.eq.${user.id},user_two.eq.${user.id},buyer_id.eq.${user.id},seller_id.eq.${user.id}`);
+
+            if (convError || !userConvs || userConvs.length === 0) return;
+
+            const convIds = userConvs.map(c => c.id);
+
+            const { count: totalUnread, error: msgError } = await supabase
+                .from("messages")
+                .select("*", { count: "exact", head: true })
+                .in("conversation_id", convIds)
+                .eq("is_read", false)
+                .neq("sender_id", user.id);
+
+            if (msgError) return;
+
+            const count = totalUnread || 0;
+            const dashBadge = document.getElementById("dashboardMessageCount");
+            if (dashBadge) {
+                dashBadge.innerText = count;
+                dashBadge.style.display = count > 0 ? "inline-block" : "none";
+            }
+        } catch (err) {
+            console.error("Gabim tek mesazhet:", err);
+        }
+    }
 
     document.addEventListener('DOMContentLoaded', async () => {
         const { data: { user } } = await supabase.auth.getUser();
-
         if (!user) {
             window.location.href = "login.html";
             return;
         }
 
         ngarkoArtikujt();
+        loadMessageCount();
     });
 
     const searchInput = document.getElementById('searchInput');
@@ -293,13 +301,11 @@
 
     window.addEventListener('scroll', () => {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
         if (scrollTop > lastScrollTop) {
             nav.classList.add('hidden');
         } else {
             nav.classList.remove('hidden');
         }
-        
         lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
     }, false);
 </script>

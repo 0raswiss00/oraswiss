@@ -23,7 +23,7 @@
     .grid {
         display: grid; 
         grid-template-columns: repeat(2, 1fr); 
-        gap: 10px; 
+        gap: 15px; 
         padding: 10px;
     }
 
@@ -36,40 +36,59 @@
     .card {
         background: #111;
         padding: 15px;
-        border-radius: 10px;
+        border-radius: 12px;
         border: 1px solid #333;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
     .card img {
         width: 100%;
-        height: 140px;
+        height: 180px;
         object-fit: cover;
         display: block;
         border-radius: 8px;
+        margin-bottom: 12px;
     }
 
-    .btn-main {
-      padding: 10px;
-      border: none;
-      border-radius: 4px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 14px;
+    .card h3 {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 5px 0 2px 0;
+        color: #fff;
     }
-    .btn-secondary {
-      background: #333;
-      color: #fff;
-      border: 1px solid #555;
+
+    .card p {
+        color: #aaa;
+        font-size: 14px;
+        margin: 0 0 10px 0;
     }
-    .btn-secondary:hover {
-      background: #444;
+
+    .price {
+        font-size: 18px;
+        font-weight: bold;
+        color: gold;
+        margin-bottom: 12px;
     }
-    .btn-buy {
-      background: gold;
-      color: #000;
+
+    .btn-view-details {
+        width: 100%;
+        padding: 12px;
+        background: #222;
+        color: #fff;
+        border: 1px solid #444;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 14px;
+        text-align: center;
+        transition: background 0.2s;
     }
-    .btn-buy:hover {
-        background: #e6c200;
+
+    .btn-view-details:hover {
+        background: #333;
+        border-color: #666;
     }
 
     .bottom-nav {
@@ -236,27 +255,13 @@
       
         return `
             <div class="card" onclick="openProduct('${ora.id}')" style="cursor: pointer;">
-                <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
-                <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
-                <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>
-                <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-                
-                <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:10px; background:#222; color:#fff; border:1px solid #444; border-radius:4px; box-sizing:border-box;" onclick="event.stopPropagation();">
-                
-                <button class="btn-main btn-secondary" style="width:100%; margin-top:5px;" onclick="event.stopPropagation();">Send Request</button>
-                
-                <button class="btn-main btn-buy" style="width:100%; margin-top:5px;" onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}'">
-                 Buy Now
-                </button>
-
-                <div style="display: flex; gap: 5px; margin-top: 5px;">
-                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" onclick="event.stopPropagation(); this.style.background = this.style.background === 'rgb(220, 53, 69)' ? '#222' : '#dc3545';">
-                         Like
-                    </button>
-                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.origin + '/product.html?id=${ora.id}'); alert('Link copied to clipboard!');">
-                         Share
-                    </button>
+                <div>
+                    <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
+                    <h3>${ora.brand || ''}</h3>
+                    <p>${ora.model || ora.reference || ''}</p>
+                    <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
                 </div>
+                <button class="btn-view-details" onclick="event.stopPropagation(); openProduct('${ora.id}')">View Details</button>
             </div>
         `;
     }).join('');
@@ -351,12 +356,13 @@
                 const item = document.createElement("div");
                 item.className = "card";
                 item.innerHTML = `
-                    <div onclick="openProduct('${product.id}')" style="cursor:pointer;">
-                        <img src="${imgUrl}" alt="${product.model || ''}">
-                        <h3>${product.brand || ''} - ${product.model || ''}</h3>
-                        <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${product.reference || '/'}</p>
+                    <div>
+                        <img src="${imgUrl}" alt="${product.brand || ''}">
+                        <h3>${product.brand || ''}</h3>
+                        <p>${product.model || product.reference || ''}</p>
                         <div class="price">${product.price ? product.price + ' €' : 'Contact for price'}</div>
                     </div>
+                    <button class="btn-view-details" onclick="event.stopPropagation(); openProduct('${product.id}')">View Details</button>
                 `;
                 luxuryContainer.appendChild(item);
             });

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html lang="sq">
+<!doctype html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bracelets & Straps - Ora Swiss</title>
+    <title>Bracelet & Straps - Ora Swiss</title>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
     <script>
@@ -12,223 +12,324 @@
         gtag('js', new Date());
         gtag('config', 'G-KD2ZZ3MJYY');
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * { box-sizing: border-box; }
-        body { margin: 0; background: #050505; color: white; font-family: Arial, sans-serif; padding-bottom: 50px; }
-        
-        .container { max-width: 1200px; margin: auto; padding: 20px; }
-        
-        .header-title {
-            font-size: 26px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #222;
-            padding-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .back-link {
-            color: #aaa;
-            text-decoration: none;
-            font-size: 14px;
-            background: #111;
-            padding: 8px 14px;
-            border-radius: 20px;
-            border: 1px solid #222;
-        }
-        .back-link:hover { background: #222; color: white; }
+        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff; }
+        .site-header { position: sticky; top: 0; z-index: 9999; background: #111; }
+        .nav-scroll { display: flex; gap: 18px; align-items: center; overflow-x: auto; padding: 14px 16px; }
+        .nav-scroll a { color: #fff; text-decoration: none; padding: 6px 10px; }
+        .nav-scroll a:hover { color: gold; }
+        .site-title { font-weight: 700; line-height: 1.05; margin-right: 10px; }
 
-        .products-grid {
+        .grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            gap: 10px;
+            padding: 10px;
         }
 
         @media (min-width: 768px) {
-            .products-grid {
+            .grid {
                 grid-template-columns: repeat(4, 1fr);
             }
         }
 
-        .product-card {
+        .card {
             background: #111;
-            border: 1px solid #222;
-            border-radius: 12px;
-            overflow: hidden;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #333;
             cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s;
-            display: flex;
-            flex-direction: column;
         }
 
-        .product-card:hover {
-            transform: translateY(-3px);
-            border-color: #444;
-        }
-
-        .product-img-wrapper {
+        .card img {
             width: 100%;
-            height: 160px;
-            background: #000;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .product-img-wrapper img {
-            width: 100%;
-            height: 100%;
+            height: 140px;
             object-fit: cover;
+            display: block;
+            border-radius: 8px;
         }
 
-        .product-info {
+        .btn-main {
             padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            flex: 1;
-        }
-
-        .product-brand {
-            font-size: 13px;
-            color: #aaa;
-            text-transform: uppercase;
-        }
-
-        .product-model {
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
             font-size: 15px;
-            font-weight: bold;
-            color: white;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .product-desc {
-            font-size: 12px;
-            color: #888;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            margin-top: 2px;
-        }
-
-        .product-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: auto;
-            padding-top: 8px;
-            border-top: 1px solid #1a1a1a;
-        }
-
-        .product-price {
-            font-size: 16px;
-            color: #25D366;
-            font-weight: bold;
-        }
-
-        .loading-text, .empty-text {
             text-align: center;
-            padding: 50px;
+            display: block;
+            text-decoration: none;
+        }
+        .btn-buy {
+            background: gold;
+            color: #000;
+        }
+        .btn-buy:hover { background: #e6c200; }
+
+        .btn-request {
+            background: #222;
+            color: #fff;
+            border: 1px solid #555;
+            margin-top: 10px;
+        }
+        .btn-request:hover { background: #333; }
+
+        /* Stilimi i detajeve të produktit */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid #333;
+            font-size: 14px;
+        }
+        .specs-grid div {
             color: #aaa;
-            font-size: 16px;
-            grid-column: 1 / -1;
+        }
+        .specs-grid span {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .bottom-nav {
+            position: fixed !important;
+            bottom: 20px !important;
+            left: 15px !important;
+            right: 15px !important;
+            width: auto !important;
+            height: 65px !important;
+            background-color: #1a1a1a !important;
+            display: flex !important;
+            justify-content: space-around !important;
+            align-items: center !important;
+            padding: 0 5px !important;
+            border-radius: 20px !important;
+            border: 1px solid #333 !important;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
+            z-index: 999999 !important;
+        }
+
+        .bottom-nav a, .bottom-nav button {
+            color: #ffffff !important;
+            text-decoration: none !important;
+            font-size: 10px !important;
+            text-align: center !important;
+            white-space: nowrap !important;
+            flex: 1 !important;
+            background: none !important;
+            border: none !important;
+            cursor: pointer !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 3px !important;
+        }
+
+        .bottom-nav a:hover { color: gold !important; }
+
+        body {
+            padding-bottom: 110px !important;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
+    <script src="db-connect.js"></script>
 </head>
 <body>
 
-<div class="container">
-    <div class="header-title">
-        <span>Bracelets & Straps</span>
-        <a href="index.html" class="back-link">← Home</a>
-    </div>
+<header class="site-header">
+    <nav class="nav-scroll">
+        <span class="site-title">ORA<br>SWISS</span>
+        <a href="index.html">Home</a>
+        <a href="luxury.html">Luxury</a>
+        <a href="vintage.html">Vintage</a>
+        <a href="parts.html">Parts</a>
+        <a href="product-bracelets-straps.html" style="color: gold;">Bracelet/Strap</a>
+        <a href="service.html">Service</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
 
-    <div class="products-grid" id="products-container">
-        <div class="loading-text">Duke ngarkuar produktet...</div>
-    </div>
+<div id="content-container" style="padding: 10px;">
+    Loading...
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-<script src="db-connect.js"></script>
-
 <script>
-document.addEventListener("DOMContentLoaded", async function() {
-    const container = document.getElementById("products-container");
-
-    if (!window.supabaseClient) {
-        container.innerHTML = `<div class="empty-text" style="color: red;">Gabim në lidhjen me databazën.</div>`;
-        return;
-    }
-
-    try {
-        const { data, error } = await window.supabaseClient
-            .from("bracelets_straps")
-            .select("*")
-            .order("created_at", { ascending: false });
-
-        if (error) throw error;
-
-        if (!data || data.length === 0) {
-            container.innerHTML = `<div class="empty-text">Nuk u gjet asnjë produkt.</div>`;
+    document.addEventListener("DOMContentLoaded", async function() {
+        if (!window.supabaseClient) {
+            console.error("Supabase client nuk u gjet!");
             return;
         }
 
-        container.innerHTML = "";
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get('id');
+        const container = document.getElementById("content-container");
 
-        data.forEach(item => {
-            let imageUrl = "https://placeholder.co/400x300/222/fff?text=No+Image";
-            
-            // Trajtimi i saktë i fotos që vjen si array nga form-i yt
-            if (item.image_url) {
-                if (Array.isArray(item.image_url) && item.image_url.length > 0) {
-                    imageUrl = item.image_url[0];
-                } else if (typeof item.image_url === 'string') {
-                    imageUrl = item.image_url.startsWith('http') ? item.image_url : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + item.image_url;
+        if (itemId) {
+            // NËSE KA ID: Shfaqim detajet e plota, butonin e PayPal (Buy Now) dhe Send Request
+            const { data, error } = await window.supabaseClient
+                .from('bracelets_straps')
+                .select('*')
+                .eq('id', itemId)
+                .single();
+
+            if (error || !data) {
+                container.innerHTML = "<h2 style='color:red; text-align:center;'>Produkti nuk u gjet ose ndodhi një gabim!</h2>";
+                return;
+            }
+
+            let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+            if (data.image_url && data.image_url.length > 0) {
+                let primaryImage = Array.isArray(data.image_url) ? data.image_url[0] : data.image_url;
+                if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
+                    imgUrl = primaryImage.startsWith('http') ? primaryImage : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
                 }
             }
 
-            const brand = item.brand || "Ora Swiss";
-            const model = item.model || "";
-            const description = item.description || "";
-            const price = item.price || 0;
-
-            const card = document.createElement("div");
-            card.className = "product-card";
-            card.onclick = () => {
-                window.location.href = `product-details.html?id=${item.id}`;
-            };
-
-            card.innerHTML = `
-                <div class="product-img-wrapper">
-                    <img src="${imageUrl}" alt="${brand}" loading="lazy">
-                </div>
-                <div class="product-info">
-                    <div class="product-brand">${brand}</div>
-                    <div class="product-model">${model}</div>
-                    <div class="product-desc">${description}</div>
-                    <div class="product-footer">
-                        <span class="product-price">${price} €</span>
+            container.innerHTML = `
+                <div style="max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border-radius: 10px; border: 1px solid #333;">
+                    <img src="${imgUrl}" alt="${data.brand || 'Strap'}" style="width:100%; height: 300px; object-fit: cover; border-radius: 8px;">
+                    
+                    <h2 style="margin-top: 15px;">${data.brand || 'Bracelet / Strap'} ${data.model || ''}</h2>
+                    
+                    <div class="price" style="font-weight:bold; color:gold; font-size: 22px; margin: 10px 0;">
+                        ${data.price ? data.price + ' €' : 'Contact for price'}
                     </div>
+
+                    <div class="specs-grid">
+                        <div>Type: <span>${data.type || '/'}</span></div>
+                        <div>Condition: <span>${data.condition || '/'}</span></div>
+                        <div>Material: <span>${data.material || '/'}</span></div>
+                        <div>Color: <span>${data.color || '/'}</span></div>
+                        <div>Reference: <span>${data.reference || '/'}</span></div>
+                        <div>Year: <span>${data.year || '/'}</span></div>
+                        <div>Gold Purity: <span>${data.gold_purity || '/'}</span></div>
+                        <div>Lug Width: <span>${data.lug_width || '/'}</span></div>
+                        <div>Clasp Width: <span>${data.clasp_width || '/'}</span></div>
+                        <div>Length: <span>${data.length || '/'}</span></div>
+                    </div>
+
+                    <div style="background: #1a1a1a; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #333;">
+                        <h4 style="margin: 0 0 10px 0; color: #fff;">Description</h4>
+                        <p style="color: #ccc; line-height: 1.5; margin: 0; white-space: pre-line;">${data.description || 'Nuk ka përshkrim shtesë për këtë produkt.'}</p>
+                    </div>
+
+                    <!-- Butoni i PayPal (Buy Now) -->
+                    <button id="buy-bracelet-btn" class="btn-main btn-buy" style="width:100%;"> Buy Now (PayPal)</button>
+                    
+                    <!-- Butoni Send Request (Dërgo Kërkesë / Mesazh për produktin) -->
+                    <button id="send-request-btn" class="btn-main btn-request" style="width:100%;"> Send Request / Inquiry</button>
                 </div>
             `;
 
-            container.appendChild(card);
-        });
+            // Lidhja funksionale e PayPal
+            const buyBtn = document.getElementById("buy-bracelet-btn");
+            if (buyBtn) {
+                buyBtn.onclick = async function(e) {
+                    e.preventDefault();
+                    buyBtn.innerText = " Loading PayPal...";
+                    try {
+                        const response = await fetch(
+                            "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
+                            {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    product_id: itemId,
+                                    price: data.price,
+                                    product_name: (data.brand || 'Strap') + ' ' + (data.model || '')
+                                })
+                            }
+                        );
+                        const result = await response.json();
+                        if (result.paypal_link) {
+                            window.location.href = result.paypal_link;
+                        } else {
+                            alert("PayPal link nuk u krijua");
+                            buyBtn.innerText = " Buy Now (PayPal)";
+                        }
+                    } catch(error) {
+                        console.error(error);
+                        alert("Gabim me PayPal");
+                        buyBtn.innerText = " Buy Now (PayPal)";
+                    }
+                };
+            }
 
-    } catch (err) {
-        console.error("Gabim:", err);
-        container.innerHTML = `<div class="empty-text" style="color: red;">Gabim gjatë ngarkimit të të dhënave.</div>`;
-    }
-});
+            // Lidhja funksionale për Send Request (p.sh. dërgon përdoruesin te faqja e mesazheve ose hap një kërkesë)
+            const requestBtn = document.getElementById("send-request-btn");
+            if (requestBtn) {
+                requestBtn.onclick = function() {
+                    window.location.href = `messages.html?product_id=${itemId}&title=` + encodeURIComponent((data.brand || 'Strap') + ' ' + (data.model || ''));
+                };
+            }
+
+        } else {
+            // NËSE NUK KA ID: Shfaqim listën e plotë të rripave/byzylyqeve
+            container.innerHTML = '<h2 style="padding-left: 0;">Bracelets & Straps Collection</h2><div id="straps-container" class="grid">Loading...</div>';
+            const gridContainer = document.getElementById("straps-container");
+
+            const { data, error } = await window.supabaseClient
+                .from('bracelets_straps')
+                .select('*');
+
+            if (error) {
+                console.error("Gabim gjatë marrjes së rripave:", error);
+                gridContainer.innerHTML = "Error loading items.";
+                return;
+            }
+
+            if (!data || data.length === 0) {
+                gridContainer.innerHTML = "No bracelets or straps available.";
+                return;
+            }
+
+            gridContainer.innerHTML = data.map(item => {
+                let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+                let primaryImage = "";
+
+                if (item.image_url && item.image_url.length > 0) {
+                    primaryImage = Array.isArray(item.image_url) ? item.image_url[0] : item.image_url;
+                }
+
+                if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
+                    if (primaryImage.startsWith('http')) {
+                        imgUrl = primaryImage;
+                    } else {
+                        imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
+                    }
+                }
+
+                return `
+                    <div class="card" onclick="window.location.href='product-bracelets-straps.html?id=${item.id}'">
+                        <img src="${imgUrl}" alt="${item.brand || 'Strap'}">
+                        <h3 style="margin: 10px 0 5px 0;">${item.brand || 'Bracelet / Strap'}</h3>
+                        <p style="color:#aaa; font-size:13px; margin:0 0 8px 0;">${item.material || '/'}</p>
+                        <div class="price" style="font-weight:bold; color:gold; margin-bottom: 10px;">${item.price ? item.price + ' €' : 'Contact for price'}</div>
+                        
+                        <button class="btn-main btn-buy" 
+                        style="width:100%; padding: 8px; font-size: 13px;"
+                        onclick="event.stopPropagation(); window.location.href='product-bracelets-straps.html?id=${item.id}'">
+                         View Details
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+    });
 </script>
+
+<nav class="bottom-nav">
+    <a href="index.html"><br>Home</a>
+    <a href="favorites.html"><br>Favs</a>
+    <a href="messages.html"><br>Messages</a>
+    <a href="mysales.html"><br>Sales</a>
+    <a href="sellnow.html"><br>Sell</a>
+    <button type="button" onclick="checkMenu(event)"><br>Menu</button>
+</nav>
 
 </body>
 </html>

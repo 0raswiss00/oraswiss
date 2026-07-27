@@ -35,18 +35,19 @@
         }
         .search-box:focus { outline: none; border-color: gold; }
 
-        .grid {
+         .grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 10px; 
+            padding: 10px;
         }
 
-        @media (min-width: 1024px) {
+        @media (min-width: 768px) {
             .grid {
-                grid-template-columns: repeat(4, 1fr) !important;
-                gap: 15px;
+                grid-template-columns: repeat(4, 1fr); 
             }
         }
+        
         .card {
             background: #111;
             padding: 15px;

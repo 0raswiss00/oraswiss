@@ -113,6 +113,41 @@
     body {
         padding-bottom: 110px !important;
     }
+
+    /* Stili i rregulluar dhe i mbledhur për My OraSwiss menu */
+    .my-oraswiss-menu {
+        display: none;
+        position: fixed !important;
+        bottom: 105px !important;
+        right: 15px !important;
+        left: auto !important;
+        width: 220px !important;
+        background: #1a1a1a !important;
+        border-radius: 15px !important;
+        border: 1px solid #333 !important;
+        padding: 10px !important;
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.5) !important;
+        z-index: 1000000 !important;
+    }
+
+    .my-oraswiss-menu.active {
+        display: block !important;
+    }
+
+    .my-oraswiss-menu .menu-item { 
+        display: flex !important; 
+        justify-content: space-between !important; 
+        align-items: center !important; 
+        padding: 15px 10px !important; 
+        border-bottom: 1px solid #222 !important; 
+        cursor: pointer !important; 
+        color: #fff !important;
+        text-decoration: none !important;
+    }
+
+    .my-oraswiss-menu .menu-item:last-child { 
+        border-bottom: none !important; 
+    }
   </style>  
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 </head>
@@ -158,16 +193,16 @@
 <h2>Parts Collection</h2>
 <div id="parts-container" class="grid">Loading...</div>  
 
-<div id="myOraSwissMenu" style="display: none; position: fixed; bottom: 95px; right: 15px; left: 15px; background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 15px; z-index: 1000000; box-shadow: 0 -5px 20px rgba(0,0,0,0.8);">
-    <div class="menu-item" onclick="location.href='buy.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 Buy</div>
-    <div class="menu-item" onclick="location.href='mysold.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 My Sold</div>
-    <div class="menu-item" onclick="location.href='messages.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444; display: flex; justify-content: space-between; align-items: center;">
-        <span>✉️ Messages</span> 
-        <span id="messageCount" style="background: #444; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold;">0</span>
-    </div>
-    <div class="menu-item" onclick="location.href='settings.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">⚙️ Settings</div>
-    <div class="menu-item" onclick="location.href='support.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🎧 Support</div>
-    <div class="menu-item" onclick="location.href='info.html'" style="padding: 10px; color: white; cursor: pointer;">ℹ️ Info</div>
+<div class="my-oraswiss-menu" id="myOraSwissMenu">
+    <div class="menu-item" onclick="location.href='buy.html'"><span>🛒 Buy</span> <span>></span></div>
+    <div class="menu-item" onclick="location.href='mysold.html'"><span>🛒 my sold</span> <span>></span></div>
+    <a href="messages.html" class="menu-item" style="text-decoration: none; color: inherit;">
+        <span>✉️ Messages</span>
+        <span id="dashboardMessageCount" style="background: red; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold; display: none;">0</span>
+    </a>
+    <div class="menu-item" onclick="location.href='settings.html'"><span>⚙️ Account Settings</span> <span>></span></div>
+    <div class="menu-item" onclick="location.href='support.html'"><span>🎧 Support</span> <span>></span></div>
+    <div class="menu-item" onclick="location.href='info.html'"><span>ℹ️ Info</span> <span>></span></div>
 </div>
 
 <nav class="bottom-nav">
@@ -312,7 +347,7 @@
 
   function toggleMenu() {
       const menu = document.getElementById('myOraSwissMenu');
-      menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+      menu.classList.toggle('active');
   }
 
   document.getElementById("searchInput").addEventListener("input", async function(e) {
@@ -419,14 +454,12 @@
 
         const count = totalUnread || 0;
 
-        // Përditëso rrethin e kuq te menuja e My OraSwiss
         const dashBadge = document.getElementById("dashboardMessageCount");
         if (dashBadge) {
             dashBadge.innerText = count;
             dashBadge.style.display = count > 0 ? "inline-block" : "none";
         }
 
-        // Përditëso edhe badge-in tek ikona e poshtme "messg" nëse e keni
         const navBadge = document.getElementById("menuMessageCount");
         if (navBadge) {
             navBadge.innerText = count;
@@ -437,7 +470,6 @@
     }
 }
 
-// Thirre funksionin sapo të ngarkohet faqja
 loadMessageCount();
 </script>
 

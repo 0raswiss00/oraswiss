@@ -316,6 +316,16 @@
     });
 
     document.addEventListener("DOMContentLoaded", loadOras);
+
+    // Funksioni checkMenu për butonin Menu në fund
+    function checkMenu(event) {
+        event.stopPropagation();
+        if (typeof window.toggleMenu === 'function') {
+            window.toggleMenu();
+        } else {
+            alert('Menuja është duke u ngarkuar ose mungon skripta kryesore e menusë.');
+        }
+    }
 </script>
 
 <nav class="bottom-nav">

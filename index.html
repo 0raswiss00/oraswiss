@@ -65,13 +65,6 @@
         margin: 0 0 10px 0;
     }
 
-    .price {
-        font-size: 18px;
-        font-weight: bold;
-        color: gold;
-        margin-bottom: 12px;
-    }
-
     .btn-view-details {
         width: 100%;
         padding: 12px;
@@ -129,6 +122,55 @@
       color: gold !important;
     }
 
+    /* Stili i rregulluar për ta bërë menynë më kompakte fiks si te fotoja e dytë */
+    #myOraSwissMenu {
+      display: none;
+      position: fixed;
+      bottom: 95px;
+      right: 15px;
+      left: 15px;
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 16px;
+      z-index: 1000000;
+      box-shadow: 0 -10px 30px rgba(0,0,0,0.9);
+      overflow: hidden;
+    }
+
+    .menu-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 11px 18px; /* Hapësirë më e vogël që të mos duket e madhe */
+      color: #fff;
+      text-decoration: none;
+      cursor: pointer;
+      border-bottom: 1px solid #2a2a2a;
+      font-size: 15px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    .menu-item-row:last-child {
+      border-bottom: none;
+    }
+
+    .menu-item-row:hover {
+      background: #282828;
+    }
+
+    .menu-item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .menu-arrow {
+      color: #888;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
     body {
         padding-bottom: 110px !important;
     }
@@ -177,16 +219,37 @@
 <h2>Parts Collection</h2>
 <div id="parts-container" class="grid">Loading...</div>  
 
-<div id="myOraSwissMenu" style="display: none; position: fixed; bottom: 95px; right: 15px; left: 15px; background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 15px; z-index: 1000000; box-shadow: 0 -5px 20px rgba(0,0,0,0.8);">
-    <div class="menu-item" onclick="location.href='buy.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 Buy</div>
-    <div class="menu-item" onclick="location.href='mysold.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 My Sold</div>
-    <div class="menu-item" onclick="location.href='messages.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444; display: flex; justify-content: space-between; align-items: center;">
-        <span>✉️ Messages</span> 
-        <span id="dashboardMessageCount" style="background: #ff3b30; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold; display: none;">0</span>
+<!-- Menuja lundruese kompakte fiks si te fotoja e dytë -->
+<div id="myOraSwissMenu">
+    <div class="menu-item-row" onclick="location.href='buy.html'">
+        <div class="menu-item-left"><span>🛒</span> Buy</div>
+        <span class="menu-arrow">&gt;</span>
     </div>
-    <div class="menu-item" onclick="location.href='settings.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">⚙️ Settings</div>
-    <div class="menu-item" onclick="location.href='support.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🎧 Support</div>
-    <div class="menu-item" onclick="location.href='info.html'" style="padding: 10px; color: white; cursor: pointer;">ℹ️ Info</div>
+    <div class="menu-item-row" onclick="location.href='mysold.html'">
+        <div class="menu-item-left"><span>🛒</span> my sold</div>
+        <span class="menu-arrow">&gt;</span>
+    </div>
+    <div class="menu-item-row" onclick="location.href='messages.html'">
+        <div class="menu-item-left">
+            <span>✉️</span> Messages
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <span id="dashboardMessageCount" style="background: #ff3b30; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold; display: none;">0</span>
+            <span class="menu-arrow">&gt;</span>
+        </div>
+    </div>
+    <div class="menu-item-row" onclick="location.href='settings.html'">
+        <div class="menu-item-left"><span>⚙️</span> Account Settings</div>
+        <span class="menu-arrow">&gt;</span>
+    </div>
+    <div class="menu-item-row" onclick="location.href='support.html'">
+        <div class="menu-item-left"><span>🎧</span> Support</div>
+        <span class="menu-arrow">&gt;</span>
+    </div>
+    <div class="menu-item-row" onclick="location.href='info.html'">
+        <div class="menu-item-left"><span>ℹ️</span> Info</div>
+        <span class="menu-arrow">&gt;</span>
+    </div>
 </div>
 
 <nav class="bottom-nav">
@@ -198,7 +261,7 @@
     </a>
     <a href="mysales.html">📦<br>Sales</a>
     <a href="sellnow.html">➕<br>Sell</a>
-    <button type="button" onclick="checkMenu(event)">📂<br>Menu</button>  
+    <button type="button" onclick="checkMenu(event)" id="menuBtnText">📂<br>My OraSwiss</button>  
 </nav>
 
 <div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center;z-index:99999;">
@@ -259,7 +322,6 @@
                     <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
                     <h3>${ora.brand || ''}</h3>
                     <p>${ora.model || ora.reference || ''}</p>
-                    <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
                 </div>
                 <button class="btn-view-details" onclick="event.stopPropagation(); openProduct('${ora.id}')">View Details</button>
             </div>
@@ -317,7 +379,14 @@
 
   function toggleMenu() {
       const menu = document.getElementById('myOraSwissMenu');
-      menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+      const menuBtn = document.getElementById('menuBtnText');
+      if (menu.style.display === 'block') {
+          menu.style.display = 'none';
+          menuBtn.style.color = '#ffffff';
+      } else {
+          menu.style.display = 'block';
+          menuBtn.style.color = 'gold';
+      }
   }
 
   document.getElementById("searchInput").addEventListener("input", async function(e) {
@@ -360,7 +429,6 @@
                         <img src="${imgUrl}" alt="${product.brand || ''}">
                         <h3>${product.brand || ''}</h3>
                         <p>${product.model || product.reference || ''}</p>
-                        <div class="price">${product.price ? product.price + ' €' : 'Contact for price'}</div>
                     </div>
                     <button class="btn-view-details" onclick="event.stopPropagation(); openProduct('${product.id}')">View Details</button>
                 `;

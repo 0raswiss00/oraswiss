@@ -13,7 +13,7 @@
         gtag('config', 'G-KD2ZZ3MJYY');
     </script>
     <style>
-        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff; }
+        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff; padding-bottom: 110px; }
         .site-header { position: sticky; top: 0; z-index: 9999; background: #111; }
         .nav-scroll { display: flex; gap: 18px; align-items: center; overflow-x: auto; padding: 14px 16px; }
         .nav-scroll a { color: #fff; text-decoration: none; padding: 6px 10px; }
@@ -74,7 +74,6 @@
         }
         .btn-request:hover { background: #333; }
 
-        /* Stilimi i detajeve të produktit */
         .specs-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -92,46 +91,6 @@
         .specs-grid span {
             color: #fff;
             font-weight: bold;
-        }
-
-        .bottom-nav {
-            position: fixed !important;
-            bottom: 20px !important;
-            left: 15px !important;
-            right: 15px !important;
-            width: auto !important;
-            height: 65px !important;
-            background-color: #1a1a1a !important;
-            display: flex !important;
-            justify-content: space-around !important;
-            align-items: center !important;
-            padding: 0 5px !important;
-            border-radius: 20px !important;
-            border: 1px solid #333 !important;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.8) !important;
-            z-index: 999999 !important;
-        }
-
-        .bottom-nav a, .bottom-nav button {
-            color: #ffffff !important;
-            text-decoration: none !important;
-            font-size: 10px !important;
-            text-align: center !important;
-            white-space: nowrap !important;
-            flex: 1 !important;
-            background: none !important;
-            border: none !important;
-            cursor: pointer !important;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            gap: 3px !important;
-        }
-
-        .bottom-nav a:hover { color: gold !important; }
-
-        body {
-            padding-bottom: 110px !important;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
@@ -169,7 +128,6 @@
         const container = document.getElementById("content-container");
 
         if (itemId) {
-            // NËSE KA ID: Shfaqim detajet e plota, butonin e PayPal (Buy Now) dhe Send Request
             const { data, error } = await window.supabaseClient
                 .from('bracelets_straps')
                 .select('*')
@@ -217,16 +175,11 @@
                         <p style="color: #ccc; line-height: 1.5; margin: 0; white-space: pre-line;">${data.description || 'Nuk ka përshkrim shtesë për këtë produkt.'}</p>
                     </div>
 
-                    <!-- Butoni i PayPal (Buy Now) -->
                     <button id="buy-bracelet-btn" class="btn-main btn-buy" style="width:100%;">🛒 Buy Now (PayPal)</button>
-                    
-                    <!-- Butoni Send Request (Dërgo Kërkesë / Mesazh për produktin) -->
                     <button id="send-request-btn" class="btn-main btn-request" style="width:100%;">✉️ Send Request / Inquiry</button>
                 </div>
             `;
 
-            // Lidhja funksionale e PayPal fiks si te product.html
-           // Lidhja funksionale e PayPal e barabartë me product.html
             const buyBtn = document.getElementById("buy-bracelet-btn");
             if (buyBtn) {
                 buyBtn.onclick = async function(e) {
@@ -242,7 +195,7 @@
                                     product_id: itemId,
                                     price: data.price,
                                     product_name: (data.brand || 'Strap') + ' ' + (data.model || ''),
-                                    table: "bracelets_straps" // I tregon databazës emrin e tabelës nëse e kërkon
+                                    table: "bracelets_straps"
                                 })
                             }
                         );
@@ -267,9 +220,7 @@
                     }
                 };
             }
-                        
-    
-            // Lidhja funksionale për Send Request (p.sh. dërgon përdoruesin te faqja e mesazheve ose hap një kërkesë)
+
             const requestBtn = document.getElementById("send-request-btn");
             if (requestBtn) {
                 requestBtn.onclick = function() {
@@ -278,7 +229,6 @@
             }
 
         } else {
-            // NËSE NUK KA ID: Shfaqim listën e plotë të rripave/byzylyqeve
             container.innerHTML = `<h2 style="padding-left: 0;">Bracelets & Straps Collection</h2><div id="straps-container" class="grid">Loading...</div>`;
             const gridContainer = document.getElementById("straps-container");
 
@@ -297,49 +247,28 @@
                 return;
             }
 
-            gridContainer.innerHTML = data.map(item => {
+            let htmlContent = "";
+            data.forEach(item => {
                 let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-                let primaryImage = "";
-
                 if (item.image_url && item.image_url.length > 0) {
-                    primaryImage = Array.isArray(item.image_url) ? item.image_url[0] : item.image_url;
-                }
-
-                if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
-                    if (primaryImage.startsWith('http')) {
-                        imgUrl = primaryImage;
-                    } else {
-                        imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
+                    let primaryImage = Array.isArray(item.image_url) ? item.image_url[0] : item.image_url;
+                    if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
+                        imgUrl = primaryImage.startsWith('http') ? primaryImage : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
                     }
                 }
 
-                return `
-                    <div class="card" onclick="window.location.href='product-bracelets-straps.html?id=${item.id}'">
+                htmlContent += `
+                    <div class="card" onclick="window.location.href='?id=${item.id}'">
                         <img src="${imgUrl}" alt="${item.brand || 'Strap'}">
-                        <h3 style="margin: 10px 0 5px 0;">${item.brand || 'Bracelet / Strap'}</h3>
-                        <p style="color:#aaa; font-size:13px; margin:0 0 8px 0;">${item.material || '/'}</p>
-                        <div class="price" style="font-weight:bold; color:gold; margin-bottom: 10px;">${item.price ? item.price + ' €' : 'Contact for price'}</div>
-                        
-                        <button class="btn-main btn-buy" 
-                        style="width:100%; padding: 8px; font-size: 13px;"
-                        onclick="event.stopPropagation(); window.location.href='product-bracelets-straps.html?id=${item.id}'">
-                        🛒 View Details
-                        </button>
+                        <h4 style="margin: 10px 0 5px 0; font-size: 15px;">${item.brand || ''} ${item.model || ''}</h4>
+                        <div style="color: gold; font-weight: bold;">${item.price ? item.price + ' €' : ''}</div>
                     </div>
                 `;
-            }).join('');
+            });
+            gridContainer.innerHTML = htmlContent;
         }
     });
 </script>
-
-<nav class="bottom-nav">
-    <a href="index.html">🏠<br>Home</a>
-    <a href="favorites.html">❤️<br>Favs</a>
-    <a href="messages.html">✉️<br>Messages</a>
-    <a href="mysales.html">⌚<br>Sales</a>
-    <a href="sellnow.html">➕<br>Sell</a>
-    <button type="button" onclick="checkMenu(event)">👤<br>Menu</button>
-</nav>
 
 </body>
 </html>

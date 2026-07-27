@@ -168,7 +168,6 @@
         const container = document.getElementById("content-container");
 
         if (itemId) {
-            // NËSE KA ID: Shfaq detajet e plota të këtij rripi/byzylyku dhe mundësinë e blerjes me PayPal
             const { data, error } = await supabase
                 .from('bracelets_straps')
                 .select('*')
@@ -221,12 +220,11 @@
                         <p style="color: #ccc; line-height: 1.5; margin: 0; white-space: pre-line;">${data.description || data.detajet || 'Nuk ka përshkrim shtesë për këtë produkt.'}</p>
                     </div>
 
-                    <!-- Butoni i PayPal lidhur njëlloj si te produktet e tjera -->
+                    <!-- Butoni i PayPal -->
                     <button id="buy-bracelet-btn" class="btn-main btn-buy" style="width:100%; margin-top:10px;">🛒 Buy Now (PayPal)</button>
                 </div>
             `;
 
-            // Lidhja funksionale e butonit të blerjes me endpoint-in e PayPal
             const buyBtn = document.getElementById("buy-bracelet-btn");
             if (buyBtn) {
                 buyBtn.onclick = async function(e) {
@@ -261,7 +259,6 @@
             }
 
         } else {
-            // NËSE NUK KA ID: Shfaq listën e plotë (Vitrinën)
             container.innerHTML = `<h2 style="padding-left: 0;">Bracelets & Straps Collection</h2><div id="straps-container" class="grid">Loading...</div>`;
             const gridContainer = document.getElementById("straps-container");
 
@@ -314,12 +311,12 @@
         }
     }
 
-    // Funksioni për zgjedhjen vizuale të opsioneve të rripit
+    // Funksioni i korrigjuar saktë në JavaScript
     function selectBraceletType(element, typeName) {
         const container = element.parentElement;
         container.querySelectorAll('.bracelet-pill').forEach(btn => btn.classList.remove('active'));
         element.classList.add('active');
-        console. u zgjodh lloji: + typeName;
+        console.log("U zgjodh lloji: " + typeName);
     }
 
     initPage();

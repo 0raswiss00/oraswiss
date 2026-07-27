@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watch Details</title>
+    <title>Product Details</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { box-sizing: border-box; }
@@ -17,7 +17,6 @@
         
         .details { padding: 20px; max-width: 900px; margin: auto; position: relative; }
         
-        /* Rregullimi i Brendit dhe Modelit që të mos jenë ngjitur */
         .brand { font-size: 18px; color: #aaa; margin-bottom: 4px; }
         .model { font-size: 30px; font-weight: bold; margin-bottom: 15px; display: block; }
         
@@ -27,7 +26,6 @@
         .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; max-width: 900px; margin-left: auto; margin-right: auto; }
         .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
         
-        /* Stili për Share dhe Like (Zemrën) */
         .top-actions {
             display: flex;
             justify-content: flex-end;
@@ -55,7 +53,6 @@
         .buy { background: #ffd900; color: black; }
         .offer { background: #222; color: white; border: 1px solid #444; }
 
-        /* ORAWISS SELLER CARD CSS */
         .oraswiss-seller-wrapper {
             display: block;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -161,7 +158,6 @@
     </div>
     
     <div class="details">
-        <!-- Share dhe Like të vendosura bukur -->
         <div class="top-actions">
             <div class="action" onclick="shareProduct()">🔗 Share</div>
             <div class="action" onclick="toggleLike(this)" title="Ruaj në të preferuarat">♡ Like</div>
@@ -176,26 +172,9 @@
         </div>
     </div>
     
+    <!-- Kutia e specifikave dinamike përshtatet sipas tabelës -->
     <div class="info-box" id="specs">
-        <div class="info-row"><span>Reference</span><span id="reference">-</span></div>
-        <div class="info-row"><span>Serial Number</span><span id="serial_number">-</span></div>
-        <div class="info-row"><span>Movement</span><span id="movement">-</span></div>
-        <div class="info-row"><span>Caliber</span><span id="caliber">-</span></div>
-        <div class="info-row"><span>Frequency</span><span id="frequency">-</span></div>
-        <div class="info-row"><span>Material</span><span id="material">-</span></div>
-        <div class="info-row"><span>Case Size</span><span id="case_size">-</span></div>
-        <div class="info-row"><span>Movement Size</span><span id="movement_size">-</span></div>
-        <div class="info-row"><span>Year</span><span id="year">-</span></div>
-        <div class="info-row"><span>Function</span><span id="function">-</span></div>
-        <div class="info-row"><span>Service</span><span id="service_display">-</span></div>
-        <div class="info-row"><span>Service Date</span><span id="service_date_display">-</span></div>
-        <div class="info-row"><span>Origin</span><span id="origin">-</span></div>
-        <div class="info-row"><span>Work Status</span><span id="work_status">-</span></div>
-        <div class="info-row"><span>Bracelet</span><span id="bracelet">-</span></div>
-        <div class="info-row"><span>Glass</span><span id="glass">-</span></div>
-        <div class="info-row"><span>Warranty</span><span id="warranty">-</span></div>
-        <div class="info-row"><span>Warranty Months</span><span id="warranty_months">-</span></div>
-        <div class="info-row"><span>Box & Papers</span><span id="box_papers">-</span></div>
+        <!-- Të dhënat do të gjenerohen automatikisht nga skripta -->
     </div>
 
     <div class="info-box">
@@ -211,7 +190,6 @@
     <a class="buy-btn buy" id="buy">🛒 BUY</a>
 </div>
 
-<!-- ORAWISS SELLER CARD -->
 <div class="oraswiss-seller-wrapper">
     <div class="oraswiss-seller-card">
         <div class="oraswiss-header">
@@ -245,7 +223,9 @@ const supabaseClient = window.supabase.createClient(
 
 let currentImages = [];
 let currentImgIndex = 0;
-const productId = new URLSearchParams(window.location.search).get("id");
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get("id");
+const category = urlParams.get("category"); // Kontrollon nëse është "bracelets_straps" apo orë standarde
 
 async function loadProduct() {
     const container = document.querySelector(".product-page");
@@ -255,9 +235,12 @@ async function loadProduct() {
         return;
     }
 
+    // Përcaktojmë tabelën bazuar te kategoria e ardhur nga URL
+    const tableName = (category === "bracelets_straps") ? "bracelets_straps" : "oras";
+
     try {
         const { data, error } = await supabaseClient
-            .from("oras")
+            .from(tableName)
             .select("*")
             .eq("id", productId)
             .single();
@@ -364,33 +347,54 @@ async function loadProduct() {
         document.getElementById("brand").textContent = data.brand || "N/A";
         document.getElementById("model").textContent = data.model || "N/A";
         
-        // Rregullimi i shfaqjes së çmimit dhe valutës saktë
         const currencySymbol = data.currency || "€";
         document.getElementById("top-price").textContent = (data.price || 0) + " " + currencySymbol;
         
-        const serial = data.serial_number || "";
-        const maskedSerial = serial.length > 3 ? serial.substring(0, 3) + 'X'.repeat(serial.length - 3) : (serial || "N/A");
-        const serialElement = document.getElementById("serial_number");
-        if (serialElement) { serialElement.innerText = maskedSerial; }
+        // Gjenerimi i specifikave sipas llojit të produktit (Orë vs Rrip/Byzylyk)
+        const specsContainer = document.getElementById("specs");
+        specsContainer.innerHTML = "";
 
-        document.getElementById("reference").innerText = data.reference || "N/A";
-        document.getElementById("movement").innerText = data.movement || "N/A";
-        document.getElementById("caliber").innerText = data.caliber || "N/A";
-        document.getElementById("frequency").innerText = data.frekuen || "N/A";
-        document.getElementById("material").innerText = data.material || "N/A";
-        document.getElementById("case_size").innerText = data.case_size || "N/A";
-        document.getElementById("movement_size").innerText = data.movement_size || "N/A";
-        document.getElementById("year").innerText = data.year || "N/A";
-        document.getElementById("function").innerText = data.function || "N/A";
-        document.getElementById("service_display").innerText = data.service ? "Yes (Serviced)" : "No";
-        document.getElementById("service_date_display").innerText = data.service_date || "-";
-        document.getElementById("origin").innerText = data.origin || "N/A";
-        document.getElementById("work_status").innerText = data.work_status || "N/A";
-        document.getElementById("bracelet").innerText = data.bracelet || "N/A";
-        document.getElementById("glass").innerText = data.glass || "N/A";
-        document.getElementById("warranty").innerText = data.warranty || "N/A";
-        document.getElementById("warranty_months").innerText = data.warranty_months || "N/A";
-        document.getElementById("box_papers").innerText = data.box_papers ? "Full Set" : "Watch Only";
+        if (tableName === "bracelets_straps") {
+            specsContainer.innerHTML = `
+                <div class="info-row"><span>Type</span><span>${data.type || "N/A"}</span></div>
+                <div class="info-row"><span>Reference</span><span>${data.reference || "N/A"}</span></div>
+                <div class="info-row"><span>Condition</span><span>${data.condition || "N/A"}</span></div>
+                <div class="info-row"><span>Material</span><span>${data.material || "N/A"}</span></div>
+                <div class="info-row"><span>Gold Purity</span><span>${data.gold_purity || "N/A"}</span></div>
+                <div class="info-row"><span>Color</span><span>${data.color || "N/A"}</span></div>
+                <div class="info-row"><span>Lug Width</span><span>${data.lug_width || "N/A"}</span></div>
+                <div class="info-row"><span>Clasp Width</span><span>${data.clasp_width || "N/A"}</span></div>
+                <div class="info-row"><span>Length</span><span>${data.length || "N/A"}</span></div>
+                <div class="info-row"><span>Thickness</span><span>${data.thickness || "N/A"}</span></div>
+                <div class="info-row"><span>Year</span><span>${data.year || "N/A"}</span></div>
+            `;
+        } else {
+            const serial = data.serial_number || "";
+            const maskedSerial = serial.length > 3 ? serial.substring(0, 3) + 'X'.repeat(serial.length - 3) : (serial || "N/A");
+            
+            specsContainer.innerHTML = `
+                <div class="info-row"><span>Reference</span><span>${data.reference || "N/A"}</span></div>
+                <div class="info-row"><span>Serial Number</span><span>${maskedSerial}</span></div>
+                <div class="info-row"><span>Movement</span><span>${data.movement || "N/A"}</span></div>
+                <div class="info-row"><span>Caliber</span><span>${data.caliber || "N/A"}</span></div>
+                <div class="info-row"><span>Frequency</span><span>${data.frekuen || "N/A"}</span></div>
+                <div class="info-row"><span>Material</span><span>${data.material || "N/A"}</span></div>
+                <div class="info-row"><span>Case Size</span><span>${data.case_size || "N/A"}</span></div>
+                <div class="info-row"><span>Movement Size</span><span>${data.movement_size || "N/A"}</span></div>
+                <div class="info-row"><span>Year</span><span>${data.year || "N/A"}</span></div>
+                <div class="info-row"><span>Function</span><span>${data.function || "N/A"}</span></div>
+                <div class="info-row"><span>Service</span><span>${data.service ? "Yes (Serviced)" : "No"}</span></div>
+                <div class="info-row"><span>Service Date</span><span>${data.service_date || "-"}</span></div>
+                <div class="info-row"><span>Origin</span><span>${data.origin || "N/A"}</span></div>
+                <div class="info-row"><span>Work Status</span><span>${data.work_status || "N/A"}</span></div>
+                <div class="info-row"><span>Bracelet</span><span>${data.bracelet || "N/A"}</span></div>
+                <div class="info-row"><span>Glass</span><span>${data.glass || "N/A"}</span></div>
+                <div class="info-row"><span>Warranty</span><span>${data.warranty || "N/A"}</span></div>
+                <div class="info-row"><span>Warranty Months</span><span>${data.warranty_months || "N/A"}</span></div>
+                <div class="info-row"><span>Box & Papers</span><span>${data.box_papers ? "Full Set" : "Watch Only"}</span></div>
+            `;
+        }
+
         document.getElementById("description").innerText = data.description || "N/A";
 
         const buyBtn = document.getElementById("buy");

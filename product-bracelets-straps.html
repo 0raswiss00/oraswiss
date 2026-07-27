@@ -225,16 +225,13 @@
                 </div>
             `;
 
-            // Lidhja funksionale e PayPal
-            // Lidhja funksionale e PayPal
+            // Lidhja funksionale e PayPal fiks si te product.html
             const buyBtn = document.getElementById("buy-bracelet-btn");
             if (buyBtn) {
                 buyBtn.onclick = async function(e) {
                     e.preventDefault();
-                    buyBtn.innerText = "⏳ Loading PayPal...";
+                    buyBtn.innerText = "⏳ Loading...";
                     try {
-                        // KUJDES: Nëse te product.html përdor një emër tjetër funksioni (p.sh. create-paypal-payment), 
-                        // ndryshoje këtu që të përputhet saktësisht.
                         const response = await fetch(
                             "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
                             {
@@ -243,31 +240,27 @@
                                 body: JSON.stringify({
                                     product_id: itemId,
                                     price: data.price,
-                                    product_name: (data.brand || 'Strap') + ' ' + (data.model || ''),
-                                    table_name: "bracelets_straps" // I tregon databazës nga cila tabelë po blihet produkti
+                                    product_name: (data.brand || 'Strap') + ' ' + (data.model || '')
                                 })
                             }
                         );
-                        
-                        if (!response.ok) {
-                            throw new Error("Server returned status " + response.status);
-                        }
 
                         const result = await response.json();
                         if (result.paypal_link || result.url) {
                             window.location.href = result.paypal_link || result.url;
                         } else {
-                            alert("PayPal link nuk u krijua nga serveri.");
+                            alert("PayPal link nuk u krijua");
                             buyBtn.innerText = "🛒 Buy Now (PayPal)";
                         }
                     } catch(error) {
-                        console.error("Gabim PayPal:", error);
-                        alert("Gabim gjatë lidhjes me PayPal. Sigurohu që endpoint-i është aktiv.");
+                        console.error(error);
+                        alert("Gabim me PayPal");
                         buyBtn.innerText = "🛒 Buy Now (PayPal)";
                     }
                 };
             }
-
+                        
+    
             // Lidhja funksionale për Send Request (p.sh. dërgon përdoruesin te faqja e mesazheve ose hap një kërkesë)
             const requestBtn = document.getElementById("send-request-btn");
             if (requestBtn) {

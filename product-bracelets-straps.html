@@ -226,6 +226,7 @@
             `;
 
             // Lidhja funksionale e PayPal fiks si te product.html
+           // Lidhja funksionale e PayPal e barabartë me product.html
             const buyBtn = document.getElementById("buy-bracelet-btn");
             if (buyBtn) {
                 buyBtn.onclick = async function(e) {
@@ -240,21 +241,28 @@
                                 body: JSON.stringify({
                                     product_id: itemId,
                                     price: data.price,
-                                    product_name: (data.brand || 'Strap') + ' ' + (data.model || '')
+                                    product_name: (data.brand || 'Strap') + ' ' + (data.model || ''),
+                                    table: "bracelets_straps" // I tregon databazës emrin e tabelës nëse e kërkon
                                 })
                             }
                         );
 
+                        if (!response.ok) {
+                            throw new Error("HTTP error! status: " + response.status);
+                        }
+
                         const result = await response.json();
-                        if (result.paypal_link || result.url) {
-                            window.location.href = result.paypal_link || result.url;
+                        if (result.paypal_link) {
+                            window.location.href = result.paypal_link;
+                        } else if (result.url) {
+                            window.location.href = result.url;
                         } else {
                             alert("PayPal link nuk u krijua");
                             buyBtn.innerText = "🛒 Buy Now (PayPal)";
                         }
                     } catch(error) {
-                        console.error(error);
-                        alert("Gabim me PayPal");
+                        console.error("Gabim PayPal:", error);
+                        alert("Gabim gjatë lidhjes me PayPal. Kontrollo console.");
                         buyBtn.innerText = "🛒 Buy Now (PayPal)";
                     }
                 };

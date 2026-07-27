@@ -23,7 +23,7 @@
     .grid {
         display: grid; 
         grid-template-columns: repeat(2, 1fr); 
-        gap: 10px; 
+        gap: 15px; 
         padding: 10px;
     }
 
@@ -36,40 +36,52 @@
     .card {
         background: #111;
         padding: 15px;
-        border-radius: 10px;
+        border-radius: 12px;
         border: 1px solid #333;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
     .card img {
         width: 100%;
-        height: 140px;
+        height: 180px;
         object-fit: cover;
         display: block;
         border-radius: 8px;
+        margin-bottom: 12px;
     }
 
-    .btn-main {
-      padding: 10px;
-      border: none;
-      border-radius: 4px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 14px;
+    .card h3 {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 5px 0 2px 0;
+        color: #fff;
     }
-    .btn-secondary {
-      background: #333;
-      color: #fff;
-      border: 1px solid #555;
+
+    .card p {
+        color: #aaa;
+        font-size: 14px;
+        margin: 0 0 10px 0;
     }
-    .btn-secondary:hover {
-      background: #444;
+
+    .btn-view-details {
+        width: 100%;
+        padding: 12px;
+        background: #222;
+        color: #fff;
+        border: 1px solid #444;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 14px;
+        text-align: center;
+        transition: background 0.2s;
     }
-    .btn-buy {
-      background: gold;
-      color: #000;
-    }
-    .btn-buy:hover {
-        background: #e6c200;
+
+    .btn-view-details:hover {
+        background: #333;
+        border-color: #666;
     }
 
     .bottom-nav {
@@ -108,6 +120,59 @@
 
     .bottom-nav-item:hover {
       color: gold !important;
+    }
+
+    /* Stili i ri kompakt për menynë lundruese */
+    #myOraSwissMenu {
+        display: none;
+        position: fixed;
+        bottom: 95px;
+        right: 15px;
+        width: 220px;
+        background: #1a1a1a;
+        border-radius: 15px;
+        border: 1px solid #333;
+        padding: 10px;
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+        z-index: 1000000;
+    }
+
+    #myOraSwissMenu.active {
+        display: block;
+    }
+
+    .menu-item-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 10px;
+        border-bottom: 1px solid #222;
+        cursor: pointer;
+        color: #fff;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: background 0.2s;
+    }
+
+    .menu-item-row:last-child {
+        border-bottom: none;
+    }
+
+    .menu-item-row:hover {
+        background: #282828;
+    }
+
+    .menu-item-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .menu-arrow {
+        color: #888;
+        font-size: 14px;
+        font-weight: bold;
     }
 
     body {
@@ -158,16 +223,37 @@
 <h2>Parts Collection</h2>
 <div id="parts-container" class="grid">Loading...</div>  
 
-<div id="myOraSwissMenu" style="display: none; position: fixed; bottom: 95px; right: 15px; left: 15px; background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 15px; z-index: 1000000; box-shadow: 0 -5px 20px rgba(0,0,0,0.8);">
-    <div class="menu-item" onclick="location.href='buy.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 Buy</div>
-    <div class="menu-item" onclick="location.href='mysold.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 My Sold</div>
-    <div class="menu-item" onclick="location.href='messages.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444; display: flex; justify-content: space-between; align-items: center;">
-        <span>✉️ Messages</span> 
-        <span id="dashboardMessageCount" style="background: #ff3b30; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold; display: none;">0</span>
+<!-- Menuja e re kompakte në anë të djathtë -->
+<div id="myOraSwissMenu">
+    <div class="menu-item-row" onclick="location.href='buy.html'">
+        <div class="menu-item-left"><span>🛒</span> Buy</div>
+        <span class="menu-arrow">&gt;</span>
     </div>
-    <div class="menu-item" onclick="location.href='settings.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">⚙️ Settings</div>
-    <div class="menu-item" onclick="location.href='support.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🎧 Support</div>
-    <div class="menu-item" onclick="location.href='info.html'" style="padding: 10px; color: white; cursor: pointer;">ℹ️ Info</div>
+    <div class="menu-item-row" onclick="location.href='mysold.html'">
+        <div class="menu-item-left"><span>🛒</span> my sold</div>
+        <span class="menu-arrow">&gt;</span>
+    </div>
+    <div class="menu-item-row" onclick="location.href='messages.html'">
+        <div class="menu-item-left">
+            <span>✉️</span> Messages
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <span id="dashboardMessageCount" style="background: #ff3b30; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold; display: none;">0</span>
+            <span class="menu-arrow">&gt;</span>
+        </div>
+    </div>
+    <div class="menu-item-row" onclick="location.href='settings.html'">
+        <div class="menu-item-left"><span>⚙️</span> Account Settings</div>
+        <span class="menu-arrow">&gt;</span>
+    </div>
+    <div class="menu-item-row" onclick="location.href='support.html'">
+        <div class="menu-item-left"><span>🎧</span> Support</div>
+        <span class="menu-arrow">&gt;</span>
+    </div>
+    <div class="menu-item-row" onclick="location.href='info.html'">
+        <div class="menu-item-left"><span>ℹ️</span> Info</div>
+        <span class="menu-arrow">&gt;</span>
+    </div>
 </div>
 
 <nav class="bottom-nav">
@@ -179,7 +265,7 @@
     </a>
     <a href="mysales.html">📦<br>Sales</a>
     <a href="sellnow.html">➕<br>Sell</a>
-    <button type="button" onclick="checkMenu(event)">📂<br>Menu</button>  
+    <button type="button" onclick="checkMenu(event)" id="menuBtnText">📂<br>My OraSwiss</button>  
 </nav>
 
 <div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center;z-index:99999;">
@@ -236,27 +322,12 @@
       
         return `
             <div class="card" onclick="openProduct('${ora.id}')" style="cursor: pointer;">
-                <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
-                <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
-                <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>
-                <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-                
-                <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:10px; background:#222; color:#fff; border:1px solid #444; border-radius:4px; box-sizing:border-box;" onclick="event.stopPropagation();">
-                
-                <button class="btn-main btn-secondary" style="width:100%; margin-top:5px;" onclick="event.stopPropagation();">Send Request</button>
-                
-                <button class="btn-main btn-buy" style="width:100%; margin-top:5px;" onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}'">
-                 Buy Now
-                </button>
-
-                <div style="display: flex; gap: 5px; margin-top: 5px;">
-                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" onclick="event.stopPropagation(); this.style.background = this.style.background === 'rgb(220, 53, 69)' ? '#222' : '#dc3545';">
-                         Like
-                    </button>
-                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.origin + '/product.html?id=${ora.id}'); alert('Link copied to clipboard!');">
-                         Share
-                    </button>
+                <div>
+                    <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
+                    <h3>${ora.brand || ''}</h3>
+                    <p>${ora.model || ora.reference || ''}</p>
                 </div>
+                <button class="btn-view-details" onclick="event.stopPropagation(); openProduct('${ora.id}')">View Details</button>
             </div>
         `;
     }).join('');
@@ -312,7 +383,13 @@
 
   function toggleMenu() {
       const menu = document.getElementById('myOraSwissMenu');
-      menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+      const menuBtn = document.getElementById('menuBtnText');
+      menu.classList.toggle('active');
+      if (menu.classList.contains('active')) {
+          menuBtn.style.color = 'gold';
+      } else {
+          menuBtn.style.color = '#ffffff';
+      }
   }
 
   document.getElementById("searchInput").addEventListener("input", async function(e) {
@@ -351,12 +428,12 @@
                 const item = document.createElement("div");
                 item.className = "card";
                 item.innerHTML = `
-                    <div onclick="openProduct('${product.id}')" style="cursor:pointer;">
-                        <img src="${imgUrl}" alt="${product.model || ''}">
-                        <h3>${product.brand || ''} - ${product.model || ''}</h3>
-                        <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${product.reference || '/'}</p>
-                        <div class="price">${product.price ? product.price + ' €' : 'Contact for price'}</div>
+                    <div>
+                        <img src="${imgUrl}" alt="${product.brand || ''}">
+                        <h3>${product.brand || ''}</h3>
+                        <p>${product.model || product.reference || ''}</p>
                     </div>
+                    <button class="btn-view-details" onclick="event.stopPropagation(); openProduct('${product.id}')">View Details</button>
                 `;
                 luxuryContainer.appendChild(item);
             });

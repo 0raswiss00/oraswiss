@@ -194,7 +194,7 @@ Case Size:
 <input 
 id="case_size"
 type="text"
-placeholder="Example: 40mm">
+placeholder="Example: 40mm or No Case">
 
 
 
@@ -244,9 +244,12 @@ placeholder="Example: 18mm">
 
 <div class="checkbox-row">
 
-<label>
-<input id="service" type="checkbox">
-Service Completed
+<label>Service Status:
+    <select id="serviceStatus">
+        <option value="">Not Serviced / Unknown</option>
+        <option value="Completed">Service Completed</option>
+        <option value="Not Serviced">Not Serviced</option>
+    </select>
 </label>
 
 
@@ -297,7 +300,7 @@ Box / Papers
 <option>Nato</option>
 <option>Rubber</option>
 <option>Bracelet</option>
-<option>No Bracelet Leather</option>
+<option>No Bracelet No Leather</option>
 
 </select>
 
@@ -312,6 +315,7 @@ Box / Papers
         <option value="Acrylic / Hesalite">Acrylic / Hesalite</option>
         <option value="Hardlex">Hardlex</option>
         <option value="K1 Mineral">K1 Mineral</option>
+        <option value="No Glass">No Glass</option>
     </select>
 </label>
 

@@ -1,104 +1,134 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="sq">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ora Swiss</title>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <meta charset="UTF-8">
+    <title>myOraSwiss - Dashboard</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; 
+            background: #000; 
+            color: #fff; 
+            padding: 15px; 
+            padding-top: 15px; 
+            padding-bottom: 120px; 
+            margin: 0;
+        }
+        .search-container { margin-bottom: 20px; }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 10px 12px;
+        }
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+            margin-left: 8px;
+        }
+        .camera-icon {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .profile-header { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            border-bottom: 1px solid #333; 
+            padding-bottom: 20px; 
+        }
+        .btn-sell { 
+            background: gold; 
+            color: #000; 
+            font-weight: bold; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            width: 100%; 
+            margin-bottom: 20px; 
+        }
+    
+        .my-oraswiss-menu {
+            display: none;
+            position: fixed;
+            bottom: 105px;
+            right: 15px;
+            width: 220px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            border: 1px solid #333;
+            padding: 10px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+            z-index: 1000000;
+        }
 
-  gtag('config', 'G-KD2ZZ3MJYY');
-</script>
-  <style>
-    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
-    .site-header{position:sticky;top:0;z-index:9999;background:#111}
-    .nav-scroll{display:flex;gap:18px;align-items:center;overflow-x:auto;padding:14px 16px}
-    .nav-scroll a{color:#fff;text-decoration:none;padding:6px 10px}
-    .nav-scroll a:hover{color:gold}
-    .site-title{font-weight:700;line-height:1.05;margin-right:10px}
+        .my-oraswiss-menu.active {
+            display: block;
+        }
 
-    .grid {
-        display: grid; 
-        grid-template-columns: 1fr 1fr; 
-        gap: 10px; 
-        padding: 10px;
-    }
+        .my-oraswiss-menu .menu-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 15px 10px; 
+            border-bottom: 1px solid #222; 
+            cursor: pointer; 
+            color: #fff;
+            text-decoration: none;
+        }
 
-    .card {
-        background: #111;
-        padding: 15px;
-        border-radius: 10px;
-        border: 1px solid #333;
-    }
+        .my-oraswiss-menu .menu-item:last-child { 
+            border-bottom: none; 
+        }
 
-    .card img {
-        width: 100%;
-        height: 140px; /* Ndryshoni vlerën nga 220px në 140px */
-        object-fit: cover;
-        display: block;
-        border-radius: 8px;
-    }
+        .bottom-nav {
+            position: fixed;
+            bottom: 30px;
+            left: 15px;
+            right: 15px;
+            width: auto;
+            height: 65px;
+            background-color: #1a1a1a;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 5px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            z-index: 999999;
+            transition: transform 0.3s ease;
+        }
+        .bottom-nav.hidden {
+            transform: translateY(150%);
+        }
+        .bottom-nav-item {
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            text-align: center;
+        }
+        .bottom-nav-item:hover { color: gold; }
 
-    /* Stilet për butonat që mungonin */
-    .btn-main {
-      padding: 10px;
-      border: none;
-      border-radius: 4px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    .btn-secondary {
-      background: #333;
-      color: #fff;
-      border: 1px solid #555;
-    }
-    .btn-secondary:hover {
-      background: #444;
-    }
-    .btn-buy {
-      background: gold;
-      color: #000;
-    }
-    .btn-buy:hover {
-      background: #e6c200;
-    }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
+        .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; list-style: none; }
+    </style>
 </head>
 <body>
 
-<header class="site-header">
-  <nav class="nav-scroll">
-    <span class="site-title">ORA<br>SWISS</span>
-    <span style="color: white; margin-left: 20px; display: flex; align-items: center; gap: 15px;">
-        <span>👤 User: <b id="count-users">0</b></span>
-    
-        <span>⌚ Ora: <b id="count-products">0</b></span>
-    </span>
-    <button onclick="location.href='register.html'">
-        Login / Register
-    </button>
-    <button id="btnSellNow" style="display: none;" onclick="trajtoKlikiminSellNow()">Sell a watch</button>
-    <a href="home.html">Home</a>
-    <a href="luxury.html">Luxury</a>
-    <a href="vintage.html">Vintage</a>
-    <a href="parts.html">Parts</a>
-    <a href="index.html#product-bracelet-strap-container">Bracelet/Strap</a>
-    <a href="service.html">Service</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="policy.html">Policy</a>
-    <a href="sell.html">Sell</a>
-    <a href="admin_users.html">
-      <button>👥 Përdoruesit</button>
-    </a>
-  </nav>
-</header>
     <div class="search-container">
         <div class="search-box">
             <span class="search-icon">🔍</span>
@@ -106,1616 +136,208 @@
             <button class="camera-icon" onclick="alert('Funksioni për foto së shpejti!')">📷</button>
         </div>
     </div>
-<h2>Luxury Collection</h2>
-<div id="luxury-container" class="grid">Loading...</div>
 
-<h2>Vintage Collection</h2>
-<div id="vintage-container" class="grid">Loading...</div>
+    <!-- Seksioni ku do të shfaqen artikujt e ngarkuar -->
+    <div style="margin-bottom: 20px;">
+        <h2>Artikujt e mi</h2>
+        <ul id="myWatchesList" style="padding: 0; margin: 0;"></ul>
+    </div>
 
-<h2>Parts Collection</h2>
-<div id="parts-container" class="grid">Loading...</div>
+    <div id="myOraSwissMenu" class="my-oraswiss-menu">
+        <div class="menu-item" onclick="location.href='buy.html'"><span>🛒 Buy</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='mysold.html'"><span>🛒 my sold</span> <span>></span></div>
+        <a href="messages.html" class="menu-item" style="text-decoration: none; color: inherit;">
+            <span>✉️ Messages</span>
+            <span id="dashboardMessageCount" style="background: red; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold; display: none;">0</span>
+        </a>
+        <div class="menu-item" onclick="location.href='settings.html'"><span>⚙️ Account Settings</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='support.html'"><span>🎧 Support</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='info.html'"><span>ℹ️ Info</span> <span>></span></div>
+    </div>
 
-<h2>Bracelet / Strap Collection</h2>
-<div id="product-bracelet-strap-container" class="grid">Loading...</div>
-  
-<script>
-  const supabase = window.supabase.createClient(
-    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-  );
-// Tani përdorni variablin 'supabase' kudo në kod
+    <nav class="bottom-nav">
+      <a href="index.html" class="bottom-nav-item">OraSwiss</a>
+      <a href="profile.html" class="bottom-nav-item">Profile</a>
+      <a href="favorites.html" class="bottom-nav-item">Favorites</a>
+      <a href="collection.html" class="bottom-nav-item">Collection</a>
+      <a href="mysales.html" class="bottom-nav-item">Sales</a>
+      <a href="sellnow.html" class="bottom-nav-item">Sell</a>
+      <a href="javascript:void(0)" class="bottom-nav-item" onclick="toggleMenu('myOraSwissMenu')">My OraSwiss</a>
+    </nav>
 
-async function loadCategory(cat, containerId) {
-    const container = document.getElementById(containerId);
-    
-    const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .eq('category', cat); 
+<script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-    if (error) {
-        console.error("Gabim gjatë marrjes së të dhënave:", error);
-        container.innerHTML = "Error loading items.";
-        return;
+    const supabase = createClient(
+        'https://gnwsrmelmeqduhhmfmoa.supabase.co',
+        'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
+    );
+
+    async function protectPage() {
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            window.location.href = "login.html";
+            return false;
+        }
+
+        return true;
     }
 
-    async function trajtoKlikiminSellNow() {
-        // Kontrollo sesionin me klientin 'supabase' që ke krijuar në rreshtin 109
-        const { data: { session } } = await supabase.auth.getSession();
+    protectPage();
+  
+    async function checkLogin(event, page) {
+        event.preventDefault();
 
-        if (session) {
-            // Nëse je loguar, të çon te faqja e shitjes
-            window.location.href = 'sellnow.html';
+        const { data } = await supabase.auth.getSession();
+
+        if (data.session) {
+            window.location.href = page;
         } else {
-            // Nëse NUK je loguar, të çon te login
-            window.location.href = 'login.html';
+            window.location.href = "login.html";
         }
     }
-  
-    if (!data || data.length === 0) {
-        container.innerHTML = "No items in this category.";
-        return;
-    }
 
-    // Ndërtimi i kartave dinamike
-    container.innerHTML = data.map(ora => {
-        
-// Imazhi standard nëse nuk ka foto
-        let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-        let primaryImage = "";
-
-        // Kontrolli i kolonës së re image_url (me vizë poshtë)
-        if (ora.image_url && ora.image_url.length > 0) {
-            primaryImage = Array.isArray(ora.image_url) ? ora.image_url[0] : ora.image_url;
-        }
-
-  if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
-              if (primaryImage.startsWith('http')) {
-                  imgUrl = primaryImage;
-              } else {
-                  imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
-              }
-          }
-      
-        return `
-            <div class="card" onclick="openProduct('${ora.id}')">
-                <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
-                <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
-                <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>
-                <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-                
-                <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:10px; background:#222; color:#fff; border:1px solid #444; border-radius:4px; box-sizing:border-box;" onclick="event.stopPropagation();">
-                
-                <button class="btn-main btn-secondary" style="width:100%; margin-top:5px;" onclick="event.stopPropagation();">Send Request</button>
-                
-                <button class="btn-main btn-buy" 
-                style="width:100%; margin-top:5px;"
-                onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}'">
-                🛒 Buy Now
-                </button>
-
-                <div style="display: flex; gap: 5px; margin-top: 5px;">
-                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" 
-                        onclick="event.stopPropagation(); this.style.background = this.style.background === 'rgb(220, 53, 69)' ? '#222' : '#dc3545';">
-                        ❤️ Like
-                    </button>
-                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" 
-                        onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.origin + '/product.html?id=${ora.id}'); alert('Link copied to clipboard!');">
-                        🔗 Share
-                    </button>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-// E vendosim tek 'window' që të jetë i aksesueshëm nga butoni në HTML
-window.trajtoKlikiminSellNow = async function() {
-    // 1. Kontrollo statusin e logimit
-    const { data: { session } } = await supabase.auth.getSession();
-
-    if (session) {
-        // Nëse është i loguar, dërgoje te faqja e shitjes (sigurohu që emri i skedarit është i saktë)
-        window.location.href = 'sellnow.html'; 
-    } else {
-        // Nëse NUK është i loguar, dërgoje te faqja e Login
-        window.location.href = 'login.html'; 
-    }
-};
-
-// Funksioni për ta shfaqur butonin vetëm kur përdoruesi është i loguar
-// 1. Funksioni që kontrollon nëse je loguar dhe shfaq butonin kur hapet faqja
-async function kontrolloSesionin() {
-    const { data: { session } } = await supabase.auth.getSession();
-    const btnSell = document.getElementById("btnSellNow");
+    window.checkLogin = checkLogin;
     
-    if (session && btnSell) {
-        btnSell.style.display = "inline-block"; // E shfaq butonin
-    }
-}
+    async function ngarkoArtikujt() {
+        const lista = document.getElementById("myWatchesList");
+        if (!lista) return;
+        lista.innerHTML = "Po ngarkojmë artikujt...";
 
-// 2. Funksioni që aktivizohet KUR KLIKON butonin
-window.trajtoKlikiminSell = async function() {
-    const { data: { session } } = await supabase.auth.getSession();
-    
-    if (session) {
-        window.location.href = 'sell.html'; // Sigurohu që ky skedar ekziston
-    } else {
-        window.location.href = 'login.html';
-    }
-};
-
-// E thërrasim kontrollin sapo hapet faqja
-kontrolloSesionin();
-  
-// Ngarkimi i kategorive
-loadCategory('luxury', 'luxury-container');
-loadCategory('vintage', 'vintage-container');
-loadCategory('parts', 'parts-container');
-async function loadBraceletStraps() {
-
-    const container = document.getElementById("product-bracelet-strap-container");
-
-    const { data, error } = await supabase
-        .from("bracelets_straps")
-        .select("*");
-
-    if (error) {
-        console.log(error);
-        container.innerHTML = "Error loading bracelets";
-        return;
-    }
-
-    container.innerHTML = data.map(item => `
-        <div class="card" onclick="window.location.href='product-bracelet-strap.html?id=${item.id}'">
-            <div class="image-slider">
-                ${item.image_url && item.image_url.length > 0 
-    ? `<img src="${item.image_url[0]}" alt="Strap Image">` 
-    : '<img src="default-placeholder.png" alt="No image">'}
-            </div>
-            <h3>${item.brand || ""} ${item.model || ""}</h3>
-            <div>${item.price || ""} €</div>
-        </div>
-    `).join('');
-}
-
-loadBraceletStraps();
-  
-  
-// 1. Funksioni për të numëruar produktet (orët)
-async function loadProductCount() {
-    console.log("Duke u lidhur me Supabase për të numëruar të gjithë artikujt...");
-    try {
-        // Numërojmë orët
-        const { count: countOras, error: errorOras } = await supabase
-            .from('oras')
-            .select('*', { count: 'exact', head: true });
-            
-        // Numërojmë rripat
-        const { count: countStraps, error: errorStraps } = await supabase
-            .from('bracelets_straps')
-            .select('*', { count: 'exact', head: true });
-
-        if (errorOras) throw errorOras;
-        if (errorStraps) throw errorStraps;
-
-        // Mbledhim totalin e të dyjave
-        const total = (countOras || 0) + (countStraps || 0);
-        console.log("Numri total i artikujve (Ora + Bracelets):", total);
-
-        const element = document.getElementById('count-products');
-        if (element) {
-            element.textContent = total;
-        }
-    } catch (err) {
-        console.error("Gabim te loadProductCount:", err);
-    }
-}
-
-
-// Funksioni për të numëruar përdoruesit
-async function loadUserCount() {
-    try {
-        const { data, error } = await supabase
-            .rpc('get_users_count');
-
-        if (error) throw error;
-
-        const element = document.getElementById('count-users');
-        if (element) {
-            element.textContent = data || 0;
-        }
-
-    } catch (err) {
-        console.error("Gabim te loadUserCount:", err);
-    }
-}
-
-// Thirr funksionet këtu (jashtë çdo funksioni tjetër)
-loadUserCount();
-loadProductCount();
-  
-</script>
-<div id="myOraSwissMenu" style="display: none; position: fixed; bottom: 80px; right: 10px; background: #222; border: 1px solid #444; padding: 10px; border-radius: 10px; z-index: 9999; width: 200px;">
-    <div class="menu-item" onclick="location.href='buy.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 Buy</div>
-    <div class="menu-item" onclick="location.href='mysold.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 My Sold</div>
-    <div class="menu-item" onclick="location.href='messages.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444; display: flex; justify-content: space-between; align-items: center;">
-        <span>✉️ Messages</span> 
-        <span id="messageCount" style="background: red; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold;">0</span>
-    </div>
-    <div class="menu-item" onclick="location.href='settings.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">⚙️ Settings</div>
-    <div class="menu-item" onclick="location.href='support.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🎧 Support</div>
-    <div class="menu-item" onclick="location.href='info.html'" style="padding: 10px; color: white; cursor: pointer;">ℹ️ Info</div>
-</div>
-
-<nav class="bottom-nav" style="position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-around; background: #000; padding: 15px 0; border-top: 1px solid #333; z-index: 9998; box-sizing: border-box;">
-    <a href="#" onclick="checkPage(event,'dashboard.html')" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">🏠<br>Home</a>
-    <a href="#" onclick="checkPage(event,'favorites.html')" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">❤️<br>Favs</a>
-    <a href="messages.html" id="msgLink" style="color: white; text-decoration: none; font-size: 13px; text-align: center; position: relative;">
-        💬 <br>Messages <span id="unreadBadge" style="display:none; position:absolute; top:-5px; right:5px; background:red; color:white; border-radius:50%; padding:2px 6px; font-size:10px; font-weight:bold;">0</span>
-    </a>
-    <a href="mysales.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">⌚<br>Sales</a>
-    <a href="sellnow.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">➕<br>Sell</a>
-    <button type="button" onclick="checkMenu(event)" style="background: none; border: none; color: white; cursor: pointer; font-size: 13px; text-align: center;">
-    👤<br>Menu
-    </button>  
-</nav>
-
-<script>
-    function toggleMenu() {
-        const menu = document.getElementById('myOraSwissMenu');
-        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-    }
-  
-</script>  
-<script>
-document.getElementById("searchInput").addEventListener("input", async function(e) {
-    const query = e.target.value.trim();
-
-    const luxuryContainer = document.getElementById("luxury-container");
-    const vintageContainer = document.getElementById("vintage-container");
-    const partsContainer = document.getElementById("parts-container");
-    // Heqja e 'const' të dytë, duke përdorur një emër tjetër për kontejnerin e rripave
-    const strapContainer = document.getElementById("product-bracelet-strap-container");
-  
-    if (query.length === 0) {
-        location.reload(); 
-        return;
-    }
-
-    try {
-        // Përdorim thonjëza të zakonshme me plus (+) që të shmangim çdo gabim sintakse
-        const { data, error } = await supabase
-            .from("oras")
-            .select("*")
-            .or("brand.ilike.%" + query + "%,model.ilike.%" + query + "%,reference.ilike.%" + query + "%");
-
-        if (error) throw error;
-
-        if (luxuryContainer) {
-            luxuryContainer.innerHTML = "";
-            if (!data || data.length === 0) {
-                luxuryContainer.innerHTML = "<p>Nuk u gjet asnjë orë.</p>";
-                return;
-            }
-
-            data.forEach(product => {
-                let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-                let primaryImage = Array.isArray(product.image_url) ? product.image_url[0] : product.image_url;
-                if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
-                    imgUrl = primaryImage.startsWith('http') ? primaryImage : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
-                }
-
-                const item = document.createElement("div");
-                item.className = "card";
-                item.innerHTML = `
-                    <div onclick="openProduct('${product.id}')" style="cursor:pointer;">
-                        <img src="${imgUrl}" alt="${product.model || ''}" style="width:100%; height:auto;">
-                        <h3>${product.brand || ''} - ${product.model || ''}</h3>
-                        <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${product.reference || '/'}</p>
-                        <div class="price">${product.price ? product.price + ' €' : 'Contact for price'}</div>
-                    </div>
-                `;
-                luxuryContainer.appendChild(item);
-            });
-        }
-
-        if (vintageContainer) vintageContainer.innerHTML = "";
-        if (partsContainer) partsContainer.innerHTML = "";
-
-    } catch (err) {
-        console.error("Gabim në kërkim:", err);
-    }
-});
-</script>
-<script>
-async function checkPage(event, page) {
-    event.preventDefault();
-
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-        document.getElementById("loginModal").style.display = "flex";
-        return;
-    }
-
-    window.location.href = page;
-}
-</script>
-<script> 
-async function checkMenu(event) {
-    event.preventDefault();
-
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-        document.getElementById("loginModal").style.display = "flex";
-        return;
-    }
-
-    toggleMenu();
-}  
-</script>  
-<script>  
-function openProduct(productId) {
-    window.location.href = "product.html?id=" + productId;
-}
-</script>
-
-<div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center;z-index:99999;">
-    <div style="background:#1a1a1a;padding:25px;border-radius:12px;text-align:center;max-width:320px;width:90%;color:#fff;">
-        <h2>Login Required</h2>
-        <p>Please sign in or create an account to continue.</p>
-
-        <button onclick="location.href='register.html'">
-            Login / Register
-        </button>
-        <br><br>
-        <button onclick="document.getElementById('loginModal').style.display='none'">Cancel</button>
-    </div>
-</div>
-
-</script>
-
-<div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center;z-index:99999;">
-    <div style="background:#1a1a1a;padding:25px;border-radius:12px;text-align:center;max-width:320px;width:90%;color:#fff;">
-        <h2>Login Required</h2>
-        <p>Please sign in or create an account to continue.</p>
-
-        <button onclick="location.href='register.html'" style="padding:10px 20px;background:#000;color:#fff;border:none;border-radius:6px;cursor:pointer;">
-            Login / Register
-        </button>
-        <br><br>
-        <button onclick="document.getElementById('loginModal').style.display='none'" style="padding:8px 15px;background:#444;color:#fff;border:none;border-radius:6px;cursor:pointer;">Cancel</button>
-    </div>
-</div>
-
-<script>
-
-async function loadMessageCount() {
-    try {
-        const { data: { user }, error } = await supabase.auth.getUser();
-
-        if (error || !user) {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+            lista.innerHTML = "<li>Duhet të logoheni!</li>";
             return;
         }
 
-        // Marrim të gjitha ID-të e bisedave ku përdoruesi është blerës ose shitës
-        const { data: userConvs, error: convError } = await supabase
-            .from("conversations")
-            .select("id")
-            .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`);
+        const { data: watches, error: errorW } = await supabase
+            .from('oras')
+            .select('*')
+            .eq('user_id', user.id);
 
-        const counter = document.getElementById("messageCount");
+        const { data: straps, error: errorS } = await supabase
+            .from('bracelets_straps')
+            .select('*')
+            .eq('user_id', user.id);
 
-        if (!convError && userConvs && userConvs.length > 0) {
+        if (errorW || errorS) {
+            lista.innerHTML = "<li>Gabim gjatë lidhjes me databazën.</li>";
+            return;
+        }
+
+        const teGjitha = [...(watches || []), ...(straps || [])];
+
+        lista.innerHTML = "";
+        if (teGjitha.length === 0) {
+            lista.innerHTML = "<li>Nuk keni asnjë artikull në shitje.</li>";
+        } else {
+            teGjitha.forEach(item => {
+                const isStrap = straps && straps.some(s => s.id === item.id);
+                
+                const detailPage = isStrap ? 'product-bracelets-straps.html' : 'watch-details.html';
+
+                const li = document.createElement("li");
+                li.className = "watch-card";
+                li.innerHTML = `
+                    <a href="${detailPage}?id=${item.id}" style="text-decoration:none; color:inherit; display:flex; align-items:center; width:100%;">
+                        <img src="${item.image_url && item.image_url[0] ? item.image_url[0] : ''}" alt="${item.brand || 'Artikull'}" style="width:100px; height:auto; margin-right:15px; object-fit:cover;">
+                        <div>
+                            <strong>${item.brand || 'Rrip'}</strong> - ${item.price} €
+                        </div>
+                    </a>
+                `;
+                lista.appendChild(li);
+            });
+        }
+    }
+    
+    function toggleMenu(menuId) {
+        const menu = document.getElementById(menuId);
+        if (!menu) return; 
+
+        menu.classList.toggle('active');
+    }
+
+    window.ngarkoArtikujt = ngarkoArtikujt;
+    window.toggleMenu = toggleMenu;
+
+    async function loadMessageCount() {
+        try {
+            const { data: { user }, error } = await supabase.auth.getUser();
+            if (error || !user) return;
+
+            const { data: userConvs, error: convError } = await supabase
+                .from("conversations")
+                .select("id")
+                .or(`user_one.eq.${user.id},user_two.eq.${user.id},buyer_id.eq.${user.id},seller_id.eq.${user.id}`);
+
+            if (convError || !userConvs || userConvs.length === 0) return;
+
             const convIds = userConvs.map(c => c.id);
-            
-            // Numërojmë mesazhet për këto biseda
-            const { count, error: countError } = await supabase
+
+            const { count: totalUnread, error: msgError } = await supabase
                 .from("messages")
                 .select("*", { count: "exact", head: true })
-                .in("conversation_id", convIds);
+                .in("conversation_id", convIds)
+                .eq("is_read", false)
+                .neq("sender_id", user.id);
 
-            if (counter && !countError) {
-                counter.innerText = `Messages ${count || 0}`;
+            if (msgError) return;
+
+            const count = totalUnread || 0;
+
+            const dashBadge = document.getElementById("dashboardMessageCount");
+            if (dashBadge) {
+                dashBadge.innerText = count;
+                dashBadge.style.display = count > 0 ? "inline-block" : "none";
             }
-        } else {
-            if (counter) counter.innerText = "Messages 0";
+        } catch (err) {
+            console.error("Gabim tek mesazhet:", err);
         }
-    } catch (err) {
-        console.error("Gabim te loadMessageCount:", err);
     }
-}
 
-// Thirre funksionin për të ngarkuar numrin e mesazheve
-loadMessageCount();
-</script>
-<script>
-async function updateIndexMessageCount() {
-    try {
-        const { data: { user }, error } = await supabase.auth.getUser();
-        if (error || !user) {
-            console.log("Nuk ka përdorues të loguar");
+    document.addEventListener('DOMContentLoaded', async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            window.location.href = "login.html";
             return;
         }
 
-        // Marrim të gjitha bisedat ku ky user është ose user_one ose user_two
-        const { data: userConvs, error: convError } = await supabase
-            .from("conversations")
-            .select("id, user_one, user_two, unread_user_one, unread_user_two")
-            .or(`user_one.eq.${user.id},user_two.eq.${user.id}`);
+        ngarkoArtikujt();
+        loadMessageCount();
+    });
 
-        if (convError || !userConvs) {
-            console.error("Gabim në marrjen e bisedave:", convError);
-            return;
-        }
-
-        // Llogarisim totalin vetëm për bisedat e këtij useri
-        let totalUnread = 0;
-        userConvs.forEach(conv => {
-            if (conv.user_one === user.id) {
-                totalUnread += conv.unread_user_one || 0;
-            } else if (conv.user_two === user.id) {
-                totalUnread += conv.unread_user_two || 0;
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keyup', function(e) {
+            const termi = e.target.value.toLowerCase();
+            const lista = document.getElementById("myWatchesList");
+            if (!lista) return;
+            const artikujt = lista.getElementsByClassName("watch-card");
+            for (let i = 0; i < artikujt.length; i++) {
+                let tekst = artikujt[i].textContent.toLowerCase();
+                artikujt[i].style.display = tekst.includes(termi) ? "" : "none";
             }
         });
-
-        // Përditësojmë elementin në menu
-        const menuBadge = document.getElementById("messageCount");
-        if (menuBadge) {
-            menuBadge.innerText = totalUnread;
-            menuBadge.style.background = totalUnread > 0 ? "red" : "#444";
-        }
-
-        // Përditësojmë elementin te butoni poshtë
-        const navBadge = document.getElementById("navMessageCount") || document.getElementById("bottomBadge");
-        if (navBadge) {
-            navBadge.innerText = totalUnread;
-            navBadge.style.display = totalUnread > 0 ? "inline-block" : "none";
-        }
-
-    } catch (err) {
-        console.error("Gabim:", err);
     }
-}
-
-  
-</body>
-</html>
-
-  tjetraaaa
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ora Swiss</title>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-KD2ZZ3MJYY');
 </script>
-  <style>
-    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
-    .site-header{position:sticky;top:0;z-index:9999;background:#111}
-    .nav-scroll{display:flex;gap:18px;align-items:center;overflow-x:auto;padding:14px 16px}
-    .nav-scroll a{color:#fff;text-decoration:none;padding:6px 10px}
-    .nav-scroll a:hover{color:gold}
-    .site-title{font-weight:700;line-height:1.05;margin-right:10px}
-
-.grid {
-        display: grid; 
-        /* Parazgjedhja për celularë: 2 artikuj për rresht */
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 10px; 
-        padding: 10px;
-    }
-
-    /* Për kompjutera dhe ekrane të mëdha (mbi 768px) */
-    @media (min-width: 768px) {
-        .grid {
-            /* Ndryshoje në 4 nëse do 4 në një rresht, ose në 3 nëse i do 3 */
-            grid-template-columns: repeat(4, 1fr); 
-        }
-    }
-
-    .card {
-        background: #111;
-        padding: 15px;
-        border-radius: 10px;
-        border: 1px solid #333;
-    }
-
-    .card img {
-        width: 100%;
-        height: 140px;
-        object-fit: cover;
-        display: block;
-        border-radius: 8px;
-    }
-
-    /* Stilet për butonat */
-    .btn-main {
-      padding: 10px;
-      border: none;
-      border-radius: 4px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    .btn-secondary {
-      background: #333;
-      color: #fff;
-      border: 1px solid #555;
-    }
-    .btn-secondary:hover {
-      background: #444;
-    }
-    .btn-buy {
-      background: gold;
-      color: #000;
-    }
-    .btn-buy:hover {
-        background: #e6c200;
-    }
-    /* ===============================
-       NAVIGIMI FUNDOR (I ngritur dhe i rregulluar)
-       =============================== */
-    .bottom-nav {
-      position: fixed !important;
-      bottom: 20px !important; /* E ngritur lart nga fundi i telefonit */
-      left: 15px !important;
-      right: 15px !important;
-      width: auto !important;
-      height: 65px !important;
-      background-color: #1a1a1a !important;
-      display: flex !important;
-      justify-content: space-around !important;
-      align-items: center !important;
-      padding: 0 5px !important;
-      border-radius: 20px !important; /* Këndet e rrumbullakosura si kartë */
-      border: 1px solid #333 !important;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.😎 !important;
-      z-index: 999999 !important;
-    }
-
-    .bottom-nav-item, .bottom-nav a, .bottom-nav button {
-      color: #ffffff !important;
-      text-decoration: none !important;
-      font-size: 10px !important;
-      text-align: center !important;
-      white-space: nowrap !important;
-      flex: 1 !important;
-      background: none !important;
-      border: none !important;
-      cursor: pointer !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      gap: 3px !important;
-    }
-
-    .bottom-nav-item:hover {
-      color: gold !important;
-    }
-
-    /* Menuja që hapet sipër shiritit */
-    .my-oraswiss-menu, .menu-content {
-        display: none; 
-        position: fixed !important;
-        bottom: 95px !important; /* E vendosur saktë mbi shiritin e ngritur */
-        left: 15px !important;
-        right: 15px !important;
-        background: #1a1a1a !important;
-        border-radius: 15px !important;
-        border: 1px solid #333 !important;
-        padding: 15px !important;
-        box-shadow: 0 -5px 20px rgba(0,0,0,0.😎 !important;
-        z-index: 1000000 !important;
-    }
-
-    .my-oraswiss-menu.active {
-        display: block !important;
-    }
-
-    body {
-        padding-bottom: 110px !important; /* Që të mos mbulohet asnjë artikull në fund */
-    }
-  </style>  
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-</head>
-<body>
-
-<header class="site-header">
-  <nav class="nav-scroll">
-    <span class="site-title">ORA<br>SWISS</span>
-    <span style="color: white; margin-left: 20px; display: flex; align-items: center; gap: 15px;">
-        <span>👤 User: <b id="count-users">0</b></span>
-    
-        <span>⌚ Ora: <b id="count-products">0</b></span>
-    </span>
-    <button onclick="location.href='register.html'">
-        Login / Register
-    </button>
-    <button id="btnSellNow" style="display: none;" onclick="trajtoKlikiminSellNow()">Sell a watch</button>
-    <a href="home.html">Home</a>
-    <a href="luxury.html">Luxury</a>
-    <a href="vintage.html">Vintage</a>
-    <a href="parts.html">Parts</a>
-    <a href="bracelets-straps.html">Bracelet/Strap</a>
-    <a href="service.html">Service</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="policy.html">Policy</a>
-    <a href="sell.html">Sell</a>
-    <a href="admin_users.html">
-      <button>👥 Përdoruesit</button>
-    </a>
-  </nav>
-</header>
-    <div class="search-container">
-        <div class="search-box">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="searchInput" placeholder="Search on OraSwiss">
-            <button class="camera-icon" onclick="alert('Funksioni për foto së shpejti!')">📷</button>
-        </div>
-    </div>
-<h2>Luxury Collection</h2>
-<div id="luxury-container" class="grid">Loading...</div>
-
-<h2>Vintage Collection</h2>
-<div id="vintage-container" class="grid">Loading...</div>
-
-<h2>Parts Collection</h2>
-<div id="parts-container" class="grid">Loading...</div>
-
-<h2>Bracelet / Strap Collection</h2>
-<div id="product-bracelet-strap-container" class="grid">Loading...</div>
-  
 <script>
-  const supabase = window.supabase.createClient(
-    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-  );
-// Tani përdorni variablin 'supabase' kudo në kod
+    let lastScrollTop = 0;
+    const nav = document.querySelector('.bottom-nav');
 
-async function loadCategory(cat, containerId) {
-    const container = document.getElementById(containerId);
-    
-    const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .eq('category', cat); 
+    window.addEventListener('scroll', () => {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-    if (error) {
-        console.error("Gabim gjatë marrjes së të dhënave:", error);
-        container.innerHTML = "Error loading items.";
-        return;
-    }
-
-    async function trajtoKlikiminSellNow() {
-        // Kontrollo sesionin me klientin 'supabase' që ke krijuar në rreshtin 109
-        const { data: { session } } = await supabase.auth.getSession();
-
-        if (session) {
-            // Nëse je loguar, të çon te faqja e shitjes
-            window.location.href = 'sellnow.html';
+        if (scrollTop > lastScrollTop) {
+            nav.classList.add('hidden');
         } else {
-            // Nëse NUK je loguar, të çon te login
-            window.location.href = 'login.html';
+            nav.classList.remove('hidden');
         }
-    }
-  
-    if (!data || data.length === 0) {
-        container.innerHTML = "No items in this category.";
-        return;
-    }
-
-    // Ndërtimi i kartave dinamike
-    container.innerHTML = data.map(ora => {
         
-// Imazhi standard nëse nuk ka foto
-        let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-        let primaryImage = "";
-
-        // Kontrolli i kolonës së re image_url (me vizë poshtë)
-        if (ora.image_url && ora.image_url.length > 0) {
-            primaryImage = Array.isArray(ora.image_url) ? ora.image_url[0] : ora.image_url;
-        }
-
-  if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
-              if (primaryImage.startsWith('http')) {
-                  imgUrl = primaryImage;
-              } else {
-                  imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
-              }
-          }
-      
-        return `
-            <div class="card" onclick="openProduct('${ora.id}')">
-                <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
-                <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
-                <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>
-                <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-                
-                <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:10px; background:#222; color:#fff; border:1px solid #444; border-radius:4px; box-sizing:border-box;" onclick="event.stopPropagation();">
-                
-                <button class="btn-main btn-secondary" style="width:100%; margin-top:5px;" onclick="event.stopPropagation();">Send Request</button>
-                
-                <button class="btn-main btn-buy" 
-                style="width:100%; margin-top:5px;"
-                onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}'">
-                🛒 Buy Now
-                </button>
-
-                <div style="display: flex; gap: 5px; margin-top: 5px;">
-                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" 
-                        onclick="event.stopPropagation(); this.style.background = this.style.background === 'rgb(220, 53, 69)' ? '#222' : '#dc3545';">
-                        ❤️ Like
-                    </button>
-                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" 
-                        onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.origin + '/product.html?id=${ora.id}'); alert('Link copied to clipboard!');">
-                        🔗 Share
-                    </button>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-// E vendosim tek 'window' që të jetë i aksesueshëm nga butoni në HTML
-window.trajtoKlikiminSellNow = async function() {
-    // 1. Kontrollo statusin e logimit
-    const { data: { session } } = await supabase.auth.getSession();
-
-    if (session) {
-        // Nëse është i loguar, dërgoje te faqja e shitjes (sigurohu që emri i skedarit është i saktë)
-        window.location.href = 'sellnow.html'; 
-    } else {
-        // Nëse NUK është i loguar, dërgoje te faqja e Login
-        window.location.href = 'login.html'; 
-    }
-};
-
-// Funksioni për ta shfaqur butonin vetëm kur përdoruesi është i loguar
-// 1. Funksioni që kontrollon nëse je loguar dhe shfaq butonin kur hapet faqja
-async function kontrolloSesionin() {
-    const { data: { session } } = await supabase.auth.getSession();
-    const btnSell = document.getElementById("btnSellNow");
-    
-    if (session && btnSell) {
-        btnSell.style.display = "inline-block"; // E shfaq butonin
-    }
-}
-
-// 2. Funksioni që aktivizohet KUR KLIKON butonin
-window.trajtoKlikiminSell = async function() {
-    const { data: { session } } = await supabase.auth.getSession();
-    
-    if (session) {
-        window.location.href = 'sell.html'; // Sigurohu që ky skedar ekziston
-    } else {
-        window.location.href = 'login.html';
-    }
-};
-
-// E thërrasim kontrollin sapo hapet faqja
-kontrolloSesionin();
-  
-// Ngarkimi i kategorive
-loadCategory('luxury', 'luxury-container');
-loadCategory('vintage', 'vintage-container');
-loadCategory('parts', 'parts-container');
-async function loadBraceletStraps() {
-
-    const container = document.getElementById("product-bracelet-strap-container");
-
-    const { data, error } = await supabase
-        .from("bracelets_straps")
-        .select("*");
-
-    if (error) {
-        console.log(error);
-        container.innerHTML = "Error loading bracelets";
-        return;
-    }
-
-    container.innerHTML = data.map(item => `
-        <div class="card" onclick="window.location.href='product-bracelet-strap.html?id=${item.id}'">
-            <div class="image-slider">
-                ${item.image_url && item.image_url.length > 0 
-    ? `<img src="${item.image_url[0]}" alt="Strap Image">` 
-    : '<img src="default-placeholder.png" alt="No image">'}
-            </div>
-            <h3>${item.brand || ""} ${item.model || ""}</h3>
-            <div>${item.price || ""} €</div>
-        </div>
-    `).join('');
-}
-
-loadBraceletStraps();
-  
-  
-// 1. Funksioni për të numëruar produktet (orët)
-async function loadProductCount() {
-    console.log("Duke u lidhur me Supabase për të numëruar të gjithë artikujt...");
-    try {
-        // Numërojmë orët
-        const { count: countOras, error: errorOras } = await supabase
-            .from('oras')
-            .select('*', { count: 'exact', head: true });
-            
-        // Numërojmë rripat
-        const { count: countStraps, error: errorStraps } = await supabase
-            .from('bracelets_straps')
-            .select('*', { count: 'exact', head: true });
-
-        if (errorOras) throw errorOras;
-        if (errorStraps) throw errorStraps;
-
-        // Mbledhim totalin e të dyjave
-        const total = (countOras || 0) + (countStraps || 0);
-        console.log("Numri total i artikujve (Ora + Bracelets):", total);
-
-        const element = document.getElementById('count-products');
-        if (element) {
-            element.textContent = total;
-        }
-    } catch (err) {
-        console.error("Gabim te loadProductCount:", err);
-    }
-}
-
-
-// Funksioni për të numëruar përdoruesit
-async function loadUserCount() {
-    try {
-        const { data, error } = await supabase
-            .rpc('get_users_count');
-
-        if (error) throw error;
-
-        const element = document.getElementById('count-users');
-        if (element) {
-            element.textContent = data || 0;
-        }
-
-    } catch (err) {
-        console.error("Gabim te loadUserCount:", err);
-    }
-}
-
-// Thirr funksionet këtu (jashtë çdo funksioni tjetër)
-loadUserCount();
-loadProductCount();
-  
-</script>
-<div id="myOraSwissMenu" style="display: none; position: fixed; bottom: 80px; right: 10px; background: #222; border: 1px solid #444; padding: 10px; border-radius: 10px; z-index: 9999; width: 200px;">
-    <div class="menu-item" onclick="location.href='buy.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 Buy</div>
-    <div class="menu-item" onclick="location.href='mysold.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🛒 My Sold</div>
-    <div class="menu-item" onclick="location.href='messages.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444; display: flex; justify-content: space-between; align-items: center;">
-        <span>✉️ Messages</span> 
-        <span id="messageCount" style="background: red; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold;">0</span>
-    </div>
-    <div class="menu-item" onclick="location.href='settings.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">⚙️ Settings</div>
-    <div class="menu-item" onclick="location.href='support.html'" style="padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid #444;">🎧 Support</div>
-    <div class="menu-item" onclick="location.href='info.html'" style="padding: 10px; color: white; cursor: pointer;">ℹ️ Info</div>
-</div>
-
-<nav class="bottom-nav" style="position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-around; background: #000; padding: 15px 0; border-top: 1px solid #333; z-index: 9998; box-sizing: border-box;">
-    <a href="#" onclick="checkPage(event,'dashboard.html')" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">🏠<br>Home</a>
-    <a href="#" onclick="checkPage(event,'favorites.html')" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">❤️<br>Favs</a>
-    <a href="messages.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center; position: relative;">
-        ✉️<br>messg
-        <span id="menuMessageCount" style="position: absolute; top: -5px; right: -10px; background: red; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px; font-weight: bold; display: none;">0</span>
-    </a>
-    <a href="mysales.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">⌚<br>Sales</a>
-    <a href="sellnow.html" style="color: white; text-decoration: none; font-size: 13px; text-align: center;">➕<br>Sell</a>
-    <button type="button" onclick="checkMenu(event)" style="background: none; border: none; color: white; cursor: pointer; font-size: 13px; text-align: center;">
-    👤<br>Menu
-    </button>  
-</nav>
-
-<script>
-    function toggleMenu() {
-        const menu = document.getElementById('myOraSwissMenu');
-        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-    }
-  
-</script>  
-<script>
-document.getElementById("searchInput").addEventListener("input", async function(e) {
-    const query = e.target.value.trim();
-
-    const luxuryContainer = document.getElementById("luxury-container");
-    const vintageContainer = document.getElementById("vintage-container");
-    const partsContainer = document.getElementById("parts-container");
-    // Heqja e 'const' të dytë, duke përdorur një emër tjetër për kontejnerin e rripave
-    const strapContainer = document.getElementById("product-bracelet-strap-container");
-  
-    if (query.length === 0) {
-        location.reload(); 
-        return;
-    }
-
-    try {
-        // Përdorim thonjëza të zakonshme me plus (+) që të shmangim çdo gabim sintakse
-        const { data, error } = await supabase
-            .from("oras")
-            .select("*")
-            .or("brand.ilike.%" + query + "%,model.ilike.%" + query + "%,reference.ilike.%" + query + "%");
-
-        if (error) throw error;
-
-        if (luxuryContainer) {
-            luxuryContainer.innerHTML = "";
-            if (!data || data.length === 0) {
-                luxuryContainer.innerHTML = "<p>Nuk u gjet asnjë orë.</p>";
-                return;
-            }
-
-            data.forEach(product => {
-                let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-                let primaryImage = Array.isArray(product.image_url) ? product.image_url[0] : product.image_url;
-                if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
-                    imgUrl = primaryImage.startsWith('http') ? primaryImage : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
-                }
-
-                const item = document.createElement("div");
-                item.className = "card";
-                item.innerHTML = `
-                    <div onclick="openProduct('${product.id}')" style="cursor:pointer;">
-                        <img src="${imgUrl}" alt="${product.model || ''}" style="width:100%; height:auto;">
-                        <h3>${product.brand || ''} - ${product.model || ''}</h3>
-                        <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${product.reference || '/'}</p>
-                        <div class="price">${product.price ? product.price + ' €' : 'Contact for price'}</div>
-                    </div>
-                `;
-                luxuryContainer.appendChild(item);
-            });
-        }
-
-        if (vintageContainer) vintageContainer.innerHTML = "";
-        if (partsContainer) partsContainer.innerHTML = "";
-
-    } catch (err) {
-        console.error("Gabim në kërkim:", err);
-    }
-});
-</script>
-<script>
-async function checkPage(event, page) {
-    event.preventDefault();
-
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-        document.getElementById("loginModal").style.display = "flex";
-        return;
-    }
-
-    window.location.href = page;
-}
-</script>
-<script> 
-async function checkMenu(event) {
-    event.preventDefault();
-
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-        document.getElementById("loginModal").style.display = "flex";
-        return;
-    }
-
-    toggleMenu();
-}  
-</script>  
-<script>  
-function openProduct(productId) {
-    window.location.href = "product.html?id=" + productId;
-}
-</script>
-
-<div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center;z-index:99999;">
-    <div style="background:#1a1a1a;padding:25px;border-radius:12px;text-align:center;max-width:320px;width:90%;color:#fff;">
-        <h2>Login Required</h2>
-        <p>Please sign in or create an account to continue.</p>
-
-        <button onclick="location.href='register.html'">
-            Login / Register
-        </button>
-        <br><br>
-        <button onclick="document.getElementById('loginModal').style.display='none'">Cancel</button>
-    </div>
-</div>
-
-</script>
-
-<div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center;z-index:99999;">
-    <div style="background:#1a1a1a;padding:25px;border-radius:12px;text-align:center;max-width:320px;width:90%;color:#fff;">
-        <h2>Login Required</h2>
-        <p>Please sign in or create an account to continue.</p>
-
-        <button onclick="location.href='register.html'" style="padding:10px 20px;background:#000;color:#fff;border:none;border-radius:6px;cursor:pointer;">
-            Login / Register
-        </button>
-        <br><br>
-        <button onclick="document.getElementById('loginModal').style.display='none'" style="padding:8px 15px;background:#444;color:#fff;border:none;border-radius:6px;cursor:pointer;">Cancel</button>
-    </div>
-</div>
-
-<script>
-
-async function loadMessageCount() {
-    try {
-        const { data: { user }, error } = await supabase.auth.getUser();
-
-        if (error || !user) {
-            return;
-        }
-
-        // Marrim të gjitha ID-të e bisedave ku përdoruesi është blerës ose shitës
-        const { data: userConvs, error: convError } = await supabase
-            .from("conversations")
-            .select("id")
-            .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`);
-
-        const counter = document.getElementById("messageCount");
-
-        if (!convError && userConvs && userConvs.length > 0) {
-            const convIds = userConvs.map(c => c.id);
-            
-            // Numërojmë mesazhet për këto biseda
-            const { count, error: countError } = await supabase
-                .from("messages")
-                .select("*", { count: "exact", head: true })
-                .in("conversation_id", convIds);
-
-            if (counter && !countError) {
-                counter.innerText = `Messages ${count || 0}`;
-            }
-        } else {
-            if (counter) counter.innerText = "Messages 0";
-        }
-    } catch (err) {
-        console.error("Gabim te loadMessageCount:", err);
-    }
-}
-
-// Thirre funksionin për të ngarkuar numrin e mesazheve
-loadMessageCount();
-</script>
-<script>
-async function updateIndexMessageCount() {
-    try {
-        const { data: { user }, error } = await supabase.auth.getUser();
-        if (error || !user) {
-            console.log("Nuk ka përdorues të loguar");
-            return;
-        }
-
-        // Marrim të gjitha bisedat ku ky user është ose user_one ose user_two
-        const { data: userConvs, error: convError } = await supabase
-            .from("conversations")
-            .select("id, user_one, user_two, unread_user_one, unread_user_two")
-            .or(`user_one.eq.${user.id},user_two.eq.${user.id}`);
-
-        if (convError || !userConvs) {
-            console.error("Gabim në marrjen e bisedave:", convError);
-            return;
-        }
-
-        // Llogarisim totalin vetëm për bisedat e këtij useri
-        let totalUnread = 0;
-        userConvs.forEach(conv => {
-            if (conv.user_one === user.id) {
-                totalUnread += conv.unread_user_one || 0;
-            } else if (conv.user_two === user.id) {
-                totalUnread += conv.unread_user_two || 0;
-            }
-        });
-
-        // Përditësojmë elementin në menu
-        const menuBadge = document.getElementById("messageCount");
-        if (menuBadge) {
-            menuBadge.innerText = totalUnread;
-            menuBadge.style.background = totalUnread > 0 ? "red" : "#444";
-        }
-
-        // Përditësojmë elementin te butoni poshtë
-        const navBadge = document.getElementById("navMessageCount") || document.getElementById("bottomBadge");
-        if (navBadge) {
-            navBadge.innerText = totalUnread;
-            navBadge.style.display = totalUnread > 0 ? "inline-block" : "none";
-        }
-
-    } catch (err) {
-        console.error("Gabim:", err);
-    }
-}
-
-</script>  
-</body>
-</html>
-
- tjetriiiii 
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ora Swiss</title>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-KD2ZZ3MJYY');
-  </script>
-  <style>
-    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
-    .site-header{position:sticky;top:0;z-index:9999;background:#111}
-    .nav-scroll{display:flex;gap:18px;align-items:center;overflow-x:auto;padding:14px 16px}
-    .nav-scroll a{color:#fff;text-decoration:none;padding:6px 10px}
-    .nav-scroll a:hover{color:gold}
-    .site-title{font-weight:700;line-height:1.05;margin-right:10px}
-
-    .grid {
-        display: grid; 
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 10px; 
-        padding: 10px;
-    }
-
-    @media (min-width: 768px) {
-        .grid {
-            grid-template-columns: repeat(4, 1fr); 
-        }
-    }
-
-    .card {
-        background: #111;
-        padding: 15px;
-        border-radius: 10px;
-        border: 1px solid #333;
-    }
-
-    .card img {
-        width: 100%;
-        height: 140px;
-        object-fit: cover;
-        display: block;
-        border-radius: 8px;
-    }
-
-    .btn-main {
-      padding: 10px;
-      border: none;
-      border-radius: 4px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    .btn-secondary {
-      background: #333;
-      color: #fff;
-      border: 1px solid #555;
-    }
-    .btn-secondary:hover {
-      background: #444;
-    }
-    .btn-buy {
-      background: gold;
-      color: #000;
-    }
-    .btn-buy:hover {
-        background: #e6c200;
-    }
-
-    .bottom-nav {
-      position: fixed !important;
-      bottom: 20px !important;
-      left: 15px !important;
-      right: 15px !important;
-      width: auto !important;
-      height: 65px !important;
-      background-color: #1a1a1a !important;
-      display: flex !important;
-      justify-content: space-around !important;
-      align-items: center !important;
-      padding: 0 5px !important;
-      border-radius: 20px !important;
-      border: 1px solid #333 !important;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.8) !important;
-      z-index: 999999 !important;
-    }
-
-    .bottom-nav-item, .bottom-nav a, .bottom-nav button {
-      color: #ffffff !important;
-      text-decoration: none !important;
-      font-size: 10px !important;
-      text-align: center !important;
-      white-space: nowrap !important;
-      flex: 1 !important;
-      background: none !important;
-      border: none !important;
-      cursor: pointer !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      gap: 3px !important;
-    }
-
-    .bottom-nav-item:hover {
-      color: gold !important;
-    }
-
-    body {
-        padding-bottom: 110px !important;
-    }
-
-    /* Stili i rregulluar dhe i mbledhur për My OraSwiss menu */
-    .my-oraswiss-menu {
-        display: none;
-        position: fixed !important;
-        bottom: 105px !important;
-        right: 15px !important;
-        left: auto !important;
-        width: 220px !important;
-        background: #1a1a1a !important;
-        border-radius: 15px !important;
-        border: 1px solid #333 !important;
-        padding: 10px !important;
-        box-shadow: 0 -5px 20px rgba(0,0,0,0.5) !important;
-        z-index: 1000000 !important;
-    }
-
-    .my-oraswiss-menu.active {
-        display: block !important;
-    }
-
-    .my-oraswiss-menu .menu-item { 
-        display: flex !important; 
-        justify-content: space-between !important; 
-        align-items: center !important; 
-        padding: 15px 10px !important; 
-        border-bottom: 1px solid #222 !important; 
-        cursor: pointer !important; 
-        color: #fff !important;
-        text-decoration: none !important;
-    }
-
-    .my-oraswiss-menu .menu-item:last-child { 
-        border-bottom: none !important; 
-    }
-  </style>  
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-</head>
-<body>
-
-<header class="site-header">
-  <nav class="nav-scroll">
-    <span class="site-title">ORA<br>SWISS</span>
-    <span style="color: white; margin-left: 20px; display: flex; align-items: center; gap: 15px;">
-        <span>👤 User: <b id="count-users">0</b></span>
-        <span>⌚ Ora: <b id="count-products">0</b></span>
-    </span>
-    <button onclick="location.href='register.html'">Login / Register</button>
-    <button id="btnSellNow" style="display: none;" onclick="trajtoKlikiminSellNow()">Sell a watch</button>
-    <a href="home.html">Home</a>
-    <a href="luxury.html">Luxury</a>
-    <a href="vintage.html">Vintage</a>
-    <a href="parts.html">Parts</a>
-    <a href="product-bracelets-straps.html">Bracelet/Strap</a>
-    <a href="service.html">Service</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="policy.html">Policy</a>
-    <a href="sell.html">Sell</a>
-    <a href="admin_users.html"><button>👥 Përdoruesit</button></a>
-  </nav>
-</header>
-
-<div class="search-container" style="padding: 10px;">
-    <div class="search-box" style="display: flex; background: #111; border: 1px solid #333; border-radius: 8px; padding: 8px; align-items: center;">
-        <span class="search-icon" style="margin-right: 8px;">🔍</span>
-        <input type="text" id="searchInput" placeholder="Search on OraSwiss" style="background: transparent; border: none; color: #fff; width: 100%; outline: none;">
-        <button class="camera-icon" onclick="alert('Funksioni për foto së shpejti!')" style="background: none; border: none; cursor: pointer;">📷</button>
-    </div>
-</div>
-
-<h2>Luxury Collection</h2>
-<div id="luxury-container" class="grid">Loading...</div>
-
-<h2>Vintage Collection</h2>
-<div id="vintage-container" class="grid">Loading...</div>
-
-<h2>Parts Collection</h2>
-<div id="parts-container" class="grid">Loading...</div>  
-
-<div class="my-oraswiss-menu" id="myOraSwissMenu">
-    <div class="menu-item" onclick="location.href='buy.html'"><span>🛒 Buy</span> <span>></span></div>
-    <div class="menu-item" onclick="location.href='mysold.html'"><span>🛒 my sold</span> <span>></span></div>
-    <a href="messages.html" class="menu-item" style="text-decoration: none; color: inherit;">
-        <span>✉️ Messages</span>
-        <span id="dashboardMessageCount" style="background: red; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold; display: none;">0</span>
-    </a>
-    <div class="menu-item" onclick="location.href='settings.html'"><span>⚙️ Account Settings</span> <span>></span></div>
-    <div class="menu-item" onclick="location.href='support.html'"><span>🎧 Support</span> <span>></span></div>
-    <div class="menu-item" onclick="location.href='info.html'"><span>ℹ️ Info</span> <span>></span></div>
-</div>
-
-<nav class="bottom-nav">
-    <a href="#" onclick="checkPage(event,'dashboard.html')">🏠<br>Home</a>
-    <a href="#" onclick="checkPage(event,'favorites.html')">❤️<br>Favs</a>
-    <a href="messages.html" style="position: relative; display: inline-block; text-decoration: none; color: inherit;">
-        ✉️<br>messg
-        <span id="menuMessageCount" style="position: absolute; top: -5px; right: -10px; background: #ff3b30; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px; font-weight: bold; display: none;">0</span>
-    </a>
-    <a href="mysales.html">⌚<br>Sales</a>
-    <a href="sellnow.html">➕<br>Sell</a>
-    <button type="button" onclick="checkMenu(event)">👤<br>Menu</button>  
-</nav>
-
-<div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center;z-index:99999;">
-    <div style="background:#1a1a1a;padding:25px;border-radius:12px;text-align:center;max-width:320px;width:90%;color:#fff;">
-        <h2>Login Required</h2>
-        <p>Please sign in or create an account to continue.</p>
-        <button onclick="location.href='register.html'" style="padding:10px 20px;background:#fff;color:#000;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">Login / Register</button>
-        <br><br>
-        <button onclick="document.getElementById('loginModal').style.display='none'" style="padding:8px 15px;background:#444;color:#fff;border:none;border-radius:6px;cursor:pointer;">Cancel</button>
-    </div>
-</div>
-
-<script>
-  const supabase = window.supabase.createClient(
-    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-  );
-
-  async function loadCategory(cat, containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;  
-    
-    const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .eq('category', cat);  
-
-    if (error) {
-        console.error("Gabim gjatë marrjes së të dhënave:", error);
-        container.innerHTML = "Error loading items.";
-        return;
-    }
-  
-    if (!data || data.length === 0) {
-        container.innerHTML = "No items in this category.";
-        return;
-    }
-
-    container.innerHTML = data.map(ora => {
-        let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-        let primaryImage = "";
-
-        if (ora.image_url && ora.image_url.length > 0) {
-            primaryImage = Array.isArray(ora.image_url) ? ora.image_url[0] : ora.image_url;
-        }
-
-        if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
-            if (primaryImage.startsWith('http')) {
-                imgUrl = primaryImage;
-            } else {
-                imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
-            }
-        }
-      
-        return `
-            <div class="card" onclick="openProduct('${ora.id}')" style="cursor: pointer;">
-                <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
-                <h3>${ora.brand || ''} - ${ora.model || ''}</h3>
-                <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${ora.reference || '/'}</p>
-                <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-                
-                <input type="email" placeholder="Emaili yt" style="width:100%; margin: 5px 0; padding:10px; background:#222; color:#fff; border:1px solid #444; border-radius:4px; box-sizing:border-box;" onclick="event.stopPropagation();">
-                
-                <button class="btn-main btn-secondary" style="width:100%; margin-top:5px;" onclick="event.stopPropagation();">Send Request</button>
-                
-                <button class="btn-main btn-buy" style="width:100%; margin-top:5px;" onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}'">
-                🛒 Buy Now
-                </button>
-
-                <div style="display: flex; gap: 5px; margin-top: 5px;">
-                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" onclick="event.stopPropagation(); this.style.background = this.style.background === 'rgb(220, 53, 69)' ? '#222' : '#dc3545';">
-                        ❤️ Like
-                    </button>
-                    <button style="flex: 1; padding: 8px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 14px;" onclick="event.stopPropagation(); navigator.clipboard.writeText(window.location.origin + '/product.html?id=${ora.id}'); alert('Link copied to clipboard!');">
-                        🔗 Share
-                    </button>
-                </div>
-            </div>
-        `;
-    }).join('');
-  }
-
-  window.trajtoKlikiminSellNow = async function() {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-        window.location.href = 'sellnow.html'; 
-    } else {
-        window.location.href = 'login.html'; 
-    }
-  };
-
-  async function kontrolloSesionin() {
-    const { data: { session } } = await supabase.auth.getSession();
-    const btnSell = document.getElementById("btnSellNow");
-    if (session && btnSell) {
-        btnSell.style.display = "inline-block";
-    }
-  }
-
-  kontrolloSesionin();
-  
-  loadCategory('luxury', 'luxury-container');
-  loadCategory('vintage', 'vintage-container');
-  loadCategory('parts', 'parts-container');
-
-  async function loadProductCount() {
-    try {
-        const { count: countOras } = await supabase.from('oras').select('*', { count: 'exact', head: true });
-        const { count: countStraps } = await supabase.from('bracelets_straps').select('*', { count: 'exact', head: true });
-        const total = (countOras || 0) + (countStraps || 0);
-        const element = document.getElementById('count-products');
-        if (element) element.textContent = total;
-    } catch (err) {
-        console.error("Gabim te loadProductCount:", err);
-    }
-  }
-
-  async function loadUserCount() {
-    try {
-        const { data } = await supabase.rpc('get_users_count');
-        const element = document.getElementById('count-users');
-        if (element) element.textContent = data || 0;
-    } catch (err) {
-        console.error("Gabim te loadUserCount:", err);
-    }
-  }
-
-  loadUserCount();
-  loadProductCount();
-
-  function toggleMenu() {
-      const menu = document.getElementById('myOraSwissMenu');
-      menu.classList.toggle('active');
-  }
-
-  document.getElementById("searchInput").addEventListener("input", async function(e) {
-    const query = e.target.value.trim();
-    const luxuryContainer = document.getElementById("luxury-container");
-    const vintageContainer = document.getElementById("vintage-container");
-    const partsContainer = document.getElementById("parts-container");
-  
-    if (query.length === 0) {
-        location.reload(); 
-        return;
-    }
-
-    try {
-        const { data, error } = await supabase
-            .from("oras")
-            .select("*")
-            .or("brand.ilike.%" + query + "%,model.ilike.%" + query + "%,reference.ilike.%" + query + "%");
-
-        if (error) throw error;
-
-        if (luxuryContainer) {
-            luxuryContainer.innerHTML = "";
-            if (!data || data.length === 0) {
-                luxuryContainer.innerHTML = "<p>Nuk u gjet asnjë orë.</p>";
-                return;
-            }
-
-            data.forEach(product => {
-                let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-                let primaryImage = Array.isArray(product.image_url) ? product.image_url[0] : product.image_url;
-                if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
-                    imgUrl = primaryImage.startsWith('http') ? primaryImage : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
-                }
-
-                const item = document.createElement("div");
-                item.className = "card";
-                item.innerHTML = `
-                    <div onclick="openProduct('${product.id}')" style="cursor:pointer;">
-                        <img src="${imgUrl}" alt="${product.model || ''}">
-                        <h3>${product.brand || ''} - ${product.model || ''}</h3>
-                        <p style="color:#aaa; font-size:14px; margin:5px 0;">Ref: ${product.reference || '/'}</p>
-                        <div class="price">${product.price ? product.price + ' €' : 'Contact for price'}</div>
-                    </div>
-                `;
-                luxuryContainer.appendChild(item);
-            });
-        }
-
-        if (vintageContainer) vintageContainer.innerHTML = "";
-        if (partsContainer) partsContainer.innerHTML = "";
-
-    } catch (err) {
-        console.error("Gabim në kërkim:", err);
-    }
-  });
-
-  async function checkPage(event, page) {
-    event.preventDefault();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-        document.getElementById("loginModal").style.display = "flex";
-        return;
-    }
-    window.location.href = page;
-  }
-
-  async function checkMenu(event) {
-    event.preventDefault();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-        document.getElementById("loginModal").style.display = "flex";
-        return;
-    }
-    toggleMenu();
-  }
-
-  function openProduct(productId) {
-    window.location.href = "product.html?id=" + productId;
-  }
-
-  async function loadMessageCount() {
-    try {
-        const { data: { user }, error } = await supabase.auth.getUser();
-        if (error || !user) return;
-
-        const { data: userConvs, error: convError } = await supabase
-            .from("conversations")
-            .select("id")
-            .or(`user_one.eq.${user.id},user_two.eq.${user.id},buyer_id.eq.${user.id},seller_id.eq.${user.id}`);
-
-        if (convError || !userConvs || userConvs.length === 0) return;
-
-        const convIds = userConvs.map(c => c.id);
-
-        const { count: totalUnread, error: msgError } = await supabase
-            .from("messages")
-            .select("*", { count: "exact", head: true })
-            .in("conversation_id", convIds)
-            .eq("is_read", false)
-            .neq("sender_id", user.id);
-
-        if (msgError) return;
-
-        const count = totalUnread || 0;
-
-        const dashBadge = document.getElementById("dashboardMessageCount");
-        if (dashBadge) {
-            dashBadge.innerText = count;
-            dashBadge.style.display = count > 0 ? "inline-block" : "none";
-        }
-
-        const navBadge = document.getElementById("menuMessageCount");
-        if (navBadge) {
-            navBadge.innerText = count;
-            navBadge.style.display = count > 0 ? "inline-block" : "none";
-        }
-    } catch (err) {
-        console.error("Gabim tek mesazhet:", err);
-    }
-}
-
-loadMessageCount();
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
+    }, false);
 </script>
 
 </body>

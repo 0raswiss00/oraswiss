@@ -169,7 +169,7 @@
         const container = document.getElementById("content-container");
 
         if (itemId) {
-            // NËSE KA ID: Shfaqim detajet e plota, butonin e PayPal (Buy Now) dhe Send Request
+            // NËSE KA ID: Shfaqim detajet e plota, butonin e PayPal dhe Send Request
             const { data, error } = await window.supabaseClient
                 .from('bracelets_straps')
                 .select('*')
@@ -217,20 +217,16 @@
                         <p style="color: #ccc; line-height: 1.5; margin: 0; white-space: pre-line;">${data.description || 'Nuk ka përshkrim shtesë për këtë produkt.'}</p>
                     </div>
 
-                    <!-- Butoni i PayPal (Buy Now) -->
-                    <button id="buy-bracelet-btn" class="btn-main btn-buy" style="width:100%;"> Buy Now (PayPal)</button>
-                    
-                    <!-- Butoni Send Request (Dërgo Kërkesë / Mesazh për produktin) -->
-                    <button id="send-request-btn" class="btn-main btn-request" style="width:100%;"> Send Request / Inquiry</button>
+                    <button id="buy-bracelet-btn" class="btn-main btn-buy" style="width:100%;">Buy Now (PayPal)</button>
+                    <button id="send-request-btn" class="btn-main btn-request" style="width:100%;">Send Request / Inquiry</button>
                 </div>
             `;
 
-            // Lidhja funksionale e PayPal
             const buyBtn = document.getElementById("buy-bracelet-btn");
             if (buyBtn) {
                 buyBtn.onclick = async function(e) {
                     e.preventDefault();
-                    buyBtn.innerText = " Loading PayPal...";
+                    buyBtn.innerText = "Loading PayPal...";
                     try {
                         const response = await fetch(
                             "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
@@ -249,17 +245,16 @@
                             window.location.href = result.paypal_link;
                         } else {
                             alert("PayPal link nuk u krijua");
-                            buyBtn.innerText = " Buy Now (PayPal)";
+                            buyBtn.innerText = "Buy Now (PayPal)";
                         }
                     } catch(error) {
                         console.error(error);
                         alert("Gabim me PayPal");
-                        buyBtn.innerText = " Buy Now (PayPal)";
+                        buyBtn.innerText = "Buy Now (PayPal)";
                     }
                 };
             }
 
-            // Lidhja funksionale për Send Request (p.sh. dërgon përdoruesin te faqja e mesazheve ose hap një kërkesë)
             const requestBtn = document.getElementById("send-request-btn");
             if (requestBtn) {
                 requestBtn.onclick = function() {
@@ -323,12 +318,12 @@
 </script>
 
 <nav class="bottom-nav">
-    <a href="index.html"><br>Home</a>
-    <a href="favorites.html"><br>Favs</a>
-    <a href="messages.html"><br>Messages</a>
-    <a href="mysales.html"><br>Sales</a>
-    <a href="sellnow.html"><br>Sell</a>
-    <button type="button" onclick="checkMenu(event)"><br>Menu</button>
+    <a href="index.html">Home</a>
+    <a href="favorites.html">Favs</a>
+    <a href="messages.html">Messages</a>
+    <a href="mysales.html">Sales</a>
+    <a href="sellnow.html">Sell</a>
+    <button type="button" onclick="checkMenu(event)">Menu</button>
 </nav>
 
 </body>

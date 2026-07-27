@@ -37,23 +37,6 @@
             cursor: pointer;
             font-size: 16px;
         }
-        .profile-header { 
-            text-align: center; 
-            margin-bottom: 30px; 
-            border-bottom: 1px solid #333; 
-            padding-bottom: 20px; 
-        }
-        .btn-sell { 
-            background: gold; 
-            color: #000; 
-            font-weight: bold; 
-            border: none; 
-            padding: 12px; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            width: 100%; 
-            margin-bottom: 20px; 
-        }
     
         .my-oraswiss-menu {
             display: none;
@@ -124,7 +107,75 @@
         }
         .bottom-nav-item:hover { color: gold; }
 
-        .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; list-style: none; }
+        /* Stili i ri për grid-in e produkteve (si në foto) */
+        #myWatchesList {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .watch-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .watch-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .watch-info {
+            flex-grow: 1;
+            margin-bottom: 12px;
+        }
+
+        .watch-brand {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        .watch-model {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 8px;
+        }
+
+        .watch-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: gold;
+        }
+
+        .btn-view-details {
+            display: block;
+            width: 100%;
+            background: #222;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            border: 1px solid #444;
+            transition: background 0.2s;
+        }
+
+        .btn-view-details:hover {
+            background: #333;
+        }
     </style>
 </head>
 <body>
@@ -137,10 +188,10 @@
         </div>
     </div>
 
-    <!-- Seksioni ku do të shfaqen artikujt e ngarkuar -->
+    <!-- Seksioni i artikujve të mi -->
     <div style="margin-bottom: 20px;">
         <h2>Artikujt e mi</h2>
-        <ul id="myWatchesList" style="padding: 0; margin: 0;"></ul>
+        <ul id="myWatchesList"></ul>
     </div>
 
     <div id="myOraSwissMenu" class="my-oraswiss-menu">
@@ -175,39 +226,23 @@
 
     async function protectPage() {
         const { data: { user } } = await supabase.auth.getUser();
-
         if (!user) {
             window.location.href = "login.html";
             return false;
         }
-
         return true;
     }
 
     protectPage();
   
-    async function checkLogin(event, page) {
-        event.preventDefault();
-
-        const { data } = await supabase.auth.getSession();
-
-        if (data.session) {
-            window.location.href = page;
-        } else {
-            window.location.href = "login.html";
-        }
-    }
-
-    window.checkLogin = checkLogin;
-    
     async function ngarkoArtikujt() {
         const lista = document.getElementById("myWatchesList");
         if (!lista) return;
-        lista.innerHTML = "Po ngarkojmë artikujt...";
+        lista.innerHTML = "<li style='grid-column: 1/-1;'>Po ngarkojmë artikujt...</li>";
 
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
-            lista.innerHTML = "<li>Duhet të logoheni!</li>";
+            lista.innerHTML = "<li style='grid-column: 1/-1;'>Duhet të logoheni!</li>";
             return;
         }
 
@@ -222,7 +257,7 @@
             .eq('user_id', user.id);
 
         if (errorW || errorS) {
-            lista.innerHTML = "<li>Gabim gjatë lidhjes me databazën.</li>";
+            lista.innerHTML = "<li style='grid-column: 1/-1;'>Gabim gjatë lidhjes me databazën.</li>";
             return;
         }
 
@@ -230,22 +265,32 @@
 
         lista.innerHTML = "";
         if (teGjitha.length === 0) {
-            lista.innerHTML = "<li>Nuk keni asnjë artikull në shitje.</li>";
+            lista.innerHTML = "<li style='grid-column: 1/-1;'>Nuk keni asnjë artikull në shitje.</li>";
         } else {
             teGjitha.forEach(item => {
                 const isStrap = straps && straps.some(s => s.id === item.id);
-                
                 const detailPage = isStrap ? 'product-bracelets-straps.html' : 'watch-details.html';
+                
+                let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+                if (item.image_url) {
+                    let primaryImg = Array.isArray(item.image_url) ? item.image_url[0] : item.image_url;
+                    if (primaryImg && primaryImg !== 'null' && primaryImg !== '') {
+                        imgUrl = primaryImg.startsWith('http') ? primaryImg : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImg;
+                    }
+                }
 
                 const li = document.createElement("li");
                 li.className = "watch-card";
                 li.innerHTML = `
-                    <a href="${detailPage}?id=${item.id}" style="text-decoration:none; color:inherit; display:flex; align-items:center; width:100%;">
-                        <img src="${item.image_url && item.image_url[0] ? item.image_url[0] : ''}" alt="${item.brand || 'Artikull'}" style="width:100px; height:auto; margin-right:15px; object-fit:cover;">
-                        <div>
-                            <strong>${item.brand || 'Rrip'}</strong> - ${item.price} €
+                    <div>
+                        <img src="${imgUrl}" alt="${item.brand || 'Artikull'}">
+                        <div class="watch-info">
+                            <div class="watch-brand">${item.brand || 'Artikull'}</div>
+                            <div class="watch-model">${item.model || item.description || ''}</div>
+                            <div class="watch-price">${item.price || '0'} €</div>
                         </div>
-                    </a>
+                    </div>
+                    <a href="${detailPage}?id=${item.id}" class="btn-view-details">View Details</a>
                 `;
                 lista.appendChild(li);
             });
@@ -255,11 +300,9 @@
     function toggleMenu(menuId) {
         const menu = document.getElementById(menuId);
         if (!menu) return; 
-
         menu.classList.toggle('active');
     }
 
-    window.ngarkoArtikujt = ngarkoArtikujt;
     window.toggleMenu = toggleMenu;
 
     async function loadMessageCount() {
@@ -286,7 +329,6 @@
             if (msgError) return;
 
             const count = totalUnread || 0;
-
             const dashBadge = document.getElementById("dashboardMessageCount");
             if (dashBadge) {
                 dashBadge.innerText = count;
@@ -299,7 +341,6 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
         const { data: { user } } = await supabase.auth.getUser();
-
         if (!user) {
             window.location.href = "login.html";
             return;
@@ -329,13 +370,11 @@
 
     window.addEventListener('scroll', () => {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
         if (scrollTop > lastScrollTop) {
             nav.classList.add('hidden');
         } else {
             nav.classList.remove('hidden');
         }
-        
         lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
     }, false);
 </script>

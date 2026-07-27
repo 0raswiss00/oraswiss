@@ -374,15 +374,18 @@ async function loadProduct() {
                 e.preventDefault();
                 buyBtn.innerText = "⏳ Loading...";
                 try {
+                    // Duke qenë se Edge Function kërkon ID te tabela 'oras', 
+                    // nëse rripat janë te tabela tjetër, mund t'i dërgojmë vetëm çmimin dhe emrin 
+                    // ose ta kalojmë te një endpoint tjetër nëse ekziston.
                     const response = await fetch(
                         "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
                         {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({
-                                product_id: productId,
                                 price: data.price,
-                                product_name: (data.brand || 'Strap') + ' ' + (data.model || '')
+                                product_name: (data.brand || 'Strap') + ' ' + (data.model || ''),
+                                table: "bracelets_straps" // Nëse serveri e lexon këtë parametër
                             })
                         }
                     );

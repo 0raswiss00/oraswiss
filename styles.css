@@ -2292,43 +2292,17 @@ button, a, input, select, textarea { pointer-events: auto !important; }
 
 
 
-
-/* Përdorim klasën .grid që përputhet me HTML-në tënde */
 .grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    gap: 10px;
+    padding: 10px;
 }
 
-/* Kur klikohet karta, merr gjithë hapësirën */
-.card.active {
-    grid-column: span 2;
-}
-
-/* Për Kompjuter / Desktop (4 kolona fiks) */
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
     .grid {
-        grid-template-columns: repeat(4, 1fr) !important;
+        grid-template-columns: repeat(4, 1fr);
     }
-    .card.active {
-        grid-column: span 4 !important;
-    }
-}
-
-/* Përshtatje për celular (2 kolona siç e ke te kodi kryesor, ose 1 nëse e do vetëm një) */
-@media (max-width: 768px) {
-    .grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Stili i imazhit dhe çmimit në harmoni me markën tënde */
-.card img { 
-    width: 100%; 
-    height: 160px; 
-    object-fit: cover; 
-    border-radius: 8px;
-    cursor: pointer;
 }
 
 .price { 

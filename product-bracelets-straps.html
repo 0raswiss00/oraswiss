@@ -57,7 +57,7 @@
 
         .buy-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #090909; border-top: 1px solid #333; padding: 10px; display: flex; gap: 8px; z-index: 999; max-width: 900px; margin-left: 50%; transform: translateX(-50%); }
         .buy-btn { flex: 1; padding: 15px; border-radius: 10px; text-align: center; text-decoration: none; font-weight: bold; cursor: pointer; border: none; font-size: 16px; }
-        .whatsapp { background: #25D366; color: white; display: flex; align-items: center; justify-content: center; }
+        .request-btn { background: #0066cc; color: white; display: flex; align-items: center; justify-content: center; }
         .buy { background: #ffd900; color: black; }
 
         .oraswiss-seller-wrapper {
@@ -199,7 +199,7 @@
 </div>
 
 <div class="buy-bar">
-    <a class="buy-btn whatsapp" id="whatsapp">💬 WhatsApp</a>
+    <button class="buy-btn request-btn" id="send-request-btn">✉️ Send Request</button>
     <button class="buy-btn buy" id="buy">🛒 BUY</button>
 </div>
 
@@ -423,9 +423,53 @@ async function loadProduct() {
 
         updateGallery();
 
-        document.getElementById("whatsapp").href =
-            "https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per%20" +
-            encodeURIComponent((data.brand || 'Strap') + ' ' + (data.model || ''));
+        // Konfigurimi i butonit "Send Request" për të hapur ose krijuar chat-in (njëjtë si contact seller)
+        const sendRequestBtn = document.getElementById("send-request-btn");
+        if (sendRequestBtn) {
+            sendRequestBtn.onclick = async () => {
+                const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+
+                if (userError || !user) {
+                    window.location.href = "login.html";
+                    return;
+                }
+
+                if (user.id === data.user_id) {
+                    alert("Ky është produkti yt!");
+                    return;
+                }
+
+                const { data: existingChat } = await supabaseClient
+                    .from("conversations")
+                    .select("id")
+                    .eq("listing_id", data.id)
+                    .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
+                    .maybeSingle();
+
+                if (existingChat) {
+                    window.location.href = "chat.html?conversation=" + existingChat.id;
+                    return;
+                }
+
+                const { data: newConversation, error: createError } = await supabaseClient
+                    .from("conversations")
+                    .insert({
+                        listing_id: data.id,
+                        buyer_id: user.id,
+                        seller_id: data.user_id,
+                        last_message: "Bisedë e re"
+                    })
+                    .select()
+                    .single();
+
+                if (createError) {
+                    alert("Gabim: " + createError.message);
+                    return;
+                }
+
+                window.location.href = "chat.html?conversation=" + newConversation.id;
+            };
+        }
 
     } catch(err) {
         console.error(err);

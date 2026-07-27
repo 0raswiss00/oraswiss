@@ -238,14 +238,25 @@ const supabaseClient = window.supabase.createClient(
 let currentImages = [];
 let currentImgIndex = 0;
 const urlParams = new URLSearchParams(window.location.search);
-const productId = urlParams.get("id");
+let productId = urlParams.get("id");
 
 async function loadProduct() {
     const container = document.querySelector(".product-page");
 
+    // Nqs hapet pa ID në URL, merr automatikisht produktin e parë në tabelë për testim që të mos bllokohet
     if (!productId) {
-        container.innerHTML = "<h2 style='text-align:center; padding:50px; color:#aaa;'>Nuk u gjet ID e produktit në URL. Ju lutem zgjidhni një rrip nga faqja kryesore.</h2>";
-        return;
+        const { data: firstItem, error: firstErr } = await supabaseClient
+            .from("bracelets_straps")
+            .select("id")
+            .limit(1)
+            .maybeSingle();
+
+        if (firstItem && firstItem.id) {
+            productId = firstItem.id;
+        } else {
+            container.innerHTML = "<h2 style='text-align:center; padding:50px; color:#aaa;'>Nuk u gjet asnjë produkt në tabelën bracelets_straps.</h2>";
+            return;
+        }
     }
 
     try {

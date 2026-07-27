@@ -162,6 +162,14 @@ async function loadConversations() {
             }
         }
 
+        // Llogarit numrin e mesazheve të palexuara për këtë bisedë
+        const { count: unreadCount } = await supabase
+            .from("messages")
+            .select("*", { count: "exact", head: true })
+            .eq("conversation_id", conv.id)
+            .eq("is_read", false)
+            .neq("sender_id", user.id);
+
         let lastMsgText = conv.last_message || "Kliko për të parë mesazhin...";
         if(lastMsgText.includes("message-images") || lastMsgText.match(/\.(jpeg|jpg|png|gif)$/i)){
             lastMsgText = "📷 [Ka dërguar një foto]";
@@ -170,10 +178,12 @@ async function loadConversations() {
         const div = document.createElement("div");
         div.className = "chat";
         
-        // E gjithë kutia të çon te biseda, përveç emrit të blerësit që është link më vete
         div.onclick = () => {
             window.location.href = `chat.html?conversation=${conv.id}`;
         };
+
+        // Krijimi i badge-it të kuq nëse ka mesazhe të palexuara
+        let badgeHTML = unreadCount > 0 ? `<div style="background:#ff3b30; color:#fff; border-radius:50%; padding:2px 8px; font-size:11px; font-weight:bold; position:absolute; top:12px; right:12px; min-width:18px; text-align:center;">${unreadCount}</div>` : "";
 
         div.innerHTML = `
             ${watchImg ? `<img src="${watchImg}">` : `<div style="width:80px; height:80px; background:#ddd; border-radius:12px; display:flex; align-items:center; justify-content:center;">⌚</div>`}
@@ -183,6 +193,7 @@ async function loadConversations() {
                 <div class="price">${watchPrice} €</div>
                 <div class="last-message">💬 "${lastMsgText}"</div>
             </div>
+            ${badgeHTML}
         `;
         chatList.appendChild(div);
     }

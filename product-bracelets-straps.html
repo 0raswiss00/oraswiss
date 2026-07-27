@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bracelet & Strap Details - Ora Swiss</title>
+    <title>Bracelets & Straps - Ora Swiss</title>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
     <script>
@@ -15,217 +15,134 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { box-sizing: border-box; }
-        body { margin: 0; background: #050505; color: white; font-family: Arial, sans-serif; padding-bottom: 90px; }
-        .product-page { width: 100%; min-height: 100vh; }
-        .gallery { position: relative; width: 100%; height: 55vh; background: #000; overflow: hidden; }
-        .gallery img { width: 100%; height: 100%; object-fit: contain; }
-        .photo-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); border: none; color: white; font-size: 35px; width: 45px; height: 60px; border-radius: 10px; cursor: pointer; }
-        .photo-left { left: 15px; } .photo-right { right: 15px; }
-        .photo-counter { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.6); padding: 7px 15px; border-radius: 20px; }
+        body { margin: 0; background: #050505; color: white; font-family: Arial, sans-serif; padding-bottom: 50px; }
         
-        .details { padding: 20px; max-width: 900px; margin: auto; position: relative; }
+        .container { max-width: 1200px; margin: auto; padding: 20px; }
         
-        .brand { font-size: 18px; color: #aaa; margin-bottom: 4px; }
-        .model { font-size: 30px; font-weight: bold; margin-bottom: 15px; display: block; }
-        
-        .price-country-row { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
-        .price { font-size: 28px; color: #25D366; font-weight: bold; }
-        
-        .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; max-width: 900px; margin-left: auto; margin-right: auto; }
-        .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
-        
-        .top-actions {
+        .header-title {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 15px;
             display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin: 10px 0;
+            justify-content: space-between;
+            align-items: center;
         }
-        .top-actions .action {
+        
+        .back-link {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 14px;
             background: #111;
             padding: 8px 14px;
             border-radius: 20px;
-            font-size: 15px;
-            cursor: pointer;
             border: 1px solid #222;
+        }
+        .back-link:hover { background: #222; color: white; }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .product-card {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-3px);
+            border-color: #444;
+        }
+
+        .product-img-wrapper {
+            width: 100%;
+            height: 160px;
+            background: #000;
+            position: relative;
             display: flex;
             align-items: center;
-            gap: 5px;
-        }
-        .top-actions .action:hover {
-            background: #222;
+            justify-content: center;
+            overflow: hidden;
         }
 
-        .buy-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #090909; border-top: 1px solid #333; padding: 10px; display: flex; gap: 8px; z-index: 999; max-width: 900px; margin-left: 50%; transform: translateX(-50%); }
-        .buy-btn { flex: 1; padding: 15px; border-radius: 10px; text-align: center; text-decoration: none; font-weight: bold; cursor: pointer; border: none; font-size: 16px; }
-        .request-btn { background: #0066cc; color: white; display: flex; align-items: center; justify-content: center; }
-        .buy { background: #ffd900; color: black; }
-
-        .oraswiss-seller-wrapper {
-            display: block;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 30px auto;
-            max-width: 900px;
+        .product-img-wrapper img {
             width: 100%;
-            padding: 0 20px;
-            box-sizing: border-box;
+            height: 100%;
+            object-fit: cover;
         }
-        .oraswiss-seller-card {
-            background-color: #111111 !important;
-            color: #ffffff !important;
-            border: 1px solid #333333 !important;
-            border-radius: 16px !important;
-            padding: 24px !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
-            box-sizing: border-box !important;
+
+        .product-info {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
         }
-        .oraswiss-header {
-            display: flex !important;
-            justify-content: space-between !important;
-            align-items: center !important;
-            margin-bottom: 12px !important;
+
+        .product-brand {
+            font-size: 13px;
+            color: #aaa;
+            text-transform: uppercase;
         }
-        .oraswiss-info {
-            display: flex !important;
-            align-items: center !important;
-            gap: 12px !important;
+
+        .product-model {
+            font-size: 15px;
+            font-weight: bold;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        .oraswiss-avatar {
-            width: 40px !important;
-            height: 40px !important;
-            background: #222222 !important;
-            border-radius: 50% !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            color: #fff !important;
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 8px;
+            border-top: 1px solid #1a1a1a;
         }
-        .oraswiss-info h3 {
-            margin: 0 !important;
-            font-size: 16px !important;
-            font-weight: 700 !important;
-            color: #fff !important;
-            cursor: pointer;
+
+        .product-price {
+            font-size: 16px;
+            color: #25D366;
+            font-weight: bold;
         }
-        .oraswiss-info h3 span {
-            font-weight: normal !important;
-            color: #aaa !important;
-            font-size: 13px !important;
-        }
-        .oraswiss-green {
-            margin: 2px 0 0 0 !important;
-            font-size: 12px !important;
-            color: #25D366 !important;
-            font-weight: 600 !important;
-        }
-        .oraswiss-joined {
-            font-size: 13px !important;
-            color: #aaa !important;
-            margin-bottom: 16px !important;
-        }
-        .oraswiss-actions {
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 10px !important;
-        }
-        .oraswiss-btn-blue, .oraswiss-btn-white {
-            width: 100% !important;
-            padding: 12px !important;
-            border-radius: 24px !important;
-            font-size: 14px !important;
-            font-weight: 600 !important;
-            cursor: pointer !important;
-            text-align: center !important;
-            box-sizing: border-box !important;
-        }
-        .oraswiss-btn-blue {
-            background: #0066cc !important;
-            color: #ffffff !important;
-            border: none !important;
-        }
-        .oraswiss-btn-white {
-            background: #222222 !important;
-            color: #ffffff !important;
-            border: 1px solid #444444 !important;
-        }
-        .oraswiss-btn-white:hover {
-            background: #333333 !important;
+
+        .loading-text, .empty-text {
+            text-align: center;
+            padding: 50px;
+            color: #aaa;
+            font-size: 16px;
+            grid-column: 1 / -1;
         }
     </style>
 </head>
 <body>
 
-<div class="product-page">
-
-    <div class="gallery">
-        <button class="photo-btn photo-left" onclick="changeImage(-1)">❮</button>
-        <img id="main-photo" src="">
-        <button class="photo-btn photo-right" onclick="changeImage(1)">❯</button>
-        <div class="photo-counter" id="photo-count">1 / 1</div>
-    </div>
-    
-    <div class="details">
-        <div class="top-actions">
-            <div class="action" onclick="shareProduct()">🔗 Share</div>
-            <div class="action" onclick="toggleLike(this)" title="Ruaj në të preferuarat">♡ Like</div>
-        </div>
-
-        <div class="brand" id="brand">-</div>
-        <div class="model" id="model">-</div>
-
-        <div class="price-country-row">
-            <div class="price" id="top-price">-</div>
-            <div id="seller-country" style="background:#111; padding:8px 12px; border-radius:20px; font-size:14px; border: 1px solid #222;">🌍 -</div>
-        </div>
-    </div>
-    
-    <div class="info-box" id="specs">
-        <div class="info-row"><span>Type</span><span id="type">-</span></div>
-        <div class="info-row"><span>Condition</span><span id="condition">-</span></div>
-        <div class="info-row"><span>Material</span><span id="material">-</span></div>
-        <div class="info-row"><span>Color</span><span id="color">-</span></div>
-        <div class="info-row"><span>Reference</span><span id="reference">-</span></div>
-        <div class="info-row"><span>Year</span><span id="year">-</span></div>
-        <div class="info-row"><span>Gold Purity</span><span id="gold_purity">-</span></div>
-        <div class="info-row"><span>Lug Width</span><span id="lug_width">-</span></div>
-        <div class="info-row"><span>Clasp Width</span><span id="clasp_width">-</span></div>
-        <div class="info-row"><span>Length</span><span id="length">-</span></div>
+<div class="container">
+    <div class="header-title">
+        <span>Bracelets & Straps</span>
+        <a href="index.html" class="back-link">← Home</a>
     </div>
 
-    <div class="info-box">
-        <h3>Description</h3>
-        <p id="description">Loading...</p>
-    </div>
-
-</div>
-
-<div class="buy-bar">
-    <button class="buy-btn request-btn" id="send-request-btn">✉️ Send Request</button>
-    <button class="buy-btn buy" id="buy">🛒 BUY</button>
-</div>
-
-<!-- ORAWISS SELLER CARD -->
-<div class="oraswiss-seller-wrapper">
-    <div class="oraswiss-seller-card">
-        <div class="oraswiss-header">
-            <div class="oraswiss-info">
-                <div class="oraswiss-avatar">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                </div>
-                <div>
-                    <h3 id="os-name">- <span>(Pro)</span></h3>
-                    <p class="oraswiss-green">100% Positive Feedback</p>
-                </div>
-            </div>
-        </div>
-        <div class="oraswiss-joined" id="os-joined">Anëtar që nga -</div>
-        <div class="oraswiss-actions">
-            <button class="oraswiss-btn-blue" id="os-items">
-                Seller's other items (<span id="os-count">0</span>)
-            </button>
-            <button class="oraswiss-btn-white" id="os-contact">
-                Contact seller
-            </button>
-        </div>
+    <div class="products-grid" id="products-container">
+        <div class="loading-text">Duke ngarkuar produktet...</div>
     </div>
 </div>
 
@@ -235,283 +152,67 @@ const supabaseClient = window.supabase.createClient(
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
 );
 
-let currentImages = [];
-let currentImgIndex = 0;
-const urlParams = new URLSearchParams(window.location.search);
-let productId = urlParams.get("id");
-
-async function loadProduct() {
-    const container = document.querySelector(".product-page");
-
-    // Nqs hapet pa ID në URL, merr automatikisht produktin e parë në tabelë për testim që të mos bllokohet
-    if (!productId) {
-        const { data: firstItem, error: firstErr } = await supabaseClient
-            .from("bracelets_straps")
-            .select("id")
-            .limit(1)
-            .maybeSingle();
-
-        if (firstItem && firstItem.id) {
-            productId = firstItem.id;
-        } else {
-            container.innerHTML = "<h2 style='text-align:center; padding:50px; color:#aaa;'>Nuk u gjet asnjë produkt në tabelën bracelets_straps.</h2>";
-            return;
-        }
-    }
+async function loadCategoryProducts() {
+    const container = document.getElementById("products-container");
 
     try {
         const { data, error } = await supabaseClient
             .from("bracelets_straps")
             .select("*")
-            .eq("id", productId)
-            .single();
+            .order("created_at", { ascending: false });
 
         if (error) throw error;
 
-        const sellerName = data.seller_name || "Seller";
-        const sellerProfileUrl = "profile.html?id=" + data.user_id;
-
-        const osNameEl = document.getElementById("os-name");
-        osNameEl.innerHTML = sellerName + "-oraswiss <span>(Pro)</span>";
-        osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
-
-        let totalItemsCount = 0;
-        if (data.user_id) {
-            const { count: countOras } = await supabaseClient
-                .from("oras")
-                .select("*", { count: 'exact', head: true })
-                .eq("user_id", data.user_id);
-
-            const { count: countBracelets } = await supabaseClient
-                .from("bracelets_straps")
-                .select("*", { count: 'exact', head: true })
-                .eq("user_id", data.user_id);
-
-            totalItemsCount = (countOras || 0) + (countBracelets || 0);
+        if (!data || data.length === 0) {
+            container.innerHTML = `<div class="empty-text">Nuk u gjet asnjë rrip ose aksesor.</div>`;
+            return;
         }
-        document.getElementById("os-count").textContent = totalItemsCount;
 
-        document.getElementById("os-items").onclick = () => {
-            window.location.href = sellerProfileUrl;
-        };
+        container.innerHTML = "";
 
-        const joined = new Date(data.created_at || Date.now());
-        const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
-        document.getElementById("os-joined").textContent = "Anëtar që nga " + formattedJoined;
+        data.forEach(item => {
+            let rawImg = Array.isArray(item.image_url) ? item.image_url[0] : item.image_url;
+            let imageUrl = "https://placeholder.co/400x300/222/fff?text=No+Image";
+            
+            if (rawImg) {
+                imageUrl = rawImg.startsWith('http') ? rawImg : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + rawImg;
+            }
 
-        const contactBtn = document.getElementById("os-contact");
-        if (contactBtn) {
-            contactBtn.onclick = async () => {
-                const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+            const brand = item.brand || "Strap";
+            const model = item.model || "";
+            const price = item.price || 0;
+            const currency = item.currency || "€";
 
-                if (userError || !user) {
-                    window.location.href = "login.html";
-                    return;
-                }
-
-                if (user.id === data.user_id) {
-                    alert("Ky është produkti yt!");
-                    return;
-                }
-
-                const { data: existingChat } = await supabaseClient
-                    .from("conversations")
-                    .select("id")
-                    .eq("listing_id", data.id)
-                    .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
-                    .maybeSingle();
-
-                if (existingChat) {
-                    window.location.href = "chat.html?conversation=" + existingChat.id;
-                    return;
-                }
-
-                const { data: newConversation, error: createError } = await supabaseClient
-                    .from("conversations")
-                    .insert({
-                        listing_id: data.id,
-                        buyer_id: user.id,
-                        seller_id: data.user_id,
-                        last_message: "Bisedë e re"
-                    })
-                    .select()
-                    .single();
-
-                if (createError) {
-                    alert("Gabim: " + createError.message);
-                    return;
-                }
-
-                window.location.href = "chat.html?conversation=" + newConversation.id;
+            const card = document.createElement("div");
+            card.className = "product-card";
+            // Këtu klikimi të dërgon te faqja e detajeve duke i kaluar ID-në e saktë
+            card.onclick = () => {
+                window.location.href = `product-details.html?id=${item.id}`;
             };
-        }
 
-        const countries = {
-            "Albania": "🇦🇱 Shqipëri",
-            "Switzerland": "🇨🇭 Zvicër",
-            "Italy": "🇮🇹 Itali",
-            "Germany": "🇩🇪 Gjermani",
-            "AL": "🇦🇱 Shqipëri",
-            "CH": "🇨🇭 Zvicër",
-            "IT": "🇮🇹 Itali",
-            "DE": "🇩🇪 Gjermani"
-        };
-        const sCountry = data.seller_country || "-";
-        document.getElementById("seller-country").innerText = "🌍 " + (countries[sCountry] || sCountry);
+            card.innerHTML = `
+                <div class="product-img-wrapper">
+                    <img src="${imageUrl}" alt="${brand}" loading="lazy">
+                </div>
+                <div class="product-info">
+                    <div class="product-brand">${brand}</div>
+                    <div class="product-model">${model || 'Bracelet'}</div>
+                    <div class="product-footer">
+                        <span class="product-price">${price} ${currency}</span>
+                    </div>
+                </div>
+            `;
 
-        currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
-        currentImgIndex = 0;
+            container.appendChild(card);
+        });
 
-        document.getElementById("brand").textContent = data.brand || "Strap";
-        document.getElementById("model").textContent = data.model || "";
-        
-        const currencySymbol = data.currency || "€";
-        document.getElementById("top-price").textContent = (data.price || 0) + " " + currencySymbol;
-        
-        document.getElementById("type").innerText = data.type || "N/A";
-        document.getElementById("condition").innerText = data.condition || "N/A";
-        document.getElementById("material").innerText = data.material || "N/A";
-        document.getElementById("color").innerText = data.color || "N/A";
-        document.getElementById("reference").innerText = data.reference || "N/A";
-        document.getElementById("year").innerText = data.year || "N/A";
-        document.getElementById("gold_purity").innerText = data.gold_purity || "N/A";
-        document.getElementById("lug_width").innerText = data.lug_width || "N/A";
-        document.getElementById("clasp_width").innerText = data.clasp_width || "N/A";
-        document.getElementById("length").innerText = data.length || "N/A";
-        document.getElementById("description").innerText = data.description || "N/A";
-
-        const buyBtn = document.getElementById("buy");
-        if (buyBtn) {
-            buyBtn.onclick = async function(e) {
-                e.preventDefault();
-                buyBtn.innerText = "⏳ Loading...";
-                try {
-                    const response = await fetch(
-                        "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
-                        {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                product_id: productId,
-                                table: "bracelets_straps"
-                            })
-                        }
-                    );
-                    
-                    if (!response.ok) {
-                        const errData = await response.json().catch(() => ({}));
-                        console.error("Detajet e gabimit nga serveri:", errData);
-                        throw new Error("HTTP error! status: " + response.status);
-                    }
-
-                    const result = await response.json();
-                    if (result.paypal_link) {
-                        window.location.href = result.paypal_link;
-                    } else if (result.url) {
-                        window.location.href = result.url;
-                    } else {
-                        alert("PayPal link nuk u krijua");
-                        buyBtn.innerText = "🛒 BUY";
-                    }
-                } catch(error) {
-                    console.error("Gabim PayPal:", error);
-                    alert("Gabim gjatë lidhjes me PayPal. Shiko konsolën për detaje.");
-                    buyBtn.innerText = "🛒 BUY";
-                }
-            };
-        }
-
-        updateGallery();
-
-        // Konfigurimi i butonit "Send Request" për të hapur ose krijuar chat-in (njëjtë si contact seller)
-        const sendRequestBtn = document.getElementById("send-request-btn");
-        if (sendRequestBtn) {
-            sendRequestBtn.onclick = async () => {
-                const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
-
-                if (userError || !user) {
-                    window.location.href = "login.html";
-                    return;
-                }
-
-                if (user.id === data.user_id) {
-                    alert("Ky është produkti yt!");
-                    return;
-                }
-
-                const { data: existingChat } = await supabaseClient
-                    .from("conversations")
-                    .select("id")
-                    .eq("listing_id", data.id)
-                    .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
-                    .maybeSingle();
-
-                if (existingChat) {
-                    window.location.href = "chat.html?conversation=" + existingChat.id;
-                    return;
-                }
-
-                const { data: newConversation, error: createError } = await supabaseClient
-                    .from("conversations")
-                    .insert({
-                        listing_id: data.id,
-                        buyer_id: user.id,
-                        seller_id: data.user_id,
-                        last_message: "Bisedë e re"
-                    })
-                    .select()
-                    .single();
-
-                if (createError) {
-                    alert("Gabim: " + createError.message);
-                    return;
-                }
-
-                window.location.href = "chat.html?conversation=" + newConversation.id;
-            };
-        }
-
-    } catch(err) {
-        console.error(err);
-        container.innerHTML = "<h2 style='text-align:center; padding:50px; color:red;'>Gabim gjatë ngarkimit të produktit.</h2>";
+    } catch (err) {
+        console.error("Gabim:", err);
+        container.innerHTML = `<div class="empty-text" style="color: red;">Gabim gjatë ngarkimit.</div>`;
     }
 }
 
-function updateGallery() {
-    if(currentImages.length === 0) {
-        document.getElementById("main-photo").src = "https://placeholder.co/600x400/222/fff?text=No+Image";
-        return;
-    }
-    let img = currentImages[currentImgIndex];
-    let fullImgUrl = img.startsWith('http') ? img : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + img;
-    document.getElementById("main-photo").src = fullImgUrl;
-    document.getElementById("photo-count").innerText = (currentImgIndex + 1) + " / " + currentImages.length;
-}
-
-function changeImage(direction) {
-    if(currentImages.length === 0) return;
-    currentImgIndex += direction;
-    if(currentImgIndex >= currentImages.length) currentImgIndex = 0;
-    if(currentImgIndex < 0) currentImgIndex = currentImages.length - 1;
-    updateGallery();
-}
-
-function shareProduct() {
-    navigator.clipboard.writeText(window.location.href);
-    alert("Linku u kopjua!");
-}
-
-function toggleLike(element) {
-    if(element.innerText.includes("♡")) {
-        element.innerHTML = "❤️ Liked";
-        element.style.borderColor = "#25D366";
-    } else {
-        element.innerHTML = "♡ Like";
-        element.style.borderColor = "#222";
-    }
-}
-
-loadProduct();
+loadCategoryProducts();
 </script>
 
 </body>

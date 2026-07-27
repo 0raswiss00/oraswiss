@@ -237,13 +237,14 @@ const supabaseClient = window.supabase.createClient(
 
 let currentImages = [];
 let currentImgIndex = 0;
-const productId = new URLSearchParams(window.location.search).get("id");
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get("id");
 
 async function loadProduct() {
     const container = document.querySelector(".product-page");
 
     if (!productId) {
-        container.innerHTML = "<h2 style='text-align:center; padding:50px;'>Nuk u gjet ID e produktit.</h2>";
+        container.innerHTML = "<h2 style='text-align:center; padding:50px; color:#aaa;'>Nuk u gjet ID e produktit në URL. Ju lutem zgjidhni një rrip nga faqja kryesore.</h2>";
         return;
     }
 
@@ -381,8 +382,6 @@ async function loadProduct() {
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({
                                 product_id: productId,
-                                price: data.price,
-                                product_name: (data.brand || 'Strap') + ' ' + (data.model || ''),
                                 table: "bracelets_straps"
                             })
                         }

@@ -173,9 +173,9 @@
 <nav class="bottom-nav">
     <a href="#" onclick="checkPage(event,'dashboard.html')">🏠<br>Home</a>
     <a href="#" onclick="checkPage(event,'favorites.html')">❤️<br>Favs</a>
-    <a href="messages.html" style="position: relative;">
+    <a href="messages.html" style="position: relative; display: inline-block; text-decoration: none; color: inherit;">
         ✉️<br>messg
-        <span id="menuMessageCount" style="position: absolute; top: 0; right: 5px; background: red; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px; font-weight: bold; display: none;">0</span>
+        <span id="menuMessageCount" style="position: absolute; top: -5px; right: -10px; background: #ff3b30; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px; font-weight: bold; display: none;">0</span>
     </a>
     <a href="mysales.html">⌚<br>Sales</a>
     <a href="sellnow.html">➕<br>Sell</a>
@@ -399,38 +399,44 @@
         const { data: { user }, error } = await supabase.auth.getUser();
         if (error || !user) return;
 
+        // 1. Merr të gjitha bisedat e përdoruesit
         const { data: userConvs, error: convError } = await supabase
             .from("conversations")
-            .select("id, user_one, user_two, unread_user_one, unread_user_two")
-            .or(`user_one.eq.${user.id},user_two.eq.${user.id}`);
+            .select("id")
+            .or(`user_one.eq.${user.id},user_two.eq.${user.id},buyer_id.eq.${user.id},seller_id.eq.${user.id}`);
 
-        if (convError || !userConvs) return;
+        if (convError || !userConvs || userConvs.length === 0) return;
 
-        let totalUnread = 0;
-        userConvs.forEach(conv => {
-            if (conv.user_one === user.id) {
-                totalUnread += conv.unread_user_one || 0;
-            } else if (conv.user_two === user.id) {
-                totalUnread += conv.unread_user_two || 0;
-            }
-        });
+        const convIds = userConvs.map(c => c.id);
 
+        // 2. Numëro mesazhet e palexuara ku nuk jeni ju dërguesi
+        const { count: totalUnread, error: msgError } = await supabase
+            .from("messages")
+            .select("*", { count: "exact", head: true })
+            .in("conversation_id", convIds)
+            .eq("is_read", false)
+            .neq("sender_id", user.id);
+
+        if (msgError) return;
+
+        const count = totalUnread || 0;
+
+        // 3. Përditëso elementet në pamje (badge-at e mesazheve)
         const menuBadge = document.getElementById("messageCount");
         if (menuBadge) {
-            menuBadge.innerText = totalUnread;
-            menuBadge.style.background = totalUnread > 0 ? "red" : "#444";
+            menuBadge.innerText = count;
+            menuBadge.style.background = count > 0 ? "red" : "#444";
         }
 
         const navBadge = document.getElementById("menuMessageCount");
         if (navBadge) {
-            navBadge.innerText = totalUnread;
-            navBadge.style.display = totalUnread > 0 ? "inline-block" : "none";
+            navBadge.innerText = count;
+            navBadge.style.display = count > 0 ? "inline-block" : "none";
         }
     } catch (err) {
         console.error("Gabim tek mesazhet:", err);
     }
   }
-
   loadMessageCount();
 </script>
 

@@ -82,9 +82,7 @@
             display: block;
             text-decoration: none;
         }
-        .btn-buy { background: gold; color: #000; width: 100%; }
-        .btn-buy:hover { background: #e6c200; }
-
+        
         .btn-secondary {
             background: #222;
             color: #fff;
@@ -227,82 +225,26 @@
                 }
             }
 
-            const buyNowButton = ora.price 
-                ? `<button class="btn-main btn-buy buy-paypal-btn" data-id="${ora.id}" data-price="${ora.price}" data-name="${encodeURIComponent((ora.brand || 'Part') + ' ' + (ora.model || ''))}" style="margin-top:5px;">
-                       🛒 BUY NOW (PayPal)
-                   </button>` 
-                : ''; 
-
             cardsHtml += `
             <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
                 <div>
-                    <h3 style="margin: 0 0 8px 0; font-size: 16px;">${ora.brand || ''} - ${ora.model || ''}</h3>
                     <img src="${imgUrl}" alt="${ora.brand || 'Part'}">
+                    <h3 style="margin: 8px 0 4px 0; font-size: 16px;">${ora.brand || ''}</h3>
+                    <div style="font-size: 14px; color: #aaa; margin-bottom: 6px;">${ora.model || ''}</div>
                     <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
                 </div>
 
                 <div>
-                    <input type="email" id="email_parts_${ora.id}" placeholder="Emaili yt" class="search-box" style="margin:5px 0 8px 0; padding:8px; font-size:13px;" onclick="event.stopPropagation();">
-                    
-                    <button class="btn-main btn-secondary" style="width:100%; padding:8px; font-size:13px;" 
-                        onclick="event.stopPropagation(); const emailVal = document.getElementById('email_parts_${ora.id}').value; if(!emailVal){ alert('Ju lutem vendosni email-in!'); return; } alert('Kërkesa u dërgua me sukses!');">
-                        Send Request
+                    <button class="btn-main btn-secondary" style="width:100%; padding:10px; font-size:14px;" 
+                        onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}';">
+                        View Details
                     </button>
-
-                    ${buyNowButton}
-
-                    <div style="display: flex; gap:5px; margin-top:8px;">
-                        <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('U shtua te të preferuarat!')" style="flex:1; padding:6px; font-size:12px;">
-                            ❤️ Like
-                        </button>
-                        <button class="btn-main btn-secondary" style="flex:1; padding:6px; font-size:12px;" 
-                            onclick="event.stopPropagation(); const productUrl = window.location.origin + '/product.html?id=${ora.id}'; navigator.clipboard.writeText(productUrl).then(() => { alert('Linku u kopjua!'); });">
-                            🔗 Share
-                        </button>
-                    </div>
                 </div>
             </div>
             `;
         });
 
         container.innerHTML = cardsHtml;
-
-        // Lidhja e eventeve për PayPal direkt nga listimi
-        document.querySelectorAll('.buy-paypal-btn').forEach(btn => {
-            btn.addEventListener('click', async function(e) {
-                e.stopPropagation();
-                const productId = this.getAttribute('data-id');
-                const price = this.getAttribute('data-price');
-                const productName = decodeURIComponent(this.getAttribute('data-name'));
-                
-                this.innerText = "Loading...";
-                try {
-                    const response = await fetch(
-                        "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
-                        {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                product_id: productId,
-                                price: price,
-                                product_name: productName
-                            })
-                        }
-                    );
-                    const result = await response.json();
-                    if (result.paypal_link) {
-                        window.location.href = result.paypal_link;
-                    } else {
-                        alert("PayPal link nuk u krijua");
-                        this.innerText = "🛒 BUY NOW (PayPal)";
-                    }
-                } catch(err) {
-                    console.error(err);
-                    alert("Gabim me PayPal");
-                    this.innerText = "🛒 BUY NOW (PayPal)";
-                }
-            });
-        });
     }
 
     // Funksionaliteti i kërkimit (Search live)

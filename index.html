@@ -421,7 +421,7 @@
 
         const count = totalUnread || 0;
 
-        // 3. Përditëso elementet në pamje (badge-at e mesazheve)
+        // 3. Përditëso elementet e badge-ve në faqen kryesore (index)
         const menuBadge = document.getElementById("messageCount");
         if (menuBadge) {
             menuBadge.innerText = count;
@@ -433,10 +433,17 @@
             navBadge.innerText = count;
             navBadge.style.display = count > 0 ? "inline-block" : "none";
         }
+
+        const dashBadge = document.getElementById("dashboardMessageCount");
+        if (dashBadge) {
+            dashBadge.innerText = count;
+            dashBadge.style.display = count > 0 ? "inline-block" : "none";
+        }
     } catch (err) {
         console.error("Gabim tek mesazhet:", err);
     }
   }
+
   loadMessageCount();
 </script>
 

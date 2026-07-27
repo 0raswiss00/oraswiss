@@ -124,7 +124,7 @@
         }
         .bottom-nav-item:hover { color: gold; }
 
-        .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; }
+        .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; list-style: none; }
     </style>
 </head>
 <body>
@@ -137,18 +137,23 @@
         </div>
     </div>
 
+    <!-- Seksioni ku do të shfaqen artikujt e ngarkuar -->
+    <div style="margin-bottom: 20px;">
+        <h2>Artikujt e mi</h2>
+        <ul id="myWatchesList" style="padding: 0; margin: 0;"></ul>
+    </div>
+
     <div id="myOraSwissMenu" class="my-oraswiss-menu">
-        <div class="my-oraswiss-menu" id="myOraSwissMenu">
-    <div class="menu-item" onclick="location.href='buy.html'"><span>🛒 Buy</span> <span>></span></div>
-    <div class="menu-item" onclick="location.href='mysold.html'"><span>🛒 my sold</span> <span>></span></div>
-    <a href="messages.html" class="menu-item" style="text-decoration: none; color: inherit;">
-        <span>✉️ Messages</span>
-        <span id="dashboardMessageCount" style="background: red; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold; display: none;">0</span>
-    </a>
-    <div class="menu-item" onclick="location.href='settings.html'"><span>⚙️ Account Settings</span> <span>></span></div>
-    <div class="menu-item" onclick="location.href='support.html'"><span>🎧 Support</span> <span>></span></div>
-    <div class="menu-item" onclick="location.href='info.html'"><span>ℹ️ Info</span> <span>></span></div>
-</div>
+        <div class="menu-item" onclick="location.href='buy.html'"><span>🛒 Buy</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='mysold.html'"><span>🛒 my sold</span> <span>></span></div>
+        <a href="messages.html" class="menu-item" style="text-decoration: none; color: inherit;">
+            <span>✉️ Messages</span>
+            <span id="dashboardMessageCount" style="background: red; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold; display: none;">0</span>
+        </a>
+        <div class="menu-item" onclick="location.href='settings.html'"><span>⚙️ Account Settings</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='support.html'"><span>🎧 Support</span> <span>></span></div>
+        <div class="menu-item" onclick="location.href='info.html'"><span>ℹ️ Info</span> <span>></span></div>
+    </div>
 
     <nav class="bottom-nav">
       <a href="index.html" class="bottom-nav-item">OraSwiss</a>
@@ -197,6 +202,7 @@
     
     async function ngarkoArtikujt() {
         const lista = document.getElementById("myWatchesList");
+        if (!lista) return;
         lista.innerHTML = "Po ngarkojmë artikujt...";
 
         const { data: { user } } = await supabase.auth.getUser();
@@ -229,7 +235,6 @@
             teGjitha.forEach(item => {
                 const isStrap = straps && straps.some(s => s.id === item.id);
                 
-                // Përdoret emri i saktë i skedarit të detajeve për rripat që krijuam
                 const detailPage = isStrap ? 'product-bracelets-straps.html' : 'watch-details.html';
 
                 const li = document.createElement("li");
@@ -270,9 +275,10 @@
 
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
-        searchInput.getElementById = searchInput.addEventListener('keyup', function(e) {
+        searchInput.addEventListener('keyup', function(e) {
             const termi = e.target.value.toLowerCase();
             const lista = document.getElementById("myWatchesList");
+            if (!lista) return;
             const artikujt = lista.getElementsByClassName("watch-card");
             for (let i = 0; i < artikujt.length; i++) {
                 let tekst = artikujt[i].textContent.toLowerCase();

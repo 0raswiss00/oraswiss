@@ -23,7 +23,60 @@
 
         .container-content { padding: 15px; max-width: 1200px; margin: 0 auto; }
         
-        /* Search Box Stilimi */
+        /* Pjesa e kreut me titullin dhe butonin e vogal luksoz anash */
+        .page-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .page-header-row h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        /* Butoni i vogal luksoz në stilin e imazhit të orës, i vendosur sipër afër titullit */
+        .btn-luxury-header-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 14px;
+            background: linear-gradient(145deg, #161616, #0d0d0d);
+            color: #d4af37;
+            font-weight: 600;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08), 
+                        0 3px 8px rgba(0, 0, 0, 0.6), 
+                        0 0 0 1px rgba(212, 175, 55, 0.1);
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-luxury-header-pill:hover {
+            background: linear-gradient(145deg, #1f1f1f, #121212);
+            border-color: #d4af37;
+            color: #ffd700;
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.15), 
+                        0 4px 12px rgba(0, 0, 0, 0.8), 
+                        0 0 6px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-luxury-header-pill:active {
+            background: #0a0a0a;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.9);
+            transform: translateY(1px);
+        }
+
+        /* Kutia e Kërkimit */
         .search-box {
             width: 100%;
             padding: 12px 15px;
@@ -71,25 +124,24 @@
 
         .price { color: gold; font-weight: bold; margin: 8px 0; font-size: 1.1em; }
 
-        .btn-main {
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
+        /* Butoni i thjeshtë në kartë */
+        .btn-card-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 8px;
+            margin-top: 8px;
+            background: #1a1a1a;
+            color: #fff;
+            font-size: 13px;
             font-weight: bold;
+            border: 1px solid #333;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
-            text-align: center;
-            display: block;
             text-decoration: none;
         }
-        
-        .btn-secondary {
-            background: #222;
-            color: #fff;
-            border: 1px solid #444;
-            margin-top: 5px;
-        }
-        .btn-secondary:hover { background: #333; }
+        .btn-card-action:hover { background: #252525; border-color: gold; color: gold; }
 
         /* Bottom Nav bar i unifikuar */
         .bottom-nav {
@@ -148,7 +200,11 @@
 </header>
 
 <div class="container-content">
-    <h1>Luxury Collection</h1>
+    <!-- Rreshti i titullit dhe butonit të vogël luksoz ekzaktësisht aty ku kërkove -->
+    <div class="page-header-row">
+        <h1>Luxury Collection</h1>
+        <a href="contact.html" class="btn-luxury-header-pill">Inquire</a>
+    </div>
     
     <!-- Kutia e Kërkimit -->
     <input type="text" id="search-input" class="search-box" placeholder="Kërko sipas brendit, modelit ose materialit...">
@@ -234,7 +290,7 @@
                 </div>
 
                 <div>
-                    <button class="btn-main btn-secondary" style="width:100%; padding:10px; font-size:14px;" 
+                    <button class="btn-card-action" 
                         onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}';">
                         View Details
                     </button>

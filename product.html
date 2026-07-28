@@ -392,6 +392,7 @@ async function loadProduct() {
                 <div class="info-row"><span>Glass</span><span>${data.glass || "N/A"}</span></div>
                 <div class="info-row"><span>Warranty</span><span>${data.warranty || "N/A"}</span></div>
                 <div class="info-row"><span>Warranty Months</span><span>${data.warranty_months || "N/A"}</span></div>
+                <div class="info-row"><span>Shipping Time</span><span>${data.shipping_days ? data.shipping_days + ' days' : "N/A"}</span></div>
                 <div class="info-row"><span>Box & Papers</span><span>${data.box_papers ? "Full Set" : "Watch Only"}</span></div>
             `;
         }

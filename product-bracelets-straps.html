@@ -237,7 +237,9 @@
                         <div>Clasp Width: <span>${data.clasp_width || '/'}</span></div>
                         <div>Length: <span>${data.length || '/'}</span></div>
                         <div>Length: <span>${data.length || '/'}</span></div>
-                        <div>Shipping: <span>${data.shipping_days ? data.shipping_days + ' days' : '/'}</span></div>
+                        <div class="shipping-info">
+                        <div>Shërbimi Postar: <span>${data.shipping_provider ? data.shipping_provider : '/'}</span></div>
+                        <div>Koha e Dërgesës: <span>${data.shipping_days ? data.shipping_days : '/'}</span></div>
                     </div>
 
                     <div style="background: #1a1a1a; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #333;">

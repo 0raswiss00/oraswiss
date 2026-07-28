@@ -172,8 +172,9 @@
         </div>
     </div>
     
+    <!-- Kutia e specifikave dinamike përshtatet sipas tabelës -->
     <div class="info-box" id="specs">
-        <!-- Të dhënat do të gjenerohen automatikisht -->
+        <!-- Të dhënat do të gjenerohen automatikisht nga skripta -->
     </div>
 
     <div class="info-box">
@@ -224,7 +225,7 @@ let currentImages = [];
 let currentImgIndex = 0;
 const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get("id");
-const category = urlParams.get("category");
+const category = urlParams.get("category"); // Kontrollon nëse është "bracelets_straps" apo orë standarde
 
 async function loadProduct() {
     const container = document.querySelector(".product-page");
@@ -234,6 +235,7 @@ async function loadProduct() {
         return;
     }
 
+    // Përcaktojmë tabelën bazuar te kategoria e ardhur nga URL
     const tableName = (category === "bracelets_straps") ? "bracelets_straps" : "oras";
 
     try {
@@ -279,16 +281,13 @@ async function loadProduct() {
         const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
         document.getElementById("os-joined").textContent = "Anëtar që nga " + formattedJoined;
 
-        // Këtu kontrollohet logimi vetëm kur klikohet "Contact seller"
         const contactBtn = document.getElementById("os-contact");
         if (contactBtn) {
-            contactBtn.onclick = async (e) => {
-                e.preventDefault();
-
+            contactBtn.onclick = async () => {
                 const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
 
                 if (userError || !user) {
-                    window.location.href = "login.html?redirect=" + encodeURIComponent(window.location.href);
+                    window.location.href = "login.html";
                     return;
                 }
 
@@ -297,15 +296,15 @@ async function loadProduct() {
                     return;
                 }
 
-                const { data: existingChat, error: searchError } = await supabaseClient
+                const { data: existingChat } = await supabaseClient
                     .from("conversations")
                     .select("id")
                     .eq("listing_id", data.id)
-                    .or(`and(buyer_id.eq.${user.id},seller_id.eq.${data.user_id}),and(buyer_id.eq.${data.user_id},seller_id.eq.${user.id})`)
+                    .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
                     .maybeSingle();
 
-                if (existingChat && existingChat.id) {
-                    window.location.href = "contact.html?conversation=" + existingChat.id;
+                if (existingChat) {
+                    window.location.href = "chat.html?conversation=" + existingChat.id;
                     return;
                 }
 
@@ -317,15 +316,15 @@ async function loadProduct() {
                         seller_id: data.user_id,
                         last_message: "Bisedë e re"
                     })
-                    .select("id")
+                    .select()
                     .single();
 
-                if (createError || !newConversation || !newConversation.id) {
-                    alert("Gabim në krijimin e chat-it: " + (createError ? createError.message : "ID mungon"));
+                if (createError) {
+                    alert("Gabim: " + createError.message);
                     return;
                 }
 
-                window.location.href = "contact.html?conversation=" + newConversation.id;
+                window.location.href = "chat.html?conversation=" + newConversation.id;
             };
         }
 
@@ -351,6 +350,7 @@ async function loadProduct() {
         const currencySymbol = data.currency || "€";
         document.getElementById("top-price").textContent = (data.price || 0) + " " + currencySymbol;
         
+        // Gjenerimi i specifikave sipas llojit të produktit (Orë vs Rrip/Byzylyk)
         const specsContainer = document.getElementById("specs");
         specsContainer.innerHTML = "";
 

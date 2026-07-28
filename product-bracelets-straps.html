@@ -359,9 +359,9 @@
         currentImgIndex += direction;
         if (currentImgIndex >= currentImages.length) currentImgIndex = 0;
         if (currentImgIndex < 0) currentImgIndex = currentImages.length - 1;
-        
-        document.getElementById("main-product-img").src = currentImages[currentImgIndex];
-        document.getElementById("photo-counter-text").innerText = (currentImgIndex + 1) + " / " + currentImages.length;
+    
+        document.getElementById("main-photo").src = currentImages[currentImgIndex];
+        document.getElementById("photo-count").innerText = (currentImgIndex + 1) + " / " + currentImages.length;
     }
 </script>
 

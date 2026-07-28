@@ -270,12 +270,14 @@ placeholder="Example: 3.5mm">
 
 
 
-<label>Shipping Time (Days)</label>
-
-<input 
-id="shipping_days"
-type="text"
-placeholder="Example: 1-2 business days">
+<div class="field-wrapper">
+    <label>Mënyra dhe Koha e Dërgesës</label>
+    <input 
+        id="shipping_days"
+        type="text"
+        placeholder="Shembull: DHL Express - 1-2 business days"
+        value="${data.shipping_days || ''}">
+</div>
     
 
 <label>Description</label>

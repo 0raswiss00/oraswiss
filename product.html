@@ -281,12 +281,9 @@ async function loadProduct() {
         const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
         document.getElementById("os-joined").textContent = "Anëtar që nga " + formattedJoined;
 
-      const contactBtn = document.getElementById("os-contact");
+        const contactBtn = document.getElementById("os-contact");
         if (contactBtn) {
-            contactBtn.onclick = async (e) => {
-                e.preventDefault();
-                console.log("U klikua Contact seller");
-
+            contactBtn.onclick = async () => {
                 const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
 
                 if (userError || !user) {
@@ -299,24 +296,18 @@ async function loadProduct() {
                     return;
                 }
 
-                // Kontrollojmë nëse ekziston një bisedë për këtë produkt mes këtyre dy përdoruesve
-                const { data: existingChat, error: searchError } = await supabaseClient
+                const { data: existingChat } = await supabaseClient
                     .from("conversations")
                     .select("id")
                     .eq("listing_id", data.id)
-                    .or(`and(buyer_id.eq.${user.id},seller_id.eq.${data.user_id}),and(buyer_id.eq.${data.user_id},seller_id.eq.${user.id})`)
+                    .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
                     .maybeSingle();
-
-                if (searchError) {
-                    console.error("Gabim në kërkimin e bisedës:", searchError.message);
-                }
 
                 if (existingChat) {
                     window.location.href = "chat.html?conversation=" + existingChat.id;
                     return;
                 }
 
-                // Krijohet biseda e re nëse nuk ekziston
                 const { data: newConversation, error: createError } = await supabaseClient
                     .from("conversations")
                     .insert({
@@ -329,7 +320,7 @@ async function loadProduct() {
                     .single();
 
                 if (createError) {
-                    alert("Gabim në krijimin e chat-it: " + createError.message);
+                    alert("Gabim: " + createError.message);
                     return;
                 }
 

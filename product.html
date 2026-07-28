@@ -288,7 +288,7 @@ async function loadProduct() {
                 const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
 
                 if (userError || !user) {
-                    window.location.href = "login.html";
+                    window.location.href = "login.html?redirect=" + encodeURIComponent(window.location.href);
                     return;
                 }
 
@@ -309,7 +309,7 @@ async function loadProduct() {
                 }
 
                 if (existingChat && existingChat.id) {
-                    window.location.href = "chat.html?conversation=" + existingChat.id;
+                    window.location.href = "contact.html?conversation=" + existingChat.id;
                     return;
                 }
 
@@ -329,7 +329,7 @@ async function loadProduct() {
                     return;
                 }
 
-                window.location.href = "chat.html?conversation=" + newConversation.id;
+                window.location.href = "contact.html?conversation=" + newConversation.id;
             };
         }
 

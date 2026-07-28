@@ -590,8 +590,10 @@ const oraData = {
 
     function: document.getElementById("function").value,
 
-    service: document.getElementById("serviceStatus")?.value || "",
+    // Kthen true nëse është "Completed", përndryshe false (për shkak të tipit boolean në Supabase)
+    service: document.getElementById("serviceStatus")?.value === "Completed",
 
+    // Rreshti tjetër për datën e shërbimit
     service_date: document.getElementById("service_date")?.value || null,
     
     box_papers: document.getElementById("box_papers")?.value || "",

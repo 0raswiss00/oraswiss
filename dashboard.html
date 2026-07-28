@@ -195,15 +195,19 @@
             return;
         }
 
-        const teGjitha = [...(watches || []), ...(straps || [])];
+        // I etiketojmë qartë që në fillim për të shmangur gabimet e lidhjes
+        const watchesFormatted = (watches || []).map(w => ({ ...w, itemType: 'watch' }));
+        const strapsFormatted = (straps || []).map(s => ({ ...s, itemType: 'strap' }));
+        
+        const teGjitha = [...watchesFormatted, ...strapsFormatted];
 
         lista.innerHTML = "";
         if (teGjitha.length === 0) {
             lista.innerHTML = "<li>Nuk keni asnjë artikull në shitje.</li>";
         } else {
             teGjitha.forEach(item => {
-                const isStrap = straps && straps.some(s => s.id === item.id);
-                const detailPage = isStrap ? 'product-bracelets-straps.html' : 'watch-details.html';
+                // Përcaktojmë faqen ekzaktësisht sipas llojit të artikullit
+                const detailPage = item.itemType === 'strap' ? 'product-bracelets-straps.html' : 'watch-details.html';
                 
                 let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
                 if (item.image_url) {

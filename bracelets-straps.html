@@ -270,12 +270,31 @@ placeholder="Example: 3.5mm">
 
 
 
-<div class="field-wrapper">
-    <label>Mënyra dhe Koha e Dërgesës</label>
-    <input 
-        id="shipping_days"
-        type="text"
-        placeholder="Shembull: DHL Express - 1-2 business days">
+<div class="shipping-config-group">
+    <!-- Zgjedhja e Shërbimit Postar -->
+    <div class="field-wrapper">
+        <label for="shipping_provider">Lloji i Shërbimit Postar</label>
+        <select id="shipping_provider" name="shipping_provider">
+            <option value="">Zgjidh shërbimin postar...</option>
+            <option value="Standard">Posta Standarde (Lokale)</option>
+            <option value="Express">Posta Express</option>
+            <option value="DHL">DHL Express</option>
+            <option value="FedEx">FedEx</option>
+            <option value="Custom">Korrier Privat / Tjetër</option>
+        </select>
+    </div>
+
+    <!-- Afati i dërgesës pas blerjes (Me Opsione) -->
+    <div class="field-wrapper">
+        <label for="shipping_days">Koha e Dërgesës (Pas Blerjes)</label>
+        <select id="shipping_days" name="shipping_days">
+            <option value="">Zgjidh kohën e dërgesës...</option>
+            <option value="Dërgesë brenda 1-2 ditëve">Dërgesë brenda 1-2 ditëve</option>
+            <option value="Dërgesë brenda 2-4 ditëve">Dërgesë brenda 2-4 ditëve</option>
+            <option value="Dërgesë brenda 5-7 ditëve">Dërgesë brenda 5-7 ditëve</option>
+            <option value="Standard (7-14 ditë)">Standard (7-14 ditë)</option>
+        </select>
+    </div>
 </div>
     
 

@@ -11,147 +11,123 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-KD2ZZ3MJYY');
-    </script>
-    <style>
-        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff; }
-        .site-header { position: sticky; top: 0; z-index: 9999; background: #111; }
-        .nav-scroll { display: flex; gap: 18px; align-items: center; overflow-x: auto; padding: 14px 16px; }
-        .nav-scroll a { color: #fff; text-decoration: none; padding: 6px 10px; }
-        .nav-scroll a:hover { color: gold; }
-        .site-title { font-weight: 700; line-height: 1.05; margin-right: 10px; }
+   <script>
+    async function loadBraceletProduct() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+        const container = document.getElementById('content-container');
 
-         .info-row {
-             display: flex;
-             justify-content: space-between; /* Kjo detyron që etiketa të dali në fillim dhe vlera në fund të rreshtit */
-             align-items: center;
-             padding: 8px 0;
-         }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            padding: 10px;
+        if (!productId) {
+            container.innerHTML = "<h2 style='text-align:center; padding:50px;'>Produkti nuk u gjet!</h2>";
+            return;
         }
 
-        @media (min-width: 768px) {
-            .grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
+        // Marrim të dhënat nga tabela e rripave (bracelets_straps) në Supabase
+        const { data, error } = await supabaseClient
+            .from('bracelets_straps')
+            .select('*')
+            .eq('id', productId)
+            .single();
+
+        if (error || !data) {
+            container.innerHTML = "<h2 style='text-align:center; padding:50px;'>Produkti nuk u gjet në databazë!</h2>";
+            return;
         }
 
-        .card {
-            background: #111;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #333;
-            cursor: pointer;
-        }
+        // Përgatitja e imazheve
+        let images = Array.isArray(data.image_url) ? data.image_url : [data.image_url || 'https://via.placeholder.com/600'];
+        let currentImgIdx = 0;
 
-        .card img {
-            width: 100%;
-            height: 140px;
-            object-fit: cover;
-            display: block;
-            border-radius: 8px;
-        }
+        // Ndërtimi i strukturës HTML të faqes së produktit
+        container.innerHTML = `
+            <div style="max-width: 900px; margin: auto;">
+                
+                <!-- Butonat e sipërm (Share & Like) -->
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin: 10px 0;">
+                    <button onclick="shareProduct()" style="background: #111; color: #fff; border: 1px solid #333; padding: 8px 14px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; gap: 5px;">🔗 Share</button>
+                    <button onclick="toggleLike(this)" style="background: #111; color: #fff; border: 1px solid #333; padding: 8px 14px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; gap: 5px;">♡ Like</button>
+                </div>
 
-        /* Galeria e Fotove në Detaje */
-        .gallery-container { position: relative; width: 100%; height: 350px; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .gallery-container img { width: 100%; height: 100%; object-fit: contain; }
-        .gallery-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: 1px solid #444; font-size: 20px; padding: 10px; cursor: pointer; border-radius: 50%; z-index: 10; }
-        .gallery-btn.prev { left: 10px; }
-        .gallery-btn.next { right: 10px; }
-        .photo-counter { position: absolute; bottom: 10px; background: rgba(0,0,0,0.7); padding: 4px 10px; border-radius: 10px; font-size: 12px; }
+                <!-- Galeria e Fotos -->
+                <div class="gallery-container" id="gallery-box">
+                    <button class="gallery-btn prev" onclick="changeImg(-1)">❮</button>
+                    <img id="main-img" src="${images[0]}" alt="Product Image">
+                    <button class="gallery-btn next" onclick="changeImg(1)">❯</button>
+                    <div class="photo-counter" id="photo-counter">1 / ${images.length}</div>
+                </div>
 
-        .btn-main {
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 15px;
-            text-align: center;
-            display: block;
-            text-decoration: none;
-        }
-        .btn-buy {
-            background: gold;
-            color: #000;
-        }
-        .btn-buy:hover { background: #e6c200; }
+                <!-- Titulli dhe Çmimi -->
+                <div style="margin-top: 15px;">
+                    <div style="font-size: 16px; color: #aaa;">${data.brand || ''}</div>
+                    <h1 style="font-size: 28px; margin: 5px 0 15px 0;">${data.model || 'Bracelet / Strap'}</h1>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="font-size: 26px; color: #25D366; font-weight: bold;">${data.price ? data.price + ' €' : 'N/A'}</div>
+                        <div style="background: #111; padding: 8px 12px; border-radius: 20px; font-size: 14px; border: 1px solid #333;">🌍 ${data.country || 'International'}</div>
+                    </div>
+                </div>
 
-        .btn-request {
-            background: #222;
-            color: #fff;
-            border: 1px solid #555;
-            margin-top: 10px;
-        }
-        .btn-request:hover { background: #333; }
+                <!-- Kutia e Specifikave (Pa dopio rresht, në një kolonë të rregullt) -->
+                <div style="background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-top: 20px;">
+                    <div class="info-row"><span>Type</span><span>${data.type || "N/A"}</span></div>
+                    <div class="info-row"><span>Condition</span><span>${data.condition || "N/A"}</span></div>
+                    <div class="info-row"><span>Material</span><span>${data.material || "N/A"}</span></div>
+                    <div class="info-row"><span>Color</span><span>${data.color || "N/A"}</span></div>
+                    <div class="info-row"><span>Reference</span><span>${data.reference || "N/A"}</span></div>
+                    <div class="info-row"><span>Year</span><span>${data.year || "N/A"}</span></div>
+                    <div class="info-row"><span>Gold Purity</span><span>${data.gold_purity || "N/A"}</span></div>
+                    <div class="info-row"><span>Lug Width</span><span>${data.lug_width || "N/A"}</span></div>
+                    <div class="info-row"><span>Clasp Width</span><span>${data.clasp_width || "N/A"}</span></div>
+                    <div class="info-row" style="border-bottom: none;"><span>Length</span><span>${data.length || "N/A"}</span></div>
+                </div>
 
-        /* Stilimi i detajeve të produktit */
-        .specs-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            background: #1a1a1a;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            border: 1px solid #333;
-            font-size: 14px;
-        }
-        .specs-grid div {
-            color: #aaa;
-        }
-        .specs-grid span {
-            color: #fff;
-            font-weight: bold;
-        }
+                <!-- Përshkrimi -->
+                <div style="background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-top: 20px;">
+                    <h3 style="margin-top: 0; color: #fff;">Description</h3>
+                    <p style="color: #aaa; line-height: 1.5; margin-bottom: 0;">${data.description || "Nuk ka përshkrim."}</p>
+                </div>
 
-        .bottom-nav {
-            position: fixed !important;
-            bottom: 20px !important;
-            left: 15px !important;
-            right: 15px !important;
-            width: auto !important;
-            height: 65px !important;
-            background-color: #1a1a1a !important;
-            display: flex !important;
-            justify-content: space-around !important;
-            align-items: center !important;
-            padding: 0 5px !important;
-            border-radius: 20px !important;
-            border: 1px solid #333 !important;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
-            z-index: 999999 !important;
-        }
+            </div>
 
-        .bottom-nav a, .bottom-nav button {
-            color: #ffffff !important;
-            text-decoration: none !important;
-            font-size: 10px !important;
-            text-align: center !important;
-            white-space: nowrap !important;
-            flex: 1 !important;
-            background: none !important;
-            border: none !important;
-            cursor: pointer !important;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            gap: 3px !important;
-        }
+            <!-- Shiriti i Poshtëm i Blerjes -->
+            <div class="bottom-nav">
+                <a href="https://wa.me/?text=Përshëndetje, jam i interesuar për: ${data.brand} ${data.model} (${data.price}€)" target="_blank" style="background:#25D366 !important; border-radius:10px !important; justify-content:center !important; font-weight:bold !important; font-size:12px !important;">💬 WhatsApp</a>
+                <a href="offer.html?id=${data.id}" class="btn-request" style="background:#222 !important; border:1px solid #444 !important; border-radius:10px !important; justify-content:center !important; font-weight:bold !important; font-size:12px !important; display:flex !important; flex-direction:column !important; align-items:center !important; text-decoration:none !important; color:#fff !important; flex:1 !important;">💰 Suggest Price</a>
+                <a href="checkout.html?id=${data.id}" class="btn-buy btn-main" style="background:gold !important; color:#000 !important; border-radius:10px !important; justify-content:center !important; font-weight:bold !important; font-size:12px !important; display:flex !important; flex-direction:column !important; align-items:center !important; text-decoration:none !important; flex:1 !important;">🛒 BUY</a>
+            </div>
+        `;
 
-        .bottom-nav a:hover { color: gold !important; }
+        // Funksioni i Galerisë për fotot
+        window.changeImg = function(direction) {
+            currentImgIdx += direction;
+            if (currentImgIdx < 0) currentImgIdx = images.length - 1;
+            if (currentImgIdx >= images.length) currentImgIdx = 0;
+            document.getElementById('main-img').src = images[currentImgIdx];
+            document.getElementById('photo-counter').innerText = `${currentImgIdx + 1} / ${images.length}`;
+        };
+    }
 
-        body {
-            padding-bottom: 110px !important;
+    function shareProduct() {
+        if (navigator.share) {
+            navigator.share({ title: document.title, url: window.location.href });
+        } else {
+            navigator.clipboard.writeText(window.location.href);
+            alert("Linku u kopjua!");
         }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-    <script src="db-connect.js"></script>
-</head>
+    }
+
+    function toggleLike(btn) {
+        if (btn.style.color === 'red') {
+            btn.style.color = '#fff';
+            btn.innerHTML = '♡ Like';
+        } else {
+            btn.style.color = 'red';
+            btn.innerHTML = '❤️ Liked';
+        }
+    }
+
+    window.onload = loadBraceletProduct;
+</script>
 <body>
 
 <header class="site-header">

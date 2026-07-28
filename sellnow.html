@@ -590,11 +590,11 @@ const oraData = {
 
     function: document.getElementById("function").value,
 
-    service: document.getElementById("service").checked,
+    service: document.getElementById("serviceStatus")?.value || "",
 
     service_date: document.getElementById("service_date")?.value || null,
     
-    box_papers: document.getElementById("box_papers").checked,
+    box_papers: document.getElementById("box_papers")?.value || "",
 
     origin: document.getElementById("origin").value,
 
@@ -612,12 +612,12 @@ const oraData = {
     shipping_days: document.getElementById("shipping_days").value,
     
     serial_number: document.getElementById("serial_number").value,
+    
     description: document.getElementById("description").value,
 
     image_url: imageUrls
 
 };
-
 
 
 console.log(

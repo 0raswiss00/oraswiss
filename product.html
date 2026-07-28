@@ -172,9 +172,8 @@
         </div>
     </div>
     
-    <!-- Kutia e specifikave dinamike përshtatet sipas tabelës -->
     <div class="info-box" id="specs">
-        <!-- Të dhënat do të gjenerohen automatikisht nga skripta -->
+        <!-- Të dhënat do të gjenerohen automatikisht -->
     </div>
 
     <div class="info-box">
@@ -215,6 +214,30 @@
     </div>
 </div>
 
+<!-- TABELA E LOGIMIT / REGJISTRIMIT (POPUP) -->
+<div id="login-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:#111; border:1px solid #333; padding:30px; border-radius:16px; width:90%; max-width:400px; text-align:center; position:relative;">
+        <button onclick="closeLoginModal()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✕</button>
+        
+        <h2 id="modal-title" style="color:#fff; margin-bottom:10px;">Identifikohu</h2>
+        <p id="modal-desc" style="color:#aaa; font-size:14px; margin-bottom:20px;">Duhet të jesh i loguar për të kontaktuar shitësin.</p>
+        
+        <input type="text" id="modal-name" placeholder="Emri Mbiemri" style="display:none; width:100%; padding:12px; margin-bottom:10px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
+        <input type="email" id="modal-email" placeholder="Email" style="width:100%; padding:12px; margin-bottom:10px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
+        <input type="password" id="modal-password" placeholder="Fjalëkalimi" style="width:100%; padding:12px; margin-bottom:15px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
+        
+        <button id="modal-submit-btn" onclick="handleModalAuth()" style="width:100%; padding:12px; background:#0066cc; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-bottom:10px;">Hyr</button>
+        <button onclick="closeLoginModal()" style="width:100%; padding:10px; background:transparent; color:#888; border:1px solid #333; border-radius:8px; cursor:pointer; margin-bottom:15px;">Cancel</button>
+        
+        <div style="color:#666; font-size:13px; border-top:1px solid #222; padding-top:15px;">
+            <span id="modal-toggle-text">Nuk ke llogari?</span> 
+            <a href="#" onclick="toggleAuthMode(event)" id="modal-toggle-link" style="color:#25D366; text-decoration:none; font-weight:bold;"> Regjistrohu</a>
+        </div>
+        
+        <div id="modal-error" style="color:#ff4444; font-size:13px; margin-top:10px;"></div>
+    </div>
+</div>
+
 <script>
 const supabaseClient = window.supabase.createClient(
     "https://gnwsrmelmeqduhhmfmoa.supabase.co",
@@ -223,9 +246,11 @@ const supabaseClient = window.supabase.createClient(
 
 let currentImages = [];
 let currentImgIndex = 0;
+let isRegisterMode = false;
+
 const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get("id");
-const category = urlParams.get("category"); // Kontrollon nëse është "bracelets_straps" apo orë standarde
+const category = urlParams.get("category");
 
 async function loadProduct() {
     const container = document.querySelector(".product-page");
@@ -235,7 +260,6 @@ async function loadProduct() {
         return;
     }
 
-    // Përcaktojmë tabelën bazuar te kategoria e ardhur nga URL
     const tableName = (category === "bracelets_straps") ? "bracelets_straps" : "oras";
 
     try {
@@ -287,7 +311,7 @@ async function loadProduct() {
                 const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
 
                 if (userError || !user) {
-                    window.location.href = "login.html";
+                    document.getElementById("login-modal").style.display = "flex";
                     return;
                 }
 
@@ -350,7 +374,6 @@ async function loadProduct() {
         const currencySymbol = data.currency || "€";
         document.getElementById("top-price").textContent = (data.price || 0) + " " + currencySymbol;
         
-        // Gjenerimi i specifikave sipas llojit të produktit (Orë vs Rrip/Byzylyk)
         const specsContainer = document.getElementById("specs");
         specsContainer.innerHTML = "";
 
@@ -482,6 +505,78 @@ function toggleLike(element) {
     } else {
         element.innerHTML = "♡ Like";
         element.style.borderColor = "#222";
+    }
+}
+
+function closeLoginModal() {
+    document.getElementById("login-modal").style.display = "none";
+}
+
+function toggleAuthMode(e) {
+    e.preventDefault();
+    isRegisterMode = !isRegisterMode;
+    
+    const title = document.getElementById("modal-title");
+    const desc = document.getElementById("modal-desc");
+    const nameInput = document.getElementById("modal-name");
+    const submitBtn = document.getElementById("modal-submit-btn");
+    const toggleText = document.getElementById("modal-toggle-text");
+    const toggleLink = document.getElementById("modal-toggle-link");
+    const errorEl = document.getElementById("modal-error");
+    
+    errorEl.textContent = "";
+
+    if (isRegisterMode) {
+        title.textContent = "Krijo Llogari";
+        desc.textContent = "Regjistrohu për të kontaktuar shitësit dhe për të blerë.";
+        nameInput.style.display = "block";
+        submitBtn.textContent = "Regjistrohu";
+        toggleText.textContent = "Ke tashmë një llogari?";
+        toggleLink.textContent = " Hyr";
+    } else {
+        title.textContent = "Identifikohu";
+        desc.textContent = "Duhet të jesh i loguar për të kontaktuar shitësin.";
+        nameInput.style.display = "none";
+        submitBtn.textContent = "Hyr";
+        toggleText.textContent = "Nuk ke llogari?";
+        toggleLink.textContent = " Regjistrohu";
+    }
+}
+
+async function handleModalAuth() {
+    const email = document.getElementById("modal-email").value;
+    const password = document.getElementById("modal-password").value;
+    const fullName = document.getElementById("modal-name").value;
+    const errorEl = document.getElementById("modal-error");
+    
+    errorEl.textContent = "Duke u procesuar...";
+
+    if (isRegisterMode) {
+        const { error } = await supabaseClient.auth.signUp({
+            email: email,
+            password: password,
+            options: { data: { full_name: fullName } }
+        });
+
+        if (error) {
+            errorEl.textContent = error.message;
+        } else {
+            alert("Regjistrimi u krye me sukses!");
+            closeLoginModal();
+            document.getElementById("os-contact").click();
+        }
+    } else {
+        const { error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) {
+            errorEl.textContent = error.message;
+        } else {
+            closeLoginModal();
+            document.getElementById("os-contact").click();
+        }
     }
 }
 

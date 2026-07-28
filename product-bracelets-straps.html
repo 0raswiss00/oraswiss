@@ -296,7 +296,7 @@
             const requestBtn = document.getElementById("send-request-btn");
             if (requestBtn) {
                 requestBtn.onclick = function() {
-                    window.location.href = messages.html?product_id=${itemId}&title= + encodeURIComponent((data.brand || 'Strap') + ' ' + (data.model || ''));
+                    window.location.href = `messages.html?product_id=${itemId}&title=` + encodeURIComponent((data.brand || 'Strap') + ' ' + (data.model || ''));
                 };
             }
 

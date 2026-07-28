@@ -283,7 +283,11 @@ async function loadProduct() {
 
        const contactBtn = document.getElementById("os-contact");
         if (contactBtn) {
-            contactBtn.onclick = async () => {
+            // Heqim eventet e mëparshme duke e zëvendësuar elementin ose thjesht duke i vënë onclick direkt
+            contactBtn.onclick = async (e) => {
+                e.preventDefault();
+                console.p ("U klikua Contact seller");
+
                 const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
 
                 if (userError || !user) {
@@ -296,8 +300,8 @@ async function loadProduct() {
                     return;
                 }
 
-                // Kontrollojmë nëse ekziston një bisedë për këtë produkt midis këtij blerësi dhe shitësit
-                const { data: existingChat, error: searchError } = await supabaseClient
+                // Krijojmë direkt bisedën ose gjejmë ekzistuesen pa bllokime
+                const { data: existingChat } = await supabaseClient
                     .from("conversations")
                     .select("id")
                     .eq("listing_id", data.id)
@@ -305,16 +309,11 @@ async function loadProduct() {
                     .eq("seller_id", data.user_id)
                     .maybeSingle();
 
-                if (searchError) {
-                    console.error("Gabim në kërkimin e bisedës:", searchError.message);
-                }
-
                 if (existingChat) {
                     window.location.href = "chat.html?conversation=" + existingChat.id;
                     return;
                 }
 
-                // Krijohet biseda e re nëse nuk ekziston
                 const { data: newConversation, error: createError } = await supabaseClient
                     .from("conversations")
                     .insert({
@@ -327,7 +326,7 @@ async function loadProduct() {
                     .single();
 
                 if (createError) {
-                    alert("Gabim në krijimin e chat-it: " + createError.message);
+                    alert("Gabim: " + createError.message);
                     return;
                 }
 

@@ -15,7 +15,27 @@
         .photo-left { left: 15px; } .photo-right { right: 15px; }
         .photo-counter { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.6); padding: 7px 15px; border-radius: 20px; }
         
-        .details { padding: 20px; max-width: 900px; margin: auto; position: relative; }
+        /* Pjesa kryesore e ndarë në dy kolona (layout i ri për të sjellë kontaktin djathtas) */
+        .main-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            gap: 30px;
+            padding: 20px;
+            align-items: flex-start;
+        }
+        .content-left {
+            flex: 1;
+            min-width: 0;
+        }
+        .content-right {
+            width: 350px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 20px;
+        }
+
+        .details { position: relative; margin-bottom: 20px; }
         
         .brand { font-size: 18px; color: #aaa; margin-bottom: 4px; }
         .model { font-size: 30px; font-weight: bold; margin-bottom: 15px; display: block; }
@@ -23,7 +43,7 @@
         .price-country-row { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
         .price { font-size: 28px; color: #25D366; font-weight: bold; }
         
-        .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; }
         .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
         
         .top-actions {
@@ -53,13 +73,10 @@
         .buy { background: #ffd900; color: black; }
         .offer { background: #222; color: white; border: 1px solid #444; }
 
+        /* Kutia e shitësit (tani pozicionohet djathtas) */
         .oraswiss-seller-wrapper {
-            display: block;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 30px auto;
-            max-width: 900px;
             width: 100%;
-            padding: 0 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             box-sizing: border-box;
         }
         .oraswiss-seller-card {
@@ -144,6 +161,17 @@
         .oraswiss-btn-white:hover {
             background: #333333 !important;
         }
+
+        /* Përshtatja për celularë */
+        @media(max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .content-right {
+                width: 100%;
+                position: static;
+            }
+        }
     </style>
 </head>
 <body>
@@ -157,32 +185,64 @@
         <div class="photo-counter" id="photo-count">1 / 1</div>
     </div>
     
-    <div class="details">
-        <div class="top-actions">
-            <!-- Shtohet opsioni i kërkimit me foto këtu lart -->
-            <label class="action" style="cursor: pointer;">
-                📷 Image Search <input type="file" accept="image/*" style="display: none;" onchange="searchByImage(this)">
-            </label>
-            <div class="action" onclick="shareProduct()">🔗 Share</div>
-            <div class="action" onclick="toggleLike(this)" title="Ruaj në të preferuarat">♡ Like</div>
+    <!-- Struktura e re me 2 kolona -->
+    <div class="main-container">
+        
+        <!-- Kolona e majtë: Detajet e produktit, specifikikat, përshkrimi -->
+        <div class="content-left">
+            <div class="details">
+                <div class="top-actions">
+                    <div class="action" onclick="shareProduct()">🔗 Share</div>
+                    <div class="action" onclick="toggleLike(this)" title="Ruaj në të preferuarat">♡ Like</div>
+                </div>
+
+                <div class="brand" id="brand">-</div>
+                <div class="model" id="model">-</div>
+
+                <div class="price-country-row">
+                    <div class="price" id="top-price">-</div>
+                    <div id="seller-country" style="background:#111; padding:8px 12px; border-radius:20px; font-size:14px; border: 1px solid #222;">🌍 -</div>
+                </div>
+            </div>
+            
+            <div class="info-box" id="specs">
+                <!-- Të dhënat gjenerohen automatikisht -->
+            </div>
+
+            <div class="info-box">
+                <h3>Description</h3>
+                <p id="description">Loading...</p>
+            </div>
         </div>
 
-        <div class="brand" id="brand">-</div>
-        <div class="model" id="model">-</div>
-
-        <div class="price-country-row">
-            <div class="price" id="top-price">-</div>
-            <div id="seller-country" style="background:#111; padding:8px 12px; border-radius:20px; font-size:14px; border: 1px solid #222;">🌍 -</div>
+        <!-- Kolona e djathtë: Kutia e kontaktit të shitësit -->
+        <div class="content-right">
+            <div class="oraswiss-seller-wrapper">
+                <div class="oraswiss-seller-card">
+                    <div class="oraswiss-header">
+                        <div class="oraswiss-info">
+                            <div class="oraswiss-avatar">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            </div>
+                            <div>
+                                <h3 id="os-name">- <span>(Pro)</span></h3>
+                                <p class="oraswiss-green" id="os-feedback">100% Positive Feedback</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="oraswiss-joined" id="os-joined">Anëtar që nga -</div>
+                    <div class="oraswiss-actions">
+                        <button class="oraswiss-btn-blue" id="os-items">
+                            Seller's other items (<span id="os-count">0</span>)
+                        </button>
+                        <button class="oraswiss-btn-white" id="os-contact">
+                            Contact seller
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    
-    <div class="info-box" id="specs">
-        <!-- Të dhënat gjenerohen automatikisht -->
-    </div>
 
-    <div class="info-box">
-        <h3>Description</h3>
-        <p id="description">Loading...</p>
     </div>
 
 </div>
@@ -191,32 +251,6 @@
     <a class="buy-btn whatsapp" id="whatsapp">💬 WhatsApp</a>
     <a class="buy-btn offer" id="offer">💰 Suggest Price</a>
     <a class="buy-btn buy" id="buy">🛒 BUY</a>
-</div>
-
-<!-- Kutia e kontaktit/shitësit e rikthyer plotësisht dhe saktë -->
-<div class="oraswiss-seller-wrapper">
-    <div class="oraswiss-seller-card">
-        <div class="oraswiss-header">
-            <div class="oraswiss-info">
-                <div class="oraswiss-avatar">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                </div>
-                <div>
-                    <h3 id="os-name">- <span>(Pro)</span></h3>
-                    <p class="oraswiss-green" id="os-feedback">100% Positive Feedback</p>
-                </div>
-            </div>
-        </div>
-        <div class="oraswiss-joined" id="os-joined">Anëtar që nga -</div>
-        <div class="oraswiss-actions">
-            <button class="oraswiss-btn-blue" id="os-items">
-                Seller's other items (<span id="os-count">0</span>)
-            </button>
-            <button class="oraswiss-btn-white" id="os-contact">
-                Contact seller
-            </button>
-        </div>
-    </div>
 </div>
 
 <script>
@@ -484,18 +518,6 @@ function toggleLike(element) {
     } else {
         element.innerHTML = "♡ Like";
         element.style.borderColor = "#222";
-    }
-}
-
-function searchByImage(input) {
-    if (input.files && input.files[0]) {
-        const file = input.files[0];
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            sessionStorage.setItem("searchImage", e.target.result);
-            alert("Foto u ngarkua me sukses për kërkim!");
-        };
-        reader.readAsDataURL(file);
     }
 }
 

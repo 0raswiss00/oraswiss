@@ -279,11 +279,11 @@ async function loadProduct() {
         const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
         document.getElementById("os-joined").textContent = "Anëtar që nga " + formattedJoined;
 
+        // Këtu kontrollohet logimi vetëm kur klikohet "Contact seller"
         const contactBtn = document.getElementById("os-contact");
         if (contactBtn) {
             contactBtn.onclick = async (e) => {
                 e.preventDefault();
-                console.log("U klikua Contact seller");
 
                 const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
 
@@ -303,10 +303,6 @@ async function loadProduct() {
                     .eq("listing_id", data.id)
                     .or(`and(buyer_id.eq.${user.id},seller_id.eq.${data.user_id}),and(buyer_id.eq.${data.user_id},seller_id.eq.${user.id})`)
                     .maybeSingle();
-
-                if (searchError) {
-                    console.error("Gabim në kërkimin e bisedës:", searchError.message);
-                }
 
                 if (existingChat && existingChat.id) {
                     window.location.href = "contact.html?conversation=" + existingChat.id;

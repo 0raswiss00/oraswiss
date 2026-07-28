@@ -13,20 +13,13 @@
         gtag('config', 'G-KD2ZZ3MJYY');
     </script>
     <style>
-        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff; }
+        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff; padding-bottom: 110px !important; }
         .site-header { position: sticky; top: 0; z-index: 9999; background: #111; }
         .nav-scroll { display: flex; gap: 18px; align-items: center; overflow-x: auto; padding: 14px 16px; }
         .nav-scroll a { color: #fff; text-decoration: none; padding: 6px 10px; }
         .nav-scroll a:hover { color: gold; }
         .site-title { font-weight: 700; line-height: 1.05; margin-right: 10px; }
 
-         .info-row {
-             display: flex;
-             justify-content: space-between; /* Kjo detyron që etiketa të dali në fillim dhe vlera në fund të rreshtit */
-             align-items: center;
-             padding: 8px 0;
-         }
-        
         .grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -89,7 +82,7 @@
         }
         .btn-request:hover { background: #333; }
 
-        /* Stilimi i detajeve të produktit */
+        /* Stilimi i detajeve të produktit në dy kolona */
         .specs-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -144,10 +137,6 @@
         }
 
         .bottom-nav a:hover { color: gold !important; }
-
-        body {
-            padding-bottom: 110px !important;
-        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
     <script src="db-connect.js"></script>
@@ -198,7 +187,6 @@
                 return;
             }
 
-            // Përpunimi i të gjitha fotove (Array ose String i ndarë)
             let rawImages = data.image_url;
             if (typeof rawImages === 'string') {
                 try { rawImages = JSON.parse(rawImages); } catch(e) { rawImages = [rawImages]; }
@@ -218,14 +206,13 @@
                 <div style="max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border-radius: 10px; border: 1px solid #333;">
                     <div class="gallery-container">
                         <button class="gallery-btn prev" onclick="changeImage(-1)">❮</button>
-                        <img id="main-product-img" src="${currentImages[0]}" alt="${data.brand || 'Strap'}">
+                        <img id="main-photo" src="${currentImages[0]}" alt="${data.brand || 'Strap'}">
                         <button class="gallery-btn next" onclick="changeImage(1)">❯</button>
-                        <div class="photo-counter" id="photo-counter-text">1 / ${currentImages.length}</div>
+                        <div class="photo-counter" id="photo-count">1 / ${currentImages.length}</div>
                     </div>
                     
                     <h2 style="margin-top: 15px;">${data.brand || 'Bracelet / Strap'} ${data.model || ''}</h2>
 
-                  
                     <div class="price" style="font-weight:bold; color:gold; font-size: 22px; margin: 10px 0;">
                         ${data.price ? data.price + ' €' : 'Contact for price'}
                     </div>
@@ -241,11 +228,8 @@
                         <div>Lug Width: <span>${data.lug_width || '/'}</span></div>
                         <div>Clasp Width: <span>${data.clasp_width || '/'}</span></div>
                         <div>Length: <span>${data.length || '/'}</span></div>
-                        <div>Length: <span>${data.length || '/'}</span></div>
-                        <div class="shipping-info">
                         <div>Postal Service: <span>${data.shipping_provider ? data.shipping_provider : '/'}</span></div>
                         <div>Delivery Time: <span>${data.shipping_days ? data.shipping_days : '/'}</span></div>
-                    </div>
                     </div>
 
                     <div style="background: #1a1a1a; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #333;">
@@ -258,7 +242,6 @@
                 </div>
             `;
 
-            // Lidhja e PayPal
             const buyBtn = document.getElementById("buy-bracelet-btn");
             if (buyBtn) {
                 buyBtn.onclick = async function(e) {
@@ -292,7 +275,6 @@
                 };
             }
 
-            // Lidhja e mesazheve
             const requestBtn = document.getElementById("send-request-btn");
             if (requestBtn) {
                 requestBtn.onclick = function() {
@@ -301,7 +283,6 @@
             }
 
         } else {
-            // NËSE NUK KA ID: Shfaqim listën e plotë
             container.innerHTML = '<h2 style="padding-left: 0;">Bracelets & Straps Collection</h2><div id="straps-container" class="grid">Loading...</div>';
             const gridContainer = document.getElementById("straps-container");
 
@@ -353,7 +334,6 @@
         }
     });
 
-    // Funksioni për të lëvizur fotot me shigjeta
     function changeImage(direction) {
         if (currentImages.length <= 1) return;
         currentImgIndex += direction;
@@ -362,6 +342,12 @@
     
         document.getElementById("main-photo").src = currentImages[currentImgIndex];
         document.getElementById("photo-count").innerText = (currentImgIndex + 1) + " / " + currentImages.length;
+    }
+
+    function checkMenu(event) {
+        if (event) event.preventDefault();
+        // Shto funksionalitetin e menusë këtu nëse dëshiron
+        console.log("Menu clicked");
     }
 </script>
 

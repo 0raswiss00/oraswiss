@@ -608,6 +608,9 @@ const oraData = {
 
     warranty_months: document.getElementById("warranty_months").value || null,
 
+    document.getElementById("shipping_provider").value = data.shipping_provider || "";
+    document.getElementById("shipping_days").value = data.shipping_days || "";
+    
     serial_number: document.getElementById("serial_number").value,
 
     description: document.getElementById("description").value,

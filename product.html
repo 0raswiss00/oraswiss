@@ -9,13 +9,20 @@
         * { box-sizing: border-box; }
         body { margin: 0; background: #050505; color: white; font-family: Arial, sans-serif; padding-bottom: 90px; }
         .product-page { width: 100%; min-height: 100vh; }
-        .gallery { position: relative; width: 100%; height: 55vh; background: #000; overflow: hidden; }
-        .gallery img { width: 100%; height: 100%; object-fit: contain; }
-        .photo-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); border: none; color: white; font-size: 35px; width: 45px; height: 60px; border-radius: 10px; cursor: pointer; }
-        .photo-left { left: 15px; } .photo-right { right: 15px; }
-        .photo-counter { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.6); padding: 7px 15px; border-radius: 20px; }
         
-        /* Pjesa kryesore e ndarë në dy kolona (layout i ri për të sjellë kontaktin djathtas) */
+        /* Fotoja kryesore e zmadhuar dhe me opsion klikimi */
+        .gallery { position: relative; width: 100%; height: 70vh; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .gallery img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; }
+        .photo-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); border: none; color: white; font-size: 35px; width: 45px; height: 60px; border-radius: 10px; cursor: pointer; z-index: 10; }
+        .photo-left { left: 15px; } .photo-right { right: 15px; }
+        .photo-counter { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.6); padding: 7px 15px; border-radius: 20px; z-index: 10; }
+        
+        /* Modal per zmadhimin e fotos ne ekran te plote */
+        #imageModal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
+        #imageModal img { max-width: 90%; max-height: 90%; object-fit: contain; }
+        #imageModal span { position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer; }
+
+        /* Struktura me 2 kolona */
         .main-container {
             max-width: 1100px;
             margin: 0 auto;
@@ -46,15 +53,16 @@
         .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; }
         .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
         
+        /* Butonat Share dhe Like pak me poshte */
         .top-actions {
             display: flex;
-            justify-content: flex-end;
+            justify-content: flex-start;
             gap: 12px;
-            margin: 10px 0;
+            margin: 25px 0 15px 0;
         }
         .top-actions .action {
             background: #111;
-            padding: 8px 14px;
+            padding: 8px 16px;
             border-radius: 20px;
             font-size: 15px;
             cursor: pointer;
@@ -73,7 +81,7 @@
         .buy { background: #ffd900; color: black; }
         .offer { background: #222; color: white; border: 1px solid #444; }
 
-        /* Kutia e shitësit (tani pozicionohet djathtas) */
+        /* Kutia e shitësit në të djathtë */
         .oraswiss-seller-wrapper {
             width: 100%;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -162,7 +170,6 @@
             background: #333333 !important;
         }
 
-        /* Përshtatja për celularë */
         @media(max-width: 768px) {
             .main-container {
                 flex-direction: column;
@@ -180,28 +187,33 @@
 
     <div class="gallery">
         <button class="photo-btn photo-left" onclick="changeImage(-1)">❮</button>
-        <img id="main-photo" src="">
+        <img id="main-photo" src="" onclick="openModal(this.src)">
         <button class="photo-btn photo-right" onclick="changeImage(1)">❯</button>
         <div class="photo-counter" id="photo-count">1 / 1</div>
     </div>
     
-    <!-- Struktura e re me 2 kolona -->
+    <!-- Modal per zmadhimin e fotos -->
+    <div id="imageModal" onclick="closeModal()">
+        <span onclick="closeModal()">&times;</span>
+        <img id="modal-img">
+    </div>
+    
     <div class="main-container">
         
-        <!-- Kolona e majtë: Detajet e produktit, specifikikat, përshkrimi -->
         <div class="content-left">
             <div class="details">
-                <div class="top-actions">
-                    <div class="action" onclick="shareProduct()">🔗 Share</div>
-                    <div class="action" onclick="toggleLike(this)" title="Ruaj në të preferuarat">♡ Like</div>
-                </div>
-
                 <div class="brand" id="brand">-</div>
                 <div class="model" id="model">-</div>
 
                 <div class="price-country-row">
                     <div class="price" id="top-price">-</div>
                     <div id="seller-country" style="background:#111; padding:8px 12px; border-radius:20px; font-size:14px; border: 1px solid #222;">🌍 -</div>
+                </div>
+
+                <!-- Share dhe Like pak me poshte, siç e kërkove -->
+                <div class="top-actions">
+                    <div class="action" onclick="shareProduct()">🔗 Share</div>
+                    <div class="action" onclick="toggleLike(this)" title="Ruaj në të preferuarat">♡ Like</div>
                 </div>
             </div>
             
@@ -215,7 +227,6 @@
             </div>
         </div>
 
-        <!-- Kolona e djathtë: Kutia e kontaktit të shitësit -->
         <div class="content-right">
             <div class="oraswiss-seller-wrapper">
                 <div class="oraswiss-seller-card">
@@ -504,6 +515,15 @@ function changeImage(direction) {
     if(currentImgIndex >= currentImages.length) currentImgIndex = 0;
     if(currentImgIndex < 0) currentImgIndex = currentImages.length - 1;
     updateGallery();
+}
+
+function openModal(imgSrc) {
+    document.getElementById("modal-img").src = imgSrc;
+    document.getElementById("imageModal").style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("imageModal").style.display = "none";
 }
 
 function shareProduct() {

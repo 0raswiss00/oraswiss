@@ -394,7 +394,13 @@ async function loadProduct() {
                 <div class="info-row"><span>Warranty Months</span><span>${data.warranty_months || "N/A"}</span></div>
                 <div class="info-row">
                     <span>Shipping & Courier</span>
-                    <span>${data.shipping_provider && data.shipping_days ? data.shipping_provider + ' (' + data.shipping_days + ')' : "N/A"}</span>
+                    <span>
+                        ${
+                            (data.shipping_provider || data.shipping || data.kurrier) && (data.shipping_days || data.ditet_dergeses) 
+                            ? (data.shipping_provider || data.shipping || data.kurrier) + ' (' + (data.shipping_days || data.ditet_dergeses) + ')' 
+                            : (data.shipping_provider || data.shipping || data.kurrier || data.shipping_days || data.ditet_dergeses || "N/A")
+                        }
+                    </span>
                 </div>
                 <div class="info-row"><span>Box & Papers</span><span>${data.box_papers || "N/A"}</span></div>
             `;

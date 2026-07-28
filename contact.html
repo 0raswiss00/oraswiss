@@ -124,7 +124,7 @@ async function init() {
 
     // Aktivizojmë Realtime që mesazhet të shfaqen automatikisht pa pasur nevojë për rifreskim
     supabase
-        .channel('public:messages')
+        .channel('public:messages:' + conversationId)
         .on('postgres_changes', { 
             event: 'INSERT', 
             schema: 'public', 

@@ -202,11 +202,10 @@
             lista.innerHTML = "<li>Nuk keni asnjë artikull në shitje.</li>";
         } else {
             teGjitha.forEach(item => {
-                // Kontrollojmë saktësisht nëse gjendet tek rripat
                 const isStrap = straps && straps.some(s => s.id === item.id);
                 
-                // Përcaktojmë faqen: nëse është rrip, çon te bracelets-straps, përndryshe te watch-details
-                const detailPage = isStrap ? 'product-bracelets-straps.html' : 'watch-details.html';
+                // Këtu tani përdor product.html për orët
+                const detailPage = isStrap ? 'product-bracelets-straps.html' : 'product.html';
                 
                 let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
                 if (item.image_url) {

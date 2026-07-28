@@ -159,6 +159,10 @@
     
     <div class="details">
         <div class="top-actions">
+            <!-- Shtohet opsioni i kërkimit me foto -->
+            <label class="action" style="cursor: pointer;">
+                📷 Image Search <input type="file" accept="image/*" style="display: none;" onchange="searchByImage(this)">
+            </label>
             <div class="action" onclick="shareProduct()">🔗 Share</div>
             <div class="action" onclick="toggleLike(this)" title="Ruaj në të preferuarat">♡ Like</div>
         </div>
@@ -172,9 +176,8 @@
         </div>
     </div>
     
-    <!-- Kutia e specifikave dinamike përshtatet sipas tabelës -->
     <div class="info-box" id="specs">
-        <!-- Të dhënat do të gjenerohen automatikisht nga skripta -->
+        <!-- Të dhënat gjenerohen automatikisht -->
     </div>
 
     <div class="info-box">
@@ -225,7 +228,7 @@ let currentImages = [];
 let currentImgIndex = 0;
 const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get("id");
-const category = urlParams.get("category"); // Kontrollon nëse është "bracelets_straps" apo orë standarde
+const category = urlParams.get("category");
 
 async function loadProduct() {
     const container = document.querySelector(".product-page");
@@ -235,7 +238,6 @@ async function loadProduct() {
         return;
     }
 
-    // Përcaktojmë tabelën bazuar te kategoria e ardhur nga URL
     const tableName = (category === "bracelets_straps") ? "bracelets_straps" : "oras";
 
     try {
@@ -350,7 +352,6 @@ async function loadProduct() {
         const currencySymbol = data.currency || "€";
         document.getElementById("top-price").textContent = (data.price || 0) + " " + currencySymbol;
         
-        // Gjenerimi i specifikave sipas llojit të produktit (Orë vs Rrip/Byzylyk)
         const specsContainer = document.getElementById("specs");
         specsContainer.innerHTML = "";
 
@@ -482,6 +483,22 @@ function toggleLike(element) {
     } else {
         element.innerHTML = "♡ Like";
         element.style.borderColor = "#222";
+    }
+}
+
+// Funksioni per kërkimin me foto (Image Search)
+function searchByImage(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            // Këtu mund të drejtosh përdoruesin te faqja e kërkimit ose të përpunosh imazhin
+            // Për shembull, ruajtja në sessionStorage dhe kalimi te faqja e rezultateve:
+            sessionStorage.setItem("searchImage", e.target.result);
+            alert("Foto u ngarkua me sukses për kërkim!");
+            // window.location.href = "search_results.html?type=image";
+        };
+        reader.readAsDataURL(file);
     }
 }
 

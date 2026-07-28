@@ -159,7 +159,7 @@
     
     <div class="details">
         <div class="top-actions">
-            <!-- Shtohet opsioni i kërkimit me foto -->
+            <!-- Shtohet opsioni i kërkimit me foto këtu lart -->
             <label class="action" style="cursor: pointer;">
                 📷 Image Search <input type="file" accept="image/*" style="display: none;" onchange="searchByImage(this)">
             </label>
@@ -193,6 +193,7 @@
     <a class="buy-btn buy" id="buy">🛒 BUY</a>
 </div>
 
+<!-- Kutia e kontaktit/shitësit e rikthyer plotësisht dhe saktë -->
 <div class="oraswiss-seller-wrapper">
     <div class="oraswiss-seller-card">
         <div class="oraswiss-header">
@@ -486,17 +487,13 @@ function toggleLike(element) {
     }
 }
 
-// Funksioni per kërkimin me foto (Image Search)
 function searchByImage(input) {
     if (input.files && input.files[0]) {
         const file = input.files[0];
         const reader = new FileReader();
         reader.onload = function (e) {
-            // Këtu mund të drejtosh përdoruesin te faqja e kërkimit ose të përpunosh imazhin
-            // Për shembull, ruajtja në sessionStorage dhe kalimi te faqja e rezultateve:
             sessionStorage.setItem("searchImage", e.target.result);
             alert("Foto u ngarkua me sukses për kërkim!");
-            // window.location.href = "search_results.html?type=image";
         };
         reader.readAsDataURL(file);
     }

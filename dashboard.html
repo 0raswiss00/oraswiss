@@ -169,7 +169,7 @@
 
     protectPage();
   
-    async function ngarkoArtikujt() {
+   async function ngarkoArtikujt() {
         const lista = document.getElementById("myWatchesList");
         if (!lista) return;
         lista.innerHTML = "<li>Po ngarkojmë artikujt...</li>";
@@ -195,19 +195,18 @@
             return;
         }
 
-        // I etiketojmë qartë që në fillim për të shmangur gabimet e lidhjes
-        const watchesFormatted = (watches || []).map(w => ({ ...w, itemType: 'watch' }));
-        const strapsFormatted = (straps || []).map(s => ({ ...s, itemType: 'strap' }));
-        
-        const teGjitha = [...watchesFormatted, ...strapsFormatted];
+        const teGjitha = [...(watches || []), ...(straps || [])];
 
         lista.innerHTML = "";
         if (teGjitha.length === 0) {
             lista.innerHTML = "<li>Nuk keni asnjë artikull në shitje.</li>";
         } else {
             teGjitha.forEach(item => {
-                // Përcaktojmë faqen ekzaktësisht sipas llojit të artikullit
-                const detailPage = item.itemType === 'strap' ? 'product-bracelets-straps.html' : 'watch-details.html';
+                // Kontrollojmë saktësisht nëse gjendet tek rripat
+                const isStrap = straps && straps.some(s => s.id === item.id);
+                
+                // Përcaktojmë faqen: nëse është rrip, çon te bracelets-straps, përndryshe te watch-details
+                const detailPage = isStrap ? 'product-bracelets-straps.html' : 'watch-details.html';
                 
                 let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
                 if (item.image_url) {

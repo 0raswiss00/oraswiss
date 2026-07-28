@@ -402,7 +402,10 @@ async function loadProduct() {
                         }
                     </span>
                 </div>
-                <div class="info-row"><span>Box & Papers</span><span>${data.box_papers || "N/A"}</span></div>
+                <div class="info-row">
+                    <span>Box & Papers</span>
+                    <span>${data.box_papers || data.box_and_papers || data.box || data.papers || "N/A"}</span>
+                </div>
             `;
         }
 

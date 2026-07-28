@@ -10,17 +10,64 @@
         body { margin: 0; background: #050505; color: white; font-family: Arial, sans-serif; padding-bottom: 90px; }
         .product-page { width: 100%; min-height: 100vh; }
         
-        /* Fotoja kryesore e zmadhuar dhe me opsion klikimi */
-        .gallery { position: relative; width: 100%; height: 70vh; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .gallery img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; }
-        .photo-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); border: none; color: white; font-size: 35px; width: 45px; height: 60px; border-radius: 10px; cursor: pointer; z-index: 10; }
-        .photo-left { left: 15px; } .photo-right { right: 15px; }
-        .photo-counter { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.6); padding: 7px 15px; border-radius: 20px; z-index: 10; }
+        /* Fotoja e rregulluar plotësisht: zmadhuar dhe përshtatur në gjerësi/lartësi */
+        .gallery { 
+            position: relative; 
+            width: 100%; 
+            background: #000; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 20px 0;
+            overflow: hidden;
+        }
+        .gallery img { 
+            width: 100%; 
+            max-height: 75vh; 
+            object-fit: contain; 
+            cursor: zoom-in; 
+            display: block;
+        }
+        .photo-btn { 
+            position: absolute; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            background: rgba(0,0,0,0.6); 
+            border: 1px solid rgba(255,255,255,0.2); 
+            color: white; 
+            font-size: 35px; 
+            width: 50px; 
+            height: 70px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            z-index: 10; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .photo-btn:hover { background: rgba(0,0,0,0.9); }
+        .photo-left { left: 20px; } 
+        .photo-right { right: 20px; }
         
-        /* Modal per zmadhimin e fotos ne ekran te plote */
-        #imageModal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
-        #imageModal img { max-width: 90%; max-height: 90%; object-fit: contain; }
-        #imageModal span { position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer; }
+        .photo-counter { 
+            position: absolute; 
+            bottom: 15px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background: rgba(0,0,0,0.7); 
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 6px 16px; 
+            border-radius: 20px; 
+            z-index: 10;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        /* Modal per zmadhimin e fotos ne ekran te plote (lightbox) */
+        #imageModal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
+        #imageModal img { max-width: 95%; max-height: 95%; object-fit: contain; }
+        #imageModal span { position: absolute; top: 20px; right: 30px; font-size: 45px; color: white; cursor: pointer; }
 
         /* Struktura me 2 kolona */
         .main-container {
@@ -53,7 +100,7 @@
         .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; }
         .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
         
-        /* Butonat Share dhe Like pak me poshte */
+        /* Butonat Share dhe Like */
         .top-actions {
             display: flex;
             justify-content: flex-start;
@@ -210,7 +257,6 @@
                     <div id="seller-country" style="background:#111; padding:8px 12px; border-radius:20px; font-size:14px; border: 1px solid #222;">🌍 -</div>
                 </div>
 
-                <!-- Share dhe Like pak me poshte, siç e kërkove -->
                 <div class="top-actions">
                     <div class="action" onclick="shareProduct()">🔗 Share</div>
                     <div class="action" onclick="toggleLike(this)" title="Ruaj në të preferuarat">♡ Like</div>

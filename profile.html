@@ -451,7 +451,7 @@
         imagePath = publicUrlData.publicUrl;
       }
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("profiles")
         .update({
           full_name: fullName,
@@ -464,7 +464,10 @@
           image_url: imagePath,
           updated_at: new Date()
         })
-        .eq("id", user.id);
+        .eq("id", user.id)
+        .select(); // Shto këtë për të parë nëse kthen gjë
+
+      console.log("Rezultati i ruajtjes:", { data, error });
 
       if (error) {
         msg.style.color = "var(--danger)";

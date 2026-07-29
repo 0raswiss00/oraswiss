@@ -91,6 +91,7 @@
             align-items: center !important;
             justify-content: center !important;
             color: #fff !important;
+            overflow: hidden;
         }
         .oraswiss-info h3 {
             margin: 0 !important;
@@ -181,37 +182,38 @@
         <p id="description">Loading...</p>
     </div>
 
+    <!-- KARTA E SHITËSIT E INTEGRUAR KËTU -->
+    <div class="oraswiss-seller-wrapper">
+        <div class="oraswiss-seller-card">
+            <div class="oraswiss-header">
+                <div class="oraswiss-info">
+                    <div class="oraswiss-avatar" id="os-avatar-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                    <div>
+                        <h3 id="os-name">- <span>(Pro)</span></h3>
+                        <p class="oraswiss-green" id="os-feedback">100% Positive Feedback</p>
+                    </div>
+                </div>
+            </div>
+            <div class="oraswiss-joined" id="os-joined">Anëtar që nga -</div>
+            <div class="oraswiss-actions">
+                <button class="oraswiss-btn-blue" id="os-items">
+                    Seller's other items (<span id="os-count">0</span>)
+                </button>
+                <button class="oraswiss-btn-white" id="os-contact">
+                    Contact seller
+                </button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div class="buy-bar">
     <a class="buy-btn whatsapp" id="whatsapp">💬 WhatsApp</a>
     <a class="buy-btn offer" id="offer">💰 Suggest Price</a>
     <a class="buy-btn buy" id="buy">🛒 BUY</a>
-</div>
-
-<div class="oraswiss-seller-wrapper">
-    <div class="oraswiss-seller-card">
-        <div class="oraswiss-header">
-            <div class="oraswiss-info">
-                <div class="oraswiss-avatar">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                </div>
-                <div>
-                    <h3 id="os-name">- <span>(Pro)</span></h3>
-                    <p class="oraswiss-green" id="os-feedback">100% Positive Feedback</p>
-                </div>
-            </div>
-        </div>
-        <div class="oraswiss-joined" id="os-joined">Anëtar që nga -</div>
-        <div class="oraswiss-actions">
-            <button class="oraswiss-btn-blue" id="os-items">
-                Seller's other items (<span id="os-count">0</span>)
-            </button>
-            <button class="oraswiss-btn-white" id="os-contact">
-                Contact seller
-            </button>
-        </div>
-    </div>
 </div>
 
 <!-- TABELA E LOGIMIT / REGJISTRIMIT (POPUP) -->
@@ -273,20 +275,18 @@ async function loadProduct() {
 
         const sellerProfileUrl = "profile.html?id=" + data.user_id;
 
-        // ==========================================
-        // KËTU E VENDOS: Merr të dhënat e profilit të shitësit
-        // ==========================================
+        // Merr të dhënat e profilit të shitësit nga tabela 'profiles'
         const { data: profileData } = await supabaseClient
             .from("profiles")
             .select("custom_username, full_name, image_url, created_at")
             .eq("id", data.user_id)
             .maybeSingle();
 
-        const displayName = profileData?.custom_username || profileData?.full_name || data.seller_name || "Seller";
+        const displayName = profileData?.custom_username || profileData?.full_name || data.seller_name || "oraswiss";
         
         const osNameEl = document.getElementById("os-name");
         if (osNameEl) {
-            osNameEl.innerHTML = `${displayName}-oraswiss <span>(Pro)</span>`;
+            osNameEl.innerHTML = `${displayName} <span>(Pro)</span>`;
             osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
         }
 
@@ -297,13 +297,13 @@ async function loadProduct() {
 
         // Vendos foton e profilit nëse ekziston
         if (profileData?.image_url) {
-            const avatarContainer = document.querySelector(".oraswiss-avatar");
+            const avatarContainer = document.getElementById("os-avatar-box");
             if (avatarContainer) {
                 avatarContainer.innerHTML = `<img src="${profileData.image_url}" alt="Avatar" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
             }
         }
 
-        // Data e regjistrimit të profilit (ose fallback te data e produktit)
+        // Data e regjistrimit të profilit
         const joinedDateSource = profileData?.created_at || data.created_at || Date.now();
         const joined = new Date(joinedDateSource);
         const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
@@ -311,8 +311,8 @@ async function loadProduct() {
         if (joinedEl) {
             joinedEl.textContent = "Anëtar që nga " + formattedJoined;
         }
-        // ==========================================
 
+        // Llogarit totalin e artikujve nga të dyja tabelat
         let totalItemsCount = 0;
         if (data.user_id) {
             const { count: countOras } = await supabaseClient
@@ -390,7 +390,6 @@ async function loadProduct() {
             "IT": "🇮🇹 Itali",
             "DE": "🇩🇪 Gjermani"
         };
-        // ... vazhdon pjesa tjetër e kodit
         const sCountry = data.seller_country || "-";
         document.getElementById("seller-country").innerText = "🌍 " + (countries[sCountry] || sCountry);
 

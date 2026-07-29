@@ -270,25 +270,30 @@ async function loadProduct() {
 
         if (error) throw error;
 
-        const sellerProfileUrl = "profile.html?id=" + data.user_id;
+        const sellerProfileUrl = data.user_id ? "profile.html?id=" + data.user_id : "#";
 
-        const { data: profileData } = await supabaseClient
-            .from("profiles")
-            .select("custom_username, full_name, image_url, created_at")
-            .eq("id", data.user_id)
-            .maybeSingle();
+        let profileData = null;
+        if (data.user_id) {
+            const { data: pData } = await supabaseClient
+                .from("profiles")
+                .select("custom_username, full_name, image_url, created_at")
+                .eq("id", data.user_id)
+                .maybeSingle();
+            profileData = pData;
+        }
 
-        const displayName = profileData?.custom_username || profileData?.full_name || data.seller_name || "Ora Swiss Seller";
+        // Kap emrin nga profili, ose nga kolona e produktit, ose fallback i fundit
+        const displayName = profileData?.custom_username || profileData?.full_name || data.seller_name || data.username || "Ora Swiss Seller";
         
         const osNameEl = document.getElementById("os-name");
         if (osNameEl) {
             osNameEl.innerHTML = `${displayName} <span>(Pro)</span>`;
-            osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
+            osNameEl.onclick = () => { if(data.user_id) window.location.href = sellerProfileUrl; };
         }
 
         const osFeedbackEl = document.getElementById("os-feedback");
         if (osFeedbackEl) {
-            osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
+            osFeedbackEl.onclick = () => { if(data.user_id) window.location.href = sellerProfileUrl; };
         }
 
         const avatarContainer = document.getElementById("os-avatar-box");
@@ -296,10 +301,11 @@ async function loadProduct() {
             if (profileData?.image_url) {
                 avatarContainer.innerHTML = `<img src="${profileData.image_url}" alt="Avatar" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
             } else {
-                avatarContainer.innerHTML = `<div style="width:100%; height:100%; border-radius:50%; background:#1f1f1f; display:flex; align-items:center; justify-content:center; font-size:1.2rem; color:var(--accent);">👤</div>`;
+                // Merr shkronjën e parë të emrit për avatar fallco nëse s'ka foto në profil
+                const firstLetter = displayName.charAt(0).toUpperCase();
+                avatarContainer.innerHTML = `<div style="width:100%; height:100%; border-radius:50%; background:#2a2a2a; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:1.1rem;">${firstLetter}</div>`;
             }
         }
-
         const joinedDateSource = profileData?.created_at || data.created_at || Date.now();
         const joined = new Date(joinedDateSource);
         const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });

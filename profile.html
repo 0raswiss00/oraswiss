@@ -162,13 +162,52 @@
       align-items: center;
     }
 
-    #feedbackList li {
-      background: #1a1a1a;
+    /* Stilet e reja për statistikat dhe feedback-un e klikueshëm */
+    .feedback-stats {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .stat-box {
+      flex: 1;
+      background: #1f1f1f;
       padding: 10px;
       border-radius: 8px;
-      font-size: 0.9rem;
-      margin-bottom: 6px;
+      text-align: center;
+      border: 1px solid var(--border-color);
     }
+    .stat-box span {
+      display: block;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--accent);
+    }
+    .stat-box label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    #feedbackList li {
+      background: #1a1a1a;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: border-color 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    #feedbackList li:hover {
+      border-color: var(--accent);
+    }
+    .badge-positive { color: #22c55e; font-weight: bold; }
+    .badge-negative { color: #ef4444; font-weight: bold; }
+    .badge-neutral { color: #eab308; font-weight: bold; }
 
     .private-field { display: none; }
     
@@ -263,9 +302,26 @@
       <p id="profileMsg"></p>
     </div>
 
-    <!-- Feedback-u -->
+    <!-- Feedback-u i blerësve me statistika -->
     <div class="card">
       <h3>Feedback-u i blerësve</h3>
+      
+      <!-- Përmbledhja e Statistikave -->
+      <div class="feedback-stats">
+        <div class="stat-box">
+          <span id="totalFeedback">0</span>
+          <label>Total</label>
+        </div>
+        <div class="stat-box">
+          <span id="positiveFeedback" style="color: #22c55e;">0</span>
+          <label>Pozitive</label>
+        </div>
+        <div class="stat-box">
+          <span id="negativeFeedback" style="color: #ef4444;">0</span>
+          <label>Negative</label>
+        </div>
+      </div>
+
       <ul id="feedbackList"><li>Nuk ka ende feedback.</li></ul>
     </div>
 
@@ -354,26 +410,66 @@
     }
   }
 
-  // Funksioni për të ngarkuar feedback-un e përdoruesit
+  // Funksioni për të ngarkuar feedback-un, llogaritur statistikat dhe bërë elementet të klikueshme
   async function loadFeedback(uid) {
     if (!feedbackList) return;
     feedbackList.innerHTML = "";
 
     const { data, error } = await supabase
-      .from("feedback") // Ndrysho emrin e tabelës nëse e ke ndryshe (p.sh. reviews, ratings)
+      .from("feedback") 
       .select("*")
-      .eq("seller_id", uid); // Ose user_id në varësi të skemës tënde
+      .eq("seller_id", uid); 
 
     if (error || !data || data.length === 0) {
       feedbackList.innerHTML = "<li>Nuk ka ende feedback.</li>";
+      document.getElementById("totalFeedback").textContent = "0";
+      document.getElementById("positiveFeedback").textContent = "0";
+      document.getElementById("negativeFeedback").textContent = "0";
       return;
     }
 
+    let total = data.length;
+    let positive = 0;
+    let negative = 0;
+
     data.forEach(item => {
+      const isPositive = item.type === 'positive' || item.rating >= 4;
+      const isNegative = item.type === 'negative' || item.rating <= 2;
+
+      if (isPositive) positive++;
+      else if (isNegative) negative++;
+
       const li = document.createElement("li");
-      li.textContent = item.comment || item.message || "Vlerësim pa koment.";
+      
+      let badgeClass = "badge-neutral";
+      let badgeText = "Neutral 🟡";
+      if (isPositive) {
+        badgeClass = "badge-positive";
+        badgeText = "Pozitiv 🟢";
+      } else if (isNegative) {
+        badgeClass = "badge-negative";
+        badgeText = "Negativ 🔴";
+      }
+
+      li.innerHTML = `
+        <div>
+          <span style="display: block; margin-bottom: 4px; color: var(--text-main);">${item.comment || item.message || "Vlerësim pa koment."}</span>
+          <small style="color: var(--text-muted);">ID e porosisë / Blerësi: ${item.order_id || item.buyer_name || "Blerës i verifikuar"}</small>
+        </div>
+        <span class="${badgeClass}">${badgeText}</span>
+      `;
+
+      // Klikimi i feedback-ut për të parë detajet
+      li.addEventListener("click", () => {
+        alert(`Detajet e Feedback-ut:\n\nKoment: ${item.comment || item.message || "-"}\nTipi: ${badgeText}\nData: ${item.created_at ? new Date(item.created_at).toLocaleDateString() : "-"}`);
+      });
+
       feedbackList.appendChild(li);
     });
+
+    document.getElementById("totalFeedback").textContent = total;
+    document.getElementById("positiveFeedback").textContent = positive;
+    document.getElementById("negativeFeedback").textContent = negative;
   }
 
   window.addEventListener("DOMContentLoaded", async () => {
@@ -391,7 +487,6 @@
 
     const isOwner = user && user.id === profileId;
 
-    // Merr profilin nga tabela profiles
     const { data: profileData } = await supabase
       .from("profiles")
       .select("*")
@@ -402,17 +497,14 @@
 
     document.body.style.visibility = "visible";
 
-    // Shfaq emrin e saktë (custom_username ose full_name)
     const sellerTitle = document.getElementById("sellerTitle");
     const customName = meta.custom_username || meta.full_name || "Seller";
     sellerTitle.textContent = `${customName}.oraswiss`;
 
-    // Shfaq foton e profilit nëse ekziston
     if (meta.image_url) {
       avatarEl.src = meta.image_url;
     }
 
-    // Data e regjistrimit
     const created = new Date(meta.created_at || Date.now());
     const joinedText = document.getElementById("sellerJoined");
     joinedText.textContent = "Anëtar që nga " + created.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
@@ -431,7 +523,6 @@
     const rawCountry = meta.country || meta.shteti || meta.country_name || "-";
     countryEl.textContent = countries[rawCountry] || rawCountry;
     
-    // Nëse jemi te profili ynë (owner), shfaq të dhënat private dhe inputet e editimit
     if (isOwner && user) {
       document.querySelectorAll(".private-field").forEach(el => el.style.display = "block");
 
@@ -451,12 +542,10 @@
       document.getElementById("editZip").value = meta.zip_code || "";
     }
 
-    // Ngarko artikujt dhe feedback-un
     await loadWatches(profileId);
     await loadFeedback(profileId);
   });
 
-  // Ruajtja e ndryshimeve të profilit
   const saveProfileBtn = document.getElementById("btnSaveProfile");
   if (saveProfileBtn) {
     saveProfileBtn.addEventListener("click", async () => {
@@ -529,7 +618,6 @@
     });
   }
 
-  // Verifikimi i Identitetit
   const verifyBtn = document.getElementById("btnVerify");
   if (verifyBtn) {
     verifyBtn.addEventListener("click", async () => {

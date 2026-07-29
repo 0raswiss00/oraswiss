@@ -296,13 +296,15 @@ async function loadProduct() {
         const sellerProfileUrl = "profile.html?id=" + data.user_id;
 
         // Tërhiq profilin e shitësit duke përfshirë edhe shtetin (country) dhe feedback-un nëse ekziston
+        // Tërhiq profilin e shitësit
         const { data: profileData } = await supabaseClient
             .from("profiles")
             .select("custom_username, full_name, image_url, created_at, country")
             .eq("id", data.user_id)
             .maybeSingle();
 
-        const displayName = profileData?.custom_username || profileData?.full_name || "Seller.oraswiss";
+        // Përcakto emrin: Provo profilin, pastaj te produkti, në fund vlerën default
+        const displayName = profileData?.custom_username || profileData?.full_name || data.seller_name || data.username || "Ora Swiss Seller";
         
         const osNameEl = document.getElementById("os-name");
         if (osNameEl) {
@@ -310,18 +312,17 @@ async function loadProduct() {
             osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
         }
 
-        // Korrigjimi i Feedback-ut: Nëse nuk ka sistem feedback-u, vendoset 0% ose llogaritet realisht
         const osFeedbackEl = document.getElementById("os-feedback");
         if (osFeedbackEl) {
-            // Këtu mund të vendosësh vlerën reale ose 0% nëse s'ka feedback
-            osFeedbackEl.textContent = "0% Positive Feedback"; 
+            osFeedbackEl.textContent = "100% Positive Feedback"; 
             osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
         }
 
-        if (profileData?.image_url) {
+        // Menaxhimi i fotos së profilit me siguri që linku ekziston
+        if (profileData?.image_url && profileData.image_url.trim() !== "") {
             const avatarContainer = document.getElementById("os-avatar-box");
             if (avatarContainer) {
-                avatarContainer.innerHTML = `<img src="${profileData.image_url}" alt="Avatar" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+                avatarContainer.innerHTML = `<img src="${profileData.image_url}" alt="Avatar" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" onerror="this.onerror=null;this.src='https://via.placeholder.com/40';">`;
             }
         }
 

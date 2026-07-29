@@ -73,25 +73,21 @@
         }
         .oraswiss-header {
             display: flex !important;
-            justify-content: space-between !important;
-            align-items: center !important;
-            margin-bottom: 12px !important;
-        }
-        .oraswiss-info {
-            display: flex !important;
             align-items: center !important;
             gap: 12px !important;
+            margin-bottom: 12px !important;
         }
         .oraswiss-avatar {
-            width: 40px !important;
-            height: 40px !important;
+            width: 48px !important;
+            height: 48px !important;
+            min-width: 48px !important;
             background: #222222 !important;
             border-radius: 50% !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
             color: #fff !important;
-            overflow: hidden;
+            overflow: hidden !important;
         }
         .oraswiss-info h3 {
             margin: 0 !important;
@@ -99,6 +95,9 @@
             font-weight: 700 !important;
             color: #fff !important;
             cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .oraswiss-info h3 span {
             font-weight: normal !important;
@@ -182,18 +181,16 @@
         <p id="description">Loading...</p>
     </div>
 
-    <!-- KARTA E SHITËSIT E INTEGRUAR KËTU -->
+    <!-- KARTA E SHITËSIT E INTEGRUAR -->
     <div class="oraswiss-seller-wrapper">
         <div class="oraswiss-seller-card">
             <div class="oraswiss-header">
-                <div class="oraswiss-info">
-                    <div class="oraswiss-avatar" id="os-avatar-box">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    </div>
-                    <div>
-                        <h3 id="os-name">- <span>(Pro)</span></h3>
-                        <p class="oraswiss-green" id="os-feedback">100% Positive Feedback</p>
-                    </div>
+                <div class="oraswiss-avatar" id="os-avatar-box">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+                <div style="overflow: hidden; flex: 1;">
+                    <h3 id="os-name">- <span>(Pro)</span></h3>
+                    <p class="oraswiss-green" id="os-feedback">100% Positive Feedback</p>
                 </div>
             </div>
             <div class="oraswiss-joined" id="os-joined">Anëtar që nga -</div>
@@ -275,14 +272,13 @@ async function loadProduct() {
 
         const sellerProfileUrl = "profile.html?id=" + data.user_id;
 
-        // Merr të dhënat e profilit të shitësit nga tabela 'profiles'
         const { data: profileData } = await supabaseClient
             .from("profiles")
             .select("custom_username, full_name, image_url, created_at")
             .eq("id", data.user_id)
             .maybeSingle();
 
-        const displayName = profileData?.custom_username || profileData?.full_name || data.seller_name || "oraswiss";
+        const displayName = profileData?.custom_username || profileData?.full_name || data.seller_name || "Ora Swiss Seller";
         
         const osNameEl = document.getElementById("os-name");
         if (osNameEl) {
@@ -295,7 +291,6 @@ async function loadProduct() {
             osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
         }
 
-        // Vendos foton e profilit nëse ekziston
         if (profileData?.image_url) {
             const avatarContainer = document.getElementById("os-avatar-box");
             if (avatarContainer) {
@@ -303,7 +298,6 @@ async function loadProduct() {
             }
         }
 
-        // Data e regjistrimit të profilit
         const joinedDateSource = profileData?.created_at || data.created_at || Date.now();
         const joined = new Date(joinedDateSource);
         const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
@@ -312,7 +306,6 @@ async function loadProduct() {
             joinedEl.textContent = "Anëtar që nga " + formattedJoined;
         }
 
-        // Llogarit totalin e artikujve nga të dyja tabelat
         let totalItemsCount = 0;
         if (data.user_id) {
             const { count: countOras } = await supabaseClient

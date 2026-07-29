@@ -275,13 +275,14 @@ async function loadProduct() {
 
         const sellerProfileUrl = "profile.html?id=" + data.user_id;
 
-        // Merr të dhënat e profilit të shitësit nga tabela 'profiles'
+       // Merr të dhënat e profilit të shitësit nga tabela 'profiles'
         const { data: profileData } = await supabaseClient
             .from("profiles")
             .select("custom_username, full_name, image_url, created_at")
             .eq("id", data.user_id)
             .maybeSingle();
 
+        // Përdor emrin e zgjedhur custom ose full_name, nëse jo fallcohet te 'oraswiss'
         const displayName = profileData?.custom_username || profileData?.full_name || data.seller_name || "oraswiss";
         
         const osNameEl = document.getElementById("os-name");
@@ -292,10 +293,11 @@ async function loadProduct() {
 
         const osFeedbackEl = document.getElementById("os-feedback");
         if (osFeedbackEl) {
+            osFeedbackEl.textContent = "100% Positive Feedback";
             osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
         }
 
-        // Vendos foton e profilit nëse ekziston
+        // Vendos foton e profilit të zgjedhur nga databaza
         if (profileData?.image_url) {
             const avatarContainer = document.getElementById("os-avatar-box");
             if (avatarContainer) {
@@ -303,7 +305,7 @@ async function loadProduct() {
             }
         }
 
-        // Data e regjistrimit të profilit
+        // Viti i saktë i regjistrimit nga tabela profiles -> created_at
         const joinedDateSource = profileData?.created_at || data.created_at || Date.now();
         const joined = new Date(joinedDateSource);
         const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });

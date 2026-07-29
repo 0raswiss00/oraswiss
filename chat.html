@@ -249,7 +249,6 @@ function setupRealtimeSubscription() {
 }
 
 // Opsioni për fshirjen e bisedës
-// Opsioni për fshirjen e bisedës
 document.getElementById("deleteChatBtn").onclick = async () => {
     if (!confirm("A jeni i sigurt që dëshironi ta fshini këtë bisedë?")) return;
 
@@ -266,17 +265,6 @@ document.getElementById("deleteChatBtn").onclick = async () => {
 
     // Ridrejto te lista e bisedave (Ndrysho "conversations.html" me emrin e saktë të faqes ku i shfaq bisedat)
     window.location.href = "conversations.html"; 
-};
-    // Pastro pamjen e chat-it në vend që ta dërgosh te index.html
-    document.getElementById("chatBox").innerHTML = '<div style="text-align:center; color:#777; margin-top:20px;">Biseda u fshi.</div>';
-    document.getElementById("headerTitle").innerText = "Bisedë e fshirë";
-    document.getElementById("headerPrice").innerText = "";
-    document.getElementById("headerImg").src = "";
-    
-    // Çaktivizo inputet që të mos dërgohen mesazhe më
-    document.getElementById("messageInput").disabled = true;
-    document.getElementById("sendBtn").disabled = true;
-    document.getElementById("attachBtn").style.display = "none";
 };
 
 document.getElementById("sendBtn").onclick = async () => {

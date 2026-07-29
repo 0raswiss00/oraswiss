@@ -427,7 +427,7 @@
         .from("profiles")
         .select("image_url")
         .eq("id", user.id)
-        .single();
+        .maybeSingle();
 
       let imagePath = currentProfile?.image_url || null;
 

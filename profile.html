@@ -40,7 +40,6 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     }
 
-    /* Stili për Koken e Profilit dhe Avatarin */
     .profile-header {
       display: flex;
       align-items: center;
@@ -361,11 +360,10 @@
     const customName = meta.custom_username || meta.full_name || "Seller";
     sellerTitle.textContent = `${customName}.oraswiss`;
 
-    // Ngarkimi i imazhit të profilit nëse ekziston
+    // Ngarkimi i imazhit të profilit nga bucket-i publik "avatars"
     if (meta.image) {
-      // Nëse ruani direkt URL-në ose path-in në storage:
       const { data: publicUrlData } = supabase.storage
-        .from("identity_documents")
+        .from("avatars")
         .getPublicUrl(meta.image);
       
       if (publicUrlData?.publicUrl) {
@@ -401,7 +399,6 @@
       houseEl.textContent = meta.house_number || "-";
       zipEl.textContent = meta.zip_code || "-";
 
-      // Mbushja e fushave në formën e modifikimit
       document.getElementById("editFullName").value = meta.full_name || "";
       document.getElementById("editCustomUsername").value = meta.custom_username || "";
       document.getElementById("editPhone").value = meta.phone || "";
@@ -414,7 +411,7 @@
     await loadWatches(profileId);
   });
 
-  // Ruajtja e ndryshimeve të profilit (përfshirë kolonën image)
+  // Ruajtja e ndryshimeve të profilit duke përdorur bucket-in "avatars"
   const saveProfileBtn = document.getElementById("btnSaveProfile");
   if (saveProfileBtn) {
     saveProfileBtn.addEventListener("click", async () => {
@@ -443,7 +440,7 @@
 
       if (imageFile) {
         const filePath = `${user.id}/profile_${Date.now()}_${imageFile.name}`;
-        const uploadRes = await supabase.storage.from("identity_documents").upload(filePath, imageFile);
+        const uploadRes = await supabase.storage.from("avatars").upload(filePath, imageFile);
         
         if (uploadRes.error) {
           msg.style.color = "var(--danger)";
@@ -480,7 +477,7 @@
     });
   }
 
-  // Verifikimi i Identitetit dhe dërgimi i email-it
+  // Verifikimi i Identitetit dhe dërgimi i email-it (përdor "identity_documents")
   const verifyBtn = document.getElementById("btnVerify");
   if (verifyBtn) {
     verifyBtn.addEventListener("click", async () => {

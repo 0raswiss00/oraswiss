@@ -1,155 +1,114 @@
 <!DOCTYPE html>
 <html lang="sq">
 <head>
-<title>Chat - Oraswiss</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#f5f5f5;
-    display:flex;
-    flex-direction:column;
-    height:100vh;
-}
-.product-header{
-    background:#fff;
-    padding:10px 15px;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    border-bottom:1px solid #ddd;
-    box-shadow:0 2px 4px rgba(0,0,0,0.05);
-}
-.back-btn {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #000;
-}
-.product-header img{
-    width:50px;
-    height:50px;
-    border-radius:8px;
-    object-fit:cover;
-}
-.product-info{
-    flex: 1;
-}
-.product-info .brand{
-    font-weight:bold;
-    font-size:15px;
-}
-.product-info .price{
-    color:#009900;
-    font-size:13px;
-    font-weight:bold;
-}
-.delete-chat-btn {
-    background: #ff3b30;
-    color: #fff;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: bold;
-}
-.delete-chat-btn:hover {
-    background: #d32f2f;
-}
-#chatBox{
-    flex:1;
-    padding:15px;
-    overflow-y:auto;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-}
-.message{
-    max-width:70%;
-    padding:10px 14px;
-    border-radius:12px;
-    font-size:14px;
-    word-break:break-word;
-}
-.message.sent{
-    background:#000;
-    color:#fff;
-    align-self:flex-end;
-}
-.message.received{
-    background:#e5e5ea;
-    color:#000;
-    align-self:flex-start;
-}
-.message img{
-    max-width:200px;
-    border-radius:8px;
-    display:block;
-    cursor:pointer;
-}
-.chat-input-area{
-    padding: 8px 10px;
-    background: #fff;
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    border-top: 1px solid #ddd;
-}
-.chat-input-area input[type="text"]{
-    flex: 1;
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    outline: none;
-    font-size: 14px;
-}
-.chat-input-area button{
-    background: #000;
-    color: #fff;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-#attachBtn {
-    background: #e5e5ea;
-    color: #000;
-    font-size: 16px;
-    padding: 8px 10px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - Oraswiss</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            color: #000;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 70px;
+        }
+        .header {
+            background: #000;
+            color: white;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            box-sizing: border-box;
+        }
+        .header img {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #d4af37;
+            background: #222;
+        }
+        .header-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+        }
+        #messagesContainer {
+            margin-top: 65px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message {
+            padding: 10px 15px;
+            border-radius: 12px;
+            max-width: 75%;
+            word-break: break-word;
+            font-size: 14px;
+        }
+        .sent {
+            background: #000;
+            color: white;
+            align-self: flex-end;
+        }
+        .received {
+            background: white;
+            color: black;
+            align-self: flex-start;
+            border: 1px solid #ddd;
+        }
+        .chat-input-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            z-index: 100;
+        }
+        .chat-input-bar input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+            font-size: 14px;
+        }
+        .chat-input-bar button {
+            background: black;
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
-<div class="product-header" id="productHeader">
-    <button class="back-btn" id="backBtn" title="Kthehu">⬅</button>
-    <img id="headerImg" src="" alt="">
-    <div class="product-info">
-        <div class="brand" id="headerTitle">Duke ngarkuar...</div>
-        <div class="price" id="headerPrice"></div>
-    </div>
-    <button class="delete-chat-btn" id="deleteChatBtn" title="Fshi bisedën">Fshi bisedën</button>
+<div class="header">
+    <img id="chatUserAvatar" src="" alt="Avatar" style="display:none;" />
+    <span id="chatUserTitle" class="header-title">💬 Chat</span>
 </div>
 
-<div id="chatBox"></div>
+<div id="messagesContainer"></div>
 
-<div class="chat-input-area">
-    <input type="file" id="imageInput" accept="image/*" style="display:none;">
-    <button type="button" id="attachBtn" title="Dërgo foto">📷</button>
+<div class="chat-input-bar">
     <input type="text" id="messageInput" placeholder="Shkruaj një mesazh...">
-    <button type="button" id="sendBtn">Dërgo</button>
+    <button id="sendButton">Dërgo</button>
 </div>
 
 <script type="module">
@@ -164,56 +123,81 @@ const urlParams = new URLSearchParams(window.location.search);
 const conversationId = urlParams.get("conversation");
 let currentUserId = null;
 
-// Butoni Back (Kthehu te lista e mesazheve)
-document.getElementById("backBtn").onclick = () => {
-    window.location.href = "messages.html";
-};
-
-async function initChat() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
+async function init() {
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) {
         window.location.href = "login.html";
         return;
     }
     currentUserId = user.id;
 
     if (!conversationId) {
-        window.location.href = "messages.html";
+        document.getElementById("messagesContainer").innerHTML = "<p style='text-align:center;'>Mungon ID e bisedës.</p>";
         return;
     }
 
-    const { data: chats, error: chatError } = await supabase
-        .from("conversations")
-        .select("*")
-        .eq("id", conversationId);
-
-    if (chatError || !chats || chats.length === 0) {
-        window.location.href = "messages.html";
-        return;
-    }
-    const chat = chats[0];
-
-    if (chat.listing_id) {
-        const { data: watch } = await supabase
-            .from("oras")
-            .select("brand, model, price, image_url")
-            .eq("id", chat.listing_id)
-            .single();
-
-        if (watch) {
-            let img = Array.isArray(watch.image_url) ? watch.image_url[0] : watch.image_url;
-            document.getElementById("headerImg").src = img || "";
-            document.getElementById("headerTitle").innerText = `${watch.brand || ""} ${watch.model || ""}`;
-            document.getElementById("headerPrice").innerText = `${watch.price || 0} €`;
-        } else {
-            document.getElementById("headerTitle").innerText = "Bisedë";
-        }
-    } else {
-        document.getElementById("headerTitle").innerText = "Bisedë";
-    }
+    // Gjejmë profilin e personit tjetër në bisedë për t'i shfaqur foton dhe emrin në header
+    await loadChatHeaderInfo();
 
     await loadMessages();
-    setupRealtimeSubscription();
+
+    // Aktivizojmë Realtime për mesazhet e reja
+    supabase
+        .channel('public:messages:' + conversationId)
+        .on('postgres_changes', { 
+            event: 'INSERT', 
+            schema: 'public', 
+            table: 'messages',
+            filter: `conversation_id=eq.${conversationId}`
+        }, payload => {
+            appendMessage(payload.new);
+            window.scrollTo(0, document.body.scrollHeight);
+        })
+        .subscribe();
+
+    document.getElementById("sendButton").onclick = sendMsg;
+    document.getElementById("messageInput").onkeydown = (e) => {
+        if (e.key === "Enter") sendMsg();
+    };
+}
+
+async function loadChatHeaderInfo() {
+    // Marrim bisedën për të parë se kush janë pjesëmarrësit (p.sh. buyer_id dhe seller_id)
+    const { data: convData, error: convError } = await supabase
+        .from("conversations")
+        .select("*")
+        .eq("id", conversationId)
+        .single();
+
+    if (convError || !convData) return;
+
+    // Përcaktojmë ID-në e personit tjetër (jo përdoruesi aktual)
+    const otherUserId = convData.buyer_id === currentUserId ? convData.seller_id : convData.buyer_id;
+
+    if (!otherUserId) return;
+
+    // Marrim profilin e personit tjetër nga tabela profiles
+    const { data: profileData } = await supabase
+        .from("profiles")
+        .select("custom_username, full_name, image")
+        .eq("id", otherUserId)
+        .single();
+
+    if (profileData) {
+        const displayName = profileData.custom_username || profileData.full_name || "Përdorues";
+        document.getElementById("chatUserTitle").textContent = `${displayName}.oraswiss`;
+
+        if (profileData.image) {
+            // Nëse imazhi është path në Supabase Storage (bucket identity_documents)
+            const { data: pubUrl } = supabase.storage
+                .from("identity_documents")
+                .getPublicUrl(profileData.image);
+
+            const avatarImg = document.getElementById("chatUserAvatar");
+            avatarImg.src = pubUrl.publicUrl;
+            avatarImg.style.display = "block";
+        }
+    }
 }
 
 async function loadMessages() {
@@ -223,148 +207,59 @@ async function loadMessages() {
         .eq("conversation_id", conversationId)
         .order("created_at", { ascending: true });
 
-    const chatBox = document.getElementById("chatBox");
-    chatBox.innerHTML = "";
+    if (error) return;
 
-    if (error || !messages) return;
+    const container = document.getElementById("messagesContainer");
+    container.innerHTML = "";
 
-    messages.forEach(msg => {
-        appendMessageToUI(msg);
-    });
-
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-function appendMessageToUI(msg) {
-    const chatBox = document.getElementById("chatBox");
-    const div = document.createElement("div");
-    div.className = "message " + (msg.sender_id === currentUserId ? "sent" : "received");
-
-    const text = msg.message_text || "";
-    if (text.startsWith("http://") || text.startsWith("https://") || text.match(/\.(jpeg|jpg|png|gif|webp)$/i)) {
-        div.innerHTML = `<img src="${text}" onclick="window.open(this.src)" style="max-width:200px; border-radius:8px; display:block; cursor:pointer;">`;
-    } else {
-        div.innerText = text;
-    }
-
-    chatBox.appendChild(div);
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-function setupRealtimeSubscription() {
-    supabase
-        .channel("public:messages")
-        .on(
-            "postgres_changes",
-            {
-                event: "INSERT",
-                schema: "public",
-                table: "messages",
-                filter: `conversation_id=eq.${conversationId}`
-            },
-            (payload) => {
-                appendMessageToUI(payload.new);
-            }
-        )
-        .subscribe();
-}
-
-document.getElementById("deleteChatBtn").onclick = async () => {
-    if (!confirm("A jeni i sigurt që dëshironi ta fshini këtë bisedë?")) return;
-
-    await supabase.from("messages").delete().eq("conversation_id", conversationId);
-
-    const { error } = await supabase.from("conversations").delete().eq("id", conversationId);
-
-    if (error) {
-        alert("Gabim gjatë fshirjes së bisedës: " + error.message);
+    if (!messages || messages.length === 0) {
+        container.innerHTML = "<p style='text-align:center; color:#777; margin-top:20px;'>Nuk ka ende mesazhe.</p>";
         return;
     }
 
-    window.location.href = "messages.html";
-};
+    for (const m of messages) {
+        appendMessage(m);
+    }
 
-document.getElementById("sendBtn").onclick = async () => {
+    window.scrollTo(0, document.body.scrollHeight);
+}
+
+function appendMessage(m) {
+    const container = document.getElementById("messagesContainer");
+    const emptyMsg = container.querySelector("p");
+    if (emptyMsg && emptyMsg.textContent.includes("Nuk ka ende mesazhe")) {
+        container.innerHTML = "";
+    }
+
+    const div = document.createElement("div");
+    div.className = "message " + (m.sender_id === currentUserId ? "sent" : "received");
+    div.textContent = m.message_text;
+    container.appendChild(div);
+}
+
+async function sendMsg() {
     const input = document.getElementById("messageInput");
     const text = input.value.trim();
     if (!text) return;
 
-    const { error } = await supabase.from("messages").insert({
-        conversation_id: Number(conversationId),
-        sender_id: currentUserId,
-        message_text: text
-    });
-
-    if (error) {
-        alert("Gabim: " + error.message);
-        return;
-    }
-
-    await supabase
-        .from("conversations")
-        .update({
-            last_message: text,
-            updated_at: new Date().toISOString()
-        })
-        .eq("id", conversationId);
-
     input.value = "";
-};
 
-const attachBtn = document.getElementById("attachBtn");
-const imageInput = document.getElementById("imageInput");
+    const { error } = await supabase.from("messages").insert([
+        {
+            conversation_id: conversationId,
+            sender_id: currentUserId,
+            message_text: text
+        }
+    ]);
 
-attachBtn.onclick = () => imageInput.click();
-
-imageInput.onchange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const fileExt = file.name.split(".").pop();
-    const fileName = `img_${Date.now()}.${fileExt}`;
-    const filePath = `chat-images/${fileName}`;
-
-    attachBtn.innerText = "⏳";
-
-    const { error: uploadError } = await supabase.storage
-        .from("oras") 
-        .upload(filePath, file);
-
-    if (uploadError) {
-        alert("Gabim gjatë ngarkimit të fotos: " + uploadError.message);
-        attachBtn.innerText = "📷";
-        return;
+    if (!error) {
+        await supabase.from("conversations")
+            .update({ last_message: text, updated_at: new Date() })
+            .eq("id", conversationId);
     }
+}
 
-    const { data: publicURLData } = supabase.storage
-        .from("oras")
-        .getPublicUrl(filePath);
-
-    const imageUrl = publicURLData.publicUrl;
-
-    const { error: insertError } = await supabase.from("messages").insert({
-        conversation_id: Number(conversationId),
-        sender_id: currentUserId,
-        message_text: imageUrl
-    });
-
-    await supabase
-        .from("conversations")
-        .update({
-            last_message: "📷 [Foto]",
-            updated_at: new Date().toISOString()
-        })
-        .eq("id", conversationId);
-
-    attachBtn.innerText = "📷";
-    imageInput.value = "";
-
-    if (insertError) {
-        alert("Gabim në dërgimin e fotos: " + insertError.message);
-    }
-};
-
-initChat();
+init();
 </script>
 
 </body>

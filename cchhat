@@ -248,14 +248,11 @@ function setupRealtimeSubscription() {
         .subscribe();
 }
 
-// Opsioni për fshirjen e bisedës
 document.getElementById("deleteChatBtn").onclick = async () => {
     if (!confirm("A jeni i sigurt që dëshironi ta fshini këtë bisedë?")) return;
 
-    // Fshi mesazhet e bisedës fillimisht (nëse nuk keni vendosur Cascade Delete në Supabase)
     await supabase.from("messages").delete().eq("conversation_id", conversationId);
 
-    // Fshi vetë bisedën nga tabela conversations
     const { error } = await supabase.from("conversations").delete().eq("id", conversationId);
 
     if (error) {
@@ -263,8 +260,7 @@ document.getElementById("deleteChatBtn").onclick = async () => {
         return;
     }
 
-    // Ridrejto përdoruesin diku tjetër, p.sh. te faqja kryesore ose lista e bisedave
-    window.location.href = "index.html"; // Ndrysho sipas emrit të faqes tuaj kryesore
+    window.location.href = "messages.html";
 };
 
 document.getElementById("sendBtn").onclick = async () => {

@@ -401,11 +401,11 @@
 
       const { data: currentProfile } = await supabase
         .from("profiles")
-        .select("image, photo")
+        .select("image")
         .eq("id", user.id)
         .single();
 
-      let imagePath = currentProfile?.image || currentProfile?.photo || null;
+      let imagePath = currentProfile?.image || null;
 
       if (imageFile) {
         const filePath = `${user.id}/profile_${Date.now()}_${imageFile.name}`;

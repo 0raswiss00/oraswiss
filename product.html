@@ -266,7 +266,6 @@ async function loadProduct() {
     let tableName = "";
 
     try {
-        // Provohet fillimisht te tabela e orëve
         let res = await supabaseClient
             .from("oras")
             .select("*")
@@ -277,7 +276,6 @@ async function loadProduct() {
             data = res.data;
             tableName = "oras";
         } else {
-            // Nëse nuk gjendet te orët, kërkohet te rripat dhe aksesorët
             let resBracelet = await supabaseClient
                 .from("bracelets_straps")
                 .select("*")
@@ -297,13 +295,14 @@ async function loadProduct() {
         const isBracelet = (tableName === "bracelets_straps");
         const sellerProfileUrl = "profile.html?id=" + data.user_id;
 
+        // Tërhiq profilin e shitësit duke përfshirë edhe shtetin (country) dhe feedback-un nëse ekziston
         const { data: profileData } = await supabaseClient
             .from("profiles")
-            .select("custom_username, full_name, image_url, created_at")
+            .select("custom_username, full_name, image_url, created_at, country")
             .eq("id", data.user_id)
             .maybeSingle();
 
-        const displayName = profileData?.custom_username || profileData?.full_name || data.seller_name || "oraswiss";
+        const displayName = profileData?.custom_username || profileData?.full_name || "Seller.oraswiss";
         
         const osNameEl = document.getElementById("os-name");
         if (osNameEl) {
@@ -311,9 +310,11 @@ async function loadProduct() {
             osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
         }
 
+        // Korrigjimi i Feedback-ut: Nëse nuk ka sistem feedback-u, vendoset 0% ose llogaritet realisht
         const osFeedbackEl = document.getElementById("os-feedback");
         if (osFeedbackEl) {
-            osFeedbackEl.textContent = "100% Positive Feedback";
+            // Këtu mund të vendosësh vlerën reale ose 0% nëse s'ka feedback
+            osFeedbackEl.textContent = "0% Positive Feedback"; 
             osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
         }
 
@@ -409,7 +410,9 @@ async function loadProduct() {
             "IT": "🇮🇹 Itali",
             "DE": "🇩🇪 Gjermani"
         };
-        const sCountry = data.seller_country || "-";
+        
+        // Merr shtetin nga profili i përdoruesit, ose fallcohet te produkti nëse nuk ka te profili
+        const sCountry = profileData?.country || data.seller_country || "-";
         document.getElementById("seller-country").innerText = "🌍 " + (countries[sCountry] || sCountry);
 
         currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
@@ -525,6 +528,7 @@ async function loadProduct() {
         container.innerHTML = "Gabim: " + err.message;
     }
 }
+
 function updateGallery() {
     if(currentImages.length === 0) return;
     document.getElementById("main-photo").src = currentImages[currentImgIndex];
@@ -628,6 +632,5 @@ async function handleModalAuth() {
 
 loadProduct();
 </script>
-
 </body>
 </html>

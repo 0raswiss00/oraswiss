@@ -276,9 +276,10 @@ async function loadProduct() {
         let sellerCountryVal = data.seller_country || "-";
         
         if (data.user_id) {
+            // Tërheqim të dhënat nga tabela profiles duke përfshirë 'country' dhe 'image'
             const { data: profileData } = await supabaseClient
                 .from("profiles")
-                .select("custom_username, full_name, image, country, seller_country")
+                .select("custom_username, full_name, image, country")
                 .eq("id", data.user_id)
                 .single();
 
@@ -286,11 +287,12 @@ async function loadProduct() {
                 const rawName = profileData.custom_username || profileData.full_name || data.seller_name || "Seller";
                 finalSellerName = `${rawName}-oraswiss`;
 
-                // Merr shtetin nga profili nëse nuk është te produkti
-                if (profileData.country || profileData.seller_country) {
-                    sellerCountryVal = profileData.country || profileData.seller_country;
+                // Marrim shtetin nga profili nëse ekziston
+                if (profileData.country) {
+                    sellerCountryVal = profileData.country;
                 }
 
+                // Trajtimi i imazhit të profilit
                 if (profileData.image) {
                     const avatarContainer = document.querySelector(".oraswiss-avatar");
                     if (avatarContainer) {
@@ -519,108 +521,6 @@ async function loadProduct() {
         container.innerHTML = "Gabim: " + err.message;
     }
 }
-
-function updateGallery() {
-    if(currentImages.length === 0) return;
-    document.getElementById("main-photo").src = currentImages[currentImgIndex];
-    document.getElementById("photo-count").innerText = (currentImgIndex + 1) + " / " + currentImages.length;
-}
-
-function changeImage(direction) {
-    if(currentImages.length === 0) return;
-    currentImgIndex += direction;
-    if(currentImgIndex >= currentImages.length) currentImgIndex = 0;
-    if(currentImgIndex < 0) currentImgIndex = currentImages.length - 1;
-    updateGallery();
-}
-
-function shareProduct() {
-    navigator.clipboard.writeText(window.location.href);
-    alert("Linku u kopjua!");
-}
-
-function toggleLike(element) {
-    if(element.innerText.includes("♡")) {
-        element.innerHTML = "❤️ Liked";
-        element.style.borderColor = "#25D366";
-    } else {
-        element.innerHTML = "♡ Like";
-        element.style.borderColor = "#222";
-    }
-}
-
-function closeLoginModal() {
-    document.getElementById("login-modal").style.display = "none";
-}
-
-function toggleAuthMode(e) {
-    e.preventDefault();
-    isRegisterMode = !isRegisterMode;
-    
-    const title = document.getElementById("modal-title");
-    const desc = document.getElementById("modal-desc");
-    const nameInput = document.getElementById("modal-name");
-    const submitBtn = document.getElementById("modal-submit-btn");
-    const toggleText = document.getElementById("modal-toggle-text");
-    const toggleLink = document.getElementById("modal-toggle-link");
-    const errorEl = document.getElementById("modal-error");
-    
-    errorEl.textContent = "";
-
-    if (isRegisterMode) {
-        title.textContent = "Krijo Llogari";
-        desc.textContent = "Regjistrohu për të kontaktuar shitësit dhe për të blerë.";
-        nameInput.style.display = "block";
-        submitBtn.textContent = "Regjistrohu";
-        toggleText.textContent = "Ke tashmë një llogari?";
-        toggleLink.textContent = " Hyr";
-    } else {
-        title.textContent = "Identifikohu";
-        desc.textContent = "Duhet të jesh i loguar për të kontaktuar shitësin.";
-        nameInput.style.display = "none";
-        submitBtn.textContent = "Hyr";
-        toggleText.textContent = "Nuk ke llogari?";
-        toggleLink.textContent = " Regjistrohu";
-    }
-}
-
-async function handleModalAuth() {
-    const email = document.getElementById("modal-email").value;
-    const password = document.getElementById("modal-password").value;
-    const fullName = document.getElementById("modal-name").value;
-    const errorEl = document.getElementById("modal-error");
-    
-    errorEl.textContent = "Duke u procesuar...";
-
-    if (isRegisterMode) {
-        const { error } = await supabaseClient.auth.signUp({
-            email: email,
-            password: password,
-            options: { data: { full_name: fullName } }
-        });
-
-        if (error) {
-            errorEl.textContent = error.message;
-        } else {
-            alert("Regjistrimi u krye me sukses!");
-            closeLoginModal();
-            document.getElementById("os-contact").click();
-        }
-    } else {
-        const { error } = await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
-
-        if (error) {
-            errorEl.textContent = error.message;
-        } else {
-            closeLoginModal();
-            document.getElementById("os-contact").click();
-        }
-    }
-}
-
 loadProduct();
 </script>
 

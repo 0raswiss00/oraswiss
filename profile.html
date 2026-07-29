@@ -360,7 +360,6 @@
     const customName = meta.custom_username || meta.full_name || "Seller";
     sellerTitle.textContent = `${customName}.oraswiss`;
 
-    // Ngarkimi i imazhit të profilit nga image_url
     if (meta.image_url) {
       avatarEl.src = meta.image_url;
     }
@@ -478,8 +477,10 @@
       msg.style.color = "var(--accent)";
       msg.textContent = "Profili u përditësua me sukses!";
       setTimeout(() => window.location.reload(), 1500);
+    });
+  }
 
-  // Verifikimi i Identitetit dhe dërgimi i email-it (përdor "identity_documents")
+  // Verifikimi i Identitetit dhe dërgimi i email-it
   const verifyBtn = document.getElementById("btnVerify");
   if (verifyBtn) {
     verifyBtn.addEventListener("click", async () => {
@@ -539,18 +540,7 @@
       await supabase.functions.invoke("send-email-notification", {
         body: {
           subject: "Kërkesë e re verifikimi",
-          message: `U dërgua një kërkesë e re për verifikim.
-
-Email: ${user.email}
-
-Dokumenti: ${documentType}
-Numri: ${documentNumber}
-
-Foto përpara:
-${frontUrl?.signedUrl || ""}
-
-Foto mbrapa:
-${backUrl?.signedUrl || ""}`
+          message: `U dërgua një kërkesë e re për verifikim.\n\nEmail: ${user.email}\n\nDokumenti: ${documentType}\nNumri: ${documentNumber}`
         }
       });
 

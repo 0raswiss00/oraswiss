@@ -361,13 +361,8 @@
     sellerTitle.textContent = `${customName}.oraswiss`;
 
     // Ngarkimi i imazhit të profilit nga bucket-i publik "avatars"
-    if (meta.image_url) {
+   if (meta.image_url) {
       avatarEl.src = meta.image_url;
-    }
-      
-      if (publicUrlData?.publicUrl) {
-        avatarEl.src = publicUrlData.publicUrl;
-      }
     }
 
     const created = new Date(meta.created_at || (user ? user.created_at : Date.now()));

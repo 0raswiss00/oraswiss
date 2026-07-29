@@ -17,9 +17,20 @@ body{
     padding:10px 15px;
     display:flex;
     align-items:center;
-    gap:15px;
+    gap:12px;
     border-bottom:1px solid #ddd;
     box-shadow:0 2px 4px rgba(0,0,0,0.05);
+}
+.back-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
 }
 .product-header img{
     width:50px;
@@ -123,6 +134,7 @@ body{
 <body>
 
 <div class="product-header" id="productHeader">
+    <button class="back-btn" id="backBtn" title="Kthehu">⬅</button>
     <img id="headerImg" src="" alt="">
     <div class="product-info">
         <div class="brand" id="headerTitle">Duke ngarkuar...</div>
@@ -152,6 +164,11 @@ const urlParams = new URLSearchParams(window.location.search);
 const conversationId = urlParams.get("conversation");
 let currentUserId = null;
 
+// Butoni Back (Kthehu te lista e mesazheve)
+document.getElementById("backBtn").onclick = () => {
+    window.location.href = "messages.html";
+};
+
 async function initChat() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
@@ -161,7 +178,7 @@ async function initChat() {
     currentUserId = user.id;
 
     if (!conversationId) {
-        alert("Bisedë e pavlefshme!");
+        window.location.href = "messages.html";
         return;
     }
 
@@ -171,7 +188,7 @@ async function initChat() {
         .eq("id", conversationId);
 
     if (chatError || !chats || chats.length === 0) {
-        console.error("Gabim te biseda:", chatError);
+        window.location.href = "messages.html";
         return;
     }
     const chat = chats[0];
@@ -188,7 +205,11 @@ async function initChat() {
             document.getElementById("headerImg").src = img || "";
             document.getElementById("headerTitle").innerText = `${watch.brand || ""} ${watch.model || ""}`;
             document.getElementById("headerPrice").innerText = `${watch.price || 0} €`;
+        } else {
+            document.getElementById("headerTitle").innerText = "Bisedë";
         }
+    } else {
+        document.getElementById("headerTitle").innerText = "Bisedë";
     }
 
     await loadMessages();

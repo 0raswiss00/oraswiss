@@ -262,7 +262,8 @@ async function loadProduct() {
         return;
     }
 
-    const tableName = (category === "bracelets_straps") ? "bracelets_straps" : "oras";
+    const isBracelet = (category === "bracelets_straps");
+    const tableName = isBracelet ? "bracelets_straps" : "oras";
 
     try {
         const { data, error } = await supabaseClient
@@ -275,15 +276,12 @@ async function loadProduct() {
 
         const sellerProfileUrl = "profile.html?id=" + data.user_id;
 
-       // Merr të dhënat e profilit të shitësit nga tabela 'profiles'
-       // Merr të dhënat e profilit të shitësit nga tabela 'profiles'
         const { data: profileData } = await supabaseClient
             .from("profiles")
             .select("custom_username, full_name, image_url, created_at")
             .eq("id", data.user_id)
             .maybeSingle();
 
-        // Përdor emrin e zgjedhur custom ose full_name, nëse jo fallcohet te 'oraswiss'
         const displayName = profileData?.custom_username || profileData?.full_name || data.seller_name || "oraswiss";
         
         const osNameEl = document.getElementById("os-name");
@@ -298,7 +296,6 @@ async function loadProduct() {
             osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
         }
 
-        // Vendos foton e profilit të zgjedhur nga databaza
         if (profileData?.image_url) {
             const avatarContainer = document.getElementById("os-avatar-box");
             if (avatarContainer) {
@@ -306,7 +303,6 @@ async function loadProduct() {
             }
         }
 
-        // Viti i saktë i regjistrimit nga tabela profiles -> created_at
         const joinedDateSource = profileData?.created_at || data.created_at || Date.now();
         const joined = new Date(joinedDateSource);
         const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
@@ -315,7 +311,6 @@ async function loadProduct() {
             joinedEl.textContent = "Anëtar që nga " + formattedJoined;
         }
 
-        // Llogarit totalin e artikujve nga të dyja tabelat
         let totalItemsCount = 0;
         if (data.user_id) {
             const { count: countOras } = await supabaseClient
@@ -399,8 +394,9 @@ async function loadProduct() {
         currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
         currentImgIndex = 0;
 
-        document.getElementById("brand").textContent = data.brand || "N/A";
-        document.getElementById("model").textContent = data.model || "N/A";
+        // Për rripat, nëse nuk ka fushë 'brand', përdor 'type' ose një vlerë alternative
+        document.getElementById("brand").textContent = data.brand || data.type || "Oraswiss Accessory";
+        document.getElementById("model").textContent = data.model || data.reference || "N/A";
         
         const currencySymbol = data.currency || "€";
         document.getElementById("top-price").textContent = (data.price || 0) + " " + currencySymbol;
@@ -408,7 +404,7 @@ async function loadProduct() {
         const specsContainer = document.getElementById("specs");
         specsContainer.innerHTML = "";
 
-        if (tableName === "bracelets_straps") {
+        if (isBracelet) {
             specsContainer.innerHTML = `
                 <div class="info-row"><span>Type</span><span>${data.type || "N/A"}</span></div>
                 <div class="info-row"><span>Reference</span><span>${data.reference || "N/A"}</span></div>
@@ -479,7 +475,7 @@ async function loadProduct() {
                             body: JSON.stringify({
                                 product_id: productId,
                                 price: data.price,
-                                product_name: data.model
+                                product_name: data.model || data.reference
                             })
                         }
                     );
@@ -502,14 +498,13 @@ async function loadProduct() {
 
         document.getElementById("whatsapp").href =
             "https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per%20" +
-            encodeURIComponent(data.model);
+            encodeURIComponent(data.model || data.reference || "produktin");
 
     } catch(err) {
         console.error(err);
         container.innerHTML = "Gabim: " + err.message;
     }
 }
-
 function updateGallery() {
     if(currentImages.length === 0) return;
     document.getElementById("main-photo").src = currentImages[currentImgIndex];

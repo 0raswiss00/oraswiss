@@ -320,8 +320,10 @@
   const zipEl = document.getElementById("userZip");
   const logoutBtn = document.getElementById("btnLogout");
   const watchList = document.getElementById("sellerWatches");
+  const feedbackList = document.getElementById("feedbackList");
   const avatarEl = document.getElementById("sellerAvatar");
 
+  // Funksioni për të ngarkuar artikujt (orët dhe aksesorët)
   async function loadWatches(uid) {
     watchList.innerHTML = "";
     const tables = [
@@ -352,6 +354,28 @@
     }
   }
 
+  // Funksioni për të ngarkuar feedback-un e përdoruesit
+  async function loadFeedback(uid) {
+    if (!feedbackList) return;
+    feedbackList.innerHTML = "";
+
+    const { data, error } = await supabase
+      .from("feedback") // Ndrysho emrin e tabelës nëse e ke ndryshe (p.sh. reviews, ratings)
+      .select("*")
+      .eq("seller_id", uid); // Ose user_id në varësi të skemës tënde
+
+    if (error || !data || data.length === 0) {
+      feedbackList.innerHTML = "<li>Nuk ka ende feedback.</li>";
+      return;
+    }
+
+    data.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item.comment || item.message || "Vlerësim pa koment.";
+      feedbackList.appendChild(li);
+    });
+  }
+
   window.addEventListener("DOMContentLoaded", async () => {
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -367,29 +391,29 @@
 
     const isOwner = user && user.id === profileId;
 
-    const { data: sellerData, error: sellerError } = await supabase
+    // Merr profilin nga tabela profiles
+    const { data: profileData } = await supabase
       .from("profiles")
       .select("*")
-      .eq("id", profileId);
+      .eq("id", profileId)
+      .maybeSingle();
 
-    let meta = {};
-    if (!sellerError && sellerData && sellerData.length > 0) {
-      meta = sellerData[0];
-    } else if (isOwner && user) {
-      meta = user.user_metadata || {};
-    }
+    let meta = profileData || {};
 
     document.body.style.visibility = "visible";
 
+    // Shfaq emrin e saktë (custom_username ose full_name)
     const sellerTitle = document.getElementById("sellerTitle");
     const customName = meta.custom_username || meta.full_name || "Seller";
     sellerTitle.textContent = `${customName}.oraswiss`;
 
+    // Shfaq foton e profilit nëse ekziston
     if (meta.image_url) {
       avatarEl.src = meta.image_url;
     }
 
-    const created = new Date(meta.created_at || (user ? user.created_at : Date.now()));
+    // Data e regjistrimit
+    const created = new Date(meta.created_at || Date.now());
     const joinedText = document.getElementById("sellerJoined");
     joinedText.textContent = "Anëtar që nga " + created.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
 
@@ -404,9 +428,10 @@
       "DE": "🇩🇪 Gjermani"
     };
 
-    const rawCountry = meta.country || meta.shteti || meta.country_name || (user?.user_metadata ? (user.user_metadata.country || user.user_metadata.shteti) : null) || "-";
+    const rawCountry = meta.country || meta.shteti || meta.country_name || "-";
     countryEl.textContent = countries[rawCountry] || rawCountry;
     
+    // Nëse jemi te profili ynë (owner), shfaq të dhënat private dhe inputet e editimit
     if (isOwner && user) {
       document.querySelectorAll(".private-field").forEach(el => el.style.display = "block");
 
@@ -426,7 +451,9 @@
       document.getElementById("editZip").value = meta.zip_code || "";
     }
 
+    // Ngarko artikujt dhe feedback-un
     await loadWatches(profileId);
+    await loadFeedback(profileId);
   });
 
   // Ruajtja e ndryshimeve të profilit
@@ -475,7 +502,7 @@
         imagePath = publicUrlData.publicUrl;
       }
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("profiles")
         .upsert({
           id: user.id,
@@ -488,10 +515,7 @@
           zip_code: zipCode,
           image_url: imagePath,
           updated_at: new Date()
-        })
-        .select();
-
-      console.log("Rezultati i ruajtjes:", { data, error });
+        });
 
       if (error) {
         msg.style.color = "var(--danger)";
@@ -505,7 +529,7 @@
     });
   }
 
-  // Verifikimi i Identitetit dhe dërgimi i email-it
+  // Verifikimi i Identitetit
   const verifyBtn = document.getElementById("btnVerify");
   if (verifyBtn) {
     verifyBtn.addEventListener("click", async () => {
@@ -536,14 +560,6 @@
         msg.textContent = "Gabim gjatë ngarkimit të fotove.";
         return;
       }
-
-      const { data: frontUrl } = await supabase.storage
-        .from("identity_documents")
-        .createSignedUrl(frontUpload.data.path, 3600);
-
-      const { data: backUrl } = await supabase.storage
-        .from("identity_documents")
-        .createSignedUrl(backUpload.data.path, 3600);
 
       const { error } = await supabase
         .from("identity_verifications")

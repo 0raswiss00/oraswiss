@@ -253,6 +253,47 @@ const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get("id");
 const category = urlParams.get("category");
 
+function updateGallery() {
+    const mainImageEl = document.getElementById("main-photo");
+    const counterEl = document.getElementById("photo-count");
+    
+    if (!currentImages || currentImages.length === 0) {
+        if (mainImageEl) mainImageEl.src = "";
+        if (counterEl) counterEl.textContent = "0 / 0";
+        return;
+    }
+
+    if (currentImgIndex >= currentImages.length) currentImgIndex = 0;
+    if (currentImgIndex < 0) currentImgIndex = currentImages.length - 1;
+
+    let activeImg = currentImages[currentImgIndex];
+
+    if (activeImg && !activeImg.startsWith("http")) {
+        const bucketName = (category === "bracelets_straps") ? "bracelets_straps" : "oras";
+        const { data: pubUrl } = supabaseClient.storage
+            .from(bucketName)
+            .getPublicUrl(activeImg);
+        
+        if (pubUrl && pubUrl.publicUrl) {
+            activeImg = pubUrl.publicUrl;
+        }
+    }
+
+    if (mainImageEl) {
+        mainImageEl.src = activeImg;
+    }
+
+    if (counterEl) {
+        counterEl.textContent = (currentImgIndex + 1) + " / " + currentImages.length;
+    }
+}
+
+function changeImage(direction) {
+    if (!currentImages || currentImages.length === 0) return;
+    currentImgIndex += direction;
+    updateGallery();
+}
+
 async function loadProduct() {
     const container = document.querySelector(".product-page");
 
@@ -276,7 +317,6 @@ async function loadProduct() {
         let sellerCountryVal = data.seller_country || "-";
         
         if (data.user_id) {
-            // Përdorim .select("*") për të marrë çdo kolonë që ekziston pa rrezikuar gabim 400
             const { data: profileData } = await supabaseClient
                 .from("profiles")
                 .select("*")
@@ -419,9 +459,9 @@ async function loadProduct() {
             sellerCountryEl.innerText = "🌍 " + (countries[sellerCountryVal] || sellerCountryVal);
         }
 
-        // Sigurohemi që variablat e galerisë ekzistojnë
         window.currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
         window.currentImgIndex = 0;
+        updateGallery();
 
         const brandEl = document.getElementById("brand");
         if(brandEl) brandEl.textContent = data.brand || "N/A";
@@ -458,15 +498,16 @@ async function loadProduct() {
         const descEl = document.getElementById("description");
         if(descEl) descEl.innerText = data.description || "N/A";
 
-        // Thirr galerinë vetëm nëse funksioni ekziston realisht
-        if (typeof updateGallery === "function") {
-            updateGallery();
-        }
-
     } catch(err) {
         console.error("Gabim në loadProduct:", err);
     }
 }
+
+function closeLoginModal() {
+    const modal = document.getElementById("login-modal");
+    if(modal) modal.style.display = "none";
+}
+
 loadProduct();
 </script>
 

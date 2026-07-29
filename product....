@@ -73,24 +73,21 @@
         }
         .oraswiss-header {
             display: flex !important;
-            justify-content: space-between !important;
-            align-items: center !important;
-            margin-bottom: 12px !important;
-        }
-        .oraswiss-info {
-            display: flex !important;
             align-items: center !important;
             gap: 12px !important;
+            margin-bottom: 12px !important;
         }
         .oraswiss-avatar {
-            width: 40px !important;
-            height: 40px !important;
+            width: 48px !important;
+            height: 48px !important;
+            min-width: 48px !important;
             background: #222222 !important;
             border-radius: 50% !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
             color: #fff !important;
+            overflow: hidden !important;
         }
         .oraswiss-info h3 {
             margin: 0 !important;
@@ -98,6 +95,9 @@
             font-weight: 700 !important;
             color: #fff !important;
             cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .oraswiss-info h3 span {
             font-weight: normal !important;
@@ -181,37 +181,36 @@
         <p id="description">Loading...</p>
     </div>
 
+    <!-- KARTA E SHITËSIT E INTEGRUAR -->
+    <div class="oraswiss-seller-wrapper">
+        <div class="oraswiss-seller-card">
+            <div class="oraswiss-header">
+                <div class="oraswiss-avatar" id="os-avatar-box">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+                <div style="overflow: hidden; flex: 1;">
+                    <h3 id="os-name">- <span>(Pro)</span></h3>
+                    <p class="oraswiss-green" id="os-feedback">100% Positive Feedback</p>
+                </div>
+            </div>
+            <div class="oraswiss-joined" id="os-joined">Anëtar që nga -</div>
+            <div class="oraswiss-actions">
+                <button class="oraswiss-btn-blue" id="os-items">
+                    Seller's other items (<span id="os-count">0</span>)
+                </button>
+                <button class="oraswiss-btn-white" id="os-contact">
+                    Contact seller
+                </button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div class="buy-bar">
     <a class="buy-btn whatsapp" id="whatsapp">💬 WhatsApp</a>
     <a class="buy-btn offer" id="offer">💰 Suggest Price</a>
     <a class="buy-btn buy" id="buy">🛒 BUY</a>
-</div>
-
-<div class="oraswiss-seller-wrapper">
-    <div class="oraswiss-seller-card">
-        <div class="oraswiss-header">
-            <div class="oraswiss-info">
-                <div class="oraswiss-avatar">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                </div>
-                <div>
-                    <h3 id="os-name">- <span>(Pro)</span></h3>
-                    <p class="oraswiss-green" id="os-feedback">100% Positive Feedback</p>
-                </div>
-            </div>
-        </div>
-        <div class="oraswiss-joined" id="os-joined">Anëtar që nga -</div>
-        <div class="oraswiss-actions">
-            <button class="oraswiss-btn-blue" id="os-items">
-                Seller's other items (<span id="os-count">0</span>)
-            </button>
-            <button class="oraswiss-btn-white" id="os-contact">
-                Contact seller
-            </button>
-        </div>
-    </div>
 </div>
 
 <!-- TABELA E LOGIMIT / REGJISTRIMIT (POPUP) -->
@@ -256,7 +255,7 @@ async function loadProduct() {
     const container = document.querySelector(".product-page");
 
     if (!productId) {
-        container.innerHTML = "Nuk u gjet ID e produktit.";
+        if (container) container.innerHTML = "Nuk u gjet ID e produktit.";
         return;
     }
 
@@ -271,17 +270,46 @@ async function loadProduct() {
 
         if (error) throw error;
 
-        const sellerName = data.seller_name || "Seller";
         const sellerProfileUrl = "profile.html?id=" + data.user_id;
 
+        const { data: profileData } = await supabaseClient
+            .from("profiles")
+            .select("custom_username, full_name, image_url, created_at")
+            .eq("id", data.user_id)
+            .maybeSingle();
+
+        const displayName = profileData?.custom_username || profileData?.full_name || data.seller_name || "Ora Swiss Seller";
+        
         const osNameEl = document.getElementById("os-name");
-        osNameEl.innerHTML = sellerName + "-oraswiss <span>(Pro)</span>";
-        osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
+        if (osNameEl) {
+            osNameEl.innerHTML = `${displayName} <span>(Pro)</span>`;
+            osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
+        }
 
         const osFeedbackEl = document.getElementById("os-feedback");
-        osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
+        if (osFeedbackEl) {
+            osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
+        }
+
+        const avatarContainer = document.getElementById("os-avatar-box");
+        if (avatarContainer) {
+            if (profileData?.image_url) {
+                avatarContainer.innerHTML = `<img src="${profileData.image_url}" alt="Avatar" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+            } else {
+                avatarContainer.innerHTML = `<div style="width:100%; height:100%; border-radius:50%; background:#1f1f1f; display:flex; align-items:center; justify-content:center; font-size:1.2rem; color:var(--accent);">👤</div>`;
+            }
+        }
+
+        const joinedDateSource = profileData?.created_at || data.created_at || Date.now();
+        const joined = new Date(joinedDateSource);
+        const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
+        const joinedEl = document.getElementById("os-joined");
+        if (joinedEl) {
+            joinedEl.textContent = "Anëtar që nga " + formattedJoined;
+        }
 
         let totalItemsCount = 0;
+        let sellerReviewsCount = 0;
         if (data.user_id) {
             const { count: countOras } = await supabaseClient
                 .from("oras")
@@ -294,16 +322,33 @@ async function loadProduct() {
                 .eq("user_id", data.user_id);
 
             totalItemsCount = (countOras || 0) + (countBracelets || 0);
+
+            const { count: countReviews } = await supabaseClient
+                .from("reviews")
+                .select("*", { count: 'exact', head: true })
+                .eq("seller_id", data.user_id);
+
+            sellerReviewsCount = countReviews || 0;
         }
-        document.getElementById("os-count").textContent = totalItemsCount;
+        
+        const osCountEl = document.getElementById("os-count");
+        if (osCountEl) {
+            osCountEl.textContent = totalItemsCount;
+        }
 
-        document.getElementById("os-items").onclick = () => {
-            window.location.href = sellerProfileUrl;
-        };
+        const osFeedbackCountEl = document.getElementById("os-feedback-count");
+        if (osFeedbackCountEl) {
+            osFeedbackCountEl.textContent = `(${sellerReviewsCount})`;
+        } else if (osFeedbackEl) {
+            osFeedbackEl.innerHTML = `Vlerësimet (${sellerReviewsCount})`;
+        }
 
-        const joined = new Date(data.created_at || Date.now());
-        const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
-        document.getElementById("os-joined").textContent = "Anëtar që nga " + formattedJoined;
+        const osItemsEl = document.getElementById("os-items");
+        if (osItemsEl) {
+            osItemsEl.onclick = () => {
+                window.location.href = sellerProfileUrl;
+            };
+        }
 
         const contactBtn = document.getElementById("os-contact");
         if (contactBtn) {
@@ -311,7 +356,8 @@ async function loadProduct() {
                 const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
 
                 if (userError || !user) {
-                    document.getElementById("login-modal").style.display = "flex";
+                    const loginModal = document.getElementById("login-modal");
+                    if (loginModal) loginModal.style.display = "flex";
                     return;
                 }
 
@@ -362,8 +408,12 @@ async function loadProduct() {
             "IT": "🇮🇹 Itali",
             "DE": "🇩🇪 Gjermani"
         };
-        const sCountry = data.seller_country || "-";
-        document.getElementById("seller-country").innerText = "🌍 " + (countries[sCountry] || sCountry);
+
+        const rawCountry = data.seller_country || data.country || data.location || "";
+        const countryEl = document.getElementById("seller-country");
+        if (countryEl) {
+            countryEl.innerText = "🌍 " + (countries[rawCountry] || rawCountry || "Zvicër");
+        }
 
         currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
         currentImgIndex = 0;
@@ -469,20 +519,23 @@ async function loadProduct() {
 
         updateGallery();
 
-        document.getElementById("whatsapp").href =
-            "https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per%20" +
-            encodeURIComponent(data.model);
+        const whatsappEl = document.getElementById("whatsapp");
+        if (whatsappEl) {
+            whatsappEl.href = "https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per%20" + encodeURIComponent(data.model);
+        }
 
     } catch(err) {
         console.error(err);
-        container.innerHTML = "Gabim: " + err.message;
+        if (container) container.innerHTML = "Gabim: " + err.message;
     }
 }
 
 function updateGallery() {
     if(currentImages.length === 0) return;
-    document.getElementById("main-photo").src = currentImages[currentImgIndex];
-    document.getElementById("photo-count").innerText = (currentImgIndex + 1) + " / " + currentImages.length;
+    const mainPhoto = document.getElementById("main-photo");
+    const photoCount = document.getElementById("photo-count");
+    if (mainPhoto) mainPhoto.src = currentImages[currentImgIndex];
+    if (photoCount) photoCount.innerText = (currentImgIndex + 1) + " / " + currentImages.length;
 }
 
 function changeImage(direction) {
@@ -509,7 +562,8 @@ function toggleLike(element) {
 }
 
 function closeLoginModal() {
-    document.getElementById("login-modal").style.display = "none";
+    const modal = document.getElementById("login-modal");
+    if (modal) modal.style.display = "none";
 }
 
 function toggleAuthMode(e) {
@@ -524,32 +578,36 @@ function toggleAuthMode(e) {
     const toggleLink = document.getElementById("modal-toggle-link");
     const errorEl = document.getElementById("modal-error");
     
-    errorEl.textContent = "";
+    if (errorEl) errorEl.textContent = "";
 
     if (isRegisterMode) {
-        title.textContent = "Krijo Llogari";
-        desc.textContent = "Regjistrohu për të kontaktuar shitësit dhe për të blerë.";
-        nameInput.style.display = "block";
-        submitBtn.textContent = "Regjistrohu";
-        toggleText.textContent = "Ke tashmë një llogari?";
-        toggleLink.textContent = " Hyr";
+        if (title) title.textContent = "Krijo Llogari";
+        if (desc) desc.textContent = "Regjistrohu për të kontaktuar shitësit dhe për të blerë.";
+        if (nameInput) nameInput.style.display = "block";
+        if (submitBtn) submitBtn.textContent = "Regjistrohu";
+        if (toggleText) toggleText.textContent = "Ke tashmë një llogari?";
+        if (toggleLink) toggleLink.textContent = " Hyr";
     } else {
-        title.textContent = "Identifikohu";
-        desc.textContent = "Duhet të jesh i loguar për të kontaktuar shitësin.";
-        nameInput.style.display = "none";
-        submitBtn.textContent = "Hyr";
-        toggleText.textContent = "Nuk ke llogari?";
-        toggleLink.textContent = " Regjistrohu";
+        if (title) title.textContent = "Identifikohu";
+        if (desc) desc.textContent = "Duhet të jesh i loguar për të kontaktuar shitësin.";
+        if (nameInput) nameInput.style.display = "none";
+        if (submitBtn) submitBtn.textContent = "Hyr";
+        if (toggleText) toggleText.textContent = "Nuk ke llogari?";
+        if (toggleLink) toggleLink.textContent = " Regjistrohu";
     }
 }
 
 async function handleModalAuth() {
-    const email = document.getElementById("modal-email").value;
-    const password = document.getElementById("modal-password").value;
-    const fullName = document.getElementById("modal-name").value;
+    const emailEl = document.getElementById("modal-email");
+    const passwordEl = document.getElementById("modal-password");
+    const nameEl = document.getElementById("modal-name");
     const errorEl = document.getElementById("modal-error");
     
-    errorEl.textContent = "Duke u procesuar...";
+    const email = emailEl ? emailEl.value : "";
+    const password = passwordEl ? passwordEl.value : "";
+    const fullName = nameEl ? nameEl.value : "";
+    
+    if (errorEl) errorEl.textContent = "Duke u procesuar...";
 
     if (isRegisterMode) {
         const { error } = await supabaseClient.auth.signUp({
@@ -559,11 +617,12 @@ async function handleModalAuth() {
         });
 
         if (error) {
-            errorEl.textContent = error.message;
+            if (errorEl) errorEl.textContent = error.message;
         } else {
             alert("Regjistrimi u krye me sukses!");
             closeLoginModal();
-            document.getElementById("os-contact").click();
+            const contactBtn = document.getElementById("os-contact");
+            if (contactBtn) contactBtn.click();
         }
     } else {
         const { error } = await supabaseClient.auth.signInWithPassword({
@@ -572,651 +631,16 @@ async function handleModalAuth() {
         });
 
         if (error) {
-            errorEl.textContent = error.message;
+            if (errorEl) errorEl.textContent = error.message;
         } else {
             closeLoginModal();
-            document.getElementById("os-contact").click();
+            const contactBtn = document.getElementById("os-contact");
+            if (contactBtn) contactBtn.click();
         }
     }
 }
 
 loadProduct();
 </script>
-
-</body>
-</html>
-
-i fundit
-<!DOCTYPE html>
-<html lang="sq">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        * { box-sizing: border-box; }
-        body { margin: 0; background: #050505; color: white; font-family: Arial, sans-serif; padding-bottom: 90px; }
-        .product-page { width: 100%; min-height: 100vh; }
-        .gallery { position: relative; width: 100%; height: 55vh; background: #000; overflow: hidden; }
-        .gallery img { width: 100%; height: 100%; object-fit: contain; }
-        .photo-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); border: none; color: white; font-size: 35px; width: 45px; height: 60px; border-radius: 10px; cursor: pointer; }
-        .photo-left { left: 15px; } .photo-right { right: 15px; }
-        .photo-counter { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.6); padding: 7px 15px; border-radius: 20px; }
-        
-        .details { padding: 20px; max-width: 900px; margin: auto; position: relative; }
-        
-        .brand { font-size: 18px; color: #aaa; margin-bottom: 4px; }
-        .model { font-size: 30px; font-weight: bold; margin-bottom: 15px; display: block; }
-        
-        .price-country-row { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
-        .price { font-size: 28px; color: #25D366; font-weight: bold; }
-        
-        .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; max-width: 900px; margin-left: auto; margin-right: auto; }
-        .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
-        
-        .top-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin: 10px 0;
-        }
-        .top-actions .action {
-            background: #111;
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-size: 15px;
-            cursor: pointer;
-            border: 1px solid #222;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .top-actions .action:hover {
-            background: #222;
-        }
-
-        .buy-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #090909; border-top: 1px solid #333; padding: 10px; display: flex; gap: 8px; z-index: 999; max-width: 900px; margin-left: 50%; transform: translateX(-50%); }
-        .buy-btn { flex: 1; padding: 15px; border-radius: 10px; text-align: center; text-decoration: none; font-weight: bold; cursor: pointer; }
-        .whatsapp { background: #25D366; color: white; }
-        .buy { background: #ffd900; color: black; }
-        .offer { background: #222; color: white; border: 1px solid #444; }
-
-        .oraswiss-seller-wrapper {
-            display: block;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 30px auto;
-            max-width: 900px;
-            width: 100%;
-            padding: 0 20px;
-            box-sizing: border-box;
-        }
-        .oraswiss-seller-card {
-            background-color: #111111 !important;
-            color: #ffffff !important;
-            border: 1px solid #333333 !important;
-            border-radius: 16px !important;
-            padding: 24px !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
-            box-sizing: border-box !important;
-        }
-        .oraswiss-header {
-            display: flex !important;
-            justify-content: space-between !important;
-            align-items: center !important;
-            margin-bottom: 12px !important;
-        }
-        .oraswiss-info {
-            display: flex !important;
-            align-items: center !important;
-            gap: 12px !important;
-        }
-        .oraswiss-avatar {
-            width: 40px !important;
-            height: 40px !important;
-            background: #222222 !important;
-            border-radius: 50% !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            color: #fff !important;
-            overflow: hidden;
-        }
-        .oraswiss-info h3 {
-            margin: 0 !important;
-            font-size: 16px !important;
-            font-weight: 700 !important;
-            color: #fff !important;
-            cursor: pointer;
-        }
-        .oraswiss-info h3 span {
-            font-weight: normal !important;
-            color: #aaa !important;
-            font-size: 13px !important;
-        }
-        .oraswiss-green {
-            margin: 2px 0 0 0 !important;
-            font-size: 12px !important;
-            color: #25D366 !important;
-            font-weight: 600 !important;
-            cursor: pointer;
-        }
-        .oraswiss-joined {
-            font-size: 13px !important;
-            color: #aaa !important;
-            margin-bottom: 16px !important;
-        }
-        .oraswiss-actions {
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 10px !important;
-        }
-        .oraswiss-btn-blue, .oraswiss-btn-white {
-            width: 100% !important;
-            padding: 12px !important;
-            border-radius: 24px !important;
-            font-size: 14px !important;
-            font-weight: 600 !important;
-            cursor: pointer !important;
-            text-align: center !important;
-            box-sizing: border-box !important;
-        }
-        .oraswiss-btn-blue {
-            background: #0066cc !important;
-            color: #ffffff !important;
-            border: none !important;
-        }
-        .oraswiss-btn-white {
-            background: #222222 !important;
-            color: #ffffff !important;
-            border: 1px solid #444444 !important;
-        }
-        .oraswiss-btn-white:hover {
-            background: #333333 !important;
-        }
-    </style>
-</head>
-<body>
-
-<div class="product-page">
-
-    <div class="gallery">
-        <button class="photo-btn photo-left" onclick="changeImage(-1)">❮</button>
-        <img id="main-photo" src="">
-        <button class="photo-btn photo-right" onclick="changeImage(1)">❯</button>
-        <div class="photo-counter" id="photo-count">1 / 1</div>
-    </div>
-    
-    <div class="details">
-        <div class="top-actions">
-            <div class="action" onclick="shareProduct()">🔗 Share</div>
-            <div class="action" onclick="toggleLike(this)" title="Ruaj në të preferuarat">♡ Like</div>
-        </div>
-
-        <div class="brand" id="brand"> </div>
-        <div class="model" id="model"> </div>
-
-        <div class="price-country-row">
-            <div class="price" id="top-price"> </div>
-            <div id="seller-country" style="background:#111; padding:8px 12px; border-radius:20px; font-size:14px; border: 1px solid #222;">🌍 -</div>
-        </div>
-    </div>
-    
-    <div class="info-box" id="specs">
-        <!-- Të dhënat do të gjenerohen automatikisht -->
-    </div>
-
-    <div class="info-box">
-        <h3>Description</h3>
-        <p id="description">Loading...</p>
-    </div>
-
-    <!-- KARTA E SHITËSIT E INTEGRUAR KËTU -->
-    <div class="oraswiss-seller-wrapper">
-        <div class="oraswiss-seller-card">
-            <div class="oraswiss-header">
-                <div class="oraswiss-info">
-                    <div class="oraswiss-avatar" id="os-avatar-box">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    </div>
-                    <div>
-                        <h3 id="os-name">- <span>(Pro)</span></h3>
-                        <p class="oraswiss-green" id="os-feedback">100% Positive Feedback</p>
-                    </div>
-                </div>
-            </div>
-            <div class="oraswiss-joined" id="os-joined">Anëtar që nga -</div>
-            <div class="oraswiss-actions">
-                <button class="oraswiss-btn-blue" id="os-items">
-                    Seller's other items (<span id="os-count">0</span>)
-                </button>
-                <button class="oraswiss-btn-white" id="os-contact">
-                    Contact seller
-                </button>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<div class="buy-bar">
-    <a class="buy-btn whatsapp" id="whatsapp">💬 WhatsApp</a>
-    <a class="buy-btn offer" id="offer">💰 Suggest Price</a>
-    <a class="buy-btn buy" id="buy">🛒 BUY</a>
-</div>
-
-<!-- TABELA E LOGIMIT / REGJISTRIMIT (POPUP) -->
-<div id="login-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center;">
-    <div style="background:#111; border:1px solid #333; padding:30px; border-radius:16px; width:90%; max-width:400px; text-align:center; position:relative;">
-        <button onclick="closeLoginModal()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✕</button>
-        
-        <h2 id="modal-title" style="color:#fff; margin-bottom:10px;">Identifikohu</h2>
-        <p id="modal-desc" style="color:#aaa; font-size:14px; margin-bottom:20px;">Duhet të jesh i loguar për të kontaktuar shitësin.</p>
-        
-        <input type="text" id="modal-name" placeholder="Emri Mbiemri" style="display:none; width:100%; padding:12px; margin-bottom:10px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
-        <input type="email" id="modal-email" placeholder="Email" style="width:100%; padding:12px; margin-bottom:10px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
-        <input type="password" id="modal-password" placeholder="Fjalëkalimi" style="width:100%; padding:12px; margin-bottom:15px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
-        
-        <button id="modal-submit-btn" onclick="handleModalAuth()" style="width:100%; padding:12px; background:#0066cc; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-bottom:10px;">Hyr</button>
-        <button onclick="closeLoginModal()" style="width:100%; padding:10px; background:transparent; color:#888; border:1px solid #333; border-radius:8px; cursor:pointer; margin-bottom:15px;">Cancel</button>
-        
-        <div style="color:#666; font-size:13px; border-top:1px solid #222; padding-top:15px;">
-            <span id="modal-toggle-text">Nuk ke llogari?</span> 
-            <a href="#" onclick="toggleAuthMode(event)" id="modal-toggle-link" style="color:#25D366; text-decoration:none; font-weight:bold;"> Regjistrohu</a>
-        </div>
-        
-        <div id="modal-error" style="color:#ff4444; font-size:13px; margin-top:10px;"></div>
-    </div>
-</div>
-
-<script>
-const supabaseClient = window.supabase.createClient(
-    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
-    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-);
-
-let currentImages = [];
-let currentImgIndex = 0;
-let isRegisterMode = false;
-
-const urlParams = new URLSearchParams(window.location.search);
-const productId = urlParams.get("id");
-const category = urlParams.get("category");
-
-async function loadProduct() {
-    const container = document.querySelector(".product-page");
-
-    if (!productId) {
-        container.innerHTML = "Nuk u gjet ID e produktit.";
-        return;
-    }
-
-    let data = null;
-    let tableName = "";
-
-    try {
-        // Provohet fillimisht te tabela e orëve
-        let res = await supabaseClient
-            .from("oras")
-            .select("*")
-            .eq("id", productId)
-            .maybeSingle();
-
-        if (res.data) {
-            data = res.data;
-            tableName = "oras";
-        } else {
-            // Nëse nuk gjendet te orët, kërkohet te rripat dhe aksesorët
-            let resBracelet = await supabaseClient
-                .from("bracelets_straps")
-                .select("*")
-                .eq("id", productId)
-                .maybeSingle();
-
-            if (resBracelet.data) {
-                data = resBracelet.data;
-                tableName = "bracelets_straps";
-            }
-        }
-
-        if (!data) {
-            throw new Error("Produkti nuk u gjet në asnjë prej tabelave.");
-        }
-
-        const isBracelet = (tableName === "bracelets_straps");
-        const sellerProfileUrl = "profile.html?id=" + data.user_id;
-
-        const { data: profileData } = await supabaseClient
-            .from("profiles")
-            .select("custom_username, full_name, image_url, created_at")
-            .eq("id", data.user_id)
-            .maybeSingle();
-
-        const displayName = profileData?.custom_username || profileData?.full_name || data.seller_name || "oraswiss";
-        
-        const osNameEl = document.getElementById("os-name");
-        if (osNameEl) {
-            osNameEl.innerHTML = `${displayName} <span>(Pro)</span>`;
-            osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
-        }
-
-        const osFeedbackEl = document.getElementById("os-feedback");
-        if (osFeedbackEl) {
-            osFeedbackEl.textContent = "100% Positive Feedback";
-            osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
-        }
-
-        if (profileData?.image_url) {
-            const avatarContainer = document.getElementById("os-avatar-box");
-            if (avatarContainer) {
-                avatarContainer.innerHTML = `<img src="${profileData.image_url}" alt="Avatar" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
-            }
-        }
-
-        const joinedDateSource = profileData?.created_at || data.created_at || Date.now();
-        const joined = new Date(joinedDateSource);
-        const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
-        const joinedEl = document.getElementById("os-joined");
-        if (joinedEl) {
-            joinedEl.textContent = "Anëtar që nga " + formattedJoined;
-        }
-
-        let totalItemsCount = 0;
-        if (data.user_id) {
-            const { count: countOras } = await supabaseClient
-                .from("oras")
-                .select("*", { count: 'exact', head: true })
-                .eq("user_id", data.user_id);
-
-            const { count: countBracelets } = await supabaseClient
-                .from("bracelets_straps")
-                .select("*", { count: 'exact', head: true })
-                .eq("user_id", data.user_id);
-
-            totalItemsCount = (countOras || 0) + (countBracelets || 0);
-        }
-        document.getElementById("os-count").textContent = totalItemsCount;
-
-        document.getElementById("os-items").onclick = () => {
-            window.location.href = sellerProfileUrl;
-        };
-
-        const contactBtn = document.getElementById("os-contact");
-        if (contactBtn) {
-            contactBtn.onclick = async () => {
-                const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
-
-                if (userError || !user) {
-                    document.getElementById("login-modal").style.display = "flex";
-                    return;
-                }
-
-                if (user.id === data.user_id) {
-                    alert("Ky është produkti yt!");
-                    return;
-                }
-
-                const { data: existingChat } = await supabaseClient
-                    .from("conversations")
-                    .select("id")
-                    .eq("listing_id", data.id)
-                    .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
-                    .maybeSingle();
-
-                if (existingChat) {
-                    window.location.href = "chat.html?conversation=" + existingChat.id;
-                    return;
-                }
-
-                const { data: newConversation, error: createError } = await supabaseClient
-                    .from("conversations")
-                    .insert({
-                        listing_id: data.id,
-                        buyer_id: user.id,
-                        seller_id: data.user_id,
-                        last_message: "Bisedë e re"
-                    })
-                    .select()
-                    .single();
-
-                if (createError) {
-                    alert("Gabim: " + createError.message);
-                    return;
-                }
-
-                window.location.href = "chat.html?conversation=" + newConversation.id;
-            };
-        }
-
-        const countries = {
-            "Albania": "🇦🇱 Shqipëri",
-            "Switzerland": "🇨🇭 Zvicër",
-            "Italy": "🇮🇹 Itali",
-            "Germany": "🇩🇪 Gjermani",
-            "AL": "🇦🇱 Shqipëri",
-            "CH": "🇨🇭 Zvicër",
-            "IT": "🇮🇹 Itali",
-            "DE": "🇩🇪 Gjermani"
-        };
-        const sCountry = data.seller_country || "-";
-        document.getElementById("seller-country").innerText = "🌍 " + (countries[sCountry] || sCountry);
-
-        currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
-        currentImgIndex = 0;
-
-        document.getElementById("brand").textContent = data.brand || data.type || "Oraswiss";
-        document.getElementById("model").textContent = data.model || data.reference || "N/A";
-        
-        const currencySymbol = data.currency || "€";
-        document.getElementById("top-price").textContent = (data.price || 0) + " " + currencySymbol;
-        
-        const specsContainer = document.getElementById("specs");
-        specsContainer.innerHTML = "";
-
-        if (isBracelet) {
-            specsContainer.innerHTML = `
-                <div class="info-row"><span>Type</span><span>${data.type || "N/A"}</span></div>
-                <div class="info-row"><span>Reference</span><span>${data.reference || "N/A"}</span></div>
-                <div class="info-row"><span>Condition</span><span>${data.condition || "N/A"}</span></div>
-                <div class="info-row"><span>Material</span><span>${data.material || "N/A"}</span></div>
-                <div class="info-row"><span>Net Weight</span><span>${data.net_weight ? data.net_weight + ' g' : "N/A"}</span></div>
-                <div class="info-row"><span>Gold Purity</span><span>${data.gold_purity || "N/A"}</span></div>
-                <div class="info-row"><span>Color</span><span>${data.color || "N/A"}</span></div>
-                <div class="info-row"><span>Lug Width</span><span>${data.lug_width || "N/A"}</span></div>
-                <div class="info-row"><span>Clasp Width</span><span>${data.clasp_width || "N/A"}</span></div>
-                <div class="info-row"><span>Length</span><span>${data.length || "N/A"}</span></div>
-                <div class="info-row"><span>Thickness</span><span>${data.thickness || "N/A"}</span></div>
-                <div class="info-row"><span>Year</span><span>${data.year || "N/A"}</span></div>
-            `;
-        } else {
-            const serial = data.serial_number || "";
-            const maskedSerial = serial.length > 3 ? serial.substring(0, 3) + 'X'.repeat(serial.length - 3) : (serial || "N/A");
-            
-            specsContainer.innerHTML = `
-                <div class="info-row"><span>Reference</span><span>${data.reference || "N/A"}</span></div>
-                <div class="info-row"><span>Serial Number</span><span>${maskedSerial}</span></div>
-                <div class="info-row"><span>Movement</span><span>${data.movement || "N/A"}</span></div>
-                <div class="info-row"><span>Caliber</span><span>${data.caliber || "N/A"}</span></div>
-                <div class="info-row"><span>Frequency</span><span>${data.frekuen || "N/A"}</span></div>
-                <div class="info-row"><span>Material</span><span>${data.material || "N/A"}</span></div>
-                <div class="info-row"><span>Case Size</span><span>${data.case_size || "N/A"}</span></div>
-                <div class="info-row"><span>Movement Size</span><span>${data.movement_size || "N/A"}</span></div>
-                <div class="info-row"><span>Year</span><span>${data.year || "N/A"}</span></div>
-                <div class="info-row"><span>Function</span><span>${data.function || "N/A"}</span></div>
-                <div class="info-row"><span>Service</span><span>${data.service ? "Yes (Serviced)" : "No"}</span></div>
-                <div class="info-row"><span>Service Date</span><span>${data.service_date || "-"}</span></div>
-                <div class="info-row"><span>Origin</span><span>${data.origin || "N/A"}</span></div>
-                <div class="info-row"><span>Work Status</span><span>${data.work_status || "N/A"}</span></div>
-                <div class="info-row"><span>Bracelet</span><span>${data.bracelet || "N/A"}</span></div>
-                <div class="info-row"><span>Glass</span><span>${data.glass || "N/A"}</span></div>
-                <div class="info-row"><span>Warranty</span><span>${data.warranty || "N/A"}</span></div>
-                <div class="info-row"><span>Warranty Months</span><span>${data.warranty_months || "N/A"}</span></div>
-                <div class="info-row">
-                    <span>Shipping & Courier</span>
-                    <span>
-                        ${
-                            (data.shipping_provider || data.shipping || data.kurrier) && (data.shipping_days || data.ditet_dergeses) 
-                            ? (data.shipping_provider || data.shipping || data.kurrier) + ' (' + (data.shipping_days || data.ditet_dergeses) + ')' 
-                            : (data.shipping_provider || data.shipping || data.kurrier || data.shipping_days || data.ditet_dergeses || "N/A")
-                        }
-                    </span>
-                </div>
-                <div class="info-row">
-                    <span>Box & Papers</span>
-                    <span>${data.box_papers || data.box_and_papers || data.box || data.papers || "N/A"}</span>
-                </div>
-            `;
-        }
-
-        document.getElementById("description").innerText = data.description || "N/A";
-
-        const buyBtn = document.getElementById("buy");
-        if (buyBtn) {
-            buyBtn.onclick = async function(e) {
-                e.preventDefault();
-                buyBtn.innerText = "⏳ Loading...";
-                try {
-                    const response = await fetch(
-                        "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
-                        {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                product_id: productId,
-                                price: data.price,
-                                product_name: data.model || data.reference
-                            })
-                        }
-                    );
-                    const result = await response.json();
-                    if (result.paypal_link) {
-                        window.location.href = result.paypal_link;
-                    } else {
-                        alert("PayPal link nuk u krijua");
-                        buyBtn.innerText = "🛒 BUY";
-                    }
-                } catch(error) {
-                    console.error(error);
-                    alert("Gabim me PayPal");
-                    buyBtn.innerText = "🛒 BUY";
-                }
-            };
-        }
-
-        updateGallery();
-
-        document.getElementById("whatsapp").href =
-            "https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per%20" +
-            encodeURIComponent(data.model || data.reference || "produktin");
-
-    } catch(err) {
-        console.error(err);
-        container.innerHTML = "Gabim: " + err.message;
-    }
-}
-function updateGallery() {
-    if(currentImages.length === 0) return;
-    document.getElementById("main-photo").src = currentImages[currentImgIndex];
-    document.getElementById("photo-count").innerText = (currentImgIndex + 1) + " / " + currentImages.length;
-}
-
-function changeImage(direction) {
-    if(currentImages.length === 0) return;
-    currentImgIndex += direction;
-    if(currentImgIndex >= currentImages.length) currentImgIndex = 0;
-    if(currentImgIndex < 0) currentImgIndex = currentImages.length - 1;
-    updateGallery();
-}
-
-function shareProduct() {
-    navigator.clipboard.writeText(window.location.href);
-    alert("Linku u kopjua!");
-}
-
-function toggleLike(element) {
-    if(element.innerText.includes("♡")) {
-        element.innerHTML = "❤️ Liked";
-        element.style.borderColor = "#25D366";
-    } else {
-        element.innerHTML = "♡ Like";
-        element.style.borderColor = "#222";
-    }
-}
-
-function closeLoginModal() {
-    document.getElementById("login-modal").style.display = "none";
-}
-
-function toggleAuthMode(e) {
-    e.preventDefault();
-    isRegisterMode = !isRegisterMode;
-    
-    const title = document.getElementById("modal-title");
-    const desc = document.getElementById("modal-desc");
-    const nameInput = document.getElementById("modal-name");
-    const submitBtn = document.getElementById("modal-submit-btn");
-    const toggleText = document.getElementById("modal-toggle-text");
-    const toggleLink = document.getElementById("modal-toggle-link");
-    const errorEl = document.getElementById("modal-error");
-    
-    errorEl.textContent = "";
-
-    if (isRegisterMode) {
-        title.textContent = "Krijo Llogari";
-        desc.textContent = "Regjistrohu për të kontaktuar shitësit dhe për të blerë.";
-        nameInput.style.display = "block";
-        submitBtn.textContent = "Regjistrohu";
-        toggleText.textContent = "Ke tashmë një llogari?";
-        toggleLink.textContent = " Hyr";
-    } else {
-        title.textContent = "Identifikohu";
-        desc.textContent = "Duhet të jesh i loguar për të kontaktuar shitësin.";
-        nameInput.style.display = "none";
-        submitBtn.textContent = "Hyr";
-        toggleText.textContent = "Nuk ke llogari?";
-        toggleLink.textContent = " Regjistrohu";
-    }
-}
-
-async function handleModalAuth() {
-    const email = document.getElementById("modal-email").value;
-    const password = document.getElementById("modal-password").value;
-    const fullName = document.getElementById("modal-name").value;
-    const errorEl = document.getElementById("modal-error");
-    
-    errorEl.textContent = "Duke u procesuar...";
-
-    if (isRegisterMode) {
-        const { error } = await supabaseClient.auth.signUp({
-            email: email,
-            password: password,
-            options: { data: { full_name: fullName } }
-        });
-
-        if (error) {
-            errorEl.textContent = error.message;
-        } else {
-            alert("Regjistrimi u krye me sukses!");
-            closeLoginModal();
-            document.getElementById("os-contact").click();
-        }
-    } else {
-        const { error } = await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
-
-        if (error) {
-            errorEl.textContent = error.message;
-        } else {
-            closeLoginModal();
-            document.getElementById("os-contact").click();
-        }
-    }
-}
-
-loadProduct();
-</script>
-
 </body>
 </html>

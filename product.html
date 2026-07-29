@@ -309,6 +309,7 @@ async function loadProduct() {
         }
 
         let totalItemsCount = 0;
+        let sellerReviewsCount = 0;
         if (data.user_id) {
             const { count: countOras } = await supabaseClient
                 .from("oras")
@@ -321,11 +322,25 @@ async function loadProduct() {
                 .eq("user_id", data.user_id);
 
             totalItemsCount = (countOras || 0) + (countBracelets || 0);
+
+            const { count: countReviews } = await supabaseClient
+                .from("reviews")
+                .select("*", { count: 'exact', head: true })
+                .eq("seller_id", data.user_id);
+
+            sellerReviewsCount = countReviews || 0;
         }
         
         const osCountEl = document.getElementById("os-count");
         if (osCountEl) {
             osCountEl.textContent = totalItemsCount;
+        }
+
+        const osFeedbackCountEl = document.getElementById("os-feedback-count");
+        if (osFeedbackCountEl) {
+            osFeedbackCountEl.textContent = `(${sellerReviewsCount})`;
+        } else if (osFeedbackEl) {
+            osFeedbackEl.innerHTML = `Vlerësimet (${sellerReviewsCount})`;
         }
 
         const osItemsEl = document.getElementById("os-items");

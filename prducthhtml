@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watch Details</title>
+    <title>Product Details</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { box-sizing: border-box; }
@@ -17,7 +17,6 @@
         
         .details { padding: 20px; max-width: 900px; margin: auto; position: relative; }
         
-        /* Rregullimi i Brendit dhe Modelit që të mos jenë ngjitur */
         .brand { font-size: 18px; color: #aaa; margin-bottom: 4px; }
         .model { font-size: 30px; font-weight: bold; margin-bottom: 15px; display: block; }
         
@@ -27,7 +26,6 @@
         .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; max-width: 900px; margin-left: auto; margin-right: auto; }
         .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
         
-        /* Stili për Share dhe Like (Zemrën) */
         .top-actions {
             display: flex;
             justify-content: flex-end;
@@ -55,7 +53,6 @@
         .buy { background: #ffd900; color: black; }
         .offer { background: #222; color: white; border: 1px solid #444; }
 
-        /* ORAWISS SELLER CARD CSS */
         .oraswiss-seller-wrapper {
             display: block;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -161,7 +158,6 @@
     </div>
     
     <div class="details">
-        <!-- Share dhe Like të vendosura bukur -->
         <div class="top-actions">
             <div class="action" onclick="shareProduct()">🔗 Share</div>
             <div class="action" onclick="toggleLike(this)" title="Ruaj në të preferuarat">♡ Like</div>
@@ -177,25 +173,7 @@
     </div>
     
     <div class="info-box" id="specs">
-        <div class="info-row"><span>Reference</span><span id="reference">-</span></div>
-        <div class="info-row"><span>Serial Number</span><span id="serial_number">-</span></div>
-        <div class="info-row"><span>Movement</span><span id="movement">-</span></div>
-        <div class="info-row"><span>Caliber</span><span id="caliber">-</span></div>
-        <div class="info-row"><span>Frequency</span><span id="frequency">-</span></div>
-        <div class="info-row"><span>Material</span><span id="material">-</span></div>
-        <div class="info-row"><span>Case Size</span><span id="case_size">-</span></div>
-        <div class="info-row"><span>Movement Size</span><span id="movement_size">-</span></div>
-        <div class="info-row"><span>Year</span><span id="year">-</span></div>
-        <div class="info-row"><span>Function</span><span id="function">-</span></div>
-        <div class="info-row"><span>Service</span><span id="service_display">-</span></div>
-        <div class="info-row"><span>Service Date</span><span id="service_date_display">-</span></div>
-        <div class="info-row"><span>Origin</span><span id="origin">-</span></div>
-        <div class="info-row"><span>Work Status</span><span id="work_status">-</span></div>
-        <div class="info-row"><span>Bracelet</span><span id="bracelet">-</span></div>
-        <div class="info-row"><span>Glass</span><span id="glass">-</span></div>
-        <div class="info-row"><span>Warranty</span><span id="warranty">-</span></div>
-        <div class="info-row"><span>Warranty Months</span><span id="warranty_months">-</span></div>
-        <div class="info-row"><span>Box & Papers</span><span id="box_papers">-</span></div>
+        <!-- Të dhënat do të gjenerohen automatikisht -->
     </div>
 
     <div class="info-box">
@@ -211,7 +189,6 @@
     <a class="buy-btn buy" id="buy">🛒 BUY</a>
 </div>
 
-<!-- ORAWISS SELLER CARD -->
 <div class="oraswiss-seller-wrapper">
     <div class="oraswiss-seller-card">
         <div class="oraswiss-header">
@@ -237,6 +214,30 @@
     </div>
 </div>
 
+<!-- TABELA E LOGIMIT / REGJISTRIMIT (POPUP) -->
+<div id="login-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:#111; border:1px solid #333; padding:30px; border-radius:16px; width:90%; max-width:400px; text-align:center; position:relative;">
+        <button onclick="closeLoginModal()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✕</button>
+        
+        <h2 id="modal-title" style="color:#fff; margin-bottom:10px;">Identifikohu</h2>
+        <p id="modal-desc" style="color:#aaa; font-size:14px; margin-bottom:20px;">Duhet të jesh i loguar për të kontaktuar shitësin.</p>
+        
+        <input type="text" id="modal-name" placeholder="Emri Mbiemri" style="display:none; width:100%; padding:12px; margin-bottom:10px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
+        <input type="email" id="modal-email" placeholder="Email" style="width:100%; padding:12px; margin-bottom:10px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
+        <input type="password" id="modal-password" placeholder="Fjalëkalimi" style="width:100%; padding:12px; margin-bottom:15px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
+        
+        <button id="modal-submit-btn" onclick="handleModalAuth()" style="width:100%; padding:12px; background:#0066cc; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-bottom:10px;">Hyr</button>
+        <button onclick="closeLoginModal()" style="width:100%; padding:10px; background:transparent; color:#888; border:1px solid #333; border-radius:8px; cursor:pointer; margin-bottom:15px;">Cancel</button>
+        
+        <div style="color:#666; font-size:13px; border-top:1px solid #222; padding-top:15px;">
+            <span id="modal-toggle-text">Nuk ke llogari?</span> 
+            <a href="#" onclick="toggleAuthMode(event)" id="modal-toggle-link" style="color:#25D366; text-decoration:none; font-weight:bold;"> Regjistrohu</a>
+        </div>
+        
+        <div id="modal-error" style="color:#ff4444; font-size:13px; margin-top:10px;"></div>
+    </div>
+</div>
+
 <script>
 const supabaseClient = window.supabase.createClient(
     "https://gnwsrmelmeqduhhmfmoa.supabase.co",
@@ -245,7 +246,11 @@ const supabaseClient = window.supabase.createClient(
 
 let currentImages = [];
 let currentImgIndex = 0;
-const productId = new URLSearchParams(window.location.search).get("id");
+let isRegisterMode = false;
+
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get("id");
+const category = urlParams.get("category");
 
 async function loadProduct() {
     const container = document.querySelector(".product-page");
@@ -255,9 +260,11 @@ async function loadProduct() {
         return;
     }
 
+    const tableName = (category === "bracelets_straps") ? "bracelets_straps" : "oras";
+
     try {
         const { data, error } = await supabaseClient
-            .from("oras")
+            .from(tableName)
             .select("*")
             .eq("id", productId)
             .single();
@@ -304,7 +311,7 @@ async function loadProduct() {
                 const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
 
                 if (userError || !user) {
-                    window.location.href = "login.html";
+                    document.getElementById("login-modal").style.display = "flex";
                     return;
                 }
 
@@ -364,33 +371,67 @@ async function loadProduct() {
         document.getElementById("brand").textContent = data.brand || "N/A";
         document.getElementById("model").textContent = data.model || "N/A";
         
-        // Rregullimi i shfaqjes së çmimit dhe valutës saktë
         const currencySymbol = data.currency || "€";
         document.getElementById("top-price").textContent = (data.price || 0) + " " + currencySymbol;
         
-        const serial = data.serial_number || "";
-        const maskedSerial = serial.length > 3 ? serial.substring(0, 3) + 'X'.repeat(serial.length - 3) : (serial || "N/A");
-        const serialElement = document.getElementById("serial_number");
-        if (serialElement) { serialElement.innerText = maskedSerial; }
+        const specsContainer = document.getElementById("specs");
+        specsContainer.innerHTML = "";
 
-        document.getElementById("reference").innerText = data.reference || "N/A";
-        document.getElementById("movement").innerText = data.movement || "N/A";
-        document.getElementById("caliber").innerText = data.caliber || "N/A";
-        document.getElementById("frequency").innerText = data.frekuen || "N/A";
-        document.getElementById("material").innerText = data.material || "N/A";
-        document.getElementById("case_size").innerText = data.case_size || "N/A";
-        document.getElementById("movement_size").innerText = data.movement_size || "N/A";
-        document.getElementById("year").innerText = data.year || "N/A";
-        document.getElementById("function").innerText = data.function || "N/A";
-        document.getElementById("service_display").innerText = data.service ? "Yes (Serviced)" : "No";
-        document.getElementById("service_date_display").innerText = data.service_date || "-";
-        document.getElementById("origin").innerText = data.origin || "N/A";
-        document.getElementById("work_status").innerText = data.work_status || "N/A";
-        document.getElementById("bracelet").innerText = data.bracelet || "N/A";
-        document.getElementById("glass").innerText = data.glass || "N/A";
-        document.getElementById("warranty").innerText = data.warranty || "N/A";
-        document.getElementById("warranty_months").innerText = data.warranty_months || "N/A";
-        document.getElementById("box_papers").innerText = data.box_papers ? "Full Set" : "Watch Only";
+        if (tableName === "bracelets_straps") {
+            specsContainer.innerHTML = `
+                <div class="info-row"><span>Type</span><span>${data.type || "N/A"}</span></div>
+                <div class="info-row"><span>Reference</span><span>${data.reference || "N/A"}</span></div>
+                <div class="info-row"><span>Condition</span><span>${data.condition || "N/A"}</span></div>
+                <div class="info-row"><span>Material</span><span>${data.material || "N/A"}</span></div>
+                <div class="info-row"><span>Net Weight</span><span>${data.net_weight ? data.net_weight + ' g' : "N/A"}</span></div>
+                <div class="info-row"><span>Gold Purity</span><span>${data.gold_purity || "N/A"}</span></div>
+                <div class="info-row"><span>Color</span><span>${data.color || "N/A"}</span></div>
+                <div class="info-row"><span>Lug Width</span><span>${data.lug_width || "N/A"}</span></div>
+                <div class="info-row"><span>Clasp Width</span><span>${data.clasp_width || "N/A"}</span></div>
+                <div class="info-row"><span>Length</span><span>${data.length || "N/A"}</span></div>
+                <div class="info-row"><span>Thickness</span><span>${data.thickness || "N/A"}</span></div>
+                <div class="info-row"><span>Year</span><span>${data.year || "N/A"}</span></div>
+            `;
+        } else {
+            const serial = data.serial_number || "";
+            const maskedSerial = serial.length > 3 ? serial.substring(0, 3) + 'X'.repeat(serial.length - 3) : (serial || "N/A");
+            
+            specsContainer.innerHTML = `
+                <div class="info-row"><span>Reference</span><span>${data.reference || "N/A"}</span></div>
+                <div class="info-row"><span>Serial Number</span><span>${maskedSerial}</span></div>
+                <div class="info-row"><span>Movement</span><span>${data.movement || "N/A"}</span></div>
+                <div class="info-row"><span>Caliber</span><span>${data.caliber || "N/A"}</span></div>
+                <div class="info-row"><span>Frequency</span><span>${data.frekuen || "N/A"}</span></div>
+                <div class="info-row"><span>Material</span><span>${data.material || "N/A"}</span></div>
+                <div class="info-row"><span>Case Size</span><span>${data.case_size || "N/A"}</span></div>
+                <div class="info-row"><span>Movement Size</span><span>${data.movement_size || "N/A"}</span></div>
+                <div class="info-row"><span>Year</span><span>${data.year || "N/A"}</span></div>
+                <div class="info-row"><span>Function</span><span>${data.function || "N/A"}</span></div>
+                <div class="info-row"><span>Service</span><span>${data.service ? "Yes (Serviced)" : "No"}</span></div>
+                <div class="info-row"><span>Service Date</span><span>${data.service_date || "-"}</span></div>
+                <div class="info-row"><span>Origin</span><span>${data.origin || "N/A"}</span></div>
+                <div class="info-row"><span>Work Status</span><span>${data.work_status || "N/A"}</span></div>
+                <div class="info-row"><span>Bracelet</span><span>${data.bracelet || "N/A"}</span></div>
+                <div class="info-row"><span>Glass</span><span>${data.glass || "N/A"}</span></div>
+                <div class="info-row"><span>Warranty</span><span>${data.warranty || "N/A"}</span></div>
+                <div class="info-row"><span>Warranty Months</span><span>${data.warranty_months || "N/A"}</span></div>
+                <div class="info-row">
+                    <span>Shipping & Courier</span>
+                    <span>
+                        ${
+                            (data.shipping_provider || data.shipping || data.kurrier) && (data.shipping_days || data.ditet_dergeses) 
+                            ? (data.shipping_provider || data.shipping || data.kurrier) + ' (' + (data.shipping_days || data.ditet_dergeses) + ')' 
+                            : (data.shipping_provider || data.shipping || data.kurrier || data.shipping_days || data.ditet_dergeses || "N/A")
+                        }
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span>Box & Papers</span>
+                    <span>${data.box_papers || data.box_and_papers || data.box || data.papers || "N/A"}</span>
+                </div>
+            `;
+        }
+
         document.getElementById("description").innerText = data.description || "N/A";
 
         const buyBtn = document.getElementById("buy");
@@ -464,6 +505,78 @@ function toggleLike(element) {
     } else {
         element.innerHTML = "♡ Like";
         element.style.borderColor = "#222";
+    }
+}
+
+function closeLoginModal() {
+    document.getElementById("login-modal").style.display = "none";
+}
+
+function toggleAuthMode(e) {
+    e.preventDefault();
+    isRegisterMode = !isRegisterMode;
+    
+    const title = document.getElementById("modal-title");
+    const desc = document.getElementById("modal-desc");
+    const nameInput = document.getElementById("modal-name");
+    const submitBtn = document.getElementById("modal-submit-btn");
+    const toggleText = document.getElementById("modal-toggle-text");
+    const toggleLink = document.getElementById("modal-toggle-link");
+    const errorEl = document.getElementById("modal-error");
+    
+    errorEl.textContent = "";
+
+    if (isRegisterMode) {
+        title.textContent = "Krijo Llogari";
+        desc.textContent = "Regjistrohu për të kontaktuar shitësit dhe për të blerë.";
+        nameInput.style.display = "block";
+        submitBtn.textContent = "Regjistrohu";
+        toggleText.textContent = "Ke tashmë një llogari?";
+        toggleLink.textContent = " Hyr";
+    } else {
+        title.textContent = "Identifikohu";
+        desc.textContent = "Duhet të jesh i loguar për të kontaktuar shitësin.";
+        nameInput.style.display = "none";
+        submitBtn.textContent = "Hyr";
+        toggleText.textContent = "Nuk ke llogari?";
+        toggleLink.textContent = " Regjistrohu";
+    }
+}
+
+async function handleModalAuth() {
+    const email = document.getElementById("modal-email").value;
+    const password = document.getElementById("modal-password").value;
+    const fullName = document.getElementById("modal-name").value;
+    const errorEl = document.getElementById("modal-error");
+    
+    errorEl.textContent = "Duke u procesuar...";
+
+    if (isRegisterMode) {
+        const { error } = await supabaseClient.auth.signUp({
+            email: email,
+            password: password,
+            options: { data: { full_name: fullName } }
+        });
+
+        if (error) {
+            errorEl.textContent = error.message;
+        } else {
+            alert("Regjistrimi u krye me sukses!");
+            closeLoginModal();
+            document.getElementById("os-contact").click();
+        }
+    } else {
+        const { error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) {
+            errorEl.textContent = error.message;
+        } else {
+            closeLoginModal();
+            document.getElementById("os-contact").click();
+        }
     }
 }
 

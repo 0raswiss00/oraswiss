@@ -255,7 +255,7 @@ async function loadProduct() {
     const container = document.querySelector(".product-page");
 
     if (!productId) {
-        container.innerHTML = "Nuk u gjet ID e produktit.";
+        if (container) container.innerHTML = "Nuk u gjet ID e produktit.";
         return;
     }
 
@@ -291,10 +291,12 @@ async function loadProduct() {
             osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
         }
 
-        if (profileData?.image_url) {
-            const avatarContainer = document.getElementById("os-avatar-box");
-            if (avatarContainer) {
+        const avatarContainer = document.getElementById("os-avatar-box");
+        if (avatarContainer) {
+            if (profileData?.image_url) {
                 avatarContainer.innerHTML = `<img src="${profileData.image_url}" alt="Avatar" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+            } else {
+                avatarContainer.innerHTML = `<div style="width:100%; height:100%; border-radius:50%; background:#1f1f1f; display:flex; align-items:center; justify-content:center; font-size:1.2rem; color:var(--accent);">👤</div>`;
             }
         }
 
@@ -320,11 +322,18 @@ async function loadProduct() {
 
             totalItemsCount = (countOras || 0) + (countBracelets || 0);
         }
-        document.getElementById("os-count").textContent = totalItemsCount;
+        
+        const osCountEl = document.getElementById("os-count");
+        if (osCountEl) {
+            osCountEl.textContent = totalItemsCount;
+        }
 
-        document.getElementById("os-items").onclick = () => {
-            window.location.href = sellerProfileUrl;
-        };
+        const osItemsEl = document.getElementById("os-items");
+        if (osItemsEl) {
+            osItemsEl.onclick = () => {
+                window.location.href = sellerProfileUrl;
+            };
+        }
 
         const contactBtn = document.getElementById("os-contact");
         if (contactBtn) {
@@ -332,7 +341,8 @@ async function loadProduct() {
                 const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
 
                 if (userError || !user) {
-                    document.getElementById("login-modal").style.display = "flex";
+                    const loginModal = document.getElementById("login-modal");
+                    if (loginModal) loginModal.style.display = "flex";
                     return;
                 }
 
@@ -383,8 +393,12 @@ async function loadProduct() {
             "IT": "🇮🇹 Itali",
             "DE": "🇩🇪 Gjermani"
         };
-        const sCountry = data.seller_country || "-";
-        document.getElementById("seller-country").innerText = "🌍 " + (countries[sCountry] || sCountry);
+
+        const rawCountry = data.seller_country || data.country || data.location || "";
+        const countryEl = document.getElementById("seller-country");
+        if (countryEl) {
+            countryEl.innerText = "🌍 " + (countries[rawCountry] || rawCountry || "Zvicër");
+        }
 
         currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
         currentImgIndex = 0;
@@ -490,20 +504,23 @@ async function loadProduct() {
 
         updateGallery();
 
-        document.getElementById("whatsapp").href =
-            "https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per%20" +
-            encodeURIComponent(data.model);
+        const whatsappEl = document.getElementById("whatsapp");
+        if (whatsappEl) {
+            whatsappEl.href = "https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per%20" + encodeURIComponent(data.model);
+        }
 
     } catch(err) {
         console.error(err);
-        container.innerHTML = "Gabim: " + err.message;
+        if (container) container.innerHTML = "Gabim: " + err.message;
     }
 }
 
 function updateGallery() {
     if(currentImages.length === 0) return;
-    document.getElementById("main-photo").src = currentImages[currentImgIndex];
-    document.getElementById("photo-count").innerText = (currentImgIndex + 1) + " / " + currentImages.length;
+    const mainPhoto = document.getElementById("main-photo");
+    const photoCount = document.getElementById("photo-count");
+    if (mainPhoto) mainPhoto.src = currentImages[currentImgIndex];
+    if (photoCount) photoCount.innerText = (currentImgIndex + 1) + " / " + currentImages.length;
 }
 
 function changeImage(direction) {
@@ -530,7 +547,8 @@ function toggleLike(element) {
 }
 
 function closeLoginModal() {
-    document.getElementById("login-modal").style.display = "none";
+    const modal = document.getElementById("login-modal");
+    if (modal) modal.style.display = "none";
 }
 
 function toggleAuthMode(e) {
@@ -545,32 +563,36 @@ function toggleAuthMode(e) {
     const toggleLink = document.getElementById("modal-toggle-link");
     const errorEl = document.getElementById("modal-error");
     
-    errorEl.textContent = "";
+    if (errorEl) errorEl.textContent = "";
 
     if (isRegisterMode) {
-        title.textContent = "Krijo Llogari";
-        desc.textContent = "Regjistrohu për të kontaktuar shitësit dhe për të blerë.";
-        nameInput.style.display = "block";
-        submitBtn.textContent = "Regjistrohu";
-        toggleText.textContent = "Ke tashmë një llogari?";
-        toggleLink.textContent = " Hyr";
+        if (title) title.textContent = "Krijo Llogari";
+        if (desc) desc.textContent = "Regjistrohu për të kontaktuar shitësit dhe për të blerë.";
+        if (nameInput) nameInput.style.display = "block";
+        if (submitBtn) submitBtn.textContent = "Regjistrohu";
+        if (toggleText) toggleText.textContent = "Ke tashmë një llogari?";
+        if (toggleLink) toggleLink.textContent = " Hyr";
     } else {
-        title.textContent = "Identifikohu";
-        desc.textContent = "Duhet të jesh i loguar për të kontaktuar shitësin.";
-        nameInput.style.display = "none";
-        submitBtn.textContent = "Hyr";
-        toggleText.textContent = "Nuk ke llogari?";
-        toggleLink.textContent = " Regjistrohu";
+        if (title) title.textContent = "Identifikohu";
+        if (desc) desc.textContent = "Duhet të jesh i loguar për të kontaktuar shitësin.";
+        if (nameInput) nameInput.style.display = "none";
+        if (submitBtn) submitBtn.textContent = "Hyr";
+        if (toggleText) toggleText.textContent = "Nuk ke llogari?";
+        if (toggleLink) toggleLink.textContent = " Regjistrohu";
     }
 }
 
 async function handleModalAuth() {
-    const email = document.getElementById("modal-email").value;
-    const password = document.getElementById("modal-password").value;
-    const fullName = document.getElementById("modal-name").value;
+    const emailEl = document.getElementById("modal-email");
+    const passwordEl = document.getElementById("modal-password");
+    const nameEl = document.getElementById("modal-name");
     const errorEl = document.getElementById("modal-error");
     
-    errorEl.textContent = "Duke u procesuar...";
+    const email = emailEl ? emailEl.value : "";
+    const password = passwordEl ? passwordEl.value : "";
+    const fullName = nameEl ? nameEl.value : "";
+    
+    if (errorEl) errorEl.textContent = "Duke u procesuar...";
 
     if (isRegisterMode) {
         const { error } = await supabaseClient.auth.signUp({
@@ -580,11 +602,12 @@ async function handleModalAuth() {
         });
 
         if (error) {
-            errorEl.textContent = error.message;
+            if (errorEl) errorEl.textContent = error.message;
         } else {
             alert("Regjistrimi u krye me sukses!");
             closeLoginModal();
-            document.getElementById("os-contact").click();
+            const contactBtn = document.getElementById("os-contact");
+            if (contactBtn) contactBtn.click();
         }
     } else {
         const { error } = await supabaseClient.auth.signInWithPassword({
@@ -593,16 +616,16 @@ async function handleModalAuth() {
         });
 
         if (error) {
-            errorEl.textContent = error.message;
+            if (errorEl) errorEl.textContent = error.message;
         } else {
             closeLoginModal();
-            document.getElementById("os-contact").click();
+            const contactBtn = document.getElementById("os-contact");
+            if (contactBtn) contactBtn.click();
         }
     }
 }
 
 loadProduct();
 </script>
-
 </body>
 </html>

@@ -162,7 +162,6 @@
       align-items: center;
     }
 
-    /* Stilet e reja për statistikat dhe feedback-un e klikueshëm */
     .feedback-stats {
       display: flex;
       gap: 15px;
@@ -239,451 +238,182 @@
   </style> 
 </head>
 
-<body style="visibility:hidden;">
+<body>
   <div class="wrap">
-    
-    <!-- Butoni i Kthimit Mbrapa -->
-    <button type="button" class="back-btn" onclick="history.back()">
-      ← BACK
-    </button>
+    <button class="back-btn" onclick="history.back()">❮ Kthehu mbrapa</button>
 
-    <!-- Koka e Profilit me Imazh -->
     <div class="card">
       <div class="profile-header">
-        <img id="sellerAvatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a3a3a3'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" alt="Avatar" class="profile-avatar">
+        <img id="profileAvatarImg" src="" alt="Avatar" class="profile-avatar" style="display:none;">
+        <div id="profileAvatarPlaceholder" class="profile-avatar" style="display:flex; align-items:center; justify-content:center; font-size:1.5rem; color:var(--accent);">👤</div>
         <div>
-          <h1 id="sellerTitle">-</h1>
-          <p id="sellerJoined" class="joined-date">-</p>
-          <p style="margin: 0;">Shteti: <b id="userCountry">-</b></p>
+          <h1 id="sellerTitle">Shitës</h1>
+          <div class="joined-date" id="profileJoined">Anëtar që nga -</div>
+          <p id="profileRole" style="color:var(--accent); font-weight:600; margin:0; font-size:0.9rem;"></p>
         </div>
       </div>
     </div>
 
-    <!-- Të Dhënat Private (Vetëm për pronarin) -->
-    <div id="ownerDetails" class="card private-field">
-      <h2>Të dhënat e llogarisë</h2>
-      <p>Email: <b id="userEmail"></b></p>
-      <p>Emri: <b id="userName">-</b></p>
-      <p>Telefon: <b id="userPhone">-</b></p>
-      <p>Rruga: <b id="userStreet">-</b></p>
-      <p>Nr. Shtëpisë: <b id="userHouseNumber">-</b></p>
-      <p>Kodi Postar: <b id="userZip">-</b></p>
+    <div class="card" id="publicListingsCard">
+      <h2>Artikujt e Shitësit</h2>
+      <ul id="sellerWatches">
+        <p style="text-align:center; color:var(--text-muted);">Duke u ngarkuar...</p>
+      </ul>
     </div>
 
-    <!-- Seksioni i Modifikimit të Profilit -->
-    <div id="editProfileSection" class="card private-field">
-      <h2>Modifiko Profilin</h2>
-      
-      <label style="font-size: 0.85rem; color: var(--text-muted);">Emri i plotë:</label>
-      <input id="editFullName" placeholder="Emri i plotë">
+    <div class="card" id="editProfileCard" style="display:none;">
+      <h2>Përditëso Profilin</h2>
+      <form id="profileForm">
+        <label>Emri i Përdoruesit (Username)</label>
+        <input type="text" id="inputUsername" placeholder="Shkruaj username...">
 
-      <label style="font-size: 0.85rem; color: var(--text-muted);">Username i faqes:</label>
-      <input id="editCustomUsername" placeholder="Username">
+        <label>Emri i Plotë / Kompania</label>
+        <input type="text" id="inputFullName" placeholder="Emri yt...">
 
-      <label style="font-size: 0.85rem; color: var(--text-muted);">Telefoni:</label>
-      <input id="editPhone" placeholder="Numri i telefonit">
+        <label>Foto e Profilit</label>
+        <input type="file" id="inputAvatarFile" accept="image/*">
 
-      <label style="font-size: 0.85rem; color: var(--text-muted);">Shteti:</label>
-      <input id="editCountry" placeholder="Shteti">
+        <button type="submit" id="btnSaveProfile">Ruaj Ndryshimet</button>
+        <div id="profileMsg"></div>
+      </form>
 
-      <label style="font-size: 0.85rem; color: var(--text-muted);">Rruga:</label>
-      <input id="editStreet" placeholder="Rruga">
-
-      <label style="font-size: 0.85rem; color: var(--text-muted);">Nr. Shtëpisë:</label>
-      <input id="editHouseNumber" placeholder="Nr. Shtëpisë">
-
-      <label style="font-size: 0.85rem; color: var(--text-muted);">Kodi Postar:</label>
-      <input id="editZip" placeholder="Kodi Postar">
-
-      <label style="font-size: 0.85rem; color: var(--text-muted);">Foto e Profilit (Imazhi):</label>
-      <input id="editImageFile" type="file" accept="image/*">
-
-      <button id="btnSaveProfile" type="button">Ruaj ndryshimet</button>
-      <p id="profileMsg"></p>
+      <button id="btnLogout">Dil nga Llogaria</button>
     </div>
-
-    <!-- Feedback-u i blerësve me statistika -->
-    <div class="card">
-      <h3>Feedback-u i blerësve</h3>
-      
-      <!-- Përmbledhja e Statistikave -->
-      <div class="feedback-stats">
-        <div class="stat-box">
-          <span id="totalFeedback">0</span>
-          <label>Total</label>
-        </div>
-        <div class="stat-box">
-          <span id="positiveFeedback" style="color: #22c55e;">0</span>
-          <label>Pozitive</label>
-        </div>
-        <div class="stat-box">
-          <span id="negativeFeedback" style="color: #ef4444;">0</span>
-          <label>Negative</label>
-        </div>
-      </div>
-
-      <ul id="feedbackList"><li>Nuk ka ende feedback.</li></ul>
-    </div>
-
-    <!-- Artikujt e shitësit -->
-    <div class="card">
-      <h3>Artikujt e shitësit</h3>
-      <div class="watch-scroll">
-        <ul id="sellerWatches"><li>Nuk ka artikuj ende.</li></ul>
-      </div>
-    </div>
-
-    <!-- Verifikimi i Identitetit & Logout -->
-    <div id="verificationSection" class="card private-field">
-      <h3>🔒 Verifikimi i Identitetit</h3>
-      
-      <select id="documentType">
-        <option value="">Zgjidh dokumentin</option>
-        <option value="ID">Kartë ID</option>
-        <option value="Passport">Pasaportë</option>
-      </select>
-
-      <input id="documentNumber" placeholder="Numri i dokumentit">
-
-      <label style="font-size: 0.85rem; color: var(--text-muted);">Foto përpara:</label>
-      <input id="photoFront" type="file" accept="image/*">
-
-      <label style="font-size: 0.85rem; color: var(--text-muted);">Foto mbrapa:</label>
-      <input id="photoBack" type="file" accept="image/*">
-
-      <button id="btnVerify" type="button">Dërgo për verifikim</button>
-      <p id="verifyMsg"></p>
-
-      <button id="btnLogout" type="button">Dil nga llogaria (Logout)</button>
-    </div>
-
-    <p id="msg"></p>
   </div>
-  
-<script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
 
-  const supabaseUrl = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
-  const supabaseKey = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9';
-  const supabase = createClient(supabaseUrl, supabaseKey);
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseClient = window.supabase.createClient(
+        "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+    );
 
-  const emailEl = document.getElementById("userEmail");
-  const nameEl = document.getElementById("userName");
-  const phoneEl = document.getElementById("userPhone");
-  const countryEl = document.getElementById("userCountry");
-  const streetEl = document.getElementById("userStreet");
-  const houseEl = document.getElementById("userHouseNumber");
-  const zipEl = document.getElementById("userZip");
-  const logoutBtn = document.getElementById("btnLogout");
-  const watchList = document.getElementById("sellerWatches");
-  const feedbackList = document.getElementById("feedbackList");
-  const avatarEl = document.getElementById("sellerAvatar");
+    const urlParams = new URLSearchParams(window.location.search);
+    const profileUserId = urlParams.get("id");
 
-  // Funksioni për të ngarkuar artikujt (orët dhe aksesorët)
-  async function loadWatches(uid) {
-    watchList.innerHTML = "";
-    const tables = [
-      { table: "oras", label: "⌚" },
-      { table: "bracelets_straps", label: "🪢" }
-    ];
+    async function initProfile() {
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      const targetId = profileUserId || (user ? user.id : null);
 
-    let hasItems = false;
-
-    for (const item of tables) {
-      const { data, error } = await supabase
-        .from(item.table)
-        .select("*")
-        .eq('user_id', uid);
-
-      if (error) continue;
-
-      data?.forEach(product => {
-        hasItems = true;
-        const li = document.createElement("li");
-        li.innerHTML = `<span><b>${item.label} ${product.brand || ""}</b> ${product.model || ""}</span> <b>${product.price || "-"}€</b>`;
-        watchList.appendChild(li);
-      });
-    }
-
-    if (!hasItems) {
-      watchList.innerHTML = "<li>Nuk ka artikuj aktivë.</li>";
-    }
-  }
-
-  // Funksioni për të ngarkuar feedback-un, llogaritur statistikat dhe bërë elementet të klikueshme
-  async function loadFeedback(uid) {
-    if (!feedbackList) return;
-    feedbackList.innerHTML = "";
-
-    const { data, error } = await supabase
-      .from("feedback") 
-      .select("*")
-      .eq("seller_id", uid); 
-
-    if (error || !data || data.length === 0) {
-      feedbackList.innerHTML = "<li>Nuk ka ende feedback.</li>";
-      document.getElementById("totalFeedback").textContent = "0";
-      document.getElementById("positiveFeedback").textContent = "0";
-      document.getElementById("negativeFeedback").textContent = "0";
-      return;
-    }
-
-    let total = data.length;
-    let positive = 0;
-    let negative = 0;
-
-    data.forEach(item => {
-      const isPositive = item.type === 'positive' || item.rating >= 4;
-      const isNegative = item.type === 'negative' || item.rating <= 2;
-
-      if (isPositive) positive++;
-      else if (isNegative) negative++;
-
-      const li = document.createElement("li");
-      
-      let badgeClass = "badge-neutral";
-      let badgeText = "Neutral 🟡";
-      if (isPositive) {
-        badgeClass = "badge-positive";
-        badgeText = "Pozitiv 🟢";
-      } else if (isNegative) {
-        badgeClass = "badge-negative";
-        badgeText = "Negativ 🔴";
+      if (!targetId) {
+        document.getElementById("sellerTitle").textContent = "Nuk u gjet përdoruesi";
+        document.getElementById("sellerWatches").innerHTML = "<p>Asnjë informacion.</p>";
+        return;
       }
 
-      li.innerHTML = `
-        <div>
-          <span style="display: block; margin-bottom: 4px; color: var(--text-main);">${item.comment || item.message || "Vlerësim pa koment."}</span>
-          <small style="color: var(--text-muted);">ID e porosisë / Blerësi: ${item.order_id || item.buyer_name || "Blerës i verifikuar"}</small>
-        </div>
-        <span class="${badgeClass}">${badgeText}</span>
-      `;
+      const isMyProfile = user && user.id === targetId;
 
-      // Klikimi i feedback-ut për të parë detajet
-      li.addEventListener("click", () => {
-        alert(`Detajet e Feedback-ut:\n\nKoment: ${item.comment || item.message || "-"}\nTipi: ${badgeText}\nData: ${item.created_at ? new Date(item.created_at).toLocaleDateString() : "-"}`);
-      });
+      if (isMyProfile) {
+        document.getElementById("editProfileCard").style.display = "block";
+      }
 
-      feedbackList.appendChild(li);
-    });
-
-    document.getElementById("totalFeedback").textContent = total;
-    document.getElementById("positiveFeedback").textContent = positive;
-    document.getElementById("negativeFeedback").textContent = negative;
-  }
-
-  window.addEventListener("DOMContentLoaded", async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-
-    const params = new URLSearchParams(window.location.search);
-    const sellerIdFromUrl = params.get("id");
-
-    const profileId = sellerIdFromUrl || (user ? user.id : null);
-
-    if (!profileId) {
-      window.location.href = "index.html";
-      return;
-    }
-
-    const isOwner = user && user.id === profileId;
-
-    const { data: profileData } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", profileId)
-      .maybeSingle();
-
-    let meta = profileData || {};
-
-    document.body.style.visibility = "visible";
-
-    const sellerTitle = document.getElementById("sellerTitle");
-    const customName = meta.custom_username || meta.full_name || "Seller";
-    sellerTitle.textContent = `${customName}.oraswiss`;
-
-    if (meta.image_url) {
-      avatarEl.src = meta.image_url;
-    }
-
-    const created = new Date(meta.created_at || Date.now());
-    const joinedText = document.getElementById("sellerJoined");
-    joinedText.textContent = "Anëtar që nga " + created.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
-
-    const countries = {
-      "Albania": "🇦🇱 Shqipëri",
-      "Switzerland": "🇨🇭 Zvicër",
-      "Italy": "🇮🇹 Itali",
-      "Germany": "🇩🇪 Gjermani",
-      "AL": "🇦🇱 Shqipëri",
-      "CH": "🇨🇭 Zvicër",
-      "IT": "🇮🇹 Itali",
-      "DE": "🇩🇪 Gjermani"
-    };
-
-    const rawCountry = meta.country || meta.shteti || meta.country_name || "-";
-    countryEl.textContent = countries[rawCountry] || rawCountry;
-    
-    if (isOwner && user) {
-      document.querySelectorAll(".private-field").forEach(el => el.style.display = "block");
-
-      emailEl.textContent = user.email;
-      nameEl.textContent = meta.full_name || "-";
-      phoneEl.textContent = meta.phone || "-";
-      streetEl.textContent = meta.street || "-";
-      houseEl.textContent = meta.house_number || "-";
-      zipEl.textContent = meta.zip_code || "-";
-
-      document.getElementById("editFullName").value = meta.full_name || "";
-      document.getElementById("editCustomUsername").value = meta.custom_username || "";
-      document.getElementById("editPhone").value = meta.phone || "";
-      document.getElementById("editCountry").value = meta.country || meta.shteti || "";
-      document.getElementById("editStreet").value = meta.street || "";
-      document.getElementById("editHouseNumber").value = meta.house_number || "";
-      document.getElementById("editZip").value = meta.zip_code || "";
-    }
-
-    await loadWatches(profileId);
-    await loadFeedback(profileId);
-  });
-
-  const saveProfileBtn = document.getElementById("btnSaveProfile");
-  if (saveProfileBtn) {
-    saveProfileBtn.addEventListener("click", async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      const msg = document.getElementById("profileMsg");
-
-      const fullName = document.getElementById("editFullName").value;
-      const customUsername = document.getElementById("editCustomUsername").value;
-      const phone = document.getElementById("editPhone").value;
-      const country = document.getElementById("editCountry").value;
-      const street = document.getElementById("editStreet").value;
-      const houseNumber = document.getElementById("editHouseNumber").value;
-      const zipCode = document.getElementById("editZip").value;
-      const imageFile = document.getElementById("editImageFile").files[0];
-
-      msg.style.color = "var(--text-main)";
-      msg.textContent = "Duke ruajtur ndryshimet...";
-
-      const { data: currentProfile } = await supabase
+      // Merr profilin
+      const { data: profile } = await supabaseClient
         .from("profiles")
-        .select("image_url")
-        .eq("id", user.id)
+        .select("*")
+        .eq("id", targetId)
         .maybeSingle();
 
-      let imagePath = currentProfile?.image_url || null;
+      const name = profile?.custom_username || profile?.full_name || "Ora Swiss Seller";
+      document.getElementById("sellerTitle").textContent = name;
 
-      if (imageFile) {
-        const cleanFileName = imageFile.name.replace(/[^a-zA-Z0-9_.-]/g, "_");
-        const filePath = `${user.id}/profile_${Date.now()}_${cleanFileName}`;
-        
-        const uploadRes = await supabase.storage.from("avatars").upload(filePath, imageFile);
-        
-        if (uploadRes.error) {
-          msg.style.color = "var(--danger)";
-          msg.textContent = "Gabim gjatë ngarkimit të imazhit: " + uploadRes.error.message;
-          return;
-        }
-
-        const { data: publicUrlData } = supabase.storage
-          .from("avatars")
-          .getPublicUrl(uploadRes.data.path);
-
-        imagePath = publicUrlData.publicUrl;
+      if (profile?.image_url) {
+        const img = document.getElementById("profileAvatarImg");
+        img.src = profile.image_url;
+        img.style.display = "block";
+        document.getElementById("profileAvatarPlaceholder").style.display = "none";
       }
 
-      const { error } = await supabase
-        .from("profiles")
-        .upsert({
-          id: user.id,
-          full_name: fullName,
-          custom_username: customUsername,
-          phone: phone,
-          country: country,
-          street: street,
-          house_number: houseNumber,
-          zip_code: zipCode,
-          image_url: imagePath,
-          updated_at: new Date()
+      const joinedDate = new Date(profile?.created_at || Date.now());
+      document.getElementById("profileJoined").textContent = "Anëtar që nga " + joinedDate.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
+      document.getElementById("profileRole").textContent = "(Pro Dealer)";
+
+      if (isMyProfile && profile) {
+        document.getElementById("inputUsername").value = profile.custom_username || "";
+        document.getElementById("inputFullName").value = profile.full_name || "";
+      }
+
+      // Ngarko orët e shitësit
+      const { data: watches } = await supabaseClient
+        .from("oras")
+        .select("*")
+        .eq("user_id", targetId);
+
+      const { data: bracelets } = await supabaseClient
+        .from("bracelets_straps")
+        .select("*")
+        .eq("user_id", targetId);
+
+      const allItems = [...(watches || []), ...(bracelets || [])];
+      const listContainer = document.getElementById("sellerWatches");
+
+      if (allItems.length === 0) {
+        listContainer.innerHTML = "<p style='text-align:center; color:var(--text-muted);'>Ky përdorues nuk ka artikuj aktivë.</p>";
+      } else {
+        listContainer.innerHTML = "";
+        allItems.forEach(item => {
+          const cat = item.case_size ? "oras" : "bracelets_straps";
+          const li = document.createElement("li");
+          li.innerHTML = `
+            <span><b>${item.brand || "Ora"}</b> - ${item.model || item.reference || "Artikull"}</span>
+            <span style="color:var(--accent); font-weight:bold;">${item.price || 0} €</span>
+          `;
+          li.style.cursor = "pointer";
+          li.onclick = () => {
+            window.location.href = `product.html?id=${item.id}&category=${cat}`;
+          };
+          listContainer.appendChild(li);
         });
-
-      if (error) {
-        msg.style.color = "var(--danger)";
-        msg.textContent = "Gabim gjatë përditësimit: " + error.message;
-        return;
       }
 
-      msg.style.color = "var(--accent)";
-      msg.textContent = "Profili u përditësua me sukses!";
-      setTimeout(() => window.location.reload(), 1500);
-    });
-  }
+      // Trajto ruajtjen e profilit
+      if (isMyProfile) {
+        document.getElementById("profileForm").onsubmit = async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("btnSaveProfile");
+          const msg = document.getElementById("profileMsg");
+          btn.textContent = "Duke ruajtur...";
 
-  const verifyBtn = document.getElementById("btnVerify");
-  if (verifyBtn) {
-    verifyBtn.addEventListener("click", async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      const documentType = document.getElementById("documentType").value;
-      const documentNumber = document.getElementById("documentNumber").value;
-      const frontFile = document.getElementById("photoFront").files[0];
-      const backFile = document.getElementById("photoBack").files[0];
-      const msg = document.getElementById("verifyMsg");
+          let imageUrl = profile?.image_url;
+          const fileInput = document.getElementById("inputAvatarFile");
+          if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const filePath = `${user.id}/${Date.now()}_${file.name}`;
+            const { error: uploadError } = await supabaseClient.storage.from("avatars").upload(filePath, file);
+            if (!uploadError) {
+              const { data: publicUrlData } = supabaseClient.storage.from("avatars").getPublicUrl(filePath);
+              imageUrl = publicUrlData.publicUrl;
+            }
+          }
 
-      if (!documentType || !documentNumber || !frontFile || !backFile) {
-        msg.style.color = "var(--danger)";
-        msg.textContent = "Plotëso të gjitha fushat dhe ngarko të dy fotot.";
-        return;
+          const { error } = await supabaseClient
+            .from("profiles")
+            .update({
+              custom_username: document.getElementById("inputUsername").value,
+              full_name: document.getElementById("inputFullName").value,
+              image_url: imageUrl
+            })
+            .eq("id", user.id);
+
+          btn.textContent = "Ruaj Ndryshimet";
+          if (error) {
+            msg.style.color = "var(--danger)";
+            msg.textContent = "Gabim: " + error.message;
+          } else {
+            msg.style.color = "#22c55e";
+            msg.textContent = "Profil u përditësua me sukses!";
+            setTimeout(() => location.reload(), 1000);
+          }
+        };
+
+        document.getElementById("btnLogout").onclick = async () => {
+          await supabaseClient.auth.signOut();
+          window.location.href = "index.html";
+        };
       }
+    }
 
-      msg.style.color = "var(--text-main)";
-      msg.textContent = "Duke dërguar verifikimin...";
-
-      const frontPath = `${user.id}/front_${Date.now()}_${frontFile.name}`;
-      const backPath = `${user.id}/back_${Date.now()}_${backFile.name}`;
-
-      const frontUpload = await supabase.storage.from("identity_documents").upload(frontPath, frontFile);
-      const backUpload = await supabase.storage.from("identity_documents").upload(backPath, backFile);
-
-      if (frontUpload.error || backUpload.error) {
-        msg.style.color = "var(--danger)";
-        msg.textContent = "Gabim gjatë ngarkimit të fotove.";
-        return;
-      }
-
-      const { error } = await supabase
-        .from("identity_verifications")
-        .insert({
-          user_id: user.id,
-          document_type: documentType,
-          document_number: documentNumber,
-          photo_front: frontUpload.data.path,
-          photo_back: backUpload.data.path,
-          verification_status: "pending"
-        });
-
-      if (error) {
-        msg.style.color = "var(--danger)";
-        msg.textContent = "Gabim gjatë dërgimit të kërkesës.";
-        return;
-      }
-
-      await supabase.functions.invoke("send-email-notification", {
-        body: {
-          subject: "Kërkesë e re verifikimi",
-          message: `U dërgua një kërkesë e re për verifikim.\n\nEmail: ${user.email}\n\nDokumenti: ${documentType}\nNumri: ${documentNumber}`
-        }
-      });
-
-      msg.style.color = "var(--accent)";
-      msg.textContent = "Kërkesa u dërgua me sukses për verifikim!";
-    });
-  }
-  
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", async () => {
-      await supabase.auth.signOut();
-      window.location.href = "index.html";
-    });
-  }
-</script>
+    initProfile();
+  </script>
 </body>
 </html>

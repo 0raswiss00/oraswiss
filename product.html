@@ -276,6 +276,7 @@ async function loadProduct() {
         const sellerProfileUrl = "profile.html?id=" + data.user_id;
 
        // Merr të dhënat e profilit të shitësit nga tabela 'profiles'
+       // Merr të dhënat e profilit të shitësit nga tabela 'profiles'
         const { data: profileData } = await supabaseClient
             .from("profiles")
             .select("custom_username, full_name, image_url, created_at")

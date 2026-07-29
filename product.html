@@ -91,7 +91,6 @@
             align-items: center !important;
             justify-content: center !important;
             color: #fff !important;
-            overflow: hidden !important;
         }
         .oraswiss-info h3 {
             margin: 0 !important;
@@ -253,52 +252,11 @@ const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get("id");
 const category = urlParams.get("category");
 
-function updateGallery() {
-    const mainImageEl = document.getElementById("main-photo");
-    const counterEl = document.getElementById("photo-count");
-    
-    if (!currentImages || currentImages.length === 0) {
-        if (mainImageEl) mainImageEl.src = "";
-        if (counterEl) counterEl.textContent = "0 / 0";
-        return;
-    }
-
-    if (currentImgIndex >= currentImages.length) currentImgIndex = 0;
-    if (currentImgIndex < 0) currentImgIndex = currentImages.length - 1;
-
-    let activeImg = currentImages[currentImgIndex];
-
-    if (activeImg && !activeImg.startsWith("http")) {
-        const bucketName = (category === "bracelets_straps") ? "bracelets_straps" : "oras";
-        const { data: pubUrl } = supabaseClient.storage
-            .from(bucketName)
-            .getPublicUrl(activeImg);
-        
-        if (pubUrl && pubUrl.publicUrl) {
-            activeImg = pubUrl.publicUrl;
-        }
-    }
-
-    if (mainImageEl) {
-        mainImageEl.src = activeImg;
-    }
-
-    if (counterEl) {
-        counterEl.textContent = (currentImgIndex + 1) + " / " + currentImages.length;
-    }
-}
-
-function changeImage(direction) {
-    if (!currentImages || currentImages.length === 0) return;
-    currentImgIndex += direction;
-    updateGallery();
-}
-
 async function loadProduct() {
     const container = document.querySelector(".product-page");
 
     if (!productId) {
-        if(container) container.innerHTML = "Nuk u gjet ID e produktit.";
+        container.innerHTML = "Nuk u gjet ID e produktit.";
         return;
     }
 
@@ -313,59 +271,15 @@ async function loadProduct() {
 
         if (error) throw error;
 
-        let finalSellerName = data.seller_name || "Seller";
-        let sellerCountryVal = data.seller_country || "-";
-        
-        if (data.user_id) {
-            const { data: profileData } = await supabaseClient
-                .from("profiles")
-                .select("*")
-                .eq("id", data.user_id)
-                .maybeSingle();
-
-            if (profileData) {
-                const rawName = profileData.custom_username || profileData.full_name || profileData.username || data.seller_name || "Seller";
-                finalSellerName = `${rawName}-oraswiss`;
-
-                if (profileData.country || profileData.seller_country) {
-                    sellerCountryVal = profileData.country || profileData.seller_country;
-                }
-
-                const userImage = profileData.image || profileData.avatar_url;
-                if (userImage) {
-                    const avatarContainer = document.querySelector(".oraswiss-avatar");
-                    if (avatarContainer) {
-                        let imageUrl = userImage;
-                        if (!imageUrl.startsWith("http")) {
-                            const { data: pubUrl } = supabaseClient.storage
-                                .from("identity_documents")
-                                .getPublicUrl(userImage);
-                            if (pubUrl && pubUrl.publicUrl) {
-                                imageUrl = pubUrl.publicUrl;
-                            }
-                        }
-                        avatarContainer.innerHTML = `<img src="${imageUrl}" alt="Seller" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
-                    }
-                }
-            } else {
-                finalSellerName = `${data.seller_name || "Seller"}-oraswiss`;
-            }
-        } else {
-            finalSellerName = `${data.seller_name || "Seller"}-oraswiss`;
-        }
-
+        const sellerName = data.seller_name || "Seller";
         const sellerProfileUrl = "profile.html?id=" + data.user_id;
 
         const osNameEl = document.getElementById("os-name");
-        if(osNameEl) {
-            osNameEl.innerHTML = finalSellerName + " <span>(Pro)</span>";
-            osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
-        }
+        osNameEl.innerHTML = sellerName + "-oraswiss <span>(Pro)</span>";
+        osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
 
         const osFeedbackEl = document.getElementById("os-feedback");
-        if(osFeedbackEl) {
-            osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
-        }
+        osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
 
         let totalItemsCount = 0;
         if (data.user_id) {
@@ -381,19 +295,15 @@ async function loadProduct() {
 
             totalItemsCount = (countOras || 0) + (countBracelets || 0);
         }
-        
-        const osCountEl = document.getElementById("os-count");
-        if(osCountEl) osCountEl.textContent = totalItemsCount;
+        document.getElementById("os-count").textContent = totalItemsCount;
 
-        const osItemsEl = document.getElementById("os-items");
-        if(osItemsEl) {
-            osItemsEl.onclick = () => { window.location.href = sellerProfileUrl; };
-        }
+        document.getElementById("os-items").onclick = () => {
+            window.location.href = sellerProfileUrl;
+        };
 
         const joined = new Date(data.created_at || Date.now());
         const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
-        const osJoinedEl = document.getElementById("os-joined");
-        if(osJoinedEl) osJoinedEl.textContent = "Anëtar që nga " + formattedJoined;
+        document.getElementById("os-joined").textContent = "Anëtar që nga " + formattedJoined;
 
         const contactBtn = document.getElementById("os-contact");
         if (contactBtn) {
@@ -401,8 +311,7 @@ async function loadProduct() {
                 const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
 
                 if (userError || !user) {
-                    const loginModal = document.getElementById("login-modal");
-                    if(loginModal) loginModal.style.display = "flex";
+                    document.getElementById("login-modal").style.display = "flex";
                     return;
                 }
 
@@ -435,7 +344,7 @@ async function loadProduct() {
                     .single();
 
                 if (createError) {
-                    alert("Gabim gjatë krijimit të bisedës: " + createError.message);
+                    alert("Gabim: " + createError.message);
                     return;
                 }
 
@@ -453,59 +362,222 @@ async function loadProduct() {
             "IT": "🇮🇹 Itali",
             "DE": "🇩🇪 Gjermani"
         };
-        
-        const sellerCountryEl = document.getElementById("seller-country");
-        if(sellerCountryEl) {
-            sellerCountryEl.innerText = "🌍 " + (countries[sellerCountryVal] || sellerCountryVal);
-        }
+        const sCountry = data.seller_country || "-";
+        document.getElementById("seller-country").innerText = "🌍 " + (countries[sCountry] || sCountry);
 
-        window.currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
-        window.currentImgIndex = 0;
-        updateGallery();
+        currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
+        currentImgIndex = 0;
 
-        const brandEl = document.getElementById("brand");
-        if(brandEl) brandEl.textContent = data.brand || "N/A";
-        
-        const modelEl = document.getElementById("model");
-        if(modelEl) modelEl.textContent = data.model || "N/A";
+        document.getElementById("brand").textContent = data.brand || "N/A";
+        document.getElementById("model").textContent = data.model || "N/A";
         
         const currencySymbol = data.currency || "€";
-        const topPriceEl = document.getElementById("top-price");
-        if(topPriceEl) topPriceEl.textContent = (data.price || 0) + " " + currencySymbol;
+        document.getElementById("top-price").textContent = (data.price || 0) + " " + currencySymbol;
         
         const specsContainer = document.getElementById("specs");
-        if(specsContainer) {
-            specsContainer.innerHTML = "";
-            if (tableName === "bracelets_straps") {
-                specsContainer.innerHTML = `
-                    <div class="info-row"><span>Type</span><span>${data.type || "N/A"}</span></div>
-                    <div class="info-row"><span>Reference</span><span>${data.reference || "N/A"}</span></div>
-                    <div class="info-row"><span>Condition</span><span>${data.condition || "N/A"}</span></div>
-                    <div class="info-row"><span>Material</span><span>${data.material || "N/A"}</span></div>
-                    <div class="info-row"><span>Color</span><span>${data.color || "N/A"}</span></div>
-                `;
-            } else {
-                specsContainer.innerHTML = `
-                    <div class="info-row"><span>Reference</span><span>${data.reference || "N/A"}</span></div>
-                    <div class="info-row"><span>Movement</span><span>${data.movement || "N/A"}</span></div>
-                    <div class="info-row"><span>Material</span><span>${data.material || "N/A"}</span></div>
-                    <div class="info-row"><span>Case Size</span><span>${data.case_size || "N/A"}</span></div>
-                    <div class="info-row"><span>Year</span><span>${data.year || "N/A"}</span></div>
-                `;
-            }
+        specsContainer.innerHTML = "";
+
+        if (tableName === "bracelets_straps") {
+            specsContainer.innerHTML = `
+                <div class="info-row"><span>Type</span><span>${data.type || "N/A"}</span></div>
+                <div class="info-row"><span>Reference</span><span>${data.reference || "N/A"}</span></div>
+                <div class="info-row"><span>Condition</span><span>${data.condition || "N/A"}</span></div>
+                <div class="info-row"><span>Material</span><span>${data.material || "N/A"}</span></div>
+                <div class="info-row"><span>Net Weight</span><span>${data.net_weight ? data.net_weight + ' g' : "N/A"}</span></div>
+                <div class="info-row"><span>Gold Purity</span><span>${data.gold_purity || "N/A"}</span></div>
+                <div class="info-row"><span>Color</span><span>${data.color || "N/A"}</span></div>
+                <div class="info-row"><span>Lug Width</span><span>${data.lug_width || "N/A"}</span></div>
+                <div class="info-row"><span>Clasp Width</span><span>${data.clasp_width || "N/A"}</span></div>
+                <div class="info-row"><span>Length</span><span>${data.length || "N/A"}</span></div>
+                <div class="info-row"><span>Thickness</span><span>${data.thickness || "N/A"}</span></div>
+                <div class="info-row"><span>Year</span><span>${data.year || "N/A"}</span></div>
+            `;
+        } else {
+            const serial = data.serial_number || "";
+            const maskedSerial = serial.length > 3 ? serial.substring(0, 3) + 'X'.repeat(serial.length - 3) : (serial || "N/A");
+            
+            specsContainer.innerHTML = `
+                <div class="info-row"><span>Reference</span><span>${data.reference || "N/A"}</span></div>
+                <div class="info-row"><span>Serial Number</span><span>${maskedSerial}</span></div>
+                <div class="info-row"><span>Movement</span><span>${data.movement || "N/A"}</span></div>
+                <div class="info-row"><span>Caliber</span><span>${data.caliber || "N/A"}</span></div>
+                <div class="info-row"><span>Frequency</span><span>${data.frekuen || "N/A"}</span></div>
+                <div class="info-row"><span>Material</span><span>${data.material || "N/A"}</span></div>
+                <div class="info-row"><span>Case Size</span><span>${data.case_size || "N/A"}</span></div>
+                <div class="info-row"><span>Movement Size</span><span>${data.movement_size || "N/A"}</span></div>
+                <div class="info-row"><span>Year</span><span>${data.year || "N/A"}</span></div>
+                <div class="info-row"><span>Function</span><span>${data.function || "N/A"}</span></div>
+                <div class="info-row"><span>Service</span><span>${data.service ? "Yes (Serviced)" : "No"}</span></div>
+                <div class="info-row"><span>Service Date</span><span>${data.service_date || "-"}</span></div>
+                <div class="info-row"><span>Origin</span><span>${data.origin || "N/A"}</span></div>
+                <div class="info-row"><span>Work Status</span><span>${data.work_status || "N/A"}</span></div>
+                <div class="info-row"><span>Bracelet</span><span>${data.bracelet || "N/A"}</span></div>
+                <div class="info-row"><span>Glass</span><span>${data.glass || "N/A"}</span></div>
+                <div class="info-row"><span>Warranty</span><span>${data.warranty || "N/A"}</span></div>
+                <div class="info-row"><span>Warranty Months</span><span>${data.warranty_months || "N/A"}</span></div>
+                <div class="info-row">
+                    <span>Shipping & Courier</span>
+                    <span>
+                        ${
+                            (data.shipping_provider || data.shipping || data.kurrier) && (data.shipping_days || data.ditet_dergeses) 
+                            ? (data.shipping_provider || data.shipping || data.kurrier) + ' (' + (data.shipping_days || data.ditet_dergeses) + ')' 
+                            : (data.shipping_provider || data.shipping || data.kurrier || data.shipping_days || data.ditet_dergeses || "N/A")
+                        }
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span>Box & Papers</span>
+                    <span>${data.box_papers || data.box_and_papers || data.box || data.papers || "N/A"}</span>
+                </div>
+            `;
         }
 
-        const descEl = document.getElementById("description");
-        if(descEl) descEl.innerText = data.description || "N/A";
+        document.getElementById("description").innerText = data.description || "N/A";
+
+        const buyBtn = document.getElementById("buy");
+        if (buyBtn) {
+            buyBtn.onclick = async function(e) {
+                e.preventDefault();
+                buyBtn.innerText = "⏳ Loading...";
+                try {
+                    const response = await fetch(
+                        "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                product_id: productId,
+                                price: data.price,
+                                product_name: data.model
+                            })
+                        }
+                    );
+                    const result = await response.json();
+                    if (result.paypal_link) {
+                        window.location.href = result.paypal_link;
+                    } else {
+                        alert("PayPal link nuk u krijua");
+                        buyBtn.innerText = "🛒 BUY";
+                    }
+                } catch(error) {
+                    console.error(error);
+                    alert("Gabim me PayPal");
+                    buyBtn.innerText = "🛒 BUY";
+                }
+            };
+        }
+
+        updateGallery();
+
+        document.getElementById("whatsapp").href =
+            "https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per%20" +
+            encodeURIComponent(data.model);
 
     } catch(err) {
-        console.error("Gabim në loadProduct:", err);
+        console.error(err);
+        container.innerHTML = "Gabim: " + err.message;
+    }
+}
+
+function updateGallery() {
+    if(currentImages.length === 0) return;
+    document.getElementById("main-photo").src = currentImages[currentImgIndex];
+    document.getElementById("photo-count").innerText = (currentImgIndex + 1) + " / " + currentImages.length;
+}
+
+function changeImage(direction) {
+    if(currentImages.length === 0) return;
+    currentImgIndex += direction;
+    if(currentImgIndex >= currentImages.length) currentImgIndex = 0;
+    if(currentImgIndex < 0) currentImgIndex = currentImages.length - 1;
+    updateGallery();
+}
+
+function shareProduct() {
+    navigator.clipboard.writeText(window.location.href);
+    alert("Linku u kopjua!");
+}
+
+function toggleLike(element) {
+    if(element.innerText.includes("♡")) {
+        element.innerHTML = "❤️ Liked";
+        element.style.borderColor = "#25D366";
+    } else {
+        element.innerHTML = "♡ Like";
+        element.style.borderColor = "#222";
     }
 }
 
 function closeLoginModal() {
-    const modal = document.getElementById("login-modal");
-    if(modal) modal.style.display = "none";
+    document.getElementById("login-modal").style.display = "none";
+}
+
+function toggleAuthMode(e) {
+    e.preventDefault();
+    isRegisterMode = !isRegisterMode;
+    
+    const title = document.getElementById("modal-title");
+    const desc = document.getElementById("modal-desc");
+    const nameInput = document.getElementById("modal-name");
+    const submitBtn = document.getElementById("modal-submit-btn");
+    const toggleText = document.getElementById("modal-toggle-text");
+    const toggleLink = document.getElementById("modal-toggle-link");
+    const errorEl = document.getElementById("modal-error");
+    
+    errorEl.textContent = "";
+
+    if (isRegisterMode) {
+        title.textContent = "Krijo Llogari";
+        desc.textContent = "Regjistrohu për të kontaktuar shitësit dhe për të blerë.";
+        nameInput.style.display = "block";
+        submitBtn.textContent = "Regjistrohu";
+        toggleText.textContent = "Ke tashmë një llogari?";
+        toggleLink.textContent = " Hyr";
+    } else {
+        title.textContent = "Identifikohu";
+        desc.textContent = "Duhet të jesh i loguar për të kontaktuar shitësin.";
+        nameInput.style.display = "none";
+        submitBtn.textContent = "Hyr";
+        toggleText.textContent = "Nuk ke llogari?";
+        toggleLink.textContent = " Regjistrohu";
+    }
+}
+
+async function handleModalAuth() {
+    const email = document.getElementById("modal-email").value;
+    const password = document.getElementById("modal-password").value;
+    const fullName = document.getElementById("modal-name").value;
+    const errorEl = document.getElementById("modal-error");
+    
+    errorEl.textContent = "Duke u procesuar...";
+
+    if (isRegisterMode) {
+        const { error } = await supabaseClient.auth.signUp({
+            email: email,
+            password: password,
+            options: { data: { full_name: fullName } }
+        });
+
+        if (error) {
+            errorEl.textContent = error.message;
+        } else {
+            alert("Regjistrimi u krye me sukses!");
+            closeLoginModal();
+            document.getElementById("os-contact").click();
+        }
+    } else {
+        const { error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) {
+            errorEl.textContent = error.message;
+        } else {
+            closeLoginModal();
+            document.getElementById("os-contact").click();
+        }
+    }
 }
 
 loadProduct();

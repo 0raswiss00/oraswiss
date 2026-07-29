@@ -249,10 +249,11 @@ function setupRealtimeSubscription() {
 }
 
 // Opsioni për fshirjen e bisedës
+// Opsioni për fshirjen e bisedës
 document.getElementById("deleteChatBtn").onclick = async () => {
     if (!confirm("A jeni i sigurt që dëshironi ta fshini këtë bisedë?")) return;
 
-    // Fshi mesazhet e bisedës fillimisht (nëse nuk keni vendosur Cascade Delete në Supabase)
+    // Fshi mesazhet e bisedës fillimisht
     await supabase.from("messages").delete().eq("conversation_id", conversationId);
 
     // Fshi vetë bisedën nga tabela conversations
@@ -263,8 +264,16 @@ document.getElementById("deleteChatBtn").onclick = async () => {
         return;
     }
 
-    // Ridrejto përdoruesin diku tjetër, p.sh. te faqja kryesore ose lista e bisedave
-    window.location.href = "index.html"; // Ndrysho sipas emrit të faqes tuaj kryesore
+    // Pastro pamjen e chat-it në vend që ta dërgosh te index.html
+    document.getElementById("chatBox").innerHTML = '<div style="text-align:center; color:#777; margin-top:20px;">Biseda u fshi.</div>';
+    document.getElementById("headerTitle").innerText = "Bisedë e fshirë";
+    document.getElementById("headerPrice").innerText = "";
+    document.getElementById("headerImg").src = "";
+    
+    // Çaktivizo inputet që të mos dërgohen mesazhe më
+    document.getElementById("messageInput").disabled = true;
+    document.getElementById("sendBtn").disabled = true;
+    document.getElementById("attachBtn").style.display = "none";
 };
 
 document.getElementById("sendBtn").onclick = async () => {

@@ -453,7 +453,8 @@
 
       const { data, error } = await supabase
         .from("profiles")
-        .update({
+        .upsert({
+          id: user.id,
           full_name: fullName,
           custom_username: customUsername,
           phone: phone,
@@ -464,8 +465,7 @@
           image_url: imagePath,
           updated_at: new Date()
         })
-        .eq("id", user.id)
-        .select(); // Shto këtë për të parë nëse kthen gjë
+        .select();
 
       console.log("Rezultati i ruajtjes:", { data, error });
 
@@ -478,8 +478,6 @@
       msg.style.color = "var(--accent)";
       msg.textContent = "Profili u përditësua me sukses!";
       setTimeout(() => window.location.reload(), 1500);
-    });
-  }
 
   // Verifikimi i Identitetit dhe dërgimi i email-it (përdor "identity_documents")
   const verifyBtn = document.getElementById("btnVerify");

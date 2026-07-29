@@ -262,18 +262,39 @@ async function loadProduct() {
         return;
     }
 
-    const isBracelet = (category === "bracelets_straps");
-    const tableName = isBracelet ? "bracelets_straps" : "oras";
+    let data = null;
+    let tableName = "";
 
     try {
-        const { data, error } = await supabaseClient
-            .from(tableName)
+        // Provohet fillimisht te tabela e orëve
+        let res = await supabaseClient
+            .from("oras")
             .select("*")
             .eq("id", productId)
-            .single();
+            .maybeSingle();
 
-        if (error) throw error;
+        if (res.data) {
+            data = res.data;
+            tableName = "oras";
+        } else {
+            // Nëse nuk gjendet te orët, kërkohet te rripat dhe aksesorët
+            let resBracelet = await supabaseClient
+                .from("bracelets_straps")
+                .select("*")
+                .eq("id", productId)
+                .maybeSingle();
 
+            if (resBracelet.data) {
+                data = resBracelet.data;
+                tableName = "bracelets_straps";
+            }
+        }
+
+        if (!data) {
+            throw new Error("Produkti nuk u gjet në asnjë prej tabelave.");
+        }
+
+        const isBracelet = (tableName === "bracelets_straps");
         const sellerProfileUrl = "profile.html?id=" + data.user_id;
 
         const { data: profileData } = await supabaseClient
@@ -394,8 +415,7 @@ async function loadProduct() {
         currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
         currentImgIndex = 0;
 
-        // Për rripat, nëse nuk ka fushë 'brand', përdor 'type' ose një vlerë alternative
-        document.getElementById("brand").textContent = data.brand || data.type || "Oraswiss Accessory";
+        document.getElementById("brand").textContent = data.brand || data.type || "Oraswiss";
         document.getElementById("model").textContent = data.model || data.reference || "N/A";
         
         const currencySymbol = data.currency || "€";

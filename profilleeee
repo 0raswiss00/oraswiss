@@ -40,7 +40,6 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     }
 
-    /* Stili për Koken e Profilit dhe Avatarin */
     .profile-header {
       display: flex;
       align-items: center;
@@ -361,16 +360,8 @@
     const customName = meta.custom_username || meta.full_name || "Seller";
     sellerTitle.textContent = `${customName}.oraswiss`;
 
-    // Ngarkimi i imazhit të profilit nëse ekziston
-    if (meta.image) {
-      // Nëse ruani direkt URL-në ose path-in në storage:
-      const { data: publicUrlData } = supabase.storage
-        .from("identity_documents")
-        .getPublicUrl(meta.image);
-      
-      if (publicUrlData?.publicUrl) {
-        avatarEl.src = publicUrlData.publicUrl;
-      }
+    if (meta.image_url) {
+      avatarEl.src = meta.image_url;
     }
 
     const created = new Date(meta.created_at || (user ? user.created_at : Date.now()));
@@ -401,7 +392,6 @@
       houseEl.textContent = meta.house_number || "-";
       zipEl.textContent = meta.zip_code || "-";
 
-      // Mbushja e fushave në formën e modifikimit
       document.getElementById("editFullName").value = meta.full_name || "";
       document.getElementById("editCustomUsername").value = meta.custom_username || "";
       document.getElementById("editPhone").value = meta.phone || "";
@@ -414,7 +404,7 @@
     await loadWatches(profileId);
   });
 
-  // Ruajtja e ndryshimeve të profilit (përfshirë kolonën image)
+  // Ruajtja e ndryshimeve të profilit
   const saveProfileBtn = document.getElementById("btnSaveProfile");
   if (saveProfileBtn) {
     saveProfileBtn.addEventListener("click", async () => {
@@ -435,27 +425,35 @@
 
       const { data: currentProfile } = await supabase
         .from("profiles")
-        .select("image")
+        .select("image_url")
         .eq("id", user.id)
-        .single();
+        .maybeSingle();
 
-      let imagePath = currentProfile?.image || null;
+      let imagePath = currentProfile?.image_url || null;
 
       if (imageFile) {
-        const filePath = `${user.id}/profile_${Date.now()}_${imageFile.name}`;
-        const uploadRes = await supabase.storage.from("identity_documents").upload(filePath, imageFile);
+        const cleanFileName = imageFile.name.replace(/[^a-zA-Z0-9_.-]/g, "_");
+        const filePath = `${user.id}/profile_${Date.now()}_${cleanFileName}`;
+        
+        const uploadRes = await supabase.storage.from("avatars").upload(filePath, imageFile);
         
         if (uploadRes.error) {
           msg.style.color = "var(--danger)";
-          msg.textContent = "Gabim gjatë ngarkimit të imazhit.";
+          msg.textContent = "Gabim gjatë ngarkimit të imazhit: " + uploadRes.error.message;
           return;
         }
-        imagePath = uploadRes.data.path;
+
+        const { data: publicUrlData } = supabase.storage
+          .from("avatars")
+          .getPublicUrl(uploadRes.data.path);
+
+        imagePath = publicUrlData.publicUrl;
       }
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("profiles")
-        .update({
+        .upsert({
+          id: user.id,
           full_name: fullName,
           custom_username: customUsername,
           phone: phone,
@@ -463,10 +461,12 @@
           street: street,
           house_number: houseNumber,
           zip_code: zipCode,
-          image: imagePath,
+          image_url: imagePath,
           updated_at: new Date()
         })
-        .eq("id", user.id);
+        .select();
+
+      console.log("Rezultati i ruajtjes:", { data, error });
 
       if (error) {
         msg.style.color = "var(--danger)";
@@ -540,18 +540,7 @@
       await supabase.functions.invoke("send-email-notification", {
         body: {
           subject: "Kërkesë e re verifikimi",
-          message: `U dërgua një kërkesë e re për verifikim.
-
-Email: ${user.email}
-
-Dokumenti: ${documentType}
-Numri: ${documentNumber}
-
-Foto përpara:
-${frontUrl?.signedUrl || ""}
-
-Foto mbrapa:
-${backUrl?.signedUrl || ""}`
+          message: `U dërgua një kërkesë e re për verifikim.\n\nEmail: ${user.email}\n\nDokumenti: ${documentType}\nNumri: ${documentNumber}`
         }
       });
 

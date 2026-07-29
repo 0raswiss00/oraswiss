@@ -360,8 +360,8 @@
     const customName = meta.custom_username || meta.full_name || "Seller";
     sellerTitle.textContent = `${customName}.oraswiss`;
 
-    // Ngarkimi i imazhit të profilit nga bucket-i publik "avatars"
-   if (meta.image_url) {
+    // Ngarkimi i imazhit të profilit nga image_url
+    if (meta.image_url) {
       avatarEl.src = meta.image_url;
     }
 
@@ -405,7 +405,7 @@
     await loadWatches(profileId);
   });
 
-  // Ruajtja e ndryshimeve të profilit duke përdorur bucket-in "avatars"
+  // Ruajtja e ndryshimeve të profilit
   const saveProfileBtn = document.getElementById("btnSaveProfile");
   if (saveProfileBtn) {
     saveProfileBtn.addEventListener("click", async () => {
@@ -426,22 +426,29 @@
 
       const { data: currentProfile } = await supabase
         .from("profiles")
-        .select("image")
+        .select("image_url")
         .eq("id", user.id)
         .single();
 
-      let imagePath = currentProfile?.image || null;
+      let imagePath = currentProfile?.image_url || null;
 
       if (imageFile) {
-        const filePath = `${user.id}/profile_${Date.now()}_${imageFile.name}`;
+        const cleanFileName = imageFile.name.replace(/[^a-zA-Z0-9_.-]/g, "_");
+        const filePath = `${user.id}/profile_${Date.now()}_${cleanFileName}`;
+        
         const uploadRes = await supabase.storage.from("avatars").upload(filePath, imageFile);
         
         if (uploadRes.error) {
           msg.style.color = "var(--danger)";
-          msg.textContent = "Gabim gjatë ngarkimit të imazhit.";
+          msg.textContent = "Gabim gjatë ngarkimit të imazhit: " + uploadRes.error.message;
           return;
         }
-        imagePath = uploadRes.data.path;
+
+        const { data: publicUrlData } = supabase.storage
+          .from("avatars")
+          .getPublicUrl(uploadRes.data.path);
+
+        imagePath = publicUrlData.publicUrl;
       }
 
       const { error } = await supabase
@@ -454,7 +461,7 @@
           street: street,
           house_number: houseNumber,
           zip_code: zipCode,
-          image: imagePath,
+          image_url: imagePath,
           updated_at: new Date()
         })
         .eq("id", user.id);

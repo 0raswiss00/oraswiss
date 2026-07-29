@@ -361,10 +361,9 @@
     sellerTitle.textContent = `${customName}.oraswiss`;
 
     // Ngarkimi i imazhit të profilit nga bucket-i publik "avatars"
-    if (meta.image) {
-      const { data: publicUrlData } = supabase.storage
-        .from("avatars")
-        .getPublicUrl(meta.image);
+    if (meta.image_url) {
+      avatarEl.src = meta.image_url;
+    }
       
       if (publicUrlData?.publicUrl) {
         avatarEl.src = publicUrlData.publicUrl;

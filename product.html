@@ -296,40 +296,37 @@ async function loadProduct() {
         const sellerProfileUrl = "profile.html?id=" + data.user_id;
 
        // Tërhiq profilin e shitësit duke përfshirë edhe shtetin (country) dhe feedback-un
+        // Tërhiq profilin e shitësit duke përfshirë edhe feedback-un nëse ekziston si kolonë
         const { data: profileData } = await supabaseClient
             .from("profiles")
-            .select("custom_username, full_name, image_url, created_at, country")
+            .select("custom_username, full_name, image_url, created_at, country, positive_feedback, feedback_count")
             .eq("id", data.user_id)
             .maybeSingle();
 
-        const displayName = profileData?.custom_username || profileData?.full_name || "Seller.oraswiss";
+        // Përcakto emrin real të shitësit
+        const displayName = profileData?.custom_username || profileData?.full_name || data.seller_name || data.username || "Ora Swiss Seller";
         
-        // Krijimi i saktë i linkut të profilit duke përdorur ID e shitësit
-        const sellerProfileUrl = "profile.html?id=" + data.user_id;
-
         const osNameEl = document.getElementById("os-name");
         if (osNameEl) {
             osNameEl.innerHTML = `${displayName} <span>(Pro)</span>`;
             osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
         }
 
+        // Llogarit ose merr feedback-un real nëse ekziston në bazë të dhënave, përndryshe fshihje ose lëre 100%
         const osFeedbackEl = document.getElementById("os-feedback");
         if (osFeedbackEl) {
-            osFeedbackEl.textContent = "0% Positive Feedback"; 
+            const feedbackPercentage = profileData?.positive_feedback !== undefined ? profileData.positive_feedback : 100;
+            osFeedbackEl.textContent = feedbackPercentage + "% Positive Feedback"; 
             osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
         }
 
-        if (profileData?.image_url) {
+        // Foto e profilit me siguri që ekziston
+        if (profileData?.image_url && profileData.image_url.trim() !== "") {
             const avatarContainer = document.getElementById("os-avatar-box");
             if (avatarContainer) {
-                avatarContainer.innerHTML = `<img src="${profileData.image_url}" alt="Avatar" style="width:100%; height:100%; border-radius:50%; object-fit:cover; cursor:pointer;">`;
-                avatarContainer.onclick = () => { window.location.href = sellerProfileUrl; };
+                avatarContainer.innerHTML = `<img src="${profileData.image_url}" alt="Avatar" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
             }
         }
-
-        document.getElementById("os-items").onclick = () => {
-            window.location.href = sellerProfileUrl;
-        };
 
         const joinedDateSource = profileData?.created_at || data.created_at || Date.now();
         const joined = new Date(joinedDateSource);
@@ -354,7 +351,7 @@ async function loadProduct() {
             totalItemsCount = (countOras || 0) + (countBracelets || 0);
         }
         document.getElementById("os-count").textContent = totalItemsCount;
-
+        
         document.getElementById("os-items").onclick = () => {
             window.location.href = sellerProfileUrl;
         };

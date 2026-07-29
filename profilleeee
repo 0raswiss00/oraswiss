@@ -40,6 +40,22 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     }
 
+    /* Stili për Koken e Profilit dhe Avatarin */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      background: #1f1f1f;
+    }
+
     h2 {
       margin-top: 0;
       font-size: 1.3rem;
@@ -66,7 +82,7 @@
     }
 
     #sellerTitle {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       margin: 0 0 4px 0;
       color: var(--text-main);
     }
@@ -74,7 +90,7 @@
     .joined-date {
       font-size: 0.9rem;
       color: var(--text-muted);
-      margin-bottom: 16px;
+      margin-bottom: 4px;
     }
 
     input, select {
@@ -168,11 +184,16 @@
 <body style="visibility:hidden;">
   <div class="wrap">
     
-    <!-- Koka e Profilit -->
+    <!-- Koka e Profilit me Imazh -->
     <div class="card">
-      <h1 id="sellerTitle">-</h1>
-      <p id="sellerJoined" class="joined-date">-</p>
-      <p>Shteti: <b id="userCountry">-</b></p>
+      <div class="profile-header">
+        <img id="sellerAvatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a3a3a3'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" alt="Avatar" class="profile-avatar">
+        <div>
+          <h1 id="sellerTitle">-</h1>
+          <p id="sellerJoined" class="joined-date">-</p>
+          <p style="margin: 0;">Shteti: <b id="userCountry">-</b></p>
+        </div>
+      </div>
     </div>
 
     <!-- Të Dhënat Private (Vetëm për pronarin) -->
@@ -275,6 +296,7 @@
   const zipEl = document.getElementById("userZip");
   const logoutBtn = document.getElementById("btnLogout");
   const watchList = document.getElementById("sellerWatches");
+  const avatarEl = document.getElementById("sellerAvatar");
 
   async function loadWatches(uid) {
     watchList.innerHTML = "";
@@ -338,6 +360,18 @@
     const sellerTitle = document.getElementById("sellerTitle");
     const customName = meta.custom_username || meta.full_name || "Seller";
     sellerTitle.textContent = `${customName}.oraswiss`;
+
+    // Ngarkimi i imazhit të profilit nëse ekziston
+    if (meta.image) {
+      // Nëse ruani direkt URL-në ose path-in në storage:
+      const { data: publicUrlData } = supabase.storage
+        .from("identity_documents")
+        .getPublicUrl(meta.image);
+      
+      if (publicUrlData?.publicUrl) {
+        avatarEl.src = publicUrlData.publicUrl;
+      }
+    }
 
     const created = new Date(meta.created_at || (user ? user.created_at : Date.now()));
     const joinedText = document.getElementById("sellerJoined");
@@ -478,7 +512,6 @@
         return;
       }
 
-      // Krijimi i linkove të firmosura për fotot që të shkojnë në email
       const { data: frontUrl } = await supabase.storage
         .from("identity_documents")
         .createSignedUrl(frontUpload.data.path, 3600);
@@ -504,7 +537,6 @@
         return;
       }
 
-      // Dërgimi i email-it përmes Supabase Functions
       await supabase.functions.invoke("send-email-notification", {
         body: {
           subject: "Kërkesë e re verifikimi",

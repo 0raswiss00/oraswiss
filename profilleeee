@@ -177,12 +177,37 @@
       font-weight: 500;
       margin-top: 8px;
     }
-  </style>
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      transition: color 0.2s;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      width: auto;
+    }
+
+    .back-btn:hover {
+      color: var(--accent);
+    }
+  </style> 
 </head>
 
 <body style="visibility:hidden;">
   <div class="wrap">
     
+    <!-- Butoni i Kthimit Mbrapa -->
+    <button type="button" class="back-btn" onclick="history.back()">
+      ← BACK
+    </button>
+
     <!-- Koka e Profilit me Imazh -->
     <div class="card">
       <div class="profile-header">

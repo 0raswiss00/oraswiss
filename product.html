@@ -271,15 +271,47 @@ async function loadProduct() {
 
         if (error) throw error;
 
-        const sellerName = data.seller_name || "Seller";
         const sellerProfileUrl = "profile.html?id=" + data.user_id;
 
+        // ==========================================
+        // KËTU E VENDOS: Merr të dhënat e profilit të shitësit
+        // ==========================================
+        const { data: profileData } = await supabaseClient
+            .from("profiles")
+            .select("custom_username, full_name, image_url, created_at")
+            .eq("id", data.user_id)
+            .maybeSingle();
+
+        const displayName = profileData?.custom_username || profileData?.full_name || data.seller_name || "Seller";
+        
         const osNameEl = document.getElementById("os-name");
-        osNameEl.innerHTML = sellerName + "-oraswiss <span>(Pro)</span>";
-        osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
+        if (osNameEl) {
+            osNameEl.innerHTML = `${displayName}-oraswiss <span>(Pro)</span>`;
+            osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
+        }
 
         const osFeedbackEl = document.getElementById("os-feedback");
-        osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
+        if (osFeedbackEl) {
+            osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
+        }
+
+        // Vendos foton e profilit nëse ekziston
+        if (profileData?.image_url) {
+            const avatarContainer = document.querySelector(".oraswiss-avatar");
+            if (avatarContainer) {
+                avatarContainer.innerHTML = `<img src="${profileData.image_url}" alt="Avatar" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+            }
+        }
+
+        // Data e regjistrimit të profilit (ose fallback te data e produktit)
+        const joinedDateSource = profileData?.created_at || data.created_at || Date.now();
+        const joined = new Date(joinedDateSource);
+        const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
+        const joinedEl = document.getElementById("os-joined");
+        if (joinedEl) {
+            joinedEl.textContent = "Anëtar që nga " + formattedJoined;
+        }
+        // ==========================================
 
         let totalItemsCount = 0;
         if (data.user_id) {
@@ -300,10 +332,6 @@ async function loadProduct() {
         document.getElementById("os-items").onclick = () => {
             window.location.href = sellerProfileUrl;
         };
-
-        const joined = new Date(data.created_at || Date.now());
-        const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
-        document.getElementById("os-joined").textContent = "Anëtar që nga " + formattedJoined;
 
         const contactBtn = document.getElementById("os-contact");
         if (contactBtn) {
@@ -362,6 +390,7 @@ async function loadProduct() {
             "IT": "🇮🇹 Itali",
             "DE": "🇩🇪 Gjermani"
         };
+        // ... vazhdon pjesa tjetër e kodit
         const sCountry = data.seller_country || "-";
         document.getElementById("seller-country").innerText = "🌍 " + (countries[sCountry] || sCountry);
 

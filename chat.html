@@ -264,6 +264,9 @@ document.getElementById("deleteChatBtn").onclick = async () => {
         return;
     }
 
+    // Ridrejto te lista e bisedave (Ndrysho "conversations.html" me emrin e saktë të faqes ku i shfaq bisedat)
+    window.location.href = "conversations.html"; 
+};
     // Pastro pamjen e chat-it në vend që ta dërgosh te index.html
     document.getElementById("chatBox").innerHTML = '<div style="text-align:center; color:#777; margin-top:20px;">Biseda u fshi.</div>';
     document.getElementById("headerTitle").innerText = "Bisedë e fshirë";

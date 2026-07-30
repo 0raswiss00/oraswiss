@@ -272,11 +272,11 @@ async function loadProduct() {
 
         const sellerProfileUrl = data.user_id ? "profile.html?id=" + data.user_id : "#";
 
-        let profileData = null;
+       let profileData = null;
         if (data.user_id) {
             const { data: pData } = await supabaseClient
                 .from("profiles")
-                .select("custom_username, full_name, image_url, created_at")
+                .select("custom_username, full_name, image_url, created_at, country, location") // <--- Shtuam country dhe location
                 .eq("id", data.user_id)
                 .maybeSingle();
             profileData = pData;

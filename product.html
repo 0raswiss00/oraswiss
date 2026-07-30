@@ -251,6 +251,21 @@ const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get("id");
 const category = urlParams.get("category");
 
+const countries = {
+    "Albania": "🇦🇱 Shqipëri",
+    "Switzerland": "🇨🇭 Zvicër",
+    "Italy": "🇮🇹 Itali",
+    "Germany": "🇩🇪 Gjermani",
+    "AL": "🇦🇱 Shqipëri",
+    "CH": "🇨🇭 Zvicër",
+    "IT": "🇮🇹 Itali",
+    "DE": "🇩🇪 Gjermani",
+    "Zvicër": "🇨🇭 Zvicër",
+    "Shqipëri": "🇦🇱 Shqipëri",
+    "Itali": "🇮🇹 Itali",
+    "Gjermani": "Gjermani"
+};
+
 async function loadProduct() {
     const container = document.querySelector(".product-page");
 
@@ -272,14 +287,22 @@ async function loadProduct() {
 
         const sellerProfileUrl = data.user_id ? "profile.html?id=" + data.user_id : "#";
 
-       let profileData = null;
+        let profileData = null;
         if (data.user_id) {
             const { data: pData } = await supabaseClient
                 .from("profiles")
-                .select("custom_username, full_name, image_url, created_at, country, location") // <--- Shtuam country dhe location
+                .select("custom_username, full_name, image_url, created_at, country, location")
                 .eq("id", data.user_id)
                 .maybeSingle();
             profileData = pData;
+        }
+
+        const rawCountry = profileData?.country || profileData?.location || data.seller_country || data.country || data.location || "";
+        const countryEl = document.getElementById("seller-country");
+        
+        if (countryEl) {
+            countryEl.innerText = rawCountry ? ("🌍 " + (countries[rawCountry] || rawCountry)) : "";
+            if (!rawCountry) countryEl.style.display = "none";
         }
 
         const displayName = profileData?.custom_username || profileData?.full_name || data.seller_name || data.username || "Ora Swiss Seller";
@@ -350,11 +373,8 @@ async function loadProduct() {
             osCountEl.textContent = totalItemsCount;
         }
 
-        const osFeedbackCountEl = document.getElementById("os-feedback-count");
-        if (osFeedbackCountEl) {
-            osFeedbackCountEl.textContent = `(${sellerReviewsCount})`;
-        } else if (osFeedbackEl) {
-            osFeedbackEl.innerHTML = `Vlerësimet (${sellerReviewsCount})`;
+        if (osFeedbackEl) {
+            osFeedbackEl.innerHTML = `100% Positive Feedback (${sellerReviewsCount})`;
         }
 
         const osItemsEl = document.getElementById("os-items");
@@ -412,9 +432,6 @@ async function loadProduct() {
             };
         }
 
-        const countries = {
-            "Albania": "🇦🇱 Shqipëri",
-       
         currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
         currentImgIndex = 0;
 

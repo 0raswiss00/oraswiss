@@ -414,25 +414,6 @@ async function loadProduct() {
 
         const countries = {
             "Albania": "🇦🇱 Shqipëri",
-            "Switzerland": "🇨🇭 Zvicër",
-            "Italy": "🇮🇹 Itali",
-            "Germany": "🇩🇪 Gjermani",
-            "AL": "🇦🇱 Shqipëri",
-            "CH": "🇨🇭 Zvicër",
-            "IT": "🇮🇹 Itali",
-            "DE": "🇩🇪 Gjermani",
-            "Zvicër": "🇨🇭 Zvicër",
-            "Shqipëri": "🇦🇱 Shqipëri",
-            "Itali": "🇮🇹 Itali",
-            "Gjermani": "🇩🇪 Gjermani"
-        };
-
-        const rawCountry = data.origin || data.seller_country || data.country || data.location || "";
-        const countryEl = document.getElementById("seller-country");
-        
-        if (countryEl) {
-            countryEl.innerText = "🌍 " + (countries[rawCountry] || rawCountry || "Zvicër");
-        }
        
         currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
         currentImgIndex = 0;

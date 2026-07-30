@@ -478,7 +478,7 @@ async function loadProduct() {
                 <div class="info-row"><span>Function</span><span>${data.function || "N/A"}</span></div>
                 <div class="info-row"><span>Service</span><span>${data.service ? "Yes (Serviced)" : "No"}</span></div>
                 <div class="info-row"><span>Service Date</span><span>${data.service_date || "-"}</span></div>
-                <div class="info-row"><span>Origin</span><span>${data.origin || "N/A"}</span></div>
+                <div class="info-row"><span>Origin</span><span>${data.origin ? (countries[data.origin] || data.origin) : "N/A"}</span></div>
                 <div class="info-row"><span>Work Status</span><span>${data.work_status || "N/A"}</span></div>
                 <div class="info-row"><span>Bracelet</span><span>${data.bracelet || "N/A"}</span></div>
                 <div class="info-row"><span>Glass</span><span>${data.glass || "N/A"}</span></div>

@@ -79,5 +79,54 @@
 
         loadSellerOffers();
     </script>
-</body>
+
+    <script>
+    // Inicializimi i Supabase (vendos kredencialet e tua reale këtu nëse i ke të reja)
+    const supabaseClient = supabase.createClient('KETA_VENDOS_SUPABASE_URL', 'KETA_VENDOS_SUPABASE_ANON_KEY');
+
+    async function loadSellerOffers() {
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        const container = document.getElementById("seller-offers-list");
+
+        if (!user) {
+            container.innerHTML = "Ju duhet të jeni të loguar për të parë ofertat.";
+            return;
+        }
+
+        const { data: offers, error } = await supabaseClient
+            .from("offers")
+            .select("*")
+            .eq("seller_id", user.id)
+            .order("created_at", { ascending: false });
+
+        if (error || !offers || offers.length === 0) {
+            container.innerHTML = "Nuk keni asnjë ofertë të re.";
+            return;
+        }
+
+        let html = '';
+        for (const offer of offers) {
+            html += `
+                <div class="offer-card">
+                    <div>
+                        <p style="color:#fff; margin:0 0 5px 0; font-weight:bold;">Çmimi i ofruar: ${offer.offered_price} €</p>
+                        <p style="color:#888; margin:0; font-size:12px;">Statusi: <span style="color:${offer.status === 'pending' ? '#f39c12' : '#2ecc71'}">${offer.status}</span></p>
+                    </div>
+                    <div>
+                        <button class="btn-chat" onclick="openChatWithBuyer('${offer.buyer_id}', '${offer.product_id}')">Flasim në Chat</button>
+                    </div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+    }
+
+    function openChatWithBuyer(buyerId, productId) {
+        window.location.href = `chat.html?user=${buyerId}&product=${productId}`;
+    }
+
+    loadSellerOffers();
+</script>
+    
+</body>    
 </html>

@@ -73,14 +73,18 @@
         }
         .oraswiss-header {
             display: flex !important;
+            justify-content: space-between !important;
             align-items: center !important;
-            gap: 12px !important;
             margin-bottom: 12px !important;
         }
+        .oraswiss-info {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+        }
         .oraswiss-avatar {
-            width: 48px !important;
-            height: 48px !important;
-            min-width: 48px !important;
+            width: 40px !important;
+            height: 40px !important;
             background: #222222 !important;
             border-radius: 50% !important;
             display: flex !important;
@@ -89,15 +93,17 @@
             color: #fff !important;
             overflow: hidden !important;
         }
+        .oraswiss-avatar img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+        }
         .oraswiss-info h3 {
             margin: 0 !important;
             font-size: 16px !important;
             font-weight: 700 !important;
             color: #fff !important;
             cursor: pointer;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
         .oraswiss-info h3 span {
             font-weight: normal !important;
@@ -181,36 +187,37 @@
         <p id="description">Loading...</p>
     </div>
 
-    <!-- KARTA E SHITËSIT E INTEGRUAR -->
-    <div class="oraswiss-seller-wrapper">
-        <div class="oraswiss-seller-card">
-            <div class="oraswiss-header">
-                <div class="oraswiss-avatar" id="os-avatar-box">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                </div>
-                <div style="overflow: hidden; flex: 1;">
-                    <h3 id="os-name">- <span>(Pro)</span></h3>
-                    <p class="oraswiss-green" id="os-feedback">100% Positive Feedback</p>
-                </div>
-            </div>
-            <div class="oraswiss-joined" id="os-joined">Anëtar që nga -</div>
-            <div class="oraswiss-actions">
-                <button class="oraswiss-btn-blue" id="os-items">
-                    Seller's other items (<span id="os-count">0</span>)
-                </button>
-                <button class="oraswiss-btn-white" id="os-contact">
-                    Contact seller
-                </button>
-            </div>
-        </div>
-    </div>
-
 </div>
 
 <div class="buy-bar">
     <a class="buy-btn whatsapp" id="whatsapp">💬 WhatsApp</a>
     <a class="buy-btn offer" id="offer">💰 Suggest Price</a>
     <a class="buy-btn buy" id="buy">🛒 BUY</a>
+</div>
+
+<div class="oraswiss-seller-wrapper">
+    <div class="oraswiss-seller-card">
+        <div class="oraswiss-header">
+            <div class="oraswiss-info">
+                <div class="oraswiss-avatar" id="os-avatar-box">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+                <div>
+                    <h3 id="os-name">- <span>(Pro)</span></h3>
+                    <p class="oraswiss-green" id="os-feedback">Duke kontrolluar feedback...</p>
+                </div>
+            </div>
+        </div>
+        <div class="oraswiss-joined" id="os-joined">Anëtar që nga -</div>
+        <div class="oraswiss-actions">
+            <button class="oraswiss-btn-blue" id="os-items">
+                Seller's other items (<span id="os-count">0</span>)
+            </button>
+            <button class="oraswiss-btn-white" id="os-contact">
+                Contact seller
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- TABELA E LOGIMIT / REGJISTRIMIT (POPUP) -->
@@ -255,7 +262,7 @@ async function loadProduct() {
     const container = document.querySelector(".product-page");
 
     if (!productId) {
-        if (container) container.innerHTML = "Nuk u gjet ID e produktit.";
+        container.innerHTML = "Nuk u gjet ID e produktit.";
         return;
     }
 
@@ -270,85 +277,84 @@ async function loadProduct() {
 
         if (error) throw error;
 
-        const sellerProfileUrl = "profile.html?id=" + data.user_id;
+        const sellerUserId = data.user_id;
 
-        const { data: profileData } = await supabaseClient
-            .from("profiles")
-            .select("custom_username, full_name, image_url, created_at")
-            .eq("id", data.user_id)
-            .maybeSingle();
+        // Merr të dhënat e plota të shitësit nga tabela `profiles` duke përdorur user_id
+        let sellerName = data.seller_name || "Seller";
+        let sellerCountryCode = data.seller_country || "";
+        let sellerAvatarUrl = "";
+        let sellerJoinedDate = data.created_at;
 
-        const displayName = profileData?.custom_username || profileData?.full_name || data.seller_name || "Ora Swiss Seller";
-        
-        const osNameEl = document.getElementById("os-name");
-        if (osNameEl) {
-            osNameEl.innerHTML = `${displayName} <span>(Pro)</span>`;
-            osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
-        }
+        if (sellerUserId) {
+            const { data: profileData } = await supabaseClient
+                .from("profiles")
+                .select("*")
+                .eq("id", sellerUserId)
+                .maybeSingle();
 
-        const osFeedbackEl = document.getElementById("os-feedback");
-        if (osFeedbackEl) {
-            osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
-        }
-
-        const avatarContainer = document.getElementById("os-avatar-box");
-        if (avatarContainer) {
-            if (profileData?.image_url) {
-                avatarContainer.innerHTML = `<img src="${profileData.image_url}" alt="Avatar" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
-            } else {
-                avatarContainer.innerHTML = `<div style="width:100%; height:100%; border-radius:50%; background:#1f1f1f; display:flex; align-items:center; justify-content:center; font-size:1.2rem; color:var(--accent);">👤</div>`;
+            if (profileData) {
+                sellerName = profileData.custom_username || profileData.full_name || sellerName;
+                sellerCountryCode = profileData.coutru || profileData.country || profileData.shteti || sellerCountryCode;
+                sellerAvatarUrl = profileData.image_url || "";
+                sellerJoinedDate = profileData.created_at || sellerJoinedDate;
             }
         }
 
-        const joinedDateSource = profileData?.created_at || data.created_at || Date.now();
-        const joined = new Date(joinedDateSource);
-        const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
-        const joinedEl = document.getElementById("os-joined");
-        if (joinedEl) {
-            joinedEl.textContent = "Anëtar që nga " + formattedJoined;
+        const osNameEl = document.getElementById("os-name");
+        osNameEl.innerHTML = sellerName + "-oraswiss <span>(Pro)</span>";
+        const sellerProfileUrl = "profile.html?id=" + sellerUserId;
+        osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
+
+        // Shfaq avatarin nëse ekziston në profil
+        if (sellerAvatarUrl) {
+            document.getElementById("os-avatar-box").innerHTML = `<img src="${sellerAvatarUrl}" alt="Avatar">`;
         }
 
+        // Llogaritja e feedback nga tabela `feedback` duke filtruar sipas seller_id ose rated_user_id
+        if (sellerUserId) {
+            const { data: feedbackList } = await supabaseClient
+                .from("feedback")
+                .select("*")
+                .or(`seller_id.eq.${sellerUserId},rated_user_id.eq.${sellerUserId}`);
+
+            const osFeedbackEl = document.getElementById("os-feedback");
+            osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
+
+            if (feedbackList && feedbackList.length > 0) {
+                const positiveCount = feedbackList.filter(f => f.type === 'positive' || f.rating >= 4).length;
+                const percent = Math.round((positiveCount / feedbackList.length) * 100);
+                osFeedbackEl.textContent = `${percent}% Positive Feedback (${feedbackList.length} vlerësime)`;
+            } else {
+                osFeedbackEl.textContent = "100% Positive Feedback";
+            }
+        } else {
+            document.getElementById("os-feedback").textContent = "100% Positive Feedback";
+        }
+
+        // Numri total i produkteve të shitësit
         let totalItemsCount = 0;
-        let sellerReviewsCount = 0;
-        if (data.user_id) {
+        if (sellerUserId) {
             const { count: countOras } = await supabaseClient
                 .from("oras")
                 .select("*", { count: 'exact', head: true })
-                .eq("user_id", data.user_id);
+                .eq("user_id", sellerUserId);
 
             const { count: countBracelets } = await supabaseClient
                 .from("bracelets_straps")
                 .select("*", { count: 'exact', head: true })
-                .eq("user_id", data.user_id);
+                .eq("user_id", sellerUserId);
 
             totalItemsCount = (countOras || 0) + (countBracelets || 0);
-
-            const { count: countReviews } = await supabaseClient
-                .from("reviews")
-                .select("*", { count: 'exact', head: true })
-                .eq("seller_id", data.user_id);
-
-            sellerReviewsCount = countReviews || 0;
         }
-        
-        const osCountEl = document.getElementById("os-count");
-        if (osCountEl) {
-            osCountEl.textContent = totalItemsCount;
-        }
+        document.getElementById("os-count").textContent = totalItemsCount;
 
-        const osFeedbackCountEl = document.getElementById("os-feedback-count");
-        if (osFeedbackCountEl) {
-            osFeedbackCountEl.textContent = `(${sellerReviewsCount})`;
-        } else if (osFeedbackEl) {
-            osFeedbackEl.innerHTML = `Vlerësimet (${sellerReviewsCount})`;
-        }
+        document.getElementById("os-items").onclick = () => {
+            window.location.href = sellerProfileUrl;
+        };
 
-        const osItemsEl = document.getElementById("os-items");
-        if (osItemsEl) {
-            osItemsEl.onclick = () => {
-                window.location.href = sellerProfileUrl;
-            };
-        }
+        const joined = new Date(sellerJoinedDate || Date.now());
+        const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
+        document.getElementById("os-joined").textContent = "Anëtar që nga " + formattedJoined;
 
         const contactBtn = document.getElementById("os-contact");
         if (contactBtn) {
@@ -356,12 +362,11 @@ async function loadProduct() {
                 const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
 
                 if (userError || !user) {
-                    const loginModal = document.getElementById("login-modal");
-                    if (loginModal) loginModal.style.display = "flex";
+                    document.getElementById("login-modal").style.display = "flex";
                     return;
                 }
 
-                if (user.id === data.user_id) {
+                if (user.id === sellerUserId) {
                     alert("Ky është produkti yt!");
                     return;
                 }
@@ -383,7 +388,7 @@ async function loadProduct() {
                     .insert({
                         listing_id: data.id,
                         buyer_id: user.id,
-                        seller_id: data.user_id,
+                        seller_id: sellerUserId,
                         last_message: "Bisedë e re"
                     })
                     .select()
@@ -408,12 +413,7 @@ async function loadProduct() {
             "IT": "🇮🇹 Itali",
             "DE": "🇩🇪 Gjermani"
         };
-
-        const rawCountry = data.seller_country || data.country || data.location || "";
-        const countryEl = document.getElementById("seller-country");
-        if (countryEl) {
-            countryEl.innerText = "🌍 " + (countries[rawCountry] || rawCountry || "Zvicër");
-        }
+        document.getElementById("seller-country").innerText = "🌍 " + (countries[sellerCountryCode] || sellerCountryCode || "International");
 
         currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
         currentImgIndex = 0;
@@ -519,23 +519,20 @@ async function loadProduct() {
 
         updateGallery();
 
-        const whatsappEl = document.getElementById("whatsapp");
-        if (whatsappEl) {
-            whatsappEl.href = "https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per%20" + encodeURIComponent(data.model);
-        }
+        document.getElementById("whatsapp").href =
+            "https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per%20" +
+            encodeURIComponent(data.model);
 
     } catch(err) {
         console.error(err);
-        if (container) container.innerHTML = "Gabim: " + err.message;
+        container.innerHTML = "Gabim: " + err.message;
     }
 }
 
 function updateGallery() {
     if(currentImages.length === 0) return;
-    const mainPhoto = document.getElementById("main-photo");
-    const photoCount = document.getElementById("photo-count");
-    if (mainPhoto) mainPhoto.src = currentImages[currentImgIndex];
-    if (photoCount) photoCount.innerText = (currentImgIndex + 1) + " / " + currentImages.length;
+    document.getElementById("main-photo").src = currentImages[currentImgIndex];
+    document.getElementById("photo-count").innerText = (currentImgIndex + 1) + " / " + currentImages.length;
 }
 
 function changeImage(direction) {
@@ -562,8 +559,7 @@ function toggleLike(element) {
 }
 
 function closeLoginModal() {
-    const modal = document.getElementById("login-modal");
-    if (modal) modal.style.display = "none";
+    document.getElementById("login-modal").style.display = "none";
 }
 
 function toggleAuthMode(e) {
@@ -578,36 +574,32 @@ function toggleAuthMode(e) {
     const toggleLink = document.getElementById("modal-toggle-link");
     const errorEl = document.getElementById("modal-error");
     
-    if (errorEl) errorEl.textContent = "";
+    errorEl.textContent = "";
 
     if (isRegisterMode) {
-        if (title) title.textContent = "Krijo Llogari";
-        if (desc) desc.textContent = "Regjistrohu për të kontaktuar shitësit dhe për të blerë.";
-        if (nameInput) nameInput.style.display = "block";
-        if (submitBtn) submitBtn.textContent = "Regjistrohu";
-        if (toggleText) toggleText.textContent = "Ke tashmë një llogari?";
-        if (toggleLink) toggleLink.textContent = " Hyr";
+        title.textContent = "Krijo Llogari";
+        desc.textContent = "Regjistrohu për të kontaktuar shitësit dhe për të blerë.";
+        nameInput.style.display = "block";
+        submitBtn.textContent = "Regjistrohu";
+        toggleText.textContent = "Ke tashmë një llogari?";
+        toggleLink.textContent = " Hyr";
     } else {
-        if (title) title.textContent = "Identifikohu";
-        if (desc) desc.textContent = "Duhet të jesh i loguar për të kontaktuar shitësin.";
-        if (nameInput) nameInput.style.display = "none";
-        if (submitBtn) submitBtn.textContent = "Hyr";
-        if (toggleText) toggleText.textContent = "Nuk ke llogari?";
-        if (toggleLink) toggleLink.textContent = " Regjistrohu";
+        title.textContent = "Identifikohu";
+        desc.textContent = "Duhet të jesh i loguar për të kontaktuar shitësin.";
+        nameInput.style.display = "none";
+        submitBtn.textContent = "Hyr";
+        toggleText.textContent = "Nuk ke llogari?";
+        toggleLink.textContent = " Regjistrohu";
     }
 }
 
 async function handleModalAuth() {
-    const emailEl = document.getElementById("modal-email");
-    const passwordEl = document.getElementById("modal-password");
-    const nameEl = document.getElementById("modal-name");
+    const email = document.getElementById("modal-email").value;
+    const password = document.getElementById("modal-password").value;
+    const fullName = document.getElementById("modal-name").value;
     const errorEl = document.getElementById("modal-error");
     
-    const email = emailEl ? emailEl.value : "";
-    const password = passwordEl ? passwordEl.value : "";
-    const fullName = nameEl ? nameEl.value : "";
-    
-    if (errorEl) errorEl.textContent = "Duke u procesuar...";
+    errorEl.textContent = "Duke u procesuar...";
 
     if (isRegisterMode) {
         const { error } = await supabaseClient.auth.signUp({
@@ -617,12 +609,11 @@ async function handleModalAuth() {
         });
 
         if (error) {
-            if (errorEl) errorEl.textContent = error.message;
+            errorEl.textContent = error.message;
         } else {
             alert("Regjistrimi u krye me sukses!");
             closeLoginModal();
-            const contactBtn = document.getElementById("os-contact");
-            if (contactBtn) contactBtn.click();
+            document.getElementById("os-contact").click();
         }
     } else {
         const { error } = await supabaseClient.auth.signInWithPassword({
@@ -631,16 +622,16 @@ async function handleModalAuth() {
         });
 
         if (error) {
-            if (errorEl) errorEl.textContent = error.message;
+            errorEl.textContent = error.message;
         } else {
             closeLoginModal();
-            const contactBtn = document.getElementById("os-contact");
-            if (contactBtn) contactBtn.click();
+            document.getElementById("os-contact").click();
         }
     }
 }
 
 loadProduct();
 </script>
+
 </body>
 </html>

@@ -48,7 +48,7 @@ async function loadSellerOffers() {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     const container = document.getElementById("seller-offers-list");
 
-    if (!container) return; // Nëse elementi nuk ekziston, dil nga funksioni
+    if (!container) return;
 
     if (userError || !user) {
         container.innerHTML = "Ju duhet të jeni të loguar për të parë ofertat.";
@@ -115,7 +115,6 @@ window.openChatWithBuyer = function(buyerId, productId) {
     window.location.href = `chat.html?user=${buyerId}&product=${productId}`;
 }
 
-// Sigurohu që faqja është ngarkuar plotësisht para se të thërrasësh funksionin
 document.addEventListener("DOMContentLoaded", () => {
     loadSellerOffers();
 });

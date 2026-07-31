@@ -81,9 +81,6 @@
     </script>
 
     <script>
-    // Inicializimi i Supabase (vendos kredencialet e tua reale këtu nëse i ke të reja)
-    const supabaseClient = supabase.createClient('KETA_VENDOS_SUPABASE_URL', 'KETA_VENDOS_SUPABASE_ANON_KEY');
-
     async function loadSellerOffers() {
         const { data: { user } } = await supabaseClient.auth.getUser();
         const container = document.getElementById("seller-offers-list");

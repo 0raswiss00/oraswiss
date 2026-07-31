@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ofertat e Marra - OraSwiss</title>
+    <style>
+        body { background: #0b0b0b; color: #fff; font-family: sans-serif; margin: 0; padding-bottom: 70px; }
+        .container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
+        h2 { border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .offer-card { background: #1a1a1a; padding: 15px; border-radius: 8px; border: 1px solid #333; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #111; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #333; z-index: 1000; }
+        .bottom-nav-item { color: #aaa; text-decoration: none; font-size: 12px; text-align: center; }
+        .bottom-nav-item:hover, .bottom-nav-item.active { color: #fff; }
+        .btn-chat { background: #25D366; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Ofertat e Marra</h2>
+        <div id="seller-offers-list" style="color: #aaa; margin-top: 20px;">Duke ngarkuar ofertat...</div>
+    </div>
+
+    <!-- Shiriti i poshtëm i navigimit -->
+    <nav class="bottom-nav">
+      <a href="index.html" class="bottom-nav-item">OraSwiss</a>
+      <a href="profile.html" class="bottom-nav-item">Profile</a>
+      <a href="favorites.html" class="bottom-nav-item">Favorites</a>
+      <a href="collection.html" class="bottom-nav-item">Collection</a>
+      <a href="mysales.html" class="bottom-nav-item">Sales</a>
+      <a href="offers.html" class="bottom-nav-item active">Offers</a>
+      <a href="sellnow.html" class="bottom-nav-item">Sell</a>
+    </nav>
+
+    <!-- Supabase Logic -->

@@ -44,48 +44,67 @@ const supabase = createClient(
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
 );
 
-async function loadSellerOffers() {
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-    const container = document.getElementById("seller-offers-list");
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get("id"); // Merr ID e orës nga URL (p.sh. product.html?id=123)
 
-    if (userError || !user) {
-        container.innerHTML = "Ju duhet të jeni të loguar për të parë ofertat.";
-        return;
-    }
+let currentSellerId = null;
 
-    const { data: offers, error } = await supabase
-        .from("offers")
+async function fetchProductDetailsForOffer() {
+    if (!productId) return;
+    
+    // Merr të dhënat e orës përfshirë ID-në e përdoruesit/shitësit (zakonisht fusha quhet user_id ose seller_id në tabelën oras)
+    const { data: watch, error } = await supabase
+        .from("oras")
         .select("*")
-        .eq("seller_id", user.id)
-        .order("created_at", { ascending: false });
+        .eq("id", productId)
+        .single();
 
-    if (error || !offers || offers.length === 0) {
-        container.innerHTML = "Nuk keni asnjë ofertë të re.";
+    if (watch) {
+        // Përshtat fushën në varësi të kolonës që ke te tabela të bërë për shitësin (user_id ose seller_id)
+        currentSellerId = watch.user_id || watch.seller_id;
+    }
+}
+
+fetchProductDetailsForOffer();
+
+document.getElementById("sendOfferBtn").onclick = async () => {
+    const priceInput = document.getElementById("buyerOfferPrice");
+    const offeredPrice = parseFloat(priceInput.value);
+
+    if (!offeredPrice || offeredPrice <= 0) {
+        alert("Ju lutem shkruani një çmim të vlefshëm!");
         return;
     }
 
-    let html = '';
-    for (const offer of offers) {
-        html += `
-            <div class="offer-card">
-                <div>
-                    <p style="color:#fff; margin:0 0 5px 0; font-weight:bold;">Çmimi i ofruar: ${offer.offered_price} €</p>
-                    <p style="color:#888; margin:0; font-size:12px;">Statusi: <span style="color:${offer.status === 'pending' ? '#f39c12' : '#2ecc71'}">${offer.status}</span></p>
-                </div>
-                <div>
-                    <button class="btn-chat" onclick="openChatWithBuyer('${offer.buyer_id}', '${offer.product_id}')">Flasim në Chat</button>
-                </div>
-            </div>
-        `;
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) {
+        alert("Duhet të jeni të loguar për të dërguar një ofertë!");
+        window.location.href = "login.html";
+        return;
     }
-    container.innerHTML = html;
-}
 
-window.openChatWithBuyer = function(buyerId, productId) {
-    window.location.href = `chat.html?user=${buyerId}&product=${productId}`;
-}
+    if (user.id === currentSellerId) {
+        alert("Nuk mund t'i bëni ofertë orës tuaj!");
+        return;
+    }
 
-loadSellerOffers();
+    // Ruajtja e ofertës në tabelën "offers"
+    const { error } = await supabase.from("offers").insert({
+        product_id: Number(productId),
+        buyer_id: user.id,
+        seller_id: currentSellerId,
+        offered_price: offeredPrice,
+        status: 'pending'
+    });
+
+    if (error) {
+        alert("Gabim gjatë dërgimit të ofertës: " + error.message);
+        return;
+    }
+
+    alert("Ofera juaj u dërgua me sukses te shitësi!");
+    priceInput.value = "";
+};
 </script>
 <script>
     async function loadSellerOffers() {

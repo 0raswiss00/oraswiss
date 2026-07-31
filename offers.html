@@ -1,128 +1,125 @@
 <!DOCTYPE html>
 <html lang="sq">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ofertat e Marra</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-        }
-        .offer-card {
-            background-color: #1e1e1e;
-            border: 1px solid #333;
-            padding: 20px;
-            margin: 15px auto;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 8px;
-            text-align: left;
-        }
-        button {
-            padding: 8px 15px;
-            margin-right: 10px;
-            cursor: pointer;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        .btn-accept {
-            background-color: #28a745;
-            color: white;
-        }
-        .btn-reject {
-            background-color: #dc3545;
-            color: white;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Admin Users - Ora Swiss</title>
+
+<style>
+body{
+  background:#000;
+  color:#fff;
+  font-family:Arial;
+}
+
+.container{
+  max-width:900px;
+  margin:30px auto;
+  padding:20px;
+}
+
+.user{
+  border:1px solid #555;
+  padding:15px;
+  margin:10px 0;
+  border-radius:10px;
+}
+button{
+  padding:8px 12px;
+  border-radius:8px;
+  background:#111;
+  color:#fff;
+  border:1px solid #777;
+}
+</style>
 </head>
+
 <body>
 
-    <h1>Ofertat e Marra</h1>
-    
-    <div id="auth-message">
-        Duke kontrolluar sesionin...
-    </div>
+<div class="container">
 
-    <div id="offers-container" style="display: none;">
-        <div id="offers-list">
-            <!-- Ofertat do të shfaqen këtu -->
-        </div>
-    </div>
+<h2>👥 Përdoruesit Ora Swiss</h2>
 
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+<div id="usersList">
+Duke ngarkuar...
+</div>
 
-        // VENDOS KREDENCIALET E TUA TË VËRTETA KËTU:
-        const SUPABASE_URL = 'https:https://gnwsrmelmeqduhhmfmoa.supabase.co'; // Ndryshoje me URL-në tënde të saktë
-        const SUPABASE_ANON_KEY = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9';                    // Ndryshoje me Anon Key-n tënd të saktë
-        
-        const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</div>
 
-        async function loadOffers() {
-            // Për të shmangur bllokimin e sesionit në skedarë të veçantë, 
-            // marrim direkt të dhënat nga tabela 'offers' e Supabase:
-            const { data: offers, error } = await db
-                .from('offers')
-                .select('*');
 
-            const authMessage = document.getElementById('auth-message');
-            const offersContainer = document.getElementById('offers-container');
-            const container = document.getElementById('offers-list');
+<script type="module">
 
-            authMessage.style.display = 'none';
-            offersContainer.style.display = 'block';
-            container.innerHTML = '';
+import { createClient } 
+from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
 
-            if (error) {
-                container.innerHTML = '<p style="color: #dc3545;">Gabim në lidhje me databazën: ' + error.message + '</p>';
-                return;
-            }
 
-            if (!offers || offers.length === 0) {
-                container.innerHTML = '<p>Nuk ka asnjë ofertë aktive për momentin.</p>';
-                return;
-            }
+const supabaseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+const supabaseKey = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
 
-            offers.forEach(offer => {
-                container.innerHTML += `
-                    <div class="offer-card">
-                        <p><strong>Detajet:</strong> ${offer.details || 'Ofertë e re'}</p>
-                        <p><strong>Çmimi:</strong> ${offer.price || '0'} €</p>
-                        <p><strong>Statusi:</strong> <span style="color: #ffc107;">${offer.status || 'Në pritje'}</span></p>
-                        <button class="btn-accept" data-id="${offer.id}" data-status="Pranuar">Prano</button>
-                        <button class="btn-reject" data-id="${offer.id}" data-status="Refuzuar">Refuzo</button>
-                    </div>
-                `;
-            });
+const supabase = createClient(
+supabaseUrl,
+supabaseKey
+);
 
-            // Funksionaliteti i butonave Prano/Refuzo
-            document.querySelectorAll('.btn-accept, .btn-reject').forEach(button => {
-                button.addEventListener('click', async function() {
-                    const offerId = this.getAttribute('data-id');
-                    const status = this.getAttribute('data-status');
 
-                    const { error: updateError } = await db
-                        .from('offers')
-                        .update({ status: status })
-                        .eq('id', offerId);
+const list = document.getElementById("usersList");
 
-                    if (updateError) {
-                        alert('Gabim gjatë përditësimit: ' + updateError.message);
-                    } else {
-                        alert('Oferta u ' + status.toLowerCase() + ' me sukses!');
-                        loadOffers(); // Rifreskon listën automatikisht
-                    }
-                });
-            });
-        }
 
-        loadOffers();
-    </script>
+async function loadUsers(){
+
+const {data,error}= await supabase
+.from("profiles")
+.select("*")
+.order("created_at",{ascending:false});
+
+
+if(error){
+ console.log(error);
+ list.innerHTML="Gabim gjatë ngarkimit";
+ return;
+}
+
+
+list.innerHTML="";
+
+
+data.forEach(user=>{
+
+list.innerHTML += `
+
+<div class="user">
+
+<b>${user.full_name || "-"}</b><br>
+
+Email:
+${user.email || "-"}<br>
+
+Telefon:
+${user.phone || "-"}<br>
+
+Shtet:
+${user.country || "-"}<br>
+
+Roli:
+${user.role || "-"}<br>
+
+<button>
+Hap profilin
+</button>
+
+</div>
+
+`;
+
+});
+
+
+}
+
+
+loadUsers();
+
+
+</script>
 
 </body>
 </html>

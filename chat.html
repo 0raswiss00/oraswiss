@@ -212,6 +212,13 @@ async function initChat() {
         document.getElementById("headerTitle").innerText = "Bisedë";
     }
 
+    // Shëno mesazhet si të lexuara sapo hapet biseda
+    await supabase
+        .from("messages")
+        .update({ is_read: true })
+        .eq("conversation_id", conversationId)
+        .neq("sender_id", currentUserId);
+
     await loadMessages();
     setupRealtimeSubscription();
 }
@@ -264,6 +271,13 @@ function setupRealtimeSubscription() {
             },
             (payload) => {
                 appendMessageToUI(payload.new);
+                // Nëse vjen mesazh i ri ndërkohë që je në chat, bëje menjëherë të lexuar nëse s'është i yti
+                if(payload.new.sender_id !== currentUserId) {
+                    supabase
+                        .from("messages")
+                        .update({ is_read: true })
+                        .eq("id", payload.new.id);
+                }
             }
         )
         .subscribe();
@@ -292,7 +306,8 @@ document.getElementById("sendBtn").onclick = async () => {
     const { error } = await supabase.from("messages").insert({
         conversation_id: Number(conversationId),
         sender_id: currentUserId,
-        message_text: text
+        message_text: text,
+        is_read: false
     });
 
     if (error) {
@@ -345,7 +360,8 @@ imageInput.onchange = async (e) => {
     const { error: insertError } = await supabase.from("messages").insert({
         conversation_id: Number(conversationId),
         sender_id: currentUserId,
-        message_text: imageUrl
+        message_text: imageUrl,
+        is_read: false
     });
 
     await supabase

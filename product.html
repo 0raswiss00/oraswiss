@@ -305,6 +305,11 @@ async function loadProduct() {
         const sellerProfileUrl = "profile.html?id=" + sellerUserId;
         osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
 
+        // Këtu e vendos:
+        window.currentSellerId = sellerUserId;
+
+        document.getElementById("description").innerText = data.description || "N/A";
+        
         // Shfaq avatarin nëse ekziston në profil
         if (sellerAvatarUrl) {
             document.getElementById("os-avatar-box").innerHTML = `<img src="${sellerAvatarUrl}" alt="Avatar">`;
@@ -632,6 +637,84 @@ async function handleModalAuth() {
 
 loadProduct();
 </script>
+<!-- TABELA E DËRGIMIT TË OFERTËS (MODAL) -->
+<div id="offer-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:#111; border:1px solid #333; padding:30px; border-radius:16px; width:90%; max-width:400px; text-align:center; position:relative;">
+        <button onclick="closeOfferModal()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✕</button>
+        
+        <h2 style="color:#fff; margin-bottom:10px;">Bëj një ofertë</h2>
+        <p style="color:#aaa; font-size:14px; margin-bottom:20px;">Propozo çmimin tënd për këtë produkt.</p>
+        
+        <input type="number" id="offer-price-input" placeholder="Shkruaj çmimin (p.sh. 450)" style="width:100%; padding:12px; margin-bottom:15px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
+        
+        <button onclick="submitOffer()" style="width:100%; padding:12px; background:#25D366; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-bottom:10px;">Dërgo Ofertën</button>
+        <button onclick="closeOfferModal()" style="width:100%; padding:10px; background:transparent; color:#888; border:1px solid #333; border-radius:8px; cursor:pointer;">Anulo</button>
+        
+        <div id="offer-error" style="color:#ff4444; font-size:13px; margin-top:10px;"></div>
+    </div>
+</div>
+<script>
+document.getElementById("offer").onclick = async function(e) {
+    e.preventDefault();
+    
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+    if (userError || !user) {
+        document.getElementById("login-modal").style.display = "flex";
+        return;
+    }
 
+    if (user.id === window.currentSellerId) {
+        alert("Nuk mund t'i bësh ofertë produktit tënd!");
+        return;
+    }
+
+    document.getElementById("offer-modal").style.display = "flex";
+};
+
+function closeOfferModal() {
+    document.getElementById("offer-modal").style.display = "none";
+    document.getElementById("offer-price-input").value = "";
+    document.getElementById("offer-error").textContent = "";
+}
+
+async function submitOffer() {
+    const offerPrice = document.getElementById("offer-price-input").value;
+    const errorEl = document.getElementById("offer-error");
+
+    if (!offerPrice || offerPrice <= 0) {
+        errorEl.textContent = "Ju lutem shkruani një çmim të vlefshëm.";
+        return;
+    }
+
+    errorEl.style.color = "#fff";
+    errorEl.textContent = "Duke dërguar ofertën...";
+
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) return;
+
+    const { error } = await supabaseClient
+        .from("offers")
+        .insert({
+            product_id: productId,
+            buyer_id: user.id,
+            seller_id: window.currentSellerId,
+            offered_price: parseFloat(offerPrice),
+            status: "pending"
+        });
+
+    if (error) {
+        errorEl.style.color = "#ff4444";
+        errorEl.textContent = "Gabim gjatë dërgimit: " + error.message;
+        return;
+    }
+
+    errorEl.style.color = "#25D366";
+    errorEl.textContent = "Oferta u dërgua me sukses!";
+    setTimeout(() => {
+        closeOfferModal();
+    }, 1500);
+}
+</script>
+    
 </body>
 </html>

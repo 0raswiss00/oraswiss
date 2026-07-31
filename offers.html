@@ -55,13 +55,13 @@
     </div>
 
     <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-        // 1. VENDOS URL DHE ÇELËSIN TËND TË VËRTETË KËTU (Fshi tekstet brenda thonjëzave)
-        const SUPABASE_URL = 'https://kodi-yt-i-supabase.supabase.co';
-        const SUPABASE_ANON_KEY = 'vendos-anon-key-ketu';
-        
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Vendos URL-në dhe Anon Key-n e vërtetë të projektit tënd këtu brenda thonjëzave:
+    const SUPABASE_URL = 'KOPJO_URL_E_SUPABASE_KETU';
+    const SUPABASE_ANON_KEY = 'KOPJO_ANON_KEY_KETU';
+    
+    const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         async function loadOffers() {
             // const { data: { session } } = await db.auth.getSession();

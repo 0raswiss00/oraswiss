@@ -369,7 +369,7 @@
         const sellerName = profile?.custom_username || profile?.full_name || "Ora Swiss Seller";
         document.getElementById("os-name").innerHTML = `${sellerName} <span>(Pro)</span>`;
         
-        // Përdorimi i fushës së saktë 'coutru' (ose 'country' / 'shteti' si alternativë)
+        // Përdorimi i fushës së saktë 'coutru' (ose 'country' / 'shteti')
         const countries = {
             "Albania": "🇦🇱 Shqipëri",
             "Switzerland": "🇨🇭 Zvicër",
@@ -380,8 +380,8 @@
             "IT": "🇮🇹 Itali",
             "DE": "🇩🇪 Gjermani"
         };
-        const rawCountry = profile?.coutru || profile?.country || profile?.shteti || "International";
-        document.getElementById("seller-country").textContent = `🌍 ${countries[rawCountry] || rawCountry}`;
+        const rawCountry = profile?.coutru || profile?.country || profile?.shteti;
+        document.getElementById("seller-country").textContent = rawCountry ? `🌍 ${countries[rawCountry] || rawCountry}` : "🌍 -";
 
         if (profile?.image_url) {
             const avatarBox = document.getElementById("os-avatar-box");
@@ -402,7 +402,7 @@
         const itemsBtn = document.getElementById("os-items");
         itemsBtn.href = `profile.html?id=${uid}`;
 
-        // Feedback stats
+        // Feedback stats nga tabela e feedback në Supabase
         const { data: feedbackData } = await supabase
             .from("feedback")
             .select("*")
@@ -413,7 +413,7 @@
             let percent = Math.round((positive / feedbackData.length) * 100);
             document.getElementById("os-feedback").textContent = `${percent}% Positive Feedback (${feedbackData.length} vlerësime)`;
         } else {
-            document.getElementById("os-feedback").textContent = "100% Positive Feedback";
+            document.getElementById("os-feedback").textContent = "Nuk ka ende feedback";
         }
 
         // Contact seller button handler

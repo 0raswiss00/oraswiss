@@ -91,6 +91,12 @@
             align-items: center !important;
             justify-content: center !important;
             color: #fff !important;
+            overflow: hidden !important;
+        }
+        .oraswiss-avatar img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
         }
         .oraswiss-info h3 {
             margin: 0 !important;
@@ -193,12 +199,12 @@
     <div class="oraswiss-seller-card">
         <div class="oraswiss-header">
             <div class="oraswiss-info">
-                <div class="oraswiss-avatar">
+                <div class="oraswiss-avatar" id="os-avatar-box">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 </div>
                 <div>
                     <h3 id="os-name">- <span>(Pro)</span></h3>
-                    <p class="oraswiss-green" id="os-feedback">100% Positive Feedback</p>
+                    <p class="oraswiss-green" id="os-feedback">Duke kontrolluar feedback...</p>
                 </div>
             </div>
         </div>
@@ -271,27 +277,72 @@ async function loadProduct() {
 
         if (error) throw error;
 
-        const sellerName = data.seller_name || "Seller";
-        const sellerProfileUrl = "profile.html?id=" + data.user_id;
+        const sellerUserId = data.user_id;
+
+        // Merr të dhënat e plota të shitësit nga tabela `profiles` duke përdorur user_id
+        let sellerName = data.seller_name || "Seller";
+        let sellerCountryCode = data.seller_country || "";
+        let sellerAvatarUrl = "";
+        let sellerJoinedDate = data.created_at;
+
+        if (sellerUserId) {
+            const { data: profileData } = await supabaseClient
+                .from("profiles")
+                .select("*")
+                .eq("id", sellerUserId)
+                .maybeSingle();
+
+            if (profileData) {
+                sellerName = profileData.custom_username || profileData.full_name || sellerName;
+                sellerCountryCode = profileData.coutru || profileData.country || profileData.shteti || sellerCountryCode;
+                sellerAvatarUrl = profileData.image_url || "";
+                sellerJoinedDate = profileData.created_at || sellerJoinedDate;
+            }
+        }
 
         const osNameEl = document.getElementById("os-name");
         osNameEl.innerHTML = sellerName + "-oraswiss <span>(Pro)</span>";
+        const sellerProfileUrl = "profile.html?id=" + sellerUserId;
         osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
 
-        const osFeedbackEl = document.getElementById("os-feedback");
-        osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
+        // Shfaq avatarin nëse ekziston në profil
+        if (sellerAvatarUrl) {
+            document.getElementById("os-avatar-box").innerHTML = `<img src="${sellerAvatarUrl}" alt="Avatar">`;
+        }
 
+        // Llogaritja e feedback nga tabela `feedback` duke filtruar sipas seller_id ose rated_user_id
+        if (sellerUserId) {
+            const { data: feedbackList } = await supabaseClient
+                .from("feedback")
+                .select("*")
+                .or(`seller_id.eq.${sellerUserId},rated_user_id.eq.${sellerUserId}`);
+
+            const osFeedbackEl = document.getElementById("os-feedback");
+            osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
+
+            if (feedbackList && feedbackList.length > 0) {
+                const positiveCount = feedbackList.filter(f => f.type === 'positive' || f.rating >= 4).length;
+                const percent = Math.round((positiveCount / feedbackList.length) * 100);
+                osFeedbackEl.textContent = `${percent}% Positive Feedback (${feedbackList.length} vlerësime)`;
+            } else {
+                osFeedbackEl.textContent = "100% Positive Feedback";
+            }
+        } else {
+            document.getElementById("os-feedback").textContent = "100% Positive Feedback";
+        }
+
+        // Numri total i produkteve të shitësit
         let totalItemsCount = 0;
-        if (data.user_id) {
+        if (sellerUserId) {
             const { count: countOras } = await supabaseClient
                 .from("oras")
                 .select("*", { count: 'exact', head: true })
-                .eq("user_id", data.user_id);
+                .eq("user_id", sellerUserId);
 
             const { count: countBracelets } = await supabaseClient
                 .from("bracelets_straps")
                 .select("*", { count: 'exact', head: true })
-                .eq("user_id", data.user_id);
+                .eq("user_id", sellerUserId);
 
             totalItemsCount = (countOras || 0) + (countBracelets || 0);
         }
@@ -301,7 +352,7 @@ async function loadProduct() {
             window.location.href = sellerProfileUrl;
         };
 
-        const joined = new Date(data.created_at || Date.now());
+        const joined = new Date(sellerJoinedDate || Date.now());
         const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
         document.getElementById("os-joined").textContent = "Anëtar që nga " + formattedJoined;
 
@@ -315,7 +366,7 @@ async function loadProduct() {
                     return;
                 }
 
-                if (user.id === data.user_id) {
+                if (user.id === sellerUserId) {
                     alert("Ky është produkti yt!");
                     return;
                 }
@@ -337,7 +388,7 @@ async function loadProduct() {
                     .insert({
                         listing_id: data.id,
                         buyer_id: user.id,
-                        seller_id: data.user_id,
+                        seller_id: sellerUserId,
                         last_message: "Bisedë e re"
                     })
                     .select()
@@ -362,8 +413,7 @@ async function loadProduct() {
             "IT": "🇮🇹 Itali",
             "DE": "🇩🇪 Gjermani"
         };
-        const sCountry = data.seller_country || "-";
-        document.getElementById("seller-country").innerText = "🌍 " + (countries[sCountry] || sCountry);
+        document.getElementById("seller-country").innerText = "🌍 " + (countries[sellerCountryCode] || sellerCountryCode || "International");
 
         currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
         currentImgIndex = 0;

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ofertat e Marra</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .offer-card {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            padding: 20px;
+            margin: 15px auto;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+            text-align: left;
+        }
+        button {
+            padding: 8px 15px;
+            margin-right: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .btn-accept {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-reject {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Ofertat e Marra</h1>
+    
+    <!-- Mesazhi nëse nuk është i loguar -->
+    <div id="auth-message">
+        Ju duhet të jeni të loguar për të parë ofertat.
+    </div>
+
+    <!-- Pjesa e ofertave që shfaqet kur logohet -->
+    <div id="offers-container" style="display: none;">
+        <div id="offers-list">
+            <!-- Ofertat do të shfaqen këtu automatikisht -->
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        // Vendos kredencialet e tua këtu
+        const SUPABASE_URL = 'VENDOS_URL_E_SUPABASE_KETU';
+        const SUPABASE_ANON_KEY = 'VENDOS_KEY_E_SUPABASE_KETU';
+
+        async function loadOffers() {
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (!session) {
+                document.getElementById('auth-message').style.display = 'block';
+                document.getElementById('offers-container').style.display = 'none';
+                return;
+            }
+
+            // Nëse është i loguar, fshi mesazhin dhe shfaq ofertat
+            document.getElementById('auth-message').style.display = 'none';
+            document.getElementById('offers-container').style.display = 'block';
+
+            // Merr ofertat nga baza e të dhënave (supozojmë se tabela juaj quhet 'offers')
+            const { data: offers, error } = await supabase
+                .from('offers')
+                .select('*');
+
+            const container = document.getElementById('offers-list');
+            container.innerHTML = '';
+
+            if (error || !offers || offers.length === 0) {
+                container.innerHTML = '<p>Nuk ka asnjë ofertë aktive për momentin.</p>';
+                return;
+            }
+
+            // Shfaq secilën ofertë me butonat e pranimit dhe refuzimit
+            offers.forEach(offer => {
+                container.innerHTML += `
+                    <div class="offer-card">
+                        <p><strong>Detajet:</strong> ${offer.details || 'Ofertë e re'}</p>
+                        <p><strong>Çmimi:</strong> ${offer.price || '0'} €</p>
+                        <button class="btn-accept" onclick="updateOfferStatus('${offer.id}', 'Pranuar')">Prano</button>
+                        <button class="btn-reject" onclick="updateOfferStatus('${offer.id}', 'Refuzuar')">Refuzo</button>
+                    </div>
+                `;
+            });
+        }
+
+        // Funksioni që ekzekutohet kur klikohet Prano ose Refuzo
+        window.updateOfferStatus = async function(offerId, status) {
+            const { error } = await supabase
+                .from('offers')
+                .update({ status: status })
+                .eq('id', offerId);
+
+            if (error) {
+                alert('Gabim gjatë përditësimit: ' + error.message);
+            } else {
+                alert('Oferta u ' + status.toLowerCase() + ' me sukses!');
+                loadOffers(); // Rifresko listën
+            }
+        }
+
+        loadOffers();
+    </script>
+
+</body>
+</html>

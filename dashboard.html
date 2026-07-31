@@ -125,11 +125,6 @@
         <h2>Artikujt e mi</h2>
         <ul id="myWatchesList" style="padding: 0; margin: 0;"></ul>
     </div>
-
-    <div style="background:#111; padding:20px; border-radius:12px; border:1px solid #333; margin-top:20px;">
-        <h3 style="color:#fff; margin-bottom:15px;">Ofertat e marra për produktet tuaja</h3>
-        <div id="seller-offers-list" style="color:#aaa;">Duke ngarkuar ofertat...</div>
-    </div>
     
     <!-- Menuja e My OraSwiss me butonin e saktë të mesazheve -->
     <div id="myOraSwissMenu" class="my-oraswiss-menu">
@@ -148,6 +143,7 @@
     <nav class="bottom-nav">
       <a href="index.html" class="bottom-nav-item">OraSwiss</a>
       <a href="profile.html" class="bottom-nav-item">Profile</a>
+      <a href="offers.html" class="bottom-nav-item">Offers</a>  
       <a href="favorites.html" class="bottom-nav-item">Favorites</a>
       <a href="collection.html" class="bottom-nav-item">Collection</a>
       <a href="mysales.html" class="bottom-nav-item">Sales</a>
@@ -317,48 +313,7 @@
     }, false);
 </script>
 
-<script>
-async function loadSellerOffers() {
-    const { data: { user } } = await supabaseClient.auth.getUser();
-    if (!user) return;
 
-    const { data: offers, error } = await supabaseClient
-        .from("offers")
-        .select("*")
-        .eq("seller_id", user.id)
-        .order("created_at", { ascending: false });
-
-    const container = document.getElementById("seller-offers-list");
-
-    if (error || !offers || offers.length === 0) {
-        container.innerHTML = "Nuk keni asnjë ofertë të re.";
-        return;
-    }
-
-    let html = '<div style="display:flex; flex-direction:column; gap:10px;">';
-    for (const offer of offers) {
-        html += `
-            <div style="background:#1a1a1a; padding:15px; border-radius:8px; border:1px solid #333; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                <div>
-                    <p style="color:#fff; margin:0 0 5px 0; font-weight:bold;">Çmimi i ofruar: ${offer.offered_price} €</p>
-                    <p style="color:#888; margin:0; font-size:12px;">Statusi: <span style="color:${offer.status === 'pending' ? '#f39c12' : '#2ecc71'}">${offer.status}</span></p>
-                </div>
-                <div style="display:flex; gap:10px;">
-                    <button onclick="openChatWithBuyer('${offer.buyer_id}', '${offer.product_id}')" style="padding:8px 12px; background:#25D366; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">Flasim në Chat</button>
-                </div>
-            </div>
-        `;
-    }
-    html += '</div>';
-    container.innerHTML = html;
-}
-
-function openChatWithBuyer(buyerId, productId) {
-    window.location.href = `chat.html?user=${buyerId}&product=${productId}`;
-}
-
-loadSellerOffers();
-</script>
     
 </body>
 </html>

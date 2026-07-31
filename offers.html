@@ -6,6 +6,7 @@
     <title>Ofertat e Marra - OraSwiss</title>
     <!-- Lidh Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
     <style>
         body { background: #0b0b0b; color: #fff; font-family: sans-serif; margin: 0; padding-bottom: 70px; }
         .container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
@@ -35,52 +36,58 @@
       <a href="sellnow.html" class="bottom-nav-item">Sell</a>
     </nav>
 
-    <script>
-        async function loadSellerOffers() {
-            const { data: { user } } = await supabaseClient.auth.getUser();
-            const container = document.getElementById("seller-offers-list");
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
 
-            if (!user) {
-                container.innerHTML = "Ju duhet të jeni të loguar për të parë ofertat.";
-                return;
-            }
+const supabase = createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
 
-            const { data: offers, error } = await supabaseClient
-                .from("offers")
-                .select("*")
-                .eq("seller_id", user.id)
-                .order("created_at", { ascending: false });
+async function loadSellerOffers() {
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const container = document.getElementById("seller-offers-list");
 
-            if (error || !offers || offers.length === 0) {
-                container.innerHTML = "Nuk keni asnjë ofertë të re.";
-                return;
-            }
+    if (userError || !user) {
+        container.innerHTML = "Ju duhet të jeni të loguar për të parë ofertat.";
+        return;
+    }
 
-            let html = '';
-            for (const offer of offers) {
-                html += `
-                    <div class="offer-card">
-                        <div>
-                            <p style="color:#fff; margin:0 0 5px 0; font-weight:bold;">Çmimi i ofruar: ${offer.offered_price} €</p>
-                            <p style="color:#888; margin:0; font-size:12px;">Statusi: <span style="color:${offer.status === 'pending' ? '#f39c12' : '#2ecc71'}">${offer.status}</span></p>
-                        </div>
-                        <div>
-                            <button class="btn-chat" onclick="openChatWithBuyer('${offer.buyer_id}', '${offer.product_id}')">Flasim në Chat</button>
-                        </div>
-                    </div>
-                `;
-            }
-            container.innerHTML = html;
-        }
+    const { data: offers, error } = await supabase
+        .from("offers")
+        .select("*")
+        .eq("seller_id", user.id)
+        .order("created_at", { ascending: false });
 
-        function openChatWithBuyer(buyerId, productId) {
-            window.location.href = `chat.html?user=${buyerId}&product=${productId}`;
-        }
+    if (error || !offers || offers.length === 0) {
+        container.innerHTML = "Nuk keni asnjë ofertë të re.";
+        return;
+    }
 
-        loadSellerOffers();
-    </script>
+    let html = '';
+    for (const offer of offers) {
+        html += `
+            <div class="offer-card">
+                <div>
+                    <p style="color:#fff; margin:0 0 5px 0; font-weight:bold;">Çmimi i ofruar: ${offer.offered_price} €</p>
+                    <p style="color:#888; margin:0; font-size:12px;">Statusi: <span style="color:${offer.status === 'pending' ? '#f39c12' : '#2ecc71'}">${offer.status}</span></p>
+                </div>
+                <div>
+                    <button class="btn-chat" onclick="openChatWithBuyer('${offer.buyer_id}', '${offer.product_id}')">Flasim në Chat</button>
+                </div>
+            </div>
+        `;
+    }
+    container.innerHTML = html;
+}
 
-    <script>
+window.openChatWithBuyer = function(buyerId, productId) {
+    window.location.href = `chat.html?user=${buyerId}&product=${productId}`;
+}
+
+loadSellerOffers();
+</script>
+<script>
     async function loadSellerOffers() {
         const { data: { user } } = await supabaseClient.auth.getUser();
         const container = document.getElementById("seller-offers-list");
@@ -124,6 +131,7 @@
 
     loadSellerOffers();
 </script>
+    
     
 </body>    
 </html>

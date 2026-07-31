@@ -62,7 +62,6 @@
         // Vendos kredencialet e tua këtu
         const SUPABASE_URL = 'VENDOS_URL_E_SUPABASE_KETU';
         const SUPABASE_ANON_KEY = 'VENDOS_KEY_E_SUPABASE_KETU';
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         async function loadOffers() {
             const { data: { session } } = await supabase.auth.getSession();

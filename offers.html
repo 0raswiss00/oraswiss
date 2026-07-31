@@ -44,24 +44,25 @@
 
     <h1>Ofertat e Marra</h1>
     
-    <!-- Mesazhi nëse nuk është i loguar -->
     <div id="auth-message">
         Ju duhet të jeni të loguar për të parë ofertat.
     </div>
 
-    <!-- Pjesa e ofertave që shfaqet kur logohet -->
     <div id="offers-container" style="display: none;">
         <div id="offers-list">
-            <!-- Ofertat do të shfaqen këtu automatikisht -->
+            <!-- Ofertat do të shfaqen këtu -->
         </div>
     </div>
 
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-        // Vendos kredencialet e tua këtu
+        // Vendos kredencialet e tua të vërteta këtu
         const SUPABASE_URL = 'VENDOS_URL_E_SUPABASE_KETU';
         const SUPABASE_ANON_KEY = 'VENDOS_KEY_E_SUPABASE_KETU';
+        
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        window.supabase = supabase; // E bëjmë globale që të mos japë gabim
 
         async function loadOffers() {
             const { data: { session } } = await supabase.auth.getSession();
@@ -72,11 +73,9 @@
                 return;
             }
 
-            // Nëse është i loguar, fshi mesazhin dhe shfaq ofertat
             document.getElementById('auth-message').style.display = 'none';
             document.getElementById('offers-container').style.display = 'block';
 
-            // Merr ofertat nga baza e të dhënave (supozojmë se tabela juaj quhet 'offers')
             const { data: offers, error } = await supabase
                 .from('offers')
                 .select('*');
@@ -89,7 +88,6 @@
                 return;
             }
 
-            // Shfaq secilën ofertë me butonat e pranimit dhe refuzimit
             offers.forEach(offer => {
                 container.innerHTML += `
                     <div class="offer-card">
@@ -102,7 +100,6 @@
             });
         }
 
-        // Funksioni që ekzekutohet kur klikohet Prano ose Refuzo
         window.updateOfferStatus = async function(offerId, status) {
             const { error } = await supabase
                 .from('offers')
@@ -113,7 +110,7 @@
                 alert('Gabim gjatë përditësimit: ' + error.message);
             } else {
                 alert('Oferta u ' + status.toLowerCase() + ' me sukses!');
-                loadOffers(); // Rifresko listën
+                loadOffers();
             }
         }
 

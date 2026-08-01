@@ -186,65 +186,60 @@ async function loadSellerOffers() {
 
 async function updateOfferStatus(offerId, newStatus) {
 
-
     if (newStatus === "countered") {
-
 
         const amount = prompt("Shkruaj kundërofertën (€):");
 
-
         if (!amount) return;
 
-
         if (isNaN(amount) || Number(amount) <= 0) {
-
             alert("Shkruaj një çmim të vlefshëm.");
             return;
-
         }
 
 
-        const { error } = await supabase
+        const { data, error } = await supabase
             .from("offers")
             .update({
-
                 status: "countered",
-                counter_offer: Number(amount),
-                last_offer_by: "seller"
-
+                counter_offer: Number(amount)
             })
-            .eq("id", offerId);
+            .eq("id", offerId)
+            .select();
 
+
+        console.log("Counter data:", data);
+        console.log("Counter error:", error);
 
 
         if (error) {
-
             alert(error.message);
             return;
-
         }
+
+
+        alert("Kundëroferta u dërgua!");
 
 
     } else {
 
 
-        const { error } = await supabase
+        const { data, error } = await supabase
             .from("offers")
             .update({
-
-                status: newStatus,
-                last_offer_by: "seller"
-
+                status: newStatus
             })
-            .eq("id", offerId);
+            .eq("id", offerId)
+            .select();
 
+
+        console.log("Status data:", data);
+        console.log("Status error:", error);
 
 
         if (error) {
-
             alert(error.message);
             return;
-
         }
 
     }

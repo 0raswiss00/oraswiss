@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ofertat e Marra - OraSwiss</title>
+    <style>
+        body { background: #0b0b0b; color: #fff; font-family: sans-serif; margin: 0; padding-bottom: 70px; }
+        .container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
+        h2 { border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .offer-card { background: #1a1a1a; padding: 15px; border-radius: 8px; border: 1px solid #333; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #111; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #333; z-index: 1000; }
+        .bottom-nav-item { color: #aaa; text-decoration: none; font-size: 12px; text-align: center; }
+        .bottom-nav-item:hover, .bottom-nav-item.active { color: #fff; }
+        .btn-chat { background: #25D366; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Ofertat e Marra</h2>
+        <div id="seller-offers-list" style="color: #aaa; margin-top: 20px;">Duke ngarkuar ofertat...</div>
+    </div>
+
+    <!-- Shiriti i poshtëm i navigimit -->
+    <nav class="bottom-nav">
+      <a href="index.html" class="bottom-nav-item">OraSwiss</a>
+      <a href="profile.html" class="bottom-nav-item">Profile</a>
+      <a href="favorites.html" class="bottom-nav-item">Favorites</a>
+      <a href="collection.html" class="bottom-nav-item">Collection</a>
+      <a href="mysales.html" class="bottom-nav-item">Sales</a>
+      <a href="offers.html" class="bottom-nav-item active">Offers</a>
+      <a href="sellnow.html" class="bottom-nav-item">Sell</a>
+    </nav>
+
+    <!-- Supabase Logic -->
+    <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
+
+    const supabase = createClient(
+        "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+    );
+
+    async function loadSellerOffers() {
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        const container = document.getElementById("seller-offers-list");
+
+        if (!container) return;
+
+        if (userError || !user) {
+            container.innerHTML = "Ju duhet të jeni të loguar për të parë ofertat.";
+            return;
+        }
+
+        const { data: offers, error } = await supabase
+            .from("offers")
+            .select("*")
+            .eq("seller_id", user.id)
+            .order("created_at", { ascending: false });
+
+        if (error || !offers || offers.length === 0) {
+            container.innerHTML = "Nuk keni asnjë ofertë të re.";
+            return;
+        }
+
+        let html = '';
+        for (const offer of offers) {
+            let actionButtons = '';
+
+            if (offer.status === 'pending') {
+                actionButtons = `
+                    <button class="btn-action" data-id="${offer.id}" data-status="accepted" style="background:#2ecc71; color:#fff; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-weight:bold; font-size:12px;">Prano</button>
+                    <button class="btn-action" data-id="${offer.id}" data-status="rejected" style="background:#e74c3c; color:#fff; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-weight:bold; font-size:12px;">Refuzo</button>
+                `;
+            } else if (offer.status === 'accepted') {
+                actionButtons = `
+                    <span style="color:#2ecc71; font-weight:bold; font-size:12px;">
+                        Oferta u pranua ✓
+                    </span>
+                `;
+            } else if (offer.status === 'rejected') {
+                actionButtons = `
+                    <span style="color:#e74c3c; font-weight:bold; font-size:12px;">
+                        Oferta u refuzua ✗
+                    </span>
+                `;
+            }
+
+            html += `
+                <div class="offer-card" id="offer-${offer.id}">
+                    <div>
+                        <p style="color:#fff; margin:0 0 5px 0; font-weight:bold;">Çmimi i ofruar: ${offer.offered_price} €</p>
+                        <p style="color:#888; margin:0; font-size:12px;">Statusi: <span style="color:${offer.status === 'pending' ? '#f39c12' : (offer.status === 'accepted' ? '#2ecc71' : '#e74c3c')}">${offer.status}</span></p>
+                    </div>
+                    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                        ${actionButtons}
+                        <button class="btn-chat" data-buyer="${offer.buyer_id}" data-product="${offer.product_id}">Chat</button>
+                    </div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+        attachEventListeners();
+    }
+
+    async function updateOfferStatus(offerId, newStatus) {
+        const { error } = await supabase
+            .from("offers")
+            .update({ status: newStatus })
+            .eq("id", offerId);
+
+        if (error) {
+            alert("Gabim gjatë përditësimit: " + error.message);
+            return;
+        }
+
+        loadSellerOffers();
+    }
+
+    function openChatWithBuyer(buyerId, productId) {
+        window.location.href = `chat.html?user=${buyerId}&product=${productId}`;
+    }
+
+    function attachEventListeners() {
+        document.querySelectorAll('.btn-action').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const offerId = e.target.getAttribute('data-id');
+                const newStatus = e.target.getAttribute('data-status');
+                updateOfferStatus(offerId, newStatus);
+            });
+        });
+
+        document.querySelectorAll('.btn-chat').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const buyerId = e.target.getAttribute('data-buyer');
+                const productId = e.target.getAttribute('data-product');
+                openChatWithBuyer(buyerId, productId);
+            });
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        loadSellerOffers();
+    });
+    </script>
+</body>
+</html>

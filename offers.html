@@ -97,25 +97,12 @@ async function loadSellerOffers() {
 
         } else if (offer.status === "countered") {
 
-             actionButtons = `
-                <button class="btn-action"
-                    data-id="${offer.id}"
-                    data-status="accepted">
-                    Prano kundërofertën
-                </button>
-
-                <button class="btn-action"
-                    data-id="${offer.id}"
-                    data-status="rejected">
-                    Refuzo
-                </button>
-
-                <button class="btn-action"
-                    data-id="${offer.id}"
-                    data-status="countered">
-                    Kundërofertë tjetër
-                </button>
+            actionButtons = `
+                <span style="color:#f39c12;font-weight:bold;">
+                    Kundëroferta u dërgua 💬
+                </span>
             `;
+
 
         } else if (offer.status === "accepted") {
 
@@ -130,11 +117,11 @@ async function loadSellerOffers() {
             `;
 
 
-        } else if (offer.status === "countered") {
+        } else if (offer.status === "rejected") {
 
             actionButtons = `
-                <span style="color:#f39c12;font-weight:bold;">
-                    Kundëroferta u dërgua 💬
+                <span style="color:#e74c3c;font-weight:bold;">
+                    Oferta u refuzua ✕
                 </span>
             `;
 

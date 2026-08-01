@@ -59,10 +59,9 @@
             .eq("seller_id", user.id)
             .order("created_at", { ascending: false });
 
-        if (error || !offers || offers.length === 0) {
-            container.innerHTML = "Nuk keni asnjë ofertë të re.";
-            return;
-        }
+        console.log("USER:", user.id);
+        console.log("OFFERS:", offers);
+        console.log("ERROR:", error);
 
         let html = '';
         for (const offer of offers) {

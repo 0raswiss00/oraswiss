@@ -279,7 +279,6 @@ async function loadProduct() {
 
         const sellerUserId = data.user_id;
 
-        // Merr të dhënat e plota të shitësit nga tabela `profiles` duke përdorur user_id
         let sellerName = data.seller_name || "Seller";
         let sellerCountryCode = data.seller_country || "";
         let sellerAvatarUrl = "";
@@ -305,17 +304,14 @@ async function loadProduct() {
         const sellerProfileUrl = "profile.html?id=" + sellerUserId;
         osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
 
-        // Këtu e vendos:
         window.currentSellerId = sellerUserId;
 
         document.getElementById("description").innerText = data.description || "N/A";
         
-        // Shfaq avatarin nëse ekziston në profil
         if (sellerAvatarUrl) {
             document.getElementById("os-avatar-box").innerHTML = `<img src="${sellerAvatarUrl}" alt="Avatar">`;
         }
 
-        // Llogaritja e feedback nga tabela `feedback` duke filtruar sipas seller_id ose rated_user_id
         if (sellerUserId) {
             const { data: feedbackList } = await supabaseClient
                 .from("feedback")
@@ -336,7 +332,6 @@ async function loadProduct() {
             document.getElementById("os-feedback").textContent = "100% Positive Feedback";
         }
 
-        // Numri total i produkteve të shitësit
         let totalItemsCount = 0;
         if (sellerUserId) {
             const { count: countOras } = await supabaseClient
@@ -432,7 +427,7 @@ async function loadProduct() {
         const specsContainer = document.getElementById("specs");
         specsContainer.innerHTML = "";
 
-        if (tableName === "bracelets_straps") {
+        if (category === "bracelets_straps") {
             specsContainer.innerHTML = `
                 <div class="info-row"><span>Type</span><span>${data.type || "N/A"}</span></div>
                 <div class="info-row"><span>Reference</span><span>${data.reference || "N/A"}</span></div>
@@ -637,6 +632,7 @@ async function handleModalAuth() {
 
 loadProduct();
 </script>
+
 <!-- TABELA E DËRGIMIT TË OFERTËS (MODAL) -->
 <div id="offer-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center;">
     <div style="background:#111; border:1px solid #333; padding:30px; border-radius:16px; width:90%; max-width:400px; text-align:center; position:relative;">

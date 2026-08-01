@@ -130,7 +130,77 @@
         }
         container.innerHTML = html;
     }
+   
+    window.acceptCounter = async function(id){
 
+        const { error } = await supabase
+            .from("offers")
+            .update({
+                status:"accepted"
+            })
+            .eq("id", id);
+
+        if(error){
+            alert(error.message);
+            return;
+        }
+
+        loadBuyerOffers();
+    };
+
+
+    window.rejectCounter = async function(id){
+
+        const { error } = await supabase
+            .from("offers")
+            .update({
+                status:"rejected"
+            })
+            .eq("id", id);
+
+        if(error){
+            alert(error.message);
+            return;
+        }
+
+        loadBuyerOffers();
+    };
+
+
+    window.makeCounter = async function(id){
+
+        const amount = prompt("Shkruaj kundërofertën (€):");
+
+        if(!amount) return;
+
+        const price = Number(amount);
+
+        if(isNaN(price) || price <= 0){
+            alert("Çmim i pavlefshëm");
+            return;
+        }
+
+        const { error } = await supabase
+            .from("offers")
+            .update({
+                status:"countered",
+                counter_offer:price
+            })
+            .eq("id", id);
+
+        if(error){
+            alert(error.message);
+            return;
+        }
+
+        loadBuyerOffers();
+    };
+
+
+    // Pastaj vazhdon ky kodi yt
+
+    window.payForOffer = async function(productId, price, btnElement) {
+        
     // Funksioni për të gjeneruar pagesën PayPal me çmimin e ofruar nga blerësi
     window.payForOffer = async function(productId, price, btnElement) {
         btnElement.innerText = "⏳ Loading...";

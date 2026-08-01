@@ -81,7 +81,7 @@ async function loadSellerOffers() {
 
         let actionButtons = "";
 
-        if (offer.status === "pending") {
+        if (offer.status === "pending" && offer.last_offer_by === "buyer") {
 
             actionButtons = `
                 <button class="btn-action"
@@ -185,18 +185,20 @@ async function updateOfferStatus(offerId, newStatus) {
 
         alert("Kundëroferta u dërgua.");
 
-        loadSellerOffers();
-        return;
-    }
+    } else {
 
-    const { error } = await supabase
-        .from("offers")
-        .update({ status: newStatus })
-        .eq("id", offerId);
+        const { error } = await supabase
+            .from("offers")
+            .update({
+                status: newStatus,
+                last_offer_by: "seller"
+            })
+            .eq("id", offerId);
 
-    if (error) {
-        alert(error.message);
-        return;
+        if (error) {
+            alert(error.message);
+            return;
+        }
     }
 
     loadSellerOffers();

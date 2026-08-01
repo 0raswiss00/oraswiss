@@ -128,17 +128,15 @@
     }
 
     function attachEventListeners() {
-        // Lidhja e eventeve për butonat e statusit (Prano/Refuzo)
         document.querySelectorAll('.btn-action').forEach(button => {
             button.addEventListener('click', (e) => {
                 const offerId = e.target.getAttribute('data-id');
                 const newStatus = e.target.getAttribute('data-status');
-                console. u konfirmuar klikimi te Prano/Refuzo për ID:", offerId);
+                console.log("U konfirmuar klikimi te Prano/Refuzo për ID:", offerId);
                 updateOfferStatus(offerId, newStatus);
             });
         });
 
-        // Lidhja e eventeve për butonin e Chat-it
         document.querySelectorAll('.btn-chat').forEach(button => {
             button.addEventListener('click', (e) => {
                 const buyerId = e.target.getAttribute('data-buyer');

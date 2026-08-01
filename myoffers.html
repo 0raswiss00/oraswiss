@@ -46,16 +46,19 @@
         // Marrja e ofertave ku përdoruesi është blerës
         const { data: offers, error } = await supabase
             .from("offers")
-            .select(`
-                *,
-                oras (model, brand, image_url)
-            `)
+            .select("*")
             .eq("buyer_id", user.id)
             .order("created_at", { ascending: false });
 
-        if (error || !offers || offers.length === 0) {
-            container.innerHTML = "Nuk keni bërë asnjë ofertë deri tani.";
+        if (error) {
+            console.error("Gabim nga Supabase:", error.message);
+            container.innerHTML = "Gabim në ngarkimin e ofertave: " + error.message;
             return;
+        }
+
+        if (!offers || offers.length === 0) {
+           container.innerHTML = "Nuk keni bërë asnjë ofertë deri tani.";
+           return;
         }
 
         let html = '';

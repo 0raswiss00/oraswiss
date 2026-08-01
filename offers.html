@@ -75,35 +75,28 @@ async function loadSellerOffers() {
         return;
     }
 
-    let html = "";
+    Çmimi i ofruar: 4 €
 
-    offers.forEach(offer => {
+Statusi: pending
 
-        let actionButtons = "";
+Në pritje...
+Çmimi i ofruar: 1 €
 
-        if (offer.status === "pending" && offer.last_offer_by === "buyer") {
+Statusi: countered
 
-            actionButtons = `
-                <button class="btn-action"
-                    data-id="${offer.id}"
-                    data-status="accepted">Prano</button>
+Çmimi i ofruar: 2 €
 
-                <button class="btn-action"
-                    data-id="${offer.id}"
-                    data-status="rejected">Refuzo</button>
+Statusi: countered
 
-                <button class="btn-action"
-                    data-id="${offer.id}"
-                    data-status="countered">Kundërofertë</button>
-            `;
+Çmimi i ofruar: 1 €
 
-        } else if (offer.status === "accepted") {
+Statusi: countered
 
-            actionButtons = `
-                <span style="color:#2ecc71;font-weight:bold;">
-                    Oferta u pranua ✓
-                </span>
-            `;
+Çmimi i ofruar: 1 €
+
+Statusi: accepted
+
+Paguaj Tani 💳
 
         } else if (offer.status === "rejected") {
 
@@ -116,9 +109,23 @@ async function loadSellerOffers() {
         } else if (offer.status === "countered") {
 
             actionButtons = `
-                <span style="color:#f39c12;font-weight:bold;">
-                    Kundëroferta u dërgua 💬
-                </span>
+                <button class="btn-action"
+                    data-id="${offer.id}"
+                    data-status="accepted">
+                    Prano kundërofertën
+                </button>
+
+                <button class="btn-action"
+                    data-id="${offer.id}"
+                    data-status="rejected">
+                    Refuzo
+                </button>
+
+                <button class="btn-action"
+                    data-id="${offer.id}"
+                    data-status="countered">
+                    Kundërofertë tjetër
+                </button>
             `;
 
         } else if (offer.status === "accepted") {

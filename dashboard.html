@@ -80,18 +80,31 @@
             height: 65px;
             background-color: #1a1a1a;
             display: flex;
-            justify-content: space-around;
+            justify-content: flex-start; /* E lejon nisjen nga e majta për scroll */
             align-items: center;
-            padding: 0 5px;
+            gap: 20px; /* Hapësira mes elementeve */
+            padding: 0 15px; /* Hapësirë nga anët brenda kutisë */
             border-radius: 20px;
             border: 1px solid #333;
             box-shadow: 0 5px 20px rgba(0,0,0,0.5);
             z-index: 999999;
             transition: transform 0.3s ease;
+            overflow-x: auto; /* Aktivizon lëvizjen majtas-djathtas */
+            white-space: nowrap;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
         }
+
+        .bottom-nav::-webkit-scrollbar {
+            display: none; /* Fsheh shiritin e scroll-it për pamje më të pastër */
+        }
+
         .bottom-nav.hidden {
             transform: translateY(150%);
         }
+
         .bottom-nav-item {
             color: #fff;
             text-decoration: none;
@@ -104,8 +117,13 @@
             background: none;
             border: none;
             text-align: center;
+            flex-shrink: 0; /* Nuk lejon që butonat të shtrydhen */
+            padding: 0 5px;
         }
-        .bottom-nav-item:hover { color: gold; }
+
+        .bottom-nav-item:hover { 
+            color: gold; 
+        }
 
         .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; list-style: none; }
     </style>

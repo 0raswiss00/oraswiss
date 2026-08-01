@@ -169,21 +169,20 @@ async function loadSellerOffers() {
     container.innerHTML = html;
 
 
-    document.querySelectorAll(".btn-action").forEach(btn => {
+        document.querySelectorAll(".btn-action").forEach(btn => {
 
-    btn.addEventListener("click", async () => {
+        btn.addEventListener("click", async () => {
 
-        console.log("BUTONI U KLIKUA:", btn.dataset.id, btn.dataset.status);
+            await updateOfferStatus(
+                btn.dataset.id,
+                btn.dataset.status
+            );
 
-        await updateOfferStatus(
-            btn.dataset.id,
-            btn.dataset.status
-        );
+        });
 
     });
 
-});
-
+}
 
 async function updateOfferStatus(offerId, newStatus) {
 

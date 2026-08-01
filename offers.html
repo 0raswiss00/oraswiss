@@ -82,28 +82,46 @@ async function loadSellerOffers() {
         let actionButtons = "";
 
         if (offer.status === "pending") {
+
             actionButtons = `
                 <button class="btn-action"
                     data-id="${offer.id}"
-                    data-status="accepted"
-                    style="background:#2ecc71;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;">
-                    ✅ Prano
-                </button>
+                    data-status="accepted">Prano</button>
 
                 <button class="btn-action"
                     data-id="${offer.id}"
-                    data-status="rejected"
-                    style="background:#e74c3c;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;">
-                    ❌ Refuzo
-                </button>
+                    data-status="rejected">Refuzo</button>
 
                 <button class="btn-action"
                     data-id="${offer.id}"
-                    data-status="countered"
-                    style="background:#f39c12;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;">
-                    ✏️ Kundërofertë
-                </button>
+                    data-status="countered">Kundërofertë</button>
             `;
+
+        } else if (offer.status === "accepted") {
+
+            actionButtons = `
+                <span style="color:#2ecc71;font-weight:bold;">
+                    Oferta u pranua ✓
+                </span>
+            `;
+
+        } else if (offer.status === "rejected") {
+
+            actionButtons = `
+                <span style="color:#e74c3c;font-weight:bold;">
+                    Oferta u refuzua ✗
+                </span>
+            `;
+
+        } else if (offer.status === "countered") {
+
+            actionButtons = `
+                <span style="color:#f39c12;font-weight:bold;">
+                    Kundëroferta u dërgua 💬
+                </span>
+            `;
+
+        }
         } else if (offer.status === "accepted") {
             actionButtons = `<span style="color:#2ecc71;font-weight:bold;">Oferta u pranua ✓</span>`;
         } else {

@@ -43,6 +43,7 @@
     );
 
     async function loadSellerOffers() {
+        console.log("Duke ngarkuar ofertat...");
         const { data: { user }, error: userError } = await supabase.auth.getUser();
         const container = document.getElementById("seller-offers-list");
 
@@ -105,16 +106,20 @@
     }
 
     async function updateOfferStatus(offerId, newStatus) {
-        const { error } = await supabase
+        console.log("Duke përditësuar ofertën ID:", offerId, "në statusin:", newStatus);
+        
+        const { data, error } = await supabase
             .from("offers")
             .update({ status: newStatus })
             .eq("id", offerId);
 
         if (error) {
+            console.error("Gabim nga Supabase:", error.message);
             alert("Gabim gjatë përditësimit: " + error.message);
             return;
         }
 
+        console.log("Përditësimi u krye me sukses!", data);
         loadSellerOffers();
     }
 
@@ -128,6 +133,7 @@
             button.addEventListener('click', (e) => {
                 const offerId = e.target.getAttribute('data-id');
                 const newStatus = e.target.getAttribute('data-status');
+                console. u konfirmuar klikimi te Prano/Refuzo për ID:", offerId);
                 updateOfferStatus(offerId, newStatus);
             });
         });

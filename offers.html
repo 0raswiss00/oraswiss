@@ -43,7 +43,6 @@
     );
 
     async function loadSellerOffers() {
-        console.log("Duke ngarkuar ofertat...");
         const { data: { user }, error: userError } = await supabase.auth.getUser();
         const container = document.getElementById("seller-offers-list");
 
@@ -80,7 +79,7 @@
                         Oferta u pranua ✓
                     </span>
                 `;
-            } else {
+            } else if (offer.status === 'rejected') {
                 actionButtons = `
                     <span style="color:#e74c3c; font-weight:bold; font-size:12px;">
                         Oferta u refuzua ✗
@@ -106,20 +105,16 @@
     }
 
     async function updateOfferStatus(offerId, newStatus) {
-        console.log("Duke përditësuar ofertën ID:", offerId, "në statusin:", newStatus);
-        
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from("offers")
             .update({ status: newStatus })
             .eq("id", offerId);
 
         if (error) {
-            console.error("Gabim nga Supabase:", error.message);
             alert("Gabim gjatë përditësimit: " + error.message);
             return;
         }
 
-        console.log("Përditësimi u krye me sukses!", data);
         loadSellerOffers();
     }
 
@@ -132,7 +127,6 @@
             button.addEventListener('click', (e) => {
                 const offerId = e.target.getAttribute('data-id');
                 const newStatus = e.target.getAttribute('data-status');
-                console.log("U konfirmuar klikimi te Prano/Refuzo për ID:", offerId);
                 updateOfferStatus(offerId, newStatus);
             });
         });

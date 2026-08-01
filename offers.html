@@ -43,6 +43,12 @@
     );
 
     async function loadSellerOffers() {
+
+    alert("loadSellerOffers u ekzekutua");
+
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+        
+    async function loadSellerOffers() {
         const { data: { user }, error: userError } = await supabase.auth.getUser();
         const container = document.getElementById("seller-offers-list");
 

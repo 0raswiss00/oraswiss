@@ -59,6 +59,12 @@
             .eq("seller_id", user.id)
             .order("created_at", { ascending: false });
 
+        console.log("==========");
+        console.log("User ID:", user.id);
+        console.log("Offers:", offers);
+        console.log("Error:", error);
+        console.log("==========");
+        
         console.log("USER:", user.id);
         console.log("OFFERS:", offers);
         console.log("ERROR:", error);

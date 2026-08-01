@@ -202,8 +202,9 @@
     window.payForOffer = async function(productId, price, btnElement) {
         
     // Funksioni për të gjeneruar pagesën PayPal me çmimin e ofruar nga blerësi
-    window.payForOffer = async function(productId, price, btnElement) {
+        window.payForOffer = async function(productId, price, btnElement) {
         btnElement.innerText = "⏳ Loading...";
+
         try {
             const response = await fetch(
                 "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
@@ -217,23 +218,29 @@
                     })
                 }
             );
+
             const result = await response.json();
+
             if (result.paypal_link) {
                 window.location.href = result.paypal_link;
             } else {
                 alert("PayPal link nuk u krijua");
                 btnElement.innerText = "Paguaj Tani 💳";
             }
+
         } catch(error) {
             console.error(error);
             alert("Gabim me PayPal");
             btnElement.innerText = "Paguaj Tani 💳";
         }
-    }
+
+    }; // KJO DUHET PATJETER
+
 
     document.addEventListener("DOMContentLoaded", () => {
         loadBuyerOffers();
-    });
-    </script>
+    }); // KJO DUHET PATJETER
+
+</script>
 </body>
 </html>

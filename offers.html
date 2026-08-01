@@ -128,30 +128,9 @@
 
         if (buyerEmail) {
             try {
-                // 3. Dërgo email-in përmes Resend
-                await fetch('https://api.resend.com/emails', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': '' // <-- VENDOS KËTU ÇELËSIN TËND TË RESEND
-                    },
-                    body: JSON.stringify({
-                        from: 'OraSwiss <onboarding@resend.dev>',
-                        to: [buyerEmail],
-                        subject: newStatus === 'accepted' ? 'Urime! Oferta juaj u pranua - OraSwiss' : 'Përditësim për ofertën tuaj - OraSwiss',
-                        html: newStatus === 'accepted' 
-                            ? `<div style="font-family: Arial, sans-serif; color: #333;">
-                                 <h2 style="color: #d4af37;">Oferta U Pranua!</h2>
-                                 <p>Përshëndetje,</p>
-                                 <p>Oferta juaj për orën <strong>${watchTitle}</strong> u <strong>pranua</strong> nga shitësi.</p>
-                                 <p>Mund të hyni në llogarinë tuaj për të vazhduar.</p>
-                               </div>`
-                            : `<div style="font-family: Arial, sans-serif; color: #333;">
-                                 <h2>Përditësim i Ofertës</h2>
-                                 <p>Përshëndetje,</p>
-                                 <p>Na vjen keq, por oferta juaj për orën <strong>${watchTitle}</strong> u <strong>refuzua</strong> nga shitësi.</p>
-                               </div>`
-                    })
+                // 3. Thirr Supabase Edge Function të sigurt për dërgimin e email-it
+                await supabase.functions.invoke('send-email', {
+                    body: { buyerEmail, watchTitle, newStatus }
                 });
             } catch (err) {
                 console.error("Gabim në dërgimin e email-it:", err);

@@ -42,18 +42,22 @@ const supabase = createClient(
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
 );
 
+
 async function loadSellerOffers() {
 
     const container = document.getElementById("seller-offers-list");
 
     if (!container) return;
 
+
     const { data: { user }, error: userError } = await supabase.auth.getUser();
+
 
     if (userError || !user) {
         container.innerHTML = "Ju duhet të jeni të loguar.";
         return;
     }
+
 
     const { data: offers, error } = await supabase
         .from("offers")
@@ -61,60 +65,35 @@ async function loadSellerOffers() {
         .eq("seller_id", user.id)
         .order("created_at", { ascending: false });
 
-    console.log("User:", user.id);
-    console.log("Offers:", offers);
-    console.log("Error:", error);
 
     if (error) {
         container.innerHTML = "Gabim: " + error.message;
         return;
     }
 
+
     if (!offers || offers.length === 0) {
         container.innerHTML = "<p style='color:#888'>Nuk ka oferta të marra.</p>";
         return;
     }
 
-    Çmimi i ofruar: 4 €
 
-Statusi: pending
+    let html = "";
 
-Në pritje...
-Çmimi i ofruar: 1 €
 
-Statusi: countered
+    offers.forEach(offer => {
 
-Çmimi i ofruar: 2 €
+        let actionButtons = "";
 
-Statusi: countered
 
-Çmimi i ofruar: 1 €
-
-Statusi: countered
-
-Çmimi i ofruar: 1 €
-
-Statusi: accepted
-
-        } else if (offer.status === "accepted") {
+        if (offer.status === "pending") {
 
             actionButtons = `
-                <span style="color:#2ecc71;font-weight:bold;">
-                    Oferta u pranua ✓
-                </span>
-
-                <button class="pay-btn">
-                    Paguaj Tani 💳
-                </button>
-            `;
-
-        } else if (offer.status === "rejected") {
-
-            actionButtons = `
-                <span style="color:#e74c3c;font-weight:bold;">
-                    Oferta u refuzua ✗
+                <span style="color:#f39c12;font-weight:bold;">
+                    Në pritje...
                 </span>
             `;
+
 
         } else if (offer.status === "countered") {
 
@@ -138,7 +117,21 @@ Statusi: accepted
                 </button>
             `;
 
-        } else {
+
+        } else if (offer.status === "accepted") {
+
+            actionButtons = `
+                <span style="color:#2ecc71;font-weight:bold;">
+                    Oferta u pranua ✓
+                </span>
+
+                <button class="pay-btn">
+                    Paguaj Tani 💳
+                </button>
+            `;
+
+
+        } else if (offer.status === "rejected") {
 
             actionButtons = `
                 <span style="color:#e74c3c;font-weight:bold;">
@@ -146,86 +139,131 @@ Statusi: accepted
                 </span>
             `;
 
+
         }
+
+
         html += `
             <div class="offer-card">
-                <div>
-                    <p><b>Çmimi:</b> ${offer.offered_price} €</p>
-                    <p>Statusi:
-                        <span>${offer.status}</span>
-                    </p>
-                </div>
+
+                <p>
+                    <b>Çmimi i ofruar:</b>
+                    ${offer.offered_price} €
+                </p>
+
+                <p>
+                    <b>Statusi:</b>
+                    ${offer.status}
+                </p>
 
                 <div>
                     ${actionButtons}
                 </div>
+
             </div>
         `;
+
     });
+
 
     container.innerHTML = html;
 
+
     document.querySelectorAll(".btn-action").forEach(btn => {
+
         btn.addEventListener("click", async () => {
+
             await updateOfferStatus(
                 btn.dataset.id,
                 btn.dataset.status
             );
+
         });
+
     });
 
 }
 
+
+
 async function updateOfferStatus(offerId, newStatus) {
+
 
     if (newStatus === "countered") {
 
+
         const amount = prompt("Shkruaj kundërofertën (€):");
+
 
         if (!amount) return;
 
+
         if (isNaN(amount) || Number(amount) <= 0) {
+
             alert("Shkruaj një çmim të vlefshëm.");
             return;
+
         }
+
 
         const { error } = await supabase
             .from("offers")
             .update({
+
                 status: "countered",
                 counter_offer: Number(amount),
                 last_offer_by: "seller"
+
             })
             .eq("id", offerId);
 
+
+
         if (error) {
+
             alert(error.message);
             return;
+
         }
 
-        alert("Kundëroferta u dërgua.");
 
     } else {
+
 
         const { error } = await supabase
             .from("offers")
             .update({
+
                 status: newStatus,
                 last_offer_by: "seller"
+
             })
             .eq("id", offerId);
 
+
+
         if (error) {
+
             alert(error.message);
             return;
+
         }
+
     }
 
+
     loadSellerOffers();
+
 }
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
+
     loadSellerOffers();
+
 });
+
 </script>
         
 </body>

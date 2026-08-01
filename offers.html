@@ -105,44 +105,61 @@
     }
 
     async function updateOfferStatus(offerId, newStatus) {
-        const { error } = await supabase
+        // 1. Përditëso statusin në Supabase dhe merr të dhënat e ofertës, blerësit dhe produktit
+        const { data: updatedOffer, error } = await supabase
             .from("offers")
             .update({ status: newStatus })
-            .eq("id", offerId);
+            .eq("id", offerId)
+            .select(`
+                *,
+                profiles:buyer_id (email),
+                products:product_id (title)
+            `)
+            .single();
 
         if (error) {
             alert("Gabim gjatë përditësimit: " + error.message);
             return;
         }
 
+        // 2. Merr email-in e blerësit dhe emrin e orës
+        const buyerEmail = updatedOffer?.profiles?.email;
+        const watchTitle = updatedOffer?.products?.title || "OraSwiss";
+
+        if (buyerEmail) {
+            try {
+                // 3. Dërgo email-in përmes Resend
+                await fetch('https://api.resend.com/emails', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer re_KODI_TAND_QE_KOPJOVE' // <-- VENDOS KËTU ÇELËSIN TËND TË RESEND
+                    },
+                    body: JSON.stringify({
+                        from: 'OraSwiss <onboarding@resend.dev>',
+                        to: [buyerEmail],
+                        subject: newStatus === 'accepted' ? 'Urime! Oferta juaj u pranua - OraSwiss' : 'Përditësim për ofertën tuaj - OraSwiss',
+                        html: newStatus === 'accepted' 
+                            ? `<div style="font-family: Arial, sans-serif; color: #333;">
+                                 <h2 style="color: #d4af37;">Oferta U Pranua!</h2>
+                                 <p>Përshëndetje,</p>
+                                 <p>Oferta juaj për orën <strong>${watchTitle}</strong> u <strong>pranua</strong> nga shitësi.</p>
+                                 <p>Mund të hyni në llogarinë tuaj për të vazhduar.</p>
+                               </div>`
+                            : `<div style="font-family: Arial, sans-serif; color: #333;">
+                                 <h2>Përditësim i Ofertës</h2>
+                                 <p>Përshëndetje,</p>
+                                 <p>Na vjen keq, por oferta juaj për orën <strong>${watchTitle}</strong> u <strong>refuzua</strong> nga shitësi.</p>
+                               </div>`
+                    })
+                });
+            } catch (err) {
+                console.error("Gabim në dërgimin e email-it:", err);
+            }
+        }
+
         loadSellerOffers();
     }
-
-    function openChatWithBuyer(buyerId, productId) {
-        window.location.href = `chat.html?user=${buyerId}&product=${productId}`;
-    }
-
-    function attachEventListeners() {
-        document.querySelectorAll('.btn-action').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const offerId = e.target.getAttribute('data-id');
-                const newStatus = e.target.getAttribute('data-status');
-                updateOfferStatus(offerId, newStatus);
-            });
-        });
-
-        document.querySelectorAll('.btn-chat').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const buyerId = e.target.getAttribute('data-buyer');
-                const productId = e.target.getAttribute('data-product');
-                openChatWithBuyer(buyerId, productId);
-            });
-        });
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-        loadSellerOffers();
-    });
     </script>
 </body>
 </html>

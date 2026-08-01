@@ -419,7 +419,7 @@
     const { data, error } = await supabase
       .from("feedback") 
       .select("*")
-      .eq("seller_id", uid); 
+      .or(`seller_id.eq.${uid},buyer_id.eq.${uid}`);
 
     if (error || !data || data.length === 0) {
       feedbackList.innerHTML = "<li>Nuk ka ende feedback.</li>";

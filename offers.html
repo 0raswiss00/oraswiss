@@ -35,121 +35,120 @@
 
     <!-- Supabase Logic -->
     <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
 
-    const supabase = createClient(
-        "https://gnwsrmelmeqduhhmfmoa.supabase.co",
-        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-    );
+const supabase = createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
 
-    async function loadSellerOffers() {
+async function loadSellerOffers() {
 
-    alert("loadSellerOffers u ekzekutua");
+    const container = document.getElementById("seller-offers-list");
+
+    if (!container) return;
 
     const { data: { user }, error: userError } = await supabase.auth.getUser();
-        
-    async function loadSellerOffers() {
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
-        const container = document.getElementById("seller-offers-list");
 
-        if (!container) return;
+    if (userError || !user) {
+        container.innerHTML = "Ju duhet të jeni të loguar.";
+        return;
+    }
 
-        if (userError || !user) {
-            container.innerHTML = "Ju duhet të jeni të loguar për të parë ofertat.";
-            return;
-        }
+    const { data: offers, error } = await supabase
+        .from("offers")
+        .select("*")
+        .eq("seller_id", user.id)
+        .order("created_at", { ascending: false });
 
-        const { data: offers, error } = await supabase
-            .from("offers")
-            .select("*")
-            .eq("seller_id", user.id)
-            .order("created_at", { ascending: false });
+    console.log("User:", user.id);
+    console.log("Offers:", offers);
+    console.log("Error:", error);
 
-        console.log("==========");
-        console.log("User ID:", user.id);
-        console.log("Offers:", offers);
-        console.log("Error:", error);
-        console.log("==========");
-        
-        console.log("USER:", user.id);
-        console.log("OFFERS:", offers);
-        console.log("ERROR:", error);
+    if (error) {
+        container.innerHTML = "Gabim: " + error.message;
+        return;
+    }
 
-        let html = '';
-        for (const offer of offers) {
-            let actionButtons = '';
+    if (!offers || offers.length === 0) {
+        container.innerHTML = "<p style='color:#888'>Nuk ka oferta të marra.</p>";
+        return;
+    }
 
-            if (offer.status === 'pending') {
-                actionButtons = `
-                    <button class="btn-action" data-id="${offer.id}" data-status="accepted" style="background:#2ecc71; color:#fff; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-weight:bold; font-size:12px;">Prano</button>
-                    <button class="btn-action" data-id="${offer.id}" data-status="rejected" style="background:#e74c3c; color:#fff; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-weight:bold; font-size:12px;">Refuzo</button>
-                `;
-            } else if (offer.status === 'accepted') {
-                actionButtons = `
-                    <span style="color:#2ecc71; font-weight:bold; font-size:12px;">
-                        Oferta u pranua ✓
-                    </span>
-                `;
-            } else if (offer.status === 'rejected') {
-                actionButtons = `
-                    <span style="color:#e74c3c; font-weight:bold; font-size:12px;">
-                        Oferta u refuzua ✗
-                    </span>
-                `;
-            }
+    let html = "";
 
-            html += `
-                <div class="offer-card" id="offer-${offer.id}">
-                    <div>
-                        <p style="color:#fff; margin:0 0 5px 0; font-weight:bold;">Çmimi i ofruar: ${offer.offered_price} €</p>
-                        <p style="color:#888; margin:0; font-size:12px;">Statusi: <span style="color:${offer.status === 'pending' ? '#f39c12' : (offer.status === 'accepted' ? '#2ecc71' : '#e74c3c')}">${offer.status}</span></p>
-                    </div>
-                    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                        ${actionButtons}
-                        <button class="btn-chat" data-buyer="${offer.buyer_id}" data-product="${offer.product_id}">Chat</button>
-                    </div>
-                </div>
+    offers.forEach(offer => {
+
+        let actionButtons = "";
+
+        if (offer.status === "pending") {
+            actionButtons = `
+                <button class="btn-action"
+                    data-id="${offer.id}"
+                    data-status="accepted"
+                    style="background:#2ecc71;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;">
+                    Prano
+                </button>
+
+                <button class="btn-action"
+                    data-id="${offer.id}"
+                    data-status="rejected"
+                    style="background:#e74c3c;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;">
+                    Refuzo
+                </button>
             `;
+        } else if (offer.status === "accepted") {
+            actionButtons = `<span style="color:#2ecc71;font-weight:bold;">Oferta u pranua ✓</span>`;
+        } else {
+            actionButtons = `<span style="color:#e74c3c;font-weight:bold;">Oferta u refuzua ✗</span>`;
         }
-        container.innerHTML = html;
-        attachEventListeners();
+
+        html += `
+            <div class="offer-card">
+                <div>
+                    <p><b>Çmimi:</b> ${offer.offered_price} €</p>
+                    <p>Statusi:
+                        <span>${offer.status}</span>
+                    </p>
+                </div>
+
+                <div>
+                    ${actionButtons}
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+
+    document.querySelectorAll(".btn-action").forEach(btn => {
+        btn.addEventListener("click", async () => {
+            await updateOfferStatus(
+                btn.dataset.id,
+                btn.dataset.status
+            );
+        });
+    });
+
+}
+
+async function updateOfferStatus(offerId, newStatus) {
+
+    const { error } = await supabase
+        .from("offers")
+        .update({ status: newStatus })
+        .eq("id", offerId);
+
+    if (error) {
+        alert(error.message);
+        return;
     }
 
-    async function updateOfferStatus(offerId, newStatus) {
-        // 1. Përditëso statusin në Supabase dhe merr të dhënat e ofertës, blerësit dhe produktit
-        const { data: updatedOffer, error } = await supabase
-            .from("offers")
-            .update({ status: newStatus })
-            .eq("id", offerId)
-            .select(`
-                *,
-                profiles:buyer_id (email),
-                products:product_id (title)
-            `)
-            .single();
+    loadSellerOffers();
+}
 
-        if (error) {
-            alert("Gabim gjatë përditësimit: " + error.message);
-            return;
-        }
+loadSellerOffers();
 
-        // 2. Merr email-in e blerësit dhe emrin e orës
-        const buyerEmail = updatedOffer?.profiles?.email;
-        const watchTitle = updatedOffer?.products?.title || "OraSwiss";
-
-        if (buyerEmail) {
-            try {
-                // 3. Thirr Supabase Edge Function të sigurt për dërgimin e email-it
-                await supabase.functions.invoke('send-email', {
-                    body: { buyerEmail, watchTitle, newStatus }
-                });
-            } catch (err) {
-                console.error("Gabim në dërgimin e email-it:", err);
-            }
-        }
-
-        loadSellerOffers();
-    }
-    </script>
+</script>
 </body>
 </html>

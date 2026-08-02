@@ -150,13 +150,13 @@ async function loadSellerOffers() {
         html += `
         <div class="offer-card">
 
-            <img src="images/watch1.png" class="offer-image">
+            <img src="${product?.image || 'images/watch1.png'}" class="offer-image">
 
             <div class="offer-details">
 
-                <h3>Produkt ID: ${offer.product_id}</h3>
+                <h3>${product?.title || 'Produkt pa emër'}</h3>
 
-                <p><b>Çmimi i produktit:</b> - €</p>
+                <p><b>Çmimi i produktit:</b> ${product?.price || '-'} €</p>
 
                 <p><b>Oferta:</b> ${offer.offered_price} €</p>
 
@@ -166,10 +166,10 @@ async function loadSellerOffers() {
                     ${actionButtons}
                 </div>
 
-             </div>
+            </div>
 
-         </div>
-         `;
+        </div>
+        `;
 
     });
 

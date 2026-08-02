@@ -91,6 +91,14 @@ async function loadSellerOffers() {
         let actionButtons="";
 
 
+        console.log("KONTROLL OFERTA:", {
+            id: offer.id,
+            status: offer.status,
+            counter_offer: offer.counter_offer,
+            last_offer_by: offer.last_offer_by
+        });
+
+
         // OFERTA E RE
         if(offer.status==="pending"){
 

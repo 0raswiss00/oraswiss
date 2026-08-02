@@ -162,15 +162,6 @@ async function loadSellerOffers() {
             `;
 
 
-        } else if (offer.status === "countered") {
-
-            actionButtons = `
-                <span style="color:#f39c12;font-weight:bold;">
-                    Kundëroferta: ${offer.counter_offer} €
-                </span>
-            `;
-
-
         } else if (offer.status === "rejected") {
 
             actionButtons = `

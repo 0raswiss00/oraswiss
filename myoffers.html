@@ -78,6 +78,10 @@
         for (const offer of offers) {
             let actionHtml = '';
 
+        const product = products.find(
+            p => String(p.id) === String(offer.product_id)
+        );
+            
             if (offer.status === 'pending') {
 
                 actionHtml = `

@@ -65,6 +65,20 @@ async function loadSellerOffers() {
         .eq("seller_id", user.id)
         .order("created_at",{ascending:false});
 
+    const { data: watches } = await supabase
+        .from("oras")
+        .select("id,brand,model,price,photos");
+
+
+    const { data: straps } = await supabase
+        .from("bracelets_straps")
+        .select("id,brand,model,price,photos");
+
+
+    const products = [
+        ...(watches || []),
+        ...(straps || [])
+    ];
 
     console.log("OFFERS:",offers);
     console.log("ERROR:",error);

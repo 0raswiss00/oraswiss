@@ -67,17 +67,18 @@ async function loadSellerOffers() {
 
     const { data: watches, error: watchError } = await supabase
         .from("oras")
-        .select("id,brand,model,price,photos");
+        .select("*");
+
+    console.log("WATCHES:", watches);
+    console.log("WATCH ERROR:", watchError);
 
 
     const { data: straps, error: strapsError } = await supabase
         .from("bracelets_straps")
-        .select("id,brand,model,price,photos");
+        .select("*");
 
-
-    // DEBUG
-    console.log("WATCHES:", watches);
     console.log("STRAPS:", straps);
+    console.log("STRAPS ERROR:", strapsError);
 
     
     const products = [

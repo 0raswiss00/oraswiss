@@ -122,6 +122,12 @@ async function loadSellerOffers() {
         p => String(p.id) === String(offer.product_id)
     );
 
+    console.log("PRODUCT:", product);
+
+    console.log("IMAGE URL:", product?.image_url);
+
+    console.log("PRICE:", product?.price);
+         
     console.log("PHOTO FIELD:", product);
          
     console.log("PRODUCT:", product);     

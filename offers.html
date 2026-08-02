@@ -273,14 +273,16 @@ async function loadSellerOffers() {
             style="text-decoration:none;color:white;">
 
 
-                <img 
-                src="${product?.image_url || 'images/default.png'}"
-                style="
-                width:100px;
-                height:100px;
-                object-fit:cover;
-                border-radius:8px;
-                ">
+                <img
+                    src="${Array.isArray(product?.image_url)
+                        ? product.image_url[0]
+                        : (product?.image_url || 'images/default.png')}"
+                   style="
+                       width:100px;
+                       height:100px;
+                       object-fit:cover;
+                       border-radius:8px;
+                    ">
 
 
                 <h3>

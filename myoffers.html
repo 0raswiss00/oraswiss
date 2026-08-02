@@ -50,6 +50,19 @@
             .eq("buyer_id", user.id)
             .order("created_at", { ascending: false });
 
+        const { data: watches } = await supabase
+            .from("oras")
+            .select("*");
+
+        const { data: straps } = await supabase
+            .from("bracelets_straps")
+            .select("*");
+
+        const products = [
+            ...(watches || []),
+            ...(straps || [])
+        ];
+        
         if (error) {
             console.error("Gabim nga Supabase:", error.message);
             container.innerHTML = "Gabim në ngarkimin e ofertave: " + error.message;

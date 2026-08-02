@@ -183,6 +183,40 @@ async function loadSellerOffers() {
 
 
 
+        if(offer.status==="pending"){
+
+            // butonat PRANO / REFUZO / KUNDËROFERTË
+
+
+        }
+
+        else if(offer.status==="countered"){
+
+            if(offer.last_offer_by === "buyer"){
+
+                actionButtons = `
+
+                <span style="color:#f39c12;font-weight:bold">
+                    Kundëroferta e blerësit: ${offer.counter_offer} € u dërgua.
+                </span>
+
+                `;
+
+            } else {
+
+                actionButtons = `
+
+                <span style="color:#f39c12;font-weight:bold">
+                    Kundëroferta juaj: ${offer.counter_offer} € u dërgua.
+                </span>
+
+                `;
+
+            }
+
+
+        }
+
         else if(offer.status==="accepted"){
 
 
@@ -212,7 +246,6 @@ async function loadSellerOffers() {
 
 
         }
-
 
 
         html+=`

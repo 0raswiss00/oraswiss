@@ -49,9 +49,6 @@
             .select("*")
             .eq("buyer_id", user.id)
             .order("created_at", { ascending: false });
-         
-            .eq("buyer_id", user.id)
-            .order("created_at", { ascending: false });
 
         if (error) {
             console.error("Gabim nga Supabase:", error.message);

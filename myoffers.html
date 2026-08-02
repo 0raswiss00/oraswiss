@@ -172,30 +172,34 @@
 
         if(!amount) return;
 
+
         const price = Number(amount);
 
-        if(isNaN(price) || price <= 0){
-            alert("Çmim i pavlefshëm");
-            return;
-        }
 
-        const { error } = await supabase
+        const { data, error } = await supabase
             .from("offers")
             .update({
                 status: "countered",
                 counter_offer: price,
                 last_offer_by: "buyer"
             })
-            .eq("id", id);
+            .eq("id", id)
+            .select();
+
+
+        console.log("BUYER COUNTER UPDATE:", data);
+        console.log("ERROR:", error);
+
 
         if(error){
             alert(error.message);
             return;
         }
 
-        loadBuyerOffers();
-    };
 
+        loadBuyerOffers();
+
+    };
 
     // Funksioni për të gjeneruar pagesën PayPal me çmimin e ofruar nga blerësi
         window.payForOffer = async function(productId, price, btnElement) {

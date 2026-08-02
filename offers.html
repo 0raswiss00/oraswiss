@@ -98,40 +98,83 @@ async function loadSellerOffers() {
 
     let html="";
 
+     offers.forEach(offer => {
 
-    offers.forEach(offer=>{
+    let actionButtons = "";
+
+    const product = products.find(
+        p => String(p.id) === String(offer.product_id)
+    );
 
 
-        let actionButtons="";
+    console.log("KONTROLL OFERTA:", {
+        id: offer.id,
+        status: offer.status,
+        counter_offer: offer.counter_offer,
+        last_offer_by: offer.last_offer_by
+    });
 
-        const product = products.find(
-            p => String(p.id) === String(offer.product_id)
-        );
 
-        console.log("KONTROLL OFERTA:", {
-            id: offer.id,
-            status: offer.status,
-            counter_offer: offer.counter_offer,
-            last_offer_by: offer.last_offer_by
-        })
 
-        
-        // OFERTA E RE
-        if(offer.status==="pending"){
+    // OFERTA E RE
+    if (offer.status === "pending") {
 
-            actionButtons=`
+        actionButtons = `
 
-           <button class="btn-action"
+        <button class="btn-action"
+        data-id="${offer.id}"
+        data-status="accepted">
+        ✓ Prano
+        </button>
+
+
+        <button class="btn-action"
+        data-id="${offer.id}"
+        data-status="rejected">
+        ✕ Refuzo
+        </button>
+
+
+        <button class="btn-action"
+        data-id="${offer.id}"
+        data-status="countered">
+        💬 Kundërofertë
+        </button>
+
+        `;
+
+
+    }
+
+
+
+    // KUNDEROFERTA
+    else if (offer.status === "countered") {
+
+
+        if (offer.last_offer_by === "buyer") {
+
+
+            actionButtons = `
+
+            <p style="color:#f39c12;font-weight:bold">
+            Kundëroferta e blerësit: ${offer.counter_offer} € u dërgua.
+            </p>
+
+
+            <button class="btn-action"
             data-id="${offer.id}"
             data-status="accepted">
             ✓ Prano
             </button>
+
 
             <button class="btn-action"
             data-id="${offer.id}"
             data-status="rejected">
             ✕ Refuzo
             </button>
+
 
             <button class="btn-action"
             data-id="${offer.id}"
@@ -142,110 +185,94 @@ async function loadSellerOffers() {
             `;
 
 
-        }
+        } else {
 
 
-        // KUNDEROFERTA
-        else if(offer.status === "countered") {
+            actionButtons = `
 
-            if(offer.last_offer_by === "buyer") {
-
-                actionButtons = `
-
-                <span style="color:#f39c12;font-weight:bold">
-                Kundëroferta e blerësit: ${offer.counter_offer} € u dërgua.
-                </span>
-
-                <button class="btn-action"
-                data-id="${offer.id}"
-                data-status="accepted">
-                ✓ Prano
-                </button>
-
-
-                <button class="btn-action"
-                data-id="${offer.id}"
-                data-status="rejected">
-                ✕ Refuzo
-                </button>
-
-
-                <button class="btn-action"
-                data-id="${offer.id}"
-                data-status="countered">
-                💬 Kundërofertë
-                </button>
-
-                `;
-
-
-            } else if(offer.last_offer_by === "seller") {
-
-
-                actionButtons = `
-
-                <span style="color:#f39c12;font-weight:bold">
-                Kundëroferta juaj: ${offer.counter_offer} € u dërgua.
-                </span>
-
-                `;
-
-            }
-
-        }
-
-
-        // PRANUAR
-        else if(offer.status==="accepted"){
-
-            actionButtons=`
-
-            <span style="color:#2ecc71;font-weight:bold">
-            ✓ Oferta u pranua
-            </span>
+            <p style="color:#f39c12;font-weight:bold">
+            Kundëroferta juaj: ${offer.counter_offer} € u dërgua.
+            </p>
 
             `;
 
         }
 
 
-        // REFUZUAR
-        else if(offer.status==="rejected"){
+    }
 
-            actionButtons=`
 
-            <span style="color:#e74c3c;font-weight:bold">
-            ✕ Oferta u refuzua
-            </span>
 
-            `;
+    // PRANUAR
+    else if (offer.status === "accepted") {
 
-        }
 
-        html+=`
+        actionButtons = `
 
-        <div class="offer-card">
+        <span style="color:#2ecc71;font-weight:bold">
+        ✓ Oferta u pranua
+        </span>
 
-            <div>
+        `;
 
-            <a href="product.html?id=${offer.product_id}" style="text-decoration:none;color:white;">
+
+    }
+
+
+
+    // REFUZUAR
+    else if (offer.status === "rejected") {
+
+
+        actionButtons = `
+
+        <span style="color:#e74c3c;font-weight:bold">
+        ✕ Oferta u refuzua
+        </span>
+
+        `;
+
+    }
+
+
+
+    html += `
+
+    <div class="offer-card">
+
+
+        <div>
+
+
+            <a href="product.html?id=${offer.product_id}" 
+            style="text-decoration:none;color:white;">
+
 
                 <img 
                 src="${product?.photos?.[0] || 'images/default.png'}"
-                style="width:100px;height:100px;object-fit:cover;border-radius:8px;">
+                style="
+                width:100px;
+                height:100px;
+                object-fit:cover;
+                border-radius:8px;
+                ">
 
-               <h3>
-                 ${product?.brand || ""}
-                 ${product?.model || ""}
+
+                <h3>
+                ${product?.brand || ""}
+                ${product?.model || ""}
                 </h3>
+
 
             </a>
 
 
+
             <p>
             <b>Çmimi:</b>
-            ${product?.price || 0} €
+            ${product?.price ?? "N/A"} €
             </p>
+
 
 
             <p>
@@ -254,41 +281,55 @@ async function loadSellerOffers() {
             </p>
 
 
+
             <p>
             <b>Statusi:</b>
             ${offer.status}
             </p>
 
 
+
         </div>
 
-        `;
 
 
-    });
+        <div>
+        ${actionButtons}
+        </div>
+
+
+    </div>
+
+
+    `;
+
+
+}); // <-- KJO ËSHTË KLLAPA E MBYLLJES SË forEach
 
 
 
-    container.innerHTML=html;
+container.innerHTML = html;
 
 
 
-    document.querySelectorAll(".btn-action").forEach(btn=>{
+document.querySelectorAll(".btn-action").forEach(btn => {
 
 
-        btn.onclick=()=>{
-
-            updateOfferStatus(
-                btn.dataset.id,
-                btn.dataset.status
-            );
-
-        };
+    btn.onclick = async () => {
 
 
-    });
+        await updateOfferStatus(
+            btn.dataset.id,
+            btn.dataset.status
+        );
 
 
+    };
+
+
+});
+
+    
 }
 
 

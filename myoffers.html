@@ -46,7 +46,15 @@
         // Marrja e ofertave ku përdoruesi është blerës
         const { data: offers, error } = await supabase
             .from("offers")
-            .select("*")
+            .select(`
+                *,
+                products (
+                    id,
+                    title,
+                    price,
+                    image
+                )
+            `)
             .eq("buyer_id", user.id)
             .order("created_at", { ascending: false });
 

@@ -73,46 +73,40 @@
                     </span>
                 `;
 
-            } else if (offer.status === 'countered' && offer.last_offer_by === 'seller') {
+           } else if (offer.status === "countered") {
 
-                actionHtml = `
-                    <span style="color:#f1c40f;font-weight:bold;font-size:12px;">
-                       Kundërofertë: ${offer.counter_offer} €
-                    </span>
+                if (offer.last_offer_by === "seller") {
 
-                    <button class="btn-buy"
-                       onclick="acceptCounter('${offer.id}', this)">
-                        Prano
-                   </button>
+                    actionHtml = `
+                        <span style="color:#f1c40f;font-weight:bold;">
+                            Kundërofertë: ${offer.counter_offer} €
+                        </span>
 
-                    <button class="btn-chat"
-                        onclick="rejectCounter('${offer.id}')">
-                        Refuzo
-                    </button>
+                        <button class="btn-buy"
+                            onclick="acceptCounter('${offer.id}')">
+                            Prano
+                        </button>
 
-                    <button class="btn-chat"
-                         onclick="makeCounter('${offer.id}')">
-                         Kundërofertë
-                    </button>
-                `;
+                        <button class="btn-chat"
+                            onclick="rejectCounter('${offer.id}')">
+                            Refuzo
+                        </button>
 
-            
-            } else if (offer.status === 'accepted') {
+                        <button class="btn-chat"
+                            onclick="makeCounter('${offer.id}')">
+                            Kundërofertë
+                        </button>
+                     `;
 
-                actionHtml = `
-                    <button class="btn-buy" 
-                    onclick="payForOffer('${offer.product_id}', ${offer.offered_price}, this)">
-                        Paguaj Tani 💳
-                    </button>
-                `;
+                 } else {
 
-            } else if (offer.status === 'rejected') {
+                     actionHtml = `
+                         <span style="color:#f39c12;font-weight:bold;">
+                            Kundëroferta ${offer.counter_offer} € u dërgua.
+                         </span>
+                    `;
 
-                actionHtml = `
-                    <span style="color:#e74c3c; font-weight:bold; font-size:12px;">
-                        Oferta u refuzua ✗
-                    </span>
-                `;
+                }
 
             }
             

@@ -188,8 +188,9 @@
         const { error } = await supabase
             .from("offers")
             .update({
-                status:"countered",
-                counter_offer:price
+                status: "countered",
+                counter_offer: price,
+                last_offer_by: "buyer"
             })
             .eq("id", id);
 

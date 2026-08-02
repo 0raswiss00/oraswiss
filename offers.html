@@ -89,9 +89,26 @@ async function loadSellerOffers() {
         if (offer.status === "pending") {
 
             actionButtons = `
-                <span style="color:#f39c12;font-weight:bold;">
-                    Në pritje...
-                </span>
+                <button class="btn-action"
+                    data-id="${offer.id}"
+                    data-status="accepted"
+                    style="background:#27ae60;color:#fff;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;margin-right:6px;">
+                    ✓ Prano
+                </button>
+
+                <button class="btn-action"
+                    data-id="${offer.id}"
+                    data-status="rejected"
+                    style="background:#e74c3c;color:#fff;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;margin-right:6px;">
+                    ✕ Refuzo
+                </button>
+
+                <button class="btn-action"
+                    data-id="${offer.id}"
+                    data-status="countered"
+                    style="background:#f39c12;color:#fff;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;">
+                    💬 Kundërofertë
+                </button>
             `;
 
 

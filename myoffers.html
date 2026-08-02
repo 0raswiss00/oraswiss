@@ -73,8 +73,17 @@
                     </span>
                 `;
 
-            } else if (offer.status === 'countered') {
+            else if (offer.status === 'countered' && offer.last_offer_by === 'seller')
 
+            else if (offer.status === 'countered' && offer.last_offer_by === 'buyer') {
+
+                actionHtml = `
+                    <span style="color:#f39c12;font-weight:bold;font-size:12px;">
+                        Kundëroferta u dërgua: ${offer.counter_offer} €
+                    </span>
+                `;
+            }
+                
                 actionHtml = `
                     <span style="color:#f1c40f;font-weight:bold;font-size:12px;">
                         Kundërofertë: ${offer.counter_offer} €

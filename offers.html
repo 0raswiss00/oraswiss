@@ -59,6 +59,21 @@ async function loadSellerOffers() {
     }
 
 
+    const { data: offers, error } = await supabase
+        .from("offers")
+        .select("*")
+        .eq("seller_id", user.id)
+        .order("created_at", { ascending: false });
+
+    console.log("OFFERS:", offers);
+    console.log("ERROR:", error);
+
+    if (error) {
+        container.innerHTML = "Gabim gjatë marrjes së ofertave.";
+        return;
+    }
+
+    
     if (!offers || offers.length === 0) {
         container.innerHTML = "<p style='color:#888'>Nuk ka oferta të marra.</p>";
         return;

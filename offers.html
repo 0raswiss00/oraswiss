@@ -261,26 +261,36 @@ async function loadSellerOffers() {
 
             <div>
 
-            <h3>Produkt ID: ${offer.product_id}</h3>
+            <a href="product.html?id=${offer.product_id}" style="text-decoration:none;color:white;">
+
+                <img 
+                src="${product?.photos?.[0] || 'images/default.png'}"
+                style="width:100px;height:100px;object-fit:cover;border-radius:8px;">
+
+               <h3>
+                 ${product?.brand || ""}
+                 ${product?.model || ""}
+                </h3>
+
+            </a>
+
 
             <p>
-            Oferta:
+            <b>Çmimi:</b>
+            ${product?.price || 0} €
+            </p>
+
+
+            <p>
+            <b>Oferta:</b>
             ${offer.offered_price} €
             </p>
 
 
             <p>
-            Statusi:
+            <b>Statusi:</b>
             ${offer.status}
             </p>
-
-
-            </div>
-
-
-            <div>
-            ${actionButtons}
-            </div>
 
 
         </div>

@@ -146,13 +146,11 @@ async function loadSellerOffers() {
 
 
         // KUNDEROFERTA
-        else if(offer.status==="countered"){
+        else if(offer.status === "countered") {
 
+            if(offer.last_offer_by === "buyer") {
 
-            if(offer.last_offer_by==="buyer"){
-
-
-                actionButtons=`
+                actionButtons = `
 
                 <span style="color:#f39c12;font-weight:bold">
                 Kundëroferta e blerësit: ${offer.counter_offer} € u dërgua.
@@ -164,11 +162,13 @@ async function loadSellerOffers() {
                 ✓ Prano
                 </button>
 
+
                 <button class="btn-action"
                 data-id="${offer.id}"
                 data-status="rejected">
                 ✕ Refuzo
                 </button>
+
 
                 <button class="btn-action"
                 data-id="${offer.id}"
@@ -179,10 +179,10 @@ async function loadSellerOffers() {
                 `;
 
 
-            } else {
+            } else if(offer.last_offer_by === "seller") {
 
 
-                actionButtons=`
+                actionButtons = `
 
                 <span style="color:#f39c12;font-weight:bold">
                 Kundëroferta juaj: ${offer.counter_offer} € u dërgua.
@@ -191,7 +191,6 @@ async function loadSellerOffers() {
                 `;
 
             }
-
 
         }
 

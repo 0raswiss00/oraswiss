@@ -34,7 +34,7 @@
     </nav>
 
     <!-- Supabase Logic -->
-    <script type="module">
+   <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
 
 const supabase = createClient(
@@ -50,230 +50,312 @@ async function loadSellerOffers() {
     if (!container) return;
 
 
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const { data:{user}, error:userError } = await supabase.auth.getUser();
 
 
-    if (userError || !user) {
+    if(userError || !user){
         container.innerHTML = "Ju duhet të jeni të loguar.";
         return;
     }
 
 
-    const { data: offers, error } = await supabase
+    const { data:offers, error } = await supabase
         .from("offers")
         .select("*")
         .eq("seller_id", user.id)
-        .order("created_at", { ascending: false });
+        .order("created_at",{ascending:false});
 
-    const { data: watches } = await supabase
-        .from("oras")
-        .select("id,title,price,image");
 
-    const { data: straps } = await supabase
-        .from("bracelets_straps")
-        .select("id,title,price,image");
+    console.log("OFFERS:",offers);
+    console.log("ERROR:",error);
 
-    const products = [
-        ...(watches || []),
-        ...(straps || [])
-    ];
-    
-    console.log("OFFERS:", offers);
-    console.log("ERROR:", error);
 
-    if (error) {
-        container.innerHTML = "Gabim gjatë marrjes së ofertave.";
-        return;
-    }
-
-    
-    if (!offers || offers.length === 0) {
-        container.innerHTML = "<p style='color:#888'>Nuk ka oferta të marra.</p>";
+    if(error){
+        container.innerHTML = error.message;
         return;
     }
 
 
-    let html = "";
+    if(!offers || offers.length === 0){
+        container.innerHTML = "Nuk ka oferta.";
+        return;
+    }
 
 
-    offers.forEach(offer => {
-
-        let actionButtons = "";
+    let html="";
 
 
-        if (offer.status === "pending") {
+    offers.forEach(offer=>{
 
-        actionButtons = `
-            <button class="btn-action"
-                data-id="${offer.id}"
-                data-status="accepted"
-                style="background:#27ae60;color:#fff;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;margin-right:6px;">
-                ✓ Prano
-            </button>
 
-            <button class="btn-action"
-                data-id="${offer.id}"
-                data-status="rejected"
-                style="background:#e74c3c;color:#fff;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;margin-right:6px;">
-                ✕ Refuzo
-            </button>
+        let actionButtons="";
+
+
+        // OFERTA E RE
+        if(offer.status==="pending"){
+
+
+            actionButtons=`
 
             <button class="btn-action"
-                data-id="${offer.id}"
-                data-status="countered"
-                style="background:#f39c12;color:#fff;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;">
-                💬 Kundërofertë
+            data-id="${offer.id}"
+            data-status="accepted">
+            ✓ Prano
             </button>
-        `;
 
-    } else if (offer.status === "countered") {
 
-        if (offer.last_offer_by === "buyer") {
+            <button class="btn-action"
+            data-id="${offer.id}"
+            data-status="rejected">
+            ✕ Refuzo
+            </button>
 
-            actionButtons = `
-                <button class="btn-action"
-                    data-id="${offer.id}"
-                    data-status="accepted"
-                    style="background:#27ae60;color:#fff;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;margin-right:6px;">
-                    ✓ Prano
-                </button>
 
-                <button class="btn-action"
-                    data-id="${offer.id}"
-                    data-status="rejected"
-                    style="background:#e74c3c;color:#fff;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;margin-right:6px;">
-                    ✕ Refuzo
-                </button>
+            <button class="btn-action"
+            data-id="${offer.id}"
+            data-status="countered">
+            💬 Kundërofertë
+            </button>
 
-                <button class="btn-action"
-                    data-id="${offer.id}"
-                    data-status="countered"
-                    style="background:#f39c12;color:#fff;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;">
-                    💬 Kundërofertë
-                </button>
             `;
 
-        } else {
-
-            actionButtons = `
-                <span style="color:#f39c12;font-weight:bold;">
-                    Kundëroferta ${offer.counter_offer} € u dërgua.
-                </span>
-            `;
-
-
-        } else if (offer.status === "rejected") {
-
-            actionButtons = `
-                <span style="color:#e74c3c;font-weight:bold;">
-                    Oferta u refuzua ✕
-                </span>
-            `;
 
         }
 
 
-        html += `
+
+        // KUNDEROFERTA
+        else if(offer.status==="countered"){
+
+
+            if(offer.last_offer_by==="buyer"){
+
+
+                actionButtons=`
+
+                <button class="btn-action"
+                data-id="${offer.id}"
+                data-status="accepted">
+                ✓ Prano
+                </button>
+
+
+                <button class="btn-action"
+                data-id="${offer.id}"
+                data-status="rejected">
+                ✕ Refuzo
+                </button>
+
+
+                <button class="btn-action"
+                data-id="${offer.id}"
+                data-status="countered">
+                💬 Kundërofertë
+                </button>
+
+                `;
+
+
+            } else {
+
+
+                actionButtons=`
+
+                <span style="color:#f39c12;font-weight:bold">
+                Kundëroferta ${offer.counter_offer} € u dërgua.
+                </span>
+
+                `;
+
+
+            }
+
+
+        }
+
+
+
+        else if(offer.status==="accepted"){
+
+
+            actionButtons=`
+
+            <span style="color:#2ecc71;font-weight:bold">
+            ✓ Oferta u pranua
+            </span>
+
+            `;
+
+
+        }
+
+
+
+        else if(offer.status==="rejected"){
+
+
+            actionButtons=`
+
+            <span style="color:#e74c3c;font-weight:bold">
+            ✕ Oferta u refuzua
+            </span>
+
+            `;
+
+
+        }
+
+
+
+        html+=`
+
         <div class="offer-card">
 
-            <img src="images/default.png" class="offer-image">
+            <div>
 
-            <div class="offer-details">
+            <h3>Produkt ID: ${offer.product_id}</h3>
 
-                <h3>Produkt ID: ${offer.product_id}</h3>
+            <p>
+            Oferta:
+            ${offer.offered_price} €
+            </p>
 
-                <p><b>Oferta:</b> ${offer.offered_price} €</p>
 
-                <p><b>Oferta:</b> ${offer.offered_price} €</p>
+            <p>
+            Statusi:
+            ${offer.status}
+            </p>
 
-                <p><b>Statusi:</b> ${offer.status}</p>
-
-                <div class="offer-buttons">
-                    ${actionButtons}
-                </div>
 
             </div>
 
+
+            <div>
+            ${actionButtons}
+            </div>
+
+
         </div>
+
         `;
+
 
     });
 
 
-    container.innerHTML = html;
+
+    container.innerHTML=html;
 
 
-        document.querySelectorAll(".btn-action").forEach(btn => {
 
-        btn.addEventListener("click", async () => {
+    document.querySelectorAll(".btn-action").forEach(btn=>{
 
-            await updateOfferStatus(
+
+        btn.onclick=()=>{
+
+            updateOfferStatus(
                 btn.dataset.id,
                 btn.dataset.status
             );
 
-        });
+        };
+
 
     });
 
+
 }
 
-async function updateOfferStatus(offerId, newStatus) {
 
-    let updateData = {};
 
-    if (newStatus === "countered") {
 
-        const amount = prompt("Shkruaj kundërofertën (€):");
+async function updateOfferStatus(id,status){
 
-        if (!amount) return;
 
-        const price = Number(amount);
+    let updateData={};
 
-        if (isNaN(price) || price <= 0) {
-            alert("Shkruaj një çmim të vlefshëm.");
+
+
+    if(status==="countered"){
+
+
+        const amount=prompt("Shkruaj kundërofertën (€):");
+
+
+        if(!amount) return;
+
+
+        const price=Number(amount);
+
+
+        if(isNaN(price)){
+            alert("Çmim gabim");
             return;
         }
 
-        updateData = {
-            status: "countered",
-            counter_offer: price,
-            last_offer_by: "seller"
-       };
+
+
+        updateData={
+
+            status:"countered",
+            counter_offer:price,
+            last_offer_by:"seller"
+
+        };
+
+
 
     } else {
 
-        updateData = {
-            status: newStatus
+
+        updateData={
+
+            status:status
+
         };
 
+
     }
 
-    const { data, error } = await supabase
-        .from("offers")
-        .update(updateData)
-        .eq("id", offerId)
-        .select();
 
-    console.log("COUNTER RESULT:", data, error);
 
-    if (error) {
+    const {data,error}=await supabase
+    .from("offers")
+    .update(updateData)
+    .eq("id",id)
+    .select();
+
+
+
+    console.log("UPDATE:",data,error);
+
+
+
+    if(error){
+
         alert(error.message);
         return;
+
     }
 
+
+
     loadSellerOffers();
+
+
+
 }
 
 
 
-document.addEventListener("DOMContentLoaded", () => {
+
+document.addEventListener("DOMContentLoaded",()=>{
 
     loadSellerOffers();
 
 });
 
-</script>
+</script> 
         
 </body>
 </html>

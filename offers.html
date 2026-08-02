@@ -150,24 +150,28 @@ async function loadSellerOffers() {
 
 
         html += `
-            <div class="offer-card">
+        <div class="offer-card">
 
-                <p>
-                    <b>Çmimi i ofruar:</b>
-                    ${offer.offered_price} €
-                </p>
+            <img src="${offer.products.image}" class="offer-image">
 
-                <p>
-                    <b>Statusi:</b>
-                    ${offer.status}
-                </p>
+            <div class="offer-details">
 
-                <div>
+                <h3>${offer.products.title}</h3>
+
+                <p><b>Çmimi:</b> ${offer.products.price} €</p>
+
+                <p><b>Oferta:</b> ${offer.offered_price} €</p>
+
+                <p><b>Statusi:</b> ${offer.status}</p>
+
+                <div class="offer-buttons">
                     ${actionButtons}
                 </div>
 
-            </div>
-        `;
+             </div>
+
+         </div>
+         `;
 
     });
 

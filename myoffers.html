@@ -128,15 +128,36 @@
             }
             
             html += `
-                <div class="offer-card">
-                    <div>
-                        <p style="color:#fff; margin:0 0 5px 0; font-weight:bold;">Çmimi i ofruar: ${offer.offered_price} €</p>
-                        <p style="color:#888; margin:0; font-size:12px;">Statusi: <span style="color:${offer.status === 'pending' ? '#f39c12' : (offer.status === 'accepted' ? '#2ecc71' : '#e74c3c')}">${offer.status}</span></p>
+            <div class="offer-card">
+
+                <img
+                    src="${product?.image_url || 'images/default.png'}"
+                    style="
+                       width:100px;
+                       height:100px;
+                       object-fit:cover;
+                       border-radius:8px;
+                    ">
+
+                <div style="flex:1">
+
+                    <h3 style="margin:0;">
+                        ${product?.brand || ""} ${product?.model || ""}
+                    </h3>
+
+                    <p><b>Çmimi:</b> ${product?.price ?? "N/A"} €</p>
+
+                    <p><b>Oferta juaj:</b> ${offer.offered_price} €</p>
+
+                    <p><b>Statusi:</b> ${offer.status}</p>
+
+                    <div style="margin-top:10px;">
+                       ${actionHtml}
                     </div>
-                    <div style="display:flex; gap:8px; align-items:center;">
-                        ${actionHtml}
-                    </div>
+
                 </div>
+
+            </div>
             `;
         }
         container.innerHTML = html;

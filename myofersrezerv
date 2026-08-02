@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ofertat e Mia - OraSwiss</title>
+    <style>
+        body { background: #0b0b0b; color: #fff; font-family: sans-serif; margin: 0; padding-bottom: 70px; }
+        .container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
+        h2 { border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .offer-card { background: #1a1a1a; padding: 15px; border-radius: 8px; border: 1px solid #333; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #111; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #333; z-index: 1000; }
+        .bottom-nav-item { color: #aaa; text-decoration: none; font-size: 12px; text-align: center; }
+        .bottom-nav-item:hover, .bottom-nav-item.active { color: #fff; }
+        .btn-chat { background: #25D366; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 12px; }
+        .btn-buy { background: #ffd900; color: #000; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Ofertat e Mia</h2>
+        <div id="buyer-offers-list" style="color: #aaa; margin-top: 20px;">Duke ngarkuar ofertat tuaja...</div>
+    </div>
+
+    <!-- Supabase Logic -->
+    <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
+
+    const supabase = createClient(
+        "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+    );
+
+    async function loadBuyerOffers() {
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        const container = document.getElementById("buyer-offers-list");
+
+        if (!container) return;
+
+        if (userError || !user) {
+            container.innerHTML = "Ju duhet të jeni të loguar për të parë ofertat tuaja.";
+            return;
+        }
+
+        // Marrja e ofertave ku përdoruesi është blerës
+        const { data: offers, error } = await supabase
+            .from("offers")
+            .select("*")
+            .eq("buyer_id", user.id)
+            .order("created_at", { ascending: false });
+
+        if (error) {
+            console.error("Gabim nga Supabase:", error.message);
+            container.innerHTML = "Gabim në ngarkimin e ofertave: " + error.message;
+            return;
+        }
+
+        if (!offers || offers.length === 0) {
+           container.innerHTML = "Nuk keni bërë asnjë ofertë deri tani.";
+           return;
+        }
+
+        let html = '';
+        for (const offer of offers) {
+            let actionHtml = '';
+
+            if (offer.status === 'pending') {
+
+                actionHtml = `
+                    <span style="color:#f39c12;font-weight:bold;font-size:12px;">
+                        Në pritje...
+                    </span>
+                `;
+
+           } else if (offer.status === "countered") {
+
+                if (offer.last_offer_by === "seller") {
+
+                    actionHtml = `
+                        <span style="color:#f1c40f;font-weight:bold;">
+                            Kundërofertë: ${offer.counter_offer} €
+                        </span>
+
+                        <button class="btn-buy"
+                            onclick="acceptCounter('${offer.id}')">
+                            Prano
+                        </button>
+
+                        <button class="btn-chat"
+                            onclick="rejectCounter('${offer.id}')">
+                            Refuzo
+                        </button>
+
+                        <button class="btn-chat"
+                            onclick="makeCounter('${offer.id}')">
+                            Kundërofertë
+                        </button>
+                     `;
+
+                 } else {
+
+                     actionHtml = `
+                         <span style="color:#f39c12;font-weight:bold;">
+                            Kundëroferta ${offer.counter_offer} € u dërgua.
+                         </span>
+                    `;
+
+                }
+
+            }
+            
+            html += `
+                <div class="offer-card">
+                    <div>
+                        <p style="color:#fff; margin:0 0 5px 0; font-weight:bold;">Çmimi i ofruar: ${offer.offered_price} €</p>
+                        <p style="color:#888; margin:0; font-size:12px;">Statusi: <span style="color:${offer.status === 'pending' ? '#f39c12' : (offer.status === 'accepted' ? '#2ecc71' : '#e74c3c')}">${offer.status}</span></p>
+                    </div>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        ${actionHtml}
+                    </div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+    }
+   
+    window.acceptCounter = async function(id){
+
+        const { data, error } = await supabase
+            .from("offers")
+            .update({
+                status:"countered",
+                counter_offer:price,
+                last_offer_by:"buyer"
+            })
+            .eq("id", id)
+            .select();
+
+        console.log("COUNTER UPDATE:", data, error);
+
+        if(error){
+            alert(error.message);
+            return;
+        }
+
+        loadBuyerOffers();
+    };
+
+
+    window.rejectCounter = async function(id){
+
+        const { error } = await supabase
+            .from("offers")
+            .update({
+                status:"rejected"
+            })
+            .eq("id", id);
+
+        if(error){
+            alert(error.message);
+            return;
+        }
+
+        loadBuyerOffers();
+    };
+
+
+    window.makeCounter = async function(id){
+
+        const amount = prompt("Shkruaj kundërofertën (€):");
+
+        if(!amount) return;
+
+
+        const price = Number(amount);
+
+
+        const { data, error } = await supabase
+            .from("offers")
+            .update({
+                status: "countered",
+                counter_offer: price,
+                last_offer_by: "buyer"
+            })
+            .eq("id", id)
+            .select();
+
+
+        console.log("BUYER COUNTER UPDATE:", data);
+        console.log("ERROR:", error);
+
+
+        if(error){
+            alert(error.message);
+            return;
+        }
+
+
+        loadBuyerOffers();
+
+    };
+
+    // Funksioni për të gjeneruar pagesën PayPal me çmimin e ofruar nga blerësi
+        window.payForOffer = async function(productId, price, btnElement) {
+        btnElement.innerText = "⏳ Loading...";
+
+        try {
+            const response = await fetch(
+                "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        price: price,
+                        product_name: "Oferta e pranuar"
+                    })
+                }
+            );
+
+            const result = await response.json();
+
+            if (result.paypal_link) {
+                window.location.href = result.paypal_link;
+            } else {
+                alert("PayPal link nuk u krijua");
+                btnElement.innerText = "Paguaj Tani 💳";
+            }
+
+        } catch(error) {
+            console.error(error);
+            alert("Gabim me PayPal");
+            btnElement.innerText = "Paguaj Tani 💳";
+        }
+
+    }; // KJO DUHET PATJETER
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+        loadBuyerOffers();
+    }); // KJO DUHET PATJETER
+
+</script>
+</body>
+</html>

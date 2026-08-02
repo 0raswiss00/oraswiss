@@ -231,10 +231,13 @@ async function updateOfferStatus(offerId, newStatus) {
 
     }
 
-    const { error } = await supabase
+    const { data, error } = await supabase
         .from("offers")
         .update(updateData)
-        .eq("id", offerId);
+        .eq("id", offerId)
+        .select();
+
+    console.log("COUNTER RESULT:", data, error);
 
     if (error) {
         alert(error.message);

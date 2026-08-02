@@ -104,6 +104,9 @@ async function loadSellerOffers() {
 
         let actionButtons="";
 
+        const product = products.find(
+            p => String(p.id) === String(offer.product_id)
+        );
 
         console.log("KONTROLL OFERTA:", {
             id: offer.id,

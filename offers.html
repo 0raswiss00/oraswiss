@@ -61,7 +61,15 @@ async function loadSellerOffers() {
 
     const { data: offers, error } = await supabase
         .from("offers")
-        .select("*")
+        .select(`
+            *,
+            products (
+                id,
+                title,
+                price,
+                image
+            )
+        `)
         .eq("seller_id", user.id)
         .order("created_at", { ascending: false });
 

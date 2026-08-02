@@ -74,6 +74,9 @@ async function loadSellerOffers() {
         .order("created_at", { ascending: false });
 
 
+    console.log("OFFERS:", offers);
+    console.log("ERROR:", error);
+    
     if (error) {
         container.innerHTML = "Gabim: " + error.message;
         return;

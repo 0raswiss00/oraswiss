@@ -113,41 +113,9 @@ async function loadSellerOffers() {
             status: offer.status,
             counter_offer: offer.counter_offer,
             last_offer_by: offer.last_offer_by
-        });
+        })
 
-
-        // OFERTA E RE
-        if(offer.status==="pending"){
-
-
-            actionButtons=`
-
-            <button class="btn-action"
-            data-id="${offer.id}"
-            data-status="accepted">
-            ✓ Prano
-            </button>
-
-
-            <button class="btn-action"
-            data-id="${offer.id}"
-            data-status="rejected">
-            ✕ Refuzo
-            </button>
-
-
-            <button class="btn-action"
-            data-id="${offer.id}"
-            data-status="countered">
-            💬 Kundërofertë
-            </button>
-
-            `;
-
-
-        }
-
-
+        
         // OFERTA E RE
         if(offer.status==="pending"){
 

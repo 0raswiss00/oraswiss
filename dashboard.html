@@ -73,34 +73,29 @@
 
         .bottom-nav {
             position: fixed !important;
-            bottom: 25px !important;
+            bottom: 20px !important;
             left: 50% !important;
             transform: translateX(-50%) !important;
-            width: 92% !important;
-            max-width: 480px !important;
-            height: 65px !important;
+            width: auto !important;
+            max-width: 85vw !important;
+            height: 52px !important;
             background-color: #1a1a1a !important;
             display: flex !important;
             justify-content: flex-start !important;
             align-items: center !important;
-            gap: 15px !important;
-            padding: 0 15px !important;
-            border-radius: 20px !important;
+            gap: 12px !important;
+            padding: 0 12px !important;
+            border-radius: 16px !important;
             border: 1px solid #333 !important;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
             z-index: 999999 !important;
     
-            /* Lëvizja horizontale majtas-djathtas */
             overflow-x: auto !important;
             white-space: nowrap !important;
             scroll-behavior: smooth !important;
             -webkit-overflow-scrolling: touch !important;
             scrollbar-width: none !important;
             -ms-overflow-style: none !important;
-    
-            /* Tranzicioni për fshehjen/shfaqjen gjatë scroll-it */
-            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
-            opacity: 1 !important;
         }
 
         .bottom-nav::-webkit-scrollbar {
@@ -110,7 +105,7 @@
         .bottom-nav-item, .bottom-nav a, .bottom-nav button {
             color: #ffffff !important;
             text-decoration: none !important;
-            font-size: 11px !important;
+            font-size: 10px !important;
             text-align: center !important;
             white-space: nowrap !important;
             flex: 0 0 auto !important;
@@ -121,23 +116,16 @@
             flex-direction: column !important;
             align-items: center !important;
             justify-content: center !important;
-            gap: 2px !important;
-            padding: 0 8px !important;
+            gap: 1px !important;
+            padding: 0 6px !important;
         }
 
         .bottom-nav a:hover, .bottom-nav button:hover, .bottom-nav-item:hover {
             color: gold !important;
         }
 
-        /* Klasa që e fsheh nav-in kur bën scroll poshtë (ruan pozicionin në qendër) */
-        .bottom-nav.nav-hidden {
-            transform: translateX(-50%) translateY(120px) !important;
-            opacity: 0 !important;
-            pointer-events: none !important;
-        }
-
         body {
-            padding-bottom: 120px !important;
+            padding-bottom: 95px !important;
         }
         
         .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; list-style: none; }

@@ -365,71 +365,54 @@ async function loadSellerOffers() {
 
     <div class="offer-card">
 
+       <div>
 
-        <div>
+           <a href="product.html?id=${offer.product_id}" 
+           style="text-decoration:none;color:white;">
 
+               <img
+               src="${productImage}"
+               style="
+               width:100px;
+               height:100px;
+               max-width:100px;
+               max-height:100px;
+               object-fit:cover;
+               border-radius:8px;
+               display:block;
+               ">
 
-            <a href="product.html?id=${offer.product_id}" 
-            style="text-decoration:none;color:white;">
+               <h3>
+               ${product?.brand || ""}
+               ${product?.model || ""}
+               </h3>
 
-            
-              <img
-              src="${productImage}"
-              style="
-              width:100px;
-              height:100px;
-              max-width:100px;
-              max-height:100px;
-              object-fit:cover;
-              border-radius:8px;
-              display:block;
-             ">
+           </a>
 
+           <p>
+           <b>Çmimi:</b>
+           ${product?.price ?? "N/A"} €
+           </p>
 
-                <h3>
-                ${product?.brand || ""}
-                ${product?.model || ""}
-                </h3>
+           <p>
+           <b>Oferta:</b>
+           ${offer.offered_price} €
+           </p>
 
+           <p>
+           <b>Statusi:</b>
+           ${offer.status}
+           </p>
 
-            </a>
+       </div>
 
+       <div>
+       ${actionButtons}
+       </div>
 
+   </div>
 
-            <p>
-            <b>Çmimi:</b>
-            ${product?.price ?? "N/A"} €
-            </p>
-
-
-
-            <p>
-            <b>Oferta:</b>
-            ${offer.offered_price} €
-            </p>
-
-
-
-            <p>
-            <b>Statusi:</b>
-            ${offer.status}
-            </p>
-
-
-
-        </div>
-
-
-
-        <div>
-        ${actionButtons}
-        </div>
-
-
-    </div>
-
-
-    `;
+   `;
 
 
 }); // <-- KJO ËSHTË KLLAPA E MBYLLJES SË forEach

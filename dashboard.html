@@ -351,21 +351,22 @@
     }, false);
 </script>
 <script>
-  // kodi yt...
+let lastScrollTop = 0;
+const nav = document.querySelector('.bottom-nav');
 
-  const bottomNavElement = document.querySelector('.bottom-nav');
+window.addEventListener('scroll', () => {
+    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-  window.addEventListener('scroll', function () {
-      let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    if (nav) {
+        if (scrollTop > lastScrollTop && scrollTop > 50) {
+            nav.classList.add('nav-hidden');
+        } else {
+            nav.classList.remove('nav-hidden');
+        }
+    }
 
-      if (scrollTop > lastScrollTop && scrollTop > 50) {
-          if (bottomNavElement) bottomNavElement.classList.add('nav-hidden');
-      } else {
-          if (bottomNavElement) bottomNavElement.classList.remove('nav-hidden');
-      }
-
-      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-  }, false);
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+});
 </script>
 </body>
 </html>

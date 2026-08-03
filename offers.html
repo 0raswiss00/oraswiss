@@ -193,13 +193,25 @@ async function loadSellerOffers() {
         products.map(p => p.id)
     );
          
+    offers.forEach(offer => {
+
+
     const product = products.find(
         p => String(p.id) === String(offer.product_id)
     );
 
-    console.log(product);
+
+    const productImage =
+        Array.isArray(product?.image_url)
+            ? product.image_url[0]
+            : product?.image_url ||
+              product?.image ||
+              (Array.isArray(product?.photos) ? product.photos[0] : product?.photos) ||
+              'images/default.png';
+
 
     console.log("PRODUCT:", product);
+    console.log("PRODUCT IMAGE:", productImage);
 
     console.log("IMAGE URL:", product?.image_url);
 

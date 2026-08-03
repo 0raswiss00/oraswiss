@@ -19,9 +19,37 @@
 <body>
 
     <div class="container">
-        <h2>Ofertat e Mia</h2>
-        <div id="buyer-offers-list" style="color: #aaa; margin-top: 20px;">Duke ngarkuar ofertat tuaja...</div>
+
+        <div style="
+            display:flex;
+            align-items:center;
+            gap:15px;
+            margin-bottom:15px;
+        ">
+
+            <button onclick="history.back()" 
+            Style="
+                background:#222;
+                color:white;
+                border:1px solid #444;
+                padding:6px 12px;
+                border-radius:8px;
+                cursor:pointer;
+            ">
+                ← Back
+            </button>
+
+            <h2 style="margin:0;">
+                Ofertat e Mia
+            </h2>
+
+        </div>
+
+    <div id="buyer-offers-list" style="color:#aaa;">
+        Duke ngarkuar ofertat tuaja...
     </div>
+
+</div>
 
     <!-- Supabase Logic -->
     <script type="module">

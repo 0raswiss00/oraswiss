@@ -85,69 +85,69 @@
     }
 
     .bottom-nav {
-    position: fixed !important;
-    bottom: 20px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: auto !important;
-    height: 65px !important;
-    background-color: #1a1a1a !important;
-    display: flex !important;
-    justify-content: flex-start !important;
-    align-items: center !important;
-    padding: 0 10px !important;
-    border-radius: 20px !important;
-    border: 1px solid #333 !important;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
-    z-index: 999999 !important;
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: auto !important;
+        height: 65px !important;
+        background-color: #1a1a1a !important;
+        display: flex !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        padding: 0 10px !important;
+        border-radius: 20px !important;
+        border: 1px solid #333 !important;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
+        z-index: 999999 !important;
     
-    overflow-x: auto !important;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    /* Efekti i lëvizjes për t'u fshehur/shfaqur */
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
-    opacity: 1 !important;
-}
-
-.bottom-nav::-webkit-scrollbar {
-    display: none;
-}
-
-.bottom-nav-item, .bottom-nav a, .bottom-nav button {
-    color: #ffffff !important;
-    text-decoration: none !important;
-    font-size: 10px !important;
-    text-align: center !important;
-    white-space: nowrap !important;
-    flex: 0 0 75px !important;
-    background: none !important;
-    border: none !important;
-    cursor: pointer !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 3px !important;
-}
-
-.bottom-nav-item:hover {
-    color: gold !important;
-}
-
-/* Klasa që e fsheh nav-in duke ruajtur pozicionin në qendër */
-.bottom-nav.nav-hidden {
-    transform: translateX(-50%) translateY(120px) !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-}
-
-/* Desktop */
-@media (min-width: 1024px) {
-    .bottom-nav {
-        width: 500px !important;
-        height: 48px !important;
-        bottom: 15px !important;
+        overflow-x: auto !important;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        /* Efekti i lëvizjes për t'u fshehur/shfaqur */
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
+        opacity: 1 !important;
     }
-}
+
+    .bottom-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .bottom-nav-item, .bottom-nav a, .bottom-nav button {
+        color: #ffffff !important;
+        text-decoration: none !important;
+        font-size: 10px !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+        flex: 0 0 75px !important;
+        background: none !important;
+        border: none !important;
+        cursor: pointer !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 3px !important;
+    }
+
+    .bottom-nav-item:hover {
+        color: gold !important;
+    }
+
+    /* Klasa që e fsheh nav-in duke ruajtur pozicionin në qendër */
+    .bottom-nav.nav-hidden {
+        transform: translateX(-50%) translateY(120px) !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
+    /* Desktop */
+    @media (min-width: 1024px) {
+        .bottom-nav {
+            width: 500px !important;
+            height: 48px !important;
+            bottom: 15px !important;
+        }
+    }
     
     /* Stili i ri kompakt për menynë lundruese */
     #myOraSwissMenu {

@@ -145,6 +145,11 @@ async function loadSellerOffers() {
         .from("bracelets_straps")
         .select("*");
 
+    const products = [
+        ...(watches || []),
+        ...(straps || [])
+    ];
+     
     console.log("STRAPS:", straps);
     console.log("STRAPS ERROR:", strapsError);
 

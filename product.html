@@ -214,7 +214,25 @@
     </style>    
 </head>
 <body>
+<header class="site-header">
+    <nav class="nav-scroll">
 
+        <span class="site-title">
+            ORA<br>SWISS
+        </span>
+
+        <a href="index.html">Home</a>
+        <a href="luxury.html">Luxury</a>
+        <a href="vintage.html">Vintage</a>
+        <a href="parts.html">Parts</a>
+        <a href="product-bracelets-straps.html">Bracelet/Strap</a>
+        <a href="service.html">Service</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+
+    </nav>
+</header>
+    
 <div class="product-page">
 
     <div class="gallery">
@@ -772,6 +790,39 @@ async function submitOffer() {
     }, 1500);
 }
 </script>
-    
+  <nav class="bottom-nav">
+
+    <a href="index.html">
+        Home
+    </a>
+
+    <a href="favorites.html">
+        Favs
+    </a>
+
+    <a href="messages.html">
+        Messages
+    </a>
+
+    <a href="mysales.html">
+        Sales
+    </a>
+
+    <a href="sellnow.html">
+        Sell
+    </a>
+
+    <button onclick="checkMenu(event)">
+        Menu
+    </button>
+
+</nav>
+
+
+<script>
+function checkMenu(event){
+    event.preventDefault();
+}
+</script>  
 </body>
 </html>

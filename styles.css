@@ -2584,6 +2584,39 @@ body {
     padding: 10px;
 }
 
+.bottom-nav {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    background: #000 !important;
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    z-index: 999999 !important;
+    height: 70px !important;
+    border-top: 2px solid #333;
+}
+
+
+
+
+.bottom-nav {
+    display: none !important;
+}
+
+
+
+.bottom-nav::-webkit-scrollbar {
+    display: none;
+}
+      
+@media (max-width: 1023px) {
+    .bottom-nav {
+        height: 75px !important;
+    }
+}
+      
 /* Për Tablet */
 @media (min-width: 768px) {
     .grid {

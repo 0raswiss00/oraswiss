@@ -131,7 +131,11 @@
             <div class="offer-card">
 
                 <img
-                    src="${product?.image_url || 'images/default.png'}"
+                    src="${
+                    Array.isArray(product?.image_url)
+                        ? product.image_url[0]
+                        : product?.image_url || 'images/default.png'
+                }"
                     style="
                        width:100px;
                        height:100px;

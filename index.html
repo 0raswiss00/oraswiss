@@ -93,22 +93,35 @@
          height: 65px !important;
          background-color: #1a1a1a !important;
          display: flex !important;
-         justify-content: space-around !important;
+         /* E ndryshuar nga space-around ne flex-start qe te funksionoje scroll-i horizontal */
+         justify-content: flex-start !important; 
          align-items: center !important;
-         padding: 0 5px !important;
+         padding: 0 10px !important;
          border-radius: 20px !important;
          border: 1px solid #333 !important;
          box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
          z-index: 999999 !important;
-       }
+    
+         /* Lejon scroll-in horizontal dhe heq vizat e shemtuara te scrollbar */
+         overflow-x: auto !important;
+         scrollbar-width: none; /* Per Firefox */
+         -ms-overflow-style: none;  /* Per Internet Explorer 10+ */
+         transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
+     }
 
-       .bottom-nav-item, .bottom-nav a, .bottom-nav button {
+     /* Heq scrollbar per Chrome, Safari dhe Opera */
+     .bottom-nav::-webkit-scrollbar {
+         display: none;
+     }
+
+     .bottom-nav-item, .bottom-nav a, .bottom-nav button {
          color: #ffffff !important;
          text-decoration: none !important;
          font-size: 10px !important;
          text-align: center !important;
          white-space: nowrap !important;
-         flex: 1 !important;
+         /* E heqim flex: 1 qe ikonat te mos shtrihen por te mbajne madhesine e tyre dhe te lejojne scroll */
+         flex: 0 0 75px !important; 
          background: none !important;
          border: none !important;
          cursor: pointer !important;
@@ -116,26 +129,37 @@
          flex-direction: column !important;
          align-items: center !important;
          gap: 3px !important;
-       }
+     }
 
-       .bottom-nav-item:hover {
+     .bottom-nav-item:hover {
          color: gold !important;
-       }
+     }
 
-       /* Desktop */
-       @media (min-width: 1024px) {
-        .bottom-nav {
-            width:680px;
-            height:52px;
-            bottom:10px;
-        
-            left:50%;
-            right:auto;
-            transform:translateX(-50%);
+     /* Klasa qe shtohet me JavaScript kur bejme scroll poshte */
+     .bottom-nav.nav-hidden {
+         transform: translateX(-50%) translateY(100px) !important; /* Per desktop */
+     }
 
-            overflow-x:auto;
-        }
-    }
+     /* Desktop */
+     @media (min-width: 1024px) {
+         .bottom-nav {
+             width: 500px !important; /* E zvogelova pak me shume per kompjuter (ishte 680px) */
+             height: 48px !important; /* Pak me e ulet per desktop */
+             bottom: 15px !important;
+             left: 50% !important;
+             right: auto !important;
+             transform: translateX(-50%) !important;
+         }
+     }
+
+     /* Kur eshte ne telefon dhe ben scroll poshte */
+     @media (max-width: 1023px) {
+         .bottom-nav.nav-hidden {
+             transform: translateY(100px) !important;
+             opacity: 0 !important;
+         }
+     }
+    
     /* Stili i ri kompakt për menynë lundruese */
     #myOraSwissMenu {
         display: none;

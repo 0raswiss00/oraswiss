@@ -76,57 +76,66 @@
             bottom: 20px !important;
             left: 50% !important;
             transform: translateX(-50%) !important;
-            width: fit-content !important;
+            width: max-content !important;
             max-width: 95vw !important;
-            height: 42px !important;
+            height: 40px !important;
             background-color: #1a1a1a !important;
             display: flex !important;
             justify-content: flex-start !important;
             align-items: center !important;
-            gap: 6px !important;
-            padding: 0 8px !important;
-            border-radius: 12px !important;
+            gap: 4px !important;
+            padding: 0 6px !important;
+            border-radius: 10px !important;
             border: 1px solid #333 !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.5) !important;
             z-index: 999999 !important;
     
-            overflow-x: auto !important;
-            white-space: nowrap !important;
-            scroll-behavior: smooth !important;
-            -webkit-overflow-scrolling: touch !important;
-            scrollbar-width: none !important;
-            -ms-overflow-style: none !important;
-        }
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    scroll-behavior: smooth !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    
+    transition: none !important;
+    opacity: 1 !important;
+}
 
-        .bottom-nav::-webkit-scrollbar {
-            display: none !important;
-        }
+.bottom-nav::-webkit-scrollbar {
+    display: none !important;
+}
 
-        .bottom-nav-item, .bottom-nav a, .bottom-nav button {
-            color: #ffffff !important;
-            text-decoration: none !important;
-            font-size: 8px !important;
-            text-align: center !important;
-            white-space: nowrap !important;
-            flex: 0 0 auto !important;
-            background: none !important;
-            border: none !important;
-            cursor: pointer !important;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            justify-content: center !important;
-            gap: 0px !important;
-            padding: 0 3px !important;
-        }
+.bottom-nav.nav-hidden {
+    transform: translateX(-50%) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
 
-        .bottom-nav a:hover, .bottom-nav button:hover, .bottom-nav-item:hover {
-            color: gold !important;
-        }
+.bottom-nav-item, .bottom-nav a, .bottom-nav button {
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-size: 8px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    flex: 0 0 auto !important;
+    background: none !important;
+    border: none !important;
+    cursor: pointer !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    padding: 0 4px !important;
+}
 
-        body {
-            padding-bottom: 75px !important;
-        }
+.bottom-nav a:hover, .bottom-nav button:hover, .bottom-nav-item:hover {
+    color: gold !important;
+}
+
+body {
+    padding-bottom: 70px !important;
+}
         
         .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; list-style: none; }
     </style>

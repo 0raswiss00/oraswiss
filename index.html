@@ -149,22 +149,19 @@
 }
 
     /* Desktop */
-    @media (min-width: 1024px) {
-        .bottom-nav {
-            width: 680px;
-            height: 52px;
-            bottom: 10px;
-            border-radius: 15px;
-        }
+   @media (min-width: 1024px) {
+    .bottom-nav {
+        width:680px;
+        height:52px;
+        bottom:10px;
+        
+        left:50%;
+        right:auto;
+        transform:translateX(-50%);
 
-        .bottom-nav-item,
-        .bottom-nav a,
-        .bottom-nav button {
-            font-size: 12px;
-            gap: 2px;
-        }
+        overflow-x:auto;
     }
-
+}
     /* Stili i ri kompakt për menynë lundruese */
     #myOraSwissMenu {
         display: none;

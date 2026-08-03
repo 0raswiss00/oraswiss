@@ -572,7 +572,67 @@
   }
 
   loadMessageCount();
+  async function loadMessageCount() {
+    try {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error || !user) return;
+
+        const { data: userConvs, error: convError } = await supabase
+            .from("conversations")
+            .select("id")
+            .or(`user_one.eq.${user.id},user_two.eq.${user.id},buyer_id.eq.${user.id},seller_id.eq.${user.id}`);
+
+        if (convError || !userConvs || userConvs.length === 0) return;
+
+        const convIds = userConvs.map(c => c.id);
+
+        const { count: totalUnread, error: msgError } = await supabase
+            .from("messages")
+            .select("*", { count: "exact", head: true })
+            .in("conversation_id", convIds)
+            .eq("is_read", false)
+            .neq("sender_id", user.id);
+
+        if (msgError) return;
+
+        const count = totalUnread || 0;
+
+        const dashBadge = document.getElementById("dashboardMessageCount");
+        if (dashBadge) {
+            dashBadge.innerText = count;
+            dashBadge.style.display = count > 0 ? "inline-block" : "none";
+        }
+
+        const navBadge = document.getElementById("menuMessageCount");
+        if (navBadge) {
+            navBadge.innerText = count;
+            navBadge.style.display = count > 0 ? "inline-block" : "none";
+        }
+    } catch (err) {
+        console.error("Gabim tek mesazhet:", err);
+    }
+  }
+
+  loadMessageCount();
+
+  // ---> VENDOSE KËTU NË FUND TË SKRIPTIT <---
+  let lastScrollTop = 0;
+  const bottomNavElement = document.querySelector('.bottom-nav');
+
+  window.addEventListener('scroll', function() {
+      let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      if (scrollTop > lastScrollTop && scrollTop > 50) {
+          // Po zbret poshtë -> Fshih navigacionin
+          if (bottomNavElement) bottomNavElement.classList.add('nav-hidden');
+      } else {
+          // Po ngjitet lart -> Shfaq navigacionin
+          if (bottomNavElement) bottomNavElement.classList.remove('nav-hidden');
+      }
+      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+  }, false);
 </script>
+  
 
 </body>
 </html>

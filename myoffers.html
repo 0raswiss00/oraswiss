@@ -130,32 +130,39 @@
             html += `
             <div class="offer-card">
 
-                <img
-                    src="${product?.image_url || 'images/default.png'}"
-                    style="
-                       width:100px;
-                       height:100px;
-                       object-fit:cover;
-                       border-radius:8px;
-                    ">
+                <a href="product.html?id=${offer.product_id}"
+                   style="text-decoration:none;color:white;display:flex;align-items:center;gap:10px;">
 
-                <div style="flex:1">
+                    <img
+                        src="${Array.isArray(product?.image_url)
+                             ? product.image_url[0]
+                             : (product?.image_url || 'images/default.png')}"
+                         style="
+                            width:100px;
+                            height:100px;
+                            object-fit:cover;
+                            border-radius:8px;
+                        ">
 
-                    <h3 style="margin:0;">
-                        ${product?.brand || ""} ${product?.model || ""}
-                    </h3>
+                    <div style="flex:1">
 
-                    <p><b>Çmimi:</b> ${product?.price ?? "N/A"} €</p>
+                        <h3 style="margin:0;">
+                            ${product?.brand || ""} ${product?.model || ""}
+                        </h3>
 
-                    <p><b>Oferta juaj:</b> ${offer.offered_price} €</p>
+                        <p><b>Çmimi:</b> ${product?.price ?? "N/A"} €</p>
 
-                    <p><b>Statusi:</b> ${offer.status}</p>
+                        <p><b>Oferta:</b> ${offer.offered_price} €</p>
 
-                    <div style="margin-top:10px;">
-                       ${actionHtml}
+                        <p><b>Statusi:</b> ${offer.status}</p>
+
+                        <div style="margin-top:10px;">
+                            ${actionButtons}
+                        </div>
+
                     </div>
 
-                </div>
+                </a>
 
             </div>
             `;

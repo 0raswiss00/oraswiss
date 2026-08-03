@@ -190,13 +190,17 @@ async function loadSellerOffers() {
         p => String(p.id) === String(offer.product_id)
     );
 
+    let actionButtons = "";
+
     if (offer.status === "pending") {
 
-        actionHtml = `
+        actionButtons = `
             <span style="color:#f39c12;font-weight:bold;font-size:12px;">
                 Në pritje...
             </span>
         `;
+
+    }
 
     } else if (offer.status === "countered") {
 

@@ -372,12 +372,7 @@ async function loadSellerOffers() {
             <a href="product.html?id=${offer.product_id}" 
             style="text-decoration:none;color:white;">
 
-            <img
-            src="${
-                Array.isArray(product?.image_url)
-                    ? product.image_url[0]
-                    : product?.image_url || 'images/default.png'
-            }"
+            
               <img
               src="${productImage}"
               style="

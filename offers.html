@@ -207,7 +207,16 @@ async function loadSellerOffers() {
         last_offer_by: offer.last_offer_by
     });
 
+    console.log("PRODUCT ID NGA OFERTA:", offer.product_id);
 
+    console.log("TE GJITHA FUSHAT E PRODUKTIT:", product ? {
+        id: product.id,
+        brand: product.brand,
+        model: product.model,
+        image_url: product.image_url,
+        image: product.image,
+        photos: product.photos
+    } : "NUK U GJET PRODUKTI");
 
     // OFERTA E RE
     if (offer.status === "pending") {

@@ -73,11 +73,12 @@
 
         .bottom-nav {
             position: fixed !important;
-            bottom: 20px !important;
-            left: 15px !important;
-            right: 15px !important;
-            width: auto !important;
-            height: 70px !important; /* Lartësi fikse për tu siguruar që ka hapësirë mjaftueshëm */
+            bottom: 25px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            width: 92% !important;
+            max-width: 480px !important;
+            height: 65px !important;
             background-color: #1a1a1a !important;
             display: flex !important;
             justify-content: flex-start !important;
@@ -89,7 +90,7 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
             z-index: 999999 !important;
     
-            /* Pjesa e lëvizjes majtas-djathtas */
+            /* Lëvizja horizontale majtas-djathtas */
             overflow-x: auto !important;
             white-space: nowrap !important;
             scroll-behavior: smooth !important;
@@ -97,27 +98,22 @@
             scrollbar-width: none !important;
             -ms-overflow-style: none !important;
     
+            /* Tranzicioni për fshehjen/shfaqjen gjatë scroll-it */
             transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
+            opacity: 1 !important;
         }
 
         .bottom-nav::-webkit-scrollbar {
             display: none !important;
         }
 
-        .bottom-nav.nav-hidden, .bottom-nav.hidden {
-            transform: translateY(150%) !important;
-            opacity: 0 !important;
-            pointer-events: none !important;
-        }
-
-        /* Sigurohu që butonat apo linket brenda të mos ngjishen */
-        .bottom-nav a, .bottom-nav button, .bottom-nav-item {
+        .bottom-nav-item, .bottom-nav a, .bottom-nav button {
             color: #ffffff !important;
             text-decoration: none !important;
             font-size: 11px !important;
             text-align: center !important;
             white-space: nowrap !important;
-            flex: 0 0 auto !important; /* I lë në madhësinë e hequr natyrale që të bëjnë scroll krahror */
+            flex: 0 0 auto !important;
             background: none !important;
             border: none !important;
             cursor: pointer !important;
@@ -133,8 +129,15 @@
             color: gold !important;
         }
 
+        /* Klasa që e fsheh nav-in kur bën scroll poshtë (ruan pozicionin në qendër) */
+        .bottom-nav.nav-hidden {
+            transform: translateX(-50%) translateY(120px) !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
         body {
-            padding-bottom: 120px !important; /* Lë hapësirë poshtë që të mos mbulohet asgjë */
+            padding-bottom: 120px !important;
         }
         
         .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; list-style: none; }

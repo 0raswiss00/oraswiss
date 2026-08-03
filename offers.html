@@ -190,23 +190,40 @@ async function loadSellerOffers() {
         p => String(p.id) === String(offer.product_id)
     );
 
-    console.log(product);
+    if (offer.status === "pending") {
 
-    console.log("PRODUCT:", product);
+        actionHtml = `
+            <span style="color:#f39c12;font-weight:bold;font-size:12px;">
+                Në pritje...
+            </span>
+        `;
 
-    console.log("IMAGE URL:", product?.image_url);
+    } else if (offer.status === "countered") {
 
-    console.log("PRICE:", product?.price);
+        if (offer.last_offer_by === "seller") {
 
-    console.log("KEYS PRODUCT:", Object.keys(product || {}));
-         
-    console.log("KONTROLL OFERTA:", {
-        id: offer.id,
-        status: offer.status,
-        counter_offer: offer.counter_offer,
-        last_offer_by: offer.last_offer_by
-    });
+            actionHtml = `
+                <span style="color:#f1c40f;font-weight:bold;">
+                    Kundërofertë: ${offer.counter_offer} €
+                </span>
 
+                <button class="btn-buy"
+                    onclick="acceptCounter('${offer.id}')">
+                    Prano
+                </button>
+
+                <button class="btn-chat"
+                    onclick="rejectCounter('${offer.id}')">
+                    Refuzo
+                </button>
+
+                <button class="btn-chat"
+                    onclick="makeCounter('${offer.id}')">
+                    Kundërofertë
+                </button>
+            `;
+        }
+    }
 
 
     // OFERTA E RE

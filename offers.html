@@ -149,11 +149,13 @@ async function loadSellerOffers() {
     console.log("STRAPS ERROR:", strapsError);
 
     
-    const products = [
-        ...(watches || []),
-        ...(straps || [])
-    ];
-
+    const productImage =
+    Array.isArray(product?.image_url)
+        ? product.image_url[0]
+        : product?.image_url ||
+          product?.image ||
+          (Array.isArray(product?.photos) ? product.photos[0] : product?.photos) ||
+          'images/default.png';
 
     console.log("WATCHES:", watches);
     console.log("WATCH ERROR:", watchError);
@@ -186,6 +188,20 @@ async function loadSellerOffers() {
 
     let actionButtons = "";
 
+    console.log("KERKOJ PRODUCT ID:", offer.product_id);
+
+    console.log(
+        "PRODUKTE ME TE NJEJTIN ID:",
+        products.filter(
+            p => String(p.id) === String(offer.product_id)
+        )
+    );
+
+    console.log(
+        "TE GJITHA ID:",
+        products.map(p => p.id)
+    );
+         
     const product = products.find(
         p => String(p.id) === String(offer.product_id)
     );
@@ -359,15 +375,17 @@ async function loadSellerOffers() {
                     ? product.image_url[0]
                     : product?.image_url || 'images/default.png'
             }"
+              <img
+              src="${productImage}"
               style="
-                   width:100px;
-                   height:100px;
-                   max-width:100px;
-                   max-height:100px;
-                   object-fit:cover;
-                   border-radius:8px;
-                   display:block;
-               ">
+              width:100px;
+              height:100px;
+              max-width:100px;
+              max-height:100px;
+              object-fit:cover;
+              border-radius:8px;
+              display:block;
+             ">
 
 
                 <h3>

@@ -84,102 +84,58 @@
         border-color: #666;
     }
 
-   .bottom-nav {
-    position: fixed;
-    bottom: 30px;
-    left: 15px;
-    right: 15px;
+     .bottom-nav {
+         position: fixed !important;
+         bottom: 20px !important;
+         left: 15px !important;
+         right: 15px !important;
+         width: auto !important;
+         height: 65px !important;
+         background-color: #1a1a1a !important;
+         display: flex !important;
+         justify-content: space-around !important;
+         align-items: center !important;
+         padding: 0 5px !important;
+         border-radius: 20px !important;
+         border: 1px solid #333 !important;
+         box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
+         z-index: 999999 !important;
+       }
 
-    width: auto;
-    height: 65px;
+       .bottom-nav-item, .bottom-nav a, .bottom-nav button {
+         color: #ffffff !important;
+         text-decoration: none !important;
+         font-size: 10px !important;
+         text-align: center !important;
+         white-space: nowrap !important;
+         flex: 1 !important;
+         background: none !important;
+         border: none !important;
+         cursor: pointer !important;
+         display: flex !important;
+         flex-direction: column !important;
+         align-items: center !important;
+         gap: 3px !important;
+       }
 
-    background:#1a1a1a;
+       .bottom-nav-item:hover {
+         color: gold !important;
+       }
 
-    display:flex;
-    justify-content:flex-start;
-    align-items:center;
-
-    gap:20px;
-    padding:0 15px;
-
-    border-radius:20px;
-    border:1px solid #333;
-
-    box-shadow:0 5px 20px rgba(0,0,0,.5);
-
-    z-index:999999;
-
-    overflow-x:auto;
-    overflow-y:hidden;
-
-    white-space:nowrap;
-
-    scrollbar-width:none;
-    -webkit-overflow-scrolling:touch;
-}
-
-.bottom-nav::-webkit-scrollbar {
-    display:none;
-}
-
-let lastScroll = 0;
-
-window.addEventListener("scroll", () => {
-
-    const nav = document.querySelector(".bottom-nav");
-
-    let currentScroll = window.pageYOffset;
-
-    if(currentScroll > lastScroll){
-        // scroll poshtë
-        nav.classList.add("hidden");
-    } else {
-        // scroll lart
-        nav.classList.remove("hidden");
-    }
-
-    lastScroll = currentScroll;
-});
-    
-.bottom-nav a,
-.bottom-nav button,
-.bottom-nav-item {
-
-    flex:0 0 auto;
-
-    color:#fff;
-    text-decoration:none;
-
-    font-size:13px;
-
-    background:none;
-    border:none;
-
-    cursor:pointer;
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-
-    padding:0 5px;
-
-    gap:3px;
-}
-
-    /* Desktop */
-   @media (min-width: 1024px) {
-    .bottom-nav {
-        width:680px;
-        height:52px;
-        bottom:10px;
+       /* Desktop */
+       @media (min-width: 1024px) {
+        .bottom-nav {
+            width:680px;
+            height:52px;
+            bottom:10px;
         
-        left:50%;
-        right:auto;
-        transform:translateX(-50%);
+            left:50%;
+            right:auto;
+            transform:translateX(-50%);
 
-        overflow-x:auto;
+            overflow-x:auto;
+        }
     }
-}
     /* Stili i ri kompakt për menynë lundruese */
     #myOraSwissMenu {
         display: none;

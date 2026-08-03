@@ -72,62 +72,69 @@
         }
 
         .bottom-nav {
-            position: fixed;
-            bottom: 30px;
-            left: 15px;
-            right: 15px;
-            width: auto;
-            height: 65px;
-            background-color: #1a1a1a;
-            display: flex;
-            justify-content: flex-start; /* E lejon nisjen nga e majta për scroll */
-            align-items: center;
-            gap: 20px; /* Hapësira mes elementeve */
-            padding: 0 15px; /* Hapësirë nga anët brenda kutisë */
-            border-radius: 20px;
-            border: 1px solid #333;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            z-index: 999999;
-            transition: transform 0.3s ease;
-            overflow-x: auto; /* Aktivizon lëvizjen majtas-djathtas */
-            white-space: nowrap;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            -ms-overflow-style: none;  
-            scrollbar-width: none;  
+            position: fixed !important;
+            bottom: 20px !important;
+            left: 15px !important;
+            right: 15px !important;
+            width: auto !important;
+            height: 70px !important; /* Lartësi fikse për tu siguruar që ka hapësirë mjaftueshëm */
+            background-color: #1a1a1a !important;
+            display: flex !important;
+            justify-content: flex-start !important;
+            align-items: center !important;
+            gap: 15px !important;
+            padding: 0 15px !important;
+            border-radius: 20px !important;
+            border: 1px solid #333 !important;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
+            z-index: 999999 !important;
+    
+            /* Pjesa e lëvizjes majtas-djathtas */
+            overflow-x: auto !important;
+            white-space: nowrap !important;
+            scroll-behavior: smooth !important;
+            -webkit-overflow-scrolling: touch !important;
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+    
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
         }
 
         .bottom-nav::-webkit-scrollbar {
-            display: none; /* Fsheh shiritin e scroll-it për pamje më të pastër */
+            display: none !important;
         }
 
-        .bottom-nav.hidden {
-            transform: translateY(150%);
+        .bottom-nav.nav-hidden, .bottom-nav.hidden {
+            transform: translateY(150%) !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
         }
 
-        .bottom-nav-item {
-            color: #fff;
-            text-decoration: none;
-            font-size: 13px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            text-align: center;
-            flex-shrink: 0; /* Nuk lejon që butonat të shtrydhen */
-            padding: 0 5px;
+        /* Sigurohu që butonat apo linket brenda të mos ngjishen */
+        .bottom-nav a, .bottom-nav button, .bottom-nav-item {
+            color: #ffffff !important;
+            text-decoration: none !important;
+            font-size: 11px !important;
+            text-align: center !important;
+            white-space: nowrap !important;
+            flex: 0 0 auto !important; /* I lë në madhësinë e hequr natyrale që të bëjnë scroll krahror */
+            background: none !important;
+            border: none !important;
+            cursor: pointer !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 2px !important;
+            padding: 0 8px !important;
         }
 
-        .bottom-nav-item:hover { 
-            color: gold; 
+        .bottom-nav a:hover, .bottom-nav button:hover, .bottom-nav-item:hover {
+            color: gold !important;
         }
 
         body {
-            /* Pjesa tjetër e stileve tuaja ekzistuese... */
-            padding-bottom: 120px; /* Kjo detyron faqen të lërë hapësirë boshe në fund, që artikujt të duken të plotë pa u mbuluar nga menuja */
+            padding-bottom: 120px !important; /* Lë hapësirë poshtë që të mos mbulohet asgjë */
         }
         
         .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; list-style: none; }

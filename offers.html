@@ -327,7 +327,11 @@ async function loadSellerOffers() {
 
     }
 
-
+    console.log("FOTO:", 
+        product?.image_url,
+        product?.image,
+        product?.photos
+    );
 
     html += `
 
@@ -340,20 +344,22 @@ async function loadSellerOffers() {
             <a href="product.html?id=${offer.product_id}" 
             style="text-decoration:none;color:white;">
 
-
-                <img
-                    src="${Array.isArray(product?.image_url)
-                        ? product.image_url[0]
-                        : (product?.image_url || 'images/default.png')}"
-                    style="
-                       width:100px;
-                       height:100px;
-                       max-width:100px;
-                       max-height:100px;
-                       object-fit:cover;
-                       border-radius:8px;
-                       display:block;
-                    ">
+            <img
+            src="${
+                product?.image_url ||
+                product?.image ||
+                (Array.isArray(product?.photos) ? product.photos[0] : product?.photos) ||
+                'images/default.png'
+            }"
+              style="
+                   width:100px;
+                   height:100px;
+                   max-width:100px;
+                   max-height:100px;
+                   object-fit:cover;
+                   border-radius:8px;
+                   display:block;
+               ">
 
 
                 <h3>

@@ -85,65 +85,70 @@
     }
 
    .bottom-nav {
-        position: fixed !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        bottom: 15px !important;
+        position: fixed;
+        left: 50%;
+        bottom: 15px;
+        transform: translateX(-50%);
 
-        width: min(95%, 900px) !important;
-        height: 65px !important;
+        width: min(95%, 900px);
+        height: 65px;
 
-        background-color: #1a1a1a !important;
-        display: flex !important;
-        justify-content: space-around !important;
-        align-items: center !important;
+        background: #1a1a1a;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
 
-        padding: 0 5px !important;
-        border-radius: 20px !important;
-        border: 1px solid #333 !important;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
-        z-index: 999999 !important;
+        padding: 0 5px;
+        border-radius: 20px;
+        border: 1px solid #333;
+        box-shadow: 0 5px 20px rgba(0,0,0,.5);
+        z-index: 999999;
     }
 
     .bottom-nav-item,
     .bottom-nav a,
     .bottom-nav button {
-        color: #ffffff !important;
-        text-decoration: none !important;
-        font-size: 10px !important;
-        text-align: center !important;
-        white-space: nowrap !important;
-        flex: 1 !important;
-        background: none !important;
-        border: none !important;
-        cursor: pointer !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        gap: 3px !important;
+        color: #fff;
+        text-decoration: none;
+        font-size: 10px;
+        text-align: center;
+        white-space: nowrap;
+        flex: 1;
+
+        background: none;
+        border: none;
+        cursor: pointer;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
     }
 
-    .bottom-nav-item:hover {
-        color: gold !important;
+    .bottom-nav-item:hover,
+    .bottom-nav a:hover,
+    .bottom-nav button:hover {
+        color: gold;
     }
 
     /* Desktop */
     @media (min-width: 1024px) {
-
         .bottom-nav {
-            width: 680px !important;
-            height: 52px !important;
-            bottom: 10px !important;
-            border-radius: 15px !important;
+            width: 680px;
+            height: 52px;
+            bottom: 10px;
+            border-radius: 15px;
         }
 
         .bottom-nav-item,
         .bottom-nav a,
         .bottom-nav button {
-            font-size: 12px !important;
-            gap: 2px !important;
+            font-size: 12px;
+            gap: 2px;
         }
     }
+
     /* Stili i ri kompakt për menynë lundruese */
     #myOraSwissMenu {
         display: none;

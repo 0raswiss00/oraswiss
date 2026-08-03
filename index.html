@@ -86,50 +86,79 @@
 
    .bottom-nav {
         position: fixed;
-        left: 50%;
-        bottom: 15px;
-        transform: translateX(-50%);
+        bottom: 30px;
+        left: 15px;
+        right: 15px;
 
-        width: min(95%, 900px);
+        width: auto;
         height: 65px;
 
-        background: #1a1a1a;
+        background-color: #1a1a1a;
+
         display: flex;
-        justify-content: space-around;
+        justify-content: flex-start;
         align-items: center;
 
-        padding: 0 5px;
+        gap: 20px;
+        padding: 0 15px;
+
         border-radius: 20px;
         border: 1px solid #333;
-        box-shadow: 0 5px 20px rgba(0,0,0,.5);
+
+        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+
         z-index: 999999;
+
+        overflow-x: auto;
+        white-space: nowrap;
+
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
     }
+
+    .bottom-nav::-webkit-scrollbar {
+        display: none;
+    }
+
 
     .bottom-nav-item,
     .bottom-nav a,
     .bottom-nav button {
+
         color: #fff;
+
         text-decoration: none;
-        font-size: 10px;
-        text-align: center;
+
+        font-size: 13px;
+
         white-space: nowrap;
-        flex: 1;
 
         background: none;
         border: none;
+
         cursor: pointer;
 
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+
         gap: 3px;
+
+        flex-shrink: 0;
+
+       padding: 0 5px;
     }
+
 
     .bottom-nav-item:hover,
     .bottom-nav a:hover,
     .bottom-nav button:hover {
         color: gold;
+    }
+
+
+    body {
+        padding-bottom: 120px;
     }
 
     /* Desktop */

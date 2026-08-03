@@ -341,18 +341,25 @@ async function loadSellerOffers() {
 
                 <!-- Imazhi -->
                 <img
-                   src="${Array.isArray(product?.image_url)
-                       ? product.image_url[0]
-                       : (product?.image_url || 'images/default.png')}"
+                    src="${(() => {
+                       let imgs = product?.image_url;
+                       if (typeof imgs === 'string') {
+                           try { imgs = JSON.parse(imgs); } catch(e) {}
+                       }
+                       return Array.isArray(imgs) && imgs.length > 0 
+                           ? imgs[0] 
+                           : (typeof imgs === 'string' ? imgs : 'images/default.png');
+                   })()}"
                    style="
-                      width: 100px;
-                      height: 100px;
-                      min-width: 100px;
-                      min-height: 100px;
-                      object-fit: cover;
-                      border-radius: 8px;
+                     width: 100px;
+                     height: 100px;
+                     min-width: 100px;
+                     min-height: 100px;
+                     object-fit: cover;
+                     border-radius: 8px;
                       display: block;
-                   ">
+                   "
+               >
 
                <!-- Teksti / Titulli -->
                <div style="flex: 1;">

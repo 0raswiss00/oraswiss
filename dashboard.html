@@ -76,28 +76,24 @@
             bottom: 20px !important;
             left: 50% !important;
             transform: translateX(-50%) !important;
-            width: max-content !important;
-            max-width: 95vw !important;
-            height: 40px !important;
+            width: 100% !important;
+            max-width: 480px !important;
+            height: 65px !important;
             background-color: #1a1a1a !important;
             display: flex !important;
-            justify-content: flex-start !important;
+            justify-content: space-around !important;
             align-items: center !important;
-            gap: 4px !important;
-            padding: 0 6px !important;
-            border-radius: 10px !important;
+            box-sizing: border-box !important;
+            padding: 0 10px !important;
+            border-radius: 20px !important;
             border: 1px solid #333 !important;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.5) !important;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
             z-index: 999999 !important;
-    
-            overflow-x: auto !important;
+        
+            overflow-x: hidden !important;
             white-space: nowrap !important;
-            scroll-behavior: smooth !important;
-            -webkit-overflow-scrolling: touch !important;
-            scrollbar-width: none !important;
-            -ms-overflow-style: none !important;
-    
-            transition: none !important;
+        
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
             opacity: 1 !important;
         }
 
@@ -105,36 +101,46 @@
             display: none !important;
         }
 
-        .bottom-nav.nav-hidden {
-            transform: translateX(-50%) !important;
-            opacity: 1 !important;
-            pointer-events: auto !important;
-        }
-
         .bottom-nav-item, .bottom-nav a, .bottom-nav button {
             color: #ffffff !important;
             text-decoration: none !important;
-            font-size: 8px !important;
+            font-size: 11px !important;
             text-align: center !important;
             white-space: nowrap !important;
-            flex: 0 0 auto !important;
+            flex: 1 1 0 !important;
+            min-width: 0 !important;
             background: none !important;
             border: none !important;
             cursor: pointer !important;
             display: flex !important;
-            flex-direction: row !important;
+            flex-direction: column !important;
             align-items: center !important;
             justify-content: center !important;
-            gap: 3px !important;
-            padding: 0 4px !important;
+            gap: 2px !important;
+            padding: 0 !important;
         }
 
-        .bottom-nav a:hover, .bottom-nav button-hover, .bottom-nav-item:hover {
+        .bottom-nav a:hover, .bottom-nav button:hover, .bottom-nav-item:hover {
             color: gold !important;
         }
 
-        body {
-           padding-bottom: 70px !important;
+        .bottom-nav.nav-hidden {
+            transform: translateX(-50%) translateY(120px) !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+        /* Desktop */
+        @media (min-width: 1024px) {
+            .bottom-nav {
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                width: 500px !important;
+                height: 48px !important;
+                bottom: 15px !important;
+            }
+            .bottom-nav.nav-hidden {
+                transform: translateX(-50%) translateY(120px) !important;
+            }
         }
         
         .watch-card { background: #111; margin-bottom: 10px; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px; list-style: none; }

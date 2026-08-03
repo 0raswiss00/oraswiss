@@ -122,7 +122,25 @@
     display:none;
 }
 
+let lastScroll = 0;
 
+window.addEventListener("scroll", () => {
+
+    const nav = document.querySelector(".bottom-nav");
+
+    let currentScroll = window.pageYOffset;
+
+    if(currentScroll > lastScroll){
+        // scroll poshtë
+        nav.classList.add("hidden");
+    } else {
+        // scroll lart
+        nav.classList.remove("hidden");
+    }
+
+    lastScroll = currentScroll;
+});
+    
 .bottom-nav a,
 .bottom-nav button,
 .bottom-nav-item {

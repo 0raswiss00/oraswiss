@@ -337,23 +337,34 @@ async function loadSellerOffers() {
         <div>
 
 
-            <a href="product.html?id=${offer.product_id}" 
-            style="text-decoration:none;color:white;">
+            <a href="product.html?id=${offer.product_id}" style="text-decoration: none; color: white; display: block;">
+    <div class="offer-card" style="display: flex; align-items: center; gap: 12px; padding: 10px;">
+        
+        <!-- Imazhi i produktit -->
+        <img
+            src="${Array.isArray(product?.image_url)
+                ? product.image_url[0]
+                : (product?.image_url || 'images/default.png')}"
+            style="
+                width: 100px;
+                height: 100px;
+                min-width: 100px;
+                min-height: 100px;
+                object-fit: cover;
+                border-radius: 8px;
+                display: block;
+            "
+        >
 
+        <!-- Pjesa e tekstit -->
+        <div style="flex: 1;">
+            <h3 style="margin: 0;">
+                ${product?.brand || ""} ${product?.model || ""}
+            </h3>
+        </div>
 
-                <img
-                    src="${Array.isArray(product?.image_url)
-                        ? product.image_url[0]
-                        : (product?.image_url || 'images/default.png')}"
-                    style="
-                       width:100px;
-                       height:100px;
-                       max-width:100px;
-                       max-height:100px;
-                       object-fit:cover;
-                       border-radius:8px;
-                       display:block;
-                    ">
+    </div>
+</a>
 
 
                 <h3>

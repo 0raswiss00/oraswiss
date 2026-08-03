@@ -337,32 +337,16 @@
     }
 </script>
 <script>
-    let lastScrollTop = 0;
-    const nav = document.querySelector('.bottom-nav');
-
-    window.addEventListener('scroll', () => {
-        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        if (scrollTop > lastScrollTop) {
-            nav.classList.add('hidden');
-        } else {
-            nav.classList.remove('hidden');
-        }
-        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
-    }, false);
-</script>
-<script>
 let lastScrollTop = 0;
 const nav = document.querySelector('.bottom-nav');
 
 window.addEventListener('scroll', () => {
     let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-    if (nav) {
-        if (scrollTop > lastScrollTop && scrollTop > 50) {
-            nav.classList.add('nav-hidden');
-        } else {
-            nav.classList.remove('nav-hidden');
-        }
+    if (scrollTop > lastScrollTop && scrollTop > 50) {
+        nav.classList.add('nav-hidden');
+    } else {
+        nav.classList.remove('nav-hidden');
     }
 
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;

@@ -313,6 +313,22 @@
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
   );
 
+    async function kontrolloLogin() {
+        const { data: { user } } = await supabase.auth.getUser();
+
+        const btn = document.getElementById("loginRegisterBtn");
+
+        if (btn) {
+            if (user) {
+                btn.style.display = "none";   // login bërë → fshihet
+            } else {
+                btn.style.display = "block";  // pa login → shfaqet
+            }
+        }
+    }
+
+    kontrolloLogin();
+  
   async function loadCategory(cat, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;  

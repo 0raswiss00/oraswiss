@@ -355,10 +355,9 @@ async function loadSellerOffers() {
 
             <img
             src="${
-                product?.image_url ||
-                product?.image ||
-                (Array.isArray(product?.photos) ? product.photos[0] : product?.photos) ||
-                'images/default.png'
+                Array.isArray(product?.image_url)
+                    ? product.image_url[0]
+                    : product?.image_url || 'images/default.png'
             }"
               style="
                    width:100px;

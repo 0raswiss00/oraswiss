@@ -337,26 +337,19 @@ async function loadSellerOffers() {
         <div>
 
 
-            <div class="offer-card" style="display: flex; align-items: center; gap: 12px; padding: 10px; border-bottom: 1px solid #333;">
-               <!-- Klikimi këtu mund ta dërgojë te produkti ose te detajet e klientit -->
-               <a href="product.html?id=${offer.product_id}" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 12px; flex: 1;">
+            <a href="product.html?id=${offer.product_id}" style="text-decoration: none; color: white; display: block;">
+               <div class="offer-card" style="display: flex; align-items: center; gap: 12px; padding: 10px; border-bottom: 1px solid #333;">
                    <img
                        src="${Array.isArray(product?.image_url) ? product.image_url[0] : (product?.image_url || 'images/default.png')}"
                        style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; display: block;"
                    >
-                   <div>
+                   <div style="flex: 1;">
                        <h3 style="margin: 0 0 5px 0;">${product?.brand || ""} ${product?.model || ""}</h3>
-                       <p style="margin: 0; color: #aaa;">Ofertë nga: <strong>${offer.buyer_name || 'Klient'}</strong></p>
-                       <p style="margin: 0; color: #4CAF50; font-weight: bold;">Shuma: €${offer.amount}</p>
+                       <p style="margin: 0; color: #aaa;">Oferta ime: <strong>€${offer.amount}</strong></p>
+                       <span style="font-size: 12px; color: #ff9800;">Statusi: ${offer.status}</span>
                    </div>
-               </a>
-
-               <!-- Butonat e veprimit vetëm për shitësin -->
-               <div style="display: flex; flex-direction: column; gap: 5px;">
-                   <button onclick="pranoOfertën('${offer.id}')" style="background: #4CAF50; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Prano</button>
-                   <button onclick="refuzoOfertën('${offer.id}')" style="background: #f44336; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Refuzo</button>
-              </div>
-          </div>
+               </div>
+           </a>
 
                 <h3>
                 ${product?.brand || ""}

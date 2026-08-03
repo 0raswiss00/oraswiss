@@ -148,15 +148,6 @@ async function loadSellerOffers() {
     console.log("STRAPS:", straps);
     console.log("STRAPS ERROR:", strapsError);
 
-    
-    const productImage =
-    Array.isArray(product?.image_url)
-        ? product.image_url[0]
-        : product?.image_url ||
-          product?.image ||
-          (Array.isArray(product?.photos) ? product.photos[0] : product?.photos) ||
-          'images/default.png';
-
     console.log("WATCHES:", watches);
     console.log("WATCH ERROR:", watchError);
 

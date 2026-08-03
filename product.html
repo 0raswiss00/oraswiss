@@ -150,7 +150,68 @@
         .oraswiss-btn-white:hover {
             background: #333333 !important;
         }
-    </style>
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+            background: #111;
+        }
+
+        .nav-scroll {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            overflow-x: auto;
+            padding: 14px 16px;
+        }
+
+        .nav-scroll a {
+            color: #fff;
+            text-decoration: none;
+            padding: 6px 10px;
+            white-space: nowrap;
+        }
+
+        .nav-scroll a:hover {
+            color: gold;
+        }
+
+        .site-title {
+            font-weight:700;
+            line-height:1.05;
+            margin-right:10px;
+        }
+
+
+        .bottom-nav {
+            position: fixed !important;
+            bottom: 20px !important;
+            left: 15px !important;
+            right: 15px !important;
+            height:65px !important;
+            background:#1a1a1a !important;
+            display:flex !important;
+            justify-content:space-around !important;
+            align-items:center !important;
+            border-radius:20px !important;
+            border:1px solid #333 !important;
+            z-index:999999 !important;
+        }
+
+        .bottom-nav a,
+        .bottom-nav button {
+            color:white !important;
+            text-decoration:none !important;
+            font-size:10px !important;
+            background:none !important;
+            border:none !important;
+            cursor:pointer;
+            display:flex !important;
+            flex-direction:column;
+            align-items:center;
+        }
+    </style>    
 </head>
 <body>
 

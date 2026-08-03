@@ -337,29 +337,31 @@ async function loadSellerOffers() {
         <div>
 
 
-            <a href="product.html?id=${offer.product_id}" style="text-decoration: none; color: white; display: block;">
-               <div class="offer-card" style="display: flex; align-items: center; gap: 12px; padding: 10px; border-bottom: 1px solid #333;">
-                   <img
-                       src="${Array.isArray(product?.image_url) ? product.image_url[0] : (product?.image_url || 'images/default.png')}"
-                       style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; display: block;"
-                   >
-                   <div style="flex: 1;">
-                       <h3 style="margin: 0 0 5px 0;">${product?.brand || ""} ${product?.model || ""}</h3>
-                       <p style="margin: 0; color: #aaa;">Oferta ime: <strong>€${offer.amount}</strong></p>
-                       <span style="font-size: 12px; color: #ff9800;">Statusi: ${offer.status}</span>
-                   </div>
+            <a href="product.html?id=${offer.product_id}" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 12px; width: 100%;">
+
+                <!-- Imazhi -->
+                <img
+                   src="${Array.isArray(product?.image_url)
+                       ? product.image_url[0]
+                       : (product?.image_url || 'images/default.png')}"
+                   style="
+                      width: 100px;
+                      height: 100px;
+                      min-width: 100px;
+                      min-height: 100px;
+                      object-fit: cover;
+                      border-radius: 8px;
+                      display: block;
+                   ">
+
+               <!-- Teksti / Titulli -->
+               <div style="flex: 1;">
+                   <h3 style="margin: 0;">
+                       ${product?.brand || ""} ${product?.model || ""}
+                  </h3>
                </div>
+
            </a>
-
-                <h3>
-                ${product?.brand || ""}
-                ${product?.model || ""}
-                </h3>
-
-
-            </a>
-
-
 
             <p>
             <b>Çmimi:</b>

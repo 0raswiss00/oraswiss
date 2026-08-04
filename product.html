@@ -163,14 +163,14 @@
             gap: 18px;
             align-items: center;
             overflow-x: auto;
-            padding: 14px 16px;
+            padding: 6px 12px;
         }
 
         .nav-scroll a {
             color: #fff;
             text-decoration: none;
-            padding: 6px 10px;
-            white-space: nowrap;
+            padding: 4px 8px;
+            font-size: 14px;
         }
 
         .nav-scroll a:hover {
@@ -178,9 +178,10 @@
         }
 
         .site-title {
-            font-weight:700;
-            line-height:1.05;
-            margin-right:10px;
+            font-weight: 700;
+            line-height: 1;
+            margin-right: 10px;
+            font-size: 14px;
         }
 
 
@@ -189,14 +190,17 @@
             bottom: 20px !important;
             left: 15px !important;
             right: 15px !important;
-            height:65px !important;
-            background:#1a1a1a !important;
-            display:flex !important;
-            justify-content:space-around !important;
-            align-items:center !important;
-            border-radius:20px !important;
-            border:1px solid #333 !important;
-            z-index:999999 !important;
+            width: auto !important;
+            height: 55px !important;
+            background-color: #1a1a1a !important;
+            display: flex !important;
+            justify-content: space-around !important;
+            align-items: center !important;
+            padding: 0 5px !important;
+            border-radius: 20px !important;
+            border: 1px solid #333 !important;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
+            z-index: 999999 !important;
         }
 
         .bottom-nav a,
@@ -211,7 +215,18 @@
             flex-direction:column;
             align-items:center;
         }
-    </style>    
+
+        .bottom-nav {
+             transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .bottom-nav.nav-hidden {
+            transform: translateY(120px);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .bottom-nav a:hover { color: gold !important; }
+    </style>     
 </head>
 <body>
 <header class="site-header">

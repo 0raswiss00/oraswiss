@@ -229,12 +229,22 @@
         margin: 10px;
     }
 
-    .menu-icon {
-        height: 1em;      /* E bën lartësinë fiks sa teksti */
-        width: auto;      /* ruan proporcionet e fotos */
-        vertical-align: middle; /* e vendos në mes të rreshtit */
-        margin-right: 5px; /* pak hapësirë nga teksti 'Parts' */
-        border-radius: 4px; /* (Opcionale) i jep pak kthesa qosheve */
+    .parts-link{
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .parts-link span{
+        font-size: 11px; /* shkronjat më të vogla */
+    }
+
+    .menu-icon{
+        width: 20px;      /* foto pak më e madhe */
+        height: 20px;
+        object-fit: cover;
+        border-radius: 4px;
+        display: block;
     }
     
   </style>     
@@ -255,8 +265,9 @@
     <button id="btnSellNow" style="display: none;" onclick="trajtoKlikiminSellNow()">Sell a watch</button>
     <a href="luxury.html">Luxury</a>
     <a href="vintage.html">Vintage</a>
-    <a href="parts.html">
-       <img src="movement-part.jpg" class="menu-icon" alt=""> Parts
+    <a href="parts.html" class="parts-link">
+    <img src="movement-part.jpg" class="menu-icon" alt="">
+        <span>Parts</span>
     </a>
     <a href="product-bracelets-straps.html">Bracelet/Strap</a>
     <a href="service.html">Service</a>

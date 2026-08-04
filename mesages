@@ -45,11 +45,16 @@ body{
     font-size:16px;
     color:#000;
 }
-.buyer-name{
+.buyer-link{
     font-size: 13px;
     font-weight: bold;
     color: #007bff;
+    text-decoration: underline;
     margin-top: 3px;
+    display: inline-block;
+}
+.buyer-link:hover {
+    color: #0056b3;
 }
 .price{
     color:#009900;
@@ -103,7 +108,6 @@ async function loadConversations() {
         return;
     }
 
-    // 1. Marrim bisedat pa lidhje të detyruar me tabelat e tjera (shmang çdo gabim PGRST200)
     const { data: convs, error } = await supabase
         .from("conversations")
         .select("*")
@@ -129,7 +133,6 @@ async function loadConversations() {
         let watchTitle = "Bisedë";
         let watchPrice = 0;
 
-        // 2. Tërheqim të dhënat e orës veçmas nëse biseda ka listing_id
         if (conv.listing_id) {
             const { data: watch } = await supabase
                 .from("oras")
@@ -145,20 +148,27 @@ async function loadConversations() {
             }
         }
 
-        // 3. Gjejmë emrin e personit tjetër (blerësit/shitësit)
         let otherUserId = (conv.buyer_id === user.id) ? conv.seller_id : (conv.user_one === user.id ? conv.user_two : conv.buyer_id);
         let buyerName = "Përdorues";
 
         if (otherUserId) {
             const { data: profile } = await supabase
                 .from("profiles")
-                .select("full_name, username")
+                .select("full_name, username, id")
                 .eq("id", otherUserId)
                 .single();
             if (profile) {
                 buyerName = profile.full_name || profile.username || "Përdorues";
             }
         }
+
+        // Llogarit numrin e mesazheve të palexuara për këtë bisedë
+        const { count: unreadCount } = await supabase
+            .from("messages")
+            .select("*", { count: "exact", head: true })
+            .eq("conversation_id", conv.id)
+            .eq("is_read", false)
+            .neq("sender_id", user.id);
 
         let lastMsgText = conv.last_message || "Kliko për të parë mesazhin...";
         if(lastMsgText.includes("message-images") || lastMsgText.match(/\.(jpeg|jpg|png|gif)$/i)){
@@ -167,16 +177,23 @@ async function loadConversations() {
 
         const div = document.createElement("div");
         div.className = "chat";
-        div.onclick = () => window.location.href = `chat.html?conversation=${conv.id}`;
+        
+        div.onclick = () => {
+            window.location.href = `chat.html?conversation=${conv.id}`;
+        };
+
+        // Krijimi i badge-it të kuq nëse ka mesazhe të palexuara
+        let badgeHTML = unreadCount > 0 ? `<div style="background:#ff3b30; color:#fff; border-radius:50%; padding:2px 8px; font-size:11px; font-weight:bold; position:absolute; top:12px; right:12px; min-width:18px; text-align:center;">${unreadCount}</div>` : "";
 
         div.innerHTML = `
             ${watchImg ? `<img src="${watchImg}">` : `<div style="width:80px; height:80px; background:#ddd; border-radius:12px; display:flex; align-items:center; justify-content:center;">⌚</div>`}
             <div class="chat-info">
                 <div class="brand">${watchTitle}</div>
-                <div class="buyer-name">👤 Blerësi: ${buyerName}</div>
+                <div>👤 Blerësi: <a href="profile.html?id=${otherUserId}" class="buyer-link" onclick="event.stopPropagation()">${buyerName}</a></div>
                 <div class="price">${watchPrice} €</div>
                 <div class="last-message">💬 "${lastMsgText}"</div>
             </div>
+            ${badgeHTML}
         `;
         chatList.appendChild(div);
     }

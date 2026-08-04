@@ -281,6 +281,9 @@
                             }
                         );
                         const result = await response.json();
+
+                        console.log("PAYPAL RESULT:", result);
+                        console.log("STATUS:", response.status);
                         if (result.paypal_link) {
                             window.location.href = result.paypal_link;
                         } else {

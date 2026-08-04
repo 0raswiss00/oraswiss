@@ -134,15 +134,36 @@ async function loadConversations() {
         let watchPrice = 0;
 
         if (conv.listing_id) {
-            const { data: watch } = await supabase
+
+            let watch = null;
+
+            // Së pari kërko te oras
+            const { data: oraProduct } = await supabase
                 .from("oras")
                 .select("brand, model, price, image_url")
                 .eq("id", conv.listing_id)
                 .single();
 
+            if (oraProduct) {
+                watch = oraProduct;
+            } else {
+
+                // Nëse nuk gjendet, kërko te bracelets_straps
+                const { data: braceletProduct } = await supabase
+                    .from("bracelets_straps")
+                    .select("brand, model, price, image_url")
+                    .eq("id", conv.listing_id)
+                    .single();
+
+                if (braceletProduct) {
+                    watch = braceletProduct;
+                }
+            }
+
             if (watch) {
                 let imgArr = watch.image_url;
                 watchImg = Array.isArray(imgArr) ? imgArr[0] : imgArr;
+
                 watchTitle = `${watch.brand || ""} ${watch.model || ""}`.trim();
                 watchPrice = watch.price || 0;
             }

@@ -128,8 +128,18 @@
             align-items: center !important;
             gap: 3px !important;
         }
+        .bottom-nav {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .bottom-nav.nav-hidden {
+            transform: translateY(120px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
         .bottom-nav a:hover { color: gold !important; }
-    </style>
+     </style>   
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
     <script src="db-connect.js"></script>
     <script src="menu.js" defer></script>

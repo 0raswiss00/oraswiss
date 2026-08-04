@@ -200,6 +200,8 @@
                 .eq('id', itemId)
                 .single();
 
+         window.currentSellerId = data.user_id;
+
             if (error || !data) {
                 container.innerHTML = "<h2 style='color:red; text-align:center;'>Produkti nuk u gjet ose ndodhi një gabim!</h2>";
                 return;

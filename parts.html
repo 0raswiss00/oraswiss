@@ -146,7 +146,22 @@
            pointer-events: none;
         }
         .bottom-nav a:hover { color: gold !important; }
-    </style>
+
+        .back-btn {
+            background: #111;
+            color: #fff;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 0 15px;
+        }
+
+        .back-btn:hover {
+            background: #222;
+        }
+    </style>    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
     <script src="db-connect.js"></script>
     <!-- Skripta e menusë për të shmangur gabimin në butonin Menu -->
@@ -157,6 +172,7 @@
 <header class="site-header">
     <nav class="nav-scroll">
         <span class="site-title">ORA<br>SWISS</span>
+        <button onclick="history.back()" class="back-btn">← Back</button>
         <a href="index.html">Home</a>
         <a href="luxury.html">Luxury</a>
         <a href="vintage.html">Vintage</a>

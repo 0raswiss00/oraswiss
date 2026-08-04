@@ -205,6 +205,8 @@
                 return;
             }
 
+            window.currentSellerId = data.user_id;
+
             let rawImages = data.image_url;
             if (typeof rawImages === 'string') {
                 try { rawImages = JSON.parse(rawImages); } catch(e) { rawImages = [rawImages]; }

@@ -288,6 +288,23 @@
     <a href="sellnow.html">Sell</a>
     <button type="button" onclick="checkMenu(event)">Menu</button>
 </nav>
+<script>
+let lastScrollTop = 0;
+const nav = document.querySelector(".bottom-nav");
 
+window.addEventListener("scroll", () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (scrollTop > lastScrollTop && scrollTop > 50) {
+        // Kur zbret poshtë
+        nav.classList.add("nav-hidden");
+    } else {
+        // Kur ngjitet lart
+        nav.classList.remove("nav-hidden");
+    }
+
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+});
+</script>
 </body>
 </html>

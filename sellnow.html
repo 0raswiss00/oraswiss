@@ -1303,30 +1303,27 @@ window.location.href =
 
 
 
- document.getElementById("category").addEventListener("change", function(){
+ function updateCategoryFields() {
+     const category = document.getElementById("category").value;
 
-      let category = this.value;
+     document.getElementById("case_size_box").style.display = "none";
+     document.getElementById("movement_size_box").style.display = "none";
+     document.getElementById("watch_fields").style.display = "none";
 
-      document.getElementById("case_size_box").style.display = "none";
-      document.getElementById("movement_size_box").style.display = "none";
-      document.getElementById("watch_fields").style.display = "none";
+     if (category === "luxury" || category === "vintage") {
+        document.getElementById("case_size_box").style.display = "block";
+        document.getElementById("watch_fields").style.display = "block";
+     }
 
+     if (category === "parts") {
+        document.getElementById("movement_size_box").style.display = "block";
+     }
+ }
 
-      if(category === "luxury" || category === "vintage"){
+ document.getElementById("category").addEventListener("change", updateCategoryFields);
 
-          document.getElementById("case_size_box").style.display = "block";
-          document.getElementById("watch_fields").style.display = "block";
-
-      }
-
-
-      if(category === "parts"){
-
-          document.getElementById("movement_size_box").style.display = "block";
-
-      }
-
-  });
+ // E ekzekuton sapo hapet faqja
+ updateCategoryFields();
 
 
 

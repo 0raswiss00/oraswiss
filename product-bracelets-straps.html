@@ -247,9 +247,15 @@
                         <div class="photo-counter" id="photo-count">1 / ${currentImages.length}</div>
                     </div>
                     
-                    <h2 style="margin-top: 15px;">${data.brand || 'Bracelet / Strap'} ${data.model || ''}</h2>
+                    <h2 style="margin-top: 15px;">
+                        ${data.brand || 'Bracelet / Strap'}
+                    </h2>
 
-                    <div class="price" style="font-weight:bold; color:gold; font-size: 22px; margin: 10px 0;">
+                    <h3 style="margin: 5px 0 10px; font-size: 18px; font-weight: 500; color: #ddd;">
+                        ${data.model || '/'}
+                    </h3>
+
+                    <div class="price" style="font-weight:bold; color:gold; font-size:22px; margin:10px 0;">
                         ${data.price ? data.price + ' €' : 'Contact for price'}
                     </div>
 

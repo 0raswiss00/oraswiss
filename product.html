@@ -589,7 +589,6 @@ async function loadProduct() {
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({
                                 product_id: productId,
-                                table: category === "bracelets_straps" ? "bracelets_straps" : "oras",
                                 price: data.price,
                                 product_name: data.model
                             })

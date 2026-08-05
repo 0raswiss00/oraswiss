@@ -493,60 +493,39 @@ placeholder="Example: 28800 vph">
 
 
 
-<div class="checkbox-row">
-
-
-
-<label>Service Status:
-
-    <select id="serviceStatus">
-
-        <option value="">Not Serviced / Unknown</option>
-
-        <option value="Completed">Service Completed</option>
-
-        <option value="Not Serviced">Not Serviced</option>
-
-    </select>
-
-</label>
 
 
 
 
+<div class="checkbox-row" style="display:flex; flex-direction:column; gap:12px;">
 
-<label>
-
-<input id="service_date" type="date">
-
-Service Date
-
-</label>
-
-
-
-    
-
-<label>Box & Papers Status</label>
-
-<select id="box_papers">
-
-    <option value="Box / Papers">Box / Papers</option>
-
-    <option value="Box only">Box only</option>
-
-    <option value="Papers only">Papers only</option>
-
-    <option value="None">None</option>
-
-</select>
+    <label style="display:flex; flex-direction:column; gap:5px;">
+        Service Status:
+        <select id="serviceStatus" style="width:100%; padding:8px; border-radius:6px;">
+            <option value="">Not Serviced / Unknown</option>
+            <option value="Completed">Service Completed</option>
+            <option value="Not Serviced">Not Serviced</option>
+        </select>
+    </label>
 
 
+    <label style="display:flex; flex-direction:column; gap:5px;">
+        Service Date:
+        <input id="service_date" type="date" style="width:100%; padding:8px; border-radius:6px;">
+    </label>
 
 
+    <label style="display:flex; flex-direction:column; gap:5px;">
+        Box & Papers Status:
+        <select id="box_papers" style="width:100%; padding:8px; border-radius:6px;">
+            <option value="Box / Papers">Box / Papers</option>
+            <option value="Box only">Box only</option>
+            <option value="Papers only">Papers only</option>
+            <option value="None">None</option>
+        </select>
+    </label>
 
 </div>
-
 
 
 

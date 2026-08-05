@@ -587,58 +587,36 @@ Service Date
 
 
 
+<div id="watch_fields" style="display:none;">
+
 <label>Bracelet</label>
-
-
 
 <select id="bracelet">
 
-
-
 <option>Leather</option>
-
 <option>Nato</option>
-
 <option>Rubber</option>
-
 <option>Bracelet</option>
-
 <option>No Bracelet No Leather</option>
-
-
 
 </select>
 
 
+<label>Glass</label>
 
+<select id="glass">
 
+<option value="">Select Glass</option>
+<option value="Sapphire">Sapphire</option>
+<option value="Mineral">Mineral</option>
+<option value="Acrylic / Hesalite">Acrylic / Hesalite</option>
+<option value="Hardlex">Hardlex</option>
+<option value="K1 Mineral">K1 Mineral</option>
+<option value="No Glass">No Glass</option>
 
+</select>
 
-
-<label>
-
-    Glass
-
-    <select id="glass">
-
-        <option value="">Select Glass</option>
-
-        <option value="Sapphire">Sapphire</option>
-
-        <option value="Mineral">Mineral</option>
-
-        <option value="Acrylic / Hesalite">Acrylic / Hesalite</option>
-
-        <option value="Hardlex">Hardlex</option>
-
-        <option value="K1 Mineral">K1 Mineral</option>
-
-        <option value="No Glass">No Glass</option>
-
-    </select>
-
-</label>
-
+</div>
 
 
 
@@ -1331,26 +1309,28 @@ window.location.href =
 
  document.getElementById("category").addEventListener("change", function(){
 
-    let category = this.value;
+      let category = this.value;
 
-    // Fshihi të dyja
-    document.getElementById("case_size_box").style.display = "none";
-    document.getElementById("movement_size_box").style.display = "none";
-
-
-    // Luxury dhe Vintage = Orë
-    if(category === "luxury" || category === "vintage"){
-        document.getElementById("case_size_box").style.display = "block";
-    }
+      document.getElementById("case_size_box").style.display = "none";
+      document.getElementById("movement_size_box").style.display = "none";
+      document.getElementById("watch_fields").style.display = "none";
 
 
-    // Parts = Movement
-    if(category === "parts"){
-        document.getElementById("movement_size_box").style.display = "block";
-    }
+      if(category === "luxury" || category === "vintage"){
 
-});   
+          document.getElementById("case_size_box").style.display = "block";
+          document.getElementById("watch_fields").style.display = "block";
 
+      }
+
+
+      if(category === "parts"){
+
+          document.getElementById("movement_size_box").style.display = "block";
+
+      }
+
+  });
 
 
 

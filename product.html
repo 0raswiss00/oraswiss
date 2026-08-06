@@ -552,6 +552,7 @@ async function loadProduct() {
             }
 
 
+            const isPart = data.category === "parts";
             specsContainer.innerHTML = `
                 ${specRow("Reference", data.reference)}
                 ${specRow("Serial Number", maskedSerial)}
@@ -567,7 +568,7 @@ async function loadProduct() {
                 ${specRow("Service Date", data.service_date)}
                 ${specRow("Origin", data.origin)}
                 ${specRow("Work Status", data.work_status)}
-                ${specRow("Bracelet", data.bracelet)}
+                ${data.category === "parts" ? "" : specRow("Bracelet", data.bracelet)}
                 ${specRow("Glass", data.glass)}
                 ${specRow("Warranty", data.warranty)}
                 ${specRow("Warranty Months", data.warranty_months)}

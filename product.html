@@ -368,6 +368,9 @@ async function loadProduct() {
 
         if (error) throw error;
 
+        console.log(data.category);
+        console.log(data);
+        
         const sellerUserId = data.user_id;
 
         let sellerName = data.seller_name || "Seller";

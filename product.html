@@ -539,21 +539,44 @@ async function loadProduct() {
         } else {
 
             const serial = data.serial_number || "";
-            const maskedSerial = serial.length > 3 
-                ? serial.substring(0, 3) + 'X'.repeat(serial.length - 3) 
-                : (serial || "");
-
+            const maskedSerial =
+                serial.length > 3
+                    ? serial.substring(0, 3) + "X".repeat(serial.length - 3)
+                    : serial;
 
             function specRow(label, value) {
-                if (!value || value === "" || value === "N/A" || value === "-") return "";
-                return `
-                    <div class="info-row">
-                        <span>${label}</span>
-                        <span>${value}</span>
-                    </div>
-                `;
-            }
+                if (value === null || value === undefined) return "";
+                if (String(value).trim() === "") return "";
+                if (value === "N/A" || value === "-") return "";
 
+                return `
+                   <div class="info-row">
+                       <span>${label}</span>
+                       <span>${value}</span>
+                   </div>
+               `;
+           }
+
+           specsContainer.innerHTML = `
+                ${data.category === "parts" ? specRow("Reference", data.reference) : ""}
+                ${data.category === "parts" ? specRow("Serial Number", maskedSerial) : ""}
+                ${specRow("Movement", data.movement)}
+                ${specRow("Caliber", data.caliber)}
+                ${specRow("Frequency", data.frekuen)}
+                ${specRow("Material", data.material)}
+                ${specRow("Case Size", data.case_size)}
+                ${specRow("Movement Size", data.movement_size)}
+                ${specRow("Year", data.year)}
+                ${specRow("Function", data.function)}
+                ${specRow("Service", data.service ? "Yes (Serviced)" : "")}
+                ${specRow("Service Date", data.service_date)}
+                ${specRow("Origin", data.origin)}
+                ${specRow("Work Status", data.work_status)}
+                ${data.category === "parts" ? "" : specRow("Bracelet", data.bracelet)}
+                ${specRow("Glass", data.glass)}
+                ${specRow("Warranty", data.warranty)}
+                ${specRow("Warranty Months", data.warranty_months)}
+            `;
 
             const isPart = data.category === "parts";
             specsContainer.innerHTML = `

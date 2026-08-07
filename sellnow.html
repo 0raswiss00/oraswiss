@@ -320,7 +320,48 @@ Continue to Bracelets / Straps
 <input id="material" type="text" placeholder="Steel, Gold, Titanium...">
 
 
+<label>Gender</label>
+<select id="gender">
+    <option value="">Select Gender</option>
+    <option>Men</option>
+    <option>Women</option>
+    <option>Boys</option>
+    <option>Girls</option>
+    <option>Unisex</option>
+</select>
 
+<label>Dial Color</label>
+<select id="dial_color">
+    <option value="">Select Dial Color</option>
+    <option>Black</option>
+    <option>White</option>
+    <option>Silver</option>
+    <option>Blue</option>
+    <option>Green</option>
+    <option>Red</option>
+    <option>Brown</option>
+    <option>Grey</option>
+    <option>Gold</option>
+    <option>Rose Gold</option>
+    <option>Champagne</option>
+    <option>Beige</option>
+    <option>Cream</option>
+    <option>Yellow</option>
+    <option>Orange</option>
+    <option>Purple</option>
+    <option>Pink</option>
+    <option>Turquoise</option>
+    <option>Ice Blue</option>
+    <option>Skeleton</option>
+    <option>Mother of Pearl</option>
+    <option>Meteorite</option>
+    <option>Salmon</option>
+    <option>Other</option>
+</select>
+
+<label>Net Weight (g)</label>
+<input id="net_weight" type="number" step="0.01"
+placeholder="Net weight of the item only, without packaging" required>
     
 
 <label>Net Weight (g)</label>
@@ -1119,6 +1160,11 @@ const oraData = {
     caliber: document.getElementById("caliber").value,
 
 
+
+    gender: document.getElementById("gender").value,
+    dial_color: document.getElementById("dial_color").value,
+
+    
 
     frekuen: document.getElementById("frekuen").value,
 

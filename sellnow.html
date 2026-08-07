@@ -564,6 +564,56 @@ placeholder="Example: 28800 vph">
 
 
 
+<label style="display:flex; flex-direction:column; gap:5px;">
+    Crown
+    <select id="crown" style="width:100%; padding:8px; border-radius:6px;">
+        <option value="">Select Crown</option>
+        <option>Original</option>
+        <option>Not Original</option>
+    </select>
+</label>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+    <label style="display:flex; flex-direction:column; gap:5px;">
+    Jewels
+    <select id="jewels" style="width:100%; padding:8px; border-radius:6px;">
+        <option value="">Select Jewels</option>
+        <option>7 Jewels</option>
+        <option>15 Jewels</option>
+        <option>17 Jewels</option>
+        <option>21 Jewels</option>
+        <option>23 Jewels</option>
+        <option>25 Jewels</option>
+        <option>27 Jewels</option>
+        <option>31 Jewels</option>
+        <option>33 Jewels</option>
+        <option>35 Jewels</option>
+        <option>Other</option>
+    </select>
+</label>
+
+
+
+
+
+
+
+
+
+
+    
 <div class="checkbox-row" style="display:flex; flex-direction:column; gap:12px;">
 
     <label style="display:flex; flex-direction:column; gap:5px;">
@@ -1218,8 +1268,21 @@ const oraData = {
 
 
 
-    // Kthen true nëse është "Completed", përndryshe false (për shkak të tipit boolean në Supabase)
 
+
+    crown: document.getElementById("crown").value,
+
+
+
+
+
+    jewels: document.getElementById("jewels").value,
+    base_plate: document.getElementById("base_plate").value,
+
+
+  
+
+    // Kthen true nëse është "Completed", përndryshe false (për shkak të tipit boolean në Supabase)
     service: document.getElementById("serviceStatus")?.value === "Completed",
 
 

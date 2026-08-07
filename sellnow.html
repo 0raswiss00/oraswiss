@@ -471,6 +471,26 @@ placeholder="Example: 28800 vph">
 
 
 
+<label>Water Resistance</label>
+
+<select id="water_resistance">
+    <option value="">Select Water Resistance</option>
+    <option>Not Water Resistant</option>
+    <option>30 m (3 ATM)</option>
+    <option>50 m (5 ATM)</option>
+    <option>100 m (10 ATM)</option>
+    <option>150 m (15 ATM)</option>
+    <option>200 m (20 ATM)</option>
+    <option>300 m (30 ATM)</option>
+    <option>500 m (50 ATM)</option>
+    <option>1000 m (100 ATM)</option>
+    <option>Other</option>
+</select>
+
+
+
+    
+
 <label>Year</label>
 
 
@@ -1182,6 +1202,10 @@ const oraData = {
 
 
 
+    water_resistance: document.getElementById("water_resistance").value,
+
+
+    
     year: parseInt(document.getElementById("year").value) || null,
 
 

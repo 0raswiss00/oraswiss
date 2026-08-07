@@ -557,37 +557,36 @@ async function loadProduct() {
                `;
            }
 
+           const isPart = data.category === "parts";
+
            specsContainer.innerHTML = `
-                ${data.category === "parts" ? specRow("Reference", data.reference) : ""}
-                ${data.category === "parts" ? specRow("Serial Number", maskedSerial) : ""}
-                ${specRow("Movement", data.movement)}
-                ${specRow("Caliber", data.caliber)}
-                ${specRow("Gender", data.gender)}
-                ${specRow("Dial Color", data.dial_color)}
-                ${specRow("Frequency", data.frekuen)}
-                ${specRow("Material", data.material)}
-                ${specRow("Material", data.material)}
-                ${specRow("Net Weight", data.net_weight ? data.net_weight + " g" : "")}
-                ${specRow("Case Size", data.case_size)}
-                ${specRow("Case Size", data.case_size)}
-                ${specRow("Movement Size", data.movement_size)}
-                ${specRow("Water Resistance", data.water_resistance)}
-                ${specRow("Year", data.year)}
-                ${specRow("Function", data.function)}
-                ${specRow("Crown", data.crown)}
-                ${specRow("Jewels", data.jewels)}
-                ${specRow("Service", data.service ? "Yes (Serviced)" : "")}
-                ${specRow("Service Date", data.service_date)}
-                ${specRow("Origin", data.origin)}
-                ${specRow("Work Status", data.work_status)}
-                ${data.category === "parts" ? "" : specRow("Bracelet", data.bracelet)}
-                ${specRow("Glass", data.glass)}
-                ${specRow("Warranty", data.warranty)}
-                ${specRow("Warranty Months", data.warranty_months)}
-            `;
-
+               ${specRow("Reference", data.reference)}
+               ${specRow("Serial Number", maskedSerial)}
+               ${specRow("Movement", data.movement)}
+               ${specRow("Caliber", data.caliber)}
+               ${specRow("Gender", data.gender)}
+               ${specRow("Dial Color", data.dial_color)}
+               ${specRow("Frequency", data.frekuen)}
+               ${specRow("Material", data.material)}
+               ${specRow("Net Weight", data.net_weight ? data.net_weight + " g" : "")}
+               ${specRow("Case Size", data.case_size)}
+               ${specRow("Movement Size", data.movement_size)}
+               ${specRow("Water Resistance", data.water_resistance)}
+               ${specRow("Year", data.year)}
+               ${specRow("Function", data.function)}
+               ${specRow("Crown", data.crown)}
+               ${specRow("Jewels", data.jewels)}
+               ${specRow("Service", data.service ? "Yes (Serviced)" : "")}
+               ${specRow("Service Date", data.service_date)}
+               ${specRow("Origin", data.origin)}
+               ${specRow("Work Status", data.work_status)}
+               ${specRow("Bracelet", data.bracelet)}
+               ${specRow("Glass", data.glass)}
+               ${specRow("Warranty", data.warranty)}
+               ${specRow("Warranty Months", data.warranty_months)}
+          `;
+            
            
-
         document.getElementById("description").innerText = data.description || "N/A";
 
         const buyBtn = document.getElementById("buy");

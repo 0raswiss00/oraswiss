@@ -580,13 +580,13 @@ async function loadProduct() {
                ${specRow("Service Date", data.service_date)}
                ${specRow("Origin", data.origin)}
                ${specRow("Work Status", data.work_status)}
-               ${specRow("Bracelet", data.bracelet)}
+               ${isPart ? "" : specRow("Bracelet", data.bracelet)}
                ${specRow("Glass", data.glass)}
                ${specRow("Warranty", data.warranty)}
                ${specRow("Warranty Months", data.warranty_months)}
-          `;
-            
-           
+          `;       
+        }   
+
         document.getElementById("description").innerText = data.description || "N/A";
 
         const buyBtn = document.getElementById("buy");

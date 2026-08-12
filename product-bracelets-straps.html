@@ -1397,47 +1397,25 @@ function checkMenu(event) {
 
 let lastScrollTop = 0;
 
-const nav =
-    document.querySelector(
-        ".bottom-nav"
-    );
+const nav = document.querySelector(".bottom-nav");
 
-
-window.addEventListener(
-    "scroll",
-    () => {
+if (nav) {
+    window.addEventListener("scroll", () => {
 
         const scrollTop =
             window.pageYOffset ||
             document.documentElement.scrollTop;
 
-
-        if (
-            scrollTop >
-                lastScrollTop &&
-            scrollTop > 50
-        ) {
-
-            nav.classList.add(
-                "nav-hidden"
-            );
-
+        if (scrollTop > lastScrollTop && scrollTop > 50) {
+            nav.classList.add("nav-hidden");
         } else {
-
-            nav.classList.remove(
-                "nav-hidden"
-            );
-
+            nav.classList.remove("nav-hidden");
         }
 
-
         lastScrollTop =
-            scrollTop <= 0
-                ? 0
-                : scrollTop;
-
-    }
-);
+            scrollTop <= 0 ? 0 : scrollTop;
+    });
+}
 
 </script>
 

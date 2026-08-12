@@ -461,10 +461,10 @@
         document.getElementById("offer-error").textContent = "";
     }
 
-    async function submitOffer() {
+        async function submitOffer() {
         const priceInput = document.getElementById("offer-price-input").value;
         const errorEl = document.getElementById("offer-error");
-        
+    
         if (!priceInput || parseFloat(priceInput) <= 0) {
             errorEl.textContent = "Ju lutem vendosni një çmim të vlefshëm.";
             return;
@@ -473,14 +473,14 @@
         errorEl.textContent = "Duke dërguar ofertën...";
 
         const { data: { user }, error: userError } = await window.supabaseClient.auth.getUser();
-        if (userError || !user) {
+         if (userError || !user) {
             closeOfferModal();
             alert("Duhet të jeni i loguar!");
             return;
         }
 
         try {
-            // Kontrollo nëse ekziston një bisedë (conversation) për këtë produkt mes blerësit dhe shitësit
+            // 1. Check if a conversation already exists for this listing between buyer and seller
             const { data: existingChat } = await window.supabaseClient
                 .from("conversations")
                 .select("id")
@@ -509,6 +509,8 @@
             }
 
             const offerMessage = `💰 Oferta ime për këtë produkt është: ${priceInput} €`;
+        
+            // 2. Insert into messages table
             const { error: msgError } = await window.supabaseClient
                 .from("messages")
                 .insert({
@@ -519,17 +521,30 @@
 
             if (msgError) throw msgError;
 
+            // 3. Optional: If you use a separate "offers" table to track user offers globally under "My Offers", insert it here too:
+            /*
+            await window.supabaseClient.from("offers").insert({
+                product_id: productId,
+                buyer_id: user.id,
+                seller_id: window.currentSellerId,
+                offered_price: parseFloat(priceInput),
+                status: 'pending'
+            });
+            */
+
             await window.supabaseClient
                 .from("conversations")
                 .update({ last_message: offerMessage })
                 .eq("id", conversationId);
 
+            // Redirect to messages or your offers page seamlessly
             window.location.href = "messages.html?conversation=" + conversationId;
 
         } catch (err) {
             console.error(err);
             errorEl.textContent = "Gabim gjatë dërgimit: " + err.message;
         }
+    }
     }
 
     function changeImage(direction) {

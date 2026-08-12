@@ -92,7 +92,6 @@
         }
         .btn-request:hover { background: #333; }
 
-        /* Stilimi i detajeve të produktit në dy kolona */
         .specs-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -104,12 +103,38 @@
             border: 1px solid #333;
             font-size: 14px;
         }
-        .specs-grid div {
-            color: #aaa;
+        .specs-grid div { color: #aaa; }
+        .specs-grid span { color: #fff; font-weight: bold; }
+
+        /* Modal për Suggest Price */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 99999;
+            align-items: center;
+            justify-content: center;
         }
-        .specs-grid span {
+        .modal-content {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid #444;
+            text-align: center;
+        }
+        .modal-content input {
+            width: 80%;
+            padding: 10px;
+            margin: 15px 0;
+            background: #111;
+            border: 1px solid #555;
             color: #fff;
-            font-weight: bold;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
         }
 
         .bottom-nav {
@@ -146,32 +171,17 @@
             gap: 3px !important;
         }
 
-        .bottom-nav {
-             transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-
-        .bottom-nav.nav-hidden {
-            transform: translateY(120px);
-            opacity: 0;
-            pointer-events: none;
-        }
+        .bottom-nav { transition: transform 0.3s ease, opacity 0.3s ease; }
+        .bottom-nav.nav-hidden { transform: translateY(120px); opacity: 0; pointer-events: none; }
         .bottom-nav a:hover { color: gold !important; }
 
         .back-btn {
-            background: #111;
-            color: #fff;
-            border: 1px solid #333;
-            border-radius: 6px;
-            padding: 6px 9px;
-            font-size: 10px;
-            cursor: pointer;
-            margin: 0 13px;
+            background: #111; color: #fff; border: 1px solid #333;
+            border-radius: 6px; padding: 6px 9px; font-size: 10px; cursor: pointer; margin: 0 13px;
         }
-
-        .back-btn:hover {
-            background: #222;
-        }
-    </style>   
+        .back-btn:hover { background: #222; }
+    </style>
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
     <script src="db-connect.js"></script>
 </head>
@@ -195,9 +205,37 @@
     Loading...
 </div>
 
+<!-- Modal për Suggest Price -->
+<div id="offer-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h3>Propuzo Çmimin Tënd (€)</h3>
+        <p style="color: #aaa; font-size: 13px;">Vendosni çmimin që dëshironi të paguani për këtë produkt:</p>
+        <input type="number" id="offer-price-input" placeholder="p.sh. 45">
+        <div id="offer-error" style="color: #ff5555; font-size: 13px; margin-bottom: 10px;"></div>
+        <div>
+            <button onclick="submitOffer()" class="btn-main btn-buy" style="display: inline-block; width: 45%; padding: 10px;">Dërgo</button>
+            <button onclick="closeOfferModal()" class="btn-main btn-request" style="display: inline-block; width: 45%; padding: 10px; margin-top:0;">Anullo</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Login Prompt (Nëse nuk është i loguar) -->
+<div id="login-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h3>Kërkohet Identifikimi</h3>
+        <p style="color: #aaa; font-size: 13px;">Ju lutem hyni në llogarinë tuaj për të dërguar një ofertë.</p>
+        <div>
+            <button onclick="window.location.href='login.html'" class="btn-main btn-buy" style="display: inline-block; width: 45%; padding: 10px;">Hyr</button>
+            <button onclick="document.getElementById('login-modal').style.display='none'" class="btn-main btn-request" style="display: inline-block; width: 45%; padding: 10px; margin-top:0;">Anullo</button>
+        </div>
+    </div>
+</div>
+
 <script>
     let currentImages = [];
     let currentImgIndex = 0;
+    let currentProductData = null;
+    let productId = null;
 
     document.addEventListener("DOMContentLoaded", async function() {
         if (!window.supabaseClient) {
@@ -206,14 +244,14 @@
         }
 
         const urlParams = new URLSearchParams(window.location.search);
-        const itemId = urlParams.get('id');
+        productId = urlParams.get('id');
         const container = document.getElementById("content-container");
 
-        if (itemId) {
+        if (productId) {
             const { data, error } = await window.supabaseClient
                 .from('bracelets_straps')
                 .select('*')
-                .eq('id', itemId)
+                .eq('id', productId)
                 .single();
 
             if (error || !data) {
@@ -221,6 +259,7 @@
                 return;
             }
 
+            currentProductData = data;
             window.currentSellerId = data.user_id;
 
             let rawImages = data.image_url;
@@ -247,14 +286,8 @@
                         <div class="photo-counter" id="photo-count">1 / ${currentImages.length}</div>
                     </div>
                     
-                    <h2 style="margin-top: 15px;">
-                        ${data.brand || 'Bracelet / Strap'}
-                    </h2>
-
-                    <h3 style="margin: 5px 0 10px; font-size: 18px; font-weight: 500; color: #ddd;">
-                        ${data.model || '/'}
-                    </h3>
-
+                    <h2 style="margin-top: 15px;">${data.brand || 'Bracelet / Strap'}</h2>
+                    <h3 style="margin: 5px 0 10px; font-size: 18px; font-weight: 500; color: #ddd;">${data.model || '/'}</h3>
                     <div class="price" style="font-weight:bold; color:gold; font-size:22px; margin:10px 0;">
                         ${data.price ? data.price + ' €' : 'Contact for price'}
                     </div>
@@ -281,9 +314,15 @@
                     </div>
 
                     <button id="buy-bracelet-btn" class="btn-main btn-buy" style="width:100%;">Buy Now (PayPal)</button>
+                    <button id="suggest-price-btn" class="btn-main btn-buy" style="width:100%; margin-top:10px; background:#2196F3; color:#fff;">Suggest Price</button>
                     <button id="send-request-btn" class="btn-main btn-request" style="width:100%;">Send Request / Inquiry</button>
                 </div>
             `;
+
+            // Ngjarjet e butonave
+            document.getElementById("suggest-price-btn").onclick = function() {
+                document.getElementById("offer-modal").style.display = "flex";
+            };
 
             const buyBtn = document.getElementById("buy-bracelet-btn");
             if (buyBtn) {
@@ -297,25 +336,13 @@
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify({
-                                    product_id: itemId,
+                                    product_id: productId,
                                     price: data.price,
                                     product_name: (data.brand || 'Strap') + ' ' + (data.model || '')
                                 })
                             }
                         );
-                        const text = await response.text();
-
-                        console.log("PAYPAL STATUS:", response.status);
-                        console.log("PAYPAL RESPONSE:", text);
-
-                        let result = {};
-                        try {
-                            result = JSON.parse(text);
-                        } catch(e) {
-                            console.log("Nuk ishte JSON");
-                        }
-
-                       
+                        let result = await response.json();
                         if (result.paypal_link) {
                             window.location.href = result.paypal_link;
                         } else {
@@ -323,7 +350,6 @@
                             buyBtn.innerText = "Buy Now (PayPal)";
                         }
                     } catch(error) {
-                        console.error(error);
                         alert("Gabim me PayPal");
                         buyBtn.innerText = "Buy Now (PayPal)";
                     }
@@ -333,7 +359,7 @@
             const requestBtn = document.getElementById("send-request-btn");
             if (requestBtn) {
                 requestBtn.onclick = function() {
-                    window.location.href = `messages.html?product_id=${itemId}&title=` + encodeURIComponent((data.brand || 'Strap') + ' ' + (data.model || ''));
+                    window.location.href = `messages.html?product_id=${productId}&title=` + encodeURIComponent((data.brand || 'Strap') + ' ' + (data.model || ''));
                 };
             }
 
@@ -381,13 +407,89 @@
                         <button class="btn-main btn-buy" 
                         style="width:100%; padding: 8px; font-size: 13px;"
                         onclick="event.stopPropagation(); window.location.href='product-bracelets-straps.html?id=${item.id}'">
-                         View Details
+                        View Details
                         </button>
                     </div>
                 `;
             }).join('');
         }
     });
+
+    function closeOfferModal() {
+        document.getElementById("offer-modal").style.display = "none";
+        document.getElementById("offer-price-input").value = "";
+        document.getElementById("offer-error").textContent = "";
+    }
+
+    async function submitOffer() {
+        const priceInput = document.getElementById("offer-price-input").value;
+        const errorEl = document.getElementById("offer-error");
+        
+        if (!priceInput || parseFloat(priceInput) <= 0) {
+            errorEl.textContent = "Ju lutem vendosni një çmim të vlefshëm.";
+            return;
+        }
+
+        errorEl.textContent = "Duke dërguar ofertën...";
+
+        const { data: { user }, error: userError } = await window.supabaseClient.auth.getUser();
+        if (userError || !user) {
+            closeOfferModal();
+            document.getElementById("login-modal").style.display = "flex";
+            return;
+        }
+
+        try {
+            const { data: existingChat } = await window.supabaseClient
+                .from("conversations")
+                .select("id")
+                .eq("listing_id", productId)
+                .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
+                .maybeSingle();
+
+            let conversationId;
+
+            if (existingChat) {
+                conversationId = existingChat.id;
+            } else {
+                const { data: newConversation, error: createError } = await window.supabaseClient
+                    .from("conversations")
+                    .insert({
+                        listing_id: productId,
+                        buyer_id: user.id,
+                        seller_id: window.currentSellerId,
+                        last_message: "Ofertë e re"
+                    })
+                    .select()
+                    .single();
+
+                if (createError) throw createError;
+                conversationId = newConversation.id;
+            }
+
+            const offerMessage = `💰 Oferta ime për këtë produkt është: ${priceInput} €`;
+            const { error: msgError } = await window.supabaseClient
+                .from("messages")
+                .insert({
+                    conversation_id: conversationId,
+                    sender_id: user.id,
+                    content: offerMessage
+                });
+
+            if (msgError) throw msgError;
+
+            await window.supabaseClient
+                .from("conversations")
+                .update({ last_message: offerMessage })
+                .eq("id", conversationId);
+
+            window.location.href = "messages.html?conversation=" + conversationId;
+
+        } catch (err) {
+            console.error(err);
+            errorEl.textContent = "Gabim gjatë dërgimit të ofertës: " + err.message;
+        }
+    }
 
     function changeImage(direction) {
         if (currentImages.length <= 1) return;
@@ -401,7 +503,6 @@
 
     function checkMenu(event) {
         if (event) event.preventDefault();
-        // Funksioni i menusë bosh, pa shkrime në console
     }
 </script>
 
@@ -419,15 +520,11 @@ const nav = document.querySelector(".bottom-nav");
 
 window.addEventListener("scroll", () => {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
     if (scrollTop > lastScrollTop && scrollTop > 50) {
-        // Kur zbret poshtë
         nav.classList.add("nav-hidden");
     } else {
-        // Kur ngjitet lart
         nav.classList.remove("nav-hidden");
     }
-
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 });
 </script>

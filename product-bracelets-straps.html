@@ -92,6 +92,7 @@
         }
         .btn-request:hover { background: #333; }
 
+        /* Stilimi i detajeve të produktit në dy kolona */
         .specs-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -103,10 +104,15 @@
             border: 1px solid #333;
             font-size: 14px;
         }
-        .specs-grid div { color: #aaa; }
-        .specs-grid span { color: #fff; font-weight: bold; }
+        .specs-grid div {
+            color: #aaa;
+        }
+        .specs-grid span {
+            color: #fff;
+            font-weight: bold;
+        }
 
-        /* Modal për Suggest Price */
+        /* Modal për Suggest Price & Login */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -171,15 +177,31 @@
             gap: 3px !important;
         }
 
-        .bottom-nav { transition: transform 0.3s ease, opacity 0.3s ease; }
-        .bottom-nav.nav-hidden { transform: translateY(120px); opacity: 0; pointer-events: none; }
+        .bottom-nav {
+             transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .bottom-nav.nav-hidden {
+            transform: translateY(120px);
+            opacity: 0;
+            pointer-events: none;
+        }
         .bottom-nav a:hover { color: gold !important; }
 
         .back-btn {
-            background: #111; color: #fff; border: 1px solid #333;
-            border-radius: 6px; padding: 6px 9px; font-size: 10px; cursor: pointer; margin: 0 13px;
+            background: #111;
+            color: #fff;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 6px 9px;
+            font-size: 10px;
+            cursor: pointer;
+            margin: 0 13px;
         }
-        .back-btn:hover { background: #222; }
+
+        .back-btn:hover {
+            background: #222;
+        }
     </style>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
@@ -234,7 +256,6 @@
 <script>
     let currentImages = [];
     let currentImgIndex = 0;
-    let currentProductData = null;
     let productId = null;
 
     document.addEventListener("DOMContentLoaded", async function() {
@@ -259,7 +280,6 @@
                 return;
             }
 
-            currentProductData = data;
             window.currentSellerId = data.user_id;
 
             let rawImages = data.image_url;
@@ -286,8 +306,14 @@
                         <div class="photo-counter" id="photo-count">1 / ${currentImages.length}</div>
                     </div>
                     
-                    <h2 style="margin-top: 15px;">${data.brand || 'Bracelet / Strap'}</h2>
-                    <h3 style="margin: 5px 0 10px; font-size: 18px; font-weight: 500; color: #ddd;">${data.model || '/'}</h3>
+                    <h2 style="margin-top: 15px;">
+                        ${data.brand || 'Bracelet / Strap'}
+                    </h2>
+
+                    <h3 style="margin: 5px 0 10px; font-size: 18px; font-weight: 500; color: #ddd;">
+                        ${data.model || '/'}
+                    </h3>
+
                     <div class="price" style="font-weight:bold; color:gold; font-size:22px; margin:10px 0;">
                         ${data.price ? data.price + ' €' : 'Contact for price'}
                     </div>
@@ -319,7 +345,7 @@
                 </div>
             `;
 
-            // Ngjarjet e butonave
+            // Lidhemi me butonin Suggest Price
             document.getElementById("suggest-price-btn").onclick = function() {
                 document.getElementById("offer-modal").style.display = "flex";
             };
@@ -342,7 +368,10 @@
                                 })
                             }
                         );
-                        let result = await response.json();
+                        const text = await response.text();
+                        let result = {};
+                        try { result = JSON.parse(text); } catch(e) {}
+
                         if (result.paypal_link) {
                             window.location.href = result.paypal_link;
                         } else {
@@ -350,6 +379,7 @@
                             buyBtn.innerText = "Buy Now (PayPal)";
                         }
                     } catch(error) {
+                        console.error(error);
                         alert("Gabim me PayPal");
                         buyBtn.innerText = "Buy Now (PayPal)";
                     }
@@ -407,7 +437,7 @@
                         <button class="btn-main btn-buy" 
                         style="width:100%; padding: 8px; font-size: 13px;"
                         onclick="event.stopPropagation(); window.location.href='product-bracelets-straps.html?id=${item.id}'">
-                        View Details
+                         View Details
                         </button>
                     </div>
                 `;
@@ -440,6 +470,7 @@
         }
 
         try {
+            // Gjej ose krijo bisedën në Supabase
             const { data: existingChat } = await window.supabaseClient
                 .from("conversations")
                 .select("id")
@@ -487,7 +518,7 @@
 
         } catch (err) {
             console.error(err);
-            errorEl.textContent = "Gabim gjatë dërgimit të ofertës: " + err.message;
+            errorEl.textContent = "Gabim gjatë dërgimit: " + err.message;
         }
     }
 
@@ -520,11 +551,13 @@ const nav = document.querySelector(".bottom-nav");
 
 window.addEventListener("scroll", () => {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
     if (scrollTop > lastScrollTop && scrollTop > 50) {
         nav.classList.add("nav-hidden");
     } else {
         nav.classList.remove("nav-hidden");
     }
+
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 });
 </script>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bracelet & Straps - Ora Swiss</title>
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
     <script>
@@ -12,17 +13,42 @@
         gtag('js', new Date());
         gtag('config', 'G-KD2ZZ3MJYY');
     </script>
+
     <style>
-        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff; padding-bottom: 110px !important; }
-        .site-header { position: sticky; top: 0; z-index: 9999; background: #111; }
-        .nav-scroll { display: flex; gap: 18px; align-items: center; overflow-x: auto; padding: 6px 12px; }
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #000;
+            color: #fff;
+            padding-bottom: 110px !important;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+            background: #111;
+        }
+
+        .nav-scroll {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            overflow-x: auto;
+            padding: 6px 12px;
+        }
+
         .nav-scroll a {
             color: #fff;
             text-decoration: none;
             padding: 4px 8px;
-            font-size: 11px;
+            font-size: 14px;
         }
-        .nav-scroll a:hover { color: gold; }
+
+        .nav-scroll a:hover {
+            color: gold;
+        }
+
         .site-title {
             font-weight: 700;
             line-height: 1;
@@ -59,13 +85,55 @@
             border-radius: 8px;
         }
 
-        /* Galeria e Fotove në Detaje */
-        .gallery-container { position: relative; width: 100%; height: 350px; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .gallery-container img { width: 100%; height: 100%; object-fit: contain; }
-        .gallery-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: 1px solid #444; font-size: 20px; padding: 10px; cursor: pointer; border-radius: 50%; z-index: 10; }
-        .gallery-btn.prev { left: 10px; }
-        .gallery-btn.next { right: 10px; }
-        .photo-counter { position: absolute; bottom: 10px; background: rgba(0,0,0,0.7); padding: 4px 10px; border-radius: 10px; font-size: 12px; }
+        /* Galeria e fotove */
+        .gallery-container {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gallery-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .gallery-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: 1px solid #444;
+            font-size: 20px;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 10;
+        }
+
+        .gallery-btn.prev {
+            left: 10px;
+        }
+
+        .gallery-btn.next {
+            right: 10px;
+        }
+
+        .photo-counter {
+            position: absolute;
+            bottom: 10px;
+            background: rgba(0,0,0,0.7);
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
 
         .btn-main {
             padding: 12px;
@@ -78,11 +146,15 @@
             display: block;
             text-decoration: none;
         }
+
         .btn-buy {
             background: gold;
             color: #000;
         }
-        .btn-buy:hover { background: #e6c200; }
+
+        .btn-buy:hover {
+            background: #e6c200;
+        }
 
         .btn-request {
             background: #222;
@@ -90,9 +162,12 @@
             border: 1px solid #555;
             margin-top: 10px;
         }
-        .btn-request:hover { background: #333; }
 
-        /* Stilimi i detajeve të produktit në dy kolona */
+        .btn-request:hover {
+            background: #333;
+        }
+
+        /* Specs */
         .specs-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -104,45 +179,17 @@
             border: 1px solid #333;
             font-size: 14px;
         }
+
         .specs-grid div {
             color: #aaa;
         }
+
         .specs-grid span {
             color: #fff;
             font-weight: bold;
         }
 
-        /* Modal për Suggest Price & Login */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 99999;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-content {
-            background: #1a1a1a;
-            padding: 20px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 400px;
-            border: 1px solid #444;
-            text-align: center;
-        }
-        .modal-content input {
-            width: 80%;
-            padding: 10px;
-            margin: 15px 0;
-            background: #111;
-            border: 1px solid #555;
-            color: #fff;
-            border-radius: 5px;
-            font-size: 16px;
-            text-align: center;
-        }
-
+        /* Bottom navigation */
         .bottom-nav {
             position: fixed !important;
             bottom: 20px !important;
@@ -159,9 +206,11 @@
             border: 1px solid #333 !important;
             box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
             z-index: 999999 !important;
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
-        .bottom-nav a, .bottom-nav button {
+        .bottom-nav a,
+        .bottom-nav button {
             color: #ffffff !important;
             text-decoration: none !important;
             font-size: 10px !important;
@@ -177,421 +226,1256 @@
             gap: 3px !important;
         }
 
-        .bottom-nav {
-             transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-
         .bottom-nav.nav-hidden {
             transform: translateY(120px);
             opacity: 0;
             pointer-events: none;
         }
-        .bottom-nav a:hover { color: gold !important; }
 
-        .back-btn {
-            background: #111;
-            color: #fff;
-            border: 1px solid #333;
-            border-radius: 6px;
-            padding: 6px 9px;
-            font-size: 10px;
-            cursor: pointer;
-            margin: 0 13px;
+        .bottom-nav a:hover {
+            color: gold !important;
         }
 
-        .back-btn:hover {
-            background: #222;
+        /* =========================
+           SUGGEST PRICE MODAL
+        ========================= */
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 9999999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid #333;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .modal-content h3 {
+            color: #fff;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .modal-content p {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            background: #111;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .modal-cancel {
+            background: #333;
+            color: #fff;
+        }
+
+        .modal-submit {
+            background: #2196F3;
+            color: #fff;
+        }
+
+        #offer-error {
+            font-size: 13px;
+            margin-bottom: 15px;
+            min-height: 18px;
         }
     </style>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
     <script src="db-connect.js"></script>
 </head>
+
 <body>
 
 <header class="site-header">
     <nav class="nav-scroll">
         <span class="site-title">ORA<br>SWISS</span>
-         <button onclick="history.back()" class="back-btn">← Back</button>
-         <a href="index.html">Home</a>
+
+        <a href="index.html">Home</a>
         <a href="luxury.html">Luxury</a>
         <a href="vintage.html">Vintage</a>
         <a href="parts.html">Parts</a>
-        <a href="product-bracelets-straps.html" style="color: gold;">Bracelet/Strap</a>
+
+        <a href="product-bracelets-straps.html"
+           style="color: gold;">
+            Bracelet/Strap
+        </a>
+
         <a href="service.html">Service</a>
         <a href="about.html">About</a>
     </nav>
 </header>
 
+
 <div id="content-container" style="padding: 10px;">
     Loading...
 </div>
 
-<!-- Modal për Suggest Price -->
+
+<!-- =========================================
+     SUGGEST PRICE MODAL
+========================================= -->
+
 <div id="offer-modal" class="modal-overlay">
+
     <div class="modal-content">
-        <h3>Propuzo Çmimin Tënd (€)</h3>
-        <p style="color: #aaa; font-size: 13px;">Vendosni çmimin që dëshironi të paguani për këtë produkt:</p>
-        <input type="number" id="offer-price-input" placeholder="p.sh. 45">
-        <div id="offer-error" style="color: #ff5555; font-size: 13px; margin-bottom: 10px;"></div>
-        <div>
-            <button onclick="submitOffer()" class="btn-main btn-buy" style="display: inline-block; width: 45%; padding: 10px;">Dërgo</button>
-            <button onclick="closeOfferModal()" class="btn-main btn-request" style="display: inline-block; width: 45%; padding: 10px; margin-top:0;">Anullo</button>
+
+        <h3>Suggest a Price</h3>
+
+        <p>
+            Vendosni çmimin që dëshironi të ofroni për këtë produkt:
+        </p>
+
+        <input
+            type="number"
+            id="offer-price-input"
+            placeholder="p.sh. 45"
+            min="0"
+            step="0.01"
+        >
+
+        <div id="offer-error"></div>
+
+        <div class="modal-buttons">
+
+            <button
+                type="button"
+                class="modal-cancel"
+                onclick="closeOfferModal()">
+                Anullo
+            </button>
+
+            <button
+                type="button"
+                class="modal-submit"
+                onclick="submitOffer()">
+                Dërgo Ofertën
+            </button>
+
         </div>
+
     </div>
+
 </div>
 
-<!-- Modal Login Prompt (Nëse nuk është i loguar) -->
+
+<!-- =========================================
+     LOGIN MODAL
+========================================= -->
+
 <div id="login-modal" class="modal-overlay">
+
     <div class="modal-content">
+
         <h3>Kërkohet Identifikimi</h3>
-        <p style="color: #aaa; font-size: 13px;">Ju lutem hyni në llogarinë tuaj për të dërguar një ofertë.</p>
-        <div>
-            <button onclick="window.location.href='login.html'" class="btn-main btn-buy" style="display: inline-block; width: 45%; padding: 10px;">Hyr</button>
-            <button onclick="document.getElementById('login-modal').style.display='none'" class="btn-main btn-request" style="display: inline-block; width: 45%; padding: 10px; margin-top:0;">Anullo</button>
+
+        <p>
+            Ju lutem hyni në llogarinë tuaj për të dërguar një ofertë.
+        </p>
+
+        <div class="modal-buttons">
+
+            <button
+                type="button"
+                class="modal-cancel"
+                onclick="document.getElementById('login-modal').style.display='none'">
+                Anullo
+            </button>
+
+            <button
+                type="button"
+                class="modal-submit"
+                onclick="window.location.href='login.html'">
+                Hyr
+            </button>
+
         </div>
+
     </div>
+
 </div>
+
 
 <script>
-    let currentImages = [];
-    let currentImgIndex = 0;
-    let productId = null;
 
-    document.addEventListener("DOMContentLoaded", async function() {
-        if (!window.supabaseClient) {
-            console.error("Supabase client nuk u gjet!");
-            return;
-        }
+let currentImages = [];
+let currentImgIndex = 0;
 
-        const urlParams = new URLSearchParams(window.location.search);
-        productId = urlParams.get('id');
-        const container = document.getElementById("content-container");
+/* ID e produktit aktual */
+let productId = null;
 
-        if (productId) {
-            const { data, error } = await window.supabaseClient
-                .from('bracelets_straps')
-                .select('*')
-                .eq('id', productId)
+
+/* =========================================
+   LOAD PRODUCT
+========================================= */
+
+document.addEventListener("DOMContentLoaded", async function() {
+
+    if (!window.supabaseClient) {
+        console.error("Supabase client nuk u gjet!");
+        return;
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    productId = urlParams.get("id");
+
+    const container =
+        document.getElementById("content-container");
+
+
+    /* =========================================
+       SINGLE PRODUCT
+    ========================================= */
+
+    if (productId) {
+
+        const { data, error } =
+            await window.supabaseClient
+                .from("bracelets_straps")
+                .select("*")
+                .eq("id", productId)
                 .single();
 
-            if (error || !data) {
-                container.innerHTML = "<h2 style='color:red; text-align:center;'>Produkti nuk u gjet ose ndodhi një gabim!</h2>";
-                return;
+
+        if (error || !data) {
+
+            container.innerHTML =
+                "<h2 style='color:red;text-align:center;'>" +
+                "Produkti nuk u gjet ose ndodhi një gabim!" +
+                "</h2>";
+
+            console.error(error);
+
+            return;
+        }
+
+
+        /* =========================================
+           SELLER ID
+        ========================================= */
+
+        window.currentSellerId = data.user_id;
+
+
+        /* =========================================
+           IMAGES
+        ========================================= */
+
+        let rawImages = data.image_url;
+
+
+        if (typeof rawImages === "string") {
+
+            try {
+
+                rawImages = JSON.parse(rawImages);
+
+            } catch(e) {
+
+                rawImages = [rawImages];
+
             }
 
-            window.currentSellerId = data.user_id;
+        }
 
-            let rawImages = data.image_url;
-            if (typeof rawImages === 'string') {
-                try { rawImages = JSON.parse(rawImages); } catch(e) { rawImages = [rawImages]; }
-            }
 
-            currentImages = Array.isArray(rawImages) ? rawImages.filter(img => img && img !== 'null' && img !== '') : [];
-            if (currentImages.length === 0) {
-                currentImages = ["https://placeholder.co/600x400/222/fff?text=No+Image"];
-            } else {
-                currentImages = currentImages.map(img => 
-                    img.startsWith('http') ? img : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + img
-                );
-            }
-            currentImgIndex = 0;
+        currentImages =
+            Array.isArray(rawImages)
+                ? rawImages.filter(
+                    img =>
+                        img &&
+                        img !== "null" &&
+                        img !== ""
+                  )
+                : [];
 
-            container.innerHTML = `
-                <div style="max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border-radius: 10px; border: 1px solid #333;">
-                    <div class="gallery-container">
-                        <button class="gallery-btn prev" onclick="changeImage(-1)">❮</button>
-                        <img id="main-photo" src="${currentImages[0]}" alt="${data.brand || 'Strap'}">
-                        <button class="gallery-btn next" onclick="changeImage(1)">❯</button>
-                        <div class="photo-counter" id="photo-count">1 / ${currentImages.length}</div>
-                    </div>
-                    
-                    <h2 style="margin-top: 15px;">
-                        ${data.brand || 'Bracelet / Strap'}
-                    </h2>
 
-                    <h3 style="margin: 5px 0 10px; font-size: 18px; font-weight: 500; color: #ddd;">
-                        ${data.model || '/'}
-                    </h3>
+        if (currentImages.length === 0) {
 
-                    <div class="price" style="font-weight:bold; color:gold; font-size:22px; margin:10px 0;">
-                        ${data.price ? data.price + ' €' : 'Contact for price'}
-                    </div>
-
-                    <div class="specs-grid">
-                        <div>Type: <span>${data.type || '/'}</span></div>
-                        <div>Condition: <span>${data.condition || '/'}</span></div>
-                        <div>Material: <span>${data.material || '/'}</span></div>
-                        <div>Color: <span>${data.color || '/'}</span></div>
-                        <div>Reference: <span>${data.reference || '/'}</span></div>
-                        <div>Year: <span>${data.year || '/'}</span></div>
-                        <div>Gold Purity: <span>${data.gold_purity || '/'}</span></div>
-                        <div>Lug Width: <span>${data.lug_width || '/'}</span></div>
-                        <div>Clasp Width: <span>${data.clasp_width || '/'}</span></div>
-                        <div>Length: <span>${data.length || '/'}</span></div>
-                        <div>Thickness: <span>${data.thickness || '/'}</span></div>
-                        <div>Postal Service: <span>${data.shipping_provider ? data.shipping_provider : '/'}</span></div>
-                        <div>Delivery Time: <span>${data.shipping_days ? data.shipping_days : '/'}</span></div>
-                    </div>
-
-                    <div style="background: #1a1a1a; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #333;">
-                        <h4 style="margin: 0 0 10px 0; color: #fff;">Description</h4>
-                        <p style="color: #ccc; line-height: 1.5; margin: 0; white-space: pre-line;">${data.description || 'Nuk ka përshkrim shtesë për këtë produkt.'}</p>
-                    </div>
-
-                    <button id="buy-bracelet-btn" class="btn-main btn-buy" style="width:100%;">Buy Now (PayPal)</button>
-                    <button id="suggest-price-btn" class="btn-main btn-buy" style="width:100%; margin-top:10px; background:#2196F3; color:#fff;">Suggest Price</button>
-                    <button id="send-request-btn" class="btn-main btn-request" style="width:100%;">Send Request / Inquiry</button>
-                </div>
-            `;
-
-            // Lidhja e butonit "Suggest Price" me shfaqjen e modalit
-            document.getElementById("suggest-price-btn").onclick = async function(e) {
-                e.preventDefault();
-                const { data: { user }, error: userError } = await window.supabaseClient.auth.getUser();
-                if (userError || !user) {
-                    alert("Duhet të jeni i loguar për të dërguar një ofertë!");
-                    return;
-                }
-                if (user.id === window.currentSellerId) {
-                    alert("Nuk mund t'i bësh ofertë produktit tënd!");
-                    return;
-                }
-                document.getElementById("offer-modal").style.display = "flex";
-            };
-
-            const buyBtn = document.getElementById("buy-bracelet-btn");
-            if (buyBtn) {
-                buyBtn.onclick = async function(e) {
-                    e.preventDefault();
-                    buyBtn.innerText = "Loading PayPal...";
-                    try {
-                        const response = await fetch(
-                            "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
-                            {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({
-                                    product_id: productId,
-                                    price: data.price,
-                                    product_name: (data.brand || 'Strap') + ' ' + (data.model || '')
-                                })
-                            }
-                        );
-                        const text = await response.text();
-                        let result = {};
-                        try { result = JSON.parse(text); } catch(e) {}
-
-                        if (result.paypal_link) {
-                            window.location.href = result.paypal_link;
-                        } else {
-                            alert("PayPal link nuk u krijua");
-                            buyBtn.innerText = "Buy Now (PayPal)";
-                        }
-                    } catch(error) {
-                        console.error(error);
-                        alert("Gabim me PayPal");
-                        buyBtn.innerText = "Buy Now (PayPal)";
-                    }
-                };
-            }
-
-            const requestBtn = document.getElementById("send-request-btn");
-            if (requestBtn) {
-                requestBtn.onclick = function() {
-                    window.location.href = `messages.html?product_id=${productId}&title=` + encodeURIComponent((data.brand || 'Strap') + ' ' + (data.model || ''));
-                };
-            }
+            currentImages = [
+                "https://placeholder.co/600x400/222/fff?text=No+Image"
+            ];
 
         } else {
-            container.innerHTML = '<h2 style="padding-left:0; font-size:10px;">Bracelets & Straps Collection</h2><div id="straps-container" class="grid">Loading...</div>';
-            const gridContainer = document.getElementById("straps-container");
 
-            const { data, error } = await window.supabaseClient
-                .from('bracelets_straps')
-                .select('*');
+            currentImages =
+                currentImages.map(img =>
 
-            if (error || !data || data.length === 0) {
-                gridContainer.innerHTML = "No bracelets or straps available.";
-                return;
-            }
+                    img.startsWith("http")
+                        ? img
+                        : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + img
 
-            gridContainer.innerHTML = data.map(item => {
-                let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+                );
+
+        }
+
+
+        currentImgIndex = 0;
+
+
+        /* =========================================
+           PRODUCT HTML
+        ========================================= */
+
+        container.innerHTML = `
+
+            <div style="
+                max-width:600px;
+                margin:0 auto;
+                background:#111;
+                padding:20px;
+                border-radius:10px;
+                border:1px solid #333;
+            ">
+
+                <!-- GALLERY -->
+
+                <div class="gallery-container">
+
+                    <button
+                        class="gallery-btn prev"
+                        onclick="changeImage(-1)">
+                        ❮
+                    </button>
+
+                    <img
+                        id="main-photo"
+                        src="${currentImages[0]}"
+                        alt="${data.brand || "Strap"}"
+                    >
+
+                    <button
+                        class="gallery-btn next"
+                        onclick="changeImage(1)">
+                        ❯
+                    </button>
+
+                    <div
+                        class="photo-counter"
+                        id="photo-count">
+                        1 / ${currentImages.length}
+                    </div>
+
+                </div>
+
+
+                <!-- TITLE -->
+
+                <h2 style="margin-top:15px;">
+                    ${data.brand || "Bracelet / Strap"}
+                    ${data.model || ""}
+                </h2>
+
+
+                <!-- PRICE -->
+
+                <div
+                    class="price"
+                    style="
+                        font-weight:bold;
+                        color:gold;
+                        font-size:22px;
+                        margin:10px 0;
+                    "
+                >
+                    ${
+                        data.price
+                            ? data.price + " €"
+                            : "Contact for price"
+                    }
+                </div>
+
+
+                <!-- SPECS -->
+
+                <div class="specs-grid">
+
+                    <div>
+                        Type:
+                        <span>${data.type || "/"}</span>
+                    </div>
+
+                    <div>
+                        Condition:
+                        <span>${data.condition || "/"}</span>
+                    </div>
+
+                    <div>
+                        Material:
+                        <span>${data.material || "/"}</span>
+                    </div>
+
+                    <div>
+                        Color:
+                        <span>${data.color || "/"}</span>
+                    </div>
+
+                    <div>
+                        Reference:
+                        <span>${data.reference || "/"}</span>
+                    </div>
+
+                    <div>
+                        Year:
+                        <span>${data.year || "/"}</span>
+                    </div>
+
+                    <div>
+                        Gold Purity:
+                        <span>${data.gold_purity || "/"}</span>
+                    </div>
+
+                    <div>
+                        Lug Width:
+                        <span>${data.lug_width || "/"}</span>
+                    </div>
+
+                    <div>
+                        Clasp Width:
+                        <span>${data.clasp_width || "/"}</span>
+                    </div>
+
+                    <div>
+                        Length:
+                        <span>${data.length || "/"}</span>
+                    </div>
+
+                    <div>
+                        Postal Service:
+                        <span>
+                            ${
+                                data.shipping_provider
+                                    ? data.shipping_provider
+                                    : "/"
+                            }
+                        </span>
+                    </div>
+
+                    <div>
+                        Delivery Time:
+                        <span>
+                            ${
+                                data.shipping_days
+                                    ? data.shipping_days
+                                    : "/"
+                            }
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div style="
+                    background:#1a1a1a;
+                    padding:15px;
+                    border-radius:8px;
+                    margin:15px 0;
+                    border:1px solid #333;
+                ">
+
+                    <h4 style="
+                        margin:0 0 10px 0;
+                        color:#fff;
+                    ">
+                        Description
+                    </h4>
+
+                    <p style="
+                        color:#ccc;
+                        line-height:1.5;
+                        margin:0;
+                        white-space:pre-line;
+                    ">
+                        ${
+                            data.description ||
+                            "Nuk ka përshkrim shtesë për këtë produkt."
+                        }
+                    </p>
+
+                </div>
+
+
+                <!-- BUY -->
+
+                <button
+                    id="buy-bracelet-btn"
+                    class="btn-main btn-buy"
+                    style="width:100%;">
+                    Buy Now (PayPal)
+                </button>
+
+
+                <!-- SUGGEST PRICE -->
+
+                <button
+                    id="suggest-price-btn"
+                    class="btn-main"
+                    style="
+                        width:100%;
+                        margin-top:10px;
+                        background:#2196F3;
+                        color:#fff;
+                    ">
+                    Suggest Price
+                </button>
+
+
+                <!-- REQUEST -->
+
+                <button
+                    id="send-request-btn"
+                    class="btn-main btn-request"
+                    style="width:100%;">
+                    Send Request / Inquiry
+                </button>
+
+            </div>
+
+        `;
+
+
+        /* =========================================
+           SUGGEST PRICE BUTTON
+        ========================================= */
+
+        const suggestBtn =
+            document.getElementById("suggest-price-btn");
+
+
+        if (suggestBtn) {
+
+            suggestBtn.onclick = async function(e) {
+
+                e.preventDefault();
+
+
+                const {
+                    data: { user },
+                    error: userError
+                } =
+                    await window.supabaseClient.auth.getUser();
+
+
+                /* NOT LOGGED IN */
+
+                if (userError || !user) {
+
+                    document.getElementById("login-modal")
+                        .style.display = "flex";
+
+                    return;
+                }
+
+
+                /* SELLER */
+
+                if (user.id === window.currentSellerId) {
+
+                    alert(
+                        "Nuk mund t'i bësh ofertë produktit tënd!"
+                    );
+
+                    return;
+                }
+
+
+                /* CLEAR OLD INPUT */
+
+                document.getElementById(
+                    "offer-price-input"
+                ).value = "";
+
+                document.getElementById(
+                    "offer-error"
+                ).textContent = "";
+
+
+                /* OPEN MODAL */
+
+                document.getElementById(
+                    "offer-modal"
+                ).style.display = "flex";
+
+            };
+
+        }
+
+
+        /* =========================================
+           BUY PAYPAL
+        ========================================= */
+
+        const buyBtn =
+            document.getElementById("buy-bracelet-btn");
+
+
+        if (buyBtn) {
+
+            buyBtn.onclick = async function(e) {
+
+                e.preventDefault();
+
+                buyBtn.innerText = "Loading PayPal...";
+
+
+                try {
+
+                    const response = await fetch(
+                        "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                product_id: productId,
+
+                                price: data.price,
+
+                                product_name:
+                                    (data.brand || "Strap") +
+                                    " " +
+                                    (data.model || "")
+
+                            })
+                        }
+                    );
+
+
+                    const result =
+                        await response.json();
+
+
+                    if (result.paypal_link) {
+
+                        window.location.href =
+                            result.paypal_link;
+
+                    } else {
+
+                        alert(
+                            "PayPal link nuk u krijua"
+                        );
+
+                        buyBtn.innerText =
+                            "Buy Now (PayPal)";
+                    }
+
+
+                } catch(error) {
+
+                    console.error(error);
+
+                    alert("Gabim me PayPal");
+
+                    buyBtn.innerText =
+                        "Buy Now (PayPal)";
+                }
+
+            };
+
+        }
+
+
+        /* =========================================
+           REQUEST / INQUIRY
+        ========================================= */
+
+        const requestBtn =
+            document.getElementById("send-request-btn");
+
+
+        if (requestBtn) {
+
+            requestBtn.onclick = function() {
+
+                window.location.href =
+                    `messages.html?product_id=${productId}&title=` +
+                    encodeURIComponent(
+                        (data.brand || "Strap") +
+                        " " +
+                        (data.model || "")
+                    );
+
+            };
+
+        }
+
+    }
+
+
+    /* =========================================
+       ALL BRACELETS / STRAPS
+    ========================================= */
+
+    else {
+
+        container.innerHTML =
+            `
+            <h2 style="
+                padding-left:0;
+                font-size:10px;
+            ">
+                Bracelets & Straps Collection
+            </h2>
+
+            <div
+                id="straps-container"
+                class="grid">
+                Loading...
+            </div>
+            `;
+
+
+        const gridContainer =
+            document.getElementById(
+                "straps-container"
+            );
+
+
+        const {
+            data,
+            error
+        } =
+            await window.supabaseClient
+                .from("bracelets_straps")
+                .select("*");
+
+
+        if (
+            error ||
+            !data ||
+            data.length === 0
+        ) {
+
+            gridContainer.innerHTML =
+                "No bracelets or straps available.";
+
+            return;
+        }
+
+
+        gridContainer.innerHTML =
+            data.map(item => {
+
+                let imgUrl =
+                    "https://placeholder.co/600x400/222/fff?text=No+Image";
+
                 let primaryImage = "";
 
+
                 if (item.image_url) {
-                    if (Array.isArray(item.image_url) && item.image_url.length > 0) {
-                        primaryImage = item.image_url[0];
-                    } else if (typeof item.image_url === 'string') {
-                        try {
-                            let parsed = JSON.parse(item.image_url);
-                            primaryImage = Array.isArray(parsed) ? parsed[0] : item.image_url;
-                        } catch(e) {
-                            primaryImage = item.image_url;
-                        }
+
+                    if (
+                        Array.isArray(item.image_url) &&
+                        item.image_url.length > 0
+                    ) {
+
+                        primaryImage =
+                            item.image_url[0];
+
                     }
+
+                    else if (
+                        typeof item.image_url === "string"
+                    ) {
+
+                        try {
+
+                            let parsed =
+                                JSON.parse(
+                                    item.image_url
+                                );
+
+                            primaryImage =
+                                Array.isArray(parsed)
+                                    ? parsed[0]
+                                    : item.image_url;
+
+                        } catch(e) {
+
+                            primaryImage =
+                                item.image_url;
+                        }
+
+                    }
+
                 }
 
-                if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
-                    imgUrl = primaryImage.startsWith('http') ? primaryImage : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
+
+                if (
+                    primaryImage &&
+                    primaryImage !== "null" &&
+                    primaryImage !== ""
+                ) {
+
+                    imgUrl =
+                        primaryImage.startsWith("http")
+                            ? primaryImage
+                            : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" +
+                              primaryImage;
                 }
+
 
                 return `
-                    <div class="card" onclick="window.location.href='product-bracelets-straps.html?id=${item.id}'">
-                        <img src="${imgUrl}" alt="${item.brand || 'Strap'}">
-                        <h3 style="margin: 10px 0 5px 0;">${item.brand || 'Bracelet / Strap'}</h3>
-                        <p style="color:#aaa; font-size:13px; margin:0 0 8px 0;">${item.model || '/'}</p>
-                        <div class="price" style="font-weight:bold; color:gold; margin-bottom: 10px;">${item.price ? item.price + ' €' : 'Contact for price'}</div>
-                        
-                        <button class="btn-main btn-buy" 
-                        style="width:100%; padding: 8px; font-size: 13px;"
-                        onclick="event.stopPropagation(); window.location.href='product-bracelets-straps.html?id=${item.id}'">
-                        View Details
+
+                    <div
+                        class="card"
+                        onclick="
+                            window.location.href=
+                            'product-bracelets-straps.html?id=${item.id}'
+                        "
+                    >
+
+                        <img
+                            src="${imgUrl}"
+                            alt="${item.brand || "Strap"}"
+                        >
+
+                        <h3 style="
+                            margin:10px 0 5px 0;
+                        ">
+                            ${item.brand || "Bracelet / Strap"}
+                        </h3>
+
+                        <p style="
+                            color:#aaa;
+                            font-size:13px;
+                            margin:0 0 8px 0;
+                        ">
+                            ${item.material || "/"}
+                        </p>
+
+                        <div
+                            class="price"
+                            style="
+                                font-weight:bold;
+                                color:gold;
+                                margin-bottom:10px;
+                            "
+                        >
+                            ${
+                                item.price
+                                    ? item.price + " €"
+                                    : "Contact for price"
+                            }
+                        </div>
+
+                        <button
+                            class="btn-main btn-buy"
+                            style="
+                                width:100%;
+                                padding:8px;
+                                font-size:13px;
+                            "
+                            onclick="
+                                event.stopPropagation();
+                                window.location.href=
+                                'product-bracelets-straps.html?id=${item.id}'
+                            "
+                        >
+                            View Details
                         </button>
+
                     </div>
+
                 `;
-            }).join('');
-        }
-    });
 
-    function closeOfferModal() {
-        document.getElementById("offer-modal").style.display = "none";
-        document.getElementById("offer-price-input").value = "";
-        document.getElementById("offer-error").textContent = "";
+            }).join("");
+
     }
 
-        async function submitOffer() {
-        const priceInput = document.getElementById("offer-price-input").value;
-        const errorEl = document.getElementById("offer-error");
-    
-        if (!priceInput || parseFloat(priceInput) <= 0) {
-            errorEl.textContent = "Ju lutem vendosni një çmim të vlefshëm.";
-            return;
-        }
-
-        errorEl.textContent = "Duke dërguar ofertën...";
-
-        const { data: { user }, error: userError } = await window.supabaseClient.auth.getUser();
-         if (userError || !user) {
-            closeOfferModal();
-            alert("Duhet të jeni i loguar!");
-            return;
-        }
-
-        try {
-            // 1. Check if a conversation already exists for this listing between buyer and seller
-            const { data: existingChat } = await window.supabaseClient
-                .from("conversations")
-                .select("id")
-                .eq("listing_id", productId)
-                .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
-                .maybeSingle();
-
-            let conversationId;
-
-            if (existingChat) {
-                conversationId = existingChat.id;
-            } else {
-                const { data: newConversation, error: createError } = await window.supabaseClient
-                    .from("conversations")
-                    .insert({
-                        listing_id: productId,
-                        buyer_id: user.id,
-                        seller_id: window.currentSellerId,
-                        last_message: "Ofertë e re"
-                    })
-                    .select()
-                    .single();
-
-                if (createError) throw createError;
-                conversationId = newConversation.id;
-            }
-
-            const offerMessage = `💰 Oferta ime për këtë produkt është: ${priceInput} €`;
-        
-            // 2. Insert into messages table
-            const { error: msgError } = await window.supabaseClient
-                .from("messages")
-                .insert({
-                    conversation_id: conversationId,
-                    sender_id: user.id,
-                    content: offerMessage
-                });
-
-            if (msgError) throw msgError;
-
-            // 3. Optional: If you use a separate "offers" table to track user offers globally under "My Offers", insert it here too:
-            /*
-            await window.supabaseClient.from("offers").insert({
-                product_id: productId,
-                buyer_id: user.id,
-                seller_id: window.currentSellerId,
-                offered_price: parseFloat(priceInput),
-                status: 'pending'
-            });
-            */
-
-            await window.supabaseClient
-                .from("conversations")
-                .update({ last_message: offerMessage })
-                .eq("id", conversationId);
-
-            // Redirect to messages or your offers page seamlessly
-            window.location.href = "messages.html?conversation=" + conversationId;
-
-        } catch (err) {
-            console.error(err);
-            errorEl.textContent = "Gabim gjatë dërgimit: " + err.message;
-        }
-    }
-    }
-
-    function changeImage(direction) {
-        if (currentImages.length <= 1) return;
-        currentImgIndex += direction;
-        if (currentImgIndex >= currentImages.length) currentImgIndex = 0;
-        if (currentImgIndex < 0) currentImgIndex = currentImages.length - 1;
-    
-        document.getElementById("main-photo").src = currentImages[currentImgIndex];
-        document.getElementById("photo-count").innerText = (currentImgIndex + 1) + " / " + currentImages.length;
-    }
-
-    function checkMenu(event) {
-        if (event) event.preventDefault();
-    }
-</script>
-<script>
-let lastScrollTop = 0;    
-const nav = document.querySelector(".bottom-nav");
-
-window.addEventListener("scroll", () => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-    if (scrollTop > lastScrollTop && scrollTop > 50) {
-        nav.classList.add("nav-hidden");
-    } else {
-        nav.classList.remove("nav-hidden");
-    }
-
-    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 });
+
+
+/* =========================================
+   CLOSE OFFER MODAL
+========================================= */
+
+function closeOfferModal() {
+
+    document.getElementById(
+        "offer-modal"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "offer-price-input"
+    ).value = "";
+
+
+    document.getElementById(
+        "offer-error"
+    ).textContent = "";
+
+}
+
+
+/* =========================================
+   SUBMIT OFFER
+========================================= */
+
+async function submitOffer() {
+
+    const input =
+        document.getElementById(
+            "offer-price-input"
+        );
+
+    const errorEl =
+        document.getElementById(
+            "offer-error"
+        );
+
+
+    const offerPrice =
+        parseFloat(input.value);
+
+
+    /* INVALID PRICE */
+
+    if (
+        !offerPrice ||
+        offerPrice <= 0
+    ) {
+
+        errorEl.style.color =
+            "#ff4444";
+
+        errorEl.textContent =
+            "Ju lutem vendosni një çmim të vlefshëm.";
+
+        return;
+    }
+
+
+    /* LOADING */
+
+    errorEl.style.color = "#fff";
+
+    errorEl.textContent =
+        "Duke dërguar ofertën...";
+
+
+    /* GET USER */
+
+    const {
+        data: { user },
+        error: userError
+    } =
+        await window.supabaseClient.auth.getUser();
+
+
+    if (
+        userError ||
+        !user
+    ) {
+
+        errorEl.style.color =
+            "#ff4444";
+
+        errorEl.textContent =
+            "Duhet të jeni i loguar!";
+
+        return;
+    }
+
+
+    /* SELLER CANNOT OFFER */
+
+    if (
+        user.id ===
+        window.currentSellerId
+    ) {
+
+        errorEl.style.color =
+            "#ff4444";
+
+        errorEl.textContent =
+            "Nuk mund t'i bësh ofertë produktit tënd!";
+
+        return;
+    }
+
+
+    /* =========================================
+       INSERT OFFER
+    ========================================= */
+
+    const {
+        data,
+        error
+    } =
+        await window.supabaseClient
+            .from("offers")
+            .insert({
+
+                product_id:
+                    productId,
+
+                buyer_id:
+                    user.id,
+
+                seller_id:
+                    window.currentSellerId,
+
+                offered_price:
+                    offerPrice,
+
+                status:
+                    "pending"
+
+            })
+            .select()
+            .single();
+
+
+    /* ERROR */
+
+    if (error) {
+
+        console.error(
+            "OFFER INSERT ERROR:",
+            error
+        );
+
+        errorEl.style.color =
+            "#ff4444";
+
+        errorEl.textContent =
+            "Gabim gjatë dërgimit: " +
+            error.message;
+
+        return;
+    }
+
+
+    /* SUCCESS */
+
+    console.log(
+        "OFFER CREATED:",
+        data
+    );
+
+
+    errorEl.style.color =
+        "#25D366";
+
+    errorEl.textContent =
+        "Oferta u dërgua me sukses!";
+
+
+    /* CLOSE AFTER 1.5 SEC */
+
+    setTimeout(() => {
+
+        closeOfferModal();
+
+    }, 1500);
+
+}
+
+
+/* =========================================
+   CHANGE IMAGE
+========================================= */
+
+function changeImage(direction) {
+
+    if (
+        currentImages.length <= 1
+    ) {
+        return;
+    }
+
+
+    currentImgIndex += direction;
+
+
+    if (
+        currentImgIndex >=
+        currentImages.length
+    ) {
+
+        currentImgIndex = 0;
+
+    }
+
+
+    if (
+        currentImgIndex < 0
+    ) {
+
+        currentImgIndex =
+            currentImages.length - 1;
+
+    }
+
+
+    document.getElementById(
+        "main-photo"
+    ).src =
+        currentImages[
+            currentImgIndex
+        ];
+
+
+    document.getElementById(
+        "photo-count"
+    ).innerText =
+        (
+            currentImgIndex + 1
+        ) +
+        " / " +
+        currentImages.length;
+
+}
+
+
+/* =========================================
+   MENU
+========================================= */
+
+function checkMenu(event) {
+
+    if (event) {
+        event.preventDefault();
+    }
+
+}
+
+
+/* =========================================
+   BOTTOM NAV HIDE ON SCROLL
+========================================= */
+
+let lastScrollTop = 0;
+
+const nav =
+    document.querySelector(
+        ".bottom-nav"
+    );
+
+
+window.addEventListener(
+    "scroll",
+    () => {
+
+        const scrollTop =
+            window.pageYOffset ||
+            document.documentElement.scrollTop;
+
+
+        if (
+            scrollTop >
+                lastScrollTop &&
+            scrollTop > 50
+        ) {
+
+            nav.classList.add(
+                "nav-hidden"
+            );
+
+        } else {
+
+            nav.classList.remove(
+                "nav-hidden"
+            );
+
+        }
+
+
+        lastScrollTop =
+            scrollTop <= 0
+                ? 0
+                : scrollTop;
+
+    }
+);
+
 </script>
-  <!-- Modal për Sugjerimin e Çmimit -->
-<div id="offer-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center;">
-    <div style="background:#1a1a1a; padding:25px; border-radius:12px; width:90%; max-width:400px; border:1px solid #333; text-align:center;">
-        <h3 style="color:#fff; margin-top:0;">Sugjero një Çmim</h3>
-        <p style="color:#aaa; font-size:14px; margin-bottom:15px;">Vendosni çmimin tuaj të preferuar në euro (€):</p>
-        
-        <input type="number" id="offer-price-input" placeholder="p.sh. 45" style="width:100%; padding:10px; background:#111; border:1px solid #444; color:#fff; border-radius:6px; font-size:16px; box-sizing:border-box; margin-bottom:15px;">
-        
-        <div id="offer-error" style="color:#ff4444; font-size:13px; margin-bottom:15px; min-height:18px;"></div>
-        
-        <div style="display:flex; gap:10px;">
-            <button onclick="closeOfferModal()" style="flex:1; padding:10px; background:#333; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">Anullo</button>
-            <button onclick="submitOffer()" style="flex:1; padding:10px; background:#2196F3; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">Dërgo Ofertën</button>
-        </div>
-    </div>
-</div>  
+
+
+<!-- =========================================
+     BOTTOM NAV
+========================================= -->
+
+<nav class="bottom-nav">
+
+    <a href="index.html">
+        Home
+    </a>
+
+    <a href="favorites.html">
+        Favs
+    </a>
+
+    <a href="messages.html">
+        Messages
+    </a>
+
+    <a href="mysales.html">
+        Sales
+    </a>
+
+    <a href="sellnow.html">
+        Sell
+    </a>
+
+    <button
+        type="button"
+        onclick="checkMenu(event)">
+        Menu
+    </button>
+
+</nav>
+
+
 </body>
 </html>

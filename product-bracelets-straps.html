@@ -345,8 +345,18 @@
                 </div>
             `;
 
-            // Lidhemi me butonin Suggest Price
-            document.getElementById("suggest-price-btn").onclick = function() {
+            // Lidhja e butonit "Suggest Price" me shfaqjen e modalit
+            document.getElementById("suggest-price-btn").onclick = async function(e) {
+                e.preventDefault();
+                const { data: { user }, error: userError } = await window.supabaseClient.auth.getUser();
+                if (userError || !user) {
+                    alert("Duhet të jeni i loguar për të dërguar një ofertë!");
+                    return;
+                }
+                if (user.id === window.currentSellerId) {
+                    alert("Nuk mund t'i bësh ofertë produktit tënd!");
+                    return;
+                }
                 document.getElementById("offer-modal").style.display = "flex";
             };
 
@@ -437,7 +447,7 @@
                         <button class="btn-main btn-buy" 
                         style="width:100%; padding: 8px; font-size: 13px;"
                         onclick="event.stopPropagation(); window.location.href='product-bracelets-straps.html?id=${item.id}'">
-                         View Details
+                        View Details
                         </button>
                     </div>
                 `;
@@ -465,12 +475,12 @@
         const { data: { user }, error: userError } = await window.supabaseClient.auth.getUser();
         if (userError || !user) {
             closeOfferModal();
-            document.getElementById("login-modal").style.display = "flex";
+            alert("Duhet të jeni i loguar!");
             return;
         }
 
         try {
-            // Gjej ose krijo bisedën në Supabase
+            // Kontrollo nëse ekziston një bisedë (conversation) për këtë produkt mes blerësit dhe shitësit
             const { data: existingChat } = await window.supabaseClient
                 .from("conversations")
                 .select("id")
@@ -536,17 +546,8 @@
         if (event) event.preventDefault();
     }
 </script>
-
-<nav class="bottom-nav">
-    <a href="index.html">Home</a>
-    <a href="favorites.html">Favs</a>
-    <a href="messages.html">Messages</a>
-    <a href="mysales.html">Sales</a>
-    <a href="sellnow.html">Sell</a>
-    <button type="button" onclick="checkMenu(event)">Menu</button>
-</nav>
 <script>
-let lastScrollTop = 0;
+let lastScrollTop = 0;    
 const nav = document.querySelector(".bottom-nav");
 
 window.addEventListener("scroll", () => {
@@ -561,6 +562,21 @@ window.addEventListener("scroll", () => {
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 });
 </script>
-    
+  <!-- Modal për Sugjerimin e Çmimit -->
+<div id="offer-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center;">
+    <div style="background:#1a1a1a; padding:25px; border-radius:12px; width:90%; max-width:400px; border:1px solid #333; text-align:center;">
+        <h3 style="color:#fff; margin-top:0;">Sugjero një Çmim</h3>
+        <p style="color:#aaa; font-size:14px; margin-bottom:15px;">Vendosni çmimin tuaj të preferuar në euro (€):</p>
+        
+        <input type="number" id="offer-price-input" placeholder="p.sh. 45" style="width:100%; padding:10px; background:#111; border:1px solid #444; color:#fff; border-radius:6px; font-size:16px; box-sizing:border-box; margin-bottom:15px;">
+        
+        <div id="offer-error" style="color:#ff4444; font-size:13px; margin-bottom:15px; min-height:18px;"></div>
+        
+        <div style="display:flex; gap:10px;">
+            <button onclick="closeOfferModal()" style="flex:1; padding:10px; background:#333; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">Anullo</button>
+            <button onclick="submitOffer()" style="flex:1; padding:10px; background:#2196F3; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">Dërgo Ofertën</button>
+        </div>
+    </div>
+</div>  
 </body>
 </html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout - Ora Swiss</title>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: white; padding: 20px; }
+        .checkout-card { background: #1e1e1e; padding: 20px; border-radius: 10px; max-width: 400px; margin: auto; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; }
+        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="checkout-card">
+    <h2>Përfundo Blerjen</h2>
+    <form action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
+        
+        <label>Emri juaj</label>
+        <input type="text" name="name" required>
+        
+        <label>Adresa për dërgim</label>
+        <input type="text" name="address" required>
+        
+        <label>Numri i telefonit</label>
+        <input type="tel" name="phone" required>
+        
+        <button type="submit">Konfirmo Porosinë</button>
+    </form>
+    <br>
+    <a href="vintage.html" style="color: #aaa; text-decoration: none;">← Kthehu te koleksioni</a>
+</div>
+
+</body>
+</html>

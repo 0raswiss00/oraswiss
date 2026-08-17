@@ -2,35 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Checkout - Ora Swiss</title>
+    <title>Faleminderit për Porosinë - Ora Swiss</title>
     <style>
-        body { font-family: sans-serif; background: #121212; color: white; padding: 20px; }
-        .checkout-card { background: #1e1e1e; padding: 20px; border-radius: 10px; max-width: 400px; margin: auto; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; }
-        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        body { font-family: sans-serif; background: #121212; color: white; padding: 20px; text-align: center; }
+        .success-card { background: #1e1e1e; padding: 30px; border-radius: 10px; max-width: 400px; margin: auto; }
     </style>
 </head>
 <body>
 
-<div class="checkout-card">
-    <h2>Përfundo Blerjen</h2>
-    <form action="https://api.web3forms.com/submit" method="POST">
-        <input type="hidden" name="access_key" value="4ecbdce6-d462-4e39-b39d-8c11e0095f46">
-        
-        <label>Emri juaj</label>
-        <input type="text" name="name" required>
-        
-        <label>Adresa për dërgim</label>
-        <input type="text" name="address" required>
-        
-        <label>Numri i telefonit</label>
-        <input type="tel" name="phone" required>
-        
-        <button type="submit">Konfirmo Porosinë</button>
-    </form>
+<div class="success-card">
+    <h2>Porosia u krye me sukses!</h2>
+    <p>Faleminderit që zgjodhët Ora Swiss. Do t'ju kontaktojmë së shpejti për dërgimin.</p>
     <br>
-    <a href="vintage.html" style="color: #aaa; text-decoration: none;">← Kthehu te koleksioni</a>
+    <a href="vintage.html" style="color: #007bff; text-decoration: none;">← Kthehu te koleksioni</a>
 </div>
+
+<!-- Kodi i Google Customer Reviews -->
+<script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script>
+<script>
+  window.renderOptIn = function() {
+    window.gapi.load('surveyoptin', function() {
+      window.gapi.surveyoptin.render(
+        {
+          "merchant_id": 5689221528,
+          "order_id": "ID_I_POROSISE",         // Vendos ID-në reale të porosisë
+          "email": "emaili@klientit.com",     // Email-i i klientit
+          "delivery_country": "AL",           // Kodi i shtetit (p.sh. AL, CH, DE)
+          "estimated_delivery_date": "2026-08-25", // Data e parashikuar e dërgesës (YYYY-MM-DD)
+
+          // Opsionale (mund t'i fshish nëse nuk përdor GTIN)
+          "products": [{"gtin": "GTIN_I_ORES"}]
+        });
+    });
+  }
+</script>
 
 </body>
 </html>

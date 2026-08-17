@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Faleminderit për Porosinë - Ora Swiss</title>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KD2ZZ3MJYY');
+    </script>
+
     <style>
         body { font-family: sans-serif; background: #121212; color: white; padding: 20px; text-align: center; }
         .success-card { background: #1e1e1e; padding: 30px; border-radius: 10px; max-width: 400px; margin: auto; }
@@ -25,12 +35,11 @@
       window.gapi.surveyoptin.render(
         {
           "merchant_id": 5689221528,
-          "order_id": "ID_I_POROSISE",         // Vendos ID-në reale të porosisë
-          "email": "emaili@klientit.com",     // Email-i i klientit
-          "delivery_country": "AL",           // Kodi i shtetit (p.sh. AL, CH, DE)
-          "estimated_delivery_date": "2026-08-25", // Data e parashikuar e dërgesës (YYYY-MM-DD)
+          "order_id": "ID_I_POROSISE",          // Vendos ID-në reale të porosisë
+          "email": "emaili@klientit.com",      // Email-i i klientit
+          "delivery_country": "AL",            // Kodi i shtetit
+          "estimated_delivery_date": "2026-08-25", // Data e parashikuar
 
-          // Opsionale (mund t'i fshish nëse nuk përdor GTIN)
           "products": [{"gtin": "GTIN_I_ORES"}]
         });
     });

@@ -16,13 +16,43 @@
     ← Back 
 </a>
 <form id="editForm">
-    <h2>Modifiko Orën</h2>
+    <h2>Modifiko Produktin</h2>
+    
+    <!-- Fushat bazë -->
     <input type="text" id="brand" placeholder="Brand" required>
     <input type="text" id="model" placeholder="Model" required>
     <input type="number" id="price" placeholder="Price">
+
+    <!-- Të gjitha fushat e specifikimeve që i ke te product.html -->
+    <input type="text" id="reference" placeholder="Reference">
+    <input type="text" id="serial_number" placeholder="Serial Number">
+    <input type="text" id="movement" placeholder="Movement">
+    <input type="text" id="caliber" placeholder="Caliber">
+    <input type="text" id="gender" placeholder="Gender">
+    <input type="text" id="dial_color" placeholder="Dial Color">
+    <input type="text" id="frekuen" placeholder="Frequency">
+    <input type="text" id="material" placeholder="Material">
+    <input type="text" id="net_weight" placeholder="Net Weight (g)">
+    <input type="text" id="case_size" placeholder="Case Size">
+    <input type="text" id="movement_size" placeholder="Movement Size">
+    <input type="text" id="water_resistance" placeholder="Water Resistance">
+    <input type="text" id="year" placeholder="Year">
+    <input type="text" id="function" placeholder="Function">
+    <input type="text" id="crown" placeholder="Crown">
+    <input type="text" id="jewels" placeholder="Jewels">
+    <input type="text" id="service_date" placeholder="Service Date">
+    <input type="text" id="origin" placeholder="Origin">
+    <input type="text" id="work_status" placeholder="Work Status">
+    <input type="text" id="bracelet" placeholder="Bracelet">
+    <input type="text" id="glass" placeholder="Glass">
+    <input type="text" id="warranty" placeholder="Warranty">
+    <input type="text" id="warranty_months" placeholder="Warranty Months">
+
     <textarea id="description" placeholder="Description"></textarea>
+
     <label for="image_input">Shto ose ndrysho fotot:</label>
     <input type="file" id="image_input" multiple accept="image/*">
+    
     <button type="submit">Ruaj Ndryshimet</button>
     <button type="button" id="deleteBtn" style="background: #ff4d4d; color: white; width: 100%; padding: 15px; border: none; cursor: pointer; margin-top: 10px;">
         Fshi Produktin
@@ -78,10 +108,34 @@ async function fetchProduct() {
 
     window.produktData = product;
 
-
     document.getElementById("brand").value = product.brand || "";
     document.getElementById("model").value = product.model || "";
     document.getElementById("price").value = product.price || "";
+
+    // Mbushja e çdo fushe tjetër që të shfaqet e gatshme për editim
+    document.getElementById("reference").value = product.reference || "";
+    document.getElementById("serial_number").value = product.serial_number || "";
+    document.getElementById("movement").value = product.movement || "";
+    document.getElementById("caliber").value = product.caliber || "";
+    document.getElementById("gender").value = product.gender || "";
+    document.getElementById("dial_color").value = product.dial_color || "";
+    document.getElementById("frekuen").value = product.frekuen || "";
+    document.getElementById("material").value = product.material || "";
+    document.getElementById("net_weight").value = product.net_weight || "";
+    document.getElementById("case_size").value = product.case_size || "";
+    document.getElementById("movement_size").value = product.movement_size || "";
+    document.getElementById("water_resistance").value = product.water_resistance || "";
+    document.getElementById("year").value = product.year || "";
+    document.getElementById("function").value = product.function || "";
+    document.getElementById("crown").value = product.crown || "";
+    document.getElementById("jewels").value = product.jewels || "";
+    document.getElementById("service_date").value = product.service_date || "";
+    document.getElementById("origin").value = product.origin || "";
+    document.getElementById("work_status").value = product.work_status || "";
+    document.getElementById("bracelet").value = product.bracelet || "";
+    document.getElementById("glass").value = product.glass || "";
+    document.getElementById("warranty").value = product.warranty || "";
+    document.getElementById("warranty_months").value = product.warranty_months || "";
     document.getElementById("description").value = product.description || "";
 
 
@@ -253,25 +307,41 @@ document.getElementById("editForm")
 
 
 
-    const {error}=await supabase
+    const { error } = await supabase
     .from(tableName)
     .update({
-
         brand: document.getElementById("brand").value,
-
         model: document.getElementById("model").value,
-
-        price: Number(document.getElementById("price").value),
-
+        price: Number(document.getElementById("price").value) || 0,
+        reference: document.getElementById("reference").value,
+        serial_number: document.getElementById("serial_number").value,
+        movement: document.getElementById("movement").value,
+        caliber: document.getElementById("caliber").value,
+        gender: document.getElementById("gender").value,
+        dial_color: document.getElementById("dial_color").value,
+        frekuen: document.getElementById("frekuen").value,
+        material: document.getElementById("material").value,
+        net_weight: document.getElementById("net_weight").value,
+        case_size: document.getElementById("case_size").value,
+        movement_size: document.getElementById("movement_size").value,
+        water_resistance: document.getElementById("water_resistance").value,
+        year: document.getElementById("year").value,
+        function: document.getElementById("function").value,
+        crown: document.getElementById("crown").value,
+        jewels: document.getElementById("jewels").value,
+        service_date: document.getElementById("service_date").value,
+        origin: document.getElementById("origin").value,
+        work_status: document.getElementById("work_status").value,
+        bracelet: document.getElementById("bracelet").value,
+        glass: document.getElementById("glass").value,
+        warranty: document.getElementById("warranty").value,
+        warranty_months: document.getElementById("warranty_months").value,
         description: document.getElementById("description").value,
-
         image_url: imageUrls
-
     })
-    .eq("id",id)
-    .eq("user_id",user.id);
-
-
+    .eq("id", id)
+    .eq("user_id", user.id);
+  
 
     if(error){
 

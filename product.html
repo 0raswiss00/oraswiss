@@ -5,6 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Details</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      // Lexon ID nga URL (p.sh. ?id=168)
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('id');
+
+      if (productId) {
+        // Lidhja me Supabase për të marrë të dhënat e produktit
+        const SUPABASE_URL = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9';
+
+        fetch(${SUPABASE_URL}/rest/v1/products?id=eq.${productId}&select=brand,model,reference, {
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': Bearer ${SUPABASE_ANON_KEY}
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.length > 0) {
+            const p = data[0];
+            const productTitle = ${p.brand} ${p.model} - ${p.reference} | Ora Swiss;
+        
+            // Ndryshon titullin e faqes
+            document.title = productTitle;
+
+            // Krijon ose përditëson Open Graph tags për WhatsApp / Social Media
+            let ogTitle = document.querySelector('meta[property="og:title"]');
+            if (!ogTitle) {
+              ogTitle = document.createElement('meta');
+              ogTitle.setAttribute('property', 'og:title');
+              document.head.appendChild(ogTitle);
+            }
+            ogTitle.setAttribute('content', productTitle);
+          }
+        }).catch(err => console.error("Gabim në marrjen e të dhënave:", err));
+      }
+    </script>
+
     <style>
         * { box-sizing: border-box; }
         body { margin: 0; background: #050505; color: white; font-family: Arial, sans-serif; padding-bottom: 90px; }

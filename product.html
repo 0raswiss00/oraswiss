@@ -52,123 +52,95 @@
         }
 
         gtag('js', new Date());
-
         gtag('config', 'G-KD2ZZ3MJYY');
     </script>
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+    <!-- SEO PRODUCT -->
     <script>
-        // Lexon ID nga URL
-        // Shembull: ?id=168
+        (async function () {
 
-        const urlParams =
-            new URLSearchParams(window.location.search);
+            const seoUrlParams =
+                new URLSearchParams(window.location.search);
 
-        const productId =
-            urlParams.get('id');
+            const seoProductId =
+                seoUrlParams.get('id');
 
-
-        // Supabase
-        const SUPABASE_URL =
-            'https://gnwsrmelmeqduhhmfmoa.supabase.co';
-
-        const SUPABASE_ANON_KEY =
-            'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIyC9';
-
-
-        async function loadProductSEO() {
-
-            // Nëse nuk ka ID, ndalo
-            if (!productId) {
+            if (!seoProductId) {
                 return;
             }
 
+            const SUPABASE_URL =
+                'https://gnwsrmelmeqduhhmfmoa.supabase.co';
 
-            // URL e Supabase
+            const SUPABASE_ANON_KEY =
+                'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIyC9';
+
             const url =
-                `${SUPABASE_URL}/rest/v1/products?id=eq.${encodeURIComponent(productId)}&select=brand,model,reference`;
-
+                `${SUPABASE_URL}/rest/v1/products?id=eq.${encodeURIComponent(seoProductId)}&select=brand,model,reference`;
 
             try {
 
-                const response =
-                    await fetch(url, {
-                        headers: {
-                            'apikey':
-                                SUPABASE_ANON_KEY,
-
-                            'Authorization':
-                                `Bearer ${SUPABASE_ANON_KEY}`
-                        }
-                    });
-
+                const response = await fetch(url, {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    }
+                });
 
                 if (!response.ok) {
-                    throw new Error(
-                        'Nuk u gjet produkti'
-                    );
-                }
-
-
-                const data =
-                    await response.json();
-
-
-                // Kontrollon nëse ekziston produkti
-                if (!data || data.length === 0) {
                     return;
                 }
 
+                const products =
+                    await response.json();
 
-                const p =
-                    data[0];
+                if (!products || products.length === 0) {
+                    return;
+                }
 
+                const product =
+                    products[0];
 
-                // Merr të dhënat
                 const brand =
-                    p.brand || '';
+                    product.brand || '';
 
                 const model =
-                    p.model || '';
+                    product.model || '';
 
                 const reference =
-                    p.reference || '';
+                    product.reference || '';
 
+                const productName = [
+                    brand,
+                    model,
+                    reference ? `Ref. ${reference}` : ''
+                ]
+                .filter(Boolean)
+                .join(' ');
 
-                // Krijon emrin e produktit
-                const productTitle =
-                    [
-                        brand,
-                        model,
-                        reference
-                            ? `Ref. ${reference}`
-                            : ''
-                    ]
-                    .filter(Boolean)
-                    .join(' ');
+                const pageTitle =
+                    `${productName} | Ora Swiss`;
 
-
-                /*
-                 * TITLE
-                 */
-                document.title =
-                    `${productTitle} | Ora Swiss`;
-
-
-                /*
-                 * META DESCRIPTION
-                 */
                 const description =
-                    `${productTitle} - Luxury watch available at Ora Swiss.`;
+                    `${productName} - Luxury watch available at Ora Swiss.`;
+
+                const currentUrl =
+                    window.location.href;
 
 
+                /* TITLE */
+                document.title =
+                    pageTitle;
+
+
+                /* META DESCRIPTION */
                 const descriptionMeta =
                     document.querySelector(
                         'meta[name="description"]'
                     );
-
 
                 if (descriptionMeta) {
                     descriptionMeta.setAttribute(
@@ -178,96 +150,70 @@
                 }
 
 
-                /*
-                 * OPEN GRAPH TITLE
-                 */
-                document
-                    .getElementById('ogTitle')
-                    .setAttribute(
+                /* OG TITLE */
+                const ogTitle =
+                    document.getElementById('ogTitle');
+
+                if (ogTitle) {
+                    ogTitle.setAttribute(
                         'content',
-                        `${productTitle} | Ora Swiss`
+                        pageTitle
                     );
+                }
 
 
-                /*
-                 * OPEN GRAPH DESCRIPTION
-                 */
-                document
-                    .getElementById('ogDescription')
-                    .setAttribute(
+                /* OG DESCRIPTION */
+                const ogDescription =
+                    document.getElementById('ogDescription');
+
+                if (ogDescription) {
+                    ogDescription.setAttribute(
                         'content',
                         description
                     );
+                }
 
 
-                /*
-                 * CURRENT URL
-                 */
-                const currentUrl =
-                    window.location.href;
+                /* OG URL */
+                const ogUrl =
+                    document.getElementById('ogUrl');
 
-
-                /*
-                 * OPEN GRAPH URL
-                 */
-                document
-                    .getElementById('ogUrl')
-                    .setAttribute(
+                if (ogUrl) {
+                    ogUrl.setAttribute(
                         'content',
                         currentUrl
                     );
+                }
 
 
-                /*
-                 * CANONICAL
-                 */
-                document
-                    .getElementById('canonicalUrl')
-                    .setAttribute(
+                /* CANONICAL */
+                const canonical =
+                    document.getElementById('canonicalUrl');
+
+                if (canonical) {
+                    canonical.setAttribute(
                         'href',
                         currentUrl
                     );
+                }
 
 
-                /*
-                 * PRODUCT SCHEMA
-                 */
+                /* PRODUCT SCHEMA */
                 const schema = {
-
-                    "@context":
-                        "https://schema.org",
-
-                    "@type":
-                        "Product",
-
-                    "name":
-                        productTitle,
-
+                    "@context": "https://schema.org",
+                    "@type": "Product",
+                    "name": productName,
                     "brand": {
-                        "@type":
-                            "Brand",
-
-                        "name":
-                            brand
+                        "@type": "Brand",
+                        "name": brand
                     },
-
-                    "model":
-                        model,
-
-                    "sku":
-                        reference,
-
-                    "url":
-                        currentUrl,
-
-                    "description":
-                        description
+                    "model": model,
+                    "sku": reference,
+                    "url": currentUrl,
+                    "description": description
                 };
 
 
-                /*
-                 * JSON-LD
-                 */
                 const schemaScript =
                     document.createElement('script');
 
@@ -281,43 +227,26 @@
                     schemaScript
                 );
 
-
-                /*
-                 * Ndryshon edhe titullin
-                 * në faqen e produktit,
-                 * nëse ekziston.
-                 */
-                const titleElement =
-                    document.getElementById(
-                        'productTitle'
-                    );
-
-
-                if (titleElement) {
-
-                    titleElement.textContent =
-                        productTitle;
-                }
-
-
             } catch (error) {
 
                 console.error(
-                    'Gabim në marrjen e produktit:',
+                    'SEO product error:',
                     error
                 );
+
             }
-        }
 
-
-        // Nis ngarkimin e produktit
-        loadProductSEO();
-
+        })();
     </script>
 
-</head>
-
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /* KËTU VAZHDON CSS-I YT */
+
+    
         * { box-sizing: border-box; }
         body { margin: 0; background: #050505; color: white; font-family: Arial, sans-serif; padding-bottom: 90px; }
         .product-page { width: 100%; min-height: 100vh; }

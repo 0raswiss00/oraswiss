@@ -504,6 +504,8 @@
         <div class="brand" id="brand">-</div>
         <div class="model" id="model">-</div>
 
+        <div class="condition" id="condition">-</div>
+        
         <div class="price-country-row">
             <div class="price" id="top-price">-</div>
             <div id="seller-country" style="background:#111; padding:8px 12px; border-radius:20px; font-size:14px; border: 1px solid #222;">🌍 -</div>
@@ -805,6 +807,7 @@ async function loadProduct() {
                ${specRow("Serial Number", maskedSerial)}
                ${specRow("Movement", data.movement)}
                ${specRow("Caliber", data.caliber)}
+               ${specRow("Condition", data.condition)}  <!-- Shtoje ketu -->
                ${specRow("Gender", data.gender)}
                ${specRow("Dial Color", data.dial_color)}
                ${specRow("Frequency", data.frekuen)}

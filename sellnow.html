@@ -315,6 +315,22 @@ Continue to Bracelets / Straps
 
 
 
+ <label>Condition</label>
+<select id="condition" name="condition">
+    <option value="">Zgjidh gjendjen...</option>
+    <option value="Used">Used</option>
+    <option value="Used Good">Used Good</option>
+    <option value="Used Very Good">Used Very Good</option>
+    <option value="Used not Good">Used not Good</option>
+    <option value="Used For Repair & Spares">Used For Repair & Spares</option>
+</select>   
+
+
+
+
+
+
+    
 <label>Material</label>
 
 <input id="material" type="text" placeholder="Steel, Gold, Titanium...">
@@ -1287,6 +1303,10 @@ const oraData = {
 
 
 
+    condition: document.getElementById("condition").value,
+    
+
+    
     paypal_link: document.getElementById("paypal_link").value,
 
     

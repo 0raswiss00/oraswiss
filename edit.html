@@ -331,11 +331,15 @@ document.getElementById("editForm")
         dial_color: document.getElementById("dial_color").value,
         frekuen: document.getElementById("frekuen").value,
         material: document.getElementById("material").value,
-        net_weight: document.getElementById("net_weight").value,
+        net_weight: document.getElementById("net_weight").value
+            ? Number(document.getElementById("net_weight").value)
+            : null,
         case_size: document.getElementById("case_size").value,
         movement_size: document.getElementById("movement_size").value,
         water_resistance: document.getElementById("water_resistance").value,
-        year: document.getElementById("year").value,
+        year: document.getElementById("year").value
+            ? Number(document.getElementById("year").value)
+            : null,
         function: document.getElementById("function").value,
         crown: document.getElementById("crown").value,
         jewels: document.getElementById("jewels").value,
@@ -345,7 +349,9 @@ document.getElementById("editForm")
         bracelet: document.getElementById("bracelet").value,
         glass: document.getElementById("glass").value,
         warranty: document.getElementById("warranty").value,
-        warranty_months: document.getElementById("warranty_months").value,
+        warranty_months: document.getElementById("warranty_months").value
+            ? Number(document.getElementById("warranty_months").value)
+            : null,
         description: document.getElementById("description").value,
         image_url: imageUrls
     })

@@ -461,21 +461,76 @@ function getNullableNumber(id) {
 }
 
 
-function getNullableBigInt(id) {
+function hideEmptyFields(product) {
 
-    const value =
-        getValue(id);
+    const fieldIds = [
+        "reference",
+        "serial_number",
+        "category",
+        "condition",
+        "material",
+        "movement",
+        "caliber",
+        "movement_size",
+        "case_size",
+        "size",
+        "ref_type",
+        "gender",
+        "dial_color",
+        "water_resistance",
+        "water_resistant",
+        "crown",
+        "jewels",
+        "glass",
+        "base_plate",
+        "frekuen",
+        "type",
+        "length",
+        "thickness",
+        "lug_width",
+        "net_weight",
+        "year",
+        "shipping_region",
+        "shipping_time",
+        "shipping_provider",
+        "shipping_days",
+        "country",
+        "seller_country",
+        "tracing_number",
+        "warranty_months",
+        "service",
+        "box_papers",
+        "paypal_link",
+        "status",
+        "description"
+    ];
 
-    if (value === "") {
-        return null;
-    }
+    fieldIds.forEach(fieldId => {
 
-    const number =
-        Number(value);
+        const element = document.getElementById(fieldId);
 
-    return Number.isInteger(number)
-        ? number
-        : null;
+        if (!element) return;
+
+        const value = product[fieldId];
+
+        const empty =
+            value === null ||
+            value === undefined ||
+            value === "" ||
+            (typeof value === "string" && value.trim() === "");
+
+        if (empty) {
+            element.style.display = "none";
+
+            const label = document.querySelector(
+                `label[for="${fieldId}"]`
+            );
+
+            if (label) {
+                label.style.display = "none";
+            }
+        }
+    });
 }
 
 
@@ -639,6 +694,7 @@ async function fetchProduct() {
         product.description
     );
 
+    hideEmptyFields(product);
 
 // =====================================
 // FOTOT

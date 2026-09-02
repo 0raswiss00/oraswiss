@@ -967,6 +967,20 @@ document
 // VLERAT
 // =====================================
 
+            function getNullableBigInt(value) {
+                if (value === null || value === undefined || value === '') {
+                    return null;
+                }
+
+                const num = Number(value);
+
+                if (!Number.isInteger(num)) {
+                    return null;
+                }
+
+                return num;
+            }
+            
             const price =
                 getNullableBigInt("price");
 

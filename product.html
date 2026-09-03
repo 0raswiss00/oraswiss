@@ -806,6 +806,8 @@ async function loadProduct() {
                ${specRow("Reference", data.reference)}
                ${specRow("Serial Number", maskedSerial)}
                ${specRow("Movement", data.movement)}
+               ${isPart ? specRow("Part Type", data.part_type) : ""}
+               ${isPart ? specRow("Part Name", data.custom_part_name) : ""}
                ${specRow("Caliber", data.caliber)}
                ${specRow("Condition", data.condition)}  <!-- Shtoje ketu -->
                ${specRow("Gender", data.gender)}

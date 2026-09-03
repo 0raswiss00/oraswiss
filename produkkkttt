@@ -613,3 +613,1072 @@ loadProduct();
 
 </body>
 </html>
+
+
+
+tjetraaa
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Loading product...</title>
+
+    <meta
+        name="description"
+        content="Luxury watches at Ora Swiss"
+    >
+
+    <link
+        rel="canonical"
+        id="canonicalUrl"
+        href=""
+    >
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="product">
+
+    <meta
+        property="og:title"
+        id="ogTitle"
+        content="Ora Swiss"
+    >
+
+    <meta
+        property="og:description"
+        id="ogDescription"
+        content=""
+    >
+
+    <meta
+        property="og:url"
+        id="ogUrl"
+        content=""
+    >
+
+    <!-- Google tag (gtag.js) -->
+    <script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"
+    ></script>
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+        gtag('config', 'G-KD2ZZ3MJYY');
+    </script>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- SEO PRODUCT -->
+    <script>
+        (async function () {
+
+            const seoUrlParams =
+                new URLSearchParams(window.location.search);
+
+            const seoProductId =
+                seoUrlParams.get('id');
+
+            if (!seoProductId) {
+                return;
+            }
+
+            const SUPABASE_URL =
+                'https://gnwsrmelmeqduhhmfmoa.supabase.co';
+
+            const SUPABASE_ANON_KEY =
+                'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIyC9';
+
+            const url =
+                `${SUPABASE_URL}/rest/v1/products?id=eq.${encodeURIComponent(seoProductId)}&select=brand,model,reference`;
+
+            try {
+
+                const response = await fetch(url, {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    }
+                });
+
+                if (!response.ok) {
+                    return;
+                }
+
+                const products =
+                    await response.json();
+
+                if (!products || products.length === 0) {
+                    return;
+                }
+
+                const product =
+                    products[0];
+
+                const brand =
+                    product.brand || '';
+
+                const model =
+                    product.model || '';
+
+                const reference =
+                    product.reference || '';
+
+                const productName = [
+                    brand,
+                    model,
+                    reference ? `Ref. ${reference}` : ''
+                ]
+                .filter(Boolean)
+                .join(' ');
+
+                const pageTitle =
+                    `${productName} | Ora Swiss`;
+
+                const description =
+                    `${productName} - Luxury watch available at Ora Swiss.`;
+
+                const currentUrl =
+                    window.location.href;
+
+
+                /* TITLE */
+                document.title =
+                    pageTitle;
+
+
+                /* META DESCRIPTION */
+                const descriptionMeta =
+                    document.querySelector(
+                        'meta[name="description"]'
+                    );
+
+                if (descriptionMeta) {
+                    descriptionMeta.setAttribute(
+                        'content',
+                        description
+                    );
+                }
+
+
+                /* OG TITLE */
+                const ogTitle =
+                    document.getElementById('ogTitle');
+
+                if (ogTitle) {
+                    ogTitle.setAttribute(
+                        'content',
+                        pageTitle
+                    );
+                }
+
+
+                /* OG DESCRIPTION */
+                const ogDescription =
+                    document.getElementById('ogDescription');
+
+                if (ogDescription) {
+                    ogDescription.setAttribute(
+                        'content',
+                        description
+                    );
+                }
+
+
+                /* OG URL */
+                const ogUrl =
+                    document.getElementById('ogUrl');
+
+                if (ogUrl) {
+                    ogUrl.setAttribute(
+                        'content',
+                        currentUrl
+                    );
+                }
+
+
+                /* CANONICAL */
+                const canonical =
+                    document.getElementById('canonicalUrl');
+
+                if (canonical) {
+                    canonical.setAttribute(
+                        'href',
+                        currentUrl
+                    );
+                }
+
+
+                /* PRODUCT SCHEMA */
+                const schema = {
+                    "@context": "https://schema.org",
+                    "@type": "Product",
+                    "name": productName,
+                    "brand": {
+                        "@type": "Brand",
+                        "name": brand
+                    },
+                    "model": model,
+                    "sku": reference,
+                    "url": currentUrl,
+                    "description": description
+                };
+
+
+                const schemaScript =
+                    document.createElement('script');
+
+                schemaScript.type =
+                    'application/ld+json';
+
+                schemaScript.textContent =
+                    JSON.stringify(schema);
+
+                document.head.appendChild(
+                    schemaScript
+                );
+
+            } catch (error) {
+
+                console.error(
+                    'SEO product error:',
+                    error
+                );
+
+            }
+
+        })();
+    </script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /* KËTU VAZHDON CSS-I YT */
+
+    
+        * { box-sizing: border-box; }
+        body { margin: 0; background: #050505; color: white; font-family: Arial, sans-serif; padding-bottom: 90px; }
+        .product-page { width: 100%; min-height: 100vh; }
+        .gallery { position: relative; width: 100%; height: 55vh; background: #000; overflow: hidden; }
+        .gallery img { width: 100%; height: 100%; object-fit: contain; }
+        .photo-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); border: none; color: white; font-size: 35px; width: 45px; height: 60px; border-radius: 10px; cursor: pointer; }
+        .photo-left { left: 15px; } .photo-right { right: 15px; }
+        .photo-counter { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.6); padding: 7px 15px; border-radius: 20px; }
+        
+        .details { padding: 20px; max-width: 900px; margin: auto; position: relative; }
+        
+        .brand { font-size: 18px; color: #aaa; margin-bottom: 4px; }
+        .model { font-size: 30px; font-weight: bold; margin-bottom: 15px; display: block; }
+        
+        .price-country-row { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+        .price { font-size: 28px; color: #25D366; font-weight: bold; }
+        
+        .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
+        
+        .top-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin: 10px 0;
+        }
+        .top-actions .action {
+            background: #111;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 15px;
+            cursor: pointer;
+            border: 1px solid #222;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .top-actions .action:hover {
+            background: #222;
+        }
+
+        .buy-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #090909; border-top: 1px solid #333; padding: 10px; display: flex; gap: 8px; z-index: 999; max-width: 900px; margin-left: 50%; transform: translateX(-50%); }
+        .buy-btn { flex: 1; padding: 15px; border-radius: 10px; text-align: center; text-decoration: none; font-weight: bold; cursor: pointer; }
+        .whatsapp { background: #25D366; color: white; }
+        .buy { background: #ffd900; color: black; }
+        .offer { background: #222; color: white; border: 1px solid #444; }
+
+        .oraswiss-seller-wrapper {
+            display: block;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 30px auto;
+            max-width: 900px;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+        .oraswiss-seller-card {
+            background-color: #111111 !important;
+            color: #ffffff !important;
+            border: 1px solid #333333 !important;
+            border-radius: 16px !important;
+            padding: 24px !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+            box-sizing: border-box !important;
+        }
+        .oraswiss-header {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            margin-bottom: 12px !important;
+        }
+        .oraswiss-info {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+        }
+        .oraswiss-avatar {
+            width: 40px !important;
+            height: 40px !important;
+            background: #222222 !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            color: #fff !important;
+            overflow: hidden !important;
+        }
+        .oraswiss-avatar img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+        }
+        .oraswiss-info h3 {
+            margin: 0 !important;
+            font-size: 16px !important;
+            font-weight: 700 !important;
+            color: #fff !important;
+            cursor: pointer;
+        }
+        .oraswiss-info h3 span {
+            font-weight: normal !important;
+            color: #aaa !important;
+            font-size: 13px !important;
+        }
+        .oraswiss-green {
+            margin: 2px 0 0 0 !important;
+            font-size: 12px !important;
+            color: #25D366 !important;
+            font-weight: 600 !important;
+            cursor: pointer;
+        }
+        .oraswiss-joined {
+            font-size: 13px !important;
+            color: #aaa !important;
+            margin-bottom: 16px !important;
+        }
+        .oraswiss-actions {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 10px !important;
+        }
+        .oraswiss-btn-blue, .oraswiss-btn-white {
+            width: 100% !important;
+            padding: 12px !important;
+            border-radius: 24px !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            text-align: center !important;
+            box-sizing: border-box !important;
+        }
+        .oraswiss-btn-blue {
+            background: #0066cc !important;
+            color: #ffffff !important;
+            border: none !important;
+        }
+        .oraswiss-btn-white {
+            background: #222222 !important;
+            color: #ffffff !important;
+            border: 1px solid #444444 !important;
+        }
+        .oraswiss-btn-white:hover {
+            background: #333333 !important;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+            background: #111;
+        }
+
+        .nav-scroll {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            overflow-x: auto;
+            padding: 6px 12px;
+        }
+
+        .nav-scroll a {
+            color: #fff;
+            text-decoration: none;
+            padding: 4px 8px;
+            font-size: 14px;
+        }
+
+        .nav-scroll a:hover {
+            color: gold;
+        }
+
+        .site-title {
+            font-weight: 700;
+            line-height: 1;
+            margin-right: 10px;
+            font-size: 7px !important;
+        }
+
+        .bottom-nav {
+            position: fixed !important;
+            bottom: 20px !important;
+            left: 15px !important;
+            right: 15px !important;
+            width: auto !important;
+            height: 55px !important;
+            background-color: #1a1a1a !important;
+            display: flex !important;
+            justify-content: space-around !important;
+            align-items: center !important;
+            padding: 0 5px !important;
+            border-radius: 20px !important;
+            border: 1px solid #333 !important;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
+            z-index: 999999 !important;
+        }
+
+        .bottom-nav a,
+        .bottom-nav button {
+            color:white !important;
+            text-decoration:none !important;
+            font-size:10px !important;
+            background:none !important;
+            border:none !important;
+            cursor:pointer;
+            display:flex !important;
+            flex-direction:column;
+            align-items:center;
+        }
+
+        .bottom-nav {
+             transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .bottom-nav.nav-hidden {
+            transform: translateY(120px);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .bottom-nav a:hover { color: gold !important; }
+    </style>     
+</head>
+<body>
+<header class="site-header">
+    <nav class="nav-scroll">
+
+        <span class="site-title">
+            ORA<br>SWISS
+        </span>
+        <a href="javascript:history.back()">← Back</a>
+        <a href="index.html">Home</a>
+        <a href="luxury.html">Luxury</a>
+        <a href="vintage.html">Vintage</a>
+        <a href="parts.html">Parts</a>
+        <a href="product-bracelets-straps.html">Bracelet/Strap</a>
+        <a href="service.html">Service</a>
+        <a href="about.html">About</a>
+    </nav>
+</header>
+    
+<div class="product-page">
+
+    <div class="gallery">
+        <button class="photo-btn photo-left" onclick="changeImage(-1)">❮</button>
+        <img id="main-photo" src="">
+        <button class="photo-btn photo-right" onclick="changeImage(1)">❯</button>
+        <div class="photo-counter" id="photo-count">1 / 1</div>
+    </div>
+    
+    <div class="details">
+        <div class="top-actions">
+            <div class="action" onclick="shareProduct()">🔗 Share</div>
+            <div class="action" onclick="toggleLike(this)" title="Ruaj në të preferuarat">♡ Like</div>
+        </div>
+
+        <div class="brand" id="brand">-</div>
+        <div class="model" id="model">-</div>
+
+        <div class="condition" id="condition">-</div>
+        
+        <div class="price-country-row">
+            <div class="price" id="top-price">-</div>
+            <div id="seller-country" style="background:#111; padding:8px 12px; border-radius:20px; font-size:14px; border: 1px solid #222;">🌍 -</div>
+        </div>
+    </div>
+    
+    <div class="info-box" id="specs">
+        <!-- Të dhënat do të gjenerohen automatikisht -->
+    </div>
+
+    <div class="info-box">
+        <h3>Description</h3>
+        <p id="description">Loading...</p>
+    </div>
+
+</div>
+
+<div class="buy-bar">
+    <a class="buy-btn whatsapp" id="whatsapp">💬 WhatsApp</a>
+    <a class="buy-btn offer" id="offer" onclick="openOfferModal()">💰 Suggest Price</a>
+    <a class="buy-btn buy" id="buy">🛒 BUY</a>
+</div>
+
+<div class="oraswiss-seller-wrapper">
+    <div class="oraswiss-seller-card">
+        <div class="oraswiss-header">
+            <div class="oraswiss-info">
+                <div class="oraswiss-avatar" id="os-avatar-box">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+                <div>
+                    <h3 id="os-name">- <span>(Pro)</span></h3>
+                    <p class="oraswiss-green" id="os-feedback">Duke kontrolluar feedback...</p>
+                </div>
+            </div>
+        </div>
+        <div class="oraswiss-joined" id="os-joined">Anëtar që nga -</div>
+        <div class="oraswiss-actions">
+            <button class="oraswiss-btn-blue" id="os-items">
+                Seller's other items (<span id="os-count">0</span>)
+            </button>
+            <button class="oraswiss-btn-white" id="os-contact">
+                Contact seller
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- TABELA E LOGIMIT / REGJISTRIMIT (POPUP) -->
+<div id="login-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:#111; border:1px solid #333; padding:30px; border-radius:16px; width:90%; max-width:400px; text-align:center; position:relative;">
+        <button onclick="closeLoginModal()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✕</button>
+        
+        <h2 id="modal-title" style="color:#fff; margin-bottom:10px;">Identifikohu</h2>
+        <p id="modal-desc" style="color:#aaa; font-size:14px; margin-bottom:20px;">Duhet të jesh i loguar për të kontaktuar shitësin.</p>
+        
+        <input type="text" id="modal-name" placeholder="Emri Mbiemri" style="display:none; width:100%; padding:12px; margin-bottom:10px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
+        <input type="email" id="modal-email" placeholder="Email" style="width:100%; padding:12px; margin-bottom:10px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
+        <input type="password" id="modal-password" placeholder="Fjalëkalimi" style="width:100%; padding:12px; margin-bottom:15px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
+        
+        <button id="modal-submit-btn" onclick="handleModalAuth()" style="width:100%; padding:12px; background:#0066cc; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-bottom:10px;">Hyr</button>
+        <button onclick="closeLoginModal()" style="width:100%; padding:10px; background:transparent; color:#888; border:1px solid #333; border-radius:8px; cursor:pointer; margin-bottom:15px;">Cancel</button>
+        
+        <div style="color:#666; font-size:13px; border-top:1px solid #222; padding-top:15px;">
+            <span id="modal-toggle-text">Nuk ke llogari?</span> 
+            <a href="#" onclick="toggleAuthMode(event)" id="modal-toggle-link" style="color:#25D366; text-decoration:none; font-weight:bold;"> Regjistrohu</a>
+        </div>
+        
+        <div id="modal-error" style="color:#ff4444; font-size:13px; margin-top:10px;"></div>
+    </div>
+</div>
+
+<script>
+const supabaseClient = window.supabase.createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
+
+let currentImages = [];
+let currentImgIndex = 0;
+let isRegisterMode = false;
+
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get("id");
+const category = urlParams.get("category");
+
+async function loadProduct() {
+    const container = document.querySelector(".product-page");
+
+    if (!productId) {
+        container.innerHTML = "Nuk u gjet ID e produktit.";
+        return;
+    }
+
+    const tableName = (category === "bracelets_straps") ? "bracelets_straps" : "oras";
+
+    try {
+        const { data, error } = await supabaseClient
+            .from(tableName)
+            .select("*")
+            .eq("id", productId)
+            .single();
+
+        if (error) throw error;
+
+        console.log(data.category);
+        console.log(data);
+        
+        const sellerUserId = data.user_id;
+
+        let sellerName = data.seller_name || "Seller";
+        let sellerCountryCode = data.seller_country || "";
+        let sellerAvatarUrl = "";
+        let sellerJoinedDate = data.created_at;
+
+        if (sellerUserId) {
+            const { data: profileData } = await supabaseClient
+                .from("profiles")
+                .select("*")
+                .eq("id", sellerUserId)
+                .maybeSingle();
+
+            if (profileData) {
+                sellerName = profileData.custom_username || profileData.full_name || sellerName;
+                sellerCountryCode = profileData.coutru || profileData.country || profileData.shteti || sellerCountryCode;
+                sellerAvatarUrl = profileData.image_url || "";
+                sellerJoinedDate = profileData.created_at || sellerJoinedDate;
+            }
+        }
+
+        const osNameEl = document.getElementById("os-name");
+        osNameEl.innerHTML = sellerName + "-oraswiss <span>(Pro)</span>";
+        const sellerProfileUrl = "profile.html?id=" + sellerUserId;
+        osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
+
+        window.currentSellerId = sellerUserId;
+
+        document.getElementById("description").innerText = data.description || "N/A";
+        
+        if (sellerAvatarUrl) {
+            document.getElementById("os-avatar-box").innerHTML = `<img src="${sellerAvatarUrl}" alt="Avatar">`;
+        }
+
+        if (sellerUserId) {
+            const { data: feedbackList } = await supabaseClient
+                .from("feedback")
+                .select("*")
+                .or(`seller_id.eq.${sellerUserId},rated_user_id.eq.${sellerUserId}`);
+
+            const osFeedbackEl = document.getElementById("os-feedback");
+            osFeedbackEl.onclick = () => { window.location.href = sellerProfileUrl; };
+
+            if (feedbackList && feedbackList.length > 0) {
+                const positiveCount = feedbackList.filter(f => f.type === 'positive' || f.rating >= 4).length;
+                const percent = Math.round((positiveCount / feedbackList.length) * 100);
+                osFeedbackEl.textContent = `${percent}% Positive Feedback (${feedbackList.length} vlerësime)`;
+            } else {
+                osFeedbackEl.textContent = "100% Positive Feedback";
+            }
+        } else {
+            document.getElementById("os-feedback").textContent = "100% Positive Feedback";
+        }
+
+        let totalItemsCount = 0;
+        if (sellerUserId) {
+            const { count: countOras } = await supabaseClient
+                .from("oras")
+                .select("*", { count: 'exact', head: true })
+                .eq("user_id", sellerUserId);
+
+            const { count: countBracelets } = await supabaseClient
+                .from("bracelets_straps")
+                .select("*", { count: 'exact', head: true })
+                .eq("user_id", sellerUserId);
+
+            totalItemsCount = (countOras || 0) + (countBracelets || 0);
+        }
+        document.getElementById("os-count").textContent = totalItemsCount;
+
+        document.getElementById("os-items").onclick = () => {
+            window.location.href = sellerProfileUrl;
+        };
+
+        const joined = new Date(sellerJoinedDate || Date.now());
+        const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
+        document.getElementById("os-joined").textContent = "Anëtar që nga " + formattedJoined;
+
+        const contactBtn = document.getElementById("os-contact");
+        if (contactBtn) {
+            contactBtn.onclick = async () => {
+                const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+
+                if (userError || !user) {
+                    document.getElementById("login-modal").style.display = "flex";
+                    return;
+                }
+
+                if (user.id === sellerUserId) {
+                    alert("Ky është produkti yt!");
+                    return;
+                }
+
+                const { data: existingChat } = await supabaseClient
+                    .from("conversations")
+                    .select("id")
+                    .eq("listing_id", data.id)
+                    .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
+                    .maybeSingle();
+
+                if (existingChat) {
+                    window.location.href = "chat.html?conversation=" + existingChat.id;
+                    return;
+                }
+
+                const { data: newConversation, error: createError } = await supabaseClient
+                    .from("conversations")
+                    .insert({
+                        listing_id: data.id,
+                        buyer_id: user.id,
+                        seller_id: sellerUserId,
+                        last_message: "Bisedë e re"
+                    })
+                    .select()
+                    .single();
+
+                if (createError) {
+                    alert("Gabim: " + createError.message);
+                    return;
+                }
+
+                window.location.href = "chat.html?conversation=" + newConversation.id;
+            };
+        }
+
+        const countries = {
+            "Albania": "🇦🇱 Shqipëri",
+            "Switzerland": "🇨🇭 Zvicër",
+            "Italy": "🇮🇹 Itali",
+            "Germany": "🇩🇪 Gjermani",
+            "AL": "🇦🇱 Shqipëri",
+            "CH": "🇨🇭 Zvicër",
+            "IT": "🇮🇹 Itali",
+            "DE": "🇩🇪 Gjermani"
+        };
+        document.getElementById("seller-country").innerText = "🌍 " + (countries[sellerCountryCode] || sellerCountryCode || "International");
+
+        currentImages = Array.isArray(data.image_url) ? data.image_url : (data.image_url ? [data.image_url] : []);
+        currentImgIndex = 0;
+
+        document.getElementById("brand").textContent = data.brand || "N/A";
+        document.getElementById("model").textContent = data.model || "N/A";
+        
+        const currencySymbol = data.currency || "€";
+        document.getElementById("top-price").textContent = (data.price || 0) + " " + currencySymbol;
+        
+        const specsContainer = document.getElementById("specs");
+        specsContainer.innerHTML = "";
+
+        if (category === "bracelets_straps") {
+            specsContainer.innerHTML = `
+                <div class="info-row"><span>Type</span><span>${data.type || "N/A"}</span></div>
+                <div class="info-row"><span>Reference</span><span>${data.reference || "N/A"}</span></div>
+                <div class="info-row"><span>Condition</span><span>${data.condition || "N/A"}</span></div>
+                <div class="info-row"><span>Material</span><span>${data.material || "N/A"}</span></div>
+                <div class="info-row"><span>Net Weight</span><span>${data.net_weight ? data.net_weight + ' g' : "N/A"}</span></div>
+                <div class="info-row"><span>Gold Purity</span><span>${data.gold_purity || "N/A"}</span></div>
+                <div class="info-row"><span>Color</span><span>${data.color || "N/A"}</span></div>
+                <div class="info-row"><span>Lug Width</span><span>${data.lug_width || "N/A"}</span></div>
+                <div class="info-row"><span>Clasp Width</span><span>${data.clasp_width || "N/A"}</span></div>
+                <div class="info-row"><span>Length</span><span>${data.length || "N/A"}</span></div>
+                <div class="info-row"><span>Thickness</span><span>${data.thickness || "N/A"}</span></div>
+                <div class="info-row"><span>Year</span><span>${data.year || "N/A"}</span></div>
+            `;
+        } else {
+
+            const serial = data.serial_number || "";
+            const maskedSerial =
+                serial.length > 3
+                    ? serial.substring(0, 3) + "X".repeat(serial.length - 3)
+                    : serial;
+
+            function specRow(label, value) {
+                if (value === null || value === undefined) return "";
+                if (String(value).trim() === "") return "";
+                if (value === "N/A" || value === "-") return "";
+
+                return `
+                   <div class="info-row">
+                       <span>${label}</span>
+                       <span>${value}</span>
+                   </div>
+               `;
+           }
+
+           const isPart = data.category === "parts";
+
+           specsContainer.innerHTML = `
+               ${specRow("Reference", data.reference)}
+               ${specRow("Serial Number", maskedSerial)}
+               ${specRow("Movement", data.movement)}
+               ${specRow("Caliber", data.caliber)}
+               ${specRow("Condition", data.condition)}  <!-- Shtoje ketu -->
+               ${specRow("Gender", data.gender)}
+               ${specRow("Dial Color", data.dial_color)}
+               ${specRow("Frequency", data.frekuen)}
+               ${specRow("Material", data.material)}
+               ${specRow("Net Weight", data.net_weight ? data.net_weight + " g" : "")}
+               ${specRow("Case Size", data.case_size)}
+               ${specRow("Movement Size", data.movement_size)}
+               ${specRow("Water Resistance", data.water_resistance)}
+               ${specRow("Year", data.year)}
+               ${specRow("Function", data.function)}
+               ${specRow("Crown", data.crown)}
+               ${specRow("Jewels", data.jewels)}
+               ${specRow("Service", data.service ? "Yes (Serviced)" : "")}
+               ${specRow("Service Date", data.service_date)}
+               ${specRow("Origin", data.origin)}
+               ${specRow("Work Status", data.work_status)}
+               ${isPart ? "" : specRow("Bracelet", data.bracelet)}
+               ${specRow("Glass", data.glass)}
+               ${specRow("Warranty", data.warranty)}
+               ${specRow("Warranty Months", data.warranty_months)}
+          `;       
+        }   
+
+        document.getElementById("description").innerText = data.description || "N/A";
+
+        const buyBtn = document.getElementById("buy");
+        if (buyBtn) {
+            buyBtn.onclick = async function(e) {
+                e.preventDefault();
+                buyBtn.innerText = "⏳ Loading...";
+                try {
+                    const response = await fetch(
+                        "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                product_id: productId,
+                                price: data.price,
+                                product_name: data.model
+                            })
+                        }
+                    );
+                    const result = await response.json();
+                    if (result.paypal_link) {
+                        window.location.href = result.paypal_link;
+                    } else {
+                        alert("PayPal link nuk u krijua");
+                        buyBtn.innerText = "🛒 BUY";
+                    }
+                } catch(error) {
+                    console.error(error);
+                    alert("Gabim me PayPal");
+                    buyBtn.innerText = "🛒 BUY";
+                }
+            };
+        }
+
+        updateGallery();
+
+        document.getElementById("whatsapp").href =
+            "https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per%20" +
+            encodeURIComponent(data.model);
+
+    } catch(err) {
+        console.error(err);
+        container.innerHTML = "Gabim: " + err.message;
+    }
+}
+
+function updateGallery() {
+    if(currentImages.length === 0) return;
+    document.getElementById("main-photo").src = currentImages[currentImgIndex];
+    document.getElementById("photo-count").innerText = (currentImgIndex + 1) + " / " + currentImages.length;
+}
+
+function changeImage(direction) {
+    if(currentImages.length === 0) return;
+    currentImgIndex += direction;
+    if(currentImgIndex >= currentImages.length) currentImgIndex = 0;
+    if(currentImgIndex < 0) currentImgIndex = currentImages.length - 1;
+    updateGallery();
+}
+
+function shareProduct() {
+    navigator.clipboard.writeText(window.location.href);
+    alert("Linku u kopjua!");
+}
+
+function toggleLike(element) {
+    if(element.innerText.includes("♡")) {
+        element.innerHTML = "❤️ Liked";
+        element.style.borderColor = "#25D366";
+    } else {
+        element.innerHTML = "♡ Like";
+        element.style.borderColor = "#222";
+    }
+}
+
+function closeLoginModal() {
+    document.getElementById("login-modal").style.display = "none";
+}
+
+function toggleAuthMode(e) {
+    e.preventDefault();
+    isRegisterMode = !isRegisterMode;
+    
+    const title = document.getElementById("modal-title");
+    const desc = document.getElementById("modal-desc");
+    const nameInput = document.getElementById("modal-name");
+    const submitBtn = document.getElementById("modal-submit-btn");
+    const toggleText = document.getElementById("modal-toggle-text");
+    const toggleLink = document.getElementById("modal-toggle-link");
+    const errorEl = document.getElementById("modal-error");
+    
+    errorEl.textContent = "";
+
+    if (isRegisterMode) {
+        title.textContent = "Krijo Llogari";
+        desc.textContent = "Regjistrohu për të kontaktuar shitësit dhe për të blerë.";
+        nameInput.style.display = "block";
+        submitBtn.textContent = "Regjistrohu";
+        toggleText.textContent = "Ke tashmë një llogari?";
+        toggleLink.textContent = " Hyr";
+    } else {
+        title.textContent = "Identifikohu";
+        desc.textContent = "Duhet të jesh i loguar për të kontaktuar shitësin.";
+        nameInput.style.display = "none";
+        submitBtn.textContent = "Hyr";
+        toggleText.textContent = "Nuk ke llogari?";
+        toggleLink.textContent = " Regjistrohu";
+    }
+}
+
+async function handleModalAuth() {
+    const email = document.getElementById("modal-email").value;
+    const password = document.getElementById("modal-password").value;
+    const fullName = document.getElementById("modal-name").value;
+    const errorEl = document.getElementById("modal-error");
+    
+    errorEl.textContent = "Duke u procesuar...";
+
+    if (isRegisterMode) {
+        const { error } = await supabaseClient.auth.signUp({
+            email: email,
+            password: password,
+            options: { data: { full_name: fullName } }
+        });
+
+        if (error) {
+            errorEl.textContent = error.message;
+        } else {
+            alert("Regjistrimi u krye me sukses!");
+            closeLoginModal();
+            document.getElementById("os-contact").click();
+        }
+    } else {
+        const { error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) {
+            errorEl.textContent = error.message;
+        } else {
+            closeLoginModal();
+            document.getElementById("os-contact").click();
+        }
+    }
+}
+
+loadProduct();
+</script>
+
+<!-- TABELA E DËRGIMIT TË OFERTËS (MODAL) -->
+<div id="offer-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:#111; border:1px solid #333; padding:30px; border-radius:16px; width:90%; max-width:400px; text-align:center; position:relative;">
+        <button onclick="closeOfferModal()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✕</button>
+        
+        <h2 style="color:#fff; margin-bottom:10px;">Bëj një ofertë</h2>
+        <p style="color:#aaa; font-size:14px; margin-bottom:20px;">Propozo çmimin tënd për këtë produkt.</p>
+        
+        <input type="number" id="offer-price-input" placeholder="Shkruaj çmimin (p.sh. 450)" style="width:100%; padding:12px; margin-bottom:15px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
+        
+        <button onclick="submitOffer()" style="width:100%; padding:12px; background:#25D366; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-bottom:10px;">Dërgo Ofertën</button>
+        <button onclick="closeOfferModal()" style="width:100%; padding:10px; background:transparent; color:#888; border:1px solid #333; border-radius:8px; cursor:pointer;">Anulo</button>
+        
+        <div id="offer-error" style="color:#ff4444; font-size:13px; margin-top:10px;"></div>
+    </div>
+</div>
+<script>
+document.getElementById("offer").onclick = async function(e) {
+    e.preventDefault();
+    
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+    if (userError || !user) {
+        document.getElementById("login-modal").style.display = "flex";
+        return;
+    }
+
+    if (user.id === window.currentSellerId) {
+        alert("Nuk mund t'i bësh ofertë produktit tënd!");
+        return;
+    }
+
+    document.getElementById("offer-modal").style.display = "flex";
+};
+
+function closeOfferModal() {
+    document.getElementById("offer-modal").style.display = "none";
+    document.getElementById("offer-price-input").value = "";
+    document.getElementById("offer-error").textContent = "";
+}
+
+async function submitOffer() {
+    const offerPrice = document.getElementById("offer-price-input").value;
+    const errorEl = document.getElementById("offer-error");
+
+    if (!offerPrice || offerPrice <= 0) {
+        errorEl.textContent = "Ju lutem shkruani një çmim të vlefshëm.";
+        return;
+    }
+
+    errorEl.style.color = "#fff";
+    errorEl.textContent = "Duke dërguar ofertën...";
+
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) return;
+
+    const { error } = await supabaseClient
+        .from("offers")
+        .insert({
+            product_id: productId,
+            buyer_id: user.id,
+            seller_id: window.currentSellerId,
+            offered_price: parseFloat(offerPrice),
+            status: "pending"
+        });
+
+    if (error) {
+        errorEl.style.color = "#ff4444";
+        errorEl.textContent = "Gabim gjatë dërgimit: " + error.message;
+        return;
+    }
+
+    errorEl.style.color = "#25D366";
+    errorEl.textContent = "Oferta u dërgua me sukses!";
+    setTimeout(() => {
+        closeOfferModal();
+    }, 1500);
+}
+
+</script>  
+</body>
+</html>

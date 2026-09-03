@@ -726,6 +726,10 @@ async function fetchProduct() {
         product.description
     );
 
+    if (product.category === "parts") {
+        document.getElementById("parts_edit_box").style.display = "block";
+    }
+
     hideEmptyFields(product);
 
 // =====================================

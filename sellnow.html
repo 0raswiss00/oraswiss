@@ -263,6 +263,8 @@ button:hover {
 
 <option value="parts">Part</option>
 
+<option value="case">Watch Case</option>
+        
 <option value="bracelets_straps">Bracelets / Straps</option>
 
 
@@ -1532,13 +1534,15 @@ window.location.href =
      watchFields.style.display = "none";
 
 
-     if (category === "luxury" || category === "vintage") {
+    if (category === "luxury" || category === "vintage" || category === "case") {
 
          caseBox.style.display = "block";
-         watchFields.style.display = "block";
+         
+         if (category !== "case") {
+             watchFields.style.display = "block";
+         }
 
      }
-
 
      if (category === "parts") {
 

@@ -339,3 +339,1323 @@ fetchProduct();
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+tjetra aaaa
+
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifiko Orën</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #000;
+            color: #fff;
+            padding: 20px;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #111;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #222;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 5px;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        label {
+            display: block;
+            margin: 12px 0 6px;
+            color: #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: gold;
+            color: #000;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        #deleteBtn {
+            background: #ff4d4d;
+            color: white;
+            margin-top: 10px;
+        }
+
+        #gallery-container {
+            max-width: 600px;
+            margin: 20px auto;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .image-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .product-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid #444;
+        }
+
+        .delete-image {
+            position: absolute;
+            top: 2px;
+            right: 5px;
+            background: rgba(255, 0, 0, 0.85);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1;
+            padding: 0;
+        }
+
+        .info {
+            max-width: 600px;
+            margin: 10px auto;
+            color: #aaa;
+            font-size: 13px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<a href="dashboard.html"
+   style="color:#ccc;text-align:center;display:block;margin-top:10px;text-decoration:none;">
+    ← Back
+</a>
+
+<form id="editForm">
+
+    <h2>Modifiko Produktin</h2>
+
+    <!-- ========================= -->
+    <!-- BAZAT -->
+    <!-- ========================= -->
+
+    <input type="text" id="brand" placeholder="Brand" required>
+
+    <input type="text" id="model" placeholder="Model" required>
+
+    <input type="number" id="price" placeholder="Price">
+
+    <input type="text" id="reference" placeholder="Reference">
+
+    <input type="text" id="serial_number" placeholder="Serial Number">
+
+    <input type="text" id="category" placeholder="Category">
+
+    <select id="condition">
+        <option value="">Zgjidh gjendjen...</option>
+        <option value="Used">Used</option>
+        <option value="Used Good">Used Good</option>
+        <option value="Used Very Good">Used Very Good</option>
+        <option value="Used not Good">Used not Good</option>
+        <option value="Used For Repair & Spares">
+            Used For Repair & Spares
+        </option>
+    </select>
+
+    <input type="text" id="material" placeholder="Material">
+
+    <input type="text" id="movement" placeholder="Movement">
+
+    <input type="text" id="caliber" placeholder="Caliber">
+
+    <input type="text" id="movement_size" placeholder="Movement Size">
+
+    <input type="text" id="case_size" placeholder="Case Size">
+
+    <input type="text" id="size" placeholder="Size">
+
+    <input type="text" id="ref_type" placeholder="Reference Type">
+
+    <!-- ========================= -->
+    <!-- WATCH -->
+    <!-- ========================= -->
+
+    <input type="text" id="gender" placeholder="Gender">
+
+    <input type="text" id="dial_color" placeholder="Dial Color">
+
+    <input type="text" id="water_resistance" placeholder="Water Resistance">
+
+    <input type="text" id="water_resistant" placeholder="Water Resistant">
+
+    <input type="text" id="crown" placeholder="Crown">
+
+    <input type="text" id="jewels" placeholder="Jewels">
+
+    <input type="text" id="glass" placeholder="Glass">
+
+    <input type="text" id="base_plate" placeholder="Base Plate">
+
+    <input type="text" id="frekuen" placeholder="Frequency">
+
+    <!-- ========================= -->
+    <!-- BRACELET / DIMENSIONS -->
+    <!-- ========================= -->
+
+    <input type="text" id="type" placeholder="Type">
+
+    <input type="text" id="length" placeholder="Length">
+
+    <input type="text" id="thickness" placeholder="Thickness">
+
+    <input type="text" id="lug_width" placeholder="Lug Width">
+
+    <input
+        type="number"
+        step="0.01"
+        id="net_weight"
+        placeholder="Net Weight"
+    >
+
+    <!-- ========================= -->
+    <!-- YEAR -->
+    <!-- ========================= -->
+
+    <input
+        type="number"
+        id="year"
+        placeholder="Year"
+    >
+
+    <!-- ========================= -->
+    <!-- SHIPPING -->
+    <!-- ========================= -->
+
+    <input
+        type="text"
+        id="shipping_region"
+        placeholder="Shipping Region"
+    >
+
+    <input
+        type="text"
+        id="shipping_time"
+        placeholder="Shipping Time"
+    >
+
+    <input
+        type="text"
+        id="shipping_provider"
+        placeholder="Shipping Provider"
+    >
+
+    <input
+        type="text"
+        id="shipping_days"
+        placeholder="Shipping Days"
+    >
+
+    <input
+        type="text"
+        id="country"
+        placeholder="Country"
+    >
+
+    <input
+        type="text"
+        id="seller_country"
+        placeholder="Seller Country"
+    >
+
+    <input
+        type="text"
+        id="tracing_number"
+        placeholder="Tracing Number"
+    >
+
+    <!-- ========================= -->
+    <!-- WARRANTY -->
+    <!-- ========================= -->
+
+    <input
+        type="number"
+        id="warranty_months"
+        placeholder="Warranty Months"
+    >
+
+    <!-- ========================= -->
+    <!-- SERVICE -->
+    <!-- ========================= -->
+
+    <label for="service">
+        Service
+    </label>
+
+    <select id="service">
+        <option value="">Zgjidh...</option>
+        <option value="true">Po</option>
+        <option value="false">Jo</option>
+    </select>
+
+    <!-- ========================= -->
+    <!-- BOX / PAPERS -->
+    <!-- ========================= -->
+
+    <input
+        type="text"
+        id="box_papers"
+        placeholder="Box & Papers"
+    >
+
+    <!-- ========================= -->
+    <!-- PAYPAL -->
+    <!-- ========================= -->
+
+    <input
+        type="text"
+        id="paypal_link"
+        placeholder="PayPal Link"
+    >
+
+    <!-- ========================= -->
+    <!-- STATUS -->
+    <!-- ========================= -->
+
+    <input
+        type="text"
+        id="status"
+        placeholder="Status"
+    >
+
+    <!-- ========================= -->
+    <!-- DESCRIPTION -->
+    <!-- ========================= -->
+
+    <textarea
+        id="description"
+        placeholder="Description"
+    ></textarea>
+
+    <!-- ========================= -->
+    <!-- IMAGES -->
+    <!-- ========================= -->
+
+    <label for="image_input">
+        Shto ose ndrysho fotot:
+    </label>
+
+    <input
+        type="file"
+        id="image_input"
+        multiple
+        accept="image/*"
+    >
+
+    <button type="submit">
+        Ruaj Ndryshimet
+    </button>
+
+    <button
+        type="button"
+        id="deleteBtn"
+    >
+        Fshi Produktin
+    </button>
+
+</form>
+
+<div class="info">
+    Kliko një foto ekzistuese për ta bërë foto kryesore.
+</div>
+
+<div id="gallery-container"></div>
+
+
+<script type="module">
+
+import {
+    createClient
+} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+
+const supabase = createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
+
+
+// =====================================
+// PARAMETRAT
+// =====================================
+
+const urlParams =
+    new URLSearchParams(window.location.search);
+
+const id =
+    urlParams.get("id");
+
+const type =
+    urlParams.get("type") || "watch";
+
+
+const tableName =
+    type === "bracelet"
+        ? "bracelets_straps"
+        : "oras";
+
+
+if (!id) {
+
+    alert("ID e produktit mungon.");
+
+    throw new Error("Product ID missing");
+}
+
+
+window.produktData = {
+    image_url: []
+};
+
+
+// =====================================
+// HELPER
+// =====================================
+
+function setValue(id, value) {
+
+    const element =
+        document.getElementById(id);
+
+    if (!element) return;
+
+    element.value =
+        value === null ||
+        value === undefined
+            ? ""
+            : value;
+}
+
+
+function getValue(id) {
+
+    const element =
+        document.getElementById(id);
+
+    if (!element) return "";
+
+    return element.value.trim();
+}
+
+
+function getNullableNumber(id) {
+
+    const value =
+        getValue(id);
+
+    if (value === "") {
+        return null;
+    }
+
+    const number =
+        Number(value);
+
+    return Number.isFinite(number)
+        ? number
+        : null;
+}
+
+
+function hideEmptyFields(product) {
+
+    const fieldIds = [
+        "reference",
+        "serial_number",
+        "category",
+        "condition",
+        "material",
+        "movement",
+        "caliber",
+        "movement_size",
+        "case_size",
+        "size",
+        "ref_type",
+        "gender",
+        "dial_color",
+        "water_resistance",
+        "water_resistant",
+        "crown",
+        "jewels",
+        "glass",
+        "base_plate",
+        "frekuen",
+        "type",
+        "length",
+        "thickness",
+        "lug_width",
+        "net_weight",
+        "year",
+        "shipping_region",
+        "shipping_time",
+        "shipping_provider",
+        "shipping_days",
+        "country",
+        "seller_country",
+        "tracing_number",
+        "warranty_months",
+        "service",
+        "box_papers",
+        "paypal_link",
+        "status",
+        "description"
+    ];
+
+    fieldIds.forEach(fieldId => {
+
+        const element = document.getElementById(fieldId);
+
+        if (!element) return;
+
+        const value = product[fieldId];
+
+        const empty =
+            value === null ||
+            value === undefined ||
+            value === "" ||
+            (typeof value === "string" && value.trim() === "");
+
+        if (empty) {
+            element.style.display = "none";
+
+            const label = document.querySelector(
+                `label[for="${fieldId}"]`
+            );
+
+            if (label) {
+                label.style.display = "none";
+            }
+        }
+    });
+}
+
+
+// =====================================
+// MERR PRODUKTIN
+// =====================================
+
+async function fetchProduct() {
+
+    const {
+        data: product,
+        error
+    } = await supabase
+        .from(tableName)
+        .select("*")
+        .eq("id", id)
+        .single();
+
+
+    if (error) {
+
+        console.error("FETCH ERROR:", error);
+
+        alert(
+            "Gabim gjatë marrjes së produktit:\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    console.log("PRODUCT:", product);
+
+
+    window.produktData =
+        product || {};
+
+
+// =====================================
+// MBUSH FUSHAT
+// =====================================
+
+    setValue("brand", product.brand);
+    setValue("model", product.model);
+    setValue("price", product.price);
+
+    setValue("category", product.category);
+
+    setValue("reference", product.reference);
+    setValue("serial_number", product.serial_number);
+
+    setValue("condition", product.condition);
+
+    setValue("material", product.material);
+
+    setValue("movement", product.movement);
+    setValue("caliber", product.caliber);
+    setValue("movement_size", product.movement_size);
+    setValue("case_size", product.case_size);
+    setValue("size", product.size);
+    setValue("ref_type", product.ref_type);
+
+    setValue("gender", product.gender);
+    setValue("dial_color", product.dial_color);
+
+    setValue(
+        "water_resistance",
+        product.water_resistance
+    );
+
+    setValue(
+        "water_resistant",
+        product.water_resistant
+    );
+
+    setValue("crown", product.crown);
+    setValue("jewels", product.jewels);
+    setValue("glass", product.glass);
+    setValue("base_plate", product.base_plate);
+    setValue("frekuen", product.frekuen);
+
+    setValue("type", product.type);
+    setValue("length", product.length);
+    setValue("thickness", product.thickness);
+    setValue("lug_width", product.lug_width);
+
+    setValue("net_weight", product.net_weight);
+
+    setValue("year", product.year);
+
+    setValue(
+        "shipping_region",
+        product.shipping_region
+    );
+
+    setValue(
+        "shipping_time",
+        product.shipping_time
+    );
+
+    setValue(
+        "shipping_provider",
+        product.shipping_provider
+    );
+
+    setValue(
+        "shipping_days",
+        product.shipping_days
+    );
+
+    setValue("country", product.country);
+
+    setValue(
+        "seller_country",
+        product.seller_country
+    );
+
+    setValue(
+        "tracing_number",
+        product.tracing_number
+    );
+
+    setValue(
+        "warranty_months",
+        product.warranty_months
+    );
+
+    if (product.service === true) {
+
+        setValue("service", "true");
+
+    } else if (product.service === false) {
+
+        setValue("service", "false");
+
+    } else {
+
+        setValue("service", "");
+
+    }
+
+
+    setValue(
+        "box_papers",
+        product.box_papers
+    );
+
+    setValue(
+        "paypal_link",
+        product.paypal_link
+    );
+
+    setValue(
+        "status",
+        product.status
+    );
+
+    setValue(
+        "description",
+        product.description
+    );
+
+    hideEmptyFields(product);
+
+// =====================================
+// FOTOT
+// =====================================
+
+    let images = [];
+
+
+    if (Array.isArray(product.image_url)) {
+
+        images =
+            [...product.image_url];
+
+    }
+
+    else if (
+        typeof product.image_url === "string"
+    ) {
+
+        try {
+
+            const parsed =
+                JSON.parse(product.image_url);
+
+            if (Array.isArray(parsed)) {
+
+                images = parsed;
+
+            } else {
+
+                images = [product.image_url];
+
+            }
+
+        } catch {
+
+            images =
+                product.image_url
+                    .split(",")
+                    .map(x => x.trim())
+                    .filter(Boolean);
+        }
+
+    }
+
+
+    window.produktData.image_url =
+        images;
+
+
+    showImages(images);
+}
+
+
+// =====================================
+// SHFAQ FOTOT
+// =====================================
+
+function showImages(images) {
+
+    const gallery =
+        document.getElementById(
+            "gallery-container"
+        );
+
+
+    if (!gallery) return;
+
+
+    gallery.innerHTML = "";
+
+
+    images.forEach(
+        (url, index) => {
+
+            const wrapper =
+                document.createElement("div");
+
+            wrapper.className =
+                "image-wrapper";
+
+
+            const img =
+                document.createElement("img");
+
+            img.src = url;
+
+            img.className =
+                "product-image";
+
+
+            img.title =
+                "Kliko për ta bërë foto kryesore";
+
+
+            img.onclick = () => {
+
+                const moved =
+                    images.splice(index, 1)[0];
+
+                images.unshift(moved);
+
+                window.produktData.image_url =
+                    images;
+
+                showImages(images);
+            };
+
+
+            const deleteBtn =
+                document.createElement("button");
+
+            deleteBtn.innerHTML = "×";
+
+            deleteBtn.type = "button";
+
+            deleteBtn.className =
+                "delete-image";
+
+
+            deleteBtn.onclick = (e) => {
+
+                e.stopPropagation();
+
+                images.splice(index, 1);
+
+                window.produktData.image_url =
+                    images;
+
+                showImages(images);
+            };
+
+
+            wrapper.appendChild(img);
+
+            wrapper.appendChild(deleteBtn);
+
+            gallery.appendChild(wrapper);
+        }
+    );
+}
+
+
+// =====================================
+// RUAN NDRYSHIMET
+// =====================================
+
+document
+    .getElementById("editForm")
+    .addEventListener(
+        "submit",
+        async (e) => {
+
+            e.preventDefault();
+
+
+            const {
+                data: {
+                    user
+                }
+            } =
+                await supabase.auth.getUser();
+
+
+            if (!user) {
+
+                alert(
+                    "Duhet të jesh i loguar."
+                );
+
+                return;
+            }
+
+
+// =====================================
+// FOTOT E REJA
+// =====================================
+
+            let imageUrls =
+                Array.isArray(
+                    window.produktData.image_url
+                )
+                    ? [
+                        ...window.produktData.image_url
+                    ]
+                    : [];
+
+
+            const fileInput =
+                document.getElementById(
+                    "image_input"
+                );
+
+
+            if (
+                fileInput &&
+                fileInput.files.length > 0
+            ) {
+
+                for (
+                    const file
+                    of fileInput.files
+                ) {
+
+                    const safeName =
+                        file.name
+                            .replace(
+                                /[^a-zA-Z0-9._-]/g,
+                                "_"
+                            );
+
+
+                    const fileName =
+                        `${Date.now()}_${safeName}`;
+
+
+                    const {
+                        error: uploadError
+                    } =
+                        await supabase
+                            .storage
+                            .from("or-images")
+                            .upload(
+                                fileName,
+                                file
+                            );
+
+
+                    if (uploadError) {
+
+                        console.error(
+                            "UPLOAD ERROR:",
+                            uploadError
+                        );
+
+                        alert(
+                            "Gabim gjatë upload të fotos:\n" +
+                            uploadError.message
+                        );
+
+                        return;
+                    }
+
+
+                    const {
+                        data: urlData
+                    } =
+                        supabase
+                            .storage
+                            .from("or-images")
+                            .getPublicUrl(
+                                fileName
+                            );
+
+
+                    if (
+                        urlData &&
+                        urlData.publicUrl
+                    ) {
+
+                        imageUrls.push(
+                            urlData.publicUrl
+                        );
+                    }
+                }
+            }
+
+
+// =====================================
+// VLERAT
+// =====================================
+
+            function getNullableBigInt(value) {
+                if (value === null || value === undefined || value === '') {
+                    return null;
+                }
+
+                const num = Number(value);
+
+                if (!Number.isInteger(num)) {
+                    return null;
+                }
+
+                return num;
+            }
+            
+            const price =
+                getNullableBigInt("price");
+
+            const year =
+                getNullableNumber("year");
+
+            const netWeight =
+                getNullableNumber("net_weight");
+
+            const warrantyMonths =
+                getNullableBigInt(
+                    "warranty_months"
+                );
+
+
+            let service = null;
+
+            const serviceValue =
+                getValue("service");
+
+
+            if (serviceValue === "true") {
+
+                service = true;
+
+            } else if (
+                serviceValue === "false"
+            ) {
+
+                service = false;
+            }
+
+
+// =====================================
+// DATA PËR SUPABASE
+// =====================================
+
+            const updateData = {
+
+                brand:
+                    getValue("brand"),
+
+                model:
+                    getValue("model"),
+
+                price:
+                    price,
+
+                category:
+                    getValue("category"),
+
+                reference:
+                    getValue("reference"),
+
+                serial_number:
+                    getValue("serial_number"),
+
+                condition:
+                    getValue("condition"),
+
+                material:
+                    getValue("material"),
+
+                movement:
+                    getValue("movement"),
+
+                caliber:
+                    getValue("caliber"),
+
+                movement_size:
+                    getValue("movement_size"),
+
+                case_size:
+                    getValue("case_size"),
+
+                size:
+                    getValue("size"),
+
+                ref_type:
+                    getValue("ref_type"),
+
+                gender:
+                    getValue("gender"),
+
+                dial_color:
+                    getValue("dial_color"),
+
+                water_resistance:
+                    getValue("water_resistance"),
+
+                water_resistant:
+                    getValue("water_resistant"),
+
+                crown:
+                    getValue("crown"),
+
+                jewels:
+                    getValue("jewels"),
+
+                glass:
+                    getValue("glass"),
+
+                base_plate:
+                    getValue("base_plate"),
+
+                frekuen:
+                    getValue("frekuen"),
+
+                type:
+                    getValue("type"),
+
+                length:
+                    getValue("length"),
+
+                thickness:
+                    getValue("thickness"),
+
+                lug_width:
+                    getValue("lug_width"),
+
+                net_weight:
+                    netWeight,
+
+                year:
+                    year,
+
+                shipping_region:
+                    getValue(
+                        "shipping_region"
+                    ),
+
+                shipping_time:
+                    getValue(
+                        "shipping_time"
+                    ),
+
+                shipping_provider:
+                    getValue(
+                        "shipping_provider"
+                    ),
+
+                shipping_days:
+                    getValue(
+                        "shipping_days"
+                    ),
+
+                country:
+                    getValue("country"),
+
+                seller_country:
+                    getValue(
+                        "seller_country"
+                    ),
+
+                tracing_number:
+                    getValue(
+                        "tracing_number"
+                    ),
+
+                warranty_months:
+                    warrantyMonths,
+
+                service:
+                    service,
+
+                box_papers:
+                    getValue(
+                        "box_papers"
+                    ),
+
+                paypal_link:
+                    getValue(
+                        "paypal_link"
+                    ),
+
+                status:
+                    getValue("status"),
+
+                description:
+                    getValue(
+                        "description"
+                    ),
+
+                image_url:
+                    imageUrls
+            };
+
+
+            console.log(
+                "UPDATE DATA:",
+                updateData
+            );
+
+
+// =====================================
+// UPDATE
+// =====================================
+
+            const {
+                error
+            } =
+                await supabase
+                    .from(tableName)
+                    .update(updateData)
+                    .eq("id", id)
+                    .eq("user_id", user.id);
+
+
+            if (error) {
+
+                console.error(
+                    "UPDATE ERROR:",
+                    error
+                );
+
+                alert(
+                    "Gabim gjatë ruajtjes:\n\n" +
+                    error.message
+                );
+
+                return;
+            }
+
+
+            alert(
+                "Ndryshimet u ruajtën me sukses!"
+            );
+
+
+            window.location.href =
+                "dashboard.html";
+        }
+    );
+
+
+// =====================================
+// FSHI PRODUKTIN
+// =====================================
+
+document
+    .getElementById("deleteBtn")
+    .addEventListener(
+        "click",
+        async () => {
+
+            if (
+                !confirm(
+                    "A jeni i sigurt që doni ta fshini?"
+                )
+            ) {
+                return;
+            }
+
+
+            const {
+                data: {
+                    user
+                }
+            } =
+                await supabase.auth.getUser();
+
+
+            if (!user) {
+
+                alert(
+                    "Duhet të jesh i loguar."
+                );
+
+                return;
+            }
+
+
+            const {
+                error
+            } =
+                await supabase
+                    .from(tableName)
+                    .delete()
+                    .eq("id", id)
+                    .eq(
+                        "user_id",
+                        user.id
+                    );
+
+
+            if (error) {
+
+                console.error(
+                    "DELETE ERROR:",
+                    error
+                );
+
+                alert(
+                    error.message
+                );
+
+                return;
+            }
+
+
+            alert(
+                "Produkti u fshi!"
+            );
+
+
+            window.location.href =
+                "dashboard.html";
+        }
+    );
+
+
+// =====================================
+// START
+// =====================================
+
+fetchProduct();
+
+</script>
+
+</body>
+</html>
+
+
+
+

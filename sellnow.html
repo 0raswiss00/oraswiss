@@ -1540,34 +1540,37 @@ window.location.href =
 
  function updateCategoryFields() {
 
-     const category = document.getElementById("category").value;
+    const category = document.getElementById("category").value;
 
-     const caseBox = document.getElementById("case_size_box");
-     const movementBox = document.getElementById("movement_size_box");
-     const watchFields = document.getElementById("watch_fields");
+    const caseBox = document.getElementById("case_size_box");
+    const movementBox = document.getElementById("movement_size_box");
+    const watchFields = document.getElementById("watch_fields");
+    const partsBox = document.getElementById("parts_category_box");
 
-     // Fshiji të gjitha
-     caseBox.style.display = "none";
-     movementBox.style.display = "none";
-     watchFields.style.display = "none";
+    // Fshiji të gjitha
+    caseBox.style.display = "none";
+    movementBox.style.display = "none";
+    watchFields.style.display = "none";
+    partsBox.style.display = "none";
 
+    // Luxury / Vintage
+    if (category === "luxury" || category === "vintage") {
 
-     if (category === "luxury" || category === "vintage") {
+        caseBox.style.display = "block";
+        watchFields.style.display = "block";
 
-         caseBox.style.display = "block";
-         watchFields.style.display = "block";
+    }
 
-     }
+    // Parts
+    if (category === "parts") {
 
+        partsBox.style.display = "block";
+        movementBox.style.display = "block";
 
-     if (category === "parts") {
+    }
 
-         movementBox.style.display = "block";
-
-     }
-
-     console.log("CATEGORY:", category);
- }
+    console.log("CATEGORY:", category);
+}
 
 
  document.getElementById("category")

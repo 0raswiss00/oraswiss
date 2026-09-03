@@ -263,8 +263,6 @@ button:hover {
 
 <option value="parts">Part</option>
 
-<option value="case">Watch Case</option>
-        
 <option value="bracelets_straps">Bracelets / Straps</option>
 
 
@@ -622,7 +620,6 @@ placeholder="Example: 28800 vph">
         <option>19 Jewels</option>
         <option>20 Jewels</option>
         <option>21 Jewels</option>
-        <option>22 Jewels</option>
         <option>23 Jewels</option>
         <option>24 Jewels</option>
         <option>25 Jewels</option>
@@ -1535,15 +1532,13 @@ window.location.href =
      watchFields.style.display = "none";
 
 
-    if (category === "luxury" || category === "vintage" || category === "case") {
+     if (category === "luxury" || category === "vintage") {
 
          caseBox.style.display = "block";
-         
-         if (category !== "case") {
-             watchFields.style.display = "block";
-         }
+         watchFields.style.display = "block";
 
      }
+
 
      if (category === "parts") {
 
@@ -1580,3 +1575,4 @@ window.location.href =
 </body>
 
 </html>
+

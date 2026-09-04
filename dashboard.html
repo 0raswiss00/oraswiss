@@ -87,24 +87,33 @@
             bottom: 20px !important;
             left: 50% !important;
             transform: translateX(-50%) !important;
+
             width: calc(100% - 10px) !important;
-            max-width: 480% !important;
-            height: 65px !important;
+            max-width: 480px !important;
+
+            height: 55px !important;
+
             background-color: #1a1a1a !important;
             display: flex !important;
             justify-content: space-around !important;
-            align-items: center !important;
+            Nalign-items: center !important;
+
             box-sizing: border-box !important;
             padding: 0 10px !important;
+
             border-radius: 20px !important;
             border: 1px solid #333 !important;
+
             box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
+
             z-index: 999999 !important;
-        
-            overflow-x: auto !important;
+
+            overflow-x: hidden !important;
             white-space: nowrap !important;
-        
-            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
+
+            transition: transform 0.3s ease-in-out,
+                        opacity 0.3s ease-in-out !important;
+
             opacity: 1 !important;
         }
 
@@ -112,26 +121,37 @@
             display: none !important;
         }
 
-        .bottom-nav-item, .bottom-nav a, .bottom-nav button {
+        .bottom-nav-item,
+        .bottom-nav a,
+        .bottom-nav button {
             color: #ffffff !important;
             text-decoration: none !important;
-            font-size: 19px !important;
+
+            font-size: 11px !important;
             text-align: center !important;
+
             white-space: nowrap !important;
-            flex: 0 0 auto !important;
-            min-width: 110px !important;
+
+            flex: 1 1 0 !important;
+            min-width: 0 !important;
+
             background: none !important;
             border: none !important;
+
             cursor: pointer !important;
+
             display: flex !important;
             flex-direction: column !important;
             align-items: center !important;
             justify-content: center !important;
+
             gap: 2px !important;
             padding: 0 !important;
         }
 
-        .bottom-nav a:hover, .bottom-nav button:hover, .bottom-nav-item:hover {
+        .bottom-nav a:hover,
+        .bottom-nav button:hover,
+        .bottom-nav-item:hover {
             color: gold !important;
         }
 
@@ -140,22 +160,22 @@
             opacity: 0 !important;
             pointer-events: none !important;
         }
-        /* Desktop */
+
+        /* DESKTOP */
         @media (min-width: 1024px) {
             .bottom-nav {
                 left: 50% !important;
                 transform: translateX(-50%) !important;
+
                 width: 500px !important;
+                max-width: 500px !important;
+
                 height: 48px !important;
                 bottom: 15px !important;
             }
+
             .bottom-nav.nav-hidden {
                 transform: translateX(-50%) translateY(120px) !important;
-            }
-        }
-        @media (max-width: 1023px) {
-            .bottom-nav {
-                height: 90px !important;
             }
         }
         .watch-card {

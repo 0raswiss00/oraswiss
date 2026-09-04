@@ -317,19 +317,23 @@
 
     <select id="service">
         <option value="">Zgjidh...</option>
-        <option value="true">Po</option>
-        <option value="false">Jo</option>
+        <option value="true">Yes</option>
+        <option value="false">Not</option>
     </select>
 
     <!-- ========================= -->
     <!-- BOX / PAPERS -->
     <!-- ========================= -->
 
-    <input
-        type="text"
-        id="box_papers"
-        placeholder="Box & Papers"
-    >
+    <label style="display:flex; flex-direction:column; gap:5px;">
+        Box & Papers Status:
+        <select id="box_papers" style="width:100%; padding:8px; border-radius:6px;">
+            <option value="Box / Papers">Box / Papers</option>
+            <option value="Box only">Box only</option>
+            <option value="Papers only">Papers only</option>
+            <option value="No box, no papers">No box, no papers</option>
+        </select>
+    </label>
 
     <!-- ========================= -->
     <!-- PAYPAL -->

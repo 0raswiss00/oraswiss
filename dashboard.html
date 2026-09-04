@@ -96,14 +96,14 @@
             transform: translateX(-50%) !important;
 
             width: calc(100% - 20px) !important;
-            max-width: 480px !important;
+            max-width: 1200px !important;
 
             height: 65px !important;
 
             background-color: #1a1a1a !important;
 
             display: flex !important;
-            justify-content: space-around !important;
+            justify-content: flex-start !important;
             align-items: center !important;
 
             box-sizing: border-box !important;
@@ -116,7 +116,10 @@
 
             z-index: 999999 !important;
 
-            overflow: hidden !important;
+            /* SCROLL MAJTAS-DJATHTAS */
+            overflow-x: auto !important;
+            overflow-y: hidden !important;
+
             white-space: nowrap !important;
 
             opacity: 1 !important;
@@ -124,27 +127,40 @@
             transition:
                 transform 0.3s ease-in-out,
                 opacity 0.3s ease-in-out !important;
+
+            scrollbar-width: none !important;
+
+            -webkit-overflow-scrolling: touch !important;
+        }
+
+        /* Fshi scrollbar-in në Chrome/Edge */
+        .bottom-nav::-webkit-scrollbar {
+            display: none !important;
         }
 
 
         /* =========================
-            NAV ITEMS
+           NAV ITEMS
         ========================= */
 
         .bottom-nav-item,
         .bottom-nav a,
         .bottom-nav button {
+
             color: #ffffff !important;
+
             text-decoration: none !important;
 
-            font-size: 13px !important;
+            font-size: 14px !important;
+
             text-align: center !important;
 
-            white-space: normal !important;
-            line-height: 1.2 !important;
+            white-space: nowrap !important;
 
-            flex: 1 1 0 !important;
-            min-width: 0 !important;
+            /* MOS I NGJIT / MOS I NGJESH */
+            flex: 0 0 auto !important;
+
+            min-width: max-content !important;
 
             background: none !important;
             border: none !important;
@@ -159,29 +175,29 @@
 
             gap: 2px !important;
 
-            padding: 0 3px !important;
+            /* Hapësirë mes butonave */
+            padding: 0 18px !important;
 
-            overflow: hidden !important;
+            height: 100% !important;
         }
 
+
         /* =========================
-            HOVER
-        ========================= */
+           HOVER
+         ========================= */
 
         .bottom-nav a:hover,
         .bottom-nav button:hover,
         .bottom-nav-item:hover {
-
             color: gold !important;
         }
 
 
         /* =========================
-            WHEN HIDDEN
+           WHEN HIDDEN
         ========================= */
 
         .bottom-nav.nav-hidden {
-
             transform:
                 translateX(-50%)
                 translateY(120px) !important;
@@ -193,7 +209,7 @@
 
 
         /* =========================
-            WATCH CARDS
+           WATCH CARDS
         ========================= */
 
         .watch-card {
@@ -219,14 +235,11 @@
 
 
         /* =========================
-            BODY
-            LËR VEND POSHTË MENUSË
+           BODY
         ========================= */
 
         body {
-
             padding-top: 0 !important;
-
             padding-bottom: 105px !important;
         }
 
@@ -240,15 +253,9 @@
             .bottom-nav {
 
                 bottom: 20px !important;
-                top: auto !important;
 
-                left: 50% !important;
-                right: auto !important;
-
-                transform: translateX(-50%) !important;
-
-                width: 850px !important;
-                max-width: 850px !important;
+                width: 95% !important;
+                max-width: 1200px !important;
 
                 height: 75px !important;
             }
@@ -259,6 +266,9 @@
             .bottom-nav button {
 
                 font-size: 16px !important;
+
+                padding-left: 22px !important;
+                padding-right: 22px !important;
             }
 
 
@@ -271,7 +281,6 @@
 
 
             body {
-
                 padding-bottom: 115px !important;
             }
         }

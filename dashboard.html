@@ -82,18 +82,29 @@
             border-bottom: none; 
         }
 
+    <style>
+        /* =========================
+           BOTTOM NAV - LART
+        ========================= */
+
         .bottom-nav {
             position: fixed !important;
-            bottom: 20px !important;
+
+            top: 20px !important;
+            bottom: auto !important;
+
             left: 50% !important;
+            right: auto !important;
+
             transform: translateX(-50%) !important;
 
             width: calc(100% - 20px) !important;
             max-width: 480px !important;
 
-            height: 55px !important;
+            height: 65px !important;
 
             background-color: #1a1a1a !important;
+
             display: flex !important;
             justify-content: space-around !important;
             align-items: center !important;
@@ -104,26 +115,35 @@
             border-radius: 20px !important;
             border: 1px solid #333 !important;
 
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5) !important;
 
             z-index: 999999 !important;
 
             overflow: hidden !important;
             white-space: nowrap !important;
 
-            transition: transform 0.3s ease-in-out,
-                        opacity 0.3s ease-in-out !important;
-
             opacity: 1 !important;
+
+            transition:
+                transform 0.3s ease-in-out,
+                opacity 0.3s ease-in-out !important;
         }
+
+
+        /* =========================
+           NAV ITEMS
+        ========================= */
 
         .bottom-nav-item,
         .bottom-nav a,
         .bottom-nav button {
+
             color: #ffffff !important;
+
             text-decoration: none !important;
 
-            font-size: 15px !important;
+            font-size: 14px !important;
+
             text-align: center !important;
 
             white-space: nowrap !important;
@@ -138,59 +158,126 @@
 
             display: flex !important;
             flex-direction: column !important;
+
             align-items: center !important;
             justify-content: center !important;
 
             gap: 2px !important;
+
             padding: 0 !important;
         }
+
+
+        /* =========================
+           HOVER
+        ========================= */
 
         .bottom-nav a:hover,
         .bottom-nav button:hover,
         .bottom-nav-item:hover {
+
             color: gold !important;
         }
 
+
+        /* =========================
+           WHEN HIDDEN
+        ========================= */
+
         .bottom-nav.nav-hidden {
-            transform: translateX(-50%) translateY(120px) !important;
+
+            transform:
+                translateX(-50%)
+                translateY(-120px) !important;
+
             opacity: 0 !important;
+
             pointer-events: none !important;
         }
 
-        /* DESKTOP */
+
+        /* =========================
+           WATCH CARDS
+        ========================= */
+
+        .watch-card {
+
+            background: #111 !important;
+
+            margin-bottom: 20px !important;
+
+            padding: 20px !important;
+
+            border-radius: 12px !important;
+
+            display: flex !important;
+
+            align-items: center !important;
+
+            gap: 25px !important;
+
+            list-style: none !important;
+
+            min-height: 140px !important;
+        }
+
+
+        /* =========================
+           BODY
+           LËR VEND POSHTË MENUSË
+        ========================= */
+
+        body {
+
+            padding-top: 105px !important;
+
+            padding-bottom: 0 !important;
+        }
+
+
+        /* =========================
+           DESKTOP
+        ========================= */
+
         @media (min-width: 1024px) {
+
             .bottom-nav {
+
+                top: 20px !important;
+                bottom: auto !important;
+
                 left: 50% !important;
+                right: auto !important;
+
                 transform: translateX(-50%) !important;
 
-                width: 750px !important;
-                max-width: 750px !important;
+                width: 850px !important;
+                max-width: 850px !important;
 
-                height: 60px !important;
-                bottom: 20px !important;
+                height: 75px !important;
             }
+
 
             .bottom-nav-item,
             .bottom-nav a,
             .bottom-nav button {
-                font-size: 13px !important;
+
+                font-size: 16px !important;
             }
+
 
             .bottom-nav.nav-hidden {
-                transform: translateX(-50%) translateY(120px) !important;
-            }
-        }
 
-        .watch-card {
-            background: #111;
-            margin-bottom: 20px;
-            padding: 20px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            gap: 25px;
-            list-style: none;
-            min-height: 140px;
+                transform:
+                    translateX(-50%)
+                    translateY(-120px) !important;
+            }
+
+
+            body {
+
+                padding-top: 115px !important;
+            }
         }
     </style>
 </head>

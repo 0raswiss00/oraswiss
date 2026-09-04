@@ -88,18 +88,18 @@
             left: 50% !important;
             transform: translateX(-50%) !important;
 
-            width: calc(100% - 10px) !important;
-            max-width: 480px !important;
+            width: calc(100% - 20px) !important;
+            max-width: 550px !important; /* E rritëm pak që të nxënë elementët */
 
             height: 55px !important;
 
             background-color: #1a1a1a !important;
             display: flex !important;
-            justify-content: space-around !important;
+            justify-content: space-between !important; /* Ndryshuar nga space-around në space-between për shtrirje më të mirë majtas-djathtas */
             align-items: center !important;
 
             box-sizing: border-box !important;
-            padding: 0 10px !important;
+            padding: 0 8px !important; /* Zvogëluar pak padding anësor */
 
             border-radius: 20px !important;
             border: 1px solid #333 !important;
@@ -123,7 +123,7 @@
             color: #ffffff !important;
             text-decoration: none !important;
 
-            font-size: 11px !important;
+            font-size: 10px !important; /* Zvogëluar nga 11px në 10px që të mos mbivendosen */
             text-align: center !important;
 
             white-space: nowrap !important;
@@ -141,8 +141,8 @@
             align-items: center !important;
             justify-content: center !important;
 
-            gap: 2px !important;
-            padding: 0 !important;
+            gap: 1px !important; /* Zvogëluar hapësira mes ikonës dhe tekstit */
+            padding: 0 2px !important;
         }
 
         .bottom-nav a:hover,
@@ -163,17 +163,17 @@
                 left: 50% !important;
                 transform: translateX(-50%) !important;
 
-                width: 500px !important;
-                max-width: 500px !important;
+                width: 580px !important; /* Zgjeruar për desktop që të ketë hapësirë për të gjithë tekstin */
+                max-width: 580px !important;
 
-                height: 48px !important;
+                height: 50px !important;
                 bottom: 15px !important;
             }
 
             .bottom-nav.nav-hidden {
                 transform: translateX(-50%) translateY(120px) !important;
             }
-        } 
+        }
         .watch-card {
             background: #111;
             margin-bottom: 20px;

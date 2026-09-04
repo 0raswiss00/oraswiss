@@ -82,24 +82,24 @@
             border-bottom: none; 
         }
 
-       .bottom-nav {
+        .bottom-nav {
             position: fixed !important;
             bottom: 20px !important;
             left: 50% !important;
             transform: translateX(-50%) !important;
 
             width: calc(100% - 20px) !important;
-            max-width: 550px !important; /* E rritëm pak që të nxënë elementët */
+            max-width: 480px !important;
 
             height: 55px !important;
 
             background-color: #1a1a1a !important;
             display: flex !important;
-            justify-content: space-between !important; /* Ndryshuar nga space-around në space-between për shtrirje më të mirë majtas-djathtas */
+            justify-content: space-around !important;
             align-items: center !important;
 
             box-sizing: border-box !important;
-            padding: 0 8px !important; /* Zvogëluar pak padding anësor */
+            padding: 0 10px !important;
 
             border-radius: 20px !important;
             border: 1px solid #333 !important;
@@ -123,7 +123,7 @@
             color: #ffffff !important;
             text-decoration: none !important;
 
-            font-size: 10px !important; /* Zvogëluar nga 11px në 10px që të mos mbivendosen */
+            font-size: 11px !important;
             text-align: center !important;
 
             white-space: nowrap !important;
@@ -141,8 +141,8 @@
             align-items: center !important;
             justify-content: center !important;
 
-            gap: 1px !important; /* Zvogëluar hapësira mes ikonës dhe tekstit */
-            padding: 0 2px !important;
+            gap: 2px !important;
+            padding: 0 !important;
         }
 
         .bottom-nav a:hover,
@@ -163,10 +163,10 @@
                 left: 50% !important;
                 transform: translateX(-50%) !important;
 
-                width: 580px !important; /* Zgjeruar për desktop që të ketë hapësirë për të gjithë tekstin */
-                max-width: 580px !important;
+                width: 500px !important;
+                max-width: 500px !important;
 
-                height: 50px !important;
+                height: 48px !important;
                 bottom: 15px !important;
             }
 
@@ -174,6 +174,7 @@
                 transform: translateX(-50%) translateY(120px) !important;
             }
         }
+
         .watch-card {
             background: #111;
             margin-bottom: 20px;
@@ -187,7 +188,7 @@
         }
     </style>
 </head>
-<body>
+<body style="margin: 0; padding-bottom: 90px; background-color: #0b0b0b; color: #fff;">
 
     <div class="search-container">
         <div class="search-box">

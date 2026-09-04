@@ -82,7 +82,7 @@
             border-bottom: none; 
         }
 
-        .bottom-nav {
+       .bottom-nav {
             position: fixed !important;
             bottom: 20px !important;
             left: 50% !important;
@@ -96,7 +96,7 @@
             background-color: #1a1a1a !important;
             display: flex !important;
             justify-content: space-around !important;
-            Nalign-items: center !important;
+            align-items: center !important;
 
             box-sizing: border-box !important;
             padding: 0 10px !important;
@@ -108,17 +108,13 @@
 
             z-index: 999999 !important;
 
-            overflow-x: hidden !important;
+            overflow: hidden !important;
             white-space: nowrap !important;
 
             transition: transform 0.3s ease-in-out,
                         opacity 0.3s ease-in-out !important;
 
             opacity: 1 !important;
-        }
-
-        .bottom-nav::-webkit-scrollbar {
-            display: none !important;
         }
 
         .bottom-nav-item,
@@ -177,7 +173,7 @@
             .bottom-nav.nav-hidden {
                 transform: translateX(-50%) translateY(120px) !important;
             }
-        }
+        } 
         .watch-card {
             background: #111;
             margin-bottom: 20px;

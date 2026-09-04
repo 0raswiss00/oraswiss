@@ -498,7 +498,7 @@
     <div class="details">
         <div class="top-actions">
             <div class="action" onclick="shareProduct()">🔗 Share</div>
-            <div class="action" onclick="toggleLike(this)" title="Ruaj në të preferuarat">♡ Like</div>
+            <div class="action" onclick="toggleLike(this)" title="Add to Favorites">♡ Like</div>
         </div>
 
         <div class="brand" id="brand">-</div>
@@ -511,7 +511,7 @@
     </div>
     
     <div class="info-box" id="specs">
-        <!-- Të dhënat do të gjenerohen automatikisht -->
+        <!-- The data will be generated automatically. -->
     </div>
 
     <div class="info-box">
@@ -536,11 +536,11 @@
                 </div>
                 <div>
                     <h3 id="os-name">- <span>(Pro)</span></h3>
-                    <p class="oraswiss-green" id="os-feedback">Duke kontrolluar feedback...</p>
+                    <p class="oraswiss-green" id="os-feedback">Checking feedback...</p>
                 </div>
             </div>
         </div>
-        <div class="oraswiss-joined" id="os-joined">Anëtar që nga -</div>
+        <div class="oraswiss-joined" id="os-joined">Member since</div>
         <div class="oraswiss-actions">
             <button class="oraswiss-btn-blue" id="os-items">
                 Seller's other items (<span id="os-count">0</span>)
@@ -817,6 +817,7 @@ async function loadProduct() {
                ${specRow("Movement Size", data.movement_size)}
                ${specRow("Water Resistance", data.water_resistance)}
                ${specRow("Year", data.year)}
+               ${specRow("Box & Papers", data.box_papers)}
                ${specRow("Function", data.function)}
                ${specRow("Crown", data.crown)}
                ${specRow("Jewels", data.jewels)}
@@ -855,12 +856,12 @@ async function loadProduct() {
                     if (result.paypal_link) {
                         window.location.href = result.paypal_link;
                     } else {
-                        alert("PayPal link nuk u krijua");
+                        alert("PayPal link could not be created.");
                         buyBtn.innerText = "🛒 BUY";
                     }
                 } catch(error) {
                     console.error(error);
-                    alert("Gabim me PayPal");
+                    alert("PayPal error.");
                     buyBtn.innerText = "🛒 BUY";
                 }
             };
@@ -926,19 +927,19 @@ function toggleAuthMode(e) {
     errorEl.textContent = "";
 
     if (isRegisterMode) {
-        title.textContent = "Krijo Llogari";
-        desc.textContent = "Regjistrohu për të kontaktuar shitësit dhe për të blerë.";
+        title.textContent = "Create Account";
+        desc.textContent = "Sign up to contact sellers and make purchases.";
         nameInput.style.display = "block";
-        submitBtn.textContent = "Regjistrohu";
-        toggleText.textContent = "Ke tashmë një llogari?";
-        toggleLink.textContent = " Hyr";
+        submitBtn.textContent = "Sign Up";
+        toggleText.textContent = "Already have an account?";
+        toggleLink.textContent = " Log In";
     } else {
-        title.textContent = "Identifikohu";
-        desc.textContent = "Duhet të jesh i loguar për të kontaktuar shitësin.";
+        title.textContent = "Log In";
+        desc.textContent = "You must be logged in to contact the seller.";
         nameInput.style.display = "none";
-        submitBtn.textContent = "Hyr";
-        toggleText.textContent = "Nuk ke llogari?";
-        toggleLink.textContent = " Regjistrohu";
+        submitBtn.textContent = "Log In";
+        toggleText.textContent = "Don't have an account?";
+        toggleLink.textContent = " Sign Up";
     }
 }
 
@@ -960,7 +961,7 @@ async function handleModalAuth() {
         if (error) {
             errorEl.textContent = error.message;
         } else {
-            alert("Regjistrimi u krye me sukses!");
+            alert("Registration completed successfully!");
             closeLoginModal();
             document.getElementById("os-contact").click();
         }
@@ -987,7 +988,7 @@ loadProduct();
     <div style="background:#111; border:1px solid #333; padding:30px; border-radius:16px; width:90%; max-width:400px; text-align:center; position:relative;">
         <button onclick="closeOfferModal()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✕</button>
         
-        <h2 style="color:#fff; margin-bottom:10px;">Bëj një ofertë</h2>
+        <h2 style="color:#fff; margin-bottom:10px;">Make an offer</h2>
         <p style="color:#aaa; font-size:14px; margin-bottom:20px;">Propozo çmimin tënd për këtë produkt.</p>
         
         <input type="number" id="offer-price-input" placeholder="Shkruaj çmimin (p.sh. 450)" style="width:100%; padding:12px; margin-bottom:15px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
@@ -1027,12 +1028,12 @@ async function submitOffer() {
     const errorEl = document.getElementById("offer-error");
 
     if (!offerPrice || offerPrice <= 0) {
-        errorEl.textContent = "Ju lutem shkruani një çmim të vlefshëm.";
+        errorEl.textContent = "Please enter a valid price.";
         return;
     }
 
     errorEl.style.color = "#fff";
-    errorEl.textContent = "Duke dërguar ofertën...";
+    errorEl.textContent = "Sending offer...";
 
     const { data: { user } } = await supabaseClient.auth.getUser();
     if (!user) return;
@@ -1054,7 +1055,7 @@ async function submitOffer() {
     }
 
     errorEl.style.color = "#25D366";
-    errorEl.textContent = "Oferta u dërgua me sukses!";
+    errorEl.textContent = "Offer sent successfully!";
     setTimeout(() => {
         closeOfferModal();
     }, 1500);

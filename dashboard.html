@@ -86,11 +86,11 @@
            BOTTOM NAV - LART
         ========================= */
 
+        <style>
         .bottom-nav {
             position: fixed !important;
-
-            top: 20px !important;
-            bottom: auto !important;
+            bottom: 20px !important;
+            top: auto !important;
 
             left: 50% !important;
             right: auto !important;
@@ -130,7 +130,7 @@
 
 
         /* =========================
-           NAV ITEMS
+            NAV ITEMS
         ========================= */
 
         .bottom-nav-item,
@@ -168,7 +168,7 @@
 
 
         /* =========================
-           HOVER
+            HOVER
         ========================= */
 
         .bottom-nav a:hover,
@@ -180,14 +180,14 @@
 
 
         /* =========================
-           WHEN HIDDEN
+            WHEN HIDDEN
         ========================= */
 
         .bottom-nav.nav-hidden {
 
             transform:
                 translateX(-50%)
-                translateY(-120px) !important;
+                translateY(120px) !important;
 
             opacity: 0 !important;
 
@@ -196,7 +196,7 @@
 
 
         /* =========================
-           WATCH CARDS
+            WATCH CARDS
         ========================= */
 
         .watch-card {
@@ -222,28 +222,28 @@
 
 
         /* =========================
-           BODY
-           LËR VEND POSHTË MENUSË
+            BODY
+            LËR VEND POSHTË MENUSË
         ========================= */
 
         body {
 
-            padding-top: 105px !important;
+            padding-top: 0 !important;
 
-            padding-bottom: 0 !important;
+            padding-bottom: 105px !important;
         }
 
 
         /* =========================
-           DESKTOP
+            DESKTOP
         ========================= */
 
         @media (min-width: 1024px) {
 
             .bottom-nav {
 
-                top: 20px !important;
-                bottom: auto !important;
+                bottom: 20px !important;
+                top: auto !important;
 
                 left: 50% !important;
                 right: auto !important;
@@ -269,13 +269,13 @@
 
                 transform:
                     translateX(-50%)
-                    translateY(-120px) !important;
+                    translateY(120px) !important;
             }
 
 
             body {
 
-                padding-top: 115px !important;
+                padding-bottom: 115px !important;
             }
         }
     </style>

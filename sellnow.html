@@ -717,7 +717,7 @@ placeholder="Example: 28800 vph">
             <option value="Box / Papers">Box / Papers</option>
             <option value="Box only">Box only</option>
             <option value="Papers only">Papers only</option>
-            <option value="None">None</option>
+            <option value="No box, no papers">No box, no papers</option>
         </select>
     </label>
 
@@ -869,25 +869,25 @@ placeholder="Example: Europe 3-7 days, USA 7-14 days">
 
 <div class="shipping-config-group">
 
-    <!-- Zgjedhja e Shërbimit Postar -->
+    <!-- Select Shipping Service -->
 
     <div class="field-wrapper">
 
-        <label for="shipping_provider">Lloji i Shërbimit Postar</label>
+        <label for="shipping_provider">Shipping Service Type</label>
 
         <select id="shipping_provider" name="shipping_provider">
 
-            <option value="">Zgjidh shërbimin postar...</option>
+            <option value="">Select Shipping Service...</option>
 
-            <option value="Standard">Posta Standarde (Lokale)</option>
+            <option value="Standard">Standard Shipping (Local)</option>
 
-            <option value="Express">Posta Express</option>
+            <option value="Express">Express Shipping</option>
 
             <option value="DHL">DHL Express</option>
 
             <option value="FedEx">FedEx</option>
 
-            <option value="Custom">Korrier Privat / Tjetër</option>
+            <option value="Custom">Private Courier / Other</option>
 
         </select>
 
@@ -895,13 +895,13 @@ placeholder="Example: Europe 3-7 days, USA 7-14 days">
 
 
 
-    <!-- Afati i dërgesës pas blerjes (Si Input Teksti i Lirë) -->
+    <!-- Shipping Time After Purchase (Free Text Input) -->
 
     <div class="field-wrapper">
 
-        <label for="shipping_days">Koha e Dërgesës (Pas Blerjes)</label>
+        <label for="shipping_days">Shipping Time After Payment</label>
 
-        <input id="shipping_days" type="text" placeholder="Shembull: DHL: 4-7 ditë ose Ekonomike: 25-30 ditë">
+        <input id="shipping_days" type="text" placeholder="Shipped within 1 to 5 days.">
 
     </div>
 
@@ -1015,7 +1015,7 @@ const supabase = createClient(
 
 /*
 
- Kontrollon nëse përdoruesi është i loguar
+ Checks if the user is logged in.
 
 */
 
@@ -1031,7 +1031,7 @@ if(!user){
 
 
 
-    alert("Duhet të jesh i loguar!");
+    alert("You must be logged in!");
 
 
 
@@ -1225,7 +1225,7 @@ for(let i=0; i<files.length; i++){
 
         alert(
 
-        "Gabim gjatë upload fotos: "
+        “Error uploading photo:”
 
         + uploadError.message
 
@@ -1289,7 +1289,7 @@ imageUrls
 
 
 
-// Krijimi i objektit të orës
+// Creating the watch object
 
 const price = parseInt(document.getElementById("price").value) || 0;
 
@@ -1470,7 +1470,7 @@ const oraData = {
 
 console.log(
 
-"Po dërgoj:",
+"Sending:",
 
 oraData
 
@@ -1508,7 +1508,7 @@ if(error){
 
     alert(
 
-    "Gabim gjatë publikimit: "
+    "Error while publishing: "
 
     + error.message
 

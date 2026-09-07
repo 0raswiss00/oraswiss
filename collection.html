@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Watch Collection | Ora Swiss</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+
+    <!-- Header / Navbar -->
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <a href="/" class="text-xl font-bold tracking-wider text-amber-500">ORA SWISS</a>
+            <div class="flex items-center gap-4">
+                <a href="favorites.html" class="text-sm text-slate-400 hover:text-white transition">Favorites</a>
+                <a href="collection.html" class="text-sm text-amber-500 font-medium">My Collection</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        
+        <!-- Top Summary Dashboard -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+                <p class="text-slate-400 text-sm">Total Watches</p>
+                <h3 id="stat-total" class="text-2xl font-bold mt-1">0</h3>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+                <p class="text-slate-400 text-sm">Purchase Cost</p>
+                <h3 id="stat-cost" class="text-2xl font-bold mt-1">€0</h3>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+                <p class="text-slate-400 text-sm">Estimated Value</p>
+                <h3 id="stat-value" class="text-2xl font-bold text-amber-500 mt-1">€0</h3>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+                <p class="text-slate-400 text-sm">Performance / Profit</p>
+                <h3 id="stat-profit" class="text-2xl font-bold text-emerald-400 mt-1">€0</h3>
+            </div>
+        </div>
+
+        <!-- Actions & Filters Bar -->
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
+            <div class="flex items-center gap-2 bg-slate-900 p-1.5 rounded-xl border border-slate-800">
+                <button onclick="filterCollection('all')" class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium bg-amber-500 text-slate-950 transition">All</button>
+                <button onclick="filterCollection('owned')" class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition">Owned</button>
+                <button onclick="filterCollection('wanted')" class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition">Wanted</button>
+                <button onclick="filterCollection('sold')" class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition">Sold</button>
+            </div>
+            
+            <button onclick="openAddModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 px-5 py-2.5 rounded-xl font-semibold text-sm transition">
+                + Add Watch to Collection
+            </button>
+        </div>
+
+        <!-- Collection Grid -->
+        <div id="collection-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Dynamic items will load here -->
+            <div class="col-span-full text-center py-12 text-slate-500">Loading your collection...</div>
+        </div>
+    </main>
+
+    <!-- Modal for Adding Watch -->
+    <div id="add-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-slate-800 max-w-md w-full p-6 rounded-2xl">
+            <h3 class="text-lg font-bold mb-4">Add Watch to Collection</h3>
+            <form id="add-form" onsubmit="saveWatch(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Status</label>
+                    <select id="watch-status" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm text-white">
+                        <option value="owned">I Own This Watch (Owned)</option>
+                        <option value="wanted">I Want This Watch (Wanted)</option>
+                        <option value="sold">Sold</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Product ID (from Ora Swiss)</label>
+                        <input type="number" id="product-id" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm text-white" placeholder="e.g. 190">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Purchase Price (€)</label>
+                        <input type="number" id="purchase-price" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm text-white" placeholder="4200">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Current Value (€)</label>
+                        <input type="number" id="current-value" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm text-white" placeholder="4800">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Purchase Date</label>
+                        <input type="date" id="purchase-date" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Personal Notes</label>
+                    <textarea id="watch-notes" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm text-white" placeholder="Box & papers included..."></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeAddModal()" class="px-4 py-2 rounded-lg text-sm text-slate-400 hover:text-white">Cancel</button>
+                    <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-slate-950 px-5 py-2 rounded-lg text-sm font-semibold transition">Save Watch</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script logic -->
+    <script>
+        const supabaseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+        const supabaseKey = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        let collectionData = [];
+        let currentFilter = 'all';
+
+        async function fetchCollection() {
+            // Sigurohu që përdoruesi është i loguar ose përdor një user_id testues nëse s'ke auth aktiv
+            const { data: { user } } = await supabase.auth.getUser();
+            const userId = user ? user.id : 'ca8d97e5-bcbd-4cfe-b1d8-693f5d99009b'; // përdor id e tua nga gabimet e mëparshme
+
+            const { data, error } = await supabase
+                .from('collections')
+                .select(`
+                    *,
+                    oras (brand, model, reference, price)
+                `)
+                .eq('user_id', userId);
+
+            if (error) {
+                console.error("Error loading collection:", error);
+                document.getElementById('collection-grid').innerHTML = `<div class="col-span-full text-center py-12 text-red-400">Error loading collection data. Make sure 'collections' table exists.</div>`;
+                return;
+            }
+
+            collectionData = data || [];
+            updateDashboard();
+            renderCollection();
+        }
+
+        function updateDashboard() {
+            const total = collectionData.length;
+            const totalCost = collectionData.reduce((acc, item) => acc + (Number(item.purchase_price) || 0), 0);
+            const totalValue = collectionData.reduce((acc, item) => acc + (Number(item.current_value) || 0), 0);
+            const profit = totalValue - totalCost;
+
+            document.getElementById('stat-total').innerText = total;
+            document.getElementById('stat-cost').innerText = `€${totalCost.toLocaleString()}`;
+            document.getElementById('stat-value').innerText = `€${totalValue.toLocaleString()}`;
+            
+            const profitEl = document.getElementById('stat-profit');
+            profitEl.innerText = `${profit >= '' ? '+' : ''}€${profit.toLocaleString()}`;
+            profitEl.className = `text-2xl font-bold mt-1 ${profit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+        }
+
+        function renderCollection() {
+            const grid = document.getElementById('collection-grid');
+            const filtered = currentFilter === 'all' 
+                ? collectionData 
+                : collectionData.filter(item => item.status === currentFilter);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500">No watches found in this category.</div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(item => {
+                const product = item.oras || {};
+                const badgeColor = item.status === 'owned' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' : 
+                                   item.status === 'wanted' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-slate-800 text-slate-400 border-slate-700';
+                
+                return `
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs uppercase px-2.5 py-1 rounded-full border font-semibold ${badgeColor}">${item.status}</span>
+                                <span class="text-sm font-semibold text-amber-500">€${item.current_value || product.price || 0}</span>
+                            </div>
+                            <h4 class="font-bold text-lg text-white">${product.brand || 'Unknown Brand'}</h4>
+                            <p class="text-slate-400 text-sm">${product.model || 'Model name'} (${product.reference || 'Ref'})</p>
+                            ${item.notes ? `<p class="text-xs text-slate-500 mt-3 bg-slate-950 p-2.5 rounded-lg border border-slate-800/60">"${item.notes}"</p>` : ''}
+                        </div>
+                        <div class="flex items-center justify-between mt-6 pt-4 border-t border-slate-800">
+                            <a href="product.html?id=${item.product_id}" class="text-xs font-medium text-slate-400 hover:text-white transition">View Watch →</a>
+                            <button onclick="deleteItem('${item.id}')" class="text-xs text-rose-400 hover:text-rose-300 transition">Remove</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterCollection(status) {
+            currentFilter = status;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = "filter-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition";
+            });
+            event.target.className = "filter-btn px-4 py-1.5 rounded-lg text-sm font-medium bg-amber-500 text-slate-950 transition";
+            renderCollection();
+        }
+
+        function openAddModal() {
+            document.getElementById('add-modal').classList.remove('hidden');
+            document.getElementById('add-modal').classList.add('flex');
+        }
+
+        function closeAddModal() {
+            document.getElementById('add-modal').classList.remove('flex');
+            document.getElementById('add-modal').classList.add('hidden');
+        }
+
+        async function saveWatch(e) {
+            e.preventDefault();
+            const { data: { user } } = await supabase.auth.getUser();
+            const userId = user ? user.id : 'ca8d97e5-bcbd-4cfe-b1d8-693f5d99009b';
+
+            const newEntry = {
+                user_id: userId,
+                product_id: Number(document.getElementById('product-id').value),
+                product_table: 'oras',
+                status: document.getElementById('watch-status').value,
+                purchase_price: Number(document.getElementById('purchase-price').value) || null,
+                current_value: Number(document.getElementById('current-value').value) || null,
+                purchase_date: document.getElementById('purchase-date').value || null,
+                notes: document.getElementById('watch-notes').value || null
+            };
+
+            const { error } = await supabase.from('collections').insert([newEntry]);
+            if (error) {
+                alert('Error saving watch: ' + error.message);
+                return;
+            }
+
+            closeAddModal();
+            document.getElementById('add-form').reset();
+            fetchCollection();
+        }
+
+        async function deleteItem(id) {
+            if (!confirm('Are you sure you want to remove this watch from your collection?')) return;
+            const { error } = await supabase.from('collections').delete().eq('id', id);
+            if (error) {
+                alert('Error deleting item');
+                return;
+            }
+            fetchCollection();
+        }
+
+        // Initialize load
+        fetchCollection();
+    </script>
+</body>
+</html>

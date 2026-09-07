@@ -1,0 +1,428 @@
+```html
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Favorites - Ora Swiss</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px 10px 100px;
+    background: #000;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.back-btn {
+    background: #1a1a1a;
+    color: white;
+    border: 1px solid #333;
+    padding: 9px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+#favorites-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.favorite-card {
+    position: relative;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.favorite-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+}
+
+.favorite-info {
+    padding-top: 10px;
+}
+
+.favorite-info h3 {
+    margin: 0 0 5px;
+    font-size: 16px;
+}
+
+.favorite-info p {
+    margin: 0 0 5px;
+    color: #aaa;
+    font-size: 13px;
+}
+
+.price {
+    color: #fff;
+    font-weight: bold;
+    margin-top: 8px !important;
+}
+
+.remove-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 9px;
+    background: #222;
+    color: #fff;
+    border: 1px solid #444;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.remove-btn:hover {
+    background: #333;
+}
+
+.open-btn {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 9px;
+    background: #fff;
+    color: #000;
+    border-radius: 7px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.empty {
+    text-align: center;
+    color: #888;
+    padding: 60px 20px;
+    grid-column: 1 / -1;
+}
+
+.loading {
+    text-align: center;
+    color: #aaa;
+    padding: 40px;
+    grid-column: 1 / -1;
+}
+
+@media (min-width: 768px) {
+    #favorites-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .favorite-card img {
+        height: 190px;
+    }
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    height: 55px;
+    background: #1a1a1a;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 10px;
+    border-radius: 20px;
+    border: 1px solid #333;
+    box-shadow: 0 5px 20px rgba(0,0,0,.5);
+    z-index: 99999;
+}
+
+.bottom-nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 11px;
+    text-align: center;
+    flex: 1;
+}
+
+.bottom-nav a:hover {
+    color: gold;
+}
+
+@media (min-width: 1024px) {
+    .bottom-nav {
+        width: 500px;
+        height: 48px;
+        bottom: 15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>⭐ My Favorites</h1>
+    <a href="dashboard.html" class="back-btn">← Home</a>
+</div>
+
+<div id="favorites-container">
+    <div class="loading">Loading favorites...</div>
+</div>
+
+<nav class="bottom-nav">
+    <a href="dashboard.html">🏠<br>Home</a>
+    <a href="favorites.html">⭐<br>Favs</a>
+    <a href="messages.html">✉️<br>Messages</a>
+    <a href="mysales.html">📦<br>Sales</a>
+    <a href="sellnow.html">➕<br>Sell</a>
+</nav>
+
+<script>
+
+const supabase = window.supabase.createClient(
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+);
+
+async function loadFavorites() {
+
+    const container = document.getElementById("favorites-container");
+
+    const {
+        data: { user },
+        error: userError
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+        container.innerHTML = `
+            <div class="empty">
+                <h2>Login Required</h2>
+                <p>Please login to see your favorites.</p>
+                <a href="register.html" class="open-btn">
+                    Login / Register
+                </a>
+            </div>
+        `;
+        return;
+    }
+
+    const { data: favorites, error } = await supabase
+        .from("favorites")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Favorites error:", error);
+
+        container.innerHTML = `
+            <div class="empty">
+                Error loading favorites.
+            </div>
+        `;
+
+        return;
+    }
+
+    if (!favorites || favorites.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty">
+                <div style="font-size:50px;">⭐</div>
+                <h2>No Favorites Yet</h2>
+                <p>When you like a product, it will appear here.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML = "";
+
+    for (const favorite of favorites) {
+
+        let product = null;
+
+        if (favorite.product_table === "bracelets_straps") {
+
+            const { data } = await supabase
+                .from("bracelets_straps")
+                .select("*")
+                .eq("id", favorite.product_id)
+                .single();
+
+            product = data;
+
+        } else {
+
+            const { data } = await supabase
+                .from("oras")
+                .select("*")
+                .eq("id", favorite.product_id)
+                .single();
+
+            product = data;
+        }
+
+        if (!product) {
+            continue;
+        }
+
+        let imgUrl =
+            "https://placeholder.co/600x400/222/fff?text=No+Image";
+
+        let primaryImage = "";
+
+        if (product.image_url) {
+
+            if (Array.isArray(product.image_url)) {
+                primaryImage = product.image_url[0];
+
+            } else {
+                primaryImage = product.image_url;
+            }
+        }
+
+        if (
+            primaryImage &&
+            primaryImage !== "null" &&
+            primaryImage !== ""
+        ) {
+
+            if (primaryImage.startsWith("http")) {
+
+                imgUrl = primaryImage;
+
+            } else {
+
+                imgUrl =
+                    "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/"
+                    + primaryImage;
+            }
+        }
+
+        const card = document.createElement("div");
+
+        card.className = "favorite-card";
+
+        card.innerHTML = `
+
+            <img
+                src="${imgUrl}"
+                alt="${product.brand || "Product"}"
+            >
+
+            <div class="favorite-info">
+
+                <h3>
+                    ${product.brand || ""}
+                </h3>
+
+                <p>
+                    ${product.model || product.reference || ""}
+                </p>
+
+                ${
+                    product.price
+                    ?
+                    `<p class="price">
+                        €${Number(product.price).toLocaleString()}
+                    </p>`
+                    :
+                    ""
+                }
+
+                <a
+                    href="product.html?id=${product.id}"
+                    class="open-btn"
+                >
+                    View Details
+                </a>
+
+                <button
+                    class="remove-btn"
+                    onclick="removeFavorite(
+                        '${favorite.id}',
+                        this
+                    )"
+                >
+                    ❤️ Remove Favorite
+                </button>
+
+            </div>
+        `;
+
+        container.appendChild(card);
+    }
+}
+
+
+async function removeFavorite(favoriteId, button) {
+
+    button.disabled = true;
+    button.innerText = "Removing...";
+
+    const { error } = await supabase
+        .from("favorites")
+        .delete()
+        .eq("id", favoriteId);
+
+    if (error) {
+
+        console.error(error);
+
+        button.disabled = false;
+        button.innerText = "❤️ Remove Favorite";
+
+        alert("Could not remove favorite.");
+
+        return;
+    }
+
+    button.closest(".favorite-card").remove();
+
+    const container =
+        document.getElementById("favorites-container");
+
+    if (container.children.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty">
+                <div style="font-size:50px;">⭐</div>
+                <h2>No Favorites Yet</h2>
+                <p>When you like a product, it will appear here.</p>
+            </div>
+        `;
+    }
+}
+
+
+loadFavorites();
+
+</script>
+
+</body>
+</html>
+```

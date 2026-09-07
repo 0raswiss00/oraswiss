@@ -698,11 +698,13 @@
     ===================================================== */
 
     async function getCurrentUser() {
-
         const {
             data: { session },
             error
         } = await supabaseClient.auth.getSession();
+
+        console.log("SESSION:", session);
+        console.log("USER:", session?.user);
 
         if (error) {
             console.error("Auth error:", error);

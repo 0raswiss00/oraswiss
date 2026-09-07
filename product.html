@@ -903,16 +903,150 @@ function shareProduct() {
     alert("Linku u kopjua!");
 }
 
-function toggleLike(element) {
-    if(element.innerText.includes("♡")) {
-        element.innerHTML = "❤️ Liked";
-        element.style.borderColor = "#25D366";
-    } else {
+async function toggleLike(element) {
+
+    const {
+        data: { user },
+        error: userError
+    } = await supabaseClient.auth.getUser();
+
+    if (userError || !user) {
+        const modal = document.getElementById("login-modal");
+
+        if (modal) {
+            modal.style.display = "flex";
+        } else {
+            window.location.href = "login.html";
+        }
+
+        return;
+    }
+
+    if (!productId) {
+        console.error("Product ID missing");
+        return;
+    }
+
+    const tableName =
+        category === "bracelets_straps"
+            ? "bracelets_straps"
+            : "oras";
+
+    const alreadyLiked = element.dataset.liked === "true";
+
+    // =========================
+    // REMOVE FROM FAVORITES
+    // =========================
+    if (alreadyLiked) {
+
+        const { error } = await supabaseClient
+            .from("favorites")
+            .delete()
+            .eq("user_id", user.id)
+            .eq("product_id", productId)
+            .eq("product_table", tableName);
+
+        if (error) {
+            console.error("Remove favorite error:", error);
+            alert("Nuk u hoq nga Favorites.");
+            return;
+        }
+
+        element.dataset.liked = "false";
         element.innerHTML = "♡ Like";
         element.style.borderColor = "#222";
+
+        return;
     }
+
+    // =========================
+    // ADD TO FAVORITES
+    // =========================
+
+    const { error } = await supabaseClient
+        .from("favorites")
+        .insert({
+            user_id: user.id,
+            product_id: productId,
+            product_table: tableName
+        });
+
+    if (error) {
+
+        // Nëse ekziston tashmë
+        if (error.code === "23505") {
+
+            element.dataset.liked = "true";
+            element.innerHTML = "❤️ Liked";
+            element.style.borderColor = "#25D366";
+
+            return;
+        }
+
+        console.error("Add favorite error:", error);
+        alert("Produkti nuk u shtua te Favorites.");
+        return;
+    }
+
+    element.dataset.liked = "true";
+    element.innerHTML = "❤️ Liked";
+    element.style.borderColor = "#25D366";
+
+    console.log("Added to favorites:", productId);
 }
 
+async function loadFavoriteState() {
+
+    const button = document.getElementById("favoriteBtn");
+
+    if (!button || !productId) {
+        return;
+    }
+
+    const {
+        data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    // User nuk është logged in
+    if (!user) {
+        button.dataset.liked = "false";
+        button.innerHTML = "♡ Like";
+        button.style.borderColor = "#222";
+        return;
+    }
+
+    const tableName =
+        category === "bracelets_straps"
+            ? "bracelets_straps"
+            : "oras";
+
+    const { data, error } = await supabaseClient
+        .from("favorites")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("product_id", productId)
+        .eq("product_table", tableName)
+        .maybeSingle();
+
+    if (error) {
+        console.error("Favorite state error:", error);
+        return;
+    }
+
+    if (data) {
+
+        button.dataset.liked = "true";
+        button.innerHTML = "❤️ Liked";
+        button.style.borderColor = "#25D366";
+
+    } else {
+
+        button.dataset.liked = "false";
+        button.innerHTML = "♡ Like";
+        button.style.borderColor = "#222";
+    }
+}
+    
 function closeLoginModal() {
     document.getElementById("login-modal").style.display = "none";
 }

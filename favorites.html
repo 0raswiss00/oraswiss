@@ -1,13 +1,13 @@
-```html
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>My Favorites - Ora Swiss</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
+<!-- Supabase & Global Connection -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="db-connect.js"></script>
 
 <style>
 * {
@@ -16,31 +16,47 @@
 
 body {
     margin: 0;
-    padding: 20px 10px 100px;
-    background: #000;
+    padding: 20px 15px 100px;
+    background: #050505;
     color: #fff;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #1a1a1a;
+    padding-bottom: 15px;
 }
 
 .header h1 {
     margin: 0;
     font-size: 22px;
+    letter-spacing: 0.5px;
 }
 
 .back-btn {
-    background: #1a1a1a;
-    color: white;
-    border: 1px solid #333;
-    padding: 9px 14px;
-    border-radius: 8px;
+    background: #111;
+    color: #aaa;
+    border: 1px solid #222;
+    padding: 8px 14px;
+    border-radius: 20px;
     text-decoration: none;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.back-btn:hover {
+    background: #222;
+    color: #fff;
+    border-color: #444;
 }
 
 #favorites-container {
@@ -50,91 +66,128 @@ body {
 }
 
 .favorite-card {
-    position: relative;
     background: #111;
-    border: 1px solid #333;
+    border: 1px solid #222;
     border-radius: 12px;
-    padding: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.favorite-card:hover {
+    transform: translateY(-3px);
+    border-color: #444;
+}
+
+.favorite-img-wrapper {
+    width: 100%;
+    height: 160px;
+    background: #000;
+    position: relative;
     overflow: hidden;
 }
 
 .favorite-card img {
     width: 100%;
-    height: 160px;
+    height: 100%;
     object-fit: cover;
-    border-radius: 8px;
     display: block;
 }
 
 .favorite-info {
-    padding-top: 10px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
 }
 
-.favorite-info h3 {
-    margin: 0 0 5px;
-    font-size: 16px;
-}
-
-.favorite-info p {
-    margin: 0 0 5px;
-    color: #aaa;
+.favorite-brand {
     font-size: 13px;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.favorite-model {
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .price {
-    color: #fff;
+    color: #25D366;
     font-weight: bold;
-    margin-top: 8px !important;
+    font-size: 16px;
+    margin: 4px 0 8px 0;
 }
 
-.remove-btn {
-    width: 100%;
-    margin-top: 10px;
-    padding: 9px;
-    background: #222;
-    color: #fff;
-    border: 1px solid #444;
-    border-radius: 7px;
-    cursor: pointer;
-}
-
-.remove-btn:hover {
-    background: #333;
+.card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 1px solid #1a1a1a;
 }
 
 .open-btn {
-    display: block;
-    width: 100%;
-    margin-top: 8px;
+    flex: 1;
     padding: 9px;
     background: #fff;
     color: #000;
-    border-radius: 7px;
+    border-radius: 8px;
     text-align: center;
     text-decoration: none;
     font-weight: bold;
+    font-size: 13px;
+    transition: background 0.2s;
 }
 
-.empty {
+.open-btn:hover {
+    background: #e0e0e0;
+}
+
+.remove-btn {
+    flex: 1;
+    padding: 9px;
+    background: #1a1a1a;
+    color: #ff4d4d;
+    border: 1px solid #333;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.remove-btn:hover {
+    background: #2a1a1a;
+    border-color: #ff4d4d;
+}
+
+.empty, .loading {
     text-align: center;
     color: #888;
     padding: 60px 20px;
     grid-column: 1 / -1;
+    font-size: 15px;
 }
 
-.loading {
-    text-align: center;
-    color: #aaa;
-    padding: 40px;
-    grid-column: 1 / -1;
+.empty h2 {
+    color: #fff;
+    margin: 15px 0 8px 0;
+    font-size: 20px;
 }
 
 @media (min-width: 768px) {
     #favorites-container {
         grid-template-columns: repeat(4, 1fr);
     }
-
-    .favorite-card img {
+    .favorite-img-wrapper {
         height: 190px;
     }
 }
@@ -144,7 +197,7 @@ body {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 100%;
+    width: 90%;
     max-width: 480px;
     height: 55px;
     background: #1a1a1a;
@@ -169,26 +222,20 @@ body {
 .bottom-nav a:hover {
     color: gold;
 }
-
-@media (min-width: 1024px) {
-    .bottom-nav {
-        width: 500px;
-        height: 48px;
-        bottom: 15px;
-    }
-}
 </style>
 </head>
 
 <body>
 
-<div class="header">
-    <h1>⭐ My Favorites</h1>
-    <a href="dashboard.html" class="back-btn">← Home</a>
-</div>
+<div class="container">
+    <div class="header">
+        <h1>⭐ My Favorites</h1>
+        <a href="dashboard.html" class="back-btn">← Home</a>
+    </div>
 
-<div id="favorites-container">
-    <div class="loading">Loading favorites...</div>
+    <div id="favorites-container">
+        <div class="loading">Loading favorites...</div>
+    </div>
 </div>
 
 <nav class="bottom-nav">
@@ -200,695 +247,187 @@ body {
 </nav>
 
 <script>
-
-const supabase = window.supabase.createClient(
-    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
-    "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-);
-
-
-/* =========================================================
-   LOAD FAVORITES
-========================================================= */
+document.addEventListener("DOMContentLoaded", async function() {
+    await loadFavorites();
+});
 
 async function loadFavorites() {
-
     const container = document.getElementById("favorites-container");
 
-    container.innerHTML = `
-        <div class="loading">
-            Loading favorites...
-        </div>
-    `;
+    if (!window.supabaseClient) {
+        container.innerHTML = '<div class="empty" style="color: red;">Database connection error.</div>';
+        return;
+    }
 
-
-    /* -----------------------------------------------------
-       GET LOGGED USER
-    ----------------------------------------------------- */
-
-    const {
-        data: { user },
-        error: userError
-    } = await supabase.auth.getUser();
-
+    const { data: { user }, error: userError } = await window.supabaseClient.auth.getUser();
 
     if (userError || !user) {
-
-        console.error("User error:", userError);
-
         container.innerHTML = `
             <div class="empty">
-
-                <div style="font-size:50px;">
-                    ⭐
-                </div>
-
+                <div style="font-size:50px;">⭐</div>
                 <h2>Login Required</h2>
-
-                <p>
-                    Please login to see your favorites.
-                </p>
-
-                <a
-                    href="register.html"
-                    class="open-btn"
-                >
-                    Login / Register
-                </a>
-
+                <p>Please login to see your favorites.</p>
+                <a href="register.html" class="open-btn" style="display:inline-block; margin-top:15px; max-width:200px;">Login / Register</a>
             </div>
         `;
-
         return;
     }
 
-
-    /* -----------------------------------------------------
-       GET FAVORITES
-
-       IMPORTANT:
-       We do NOT use created_at here because if that
-       column does not exist it causes Supabase 400.
-    ----------------------------------------------------- */
-
-    const {
-        data: favorites,
-        error: favoritesError
-    } = await supabase
+    const { data: favorites, error: favoritesError } = await window.supabaseClient
         .from("favorites")
-        .select("id,user_id,product_id,product_table")
+        .select("id, user_id, product_id, product_table")
         .eq("user_id", user.id);
 
-
     if (favoritesError) {
-
-        console.error(
-            "Favorites loading error:",
-            favoritesError
-        );
-
-        container.innerHTML = `
-            <div class="empty">
-
-                <div style="font-size:45px;">
-                    ⚠️
-                </div>
-
-                <h2>Error loading favorites</h2>
-
-                <p>
-                    ${favoritesError.message || "Please try again."}
-                </p>
-
-            </div>
-        `;
-
+        console.error("Favorites error:", favoritesError);
+        container.innerHTML = `<div class="empty">⚠️ Error loading favorites: ${escapeHTML(favoritesError.message)}</div>`;
         return;
     }
-
-
-    /* -----------------------------------------------------
-       NO FAVORITES
-    ----------------------------------------------------- */
 
     if (!favorites || favorites.length === 0) {
-
         showEmptyFavorites();
-
         return;
     }
-
 
     container.innerHTML = "";
 
-
-    /* -----------------------------------------------------
-       LOAD EACH FAVORITE
-    ----------------------------------------------------- */
-
     for (const favorite of favorites) {
-
         try {
+            const productTable = favorite.product_table === "bracelets_straps" ? "bracelets_straps" : "oras";
 
-            const productTable =
-                favorite.product_table === "bracelets_straps"
-                    ? "bracelets_straps"
-                    : "oras";
-
-
-            /* ---------------------------------------------
-               GET PRODUCT
-            --------------------------------------------- */
-
-            const {
-                data: product,
-                error: productError
-            } = await supabase
+            const { data: product, error: productError } = await window.supabaseClient
                 .from(productTable)
                 .select("*")
                 .eq("id", favorite.product_id)
                 .maybeSingle();
 
-
-            if (productError) {
-
-                console.error(
-                    "Product error:",
-                    favorite.product_id,
-                    productError
-                );
-
-                continue;
-            }
-
-
-            if (!product) {
-
-                console.warn(
-                    "Favorite product no longer exists:",
-                    favorite.product_id
-                );
-
-                continue;
-            }
-
-
-            /* ---------------------------------------------
-               IMAGE
-            --------------------------------------------- */
+            if (productError || !product) continue;
 
             const imgUrl = getProductImage(product);
+            const brand = product.brand || "Ora Swiss";
+            const model = product.model || product.reference || product.type || "";
+            const price = product.price !== null && product.price !== undefined ? `${Number(product.price).toLocaleString()} ${product.currency || '€'}` : "";
 
+            const productUrl = productTable === "bracelets_straps" 
+                ? `product-details.html?id=${encodeURIComponent(product.id)}&category=bracelets_straps`
+                : `product.html?id=${encodeURIComponent(product.id)}`;
 
-            /* ---------------------------------------------
-               PRODUCT NAME
-            --------------------------------------------- */
-
-            const brand =
-                product.brand ||
-                "";
-
-
-            const model =
-                product.model ||
-                product.reference ||
-                product.type ||
-                "";
-
-
-            /* ---------------------------------------------
-               PRICE
-            --------------------------------------------- */
-
-            let priceHTML = "";
-
-
-            if (
-                product.price !== null &&
-                product.price !== undefined &&
-                product.price !== ""
-            ) {
-
-                const currency =
-                    product.currency ||
-                    "€";
-
-
-                priceHTML = `
-                    <p class="price">
-                        ${Number(product.price).toLocaleString()}
-                        ${currency}
-                    </p>
-                `;
-            }
-
-
-            /* ---------------------------------------------
-               PRODUCT URL
-            --------------------------------------------- */
-
-            let productUrl;
-
-
-            if (productTable === "bracelets_straps") {
-
-                productUrl =
-                    `product-details.html?id=${encodeURIComponent(
-                        product.id
-                    )}&category=bracelets_straps`;
-
-            } else {
-
-                productUrl =
-                    `product.html?id=${encodeURIComponent(
-                        product.id
-                    )}`;
-            }
-
-
-            /* ---------------------------------------------
-               CREATE CARD
-            --------------------------------------------- */
-
-            const card =
-                document.createElement("div");
-
-
-            card.className =
-                "favorite-card";
-
-
+            const card = document.createElement("div");
+            card.className = "favorite-card";
             card.innerHTML = `
-
-                <img
-                    src="${escapeHTML(imgUrl)}"
-                    alt="${escapeHTML(
-                        brand || "Product"
-                    )}"
-                    onerror="
-                        this.onerror=null;
-                        this.src='https://placeholder.co/600x400/222/fff?text=No+Image';
-                    "
-                >
-
-
-                <div class="favorite-info">
-
-
-                    <h3>
-                        ${escapeHTML(brand)}
-                    </h3>
-
-
-                    <p>
-                        ${escapeHTML(model)}
-                    </p>
-
-
-                    ${priceHTML}
-
-
-                    <a
-                        href="${productUrl}"
-                        class="open-btn"
-                    >
-                        View Details
-                    </a>
-
-
-                    <button
-                        class="remove-btn"
-                        type="button"
-                    >
-                        ❤️ Remove Favorite
-                    </button>
-
-
+                <div class="favorite-img-wrapper">
+                    <img src="${escapeHTML(imgUrl)}" alt="${escapeHTML(brand)}" loading="lazy" onerror="this.onerror=null; this.src='https://placeholder.co/600x400/222/fff?text=No+Image';">
                 </div>
-
+                <div class="favorite-info">
+                    <div class="favorite-brand">${escapeHTML(brand)}</div>
+                    <div class="favorite-model">${escapeHTML(model)}</div>
+                    ${price ? `<div class="price">${price}</div>` : ''}
+                    <div class="card-actions">
+                        <a href="${productUrl}" class="open-btn">View</a>
+                        <button class="remove-btn" type="button">Remove</button>
+                    </div>
+                </div>
             `;
 
-
-            /* ---------------------------------------------
-               REMOVE BUTTON
-            --------------------------------------------- */
-
-            const removeButton =
-                card.querySelector(".remove-btn");
-
-
-            removeButton.addEventListener(
-                "click",
-                function () {
-
-                    removeFavorite(
-                        favorite.id,
-                        card,
-                        this
-                    );
-
-                }
-            );
-
+            card.querySelector(".remove-btn").addEventListener("click", async function() {
+                await removeFavorite(favorite.id, card, this);
+            });
 
             container.appendChild(card);
-
-
         } catch (err) {
-
-            console.error(
-                "Favorite card error:",
-                err
-            );
-
+            console.error("Card rendering error:", err);
         }
-
     }
-
-
-    /* -----------------------------------------------------
-       IF ALL FAVORITES ARE INVALID / DELETED
-    ----------------------------------------------------- */
 
     if (container.children.length === 0) {
-
         showEmptyFavorites();
-
     }
-
 }
-
-
-/* =========================================================
-   GET PRODUCT IMAGE
-========================================================= */
 
 function getProductImage(product) {
-
-    const placeholder =
-        "https://placeholder.co/600x400/222/fff?text=No+Image";
-
-
+    const placeholder = "https://placeholder.co/600x400/222/fff?text=No+Image";
     let image = null;
 
-
-    /* -----------------------------------------------------
-       image_url
-    ----------------------------------------------------- */
-
     if (product.image_url) {
-
-        if (Array.isArray(product.image_url)) {
-
-            image =
-                product.image_url.find(
-                    item =>
-                        item &&
-                        typeof item === "string"
-                );
-
-        } else {
-
-            image =
-                product.image_url;
-
-        }
-
+        image = Array.isArray(product.image_url) ? product.image_url.find(i => i && typeof i === "string") : product.image_url;
     }
-
-
-    /* -----------------------------------------------------
-       image
-    ----------------------------------------------------- */
-
     if (!image && product.image) {
-
-        if (Array.isArray(product.image)) {
-
-            image =
-                product.image[0];
-
-        } else {
-
-            image =
-                product.image;
-
-        }
-
+        image = Array.isArray(product.image) ? product.image[0] : product.image;
     }
-
-
-    /* -----------------------------------------------------
-       photos
-    ----------------------------------------------------- */
-
     if (!image && product.photos) {
-
         if (Array.isArray(product.photos)) {
-
-            image =
-                product.photos[0];
-
+            image = product.photos[0];
         } else {
-
             try {
-
-                const parsed =
-                    JSON.parse(product.photos);
-
-                if (Array.isArray(parsed)) {
-
-                    image =
-                        parsed[0];
-
-                } else {
-
-                    image =
-                        product.photos;
-
-                }
-
+                const parsed = JSON.parse(product.photos);
+                image = Array.isArray(parsed) ? parsed[0] : product.photos;
             } catch {
-
-                image =
-                    product.photos;
-
+                image = product.photos;
             }
-
         }
-
     }
 
+    if (!image || image === "null" || image === "undefined") return placeholder;
+    image = String(image).trim();
+    if (!image) return placeholder;
 
-    if (
-        !image ||
-        image === "null" ||
-        image === "undefined"
-    ) {
+    if (image.startsWith("http://") || image.startsWith("https://")) return image;
 
-        return placeholder;
-
-    }
-
-
-    image =
-        String(image).trim();
-
-
-    if (!image) {
-
-        return placeholder;
-
-    }
-
-
-    /* -----------------------------------------------------
-       FULL URL
-    ----------------------------------------------------- */
-
-    if (
-        image.startsWith("http://") ||
-        image.startsWith("https://")
-    ) {
-
-        return image;
-
-    }
-
-
-    /* -----------------------------------------------------
-       SUPABASE STORAGE
-    ----------------------------------------------------- */
-
-    return (
-        "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/"
-        +
-        image.replace(/^\/+/, "")
-    );
-
+    return "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + image.replace(/^\/+/, "");
 }
 
-
-/* =========================================================
-   REMOVE FAVORITE
-========================================================= */
-
-async function removeFavorite(
-    favoriteId,
-    card,
-    button
-) {
-
-    if (!favoriteId) {
-
-        console.error(
-            "Favorite ID missing"
-        );
-
-        return;
-    }
-
-
+async function removeFavorite(favoriteId, card, button) {
     button.disabled = true;
+    button.innerText = "...";
 
-    button.innerText =
-        "Removing...";
-
-
-    /* -----------------------------------------------------
-       GET CURRENT USER
-    ----------------------------------------------------- */
-
-    const {
-        data: { user },
-        error: userError
-    } = await supabase.auth.getUser();
-
-
-    if (userError || !user) {
-
+    const { data: { user } } = await window.supabaseClient.auth.getUser();
+    if (!user) {
+        alert("Please login again.");
         button.disabled = false;
-
-        button.innerText =
-            "❤️ Remove Favorite";
-
-        alert(
-            "Please login again."
-        );
-
+        button.innerText = "Remove";
         return;
     }
 
-
-    /* -----------------------------------------------------
-       DELETE ONLY USER'S FAVORITE
-    ----------------------------------------------------- */
-
-    const {
-        error
-    } = await supabase
+    const { error } = await window.supabaseClient
         .from("favorites")
         .delete()
         .eq("id", favoriteId)
         .eq("user_id", user.id);
 
-
     if (error) {
-
-        console.error(
-            "Remove favorite error:",
-            error
-        );
-
+        alert("Could not remove favorite.");
         button.disabled = false;
-
-        button.innerText =
-            "❤️ Remove Favorite";
-
-
-        alert(
-            "Could not remove favorite.\n\n" +
-            (error.message || "")
-        );
-
+        button.innerText = "Remove";
         return;
     }
 
-
-    /* -----------------------------------------------------
-       REMOVE CARD FROM PAGE
-    ----------------------------------------------------- */
-
     card.remove();
-
-
-    const container =
-        document.getElementById(
-            "favorites-container"
-        );
-
-
-    if (
-        !container.children.length
-    ) {
-
+    const container = document.getElementById("favorites-container");
+    if (!container.children.length) {
         showEmptyFavorites();
-
     }
-
 }
-
-
-/* =========================================================
-   EMPTY FAVORITES
-========================================================= */
 
 function showEmptyFavorites() {
-
-    const container =
-        document.getElementById(
-            "favorites-container"
-        );
-
-
-    container.innerHTML = `
-
+    document.getElementById("favorites-container").innerHTML = `
         <div class="empty">
-
-            <div style="font-size:50px;">
-                ⭐
-            </div>
-
-            <h2>
-                No Favorites Yet
-            </h2>
-
-            <p>
-                When you like a product,
-                it will appear here.
-            </p>
-
+            <div style="font-size:50px;">⭐</div>
+            <h2>No Favorites Yet</h2>
+            <p>When you like a product, it will appear here.</p>
         </div>
-
     `;
-
 }
 
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
 function escapeHTML(value) {
-
-    if (
-        value === null ||
-        value === undefined
-    ) {
-
-        return "";
-
-    }
-
-
+    if (value === null || value === undefined) return "";
     return String(value)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
-
 }
-
-
-/* =========================================================
-   START
-========================================================= */
-
-loadFavorites();
-
 </script>
 
 </body>
 </html>
-```

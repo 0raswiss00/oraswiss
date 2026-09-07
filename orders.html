@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Orders | OraSwiss</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0b0b0b;
+            color: #fff;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(11, 11, 11, 0.96);
+            border-bottom: 1px solid #222;
+            backdrop-filter: blur(12px);
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: auto;
+            min-height: 72px;
+            padding: 0 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            color: #fff;
+            text-decoration: none;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: #aaa;
+            font-weight: 400;
+        }
+
+        .back-btn {
+            color: #ddd;
+            text-decoration: none;
+            border: 1px solid #333;
+            padding: 9px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: .2s;
+        }
+
+        .back-btn:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+            width: calc(100% - 30px);
+            max-width: 1150px;
+            margin: 35px auto;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            margin: 0;
+            font-size: 32px;
+            letter-spacing: .5px;
+        }
+
+        .page-title p {
+            margin: 8px 0 0;
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* =========================
+           FILTERS
+        ========================= */
+
+        .filters {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            margin-bottom: 25px;
+            scrollbar-width: none;
+        }
+
+        .filters::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-btn {
+            flex: 0 0 auto;
+            border: 1px solid #333;
+            background: #111;
+            color: #aaa;
+            padding: 10px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: .2s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+
+        /* =========================
+           ORDERS
+        ========================= */
+
+        #ordersList {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .order-card {
+            background: #111;
+            border: 1px solid #242424;
+            border-radius: 14px;
+            padding: 20px;
+            transition: .2s;
+        }
+
+        .order-card:hover {
+            border-color: #444;
+            transform: translateY(-1px);
+        }
+
+        .order-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .order-number {
+            color: #777;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .product-name {
+            font-size: 19px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .order-date {
+            color: #777;
+            font-size: 12px;
+            margin-top: 7px;
+        }
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            white-space: nowrap;
+            border: 1px solid #333;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #888;
+        }
+
+        .status.pending {
+            color: #ddd;
+        }
+
+        .status.pending .status-dot {
+            background: #d6a84f;
+        }
+
+        .status.confirmed {
+            color: #ddd;
+        }
+
+        .status.confirmed .status-dot {
+            background: #6fa8dc;
+        }
+
+        .status.shipped {
+            color: #ddd;
+        }
+
+        .status.shipped .status-dot {
+            background: #8e7cc3;
+        }
+
+        .status.delivered {
+            color: #ddd;
+        }
+
+        .status.delivered .status-dot {
+            background: #6aa84f;
+        }
+
+        .status.cancelled {
+            color: #ddd;
+        }
+
+        .status.cancelled .status-dot {
+            background: #cc0000;
+        }
+
+        .status.unknown .status-dot {
+            background: #888;
+        }
+
+        /* =========================
+           INFO GRID
+        ========================= */
+
+        .order-info {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            border-top: 1px solid #222;
+            border-bottom: 1px solid #222;
+            padding: 17px 0;
+        }
+
+        .info-box {
+            min-width: 0;
+        }
+
+        .info-label {
+            font-size: 10px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .info-value {
+            font-size: 14px;
+            color: #ddd;
+            word-break: break-word;
+        }
+
+        .amount {
+            font-size: 17px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .tracking {
+            color: #aaa;
+        }
+
+        /* =========================
+           BOTTOM
+        ========================= */
+
+        .order-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 17px;
+        }
+
+        .seller {
+            color: #777;
+            font-size: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .view-btn {
+            border: 1px solid #444;
+            background: #181818;
+            color: #fff;
+            padding: 10px 17px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: .2s;
+        }
+
+        .view-btn:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        /* =========================
+           EMPTY
+        ========================= */
+
+        .empty-state {
+            display: none;
+            text-align: center;
+            padding: 70px 20px;
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 14px;
+        }
+
+        .empty-icon {
+            font-size: 42px;
+            margin-bottom: 15px;
+            opacity: .6;
+        }
+
+        .empty-state h2 {
+            margin: 0 0 8px;
+            font-size: 20px;
+        }
+
+        .empty-state p {
+            margin: 0;
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* =========================
+           LOADING
+        ========================= */
+
+        .loading {
+            text-align: center;
+            padding: 70px 20px;
+            color: #777;
+        }
+
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #222;
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* =========================
+           MODAL
+        ========================= */
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .78);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 25px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 18px;
+            border: 0;
+            background: transparent;
+            color: #aaa;
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        .modal-title {
+            margin: 0 35px 25px 0;
+            font-size: 23px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 13px 0;
+            border-bottom: 1px solid #222;
+        }
+
+        .detail-row:last-child {
+            border-bottom: 0;
+        }
+
+        .detail-label {
+            color: #777;
+            font-size: 13px;
+        }
+
+        .detail-value {
+            color: #fff;
+            font-size: 13px;
+            text-align: right;
+            max-width: 65%;
+            word-break: break-word;
+        }
+
+        .tracking-box {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #292929;
+            border-radius: 10px;
+            background: #0c0c0c;
+        }
+
+        .tracking-title {
+            color: #777;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 7px;
+        }
+
+        .tracking-number {
+            font-size: 15px;
+            color: #fff;
+            word-break: break-all;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .header-inner {
+                min-height: 62px;
+                padding: 0 15px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .container {
+                width: calc(100% - 20px);
+                margin: 25px auto;
+            }
+
+            .page-title h1 {
+                font-size: 27px;
+            }
+
+            .order-card {
+                padding: 16px;
+            }
+
+            .order-top {
+                flex-direction: column;
+            }
+
+            .order-info {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .order-bottom {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .view-btn {
+                width: 100%;
+            }
+
+            .seller {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 400px) {
+
+            .order-info {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .product-name {
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-inner">
+
+        <a href="index.html" class="logo">
+            ORA<span>SWISS</span>
+        </a>
+
+        <a href="index.html" class="back-btn">
+            ← Back
+        </a>
+
+    </div>
+</header>
+
+
+<main class="container">
+
+    <div class="page-title">
+        <h1>Orders</h1>
+        <p>Shiko dhe ndiq porositë e tua.</p>
+    </div>
+
+
+    <div class="filters">
+
+        <button class="filter-btn active" data-filter="all">
+            All
+        </button>
+
+        <button class="filter-btn" data-filter="pending">
+            Pending
+        </button>
+
+        <button class="filter-btn" data-filter="confirmed">
+            Confirmed
+        </button>
+
+        <button class="filter-btn" data-filter="shipped">
+            Shipped
+        </button>
+
+        <button class="filter-btn" data-filter="delivered">
+            Delivered
+        </button>
+
+        <button class="filter-btn" data-filter="cancelled">
+            Cancelled
+        </button>
+
+    </div>
+
+
+    <div id="loading" class="loading">
+
+        <div class="spinner"></div>
+
+        Duke ngarkuar porositë...
+
+    </div>
+
+
+    <div id="ordersList"></div>
+
+
+    <div id="emptyState" class="empty-state">
+
+        <div class="empty-icon">
+            🛍️
+        </div>
+
+        <h2>Nuk ka porosi</h2>
+
+        <p>
+            Nuk u gjetën porosi për këtë kategori.
+        </p>
+
+    </div>
+
+</main>
+
+
+<!-- =========================
+     ORDER DETAILS MODAL
+========================= -->
+
+<div id="orderModal" class="modal">
+
+    <div class="modal-content">
+
+        <button
+            class="modal-close"
+            onclick="closeOrderModal()"
+        >
+            ×
+        </button>
+
+        <h2
+            id="modalTitle"
+            class="modal-title"
+        >
+            Order Details
+        </h2>
+
+        <div id="modalDetails"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* =====================================================
+       SUPABASE
+    ===================================================== */
+
+    const SUPABASE_URL = "YOUR_SUPABASE_URL";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+
+    const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+
+    /* =====================================================
+       VARIABLES
+    ===================================================== */
+
+    let allOrders = [];
+    let currentFilter = "all";
+
+
+    /* =====================================================
+       START
+    ===================================================== */
+
+    document.addEventListener("DOMContentLoaded", async () => {
+
+        setupFilters();
+
+        await loadOrders();
+
+    });
+
+
+    /* =====================================================
+       GET CURRENT USER
+    ===================================================== */
+
+    async function getCurrentUser() {
+
+        const {
+            data,
+            error
+        } = await supabaseClient.auth.getUser();
+
+        if (error) {
+            console.error("Auth error:", error);
+            return null;
+        }
+
+        return data?.user || null;
+    }
+
+
+    /* =====================================================
+       LOAD ORDERS
+    ===================================================== */
+
+    async function loadOrders() {
+
+        const loading = document.getElementById("loading");
+
+        const ordersList = document.getElementById("ordersList");
+
+        const emptyState = document.getElementById("emptyState");
+
+        loading.style.display = "block";
+
+        ordersList.innerHTML = "";
+
+        emptyState.style.display = "none";
+
+
+        try {
+
+            const user = await getCurrentUser();
+
+
+            if (!user) {
+
+                loading.innerHTML = `
+                    <div style="font-size:35px;margin-bottom:15px;">
+                        🔐
+                    </div>
+
+                    <div>
+                        Duhet të jesh i kyçur për të parë porositë.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            /*
+             * Tabela orders ka:
+             *
+             * id
+             * user_id
+             * product_name
+             * tracking_number
+             * status
+             * created_at
+             * product_id
+             * buyer_id
+             * seller_id
+             * amount
+             *
+             * Kërkojmë porositë ku user-i është
+             * buyer/user.
+             */
+
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+                .from("orders")
+                .select(`
+                    id,
+                    user_id,
+                    product_name,
+                    tracking_number,
+                    status,
+                    created_at,
+                    product_id,
+                    buyer_id,
+                    seller_id,
+                    amount
+                `)
+                .or(
+                    `user_id.eq.${user.id},buyer_id.eq.${user.id}`
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "Orders error:",
+                    error
+                );
+
+                throw error;
+            }
+
+
+            allOrders = data || [];
+
+
+            loading.style.display = "none";
+
+
+            renderOrders();
+
+        } catch (error) {
+
+            console.error(error);
+
+            loading.innerHTML = `
+                <div style="font-size:35px;margin-bottom:15px;">
+                    ⚠️
+                </div>
+
+                <div style="color:#ccc;">
+                    Nuk mundëm të ngarkojmë porositë.
+                </div>
+
+                <div style="
+                    color:#666;
+                    font-size:12px;
+                    margin-top:8px;
+                ">
+                    Kontrollo lidhjen me Supabase.
+                </div>
+            `;
+        }
+    }
+
+
+    /* =====================================================
+       FILTERS
+    ===================================================== */
+
+    function setupFilters() {
+
+        document
+            .querySelectorAll(".filter-btn")
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        document
+                            .querySelectorAll(".filter-btn")
+                            .forEach(btn => {
+                                btn.classList.remove("active");
+                            });
+
+
+                        button.classList.add("active");
+
+
+                        currentFilter =
+                            button.dataset.filter;
+
+
+                        renderOrders();
+                    }
+                );
+
+            });
+
+    }
+
+
+    /* =====================================================
+       RENDER
+    ===================================================== */
+
+    function renderOrders() {
+
+        const ordersList =
+            document.getElementById("ordersList");
+
+        const emptyState =
+            document.getElementById("emptyState");
+
+
+        ordersList.innerHTML = "";
+
+
+        let filteredOrders =
+            [...allOrders];
+
+
+        if (currentFilter !== "all") {
+
+            filteredOrders =
+                filteredOrders.filter(order => {
+
+                    return normalizeStatus(
+                        order.status
+                    ) === currentFilter;
+
+                });
+
+        }
+
+
+        if (!filteredOrders.length) {
+
+            emptyState.style.display = "block";
+
+            return;
+
+        }
+
+
+        emptyState.style.display = "none";
+
+
+        filteredOrders.forEach(order => {
+
+            ordersList.appendChild(
+                createOrderCard(order)
+            );
+
+        });
+
+    }
+
+
+    /* =====================================================
+       CREATE ORDER CARD
+    ===================================================== */
+
+    function createOrderCard(order) {
+
+        const card =
+            document.createElement("div");
+
+        card.className = "order-card";
+
+
+        const status =
+            normalizeStatus(order.status);
+
+
+        const statusLabel =
+            getStatusLabel(status);
+
+
+        const date =
+            formatDate(order.created_at);
+
+
+        const amount =
+            formatAmount(order.amount);
+
+
+        const tracking =
+            order.tracking_number
+                ? escapeHtml(order.tracking_number)
+                : "Not available";
+
+
+        const productName =
+            escapeHtml(
+                order.product_name ||
+                "Product"
+            );
+
+
+        const seller =
+            escapeHtml(
+                order.seller_id ||
+                "Not available"
+            );
+
+
+        card.innerHTML = `
+
+            <div class="order-top">
+
+                <div>
+
+                    <div class="order-number">
+                        ORDER #${escapeHtml(String(order.id))}
+                    </div>
+
+                    <div class="product-name">
+                        ${productName}
+                    </div>
+
+                    <div class="order-date">
+                        ${date}
+                    </div>
+
+                </div>
+
+
+                <div class="status ${status}">
+
+                    <span class="status-dot"></span>
+
+                    ${statusLabel}
+
+                </div>
+
+            </div>
+
+
+            <div class="order-info">
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        Amount
+                    </div>
+
+                    <div class="info-value amount">
+                        ${amount}
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        Product ID
+                    </div>
+
+                    <div class="info-value">
+                        ${escapeHtml(
+                            String(
+                                order.product_id ??
+                                "—"
+                            )
+                        )}
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        Tracking
+                    </div>
+
+                    <div class="info-value tracking">
+                        ${tracking}
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        Status
+                    </div>
+
+                    <div class="info-value">
+                        ${statusLabel}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="order-bottom">
+
+                <div class="seller">
+                    Seller: ${seller}
+                </div>
+
+
+                <button
+                    class="view-btn"
+                    onclick="openOrder(${Number(order.id)})"
+                >
+                    View Order
+                </button>
+
+            </div>
+
+        `;
+
+
+        return card;
+
+    }
+
+
+    /* =====================================================
+       OPEN ORDER
+    ===================================================== */
+
+    function openOrder(orderId) {
+
+        const order =
+            allOrders.find(
+                item =>
+                    Number(item.id) === Number(orderId)
+            );
+
+
+        if (!order) {
+            return;
+        }
+
+
+        const modal =
+            document.getElementById("orderModal");
+
+
+        const title =
+            document.getElementById("modalTitle");
+
+
+        const details =
+            document.getElementById("modalDetails");
+
+
+        const status =
+            normalizeStatus(order.status);
+
+
+        title.textContent =
+            `Order #${order.id}`;
+
+
+        details.innerHTML = `
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Product
+                </span>
+
+                <span class="detail-value">
+                    ${escapeHtml(
+                        order.product_name || "—"
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Amount
+                </span>
+
+                <span class="detail-value">
+                    ${formatAmount(order.amount)}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Status
+                </span>
+
+                <span class="detail-value">
+                    ${getStatusLabel(status)}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Order ID
+                </span>
+
+                <span class="detail-value">
+                    ${escapeHtml(String(order.id))}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Product ID
+                </span>
+
+                <span class="detail-value">
+                    ${escapeHtml(
+                        String(
+                            order.product_id ?? "—"
+                        )
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Seller ID
+                </span>
+
+                <span class="detail-value">
+                    ${escapeHtml(
+                        order.seller_id || "—"
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Order Date
+                </span>
+
+                <span class="detail-value">
+                    ${formatDate(order.created_at)}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Buyer ID
+                </span>
+
+                <span class="detail-value">
+                    ${escapeHtml(
+                        order.buyer_id || "—"
+                    )}
+                </span>
+
+            </div>
+
+
+            ${
+                order.tracking_number
+                ?
+                `
+                <div class="tracking-box">
+
+                    <div class="tracking-title">
+                        Tracking Number
+                    </div>
+
+                    <div class="tracking-number">
+                        ${escapeHtml(
+                            order.tracking_number
+                        )}
+                    </div>
+
+                </div>
+                `
+                :
+                `
+                <div class="tracking-box">
+
+                    <div class="tracking-title">
+                        Tracking Number
+                    </div>
+
+                    <div class="tracking-number"
+                         style="color:#666;">
+                        Not available yet
+                    </div>
+
+                </div>
+                `
+            }
+
+        `;
+
+
+        modal.classList.add("show");
+
+    }
+
+
+    /* =====================================================
+       CLOSE MODAL
+    ===================================================== */
+
+    function closeOrderModal() {
+
+        document
+            .getElementById("orderModal")
+            .classList.remove("show");
+
+    }
+
+
+    document
+        .getElementById("orderModal")
+        .addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target.id ===
+                    "orderModal"
+                ) {
+                    closeOrderModal();
+                }
+
+            }
+        );
+
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (event.key === "Escape") {
+                closeOrderModal();
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       STATUS
+    ===================================================== */
+
+    function normalizeStatus(status) {
+
+        if (!status) {
+            return "unknown";
+        }
+
+
+        const value =
+            String(status)
+                .toLowerCase()
+                .trim();
+
+
+        if (
+            value.includes("pending") ||
+            value.includes("waiting")
+        ) {
+            return "pending";
+        }
+
+
+        if (
+            value.includes("confirm") ||
+            value.includes("accepted")
+        ) {
+            return "confirmed";
+        }
+
+
+        if (
+            value.includes("ship") ||
+            value.includes("dispatch")
+        ) {
+            return "shipped";
+        }
+
+
+        if (
+            value.includes("deliver") ||
+            value.includes("complete")
+        ) {
+            return "delivered";
+        }
+
+
+        if (
+            value.includes("cancel") ||
+            value.includes("reject")
+        ) {
+            return "cancelled";
+        }
+
+
+        return "unknown";
+
+    }
+
+
+    function getStatusLabel(status) {
+
+        const labels = {
+
+            pending: "Pending",
+
+            confirmed: "Confirmed",
+
+            shipped: "Shipped",
+
+            delivered: "Delivered",
+
+            cancelled: "Cancelled",
+
+            unknown: "Unknown"
+
+        };
+
+
+        return labels[status] || "Unknown";
+
+    }
+
+
+    /* =====================================================
+       DATE
+    ===================================================== */
+
+    function formatDate(dateValue) {
+
+        if (!dateValue) {
+            return "—";
+        }
+
+
+        const date =
+            new Date(dateValue);
+
+
+        if (isNaN(date.getTime())) {
+            return "—";
+        }
+
+
+        return date.toLocaleDateString(
+            "en-GB",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       AMOUNT
+    ===================================================== */
+
+    function formatAmount(amount) {
+
+        if (
+            amount === null ||
+            amount === undefined ||
+            amount === ""
+        ) {
+            return "—";
+        }
+
+
+        const number =
+            Number(amount);
+
+
+        if (isNaN(number)) {
+            return escapeHtml(
+                String(amount)
+            );
+        }
+
+
+        return "€" +
+            number.toLocaleString(
+                "en-US",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
+
+
+    /* =====================================================
+       ESCAPE HTML
+    ===================================================== */
+
+    function escapeHtml(value) {
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+</script>
+
+</body>
+</html>

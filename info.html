@@ -1,0 +1,930 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="OraSwiss - Luxury Watches, Watch Service, Vintage Restoration and Watch Accessories."
+    >
+
+    <title>OraSwiss | Info</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f5f5;
+            color: #111;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            background: #111;
+            color: white;
+            padding: 22px 20px;
+            text-align: center;
+        }
+
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+
+        .tagline {
+            margin-top: 4px;
+            color: #ccc;
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 25px 18px 50px;
+        }
+
+
+        /* =========================
+           BACK BUTTON
+        ========================= */
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            margin-bottom: 22px;
+
+            color: #111;
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+
+        /* =========================
+           INTRO
+        ========================= */
+
+        .intro {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 22px;
+
+            box-shadow:
+                0 6px 25px rgba(0, 0, 0, 0.07);
+        }
+
+
+        .intro h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+
+        .intro p {
+            color: #666;
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           SERVICES
+        ========================= */
+
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+
+        .service-card {
+            background: white;
+            border-radius: 14px;
+            padding: 24px;
+
+            box-shadow:
+                0 6px 20px rgba(0, 0, 0, 0.06);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+
+        .service-card:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 25px rgba(0, 0, 0, 0.09);
+        }
+
+
+        .service-number {
+            font-size: 13px;
+            font-weight: 700;
+            color: #777;
+            margin-bottom: 7px;
+        }
+
+
+        .service-card h3 {
+            font-size: 18px;
+            margin-bottom: 9px;
+        }
+
+
+        .service-card p {
+            color: #666;
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           CONTACT
+        ========================= */
+
+        .contact-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+
+            box-shadow:
+                0 6px 25px rgba(0, 0, 0, 0.07);
+
+            margin-bottom: 22px;
+        }
+
+
+        .contact-card h2 {
+            font-size: 24px;
+            margin-bottom: 22px;
+        }
+
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+
+            padding: 15px 0;
+
+            border-bottom: 1px solid #eee;
+        }
+
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+
+        .contact-icon {
+            width: 38px;
+            height: 38px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+
+            background: #f1f1f1;
+            border-radius: 10px;
+
+            font-size: 18px;
+        }
+
+
+        .contact-content {
+            flex: 1;
+        }
+
+
+        .contact-label {
+            display: block;
+
+            font-size: 12px;
+            color: #888;
+
+            margin-bottom: 2px;
+        }
+
+
+        .contact-content a {
+            color: #111;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+
+        .contact-content a:hover {
+            text-decoration: underline;
+        }
+
+
+        .contact-text {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+
+        /* =========================
+           MAP
+        ========================= */
+
+        .map-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+
+            box-shadow:
+                0 6px 25px rgba(0, 0, 0, 0.07);
+
+            margin-bottom: 22px;
+        }
+
+
+        .map-header {
+            padding: 24px 25px 18px;
+        }
+
+
+        .map-header h2 {
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+
+        .map-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+
+        .map-container {
+            width: 100%;
+            height: 360px;
+        }
+
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+
+        .map-button-container {
+            padding: 18px 25px 24px;
+        }
+
+
+        .map-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+
+            background: #111;
+            color: white;
+
+            text-decoration: none;
+
+            padding: 12px 18px;
+
+            border-radius: 9px;
+
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+
+        .map-button:hover {
+            background: #2a2a2a;
+        }
+
+
+        /* =========================
+           SUPPORT
+        ========================= */
+
+        .support-card {
+            background: #111;
+            color: white;
+
+            border-radius: 16px;
+
+            padding: 30px;
+
+            text-align: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .support-card h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+
+        .support-card p {
+            color: #ccc;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+
+        .support-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+
+            background: white;
+            color: #111;
+
+            text-decoration: none;
+
+            padding: 13px 22px;
+
+            border-radius: 9px;
+
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+
+        .support-button:hover {
+            background: #e8e8e8;
+        }
+
+
+        /* =========================
+           SOCIAL
+        ========================= */
+
+        .instagram {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+
+        .instagram a {
+            color: #111;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+
+        .instagram a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            background: #111;
+            color: #999;
+
+            text-align: center;
+
+            padding: 25px 20px;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 650px) {
+
+            header {
+                padding: 18px 15px;
+            }
+
+
+            .logo {
+                font-size: 24px;
+            }
+
+
+            .container {
+                padding: 20px 12px 35px;
+            }
+
+
+            .intro {
+                padding: 24px 20px;
+            }
+
+
+            .intro h1 {
+                font-size: 27px;
+            }
+
+
+            .services {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+
+            .service-card {
+                padding: 20px;
+            }
+
+
+            .contact-card {
+                padding: 22px 18px;
+            }
+
+
+            .contact-card h2 {
+                font-size: 22px;
+            }
+
+
+            .map-header {
+                padding: 20px 18px 15px;
+            }
+
+
+            .map-container {
+                height: 300px;
+            }
+
+
+            .map-button-container {
+                padding: 15px 18px 20px;
+            }
+
+
+            .support-card {
+                padding: 25px 18px;
+            }
+
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <header>
+
+        <div class="logo">
+            OraSwiss
+        </div>
+
+        <div class="tagline">
+            Luxury Watches
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <main class="container">
+
+
+        <!-- BACK -->
+
+        <a
+            href="index.html"
+            class="back-btn"
+        >
+            ← Back to Home
+        </a>
+
+
+
+        <!-- INTRO -->
+
+        <section class="intro">
+
+            <h1>
+                Our Services
+            </h1>
+
+            <p>
+                OraSwiss ofron shërbime për orë luksoze,
+                orë vintage, mirëmbajtje, restaurim dhe
+                aksesorë për orë.
+            </p>
+
+        </section>
+
+
+
+        <!-- SERVICES -->
+
+        <section>
+
+            <h2 class="section-title">
+                Services
+            </h2>
+
+
+            <div class="services">
+
+
+                <!-- SERVICE 1 -->
+
+                <div class="service-card">
+
+                    <div class="service-number">
+                        01
+                    </div>
+
+                    <h3>
+                        Buying & Selling Luxury Watches
+                    </h3>
+
+                    <p>
+                        Blejmë dhe shesim orë origjinale
+                        si Rolex, Omega, IWC, Ebel,
+                        Longines, Cartier, etj.
+                    </p>
+
+                </div>
+
+
+
+                <!-- SERVICE 2 -->
+
+                <div class="service-card">
+
+                    <div class="service-number">
+                        02
+                    </div>
+
+                    <h3>
+                        Watch Service & Polishing
+                    </h3>
+
+                    <p>
+                        Servis profesional për orë
+                        mekanike dhe quartz: pastrim,
+                        lubrifikim, rregullim precizioni
+                        dhe lustër premium.
+                    </p>
+
+                </div>
+
+
+
+                <!-- SERVICE 3 -->
+
+                <div class="service-card">
+
+                    <div class="service-number">
+                        03
+                    </div>
+
+                    <h3>
+                        Battery & Strap Replacement
+                    </h3>
+
+                    <p>
+                        Zëvendësim baterie dhe rripash
+                        (lëkurë, çelik, kauçuk) me punë
+                        të shpejtë dhe të garantuar.
+                    </p>
+
+                </div>
+
+
+
+                <!-- SERVICE 4 -->
+
+                <div class="service-card">
+
+                    <div class="service-number">
+                        04
+                    </div>
+
+                    <h3>
+                        Vintage Watch Restoration
+                    </h3>
+
+                    <p>
+                        Ristrukturim dhe restaurim i
+                        orëve vintage duke ruajtur
+                        vlerën dhe origjinalitetin.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- CONTACT -->
+
+        <section class="contact-card">
+
+            <h2>
+                Contact for Service
+            </h2>
+
+
+            <!-- LOCATION -->
+
+            <div class="contact-item">
+
+                <div class="contact-icon">
+                    📍
+                </div>
+
+                <div class="contact-content">
+
+                    <span class="contact-label">
+                        Location
+                    </span>
+
+                    <div class="contact-text">
+                        Rruga Engjell Agalliu,
+                        Dimal, Berat
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PHONE 1 -->
+
+            <div class="contact-item">
+
+                <div class="contact-icon">
+                    📞
+                </div>
+
+                <div class="contact-content">
+
+                    <span class="contact-label">
+                        Phone Albania
+                    </span>
+
+                    <a href="tel:+355692408065">
+                        +355 692 408 065
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PHONE 2 -->
+
+            <div class="contact-item">
+
+                <div class="contact-icon">
+                    📞
+                </div>
+
+                <div class="contact-content">
+
+                    <span class="contact-label">
+                        Phone Albania
+                    </span>
+
+                    <a href="tel:+35536120042">
+                        +355 361 200 42
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- EMAIL 1 -->
+
+            <div class="contact-item">
+
+                <div class="contact-icon">
+                    📧
+                </div>
+
+                <div class="contact-content">
+
+                    <span class="contact-label">
+                        Email
+                    </span>
+
+                    <a href="mailto:cela9317@gmail.com">
+                        cela9317@gmail.com
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- EMAIL 2 -->
+
+            <div class="contact-item">
+
+                <div class="contact-icon">
+                    📧
+                </div>
+
+                <div class="contact-content">
+
+                    <span class="contact-label">
+                        Additional Email
+                    </span>
+
+                    <a href="mailto:adicela899@gmail.com">
+                        adicela899@gmail.com
+                    </a>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- MAP -->
+
+        <section class="map-card">
+
+            <div class="map-header">
+
+                <h2>
+                    Find Us
+                </h2>
+
+                <p>
+                    Rruga Engjell Agalliu, Dimal, Berat
+                </p>
+
+            </div>
+
+
+            <div class="map-container">
+
+                <iframe
+                    src="https://www.google.com/maps?q=Rruga+Engjell+Agalliu,+Dimal,+Berat,+Albania&output=embed"
+                    loading="lazy"
+                    allowfullscreen
+                    referrerpolicy="no-referrer-when-downgrade"
+                ></iframe>
+
+            </div>
+
+
+            <div class="map-button-container">
+
+                <a
+                    href="https://maps.app.goo.gl/NiKAsQtBhWQAyGSw7?g_st=ipc"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="map-button"
+                >
+                    📍 View on Google Maps
+                </a>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- SUPPORT -->
+
+        <section class="support-card">
+
+            <h2>
+                Need Help?
+            </h2>
+
+            <p>
+                Për pyetje rreth porosive, pagesave,
+                dërgesave, produkteve ose llogarisë,
+                kontaktoni Support.
+            </p>
+
+
+            <a
+                href="support.html"
+                class="support-button"
+            >
+                🎧 Contact Support
+            </a>
+
+        </section>
+
+
+
+        <!-- INSTAGRAM -->
+
+        <div class="instagram">
+
+            📸 Instagram:
+
+            <a
+                href="https://www.instagram.com/ora_vintage/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                @oravintage
+            </a>
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
+    <footer>
+
+        © 2026 OraSwiss. All rights reserved.
+
+    </footer>
+
+
+</body>
+
+</html>
+```

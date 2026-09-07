@@ -206,218 +206,684 @@ const supabase = window.supabase.createClient(
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
 );
 
+
+/* =========================================================
+   LOAD FAVORITES
+========================================================= */
+
 async function loadFavorites() {
 
     const container = document.getElementById("favorites-container");
+
+    container.innerHTML = `
+        <div class="loading">
+            Loading favorites...
+        </div>
+    `;
+
+
+    /* -----------------------------------------------------
+       GET LOGGED USER
+    ----------------------------------------------------- */
 
     const {
         data: { user },
         error: userError
     } = await supabase.auth.getUser();
 
+
     if (userError || !user) {
+
+        console.error("User error:", userError);
+
         container.innerHTML = `
             <div class="empty">
+
+                <div style="font-size:50px;">
+                    ⭐
+                </div>
+
                 <h2>Login Required</h2>
-                <p>Please login to see your favorites.</p>
-                <a href="register.html" class="open-btn">
+
+                <p>
+                    Please login to see your favorites.
+                </p>
+
+                <a
+                    href="register.html"
+                    class="open-btn"
+                >
                     Login / Register
                 </a>
+
             </div>
         `;
+
         return;
     }
 
-    const { data: favorites, error } = await supabase
-        .from("favorites")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
 
-    if (error) {
-        console.error("Favorites error:", error);
+    /* -----------------------------------------------------
+       GET FAVORITES
+
+       IMPORTANT:
+       We do NOT use created_at here because if that
+       column does not exist it causes Supabase 400.
+    ----------------------------------------------------- */
+
+    const {
+        data: favorites,
+        error: favoritesError
+    } = await supabase
+        .from("favorites")
+        .select("id,user_id,product_id,product_table")
+        .eq("user_id", user.id);
+
+
+    if (favoritesError) {
+
+        console.error(
+            "Favorites loading error:",
+            favoritesError
+        );
 
         container.innerHTML = `
             <div class="empty">
-                Error loading favorites.
+
+                <div style="font-size:45px;">
+                    ⚠️
+                </div>
+
+                <h2>Error loading favorites</h2>
+
+                <p>
+                    ${favoritesError.message || "Please try again."}
+                </p>
+
             </div>
         `;
 
         return;
     }
+
+
+    /* -----------------------------------------------------
+       NO FAVORITES
+    ----------------------------------------------------- */
 
     if (!favorites || favorites.length === 0) {
 
-        container.innerHTML = `
-            <div class="empty">
-                <div style="font-size:50px;">⭐</div>
-                <h2>No Favorites Yet</h2>
-                <p>When you like a product, it will appear here.</p>
-            </div>
-        `;
+        showEmptyFavorites();
 
         return;
     }
+
 
     container.innerHTML = "";
 
+
+    /* -----------------------------------------------------
+       LOAD EACH FAVORITE
+    ----------------------------------------------------- */
+
     for (const favorite of favorites) {
 
-        let product = null;
+        try {
 
-        if (favorite.product_table === "bracelets_straps") {
+            const productTable =
+                favorite.product_table === "bracelets_straps"
+                    ? "bracelets_straps"
+                    : "oras";
 
-            const { data } = await supabase
-                .from("bracelets_straps")
+
+            /* ---------------------------------------------
+               GET PRODUCT
+            --------------------------------------------- */
+
+            const {
+                data: product,
+                error: productError
+            } = await supabase
+                .from(productTable)
                 .select("*")
                 .eq("id", favorite.product_id)
-                .single();
+                .maybeSingle();
 
-            product = data;
 
-        } else {
+            if (productError) {
 
-            const { data } = await supabase
-                .from("oras")
-                .select("*")
-                .eq("id", favorite.product_id)
-                .single();
+                console.error(
+                    "Product error:",
+                    favorite.product_id,
+                    productError
+                );
 
-            product = data;
-        }
+                continue;
+            }
 
-        if (!product) {
-            continue;
-        }
 
-        let imgUrl =
-            "https://placeholder.co/600x400/222/fff?text=No+Image";
+            if (!product) {
 
-        let primaryImage = "";
+                console.warn(
+                    "Favorite product no longer exists:",
+                    favorite.product_id
+                );
 
-        if (product.image_url) {
+                continue;
+            }
 
-            if (Array.isArray(product.image_url)) {
-                primaryImage = product.image_url[0];
+
+            /* ---------------------------------------------
+               IMAGE
+            --------------------------------------------- */
+
+            const imgUrl = getProductImage(product);
+
+
+            /* ---------------------------------------------
+               PRODUCT NAME
+            --------------------------------------------- */
+
+            const brand =
+                product.brand ||
+                "";
+
+
+            const model =
+                product.model ||
+                product.reference ||
+                product.type ||
+                "";
+
+
+            /* ---------------------------------------------
+               PRICE
+            --------------------------------------------- */
+
+            let priceHTML = "";
+
+
+            if (
+                product.price !== null &&
+                product.price !== undefined &&
+                product.price !== ""
+            ) {
+
+                const currency =
+                    product.currency ||
+                    "€";
+
+
+                priceHTML = `
+                    <p class="price">
+                        ${Number(product.price).toLocaleString()}
+                        ${currency}
+                    </p>
+                `;
+            }
+
+
+            /* ---------------------------------------------
+               PRODUCT URL
+            --------------------------------------------- */
+
+            let productUrl;
+
+
+            if (productTable === "bracelets_straps") {
+
+                productUrl =
+                    `product-bracelets-straps.html?id=${encodeURIComponent(
+                        product.id
+                    )}&category=bracelets_straps`;
 
             } else {
-                primaryImage = product.image_url;
+
+                productUrl =
+                    `product.html?id=${encodeURIComponent(
+                        product.id
+                    )}`;
             }
-        }
 
-        if (
-            primaryImage &&
-            primaryImage !== "null" &&
-            primaryImage !== ""
-        ) {
 
-            if (primaryImage.startsWith("http")) {
+            /* ---------------------------------------------
+               CREATE CARD
+            --------------------------------------------- */
 
-                imgUrl = primaryImage;
+            const card =
+                document.createElement("div");
 
-            } else {
 
-                imgUrl =
-                    "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/"
-                    + primaryImage;
-            }
-        }
+            card.className =
+                "favorite-card";
 
-        const card = document.createElement("div");
 
-        card.className = "favorite-card";
+            card.innerHTML = `
 
-        card.innerHTML = `
-
-            <img
-                src="${imgUrl}"
-                alt="${product.brand || "Product"}"
-            >
-
-            <div class="favorite-info">
-
-                <h3>
-                    ${product.brand || ""}
-                </h3>
-
-                <p>
-                    ${product.model || product.reference || ""}
-                </p>
-
-                ${
-                    product.price
-                    ?
-                    `<p class="price">
-                        €${Number(product.price).toLocaleString()}
-                    </p>`
-                    :
-                    ""
-                }
-
-                <a
-                    href="product.html?id=${product.id}"
-                    class="open-btn"
+                <img
+                    src="${escapeHTML(imgUrl)}"
+                    alt="${escapeHTML(
+                        brand || "Product"
+                    )}"
+                    onerror="
+                        this.onerror=null;
+                        this.src='https://placeholder.co/600x400/222/fff?text=No+Image';
+                    "
                 >
-                    View Details
-                </a>
 
-                <button
-                    class="remove-btn"
-                    onclick="removeFavorite(
-                        '${favorite.id}',
+
+                <div class="favorite-info">
+
+
+                    <h3>
+                        ${escapeHTML(brand)}
+                    </h3>
+
+
+                    <p>
+                        ${escapeHTML(model)}
+                    </p>
+
+
+                    ${priceHTML}
+
+
+                    <a
+                        href="${productUrl}"
+                        class="open-btn"
+                    >
+                        View Details
+                    </a>
+
+
+                    <button
+                        class="remove-btn"
+                        type="button"
+                    >
+                        ❤️ Remove Favorite
+                    </button>
+
+
+                </div>
+
+            `;
+
+
+            /* ---------------------------------------------
+               REMOVE BUTTON
+            --------------------------------------------- */
+
+            const removeButton =
+                card.querySelector(".remove-btn");
+
+
+            removeButton.addEventListener(
+                "click",
+                function () {
+
+                    removeFavorite(
+                        favorite.id,
+                        card,
                         this
-                    )"
-                >
-                    ❤️ Remove Favorite
-                </button>
+                    );
 
-            </div>
-        `;
+                }
+            );
 
-        container.appendChild(card);
+
+            container.appendChild(card);
+
+
+        } catch (err) {
+
+            console.error(
+                "Favorite card error:",
+                err
+            );
+
+        }
+
     }
+
+
+    /* -----------------------------------------------------
+       IF ALL FAVORITES ARE INVALID / DELETED
+    ----------------------------------------------------- */
+
+    if (container.children.length === 0) {
+
+        showEmptyFavorites();
+
+    }
+
 }
 
 
-async function removeFavorite(favoriteId, button) {
+/* =========================================================
+   GET PRODUCT IMAGE
+========================================================= */
 
-    button.disabled = true;
-    button.innerText = "Removing...";
+function getProductImage(product) {
 
-    const { error } = await supabase
-        .from("favorites")
-        .delete()
-        .eq("id", favoriteId);
+    const placeholder =
+        "https://placeholder.co/600x400/222/fff?text=No+Image";
 
-    if (error) {
 
-        console.error(error);
+    let image = null;
 
-        button.disabled = false;
-        button.innerText = "❤️ Remove Favorite";
 
-        alert("Could not remove favorite.");
+    /* -----------------------------------------------------
+       image_url
+    ----------------------------------------------------- */
+
+    if (product.image_url) {
+
+        if (Array.isArray(product.image_url)) {
+
+            image =
+                product.image_url.find(
+                    item =>
+                        item &&
+                        typeof item === "string"
+                );
+
+        } else {
+
+            image =
+                product.image_url;
+
+        }
+
+    }
+
+
+    /* -----------------------------------------------------
+       image
+    ----------------------------------------------------- */
+
+    if (!image && product.image) {
+
+        if (Array.isArray(product.image)) {
+
+            image =
+                product.image[0];
+
+        } else {
+
+            image =
+                product.image;
+
+        }
+
+    }
+
+
+    /* -----------------------------------------------------
+       photos
+    ----------------------------------------------------- */
+
+    if (!image && product.photos) {
+
+        if (Array.isArray(product.photos)) {
+
+            image =
+                product.photos[0];
+
+        } else {
+
+            try {
+
+                const parsed =
+                    JSON.parse(product.photos);
+
+                if (Array.isArray(parsed)) {
+
+                    image =
+                        parsed[0];
+
+                } else {
+
+                    image =
+                        product.photos;
+
+                }
+
+            } catch {
+
+                image =
+                    product.photos;
+
+            }
+
+        }
+
+    }
+
+
+    if (
+        !image ||
+        image === "null" ||
+        image === "undefined"
+    ) {
+
+        return placeholder;
+
+    }
+
+
+    image =
+        String(image).trim();
+
+
+    if (!image) {
+
+        return placeholder;
+
+    }
+
+
+    /* -----------------------------------------------------
+       FULL URL
+    ----------------------------------------------------- */
+
+    if (
+        image.startsWith("http://") ||
+        image.startsWith("https://")
+    ) {
+
+        return image;
+
+    }
+
+
+    /* -----------------------------------------------------
+       SUPABASE STORAGE
+    ----------------------------------------------------- */
+
+    return (
+        "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/"
+        +
+        image.replace(/^\/+/, "")
+    );
+
+}
+
+
+/* =========================================================
+   REMOVE FAVORITE
+========================================================= */
+
+async function removeFavorite(
+    favoriteId,
+    card,
+    button
+) {
+
+    if (!favoriteId) {
+
+        console.error(
+            "Favorite ID missing"
+        );
 
         return;
     }
 
-    button.closest(".favorite-card").remove();
+
+    button.disabled = true;
+
+    button.innerText =
+        "Removing...";
+
+
+    /* -----------------------------------------------------
+       GET CURRENT USER
+    ----------------------------------------------------- */
+
+    const {
+        data: { user },
+        error: userError
+    } = await supabase.auth.getUser();
+
+
+    if (userError || !user) {
+
+        button.disabled = false;
+
+        button.innerText =
+            "❤️ Remove Favorite";
+
+        alert(
+            "Please login again."
+        );
+
+        return;
+    }
+
+
+    /* -----------------------------------------------------
+       DELETE ONLY USER'S FAVORITE
+    ----------------------------------------------------- */
+
+    const {
+        error
+    } = await supabase
+        .from("favorites")
+        .delete()
+        .eq("id", favoriteId)
+        .eq("user_id", user.id);
+
+
+    if (error) {
+
+        console.error(
+            "Remove favorite error:",
+            error
+        );
+
+        button.disabled = false;
+
+        button.innerText =
+            "❤️ Remove Favorite";
+
+
+        alert(
+            "Could not remove favorite.\n\n" +
+            (error.message || "")
+        );
+
+        return;
+    }
+
+
+    /* -----------------------------------------------------
+       REMOVE CARD FROM PAGE
+    ----------------------------------------------------- */
+
+    card.remove();
+
 
     const container =
-        document.getElementById("favorites-container");
+        document.getElementById(
+            "favorites-container"
+        );
 
-    if (container.children.length === 0) {
 
-        container.innerHTML = `
-            <div class="empty">
-                <div style="font-size:50px;">⭐</div>
-                <h2>No Favorites Yet</h2>
-                <p>When you like a product, it will appear here.</p>
-            </div>
-        `;
+    if (
+        !container.children.length
+    ) {
+
+        showEmptyFavorites();
+
     }
+
 }
 
+
+/* =========================================================
+   EMPTY FAVORITES
+========================================================= */
+
+function showEmptyFavorites() {
+
+    const container =
+        document.getElementById(
+            "favorites-container"
+        );
+
+
+    container.innerHTML = `
+
+        <div class="empty">
+
+            <div style="font-size:50px;">
+                ⭐
+            </div>
+
+            <h2>
+                No Favorites Yet
+            </h2>
+
+            <p>
+                When you like a product,
+                it will appear here.
+            </p>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
 
 loadFavorites();
 

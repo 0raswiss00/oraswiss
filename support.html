@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Support | OraSwiss</title>
+
+    <meta name="description"
+          content="OraSwiss Support - Na kontaktoni për ndihmë, porosi, pagesa dhe çdo pyetje tjetër.">
+
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #0b0b0b;
+            color: #f5f5f5;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .support-page {
+            min-height: 100vh;
+            padding: 25px 15px 60px;
+        }
+
+        .support-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+
+        .support-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+
+        .brand {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 25px;
+            font-weight: 700;
+            letter-spacing: 3px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffffff;
+            text-decoration: none;
+            border: 1px solid #333;
+            background: #151515;
+            padding: 10px 16px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #222;
+            border-color: #555;
+        }
+
+        /* TITLE */
+
+        .support-title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .support-title h1 {
+            margin: 0 0 10px;
+            font-size: 38px;
+            letter-spacing: 1px;
+        }
+
+        .support-title p {
+            margin: 0;
+            color: #aaa;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* GRID */
+
+        .support-grid {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            gap: 25px;
+            align-items: start;
+        }
+
+        /* INFO */
+
+        .support-info,
+        .support-form-box {
+            background: #121212;
+            border: 1px solid #292929;
+            border-radius: 14px;
+        }
+
+        .support-info {
+            padding: 28px;
+        }
+
+        .support-form-box {
+            padding: 30px;
+        }
+
+        .support-info h2,
+        .support-form-box h2 {
+            margin: 0 0 20px;
+            font-size: 22px;
+        }
+
+        .support-info p {
+            color: #aaa;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .support-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #292929;
+        }
+
+        .support-item:last-child {
+            border-bottom: none;
+        }
+
+        .support-item-title {
+            color: #888;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 7px;
+        }
+
+        .support-item a {
+            color: #ffffff;
+            text-decoration: none;
+            word-break: break-word;
+        }
+
+        .support-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* FORM */
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #ddd;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            background: #0b0b0b;
+            color: #ffffff;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 13px 14px;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #777;
+            background: #101010;
+        }
+
+        .form-group textarea {
+            min-height: 170px;
+            resize: vertical;
+        }
+
+        .form-group select {
+            cursor: pointer;
+        }
+
+        .send-btn {
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            background: #ffffff;
+            color: #000000;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .send-btn:hover {
+            background: #dddddd;
+        }
+
+        .privacy-note {
+            margin-top: 14px;
+            color: #777;
+            font-size: 12px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .support-page {
+                padding: 18px 12px 40px;
+            }
+
+            .support-header {
+                margin-bottom: 25px;
+            }
+
+            .brand {
+                font-size: 20px;
+            }
+
+            .back-btn {
+                padding: 9px 12px;
+                font-size: 14px;
+            }
+
+            .support-title h1 {
+                font-size: 30px;
+            }
+
+            .support-title p {
+                font-size: 14px;
+            }
+
+            .support-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .support-info,
+            .support-form-box {
+                padding: 22px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="support-page">
+
+    <div class="support-container">
+
+        <!-- HEADER -->
+
+        <header class="support-header">
+
+            <a href="index.html" class="brand">
+                ORASWISS
+            </a>
+
+            <a href="index.html" class="back-btn">
+                ← Back
+            </a>
+
+        </header>
+
+
+        <!-- TITLE -->
+
+        <section class="support-title">
+
+            <h1>Support</h1>
+
+            <p>
+                Keni një pyetje ose problem?
+                Na kontaktoni dhe ekipi OraSwiss do t'ju përgjigjet.
+            </p>
+
+        </section>
+
+
+        <!-- CONTENT -->
+
+        <div class="support-grid">
+
+
+            <!-- SUPPORT INFO -->
+
+            <div class="support-info">
+
+                <h2>Na Kontaktoni</h2>
+
+                <p>
+                    Për pyetje rreth porosive, pagesave, produkteve,
+                    dërgesave ose llogarisë suaj, na dërgoni një mesazh.
+                </p>
+
+
+                <div class="support-item">
+
+                    <div class="support-item-title">
+                        Support Email
+                    </div>
+
+                    <a href="mailto:oraswisssuport00@gmail.com">
+                        oraswisssuport00@gmail.com
+                    </a>
+
+                </div>
+
+
+                <div class="support-item">
+
+                    <div class="support-item-title">
+                        Website
+                    </div>
+
+                    <a href="https://oraswiss.com">
+                        oraswiss.com
+                    </a>
+
+                </div>
+
+
+                <div class="support-item">
+
+                    <div class="support-item-title">
+                        Response
+                    </div>
+
+                    <span style="color:#aaa;">
+                        Do të përpiqemi t'ju përgjigjemi sa më shpejt.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- FORM -->
+
+            <div class="support-form-box">
+
+                <h2>Send a Message</h2>
+
+
+                <form
+                    action="https://formsubmit.co/oraswisssuport00@gmail.com"
+                    method="POST"
+                >
+
+                    <!-- EMAIL SETTINGS -->
+
+                    <input
+                        type="hidden"
+                        name="_subject"
+                        value="OraSwiss Support Request"
+                    >
+
+                    <input
+                        type="hidden"
+                        name="_template"
+                        value="table"
+                    >
+
+                    <input
+                        type="hidden"
+                        name="_captcha"
+                        value="true"
+                    >
+
+                    <input
+                        type="hidden"
+                        name="_url"
+                        value="https://oraswiss.com/support.html"
+                    >
+
+
+                    <!-- NAME -->
+
+                    <div class="form-group">
+
+                        <label for="name">
+                            Emri
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Emri juaj"
+                            autocomplete="name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="email@example.com"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- SUBJECT -->
+
+                    <div class="form-group">
+
+                        <label for="subject">
+                            Subject
+                        </label>
+
+                        <select
+                            id="subject"
+                            name="subject"
+                            required
+                        >
+
+                            <option value="">
+                                Zgjidhni një kategori
+                            </option>
+
+                            <option value="Order">
+                                Order / Porosi
+                            </option>
+
+                            <option value="Payment">
+                                Payment / Pagesë
+                            </option>
+
+                            <option value="Shipping">
+                                Shipping / Dërgesë
+                            </option>
+
+                            <option value="Product">
+                                Product / Produkt
+                            </option>
+
+                            <option value="Account">
+                                Account / Llogari
+                            </option>
+
+                            <option value="Other">
+                                Other / Tjetër
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- MESSAGE -->
+
+                    <div class="form-group">
+
+                        <label for="message">
+                            Mesazhi
+                        </label>
+
+                        <textarea
+                            id="message"
+                            name="message"
+                            placeholder="Shkruani mesazhin tuaj..."
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <!-- SEND -->
+
+                    <button
+                        type="submit"
+                        class="send-btn"
+                    >
+                        Send Support Request
+                    </button>
+
+
+                    <div class="privacy-note">
+                        Duke dërguar këtë formular, mesazhi juaj do të
+                        dërgohet te ekipi i Support të OraSwiss.
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

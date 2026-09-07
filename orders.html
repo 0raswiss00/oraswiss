@@ -697,19 +697,19 @@
        GET CURRENT USER
     ===================================================== */
 
-    supabaseClient.auth.getSession()
+    async function getCurrentUser() {
 
         const {
-            data,
+            data: { session },
             error
-        } = await supabaseClient.auth.getUser();
+        } = await supabaseClient.auth.getSession();
 
         if (error) {
             console.error("Auth error:", error);
             return null;
         }
 
-        return data?.user || null;
+        return session?.user || null;
     }
 
 

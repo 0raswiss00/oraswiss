@@ -116,17 +116,17 @@
 
     <!-- Script logic -->
     <script>
-    const supabaseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-    const supabaseKey = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+      const supabaseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+      const supabaseKey = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
     
-    // Përdor këtë kontroll që të mos përplaset nëse është deklaruar diku tjetër
-    if (!window.supabaseInstance) {
+      if (!window.supabaseInstance) {
         window.supabaseInstance = window.supabase.createClient(supabaseUrl, supabaseKey);
-    }
-    const supabase = window.supabaseInstance;
+      }
+      // E ndryshuam nga "supabase" në "db" që të mos bëjë përplasje
+      const db = window.supabaseInstance;
 
-    let collectionData = [];
-    let currentFilter = 'all';
+      let collectionData = [];
+      let currentFilter = 'all';
         
         async function fetchCollection() {
             const { data: { user } } = await supabase.auth.getUser();

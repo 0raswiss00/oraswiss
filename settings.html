@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Account Settings - OraSwiss</title>
+
+<link rel="stylesheet" href="styles.css">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f5f5;
+    color: #111;
+}
+
+/* HEADER */
+.settings-header {
+    background: #111;
+    color: white;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.settings-header h1 {
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: .5px;
+}
+
+.back-home {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+/* MAIN */
+.settings-container {
+    width: 100%;
+    max-width: 850px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+/* CARD */
+.settings-card {
+    background: white;
+    border-radius: 14px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 15px rgba(0,0,0,.08);
+}
+
+.settings-card h2 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: 20px;
+}
+
+.settings-card p.description {
+    margin-top: 0;
+    color: #777;
+    font-size: 14px;
+}
+
+/* FORM */
+.form-group {
+    margin-bottom: 17px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    font-size: 15px;
+    outline: none;
+    transition: .2s;
+}
+
+.form-group input:focus {
+    border-color: #111;
+}
+
+/* GRID */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* EMAIL */
+.email-box {
+    background: #f3f3f3;
+    color: #666;
+}
+
+/* BUTTONS */
+.save-btn {
+    width: 100%;
+    border: none;
+    background: #111;
+    color: white;
+    padding: 14px;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.save-btn:hover {
+    background: #333;
+}
+
+.password-btn {
+    width: 100%;
+    border: 1px solid #111;
+    background: white;
+    color: #111;
+    padding: 13px;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.password-btn:hover {
+    background: #111;
+    color: white;
+}
+
+/* LOGOUT */
+.logout-btn {
+    width: 100%;
+    border: none;
+    background: #b00020;
+    color: white;
+    padding: 14px;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background: #8b0019;
+}
+
+/* STATUS */
+.status-message {
+    display: none;
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.status-success {
+    background: #e8f7e8;
+    color: #176b17;
+}
+
+.status-error {
+    background: #fdeaea;
+    color: #a00000;
+}
+
+/* LOADING */
+#loading {
+    text-align: center;
+    padding: 50px;
+    font-size: 16px;
+}
+
+/* FOOTER */
+.settings-footer {
+    text-align: center;
+    padding: 25px;
+    color: #777;
+    font-size: 13px;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+
+    .settings-header {
+        padding: 15px;
+    }
+
+    .settings-header h1 {
+        font-size: 19px;
+    }
+
+    .settings-container {
+        margin: 18px auto;
+        padding: 0 10px;
+    }
+
+    .settings-card {
+        padding: 18px;
+        border-radius: 12px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .form-group input {
+        padding: 12px;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<header class="settings-header">
+    <h1>⚙️ Account Settings</h1>
+
+```
+<a href="index.html" class="back-home">
+    ← Home
+</a>
+```
+
+</header>
+
+<main class="settings-container">
+
+```
+<div id="loading">
+    Duke ngarkuar account-in...
+</div>
+
+<div id="settingsContent" style="display:none;">
+
+    <!-- PROFILE -->
+    <section class="settings-card">
+
+        <h2>👤 Profile</h2>
+
+        <p class="description">
+            Menaxho informacionin e profilit tënd.
+        </p>
+
+        <div class="form-group">
+            <label>Full Name</label>
+            <input
+                id="fullName"
+                type="text"
+                placeholder="Full Name"
+                autocomplete="name"
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input
+                id="email"
+                class="email-box"
+                type="email"
+                readonly
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Phone</label>
+            <input
+                id="phone"
+                type="text"
+                placeholder="Phone"
+                autocomplete="tel"
+            >
+        </div>
+
+        <button
+            id="saveProfile"
+            class="save-btn"
+            type="button"
+        >
+            💾 Save Profile
+        </button>
+
+        <div id="profileStatus" class="status-message"></div>
+
+    </section>
+
+
+    <!-- ADDRESS -->
+    <section class="settings-card">
+
+        <h2>📍 Address</h2>
+
+        <p class="description">
+            Përditëso adresën që përdor për porositë dhe dërgesat.
+        </p>
+
+        <div class="form-group">
+            <label>Country</label>
+            <input
+                id="country"
+                type="text"
+                placeholder="Country"
+                autocomplete="country-name"
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Street</label>
+            <input
+                id="street"
+                type="text"
+                placeholder="Rruga"
+                autocomplete="street-address"
+            >
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>House Number</label>
+                <input
+                    id="houseNumber"
+                    type="text"
+                    placeholder="Nr. Shtëpisë"
+                >
+            </div>
+
+            <div class="form-group">
+                <label>ZIP Code</label>
+                <input
+                    id="zipCode"
+                    type="text"
+                    placeholder="Kodi Postar"
+                    autocomplete="postal-code"
+                >
+            </div>
+
+        </div>
+
+        <button
+            id="saveAddress"
+            class="save-btn"
+            type="button"
+        >
+            💾 Save Address
+        </button>
+
+        <div id="addressStatus" class="status-message"></div>
+
+    </section>
+
+
+    <!-- PASSWORD -->
+    <section class="settings-card">
+
+        <h2>🔐 Password</h2>
+
+        <p class="description">
+            Për të ndryshuar password-in, do të marrësh një email
+            sigurie në adresën e account-it.
+        </p>
+
+        <button
+            id="changePassword"
+            class="password-btn"
+            type="button"
+        >
+            🔑 Change Password
+        </button>
+
+        <div id="passwordStatus" class="status-message"></div>
+
+    </section>
+
+
+    <!-- ACCOUNT -->
+    <section class="settings-card">
+
+        <h2>🚪 Account</h2>
+
+        <p class="description">
+            Dil nga account-i yt OraSwiss.
+        </p>
+
+        <button
+            id="logoutBtn"
+            class="logout-btn"
+            type="button"
+        >
+            Logout
+        </button>
+
+    </section>
+
+</div>
+```
+
+</main>
+
+<footer class="settings-footer">
+    © 2026 OraSwiss — Luxury Watches
+</footer>
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+
+<script>
+
+const SUPABASE_URL =
+    'https://gnwsrmelmeqduhhmfmoa.supabase.co';
+
+const SUPABASE_KEY =
+    'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9';
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* ================================
+   STATUS MESSAGE
+================================ */
+
+function showStatus(elementId, message, success = true) {
+
+    const element =
+        document.getElementById(elementId);
+
+    element.textContent = message;
+
+    element.className =
+        "status-message " +
+        (success
+            ? "status-success"
+            : "status-error");
+
+    element.style.display = "block";
+
+    setTimeout(() => {
+        element.style.display = "none";
+    }, 4000);
+}
+
+
+/* ================================
+   LOAD ACCOUNT
+================================ */
+
+async function loadAccount() {
+
+    try {
+
+        const {
+            data: {
+                user
+            },
+            error: sessionError
+        } = await supabaseClient.auth.getUser();
+
+        if (sessionError) {
+            throw sessionError;
+        }
+
+        if (!user) {
+
+            window.location.href =
+                "register.html";
+
+            return;
+        }
+
+
+        /* EMAIL */
+
+        document.getElementById("email").value =
+            user.email || "";
+
+
+        /* PROFILE */
+
+        const {
+            data: profile,
+            error: profileError
+        } = await supabaseClient
+            .from("profiles")
+            .select(`
+                user_id,
+                email,
+                full_name,
+                phone,
+                country,
+                street,
+                house_number,
+                zip_code,
+                role
+            `)
+            .eq("user_id", user.id)
+            .maybeSingle();
+
+
+        if (profileError) {
+
+            console.error(
+                "Profile error:",
+                profileError
+            );
+
+        }
+
+
+        if (profile) {
+
+            document.getElementById("fullName").value =
+                profile.full_name || "";
+
+            document.getElementById("phone").value =
+                profile.phone || "";
+
+            document.getElementById("country").value =
+                profile.country || "";
+
+            document.getElementById("street").value =
+                profile.street || "";
+
+            document.getElementById("houseNumber").value =
+                profile.house_number || "";
+
+            document.getElementById("zipCode").value =
+                profile.zip_code || "";
+        }
+
+
+        document.getElementById("loading")
+            .style.display = "none";
+
+        document.getElementById("settingsContent")
+            .style.display = "block";
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById("loading").textContent =
+            "Nuk mund të ngarkohej account-i.";
+
+    }
+}
+
+
+/* ================================
+   SAVE PROFILE
+================================ */
+
+document
+.getElementById("saveProfile")
+.addEventListener("click", async () => {
+
+    const {
+        data: {
+            user
+        }
+    } = await supabaseClient.auth.getUser();
+
+    if (!user) {
+
+        window.location.href =
+            "register.html";
+
+        return;
+    }
+
+
+    const fullName =
+        document.getElementById("fullName")
+        .value.trim();
+
+    const phone =
+        document.getElementById("phone")
+        .value.trim();
+
+
+    const {
+        error
+    } = await supabaseClient
+        .from("profiles")
+        .update({
+            full_name: fullName,
+            phone: phone
+        })
+        .eq("user_id", user.id);
+
+
+    if (error) {
+
+        console.error(error);
+
+        showStatus(
+            "profileStatus",
+            "Gabim: " + error.message,
+            false
+        );
+
+        return;
+    }
+
+
+    /* Update Auth Metadata */
+
+    const {
+        error: authError
+    } = await supabaseClient.auth.updateUser({
+
+        data: {
+            full_name: fullName,
+            phone: phone
+        }
+
+    });
+
+
+    if (authError) {
+        console.error(authError);
+    }
+
+
+    showStatus(
+        "profileStatus",
+        "Profili u ruajt me sukses ✓"
+    );
+
+});
+
+
+/* ================================
+   SAVE ADDRESS
+================================ */
+
+document
+.getElementById("saveAddress")
+.addEventListener("click", async () => {
+
+    const {
+        data: {
+            user
+        }
+    } = await supabaseClient.auth.getUser();
+
+
+    if (!user) {
+
+        window.location.href =
+            "register.html";
+
+        return;
+    }
+
+
+    const country =
+        document.getElementById("country")
+        .value.trim();
+
+    const street =
+        document.getElementById("street")
+        .value.trim();
+
+    const houseNumber =
+        document.getElementById("houseNumber")
+        .value.trim();
+
+    const zipCode =
+        document.getElementById("zipCode")
+        .value.trim();
+
+
+    const {
+        error
+    } = await supabaseClient
+        .from("profiles")
+        .update({
+
+            country: country,
+            street: street,
+            house_number: houseNumber,
+            zip_code: zipCode
+
+        })
+        .eq("user_id", user.id);
+
+
+    if (error) {
+
+        console.error(error);
+
+        showStatus(
+            "addressStatus",
+            "Gabim: " + error.message,
+            false
+        );
+
+        return;
+    }
+
+
+    /* Update Auth Metadata too */
+
+    const {
+        error: authError
+    } = await supabaseClient.auth.updateUser({
+
+        data: {
+            country: country,
+            street: street,
+            house_number: houseNumber,
+            zip_code: zipCode
+        }
+
+    });
+
+
+    if (authError) {
+        console.error(authError);
+    }
+
+
+    showStatus(
+        "addressStatus",
+        "Adresa u ruajt me sukses ✓"
+    );
+
+});
+
+
+/* ================================
+   CHANGE PASSWORD
+================================ */
+
+document
+.getElementById("changePassword")
+.addEventListener("click", async () => {
+
+    const {
+        data: {
+            user
+        }
+    } = await supabaseClient.auth.getUser();
+
+
+    if (!user || !user.email) {
+
+        alert(
+            "Nuk u gjet email-i i account-it."
+        );
+
+        return;
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient.auth
+        .resetPasswordForEmail(
+            user.email,
+            {
+                redirectTo:
+                    "https://oraswiss.com/update-password.html"
+            }
+        );
+
+
+    if (error) {
+
+        showStatus(
+            "passwordStatus",
+            "Gabim: " + error.message,
+            false
+        );
+
+        return;
+    }
+
+
+    showStatus(
+        "passwordStatus",
+        "Email për ndryshimin e password-it u dërgua ✓"
+    );
+
+});
+
+
+/* ================================
+   LOGOUT
+================================ */
+
+document
+.getElementById("logoutBtn")
+.addEventListener("click", async () => {
+
+    const confirmed =
+        confirm(
+            "A dëshiron të dalësh nga account-i?"
+        );
+
+    if (!confirmed) return;
+
+
+    const {
+        error
+    } = await supabaseClient.auth.signOut();
+
+
+    if (error) {
+
+        alert(
+            "Gabim gjatë logout: " +
+            error.message
+        );
+
+        return;
+    }
+
+
+    window.location.href =
+        "index.html";
+
+});
+
+
+/* ================================
+   START
+================================ */
+
+loadAccount();
+
+</script>
+
+</body>
+</html>

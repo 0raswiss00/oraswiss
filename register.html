@@ -158,7 +158,7 @@ if (forgotPasswordLink) {
         }
 
         // Funksioni i Supabase për reset password
-        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email, {
             redirectTo: 'https://oraswiss.com/update-password.html', // Ndryshoni me URL-në tuaj
         });
 

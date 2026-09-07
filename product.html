@@ -874,10 +874,13 @@ async function loadProduct() {
 
         updateGallery();
 
-        document.getElementById("whatsapp").href =
-            "https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per%20" +
-            encodeURIComponent(data.model);
+// Kontrollo nëse produkti është në Favorites
+await loadFavoriteState();
 
+document.getElementById("whatsapp").href =
+    "https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per%20" +
+    encodeURIComponent(data.model);
+        
     } catch(err) {
         console.error(err);
         container.innerHTML = "Gabim: " + err.message;

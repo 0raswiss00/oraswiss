@@ -14,8 +14,13 @@
     <!-- Header / Navbar -->
     <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <a href="/" class="text-xl font-bold tracking-wider text-amber-500">ORA SWISS</a>
             <div class="flex items-center gap-4">
+                <a href="javascript:history.back()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700 transition flex items-center gap-1.5">
+                    ← Back
+                </a>
+                <a href="/" class="text-xl font-bold tracking-wider text-amber-500">ORA SWISS</a>
+            </div>
+            <div class="flex items-center gap-6">
                 <a href="favorites.html" class="text-sm text-slate-400 hover:text-white transition">Favorites</a>
                 <a href="collection.html" class="text-sm text-amber-500 font-medium">My Collection</a>
             </div>
@@ -25,7 +30,7 @@
     <main class="max-w-7xl mx-auto px-4 py-8">
         
         <!-- Top Summary Dashboard -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
                 <p class="text-slate-400 text-sm">Total Watches</p>
                 <h3 id="stat-total" class="text-2xl font-bold mt-1">0</h3>
@@ -46,29 +51,28 @@
 
         <!-- Actions & Filters Bar -->
         <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
-            <div class="flex items-center gap-2 bg-slate-900 p-1.5 rounded-xl border border-slate-800">
-                <button onclick="filterCollection('all')" class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium bg-amber-500 text-slate-950 transition">All</button>
-                <button onclick="filterCollection('owned')" class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition">Owned</button>
-                <button onclick="filterCollection('wanted')" class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition">Wanted</button>
-                <button onclick="filterCollection('sold')" class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition">Sold</button>
+            <div class="flex items-center gap-2 bg-slate-900 p-1.5 rounded-xl border border-slate-800 w-full md:w-auto overflow-x-auto">
+                <button onclick="filterCollection('all', event)" class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium bg-amber-500 text-slate-950 transition whitespace-nowrap">All</button>
+                <button onclick="filterCollection('owned', event)" class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition whitespace-nowrap">Owned</button>
+                <button onclick="filterCollection('wanted', event)" class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition whitespace-nowrap">Wanted</button>
+                <button onclick="filterCollection('sold', event)" class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition whitespace-nowrap">Sold</button>
             </div>
             
-            <button onclick="openAddModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 px-5 py-2.5 rounded-xl font-semibold text-sm transition">
+            <button onclick="openAddModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 px-5 py-2.5 rounded-xl font-semibold text-sm transition w-full md:w-auto text-center">
                 + Add Watch to Collection
             </button>
         </div>
 
         <!-- Collection Grid -->
         <div id="collection-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Dynamic items will load here -->
             <div class="col-span-full text-center py-12 text-slate-500">Loading your collection...</div>
         </div>
     </main>
 
     <!-- Modal for Adding Watch -->
     <div id="add-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="bg-slate-900 border border-slate-800 max-w-md w-full p-6 rounded-2xl">
-            <h3 class="text-lg font-bold mb-4">Add Watch to Collection</h3>
+        <div class="bg-slate-900 border border-slate-800 max-w-md w-full p-6 rounded-2xl shadow-xl">
+            <h3 class="text-lg font-bold mb-4 text-white">Add Watch to Collection</h3>
             <form id="add-form" onsubmit="saveWatch(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs text-slate-400 mb-1">Status</label>
@@ -80,7 +84,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">Product ID (from Ora Swiss)</label>
+                        <label class="block text-xs text-slate-400 mb-1">Product ID (Ora Swiss)</label>
                         <input type="number" id="product-id" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm text-white" placeholder="e.g. 190">
                     </div>
                     <div>
@@ -120,9 +124,8 @@
         let currentFilter = 'all';
 
         async function fetchCollection() {
-            // Sigurohu që përdoruesi është i loguar ose përdor një user_id testues nëse s'ke auth aktiv
             const { data: { user } } = await supabase.auth.getUser();
-            const userId = user ? user.id : 'ca8d97e5-bcbd-4cfe-b1d8-693f5d99009b'; // përdor id e tua nga gabimet e mëparshme
+            const userId = user ? user.id : 'ca8d97e5-bcbd-4cfe-b1d8-693f5d99009b';
 
             const { data, error } = await supabase
                 .from('collections')
@@ -134,7 +137,7 @@
 
             if (error) {
                 console.error("Error loading collection:", error);
-                document.getElementById('collection-grid').innerHTML = `<div class="col-span-full text-center py-12 text-red-400">Error loading collection data. Make sure 'collections' table exists.</div>`;
+                document.getElementById('collection-grid').innerHTML = `<div class="col-span-full text-center py-12 text-rose-400">Error loading collection data. Make sure 'collections' table exists.</div>`;
                 return;
             }
 
@@ -154,7 +157,7 @@
             document.getElementById('stat-value').innerText = `€${totalValue.toLocaleString()}`;
             
             const profitEl = document.getElementById('stat-profit');
-            profitEl.innerText = `${profit >= '' ? '+' : ''}€${profit.toLocaleString()}`;
+            profitEl.innerText = `${profit >= 0 ? '+' : ''}€${profit.toLocaleString()}`;
             profitEl.className = `text-2xl font-bold mt-1 ${profit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
         }
 
@@ -194,12 +197,14 @@
             }).join('');
         }
 
-        function filterCollection(status) {
+        function filterCollection(status, event) {
             currentFilter = status;
             document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.className = "filter-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition";
+                btn.className = "filter-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition whitespace-nowrap";
             });
-            event.target.className = "filter-btn px-4 py-1.5 rounded-lg text-sm font-medium bg-amber-500 text-slate-950 transition";
+            if (event && event.target) {
+                event.target.className = "filter-btn px-4 py-1.5 rounded-lg text-sm font-medium bg-amber-500 text-slate-950 transition whitespace-nowrap";
+            }
             renderCollection();
         }
 
@@ -250,7 +255,6 @@
             fetchCollection();
         }
 
-        // Initialize load
         fetchCollection();
     </script>
 </body>

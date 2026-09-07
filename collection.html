@@ -116,13 +116,18 @@
 
     <!-- Script logic -->
     <script>
-        const supabaseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-        const supabaseKey = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    const supabaseUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+    const supabaseKey = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+    
+    // Përdor këtë kontroll që të mos përplaset nëse është deklaruar diku tjetër
+    if (!window.supabaseInstance) {
+        window.supabaseInstance = window.supabase.createClient(supabaseUrl, supabaseKey);
+    }
+    const supabase = window.supabaseInstance;
 
-        let collectionData = [];
-        let currentFilter = 'all';
-
+    let collectionData = [];
+    let currentFilter = 'all';
+        
         async function fetchCollection() {
             const { data: { user } } = await supabase.auth.getUser();
             const userId = user ? user.id : 'ca8d97e5-bcbd-4cfe-b1d8-693f5d99009b';

@@ -211,7 +211,7 @@
 <body>
     <div class="container">
         <h1>⌚ ORA SWISS</h1>
-        <p style="text-align: center; color: #aaa; margin-bottom: 30px;">Paneli i Administratorit - Menaxhimi i Përdoruesve</p>
+        <p style="text-align: center; color: #aaa; margin-bottom: 30px;">Paneli i Administratorit - Përdoruesit dhe Artikujt</p>
 
         <!-- STATISTIKA -->
         <div class="stats">
@@ -220,7 +220,7 @@
                 <div class="number" id="count-users">0</div>
             </div>
             <div class="stat-box">
-                <h3>⌚ Ora në Katalog</h3>
+                <h3>⌚ Ora / Artikuj</h3>
                 <div class="number" id="count-products">0</div>
             </div>
             <div class="stat-box">
@@ -231,8 +231,8 @@
 
         <!-- LISTA E PËRDORUESVE -->
         <div class="users-list">
-            <h2>📋 Lista e Përdoruesve me Emrat e Zgjedhur</h2>
-            <button class="refresh-btn" onclick="trackEvent('refresh_data'); loadAllData();">🔄 Përditëso</button>
+            <h2>📋 Lista e Përdoruesve (Të Gjithë Përdoruesit)</h2>
+            <button class="refresh-btn" onclick="loadAllData()">🔄 Përditëso Të Dhënat</button>
             <div id="users-container" class="loading">
                 <div class="spinner"></div>
                 <p>Po ngarkohet...</p>
@@ -245,62 +245,67 @@
     const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    function trackEvent(eventName, eventData = {}) {
-        if (typeof gtag !== 'undefined') {
-            gtag('event', eventName, eventData);
-        }
-    }
-
     window.addEventListener('load', function() {
         loadAllData();
     });
 
-    // Funksion për të shfaqur vendndodhjen
     function showLocation(locationName) {
-        alert("Vendndodhja e përdoruesit: " + (locationName || "E panjohur"));
+        alert("Vendndodhja e përdoruesit: " + (locationName || "Nuk është vendosur"));
     }
 
     async function loadAllData() {
         try {
             const usersContainer = document.getElementById("users-container");
+            usersContainer.innerHTML = '<div class="spinner"></div><p style="text-align:center; color:#FFD700;">Duke u lidhur me Supabase...</p>';
             
-            // 1. Merr Përdoruesit (profiles)
-            const { data: users, count: userCount, error: userError } = await supabase
+            // 1. Merr Përdoruesit nga tabela 'profiles' (ose 'users')
+            let { data: users, count: userCount, error: userError } = await supabase
                 .from('profiles')
                 .select('*', { count: 'exact' });
 
-            if (userError) throw userError;
-            document.getElementById("count-users").textContent = userCount || 0;
+            // Nëse tabela 'profiles' nuk ekziston ose kthen gabim, provohet tabela 'users'
+            if (userError) {
+                console.warn("Provova 'profiles' por dështova, po provoj tabelën 'users'...");
+                const resUsers = await supabase.from('users').select('*', { count: 'exact' });
+                users = resUsers.data;
+                userCount = resUsers.count;
+                if (resUsers.error) throw resUsers.error;
+            }
 
-            // 2. Merr Orët (watches)
-            const { count: watchCount, error: watchError } = await supabase
+            document.getElementById("count-users").textContent = userCount || (users ? users.length : 0);
+
+            // 2. Merr Artikujt / Orët nga tabela 'watches' (ose 'articles' / 'products')
+            let { count: watchCount, error: watchError } = await supabase
                 .from('watches')
                 .select('*', { count: 'exact' });
 
-            if (watchError) throw watchError;
+            if (watchError) {
+                const resWatches = await supabase.from('articles').select('*', { count: 'exact' });
+                watchCount = resWatches.count;
+            }
             document.getElementById("count-products").textContent = watchCount || 0;
 
-            // 3. Merr Porositë (orders)
-            const { count: orderCount, error: orderError } = await supabase
+            // 3. Merr Porositë nga tabela 'orders'
+            const { count: orderCount } = await supabase
                 .from('orders')
                 .select('*', { count: 'exact' });
 
-            if (orderError) console.error("Gabim te orders:", orderError);
             document.getElementById("count-orders").textContent = orderCount || 0;
 
-            // 4. Shfaq listën e përdoruesve në UI me butonat përkatës
+            // 4. Shfaq listën e përdoruesve në UI
             if (users && users.length > 0) {
                 usersContainer.innerHTML = users.map(user => {
-                    // Përdorim emrin e zgjedhur nga profili (full_name ose username)
-                    const userName = user.full_name || user.username || 'Përdorues Anonim';
-                    const userLocation = user.location || 'Nuk ka vendndodhje';
+                    // Përshtatje fleksibël për emrin, emailin dhe vendndodhjen sipas kolonave tuaj
+                    const userName = user.full_name || user.username || user.name || user.emri || 'Përdorues Anonim';
+                    const userEmail = user.email || user.mail || 'N/A';
+                    const userLocation = user.location || user.city || user.qyteti || user.address || 'Nuk ka vendndodhje';
                     const userId = user.id;
 
                     return `
                         <div class="user-card">
                             <div class="user-info">
                                 <h3>👤 ${userName}</h3>
-                                <p>Email: ${user.email || 'N/A'}</p>
+                                <p>Email: ${userEmail}</p>
                                 <p>Vendndodhja: <strong>${userLocation}</strong></p>
                             </div>
                             <div class="user-actions">
@@ -311,17 +316,14 @@
                     `;
                 }).join('');
             } else {
-                usersContainer.innerHTML = '<p class="empty">Nuk ka përdorues të regjistruar.</p>';
+                usersContainer.innerHTML = '<p class="empty">Nuk u gjet asnjë përdorues në bazën e të dhënave.</p>';
             }
 
         } catch (error) {
             console.error("Gabim në ngarkim:", error);
-            document.getElementById("users-container").innerHTML = `<div class="error">Gabim: ${error.message}</div>`;
+            document.getElementById("users-container").innerHTML = `<div class="error">Gabim gjatë lidhjes me Supabase: ${error.message}</div>`;
         }
     }
-
-    // Rifresko të dhënat çdo 30 sekonda automatikisht
-    setInterval(loadAllData, 30000);
 </script>
 </body>
 </html>

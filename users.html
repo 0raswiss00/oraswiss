@@ -147,19 +147,6 @@
             transform: translateX(5px);
         }
 
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-
         .user-info h3 {
             color: #FFD700;
             margin-bottom: 5px;
@@ -320,25 +307,25 @@
         document.getElementById('visitors-content').innerHTML = html || '<p style="color:#aaa;">Nuk ka vizitorë</p>';
     }
 
-async function loadAllData() {
-    try {
-        const usersContainer = document.getElementById("users-container");
-        
-        // 1. Merr Përdoruesit (profiles)
-        const { data: users, count: userCount, error: userError } = await supabase
-            .from('profiles')
-            .select('*', { count: 'exact' });
+    async function loadAllData() {
+        try {
+            const usersContainer = document.getElementById("users-container");
+            
+            // 1. Merr Përdoruesit (profiles)
+            const { data: users, count: userCount, error: userError } = await supabase
+                .from('profiles')
+                .select('*', { count: 'exact' });
 
-        if (userError) throw userError;
-        document.getElementById("count-users").textContent = userCount || 0;
+            if (userError) throw userError;
+            document.getElementById("count-users").textContent = userCount || 0;
 
-        // 2. Merr Orët (watches)
-        const { count: watchCount, error: watchError } = await supabase
-            .from('watches')
-            .select('*', { count: 'exact' });
+            // 2. Merr Orët (watches)
+            const { count: watchCount, error: watchError } = await supabase
+                .from('watches')
+                .select('*', { count: 'exact' });
 
-        if (watchError) throw watchError;
-        document.getElementById("count-products").textContent = watchCount || 0;
+            if (watchError) throw watchError;
+            document.getElementById("count-products").textContent = watchCount || 0;
 
             // 3. Merr Porositë (orders)
             const { count: orderCount, error: orderError } = await supabase
@@ -365,16 +352,10 @@ async function loadAllData() {
 
         } catch (error) {
             console.error("Gabim në ngarkim:", error);
-            document.getElementById("users-container").innerHTML = <div class="error">Gabim: ${error.message}</div>;
+            document.getElementById("users-container").innerHTML = `<div class="error">Gabim: ${error.message}</div>`;
         }
     }
-    // ... kodi yt i mëparshëm ...
-    } else {
-        alert("Ora u modifikua me sukses!");
-        // Këtu duhet të jetë thirrja, që të rifreskojë listën pasi ndryshimi u krye
-        fetchWatch(); 
-        window.location.href = 'dashboard.html'; 
-    }
+
     setInterval(loadAllData, 30000);
 </script>
 </body>    

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ora Swiss - Menaxhimi i Përdoruesve</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-KD2ZZ3MJYY');
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #FFD700;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .stat-box {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #FFD700;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .stat-box h3 {
+            color: #FFD700;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .stat-box .number {
+            font-size: 2.5em;
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        .users-list {
+            margin-top: 40px;
+        }
+
+        .users-list h2 {
+            color: #FFD700;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #FFD700;
+            padding-bottom: 10px;
+        }
+
+        .user-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #FFD700;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .user-card:hover {
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        .user-info h3 {
+            color: #FFD700;
+            margin-bottom: 5px;
+            font-size: 1.2em;
+        }
+
+        .user-info p {
+            color: #aaa;
+            font-size: 0.9em;
+            margin: 3px 0;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-location {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-location:hover {
+            background: #2980b9;
+        }
+
+        .btn-articles {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-articles:hover {
+            background: #219653;
+        }
+
+        .loading {
+            text-align: center;
+            color: #FFD700;
+            font-size: 1.2em;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 215, 0, 0.2);
+            border-top: 4px solid #FFD700;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: rgba(255, 0, 0, 0.2);
+            border: 2px solid #ff0000;
+            color: #ff6b6b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .empty {
+            text-align: center;
+            color: #aaa;
+            padding: 40px;
+            font-size: 1.1em;
+        }
+
+        .refresh-btn {
+            background: #FFD700;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #FFA500;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⌚ ORA SWISS</h1>
+        <p style="text-align: center; color: #aaa; margin-bottom: 30px;">Paneli i Administratorit - Menaxhimi i Përdoruesve</p>
+
+        <!-- STATISTIKA -->
+        <div class="stats">
+            <div class="stat-box">
+                <h3>👥 Përdorues DB</h3>
+                <div class="number" id="count-users">0</div>
+            </div>
+            <div class="stat-box">
+                <h3>⌚ Ora në Katalog</h3>
+                <div class="number" id="count-products">0</div>
+            </div>
+            <div class="stat-box">
+                <h3>🛒 Porosi</h3>
+                <div class="number" id="count-orders">0</div>
+            </div>
+        </div>
+
+        <!-- LISTA E PËRDORUESVE -->
+        <div class="users-list">
+            <h2>📋 Lista e Përdoruesve me Emrat e Zgjedhur</h2>
+            <button class="refresh-btn" onclick="trackEvent('refresh_data'); loadAllData();">🔄 Përditëso</button>
+            <div id="users-container" class="loading">
+                <div class="spinner"></div>
+                <p>Po ngarkohet...</p>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    function trackEvent(eventName, eventData = {}) {
+        if (typeof gtag !== 'undefined') {
+            gtag('event', eventName, eventData);
+        }
+    }
+
+    window.addEventListener('load', function() {
+        loadAllData();
+    });
+
+    // Funksion për të shfaqur vendndodhjen
+    function showLocation(locationName) {
+        alert("Vendndodhja e përdoruesit: " + (locationName || "E panjohur"));
+    }
+
+    async function loadAllData() {
+        try {
+            const usersContainer = document.getElementById("users-container");
+            
+            // 1. Merr Përdoruesit (profiles)
+            const { data: users, count: userCount, error: userError } = await supabase
+                .from('profiles')
+                .select('*', { count: 'exact' });
+
+            if (userError) throw userError;
+            document.getElementById("count-users").textContent = userCount || 0;
+
+            // 2. Merr Orët (watches)
+            const { count: watchCount, error: watchError } = await supabase
+                .from('watches')
+                .select('*', { count: 'exact' });
+
+            if (watchError) throw watchError;
+            document.getElementById("count-products").textContent = watchCount || 0;
+
+            // 3. Merr Porositë (orders)
+            const { count: orderCount, error: orderError } = await supabase
+                .from('orders')
+                .select('*', { count: 'exact' });
+
+            if (orderError) console.error("Gabim te orders:", orderError);
+            document.getElementById("count-orders").textContent = orderCount || 0;
+
+            // 4. Shfaq listën e përdoruesve në UI me butonat përkatës
+            if (users && users.length > 0) {
+                usersContainer.innerHTML = users.map(user => {
+                    // Përdorim emrin e zgjedhur nga profili (full_name ose username)
+                    const userName = user.full_name || user.username || 'Përdorues Anonim';
+                    const userLocation = user.location || 'Nuk ka vendndodhje';
+                    const userId = user.id;
+
+                    return `
+                        <div class="user-card">
+                            <div class="user-info">
+                                <h3>👤 ${userName}</h3>
+                                <p>Email: ${user.email || 'N/A'}</p>
+                                <p>Vendndodhja: <strong>${userLocation}</strong></p>
+                            </div>
+                            <div class="user-actions">
+                                <button class="btn btn-location" onclick="showLocation('${userLocation}')">📍 Vendndodhja</button>
+                                <a href="artikujt_e_perdoruesit.html?id=${userId}" class="btn btn-articles">📦 Artikujt e tij</a>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                usersContainer.innerHTML = '<p class="empty">Nuk ka përdorues të regjistruar.</p>';
+            }
+
+        } catch (error) {
+            console.error("Gabim në ngarkim:", error);
+            document.getElementById("users-container").innerHTML = `<div class="error">Gabim: ${error.message}</div>`;
+        }
+    }
+
+    // Rifresko të dhënat çdo 30 sekonda automatikisht
+    setInterval(loadAllData, 30000);
+</script>
+</body>
+</html>

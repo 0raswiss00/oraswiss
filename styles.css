@@ -2728,4 +2728,10 @@ body {
     font-size:14px;
 }
 
-
+.product-left img,
+.product-main-image {
+    max-width: 300px !important;
+    height: 220px !important;
+    object-fit: cover !important;
+    margin: 0 auto !important;
+}

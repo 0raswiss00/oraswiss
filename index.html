@@ -153,17 +153,17 @@
         opacity: 0 !important;
         pointer-events: none !important;
     }
-    /* Desktop */
+   /* Desktop */
     @media (min-width: 1024px) {
         .bottom-nav {
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-            width: 500px !important;
-            height: 48px !important;
-            bottom: 15px !important;
+            display: none !important;
         }
-        .bottom-nav.nav-hidden {
-            transform: translateX(-50%) translateY(120px) !important;
+        body img, .grid img, .card img, .product img, .mainimg, .product-main-image {
+            max-width: 300px !important;
+            height: auto !important;
+            display: block !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
         }
     }
     
@@ -247,7 +247,6 @@
         display: block;
     }
 
-    @media (min-width: 1024px) { img, .product img, .mainimg, .product-main-image { max-width: 320px !important; height: auto !important; } }
   </style>     
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 </head>

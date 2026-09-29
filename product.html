@@ -3,21 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Loading product...</title>
-    <meta name="description" content="Luxury watches at Ora Swiss">
-    <link rel="canonical" id="canonicalUrl" href="">
+
+    <meta
+        name="description"
+        content="Luxury watches at Ora Swiss"
+    >
+
+    <link
+        rel="canonical"
+        id="canonicalUrl"
+        href=""
+    >
 
     <!-- Open Graph -->
     <meta property="og:type" content="product">
-    <meta property="og:title" id="ogTitle" content="Ora Swiss">
-    <meta property="og:description" id="ogDescription" content="">
-    <meta property="og:url" id="ogUrl" content="">
+
+    <meta
+        property="og:title"
+        id="ogTitle"
+        content="Ora Swiss"
+    >
+
+    <meta
+        property="og:description"
+        id="ogDescription"
+        content=""
+    >
+
+    <meta
+        property="og:url"
+        id="ogUrl"
+        content=""
+    >
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
+    <script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"
+    ></script>
+
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
         gtag('config', 'G-KD2ZZ3MJYY');
     </script>
@@ -28,92 +61,203 @@
     <!-- SEO PRODUCT -->
     <script>
         (async function () {
-            const seoUrlParams = new URLSearchParams(window.location.search);
-            const seoProductId = seoUrlParams.get('id');
-            if (!seoProductId) return;
 
-            const SUPABASE_URL = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
-            const SUPABASE_ANON_KEY = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIyC9';
-            const url = `${SUPABASE_URL}/rest/v1/products?id=eq.${encodeURIComponent(seoProductId)}&select=brand,model,reference`;
+            const seoUrlParams =
+                new URLSearchParams(window.location.search);
+
+            const seoProductId =
+                seoUrlParams.get('id');
+
+            if (!seoProductId) {
+                return;
+            }
+
+            const SUPABASE_URL =
+                'https://gnwsrmelmeqduhhmfmoa.supabase.co';
+
+            const SUPABASE_ANON_KEY =
+                'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIyC9';
+
+            const url =
+                `${SUPABASE_URL}/rest/v1/products?id=eq.${encodeURIComponent(seoProductId)}&select=brand,model,reference`;
 
             try {
+
                 const response = await fetch(url, {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
                         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
                     }
                 });
-                if (!response.ok) return;
-                const products = await response.json();
-                if (!products || products.length === 0) return;
 
-                const product = products[0];
-                const brand = product.brand || '';
-                const model = product.model || '';
-                const reference = product.reference || '';
+                if (!response.ok) {
+                    return;
+                }
+
+                const products =
+                    await response.json();
+
+                if (!products || products.length === 0) {
+                    return;
+                }
+
+                const product =
+                    products[0];
+
+                const brand =
+                    product.brand || '';
+
+                const model =
+                    product.model || '';
+
+                const reference =
+                    product.reference || '';
 
                 const productName = [
                     brand,
                     model,
                     reference ? `Ref. ${reference}` : ''
-                ].filter(Boolean).join(' ');
+                ]
+                .filter(Boolean)
+                .join(' ');
 
-                const pageTitle = `${productName} | Ora Swiss`;
-                const description = `${productName} - Luxury watch available at Ora Swiss.`;
-                const currentUrl = window.location.href;
+                const pageTitle =
+                    `${productName} | Ora Swiss`;
 
-                document.title = pageTitle;
-                
-                const descriptionMeta = document.querySelector('meta[name="description"]');
-                if (descriptionMeta) descriptionMeta.setAttribute('content', description);
+                const description =
+                    `${productName} - Luxury watch available at Ora Swiss.`;
 
-                const ogTitle = document.getElementById('ogTitle');
-                if (ogTitle) ogTitle.setAttribute('content', pageTitle);
+                const currentUrl =
+                    window.location.href;
 
-                const ogDescription = document.getElementById('ogDescription');
-                if (ogDescription) ogDescription.setAttribute('content', description);
 
-                const ogUrl = document.getElementById('ogUrl');
-                if (ogUrl) ogUrl.setAttribute('content', currentUrl);
+                /* TITLE */
+                document.title =
+                    pageTitle;
 
-                const canonical = document.getElementById('canonicalUrl');
-                if (canonical) canonical.setAttribute('href', currentUrl);
 
+                /* META DESCRIPTION */
+                const descriptionMeta =
+                    document.querySelector(
+                        'meta[name="description"]'
+                    );
+
+                if (descriptionMeta) {
+                    descriptionMeta.setAttribute(
+                        'content',
+                        description
+                    );
+                }
+
+
+                /* OG TITLE */
+                const ogTitle =
+                    document.getElementById('ogTitle');
+
+                if (ogTitle) {
+                    ogTitle.setAttribute(
+                        'content',
+                        pageTitle
+                    );
+                }
+
+
+                /* OG DESCRIPTION */
+                const ogDescription =
+                    document.getElementById('ogDescription');
+
+                if (ogDescription) {
+                    ogDescription.setAttribute(
+                        'content',
+                        description
+                    );
+                }
+
+
+                /* OG URL */
+                const ogUrl =
+                    document.getElementById('ogUrl');
+
+                if (ogUrl) {
+                    ogUrl.setAttribute(
+                        'content',
+                        currentUrl
+                    );
+                }
+
+
+                /* CANONICAL */
+                const canonical =
+                    document.getElementById('canonicalUrl');
+
+                if (canonical) {
+                    canonical.setAttribute(
+                        'href',
+                        currentUrl
+                    );
+                }
+
+
+                /* PRODUCT SCHEMA */
                 const schema = {
                     "@context": "https://schema.org",
                     "@type": "Product",
                     "name": productName,
-                    "brand": { "@type": "Brand", "name": brand },
+                    "brand": {
+                        "@type": "Brand",
+                        "name": brand
+                    },
                     "model": model,
                     "sku": reference,
                     "url": currentUrl,
                     "description": description
                 };
 
-                const schemaScript = document.createElement('script');
-                schemaScript.type = 'application/ld+json';
-                schemaScript.textContent = JSON.stringify(schema);
-                document.head.appendChild(schemaScript);
+
+                const schemaScript =
+                    document.createElement('script');
+
+                schemaScript.type =
+                    'application/ld+json';
+
+                schemaScript.textContent =
+                    JSON.stringify(schema);
+
+                document.head.appendChild(
+                    schemaScript
+                );
+
             } catch (error) {
-                console.error('SEO product error:', error);
+
+                console.error(
+                    'SEO product error:',
+                    error
+                );
+
             }
+
         })();
     </script>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /* KËTU VAZHDON CSS-I YT */
+
+    
         * { box-sizing: border-box; }
         body { margin: 0; background: #050505; color: white; font-family: Arial, sans-serif; padding-bottom: 90px; }
         .product-page { width: 100%; min-height: 100vh; }
-        
-        /* Gallery & Swipe/Scroll styling */
-        .gallery { position: relative; width: 100%; height: 55vh; background: #000; overflow: hidden; touch-action: pan-y; user-select: none; }
-        .gallery img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; transition: transform 0.2s ease-out; }
-        
-        .photo-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); border: none; color: white; font-size: 35px; width: 45px; height: 60px; border-radius: 10px; cursor: pointer; z-index: 10; }
+        .gallery { position: relative; width: 100%; height: 55vh; background: #000; overflow: hidden; }
+        .gallery img { width: 100%; height: 100%; object-fit: contain; }
+        .photo-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); border: none; color: white; font-size: 35px; width: 45px; height: 60px; border-radius: 10px; cursor: pointer; }
         .photo-left { left: 15px; } .photo-right { right: 15px; }
-        .photo-counter { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.6); padding: 7px 15px; border-radius: 20px; z-index: 10; }
+        .photo-counter { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.6); padding: 7px 15px; border-radius: 20px; }
         
         .details { padding: 20px; max-width: 900px; margin: auto; position: relative; }
+        
         .brand { font-size: 18px; color: #aaa; margin-bottom: 4px; }
         .model { font-size: 30px; font-weight: bold; margin-bottom: 15px; display: block; }
         
@@ -123,9 +267,26 @@
         .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; max-width: 900px; margin-left: auto; margin-right: auto; }
         .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
         
-        .top-actions { display: flex; justify-content: flex-end; gap: 12px; margin: 10px 0; }
-        .top-actions .action { background: #111; padding: 8px 14px; border-radius: 20px; font-size: 15px; cursor: pointer; border: 1px solid #222; display: flex; align-items: center; gap: 5px; }
-        .top-actions .action:hover { background: #222; }
+        .top-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin: 10px 0;
+        }
+        .top-actions .action {
+            background: #111;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 15px;
+            cursor: pointer;
+            border: 1px solid #222;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .top-actions .action:hover {
+            background: #222;
+        }
 
         .buy-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #090909; border-top: 1px solid #333; padding: 10px; display: flex; gap: 8px; z-index: 999; max-width: 900px; margin-left: 50%; transform: translateX(-50%); }
         .buy-btn { flex: 1; padding: 15px; border-radius: 10px; text-align: center; text-decoration: none; font-weight: bold; cursor: pointer; }
@@ -133,36 +294,187 @@
         .buy { background: #ffd900; color: black; }
         .offer { background: #222; color: white; border: 1px solid #444; }
 
-        .oraswiss-seller-wrapper { display: block; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 30px auto; max-width: 900px; width: 100%; padding: 0 20px; box-sizing: border-box; }
-        .oraswiss-seller-card { background-color: #111111 !important; color: #ffffff !important; border: 1px solid #333333 !important; border-radius: 16px !important; padding: 24px !important; box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important; box-sizing: border-box !important; }
-        .oraswiss-header { display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 12px !important; }
-        .oraswiss-info { display: flex !important; align-items: center !important; gap: 12px !important; }
-        .oraswiss-avatar { width: 40px !important; height: 40px !important; background: #222222 !important; border-radius: 50% !important; display: flex !important; align-items: center !important; justify-content: center !important; color: #fff !important; overflow: hidden !important; }
-        .oraswiss-avatar img { width: 100% !important; height: 100% !important; object-fit: cover !important; }
-        .oraswiss-info h3 { margin: 0 !important; font-size: 16px !important; font-weight: 700 !important; color: #fff !important; cursor: pointer; }
-        .oraswiss-info h3 span { font-weight: normal !important; color: #aaa !important; font-size: 13px !important; }
-        .oraswiss-green { margin: 2px 0 0 0 !important; font-size: 12px !important; color: #25D366 !important; font-weight: 600 !important; cursor: pointer; }
-        .oraswiss-joined { font-size: 13px !important; color: #aaa !important; margin-bottom: 16px !important; }
-        .oraswiss-actions { display: flex !important; flex-direction: column !important; gap: 10px !important; }
-        .oraswiss-btn-blue, .oraswiss-btn-white { width: 100% !important; padding: 12px !important; border-radius: 24px !important; font-size: 14px !important; font-weight: 600 !important; cursor: pointer !important; text-align: center !important; box-sizing: border-box !important; }
-        .oraswiss-btn-blue { background: #0066cc !important; color: #ffffff !important; border: none !important; }
-        .oraswiss-btn-white { background: #222222 !important; color: #ffffff !important; border: 1px solid #444444 !important; }
-        .oraswiss-btn-white:hover { background: #333333 !important; }
+        .oraswiss-seller-wrapper {
+            display: block;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 30px auto;
+            max-width: 900px;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+        .oraswiss-seller-card {
+            background-color: #111111 !important;
+            color: #ffffff !important;
+            border: 1px solid #333333 !important;
+            border-radius: 16px !important;
+            padding: 24px !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+            box-sizing: border-box !important;
+        }
+        .oraswiss-header {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            margin-bottom: 12px !important;
+        }
+        .oraswiss-info {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+        }
+        .oraswiss-avatar {
+            width: 40px !important;
+            height: 40px !important;
+            background: #222222 !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            color: #fff !important;
+            overflow: hidden !important;
+        }
+        .oraswiss-avatar img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+        }
+        .oraswiss-info h3 {
+            margin: 0 !important;
+            font-size: 16px !important;
+            font-weight: 700 !important;
+            color: #fff !important;
+            cursor: pointer;
+        }
+        .oraswiss-info h3 span {
+            font-weight: normal !important;
+            color: #aaa !important;
+            font-size: 13px !important;
+        }
+        .oraswiss-green {
+            margin: 2px 0 0 0 !important;
+            font-size: 12px !important;
+            color: #25D366 !important;
+            font-weight: 600 !important;
+            cursor: pointer;
+        }
+        .oraswiss-joined {
+            font-size: 13px !important;
+            color: #aaa !important;
+            margin-bottom: 16px !important;
+        }
+        .oraswiss-actions {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 10px !important;
+        }
+        .oraswiss-btn-blue, .oraswiss-btn-white {
+            width: 100% !important;
+            padding: 12px !important;
+            border-radius: 24px !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            text-align: center !important;
+            box-sizing: border-box !important;
+        }
+        .oraswiss-btn-blue {
+            background: #0066cc !important;
+            color: #ffffff !important;
+            border: none !important;
+        }
+        .oraswiss-btn-white {
+            background: #222222 !important;
+            color: #ffffff !important;
+            border: 1px solid #444444 !important;
+        }
+        .oraswiss-btn-white:hover {
+            background: #333333 !important;
+        }
 
-        .site-header { position: sticky; top: 0; z-index: 9999; background: #111; }
-        .nav-scroll { display: flex; gap: 18px; align-items: center; overflow-x: auto; padding: 6px 12px; }
-        .nav-scroll a { color: #fff; text-decoration: none; padding: 4px 8px; font-size: 14px; }
-        .nav-scroll a:hover { color: gold; }
-        .site-title { font-weight: 700; line-height: 1; margin-right: 10px; font-size: 7px !important; }
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+            background: #111;
+        }
 
-        .bottom-nav { position: fixed !important; bottom: 20px !important; left: 15px !important; right: 15px !important; width: auto !important; height: 55px !important; background-color: #1a1a1a !important; display: flex !important; justify-content: space-around !important; align-items: center !important; padding: 0 5px !important; border-radius: 20px !important; border: 1px solid #333 !important; box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important; z-index: 999999 !important; }
-    </style>
+        .nav-scroll {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            overflow-x: auto;
+            padding: 6px 12px;
+        }
+
+        .nav-scroll a {
+            color: #fff;
+            text-decoration: none;
+            padding: 4px 8px;
+            font-size: 14px;
+        }
+
+        .nav-scroll a:hover {
+            color: gold;
+        }
+
+        .site-title {
+            font-weight: 700;
+            line-height: 1;
+            margin-right: 10px;
+            font-size: 7px !important;
+        }
+
+        .bottom-nav {
+            position: fixed !important;
+            bottom: 20px !important;
+            left: 15px !important;
+            right: 15px !important;
+            width: auto !important;
+            height: 55px !important;
+            background-color: #1a1a1a !important;
+            display: flex !important;
+            justify-content: space-around !important;
+            align-items: center !important;
+            padding: 0 5px !important;
+            border-radius: 20px !important;
+            border: 1px solid #333 !important;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
+            z-index: 999999 !important;
+        }
+
+        .bottom-nav a,
+        .bottom-nav button {
+            color:white !important;
+            text-decoration:none !important;
+            font-size:10px !important;
+            background:none !important;
+            border:none !important;
+            cursor:pointer;
+            display:flex !important;
+            flex-direction:column;
+            align-items:center;
+        }
+
+        .bottom-nav {
+             transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .bottom-nav.nav-hidden {
+            transform: translateY(120px);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .bottom-nav a:hover { color: gold !important; }
+    </style>     
 </head>
 <body>
-
 <header class="site-header">
     <nav class="nav-scroll">
-        <span class="site-title">ORA<br>SWISS</span>
+
+        <span class="site-title">
+            ORA<br>SWISS
+        </span>
         <a href="javascript:history.back()">← Back</a>
         <a href="index.html">Home</a>
         <a href="luxury.html">Luxury</a>
@@ -175,7 +487,8 @@
 </header>
     
 <div class="product-page">
-    <div class="gallery" id="image-gallery">
+
+    <div class="gallery">
         <button class="photo-btn photo-left" onclick="changeImage(-1)">❮</button>
         <img id="main-photo" src="">
         <button class="photo-btn photo-right" onclick="changeImage(1)">❯</button>
@@ -185,7 +498,12 @@
     <div class="details">
         <div class="top-actions">
             <div class="action" onclick="shareProduct()">🔗 Share</div>
-            <div id="favoriteBtn" class="action" onclick="toggleLike(this)" title="Add to Favorites">♡ Like</div>
+            <div id="favoriteBtn"
+                 class="action"
+                 onclick="toggleLike(this)"
+                 title="Add to Favorites">
+                ♡ Like
+            </div>
         </div>
 
         <div class="brand" id="brand">-</div>
@@ -197,12 +515,15 @@
         </div>
     </div>
     
-    <div class="info-box" id="specs"></div>
+    <div class="info-box" id="specs">
+        <!-- The data will be generated automatically. -->
+    </div>
 
     <div class="info-box">
         <h3>Description</h3>
         <p id="description">Loading...</p>
     </div>
+
 </div>
 
 <div class="buy-bar">
@@ -226,13 +547,17 @@
         </div>
         <div class="oraswiss-joined" id="os-joined">Member since</div>
         <div class="oraswiss-actions">
-            <button class="oraswiss-btn-blue" id="os-items">Seller's other items (<span id="os-count">0</span>)</button>
-            <button class="oraswiss-btn-white" id="os-contact">Contact seller</button>
+            <button class="oraswiss-btn-blue" id="os-items">
+                Seller's other items (<span id="os-count">0</span>)
+            </button>
+            <button class="oraswiss-btn-white" id="os-contact">
+                Contact seller
+            </button>
         </div>
     </div>
 </div>
 
-<!-- TABELA E LOGIN / REGJISTRIMIT (POPUP) -->
+<!-- TABELA E LOGIMIT / REGJISTRIMIT (POPUP) -->
 <div id="login-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center;">
     <div style="background:#111; border:1px solid #333; padding:30px; border-radius:16px; width:90%; max-width:400px; text-align:center; position:relative;">
         <button onclick="closeLoginModal()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✕</button>
@@ -288,6 +613,9 @@ async function loadProduct() {
             .single();
 
         if (error) throw error;
+
+        console.log(data.category);
+        console.log(data);
         
         const sellerUserId = data.user_id;
 
@@ -455,49 +783,59 @@ async function loadProduct() {
                 <div class="info-row"><span>Year</span><span>${data.year || "N/A"}</span></div>
             `;
         } else {
+
             const serial = data.serial_number || "";
-            const maskedSerial = serial.length > 3 ? serial.substring(0, 3) + "X".repeat(serial.length - 3) : serial;
+            const maskedSerial =
+                serial.length > 3
+                    ? serial.substring(0, 3) + "X".repeat(serial.length - 3)
+                    : serial;
 
             function specRow(label, value) {
                 if (value === null || value === undefined) return "";
                 if (String(value).trim() === "") return "";
                 if (value === "N/A" || value === "-") return "";
-                return `<div class="info-row"><span>${label}</span><span>${value}</span></div>`;
-            }
 
-            const isPart = data.category === "parts";
+                return `
+                   <div class="info-row">
+                       <span>${label}</span>
+                       <span>${value}</span>
+                   </div>
+               `;
+           }
 
-            specsContainer.innerHTML = `
-                ${specRow("Condition", data.condition)}
-                ${specRow("Reference", data.reference)}
-                ${specRow("Serial Number", maskedSerial)}
-                ${specRow("Movement", data.movement)}
-                ${isPart ? specRow("Part Type", data.part_type) : ""}
-                ${isPart ? specRow("Part Name", data.custom_part_name) : ""}
-                ${specRow("Caliber", data.caliber)}
-                ${specRow("Gender", data.gender)}
-                ${specRow("Dial Color", data.dial_color)}
-                ${specRow("Frequency", data.frekuen)}
-                ${specRow("Material", data.material)}
-                ${specRow("Net Weight", data.net_weight ? data.net_weight + " g" : "")}
-                ${specRow("Case Size", data.case_size)}
-                ${specRow("Movement Size", data.movement_size)}
-                ${specRow("Water Resistance", data.water_resistance)}
-                ${specRow("Year", data.year)}
-                ${specRow("Box & Papers", data.box_papers)}
-                ${specRow("Function", data.function)}
-                ${specRow("Crown", data.crown)}
-                ${specRow("Jewels", data.jewels)}
-                ${specRow("Service", data.service ? "Yes (Serviced)" : "")}
-                ${specRow("Service Date", data.service_date)}
-                ${specRow("Origin", data.origin)}
-                ${specRow("Work Status", data.work_status)}
-                ${isPart ? "" : specRow("Bracelet", data.bracelet)}
-                ${specRow("Glass", data.glass)}
-                ${specRow("Warranty", data.warranty)}
-                ${specRow("Warranty Months", data.warranty_months)}
-            `;        
-        }
+           const isPart = data.category === "parts";
+
+           specsContainer.innerHTML = `
+               ${specRow("Condition", data.condition)}  <!-- Shtoje ketu -->
+               ${specRow("Reference", data.reference)}
+               ${specRow("Serial Number", maskedSerial)}
+               ${specRow("Movement", data.movement)}
+               ${isPart ? specRow("Part Type", data.part_type) : ""}
+               ${isPart ? specRow("Part Name", data.custom_part_name) : ""}
+               ${specRow("Caliber", data.caliber)}
+               ${specRow("Gender", data.gender)}
+               ${specRow("Dial Color", data.dial_color)}
+               ${specRow("Frequency", data.frekuen)}
+               ${specRow("Material", data.material)}
+               ${specRow("Net Weight", data.net_weight ? data.net_weight + " g" : "")}
+               ${specRow("Case Size", data.case_size)}
+               ${specRow("Movement Size", data.movement_size)}
+               ${specRow("Water Resistance", data.water_resistance)}
+               ${specRow("Year", data.year)}
+               ${specRow("Box & Papers", data.box_papers)}
+               ${specRow("Function", data.function)}
+               ${specRow("Crown", data.crown)}
+               ${specRow("Jewels", data.jewels)}
+               ${specRow("Service", data.service ? "Yes (Serviced)" : "")}
+               ${specRow("Service Date", data.service_date)}
+               ${specRow("Origin", data.origin)}
+               ${specRow("Work Status", data.work_status)}
+               ${isPart ? "" : specRow("Bracelet", data.bracelet)}
+               ${specRow("Glass", data.glass)}
+               ${specRow("Warranty", data.warranty)}
+               ${specRow("Warranty Months", data.warranty_months)}
+          `;       
+        }   
 
         document.getElementById("description").innerText = data.description || "N/A";
 
@@ -523,208 +861,348 @@ async function loadProduct() {
                     if (result.paypal_link) {
                         window.location.href = result.paypal_link;
                     } else {
-                        alert("Gabim gjatë krijimit të porosisë.");
+                        alert("PayPal link could not be created.");
                         buyBtn.innerText = "🛒 BUY";
                     }
-                } catch (err) {
-                    console.error(err);
-                    alert("Gabim në rrjet.");
+                } catch(error) {
+                    console.error(error);
+                    alert("PayPal error.");
                     buyBtn.innerText = "🛒 BUY";
                 }
             };
         }
 
-        const whatsappBtn = document.getElementById("whatsapp");
-        if (whatsappBtn) {
-            const phoneNumber = data.whatsapp || "+35500000000"; 
-            const text = encodeURIComponent(`Përshëndetje, jam i interesuar për këtë produkt: ${data.brand} ${data.model} (${window.location.href})`);
-            whatsappBtn.href = `https://wa.me/${phoneNumber}?text=${text}`;
-        }
+        updateGallery();
 
-        updateImage();
+// Kontrollo nëse produkti është në Favorites
+await loadFavoriteState();
 
-    } catch (err) {
-        console.error("Gabim gjatë ngarkimit të produktit:", err);
-        container.innerHTML = "Ndodhi një gabim gjatë ngarkimit të produktit.";
+document.getElementById("whatsapp").href =
+    "https://wa.me/35569XXXXXXX?text=Jam%20i%20interesuar%20per%20" +
+    encodeURIComponent(data.model);
+        
+    } catch(err) {
+        console.error(err);
+        container.innerHTML = "Gabim: " + err.message;
     }
 }
 
-function updateImage() {
-    const mainPhoto = document.getElementById("main-photo");
-    const photoCount = document.getElementById("photo-count");
-
-    if (currentImages.length > 0) {
-        mainPhoto.src = currentImages[currentImgIndex];
-        photoCount.textContent = `${currentImgIndex + 1} / ${currentImages.length}`;
-    } else {
-        mainPhoto.src = "placeholder.jpg";
-        photoCount.textContent = "0 / 0";
-    }
+function updateGallery() {
+    if(currentImages.length === 0) return;
+    document.getElementById("main-photo").src = currentImages[currentImgIndex];
+    document.getElementById("photo-count").innerText = (currentImgIndex + 1) + " / " + currentImages.length;
 }
 
 function changeImage(direction) {
-    if (currentImages.length === 0) return;
+    if(currentImages.length === 0) return;
     currentImgIndex += direction;
-    if (currentImgIndex >= currentImages.length) {
-        currentImgIndex = 0;
-    } else if (currentImgIndex < 0) {
-        currentImgIndex = currentImages.length - 1;
-    }
-    updateImage();
+    if(currentImgIndex >= currentImages.length) currentImgIndex = 0;
+    if(currentImgIndex < 0) currentImgIndex = currentImages.length - 1;
+    updateGallery();
 }
-
-// --- LËVIZJA E FOTOVE ME SWIPE / TOUCH DHE MOUSE ---
-let touchStartX = 0;
-let touchEndX = 0;
-
-const galleryEl = document.getElementById("image-gallery");
-
-if (galleryEl) {
-    galleryEl.addEventListener("touchstart", e => {
-        touchStartX = e.changedTouches[0].screenX;
-    }, {passive: true});
-
-    galleryEl.addEventListener("touchend", e => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-    }, {passive: true});
-
-    // Për PC (Mouse drag)
-    let isDragging = false;
-    let startX = 0;
-
-    galleryEl.addEventListener("mousedown", e => {
-        isDragging = true;
-        startX = e.clientX;
-    });
-
-    galleryEl.addEventListener("mouseup", e => {
-        if (!isDragging) return;
-        isDragging = false;
-        let diffX = e.clientX - startX;
-        if (Math.abs(diffX) > 50) {
-            if (diffX > 0) {
-                changeImage(-1); // Swipe djathtas -> foto e mëparshme
-            } else {
-                changeImage(1);  // Swipe majtas -> foto tjetër
-            }
-        }
-    });
-}
-
-function handleSwipe() {
-    let diff = touchEndX - touchStartX;
-    if (Math.abs(diff) > 50) { // Prag minimal lëvizjeje (50px)
-        if (diff > 0) {
-            changeImage(-1);
-        } else {
-            changeImage(1);
-        }
-    }
-}
-// ----------------------------------------------------
 
 function shareProduct() {
-    if (navigator.share) {
-        navigator.share({
-            title: document.title,
-            url: window.location.href
-        }).catch(console.error);
-    } else {
-        navigator.clipboard.writeText(window.location.href);
-        alert("Linku u kopjua në memorien e aparatit!");
-    }
+    navigator.clipboard.writeText(window.location.href);
+    alert("Linku u kopjua!");
 }
 
-function toggleLike(btn) {
-    btn.classList.toggle("liked");
-    if (btn.classList.contains("liked")) {
-        btn.style.color = "#ff4444";
-        btn.innerHTML = "♥ Liked";
-    } else {
-        btn.style.color = "white";
-        btn.innerHTML = "♡ Like";
+async function toggleLike(element) {
+
+    const {
+        data: { user },
+        error: userError
+    } = await supabaseClient.auth.getUser();
+
+    if (userError || !user) {
+        const modal = document.getElementById("login-modal");
+
+        if (modal) {
+            modal.style.display = "flex";
+        } else {
+            window.location.href = "login.html";
+        }
+
+        return;
     }
+
+    if (!productId) {
+        console.error("Product ID missing");
+        return;
+    }
+
+    const tableName =
+        category === "bracelets_straps"
+            ? "bracelets_straps"
+            : "oras";
+
+    const alreadyLiked = element.dataset.liked === "true";
+
+    // =========================
+    // REMOVE FROM FAVORITES
+    // =========================
+    if (alreadyLiked) {
+
+        const { error } = await supabaseClient
+            .from("favorites")
+            .delete()
+            .eq("user_id", user.id)
+            .eq("product_id", productId)
+            .eq("product_table", tableName);
+
+        if (error) {
+            console.error("Remove favorite error:", error);
+            alert("Nuk u hoq nga Favorites.");
+            return;
+        }
+
+        element.dataset.liked = "false";
+        element.innerHTML = "♡ Like";
+        element.style.borderColor = "#222";
+
+        return;
+    }
+
+    // =========================
+    // ADD TO FAVORITES
+    // =========================
+
+    const { error } = await supabaseClient
+        .from("favorites")
+        .insert({
+            user_id: user.id,
+            product_id: productId,
+            product_table: tableName
+        });
+
+    if (error) {
+
+        // Nëse ekziston tashmë
+        if (error.code === "23505") {
+
+            element.dataset.liked = "true";
+            element.innerHTML = "❤️ Liked";
+            element.style.borderColor = "#25D366";
+
+            return;
+        }
+
+        console.error("Add favorite error:", error);
+        alert("Produkti nuk u shtua te Favorites.");
+        return;
+    }
+
+    element.dataset.liked = "true";
+    element.innerHTML = "❤️ Liked";
+    element.style.borderColor = "#25D366";
+
+    console.log("Added to favorites:", productId);
 }
 
+async function loadFavoriteState() {
+
+    const button = document.getElementById("favoriteBtn");
+
+    if (!button || !productId) {
+        return;
+    }
+
+    const {
+        data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    // User nuk është logged in
+    if (!user) {
+        button.dataset.liked = "false";
+        button.innerHTML = "♡ Like";
+        button.style.borderColor = "#222";
+        return;
+    }
+
+    const tableName =
+        category === "bracelets_straps"
+            ? "bracelets_straps"
+            : "oras";
+
+    const { data, error } = await supabaseClient
+        .from("favorites")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("product_id", productId)
+        .eq("product_table", tableName)
+        .maybeSingle();
+
+    if (error) {
+        console.error("Favorite state error:", error);
+        return;
+    }
+
+    if (data) {
+
+        button.dataset.liked = "true";
+        button.innerHTML = "❤️ Liked";
+        button.style.borderColor = "#25D366";
+
+    } else {
+
+        button.dataset.liked = "false";
+        button.innerHTML = "♡ Like";
+        button.style.borderColor = "#222";
+    }
+}
+    
 function closeLoginModal() {
     document.getElementById("login-modal").style.display = "none";
-    document.getElementById("modal-error").textContent = "";
 }
 
 function toggleAuthMode(e) {
     e.preventDefault();
     isRegisterMode = !isRegisterMode;
-    const nameInput = document.getElementById("modal-name");
+    
     const title = document.getElementById("modal-title");
     const desc = document.getElementById("modal-desc");
+    const nameInput = document.getElementById("modal-name");
     const submitBtn = document.getElementById("modal-submit-btn");
     const toggleText = document.getElementById("modal-toggle-text");
     const toggleLink = document.getElementById("modal-toggle-link");
+    const errorEl = document.getElementById("modal-error");
+    
+    errorEl.textContent = "";
 
     if (isRegisterMode) {
+        title.textContent = "Create Account";
+        desc.textContent = "Sign up to contact sellers and make purchases.";
         nameInput.style.display = "block";
-        title.textContent = "Regjistrohu";
-        desc.textContent = "Krijo një llogari për të kontaktuar shitësit.";
-        submitBtn.textContent = "Regjistrohu";
-        toggleText.textContent = "Ke tashmë një llogari?";
-        toggleLink.textContent = " Hyr";
+        submitBtn.textContent = "Sign Up";
+        toggleText.textContent = "Already have an account?";
+        toggleLink.textContent = " Log In";
     } else {
+        title.textContent = "Log In";
+        desc.textContent = "You must be logged in to contact the seller.";
         nameInput.style.display = "none";
-        title.textContent = "Identifikohu";
-        desc.textContent = "Duhet të jesh i loguar për të kontaktuar shitësin.";
-        submitBtn.textContent = "Hyr";
-        toggleText.textContent = "Nuk ke llogari?";
-        toggleLink.textContent = " Regjistrohu";
+        submitBtn.textContent = "Log In";
+        toggleText.textContent = "Don't have an account?";
+        toggleLink.textContent = " Sign Up";
     }
 }
 
 async function handleModalAuth() {
-    const email = document.getElementById("modal-email").value.trim();
-    const password = document.getElementById("modal-password").value.trim();
-    const fullName = document.getElementById("modal-name").value.trim();
+    const email = document.getElementById("modal-email").value;
+    const password = document.getElementById("modal-password").value;
+    const fullName = document.getElementById("modal-name").value;
     const errorEl = document.getElementById("modal-error");
+    
+    errorEl.textContent = "Duke u procesuar...";
 
-    errorEl.textContent = "";
+    if (isRegisterMode) {
+        const { error } = await supabaseClient.auth.signUp({
+            email: email,
+            password: password,
+            options: { data: { full_name: fullName } }
+        });
 
-    if (!email || !password) {
-        errorEl.textContent = "Plotësoni të gjitha fushat e detyrueshme.";
+        if (error) {
+            errorEl.textContent = error.message;
+        } else {
+            alert("Registration completed successfully!");
+            closeLoginModal();
+            document.getElementById("os-contact").click();
+        }
+    } else {
+        const { error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) {
+            errorEl.textContent = error.message;
+        } else {
+            closeLoginModal();
+            document.getElementById("os-contact").click();
+        }
+    }
+}
+
+loadProduct();
+</script>
+
+<!-- TABELA E DËRGIMIT TË OFERTËS (MODAL) -->
+<div id="offer-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:#111; border:1px solid #333; padding:30px; border-radius:16px; width:90%; max-width:400px; text-align:center; position:relative;">
+        <button onclick="closeOfferModal()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✕</button>
+        
+        <h2 style="color:#fff; margin-bottom:10px;">Make an offer</h2>
+        <p style="color:#aaa; font-size:14px; margin-bottom:20px;">Propozo çmimin tënd për këtë produkt.</p>
+        
+        <input type="number" id="offer-price-input" placeholder="Shkruaj çmimin (p.sh. 450)" style="width:100%; padding:12px; margin-bottom:15px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
+        
+        <button onclick="submitOffer()" style="width:100%; padding:12px; background:#25D366; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-bottom:10px;">Dërgo Ofertën</button>
+        <button onclick="closeOfferModal()" style="width:100%; padding:10px; background:transparent; color:#888; border:1px solid #333; border-radius:8px; cursor:pointer;">Anulo</button>
+        
+        <div id="offer-error" style="color:#ff4444; font-size:13px; margin-top:10px;"></div>
+    </div>
+</div>
+<script>
+document.getElementById("offer").onclick = async function(e) {
+    e.preventDefault();
+    
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+    if (userError || !user) {
+        document.getElementById("login-modal").style.display = "flex";
         return;
     }
 
-    try {
-        if (isRegisterMode) {
-            const { data, error } = await supabaseClient.auth.signUp({
-                email: email,
-                password: password,
-                options: {
-                    data: { full_name: fullName }
-                }
-            });
-            if (error) throw error;
-            alert("Regjistrimi u krye! Ju lutemi kontrolloni email-in tuaj për konfirmim (nëse kërkohet) ose hyni direkt.");
-            isRegisterMode = false;
-            toggleAuthMode({ preventDefault: () => {} });
-        } else {
-            const { data, error } = await supabaseClient.auth.signInWithPassword({
-                email: email,
-                password: password
-            });
-            if (error) throw error;
-            closeLoginModal();
-            window.location.reload();
-        }
-    } catch (err) {
-        errorEl.textContent = err.message || "Ndodhi një gabim.";
+    if (user.id === window.currentSellerId) {
+        alert("Nuk mund t'i bësh ofertë produktit tënd!");
+        return;
     }
+
+    document.getElementById("offer-modal").style.display = "flex";
+};
+
+function closeOfferModal() {
+    document.getElementById("offer-modal").style.display = "none";
+    document.getElementById("offer-price-input").value = "";
+    document.getElementById("offer-error").textContent = "";
 }
 
-function openOfferModal() {
-    alert("Opsioni për të sugjeruar çmimin u klikua.");
+async function submitOffer() {
+    const offerPrice = document.getElementById("offer-price-input").value;
+    const errorEl = document.getElementById("offer-error");
+
+    if (!offerPrice || offerPrice <= 0) {
+        errorEl.textContent = "Please enter a valid price.";
+        return;
+    }
+
+    errorEl.style.color = "#fff";
+    errorEl.textContent = "Sending offer...";
+
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) return;
+
+    const { error } = await supabaseClient
+        .from("offers")
+        .insert({
+            product_id: productId,
+            buyer_id: user.id,
+            seller_id: window.currentSellerId,
+            offered_price: parseFloat(offerPrice),
+            status: "pending"
+        });
+
+    if (error) {
+        errorEl.style.color = "#ff4444";
+        errorEl.textContent = "Gabim gjatë dërgimit: " + error.message;
+        return;
+    }
+
+    errorEl.style.color = "#25D366";
+    errorEl.textContent = "Offer sent successfully!";
+    setTimeout(() => {
+        closeOfferModal();
+    }, 1500);
 }
 
-window.addEventListener("DOMContentLoaded", loadProduct);
-</script>
-
+</script>  
 </body>
 </html>

@@ -2632,12 +2632,18 @@ body {
     }
 }
 
-.grid img {
+.grid img,
+.product img,
+.product-box img,
+.product-main img,
+.mainimg {
     width: 100%;
-    height: 150px;
+    max-width: 300px;
+    height: 220px;
     object-fit: cover;
     border-radius: 8px;
     display: block;
+    margin: 0 auto;
 }
 
       

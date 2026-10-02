@@ -187,7 +187,7 @@
     
     <!-- Kutia e Kërkimit -->
     
-<!-- KUTIA E KERKIMIT ORASWISS -->
+
 <div class="search-container" style="padding:10px;">
     <div class="search-box" style="
         display:flex;
@@ -197,10 +197,8 @@
         border:1px solid #333;
         border-radius:8px;
         padding:10px;
-        box-sizing:border-box;
-        width:100%;
     ">
-        <span style="margin-right:2px;">🔍</span>
+        <span>🔍</span>
 
         <input
             type="text"
@@ -229,8 +227,8 @@
         <button
             type="button"
             id="photoSearchButton"
-            title="Search by photo"
             aria-label="Search by photo"
+            title="Search by photo"
             style="
                 background:none;
                 border:none;
@@ -271,7 +269,6 @@
         </button>
     </div>
 </div>
-
 <div id="oras-container" class="grid">
     Duke ngarkuar koleksionin...
 </div>
@@ -417,6 +414,7 @@ window.addEventListener("scroll", () => {
 });
 
 
+
 const photoInput = document.getElementById('photoSearchInput');
 const photoButton = document.getElementById('photoSearchButton');
 const photoPreview = document.getElementById('photoSearchPreview');
@@ -424,40 +422,38 @@ const photoImage = document.getElementById('photoSearchImage');
 const photoStatus = document.getElementById('photoSearchStatus');
 const cancelPhoto = document.getElementById('cancelPhotoSearch');
 
-if (photoInput && photoButton) {
-    photoButton.addEventListener('click', () => {
-        photoInput.click();
-    });
+photoButton.addEventListener('click', () => {
+    photoInput.click();
+});
 
-    photoInput.addEventListener('change', () => {
-        const file = photoInput.files?.[0];
-        if (!file) return;
+photoInput.addEventListener('change', () => {
+    const file = photoInput.files?.[0];
+    if (!file) return;
 
-        if (!file.type.startsWith('image/')) {
-            alert('Zgjidh një fotografi të vlefshme.');
-            photoInput.value = '';
-            return;
-        }
-
-        if (file.size > 10 * 1024 * 1024) {
-            alert('Fotografia duhet të jetë maksimumi 10 MB.');
-            photoInput.value = '';
-            return;
-        }
-
-        photoImage.src = URL.createObjectURL(file);
-        photoPreview.style.display = 'block';
-        photoStatus.textContent =
-            'Fotografia u zgjodh. Kërkimi me foto kërkon lidhjen me shërbimin AI.';
-    });
-
-    cancelPhoto.addEventListener('click', () => {
+    if (!file.type.startsWith('image/')) {
+        alert('Zgjidh një fotografi të vlefshme.');
         photoInput.value = '';
-        photoImage.removeAttribute('src');
-        photoPreview.style.display = 'none';
-        photoStatus.textContent = '';
-    });
-}
+        return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+        alert('Fotografia duhet të jetë maksimumi 10 MB.');
+        photoInput.value = '';
+        return;
+    }
+
+    photoImage.src = URL.createObjectURL(file);
+    photoPreview.style.display = 'block';
+    photoStatus.textContent =
+        'Fotoja u zgjodh. Kërkimi vizual kërkon lidhjen me shërbimin AI.';
+});
+
+cancelPhoto.addEventListener('click', () => {
+    photoInput.value = '';
+    photoImage.removeAttribute('src');
+    photoPreview.style.display = 'none';
+    photoStatus.textContent = '';
+});
     
 </script>    
 </body>

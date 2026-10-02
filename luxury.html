@@ -364,16 +364,25 @@
     }
 
     // Funksionaliteti i kërkimit (Search live)
-    document.getElementById("search-input").addEventListener("input", function(e) {
-        const query = e.target.value.toLowerCase().trim();
-        const filtered = allOrasData.filter(ora => {
-            const brand = (ora.brand || "").toLowerCase();
-            const model = (ora.model || "").toLowerCase();
-            const description = (ora.description || "").toLowerCase();
-            return brand.includes(query) || model.includes(query) || description.includes(query);
+    const searchInput = document.getElementById("searchInput");
+
+    if (searchInput) {
+        searchInput.addEventListener("input", function(e) {
+            const query = e.target.value.toLowerCase().trim();
+
+            const filtered = allOrasData.filter(ora => {
+                const brand = (ora.brand || "").toLowerCase();
+                const model = (ora.model || "").toLowerCase();
+                const description = (ora.description || "").toLowerCase();
+
+                return brand.includes(query) ||
+                       model.includes(query) ||
+                       description.includes(query);
+            });
+
+            renderCards(filtered);
         });
-        renderCards(filtered);
-    });
+    }
 
     document.addEventListener("DOMContentLoaded", loadOras);
 

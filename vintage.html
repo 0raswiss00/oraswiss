@@ -183,9 +183,86 @@
 </header>
     
     <!-- Kutia e Kërkimit -->
-    <input type="text" id="search-input" class="search-box" placeholder="Kërko sipas brendit, modelit ose materialit...">
+    <div class="search-container" style="padding:10px;">
+    <div class="search-box" style="
+        display:flex;
+        align-items:center;
+        gap:8px;
+        background:#111;
+        border:1px solid #333;
+        border-radius:8px;
+        padding:10px;
+    ">
+        <span>🔍</span>
 
-    <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search on OraSwiss"
+            autocomplete="off"
+            style="
+                flex:1;
+                min-width:0;
+                background:transparent;
+                border:none;
+                color:#fff;
+                outline:none;
+                font-size:14px;
+            "
+        >
+
+        <input
+            type="file"
+            id="photoSearchInput"
+            accept="image/*"
+            capture="environment"
+            hidden
+        >
+
+        <button
+            type="button"
+            id="photoSearchButton"
+            aria-label="Search by photo"
+            title="Search by photo"
+            style="
+                background:none;
+                border:none;
+                cursor:pointer;
+                font-size:21px;
+            "
+        >📷</button>
+    </div>
+
+    <div id="photoSearchPreview"
+         style="display:none;margin-top:10px;">
+        <img id="photoSearchImage"
+             alt="Foto për kërkim"
+             style="
+                max-width:150px;
+                max-height:150px;
+                object-fit:contain;
+                border-radius:8px;
+                border:1px solid #333;
+             ">
+
+        <div id="photoSearchStatus"
+             style="color:#aaa;font-size:13px;margin-top:6px;">
+        </div>
+
+        <button type="button"
+                id="cancelPhotoSearch"
+                style="
+                    margin-top:8px;
+                    background:#222;
+                    color:white;
+                    border:1px solid #444;
+                    padding:7px 12px;
+                    border-radius:6px;
+                    cursor:pointer;
+                ">
+            Anulo foton
+        </button>
+    </div>
 </div>
 
 <script>
@@ -327,7 +404,49 @@ window.addEventListener("scroll", () => {
 
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 });
-</script>
+
+
+const photoInput = document.getElementById('photoSearchInput');
+const photoButton = document.getElementById('photoSearchButton');
+const photoPreview = document.getElementById('photoSearchPreview');
+const photoImage = document.getElementById('photoSearchImage');
+const photoStatus = document.getElementById('photoSearchStatus');
+const cancelPhoto = document.getElementById('cancelPhotoSearch');
+
+photoButton.addEventListener('click', () => {
+    photoInput.click();
+});
+
+photoInput.addEventListener('change', () => {
+    const file = photoInput.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+        alert('Zgjidh një fotografi të vlefshme.');
+        photoInput.value = '';
+        return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+        alert('Fotografia duhet të jetë maksimumi 10 MB.');
+        photoInput.value = '';
+        return;
+    }
+
+    photoImage.src = URL.createObjectURL(file);
+    photoPreview.style.display = 'block';
+    photoStatus.textContent =
+        'Fotoja u zgjodh. Kërkimi vizual kërkon lidhjen me shërbimin AI.';
+});
+
+cancelPhoto.addEventListener('click', () => {
+    photoInput.value = '';
+    photoImage.removeAttribute('src');
+    photoPreview.style.display = 'none';
+    photoStatus.textContent = '';
+});    
+
+</script>    
     
 </body>
 </html>

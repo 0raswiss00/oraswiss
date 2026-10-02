@@ -183,7 +183,9 @@
 </header>
     
     <!-- Kutia e Kërkimit -->
-    <div class="search-container" style="padding:10px;">
+    
+<!-- KUTIA E KERKIMIT ORASWISS -->
+<div class="search-container" style="padding:10px;">
     <div class="search-box" style="
         display:flex;
         align-items:center;
@@ -192,8 +194,10 @@
         border:1px solid #333;
         border-radius:8px;
         padding:10px;
+        box-sizing:border-box;
+        width:100%;
     ">
-        <span>🔍</span>
+        <span style="margin-right:2px;">🔍</span>
 
         <input
             type="text"
@@ -229,42 +233,156 @@
                 border:none;
                 cursor:pointer;
                 font-size:21px;
+                padding:0 4px;
             "
         >📷</button>
     </div>
 
-    <div id="photoSearchPreview"
-         style="display:none;margin-top:10px;">
-        <img id="photoSearchImage"
-             alt="Foto për kërkim"
-             style="
+    <!-- PAMJA PARAPRAKE E FOTOS -->
+    <div
+        id="photoSearchPreview"
+        style="display:none;margin-top:10px;"
+    >
+        <img
+            id="photoSearchImage"
+            alt="Foto për kërkim"
+            style="
                 max-width:150px;
                 max-height:150px;
                 object-fit:contain;
                 border-radius:8px;
                 border:1px solid #333;
-             ">
+                display:block;
+            "
+        >
 
-        <div id="photoSearchStatus"
-             style="color:#aaa;font-size:13px;margin-top:6px;">
-        </div>
+        <div
+            id="photoSearchStatus"
+            style="
+                color:#aaa;
+                font-size:13px;
+                margin-top:6px;
+            "
+        ></div>
 
-        <button type="button"
-                id="cancelPhotoSearch"
-                style="
-                    margin-top:8px;
-                    background:#222;
-                    color:white;
-                    border:1px solid #444;
-                    padding:7px 12px;
-                    border-radius:6px;
-                    cursor:pointer;
-                ">
-            Anulo foton
-        </button>
+        <button
+            type="button"
+            id="cancelPhotoSearch"
+            style="
+                margin-top:8px;
+                background:#222;
+                color:white;
+                border:1px solid #444;
+                padding:7px 12px;
+                border-radius:6px;
+                cursor:pointer;
+            "
+        >Anulo foton</button>
     </div>
 </div>
 
+<!-- STILI I KERKIMIT -->
+<style>
+.search-container {
+    width:100%;
+    box-sizing:border-box;
+}
+
+.search-box:focus-within {
+    border-color:#666 !important;
+}
+
+#searchInput::placeholder {
+    color:#999;
+}
+
+#photoSearchButton:hover {
+    opacity:0.75;
+}
+
+#cancelPhotoSearch:hover {
+    background:#333 !important;
+}
+</style>
+
+<!-- FUNKSIONI I FOTOS -->
+<script>
+(function () {
+    const photoInput =
+        document.getElementById("photoSearchInput");
+
+    const photoButton =
+        document.getElementById("photoSearchButton");
+
+    const photoPreview =
+        document.getElementById("photoSearchPreview");
+
+    const photoImage =
+        document.getElementById("photoSearchImage");
+
+    const photoStatus =
+        document.getElementById("photoSearchStatus");
+
+    const cancelPhoto =
+        document.getElementById("cancelPhotoSearch");
+
+    if (!photoInput || !photoButton ||
+        !photoPreview || !photoImage ||
+        !photoStatus || !cancelPhoto) {
+        return;
+    }
+
+    let currentImageUrl = null;
+
+    photoButton.addEventListener("click", function () {
+        photoInput.click();
+    });
+
+    photoInput.addEventListener("change", function () {
+        const file = photoInput.files &&
+                     photoInput.files[0];
+
+        if (!file) return;
+
+        if (!file.type.startsWith("image/")) {
+            alert("Zgjidh një fotografi të vlefshme.");
+            photoInput.value = "";
+            return;
+        }
+
+        if (file.size > 10 * 1024 * 1024) {
+            alert("Fotografia duhet të jetë maksimumi 10 MB.");
+            photoInput.value = "";
+            return;
+        }
+
+        if (currentImageUrl) {
+            URL.revokeObjectURL(currentImageUrl);
+        }
+
+        currentImageUrl = URL.createObjectURL(file);
+        photoImage.src = currentImageUrl;
+
+        photoPreview.style.display = "block";
+
+        photoStatus.textContent =
+            "Fotografia u zgjodh me sukses. " +
+            "Për të gjetur produkte të ngjashme, " +
+            "duhet aktivizuar shërbimi i kërkimit vizual.";
+    });
+
+    cancelPhoto.addEventListener("click", function () {
+        photoInput.value = "";
+        photoImage.removeAttribute("src");
+        photoPreview.style.display = "none";
+        photoStatus.textContent = "";
+
+        if (currentImageUrl) {
+            URL.revokeObjectURL(currentImageUrl);
+            currentImageUrl = null;
+        }
+    });
+})();
 <script>
     let allOrasData = [];
 

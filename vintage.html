@@ -184,8 +184,11 @@
     
     <!-- Kutia e Kërkimit -->
     
-<!-- KUTIA E KERKIMIT ORASWISS -->
-<div class="search-container" style="padding:10px;">
+
+<!-- =========================
+     KERKIMI ORASWISS
+========================= -->
+<div class="search-container" style="padding:10px; width:100%; box-sizing:border-box;">
     <div class="search-box" style="
         display:flex;
         align-items:center;
@@ -197,13 +200,14 @@
         box-sizing:border-box;
         width:100%;
     ">
-        <span style="margin-right:2px;">🔍</span>
+        <span aria-hidden="true">🔍</span>
 
         <input
             type="text"
             id="searchInput"
             placeholder="Search on OraSwiss"
             autocomplete="off"
+            aria-label="Kërko orë Vintage"
             style="
                 flex:1;
                 min-width:0;
@@ -239,10 +243,7 @@
     </div>
 
     <!-- PAMJA PARAPRAKE E FOTOS -->
-    <div
-        id="photoSearchPreview"
-        style="display:none;margin-top:10px;"
-    >
+    <div id="photoSearchPreview" style="display:none;margin-top:10px;">
         <img
             id="photoSearchImage"
             alt="Foto për kërkim"
@@ -258,11 +259,7 @@
 
         <div
             id="photoSearchStatus"
-            style="
-                color:#aaa;
-                font-size:13px;
-                margin-top:6px;
-            "
+            style="color:#aaa;font-size:13px;margin-top:6px;"
         ></div>
 
         <button
@@ -281,7 +278,6 @@
     </div>
 </div>
 
-<!-- STILI I KERKIMIT -->
 <style>
 .search-container {
     width:100%;
@@ -297,50 +293,131 @@
 }
 
 #photoSearchButton:hover {
-    opacity:0.75;
+    opacity:.75;
 }
 
 #cancelPhotoSearch:hover {
     background:#333 !important;
 }
+
+/* KARTAT E OREVE */
+#oras-container {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+    padding:10px;
+    box-sizing:border-box;
+}
+
+#oras-container .card {
+    min-width:0;
+    overflow:hidden;
+    background:#111;
+    color:#fff;
+    border:1px solid #292929;
+    border-radius:10px;
+    padding:10px;
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    gap:10px;
+    cursor:pointer;
+}
+
+#oras-container .card img {
+    display:block;
+    width:100%;
+    height:150px;
+    object-fit:contain;
+    border-radius:6px;
+    background:#181818;
+}
+
+#oras-container .card h3 {
+    overflow-wrap:anywhere;
+}
+
+#oras-container .price {
+    color:#d6b36a;
+    font-weight:bold;
+    margin:8px 0;
+}
+
+#oras-container .btn-main {
+    cursor:pointer;
+    border-radius:6px;
+}
+
+@media (max-width:360px) {
+    #oras-container {
+        gap:8px;
+        padding:6px;
+    }
+
+    #oras-container .card {
+        padding:7px;
+    }
+
+    #oras-container .card img {
+        height:120px;
+    }
+}
+
+/* MENUJA POSHTE */
+.bottom-nav.nav-hidden {
+    transform:translate(-50%,120%);
+    opacity:0;
+    pointer-events:none;
+}
+
+.bottom-nav {
+    transition:transform .25s ease, opacity .25s ease;
+}
 </style>
 
-<!-- FUNKSIONI I FOTOS -->
+<!-- KONTENIERI I PRODUKTEVE VINTAGE -->
+<div id="oras-container">
+    <p style="color:#aaa;padding:10px;">Duke ngarkuar orët Vintage...</p>
+</div>
+
+<!-- =========================
+     KERKIMI ME FOTO
+========================= -->
 <script>
 (function () {
-    const photoInput =
-        document.getElementById("photoSearchInput");
+    const photoInput = document.getElementById("photoSearchInput");
+    const photoButton = document.getElementById("photoSearchButton");
+    const photoPreview = document.getElementById("photoSearchPreview");
+    const photoImage = document.getElementById("photoSearchImage");
+    const photoStatus = document.getElementById("photoSearchStatus");
+    const cancelPhoto = document.getElementById("cancelPhotoSearch");
 
-    const photoButton =
-        document.getElementById("photoSearchButton");
-
-    const photoPreview =
-        document.getElementById("photoSearchPreview");
-
-    const photoImage =
-        document.getElementById("photoSearchImage");
-
-    const photoStatus =
-        document.getElementById("photoSearchStatus");
-
-    const cancelPhoto =
-        document.getElementById("cancelPhotoSearch");
-
-    if (!photoInput || !photoButton ||
-        !photoPreview || !photoImage ||
-        !photoStatus || !cancelPhoto) {
+    if (!photoInput || !photoButton || !photoPreview ||
+        !photoImage || !photoStatus || !cancelPhoto) {
         return;
     }
 
     let currentImageUrl = null;
+
+    function clearPhoto() {
+        photoInput.value = "";
+        photoImage.removeAttribute("src");
+        photoPreview.style.display = "none";
+        photoStatus.textContent = "";
+
+        if (currentImageUrl) {
+            URL.revokeObjectURL(currentImageUrl);
+            currentImageUrl = null;
+        }
+    }
 
     photoButton.addEventListener("click", function () {
         photoInput.click();
     });
 
     photoInput.addEventListener("change", function () {
-        const file = photoInput.files &&
-                     photoInput.files[0];
+        const file = photoInput.files && photoInput.files[0];
 
         if (!file) return;
 
@@ -362,143 +439,237 @@
 
         currentImageUrl = URL.createObjectURL(file);
         photoImage.src = currentImageUrl;
-
         photoPreview.style.display = "block";
 
         photoStatus.textContent =
-            "Fotografia u zgjodh me sukses. " +
-            "Për të gjetur produkte të ngjashme, " +
-            "duhet aktivizuar shërbimi i kërkimit vizual.";
+            "Fotoja u zgjodh me sukses. Pamja paraprake është aktive; kërkimi automatik vizual nuk është lidhur me një shërbim AI.";
     });
 
-    cancelPhoto.addEventListener("click", function () {
-        photoInput.value = "";
-        photoImage.removeAttribute("src");
-        photoPreview.style.display = "none";
-        photoStatus.textContent = "";
-
-        if (currentImageUrl) {
-            URL.revokeObjectURL(currentImageUrl);
-            currentImageUrl = null;
-        }
-    });
+    cancelPhoto.addEventListener("click", clearPhoto);
 })();
 </script>
 
+<!-- =========================
+     NGARKIMI I OREVE VINTAGE
+========================= -->
 <script>
-    let allOrasData = [];
+let allOrasData = [];
 
-    async function loadOras() {
-        const container = document.getElementById("oras-container");
-        
-        if (!window.supabaseClient) {
-            container.innerHTML = "<p style='color:red;'>Gabim në lidhjen me databazën.</p>";
-            return;
+const ORASWISS_SUPABASE_URL =
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+
+function getVintageImageUrl(imageValue) {
+    let imagePath = "";
+
+    if (Array.isArray(imageValue)) {
+        imagePath = imageValue[0] || "";
+    } else if (typeof imageValue === "string") {
+        const value = imageValue.trim();
+
+        if (!value || value === "null") {
+            return "https://placehold.co/600x400/222/fff?text=No+Image";
         }
 
-        const category = 'vintage';  
+        try {
+            const parsed = JSON.parse(value);
+            imagePath = Array.isArray(parsed)
+                ? (parsed[0] || "")
+                : value;
+        } catch (error) {
+            imagePath = value;
+        }
+    }
 
+    if (!imagePath || imagePath === "null") {
+        return "https://placehold.co/600x400/222/fff?text=No+Image";
+    }
+
+    if (/^https?:\/\//i.test(imagePath)) {
+        return imagePath;
+    }
+
+    if (imagePath.startsWith("//")) {
+        return "https:" + imagePath;
+    }
+
+    imagePath = imagePath.replace(/^\/+/, "");
+
+    // Nëse fusha ruan tashmë rrugën e plotë të bucket-it
+    if (imagePath.startsWith("storage/v1/object/public/")) {
+        return ORASWISS_SUPABASE_URL + "/" + imagePath;
+    }
+
+    // Nëse ruhet vetëm emri ose rruga e fotos në bucket
+    return ORASWISS_SUPABASE_URL +
+        "/storage/v1/object/public/or-images/" +
+        imagePath.split("/").map(encodeURIComponent).join("/");
+}
+
+function escapeVintageHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, function (char) {
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        }[char];
+    });
+}
+
+async function loadOras() {
+    const container = document.getElementById("oras-container");
+
+    if (!container) {
+        console.error("Mungon elementi #oras-container në HTML.");
+        return;
+    }
+
+    if (!window.supabaseClient) {
+        container.innerHTML =
+            "<p style='color:#f66;padding:10px;'>Gabim në lidhjen me databazën. Kontrollo db-connect.js.</p>";
+        console.error("window.supabaseClient nuk është inicializuar.");
+        return;
+    }
+
+    container.innerHTML =
+        "<p style='color:#aaa;padding:10px;'>Duke ngarkuar orët Vintage...</p>";
+
+    try {
         const { data, error } = await window.supabaseClient
-            .from('oras')
-            .select('*')
-            .eq('category', category);
+            .from("oras")
+            .select("*")
+            .eq("category", "vintage")
+            .order("created_at", { ascending: false });
 
         if (error) {
-            container.innerHTML = "<p style='color:red;'>Gabim gjatë ngarkimit: " + error.message + "</p>";
+            console.error("Gabim Supabase:", error);
+            container.innerHTML =
+                "<p style='color:#f66;padding:10px;'>Gabim gjatë ngarkimit: " +
+                escapeVintageHtml(error.message) +
+                "</p>";
             return;
         }
 
-        if (!data || data.length === 0) {
-            container.innerHTML = "<p>Nuk ka artikuj në këtë kategori.</p>";
-            return;
-        }
-
-        allOrasData = data;
+        allOrasData = Array.isArray(data) ? data : [];
         renderCards(allOrasData);
+
+    } catch (error) {
+        console.error("Gabim gjatë ngarkimit të Vintage:", error);
+        container.innerHTML =
+            "<p style='color:#f66;padding:10px;'>Ndodhi një gabim gjatë ngarkimit të produkteve.</p>";
+    }
+}
+
+function renderCards(items) {
+    const container = document.getElementById("oras-container");
+
+    if (!container) return;
+
+    if (!items || items.length === 0) {
+        container.innerHTML =
+            "<p style='color:#aaa;padding:10px;grid-column:1/-1;'>Nuk u gjet asnjë orë që përputhet me kërkimin.</p>";
+        return;
     }
 
-    function renderCards(items) {
-        const container = document.getElementById("oras-container");
-        
-        if (items.length === 0) {
-            container.innerHTML = "<p>Nuk u gjet asnjë orë që i përgjigjet kërkimit tuaj.</p>";
-            return;
-        }
+    container.innerHTML = items.map(function (ora) {
+        const brand = escapeVintageHtml(ora.brand || "Vintage Watch");
+        const model = escapeVintageHtml(ora.model || "");
+        const price = ora.price !== null &&
+                      ora.price !== undefined &&
+                      ora.price !== ""
+            ? escapeVintageHtml(ora.price) + " €"
+            : "Contact";
 
-        let cardsHtml = "";
+        const imgUrl = getVintageImageUrl(ora.image_url);
+        const productUrl = "product.html?id=" +
+            encodeURIComponent(String(ora.id));
 
-        items.forEach(ora => {
-            let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-            let primaryImage = "";
-
-            if (ora.image_url) {
-                if (Array.isArray(ora.image_url) && ora.image_url.length > 0) {
-                    primaryImage = ora.image_url[0];
-                } else if (typeof ora.image_url === 'string') {
-                    try {
-                        let parsed = JSON.parse(ora.image_url);
-                        primaryImage = Array.isArray(parsed) ? parsed[0] : ora.image_url;
-                    } catch(e) {
-                        primaryImage = ora.image_url;
-                    }
-                }
-            }
-
-            if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
-                if (primaryImage.startsWith('http')) {
-                    imgUrl = primaryImage;
-                } else {
-                    const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-                    imgUrl = SUPABASE_URL + "/storage/v1/object/public/or-images/" + primaryImage;
-                }
-            }
-
-            cardsHtml += `
-            <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
+        return `
+            <div class="card" data-product-url="${productUrl}">
                 <div>
-                    <img src="${imgUrl}" alt="${ora.brand || 'Vintage Watch'}">
-                    <h3 style="margin: 8px 0 4px 0; font-size: 16px;">${ora.brand || ''}</h3>
-                    <div style="font-size: 14px; color: #aaa; margin-bottom: 6px;">${ora.model || ''}</div>
-                    <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+                    <img
+                        src="${escapeVintageHtml(imgUrl)}"
+                        alt="${brand}"
+                        loading="lazy"
+                        onerror="this.onerror=null;this.src='https://placehold.co/600x400/222/fff?text=No+Image';"
+                    >
+                    <h3 style="margin:8px 0 4px;font-size:16px;">${brand}</h3>
+                    <div style="font-size:14px;color:#aaa;margin-bottom:6px;">
+                        ${model}
+                    </div>
+                    <div class="price">${price}</div>
                 </div>
-
                 <div>
-                    <button class="btn-main btn-secondary" style="width:100%; padding:10px; font-size:14px;" 
-                        onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}';">
-                        View Details
-                    </button>
+                    <button
+                        type="button"
+                        class="btn-main btn-secondary"
+                        style="width:100%;padding:10px;font-size:14px;"
+                        data-product-url="${productUrl}"
+                    >View Details</button>
                 </div>
             </div>
-            `;
+        `;
+    }).join("");
+
+    container.querySelectorAll("[data-product-url]").forEach(function (element) {
+        element.addEventListener("click", function (event) {
+            event.stopPropagation();
+            window.location.href = element.getAttribute("data-product-url");
+        });
+    });
+}
+
+/* KERKIMI LIVE: përdor ID-në e saktë searchInput */
+const vintageSearchInput = document.getElementById("searchInput");
+
+if (vintageSearchInput) {
+    vintageSearchInput.addEventListener("input", function (event) {
+        const query = event.target.value.toLowerCase().trim();
+
+        if (!query) {
+            renderCards(allOrasData);
+            return;
+        }
+
+        const filtered = allOrasData.filter(function (ora) {
+            const searchableText = [
+                ora.brand,
+                ora.model,
+                ora.description,
+                ora.reference,
+                ora.material,
+                ora.year
+            ].filter(Boolean).join(" ").toLowerCase();
+
+            return searchableText.includes(query);
         });
 
-        container.innerHTML = cardsHtml;
-    }
-
-    // Funksionaliteti i kërkimit (Search live)
-    document.getElementById("search-input").addEventListener("input", function(e) {
-        const query = e.target.value.toLowerCase().trim();
-        const filtered = allOrasData.filter(ora => {
-            const brand = (ora.brand || "").toLowerCase();
-            const model = (ora.model || "").toLowerCase();
-            const description = (ora.description || "").toLowerCase();
-            return brand.includes(query) || model.includes(query) || description.includes(query);
-        });
         renderCards(filtered);
     });
+}
 
+if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", loadOras);
+} else {
+    loadOras();
+}
 
-    function checkMenu(event) {
-        event.stopPropagation();
-        if (typeof window.toggleMenu === 'function') {
-            window.toggleMenu();
-        } else {
-            alert('Menuja është duke u ngarkuar ose mungon skripta kryesore e menusë.');
-        }
+/* MENUJA */
+function checkMenu(event) {
+    if (event) event.stopPropagation();
+
+    if (typeof window.toggleMenu === "function") {
+        window.toggleMenu();
+    } else {
+        alert("Funksioni i menusë nuk është ngarkuar. Kontrollo skedarin menu.js.");
     }
+}
 </script>
 
+<!-- =========================
+     MENUJA POSHTE
+========================= -->
 <nav class="bottom-nav">
     <a href="index.html">Home</a>
     <a href="favorites.html">Favs</a>
@@ -507,67 +678,30 @@
     <a href="sellnow.html">Sell</a>
     <button type="button" onclick="checkMenu(event)">Menu</button>
 </nav>
+
 <script>
-let lastScrollTop = 0;
-const nav = document.querySelector(".bottom-nav");
+(function () {
+    const nav = document.querySelector(".bottom-nav");
 
-window.addEventListener("scroll", () => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    if (!nav) return;
 
-    if (scrollTop > lastScrollTop && scrollTop > 50) {
-        // Kur zbret poshtë
-        nav.classList.add("nav-hidden");
-    } else {
-        // Kur ngjitet lart
-        nav.classList.remove("nav-hidden");
-    }
+    let lastScrollTop = window.pageYOffset ||
+        document.documentElement.scrollTop;
 
-    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-});
+    window.addEventListener("scroll", function () {
+        const scrollTop = window.pageYOffset ||
+            document.documentElement.scrollTop;
 
+        if (scrollTop > lastScrollTop && scrollTop > 50) {
+            nav.classList.add("nav-hidden");
+        } else {
+            nav.classList.remove("nav-hidden");
+        }
 
-const photoInput = document.getElementById('photoSearchInput');
-const photoButton = document.getElementById('photoSearchButton');
-const photoPreview = document.getElementById('photoSearchPreview');
-const photoImage = document.getElementById('photoSearchImage');
-const photoStatus = document.getElementById('photoSearchStatus');
-const cancelPhoto = document.getElementById('cancelPhotoSearch');
-
-photoButton.addEventListener('click', () => {
-    photoInput.click();
-});
-
-photoInput.addEventListener('change', () => {
-    const file = photoInput.files?.[0];
-    if (!file) return;
-
-    if (!file.type.startsWith('image/')) {
-        alert('Zgjidh një fotografi të vlefshme.');
-        photoInput.value = '';
-        return;
-    }
-
-    if (file.size > 10 * 1024 * 1024) {
-        alert('Fotografia duhet të jetë maksimumi 10 MB.');
-        photoInput.value = '';
-        return;
-    }
-
-    photoImage.src = URL.createObjectURL(file);
-    photoPreview.style.display = 'block';
-    photoStatus.textContent =
-        'Fotoja u zgjodh. Kërkimi vizual kërkon lidhjen me shërbimin AI.';
-});
-
-cancelPhoto.addEventListener('click', () => {
-    photoInput.value = '';
-    photoImage.removeAttribute('src');
-    photoPreview.style.display = 'none';
-    photoStatus.textContent = '';
-});
-    
-
-</script>    
-    
+        lastScrollTop = Math.max(0, scrollTop);
+    }, { passive: true });
+})();
+</script>
 </body>
 </html>
+

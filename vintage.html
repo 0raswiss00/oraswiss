@@ -572,9 +572,10 @@ function renderCards(items) {
     container.innerHTML = items.map(function (ora) {
         const brand = escapeVintageHtml(ora.brand || "Vintage Watch");
         const model = escapeVintageHtml(ora.model || "");
+        const reference = escapeVintageHtml(ora.reference || "");
         const price = ora.price !== null &&
-                      ora.price !== undefined &&
-                      ora.price !== ""
+                    ora.price !== undefined &&
+                    ora.price !== ""
             ? escapeVintageHtml(ora.price) + " €"
             : "Contact";
 
@@ -591,10 +592,21 @@ function renderCards(items) {
                         loading="lazy"
                         onerror="this.onerror=null;this.src='https://placehold.co/600x400/222/fff?text=No+Image';"
                     >
-                    <h3 style="margin:8px 0 4px;font-size:16px;">${brand}</h3>
-                    <div style="font-size:14px;color:#aaa;margin-bottom:6px;">
+                    
+                    <!-- Brand -->
+                    <h3 style="margin:8px 0 2px;font-size:16px;color:#fff;">${brand}</h3>
+
+                    <!-- Model -->
+                    <div style="font-size:14px;color:#fff;font-weight:bold;margin-bottom:2px;">
                         ${model}
                     </div>
+
+                    <!-- Reference (Ref) -->
+                    <div style="font-size:12px;color:#aaa;margin-bottom:6px;">
+                        ${reference ? 'Ref. ' + reference : ''}
+                    </div>
+
+                    <!-- Price -->
                     <div class="price">${price}</div>
                 </div>
                 <div>
@@ -616,7 +628,7 @@ function renderCards(items) {
         });
     });
 }
-
+ 
 /* KERKIMI LIVE: përdor ID-në e saktë searchInput */
 const vintageSearchInput = document.getElementById("searchInput");
 

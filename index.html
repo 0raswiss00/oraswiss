@@ -20,7 +20,7 @@
         color: #fff;
         text-decoration: none;
         padding: 4px 8px;
-        font-size: 11px; /* ose 10px, 12px */
+        font-size: 11px;
     }
     .nav-scroll a:hover{color:gold}
     .site-title {
@@ -29,7 +29,6 @@
         margin-right: 10px;
         font-size: 12px !important;
     }
-
 
     .grid {
         display: grid; 
@@ -113,10 +112,8 @@
         border: 1px solid #333 !important;
         box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
         z-index: 999999 !important;
-        
         overflow-x: hidden !important;
         white-space: nowrap !important;
-        
         transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
         opacity: 1 !important;
     }
@@ -153,7 +150,7 @@
         opacity: 0 !important;
         pointer-events: none !important;
     }
-   /* Desktop */
+
     @media (min-width: 1024px) {
         .bottom-nav {
             display: none !important;
@@ -167,7 +164,6 @@
         }
     }
     
-    /* Stili i ri kompakt për menynë lundruese */
     #myOraSwissMenu {
         display: none;
         position: fixed;
@@ -225,7 +221,7 @@
     }
 
     h2 {
-        font-size: 10px;
+        font-size: 12px;
         margin: 10px;
     }
 
@@ -236,17 +232,16 @@
     }
 
     .parts-link span{
-        font-size: 11px; /* shkronjat më të vogla */
+        font-size: 11px;
     }
 
     .menu-icon{
-        width: 35px;      /* foto pak më e madhe */
+        width: 35px;
         height: 35px;
         object-fit: cover;
         border-radius: 4px;
         display: block;
     }
-
   </style>     
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 </head>
@@ -279,7 +274,63 @@
   </nav>
 </header>
 
-<div class="search-container" style="padding:10px;">
+<!-- =========================================
+     1. TABELA PREZANTUESE ME SCROLL VERTIKAL
+========================================= -->
+<div style="padding: 10px;">
+    <div style="
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 12px;
+        padding: 15px;
+        max-height: 180px;
+        overflow-y: auto;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    ">
+        <h2 style="margin: 0 0 10px 0; color: gold; font-size: 16px; border-bottom: 1px solid #222; padding-bottom: 5px;">
+            OraSwiss – Ekspertët tuaj të Horologjisë
+        </h2>
+        <p style="color: #ccc; font-size: 13px; line-height: 1.5; margin: 0 0 10px 0;">
+            Ne jemi të specializuar në shitjen e orëve luksoze të përdorura dhe <strong>Vintage</strong>, si dhe pjesëve origjinale të këmbimit. 
+            Te ne do të gjeni një gamë të gjerë komponentësh: <em>Cases, Bracelets, Straps, Dials, Crowns, Movements</em> dhe shumë pjesë mekanike precizioni.
+        </p>
+        <div style="display: flex; flex-wrap: wrap; gap: 15px; font-size: 12px; color: #fff; margin-top: 10px; border-top: 1px solid #222; padding-top: 8px;">
+            <span>✔️ <strong>100% Produkte Origjinale</strong></span>
+            <span>✈️ <strong>Dërgesa në të gjithë botën (Worldwide Shipping)</strong></span>
+            <span>✉️ <strong>Na kontaktoni në email:</strong> <a href="mailto:info@oraswiss.com" style="color: gold; text-decoration: none;">info@oraswiss.com</a></span>
+        </div>
+    </div>
+</div>
+
+<!-- =========================================
+     2. KATEGORITË ME SCROLL HORIZONTAL (MAJTAS-DJAHTAS)
+========================================= -->
+<div style="
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 5px 10px 12px 10px;
+    scrollbar-width: thin;
+    white-space: nowrap;
+">
+    <a href="luxury.html" style="background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold; flex: 0 0 auto;">
+        ✨ Luxury Watches
+    </a>
+    <a href="vintage.html" style="background: #1a1a1a; border: 1px solid #333; color: gold; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold; flex: 0 0 auto;">
+        ⏳ Vintage Watches
+    </a>
+    <a href="parts.html" style="background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold; flex: 0 0 auto;">
+        ⚙️ Watch Parts
+    </a>
+    <a href="product-bracelets-straps.html" style="background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold; flex: 0 0 auto;">
+        🔗 Bracelets & Straps
+    </a>
+</div>
+
+<!-- =========================================
+     3. KUTIA E KËRKIMIT (SEARCH) E ULUR
+========================================= -->
+<div class="search-container" style="padding: 0 10px 15px 10px;">
     <div class="search-box" style="
         display:flex;
         align-items:center;
@@ -361,6 +412,29 @@
     </div>
 </div>
 
+<!-- =========================================
+     4. KUTIA E OFERTAVE SPECIALEN (OFFERS / DEALS)
+========================================= -->
+<div style="padding: 0 10px 20px 10px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h3 style="margin: 0; color: #fff; font-size: 15px;">🔥 Ofertat e Ditës / Special Deals</h3>
+        <span style="font-size: 11px; color: gold;">Çmime me Ofertë</span>
+    </div>
+    
+    <div style="
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    ">
+        <div style="min-width: 180px; background: #111; border: 1px solid gold; border-radius: 8px; padding: 12px; flex: 0 0 auto;">
+            <span style="background: gold; color: #000; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px;">OFFER BOX</span>
+            <div style="margin-top: 8px; font-size: 13px; font-weight: bold; color: #fff;">Make an Offer</div>
+            <div style="font-size: 11px; color: #aaa; margin: 4px 0;">Dërgoni ofertën tuaj për çdo produkt</div>
+        </div>
+    </div>
+</div>
+
 <h2>Luxury Collection</h2>
 <div id="luxury-container" class="grid">Loading...</div>
 
@@ -420,7 +494,6 @@
     <a href="#" onclick="checkPage(event,'sellnow.html')">➕<br>Sell</a>
     <button type="button" onclick="checkMenu(event)" id="menuBtnText">📂<br>My OraSwiss</button>  
 </nav>
-</nav>
 
 <div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center;z-index:99999;">
     <div style="background:#1a1a1a;padding:25px;border-radius:12px;text-align:center;max-width:320px;width:90%;color:#fff;">
@@ -445,9 +518,9 @@
 
         if (btn) {
             if (user) {
-                btn.style.display = "none";   // login bërë → fshihet
+                btn.style.display = "none";
             } else {
-                btn.style.display = "block";  // pa login → shfaqet
+                btn.style.display = "block";
             }
         }
     }
@@ -683,50 +756,7 @@
   }
 
   loadMessageCount();
-  async function loadMessageCount() {
-    try {
-        const { data: { user }, error } = await supabase.auth.getUser();
-        if (error || !user) return;
 
-        const { data: userConvs, error: convError } = await supabase
-            .from("conversations")
-            .select("id")
-            .or(`user_one.eq.${user.id},user_two.eq.${user.id},buyer_id.eq.${user.id},seller_id.eq.${user.id}`);
-
-        if (convError || !userConvs || userConvs.length === 0) return;
-
-        const convIds = userConvs.map(c => c.id);
-
-        const { count: totalUnread, error: msgError } = await supabase
-            .from("messages")
-            .select("*", { count: "exact", head: true })
-            .in("conversation_id", convIds)
-            .eq("is_read", false)
-            .neq("sender_id", user.id);
-
-        if (msgError) return;
-
-        const count = totalUnread || 0;
-
-        const dashBadge = document.getElementById("dashboardMessageCount");
-        if (dashBadge) {
-            dashBadge.innerText = count;
-            dashBadge.style.display = count > 0 ? "inline-block" : "none";
-        }
-
-        const navBadge = document.getElementById("menuMessageCount");
-        if (navBadge) {
-            navBadge.innerText = count;
-            navBadge.style.display = count > 0 ? "inline-block" : "none";
-        }
-    } catch (err) {
-        console.error("Gabim tek mesazhet:", err);
-    }
-  }
-
-  loadMessageCount();
-
-  // ---> VENDOSE KËTU NË FUND TË SKRIPTIT <---
   let lastScrollTop = 0;
   const bottomNavElement = document.querySelector('.bottom-nav');
 
@@ -734,57 +764,52 @@
       let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       
       if (scrollTop > lastScrollTop && scrollTop > 50) {
-          // Po zbret poshtë -> Fshih navigacionin
           if (bottomNavElement) bottomNavElement.classList.add('nav-hidden');
       } else {
-          // Po ngjitet lart -> Shfaq navigacionin
           if (bottomNavElement) bottomNavElement.classList.remove('nav-hidden');
       }
       lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
   }, false);
 
-  
-const photoInput = document.getElementById('photoSearchInput');
-const photoButton = document.getElementById('photoSearchButton');
-const photoPreview = document.getElementById('photoSearchPreview');
-const photoImage = document.getElementById('photoSearchImage');
-const photoStatus = document.getElementById('photoSearchStatus');
-const cancelPhoto = document.getElementById('cancelPhotoSearch');
+  const photoInput = document.getElementById('photoSearchInput');
+  const photoButton = document.getElementById('photoSearchButton');
+  const photoPreview = document.getElementById('photoSearchPreview');
+  const photoImage = document.getElementById('photoSearchImage');
+  const photoStatus = document.getElementById('photoSearchStatus');
+  const cancelPhoto = document.getElementById('cancelPhotoSearch');
 
-photoButton.addEventListener('click', () => {
-    photoInput.click();
-});
+  photoButton.addEventListener('click', () => {
+      photoInput.click();
+  });
 
-photoInput.addEventListener('change', () => {
-    const file = photoInput.files?.[0];
-    if (!file) return;
+  photoInput.addEventListener('change', () => {
+      const file = photoInput.files?.[0];
+      if (!file) return;
 
-    if (!file.type.startsWith('image/')) {
-        alert('Zgjidh një fotografi të vlefshme.');
-        photoInput.value = '';
-        return;
-    }
+      if (!file.type.startsWith('image/')) {
+          alert('Zgjidh një fotografi të vlefshme.');
+          photoInput.value = '';
+          return;
+      }
 
-    if (file.size > 10 * 1024 * 1024) {
-        alert('Fotografia duhet të jetë maksimumi 10 MB.');
-        photoInput.value = '';
-        return;
-    }
+      if (file.size > 10 * 1024 * 1024) {
+          alert('Fotografia duhet të jetë maksimumi 10 MB.');
+          photoInput.value = '';
+          return;
+      }
 
-    photoImage.src = URL.createObjectURL(file);
-    photoPreview.style.display = 'block';
-    photoStatus.textContent =
-        'Fotoja u zgjodh. Kërkimi vizual kërkon lidhjen me shërbimin AI.';
-});
+      photoImage.src = URL.createObjectURL(file);
+      photoPreview.style.display = 'block';
+      photoStatus.textContent = 'Fotoja u zgjodh me sukses.';
+  });
 
-cancelPhoto.addEventListener('click', () => {
-    photoInput.value = '';
-    photoImage.removeAttribute('src');
-    photoPreview.style.display = 'none';
-    photoStatus.textContent = '';
-});
-
- </script> 
+  cancelPhoto.addEventListener('click', () => {
+      photoInput.value = '';
+      photoImage.removeAttribute('src');
+      photoPreview.style.display = 'none';
+      photoStatus.textContent = '';
+  });
+</script>
 
 </body>
 </html>

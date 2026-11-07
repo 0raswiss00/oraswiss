@@ -22,15 +22,15 @@
 
       <h2>Sign Up</h2>
       <!-- Emri Publik / Dyqani -->
-      <input id="username" placeholder="Emri i përdoruesit (Shembull: OraSwiss_Official)" autocomplete="username" />
+      <input id="username" placeholder="Username (Example: OraSwiss_Official)" autocomplete="username" />
       
-      <input id="fullName" placeholder="Full Name (Shembull: Filan Fisteku)" autocomplete="name" />
-      <input id="phone" placeholder="Phone (Shembull: +355691234567)" autocomplete="tel" />
-      <input id="country" placeholder="Country (Shembull: Albania)" autocomplete="country-name" />
-      <input id="street" placeholder="Rruga (Shembull: Rr. Durrësit)" autocomplete="street-address" />
-      <input id="houseNumber" placeholder="Nr. Shtëpisë (Shembull: Nd. 12, H. 2)" />
-      <input id="zipCode" placeholder="Kodi Postar (Shembull: 1001)" autocomplete="postal-code" />
-      <input id="email" type="email" placeholder="Email (Shembull: emer@gmail.com)" autocomplete="email" autocapitalize="none" />
+      <input id="fullName" placeholder="Full Name (Example: John Doe)" autocomplete="name" />
+      <input id="phone" placeholder="Phone (Example: +355691234567)" autocomplete="tel" />
+      <input id="country" placeholder="Country (Example: Switzerland)" autocomplete="country-name" />
+      <input id="street" placeholder="Street (Example: Bahnhofstrasse)" autocomplete="street-address" />
+      <input id="houseNumber" placeholder="House/Building No. (Example: Apt. 4B)" />
+      <input id="zipCode" placeholder="Postal Code (Example: 8001)" autocomplete="postal-code" />
+      <input id="email" type="email" placeholder="Email (Example: name@example.com)" autocomplete="email" autocapitalize="none" />
       <input id="password" type="password" placeholder="Password" autocomplete="new-password" />
       
       <button id="btnRegister" type="button" class="auth-btn">Register</button>
@@ -76,7 +76,7 @@
         const zipCode = document.getElementById("zipCode").value.trim();
 
         if (!email || !password || !username) {
-          alert("Ju lutem plotësoni Username, Email dhe Password.");
+          alert("Please fill in Username, Email, and Password.");
           return;
         }
 
@@ -105,7 +105,7 @@
             const { error: profileError } = await supabase
               .from("profiles")
               .insert({
-                id: data.user.id, // Përdor 'id' për të lidhur profilin me përdoruesin
+                id: data.user.id,
                 user_id: data.user.id,
                 custom_username: username,
                 email: email,
@@ -119,18 +119,18 @@
               });
 
             if (profileError) {
-              console.error("Gabim te profili:", profileError);
+              console.error("Profile error:", profileError);
             }
           }
 
-          alert("Regjistrimi u krye me sukses! Konfirmo emailin tuaj.");
+          alert("Registration successful! Please check your email to confirm.");
           
           const params = new URLSearchParams(window.location.search);
           const redirect = params.get("redirect");
           window.location.href = redirect || "index.html";
 
         } catch (e) {
-          alert("Gabim gjatë regjistrimit: " + e.message);
+          alert("Registration error: " + e.message);
         }
       });
 
@@ -166,7 +166,7 @@
           const email = document.getElementById("loginEmail").value.trim();
           
           if (!email) {
-            alert("Ju lutem shkruani email-in tuaj në fushën e login-it.");
+            alert("Please enter your email in the login field first.");
             return;
           }
 
@@ -177,7 +177,7 @@
           if (error) {
             alert(error.message);
           } else {
-            alert("Një email për rivendosjen e fjalëkalimit është dërguar.");
+            alert("A password reset email has been sent.");
           }
         });
       }

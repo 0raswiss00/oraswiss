@@ -1121,25 +1121,31 @@ document.addEventListener("DOMContentLoaded", async function() {
                             alt="${item.brand || "Strap"}"
                         >
 
+                        <!-- Brand -->
                         <h3 style="
-                            margin:10px 0 5px 0;
+                            margin:10px 0 3px 0;
+                            font-size:16px;
+                            color: #fff;
                         ">
                             ${item.brand || "Bracelet / Strap"}
                         </h3>
 
+                        <!-- Type & Reference -->
                         <p style="
                             color:#aaa;
-                            font-size:13px;
-                            margin:0 0 8px 0;
+                            font-size:12px;
+                            margin:0 0 10px 0;
                         ">
-                            ${item.material || "/"}
+                            ${item.type || ""} ${item.reference ? '• Ref. ' + item.reference : ''}
                         </p>
 
+                        <!-- Price -->
                         <div
                             class="price"
                             style="
                                 font-weight:bold;
                                 color:gold;
+                                font-size:15px;
                                 margin-bottom:10px;
                             "
                         >

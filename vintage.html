@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vintage Watches - Ora Swiss</title>
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
     <script>
@@ -10,6 +13,7 @@
         gtag('js', new Date());
         gtag('config', 'G-KD2ZZ3MJYY');
     </script>
+
     <style>
         body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff; padding-bottom: 110px; }
         
@@ -45,7 +49,7 @@
         }
         .search-box:focus { outline: none; border-color: gold; }
 
-         .grid {
+        .grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr); 
             gap: 10px; 
@@ -57,7 +61,7 @@
                 grid-template-columns: repeat(4, 1fr); 
             }
         }
-        
+
         .card {
             background: #111;
             padding: 15px;
@@ -75,31 +79,29 @@
             object-fit: cover;
             display: block;
             border-radius: 8px;
+            background: #181818;
         }
 
         .price { color: gold; font-weight: bold; margin: 8px 0; font-size: 1.1em; }
 
-        .btn-main {
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
+        /* Butoni i thjeshtë në kartë */
+        .btn-card-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 8px;
+            margin-top: 8px;
+            background: #1a1a1a;
+            color: #fff;
+            font-size: 13px;
             font-weight: bold;
+            border: 1px solid #333;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
-            text-align: center;
-            display: block;
             text-decoration: none;
         }
-        .btn-buy { background: gold; color: #000; width: 100%; }
-        .btn-buy:hover { background: #e6c200; }
-
-        .btn-secondary {
-            background: #222;
-            color: #fff;
-            border: 1px solid #444;
-            margin-top: 5px;
-        }
-        .btn-secondary:hover { background: #333; }
+        .btn-card-action:hover { background: #252525; border-color: gold; color: gold; }
 
         /* Bottom Nav bar i unifikuar */
         .bottom-nav {
@@ -118,6 +120,7 @@
             border: 1px solid #333 !important;
             box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
             z-index: 999999 !important;
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
         .bottom-nav a, .bottom-nav button {
@@ -135,16 +138,13 @@
             align-items: center !important;
             gap: 3px !important;
         }
- 
-        .bottom-nav {
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
 
         .bottom-nav.nav-hidden {
             transform: translateY(120px);
             opacity: 0;
             pointer-events: none;
         }
+
         .bottom-nav a:hover { color: gold !important; }
 
         .back-btn {
@@ -157,11 +157,9 @@
             cursor: pointer;
             margin: 0 15px;
         }
+        .back-btn:hover { background: #222; }
+    </style>
 
-        .back-btn:hover {
-            background: #222;
-        }
-    </style>    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
     <script src="db-connect.js"></script>
     <script src="menu.js" defer></script>
@@ -172,7 +170,7 @@
     <nav class="nav-scroll">
         <span class="site-title">ORA<br>SWISS</span>
         <button onclick="history.back()" class="back-btn">← Back</button>
-        <a href="index.html">Home</a>
+        <a href="index.html">Home</a> 
         <a href="luxury.html">Luxury</a>
         <a href="vintage.html" style="color: gold;">Vintage</a>
         <a href="parts.html">Parts</a>
@@ -182,10 +180,8 @@
     </nav>
 </header>
     
-<!-- =========================
-     KERKIMI ORASWISS
-========================= -->
-<div class="search-container" style="padding:10px; width:100%; box-sizing:border-box;">
+<!-- Kutia e Kërkimit -->
+<div class="search-container" style="padding:10px;">
     <div class="search-box" style="
         display:flex;
         align-items:center;
@@ -194,17 +190,14 @@
         border:1px solid #333;
         border-radius:8px;
         padding:10px;
-        box-sizing:border-box;
-        width:100%;
     ">
-        <span aria-hidden="true">🔍</span>
+        <span>🔍</span>
 
         <input
             type="text"
             id="searchInput"
             placeholder="Search on OraSwiss"
             autocomplete="off"
-            aria-label="Kërko orë Vintage"
             style="
                 flex:1;
                 min-width:0;
@@ -234,451 +227,185 @@
                 border:none;
                 cursor:pointer;
                 font-size:21px;
-                padding:0 4px;
             "
         >📷</button>
     </div>
 
-    <!-- PAMJA PARAPRAKE E FOTOS -->
     <div id="photoSearchPreview" style="display:none;margin-top:10px;">
-        <img
-            id="photoSearchImage"
-            alt="Foto për kërkim"
-            style="
+        <img id="photoSearchImage"
+             alt="Foto për kërkim"
+             style="
                 max-width:150px;
                 max-height:150px;
                 object-fit:contain;
                 border-radius:8px;
                 border:1px solid #333;
-                display:block;
-            "
-        >
+             ">
 
-        <div
-            id="photoSearchStatus"
-            style="color:#aaa;font-size:13px;margin-top:6px;"
-        ></div>
+        <div id="photoSearchStatus" style="color:#aaa;font-size:13px;margin-top:6px;"></div>
 
-        <button
-            type="button"
-            id="cancelPhotoSearch"
-            style="
-                margin-top:8px;
-                background:#222;
-                color:white;
-                border:1px solid #444;
-                padding:7px 12px;
-                border-radius:6px;
-                cursor:pointer;
-            "
-        >Anulo foton</button>
+        <button type="button"
+                id="cancelPhotoSearch"
+                style="
+                    margin-top:8px;
+                    background:#222;
+                    color:white;
+                    border:1px solid #444;
+                    padding:7px 12px;
+                    border-radius:6px;
+                    cursor:pointer;
+                ">
+            Anulo foton
+        </button>
     </div>
 </div>
 
-<style>
-.search-container {
-    width:100%;
-    box-sizing:border-box;
-}
-
-.search-box:focus-within {
-    border-color:#666 !important;
-}
-
-#searchInput::placeholder {
-    color:#999;
-}
-
-#photoSearchButton:hover {
-    opacity:.75;
-}
-
-#cancelPhotoSearch:hover {
-    background:#333 !important;
-}
-
-/* KARTAT E OREVE */
-#oras-container {
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:12px;
-    padding:10px;
-    box-sizing:border-box;
-}
-
-#oras-container .card {
-    min-width:0;
-    overflow:hidden;
-    background:#111;
-    color:#fff;
-    border:1px solid #292929;
-    border-radius:10px;
-    padding:10px;
-    box-sizing:border-box;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    gap:10px;
-    cursor:pointer;
-}
-
-#oras-container .card img {
-    display:block;
-    width:100%;
-    height:150px;
-    object-fit:contain;
-    border-radius:6px;
-    background:#181818;
-}
-
-#oras-container .card h3 {
-    overflow-wrap:anywhere;
-}
-
-#oras-container .price {
-    color:#d6b36a;
-    font-weight:bold;
-    margin:8px 0;
-}
-
-#oras-container .btn-main {
-    cursor:pointer;
-    border-radius:6px;
-}
-
-@media (max-width:360px) {
-    #oras-container {
-        gap:8px;
-        padding:6px;
-    }
-
-    #oras-container .card {
-        padding:7px;
-    }
-
-    #oras-container .card img {
-        height:165px;
-    }
-}
-
-/* MENUJA POSHTE */
-.bottom-nav.nav-hidden {
-    transform:translate(-50%,120%);
-    opacity:0;
-    pointer-events:none;
-}
-
-.bottom-nav {
-    transition:transform .25s ease, opacity .25s ease;
-}
-</style>
-
-<!-- KONTENIERI I PRODUKTEVE VINTAGE -->
-<div id="oras-container">
-    <p style="color:#aaa;padding:10px;">Duke ngarkuar orët Vintage...</p>
+<div id="oras-container" class="grid">
+    Duke ngarkuar koleksionin Vintage...
 </div>
 
-<!-- =========================
-     KERKIMI ME FOTO
-========================= -->
 <script>
-(function () {
-    const photoInput = document.getElementById("photoSearchInput");
-    const photoButton = document.getElementById("photoSearchButton");
-    const photoPreview = document.getElementById("photoSearchPreview");
-    const photoImage = document.getElementById("photoSearchImage");
-    const photoStatus = document.getElementById("photoSearchStatus");
-    const cancelPhoto = document.getElementById("cancelPhotoSearch");
+    let allOrasData = [];
 
-    if (!photoInput || !photoButton || !photoPreview ||
-        !photoImage || !photoStatus || !cancelPhoto) {
-        return;
-    }
-
-    let currentImageUrl = null;
-
-    function clearPhoto() {
-        photoInput.value = "";
-        photoImage.removeAttribute("src");
-        photoPreview.style.display = "none";
-        photoStatus.textContent = "";
-
-        if (currentImageUrl) {
-            URL.revokeObjectURL(currentImageUrl);
-            currentImageUrl = null;
-        }
-    }
-
-    photoButton.addEventListener("click", function () {
-        photoInput.click();
-    });
-
-    photoInput.addEventListener("change", function () {
-        const file = photoInput.files && photoInput.files[0];
-
-        if (!file) return;
-
-        if (!file.type.startsWith("image/")) {
-            alert("Zgjidh një fotografi të vlefshme.");
-            photoInput.value = "";
+    async function loadOras() {
+        const container = document.getElementById("oras-container");
+        
+        if (!window.supabaseClient) {
+            container.innerHTML = "<p style='color:red;'>Gabim në lidhjen me databazën.</p>";
             return;
         }
 
-        if (file.size > 10 * 1024 * 1024) {
-            alert("Fotografia duhet të jetë maksimumi 10 MB.");
-            photoInput.value = "";
-            return;
-        }
+        const category = 'vintage';  
 
-        if (currentImageUrl) {
-            URL.revokeObjectURL(currentImageUrl);
-        }
-
-        currentImageUrl = URL.createObjectURL(file);
-        photoImage.src = currentImageUrl;
-        photoPreview.style.display = "block";
-
-        photoStatus.textContent =
-            "Fotoja u zgjodh me sukses. Pamja paraprake është aktive; kërkimi automatik vizual nuk është lidhur me një shërbim AI.";
-    });
-
-    cancelPhoto.addEventListener("click", clearPhoto);
-})();
-</script>
-
-<!-- =========================
-     NGARKIMI I OREVE VINTAGE
-========================= -->
-<script>
-let allOrasData = [];
-
-const ORASWISS_SUPABASE_URL =
-    "https://gnwsrmelmeqduhhmfmoa.supabase.co";
-
-function getVintageImageUrl(imageValue) {
-    let imagePath = "";
-
-    if (Array.isArray(imageValue)) {
-        imagePath = imageValue[0] || "";
-    } else if (typeof imageValue === "string") {
-        const value = imageValue.trim();
-
-        if (!value || value === "null") {
-            return "https://placehold.co/600x400/222/fff?text=No+Image";
-        }
-
-        try {
-            const parsed = JSON.parse(value);
-            imagePath = Array.isArray(parsed)
-                ? (parsed[0] || "")
-                : value;
-        } catch (error) {
-            imagePath = value;
-        }
-    }
-
-    if (!imagePath || imagePath === "null") {
-        return "https://placehold.co/600x400/222/fff?text=No+Image";
-    }
-
-    if (/^https?:\/\//i.test(imagePath)) {
-        return imagePath;
-    }
-
-    if (imagePath.startsWith("//")) {
-        return "https:" + imagePath;
-    }
-
-    imagePath = imagePath.replace(/^\/+/, "");
-
-    // Nëse fusha ruan tashmë rrugën e plotë të bucket-it
-    if (imagePath.startsWith("storage/v1/object/public/")) {
-        return ORASWISS_SUPABASE_URL + "/" + imagePath;
-    }
-
-    // Nëse ruhet vetëm emri ose rruga e fotos në bucket
-    return ORASWISS_SUPABASE_URL +
-        "/storage/v1/object/public/or-images/" +
-        imagePath.split("/").map(encodeURIComponent).join("/");
-}
-
-function escapeVintageHtml(value) {
-    return String(value ?? "").replace(/[&<>"']/g, function (char) {
-        return {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#39;"
-        }[char];
-    });
-}
-
-async function loadOras() {
-    const container = document.getElementById("oras-container");
-
-    if (!container) {
-        console.error("Mungon elementi #oras-container në HTML.");
-        return;
-    }
-
-    if (!window.supabaseClient) {
-        container.innerHTML =
-            "<p style='color:#f66;padding:10px;'>Gabim në lidhjen me databazën. Kontrollo db-connect.js.</p>";
-        console.error("window.supabaseClient nuk është inicializuar.");
-        return;
-    }
-
-    container.innerHTML =
-        "<p style='color:#aaa;padding:10px;'>Duke ngarkuar orët Vintage...</p>";
-
-    try {
         const { data, error } = await window.supabaseClient
-            .from("oras")
-            .select("*")
-            .eq("category", "vintage")
-            .order("created_at", { ascending: false });
+            .from('oras')
+            .select('*')
+            .eq('category', category);
 
         if (error) {
-            console.error("Gabim Supabase:", error);
-            container.innerHTML =
-                "<p style='color:#f66;padding:10px;'>Gabim gjatë ngarkimit: " +
-                escapeVintageHtml(error.message) +
-                "</p>";
+            container.innerHTML = "<p style='color:red;'>Gabim gjatë ngarkimit: " + error.message + "</p>";
             return;
         }
 
-        allOrasData = Array.isArray(data) ? data : [];
+        if (!data || data.length === 0) {
+            container.innerHTML = "<p style='padding:10px; color:#aaa;'>Nuk ka artikuj në këtë kategori.</p>";
+            return;
+        }
+
+        allOrasData = data;
         renderCards(allOrasData);
-
-    } catch (error) {
-        console.error("Gabim gjatë ngarkimit të Vintage:", error);
-        container.innerHTML =
-            "<p style='color:#f66;padding:10px;'>Ndodhi një gabim gjatë ngarkimit të produkteve.</p>";
-    }
-}
-
-function renderCards(items) {
-    const container = document.getElementById("oras-container");
-
-    if (!container) return;
-
-    if (!items || items.length === 0) {
-        container.innerHTML =
-            "<p style='color:#aaa;padding:10px;grid-column:1/-1;'>Nuk u gjet asnjë orë që përputhet me kërkimin.</p>";
-        return;
     }
 
-    container.innerHTML = items.map(function (ora) {
-        const brand = escapeVintageHtml(ora.brand || "Vintage Watch");
-        const model = escapeVintageHtml(ora.model || "");
-        const reference = escapeVintageHtml(ora.reference || "");
-        const price = ora.price !== null &&
-                    ora.price !== undefined &&
-                    ora.price !== ""
-            ? escapeVintageHtml(ora.price) + " €"
-            : "Contact";
+    function renderCards(items) {
+        const container = document.getElementById("oras-container");
+        
+        if (!items || items.length === 0) {
+            container.innerHTML = "<p style='padding:10px; color:#aaa;'>Nuk u gjet asnjë orë që i përgjigjet kërkimit tuaj.</p>";
+            return;
+        }
 
-        const imgUrl = getVintageImageUrl(ora.image_url);
-        const productUrl = "product.html?id=" +
-            encodeURIComponent(String(ora.id));
+        let cardsHtml = "";
 
-        return `
-            <div class="card" data-product-url="${productUrl}">
+        items.forEach(ora => {
+            let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+            let primaryImage = "";
+
+            if (ora.image_url) {
+                if (Array.isArray(ora.image_url) && ora.image_url.length > 0) {
+                    primaryImage = ora.image_url[0];
+                } else if (typeof ora.image_url === 'string') {
+                    try {
+                        let parsed = JSON.parse(ora.image_url);
+                        primaryImage = Array.isArray(parsed) ? parsed[0] : ora.image_url;
+                    } catch(e) {
+                        primaryImage = ora.image_url;
+                    }
+                }
+            }
+
+            if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
+                if (primaryImage.startsWith('http')) {
+                    imgUrl = primaryImage;
+                } else {
+                    const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+                    imgUrl = SUPABASE_URL + "/storage/v1/object/public/or-images/" + primaryImage;
+                }
+            }
+
+            cardsHtml += `
+            <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
                 <div>
-                    <img
-                        src="${escapeVintageHtml(imgUrl)}"
-                        alt="${brand}"
-                        loading="lazy"
-                        onerror="this.onerror=null;this.src='https://placehold.co/600x400/222/fff?text=No+Image';"
-                    >
+                    <img src="${imgUrl}" alt="${ora.brand || 'Vintage Watch'}">
                     
                     <!-- Brand -->
-                    <h3 style="margin:8px 0 2px;font-size:16px;color:#fff;">${brand}</h3>
+                    <h3 style="margin: 8px 0 2px 0; font-size: 16px; color: #fff;">
+                        ${ora.brand || ''}
+                    </h3>
 
                     <!-- Model -->
-                    <div style="font-size:14px;color:#fff;font-weight:bold;margin-bottom:2px;">
-                        ${model}
+                    <div style="font-size: 14px; color: #fff; font-weight: bold; margin-bottom: 2px;">
+                        ${ora.model || ''}
                     </div>
 
                     <!-- Reference (Ref) -->
-                    <div style="font-size:12px;color:#aaa;margin-bottom:6px;">
-                        ${reference ? 'Ref. ' + reference : ''}
+                    <div style="font-size: 12px; color: #aaa; margin-bottom: 6px;">
+                        ${ora.reference ? 'Ref. ' + ora.reference : ''}
                     </div>
 
                     <!-- Price -->
-                    <div class="price">${price}</div>
+                    <div class="price">
+                        ${ora.price ? ora.price + ' €' : 'Contact for price'}
+                    </div>
                 </div>
+
                 <div>
-                    <button
-                        type="button"
-                        class="btn-main btn-secondary"
-                        style="width:100%;padding:10px;font-size:14px;"
-                        data-product-url="${productUrl}"
-                    >View Details</button>
+                    <button class="btn-card-action" 
+                        onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}';">
+                        View Details
+                    </button>
                 </div>
             </div>
-        `;
-    }).join("");
-
-    container.querySelectorAll("[data-product-url]").forEach(function (element) {
-        element.addEventListener("click", function (event) {
-            event.stopPropagation();
-            window.location.href = element.getAttribute("data-product-url");
-        });
-    });
-}
- 
-/* KERKIMI LIVE: përdor ID-në e saktë searchInput */
-const vintageSearchInput = document.getElementById("searchInput");
-
-if (vintageSearchInput) {
-    vintageSearchInput.addEventListener("input", function (event) {
-        const query = event.target.value.toLowerCase().trim();
-
-        if (!query) {
-            renderCards(allOrasData);
-            return;
-        }
-
-        const filtered = allOrasData.filter(function (ora) {
-            const searchableText = [
-                ora.brand,
-                ora.model,
-                ora.description,
-                ora.reference,
-                ora.material,
-                ora.year
-            ].filter(Boolean).join(" ").toLowerCase();
-
-            return searchableText.includes(query);
+            `;
         });
 
-        renderCards(filtered);
-    });
-}
-
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", loadOras);
-} else {
-    loadOras();
-}
-
-/* MENUJA */
-function checkMenu(event) {
-    if (event) event.stopPropagation();
-
-    if (typeof window.toggleMenu === "function") {
-        window.toggleMenu();
-    } else {
-        alert("Funksioni i menusë nuk është ngarkuar. Kontrollo skedarin menu.js.");
+        container.innerHTML = cardsHtml;
     }
-}
+
+    // Funksionaliteti i kërkimit (Search live)
+    const searchInput = document.getElementById("searchInput");
+
+    if (searchInput) {
+        searchInput.addEventListener("input", function(e) {
+            const query = e.target.value.toLowerCase().trim();
+
+            const filtered = allOrasData.filter(ora => {
+                const brand = (ora.brand || "").toLowerCase();
+                const model = (ora.model || "").toLowerCase();
+                const reference = (ora.reference || "").toLowerCase();
+                const description = (ora.description || "").toLowerCase();
+
+                return brand.includes(query) ||
+                       model.includes(query) ||
+                       reference.includes(query) ||
+                       description.includes(query);
+            });
+
+            renderCards(filtered);
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", loadOras);
+
+    function checkMenu(event) {
+        event.stopPropagation();
+        if (typeof window.toggleMenu === 'function') {
+            window.toggleMenu();
+        } else {
+            alert('Menuja është duke u ngarkuar ose mungon skripta kryesore e menusë.');
+        }
+    }
 </script>
 
-<!-- =========================
-     MENUJA POSHTE
-========================= -->
 <nav class="bottom-nav">
     <a href="index.html">Home</a>
     <a href="favorites.html">Favs</a>
@@ -689,28 +416,20 @@ function checkMenu(event) {
 </nav>
 
 <script>
-(function () {
-    const nav = document.querySelector(".bottom-nav");
+let lastScrollTop = 0;
+const nav = document.querySelector(".bottom-nav");
 
-    if (!nav) return;
+window.addEventListener("scroll", () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-    let lastScrollTop = window.pageYOffset ||
-        document.documentElement.scrollTop;
+    if (scrollTop > lastScrollTop && scrollTop > 50) {
+        nav.classList.add("nav-hidden");
+    } else {
+        nav.classList.remove("nav-hidden");
+    }
 
-    window.addEventListener("scroll", function () {
-        const scrollTop = window.pageYOffset ||
-            document.documentElement.scrollTop;
-
-        if (scrollTop > lastScrollTop && scrollTop > 50) {
-            nav.classList.add("nav-hidden");
-        } else {
-            nav.classList.remove("nav-hidden");
-        }
-
-        lastScrollTop = Math.max(0, scrollTop);
-    }, { passive: true });
-})();
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+});
 </script>
 </body>
 </html>
-

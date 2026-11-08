@@ -30,10 +30,11 @@
         font-size: 12px !important;
     }
 
+    /* GRID FIX: 2 kolona në celular, 4 kolona në tablet/desktop */
     .grid {
         display: grid; 
         grid-template-columns: repeat(2, 1fr); 
-        gap: 15px; 
+        gap: 12px; 
         padding: 10px;
     }
 
@@ -45,46 +46,47 @@
 
     .card {
         background: #111;
-        padding: 15px;
-        border-radius: 12px;
+        padding: 10px;
+        border-radius: 10px;
         border: 1px solid #333;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
     }
 
+    /* FOTO MË TË VOGLA DHE TË RREGULLTA */
     .card img {
         width: 100%;
-        height: 140px;
+        height: 100px;
         object-fit: cover;
         display: block;
-        border-radius: 8px;
-        margin-bottom: 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
     }
 
     .card h3 {
-        font-size: 18px;
+        font-size: 15px;
         font-weight: bold;
-        margin: 5px 0 2px 0;
+        margin: 4px 0 2px 0;
         color: #fff;
     }
 
     .card p {
         color: #aaa;
-        font-size: 14px;
-        margin: 0 0 10px 0;
+        font-size: 12px;
+        margin: 0 0 8px 0;
     }
 
     .btn-view-details {
         width: 100%;
-        padding: 12px;
+        padding: 8px;
         background: #222;
         color: #fff;
         border: 1px solid #444;
-        border-radius: 8px;
+        border-radius: 6px;
         font-weight: bold;
         cursor: pointer;
-        font-size: 14px;
+        font-size: 12px;
         text-align: center;
         transition: background 0.2s;
     }
@@ -155,13 +157,6 @@
         .bottom-nav {
             display: none !important;
         }
-        body img, .grid img, .card img, .product img, .mainimg, .product-main-image {
-            max-width: 300px !important;
-            height: auto !important;
-            display: block !important;
-            margin-left: auto !important;
-            margin-right: auto !important;
-        }
     }
     
     #myOraSwissMenu {
@@ -221,8 +216,9 @@
     }
 
     h2 {
-        font-size: 12px;
-        margin: 10px;
+        font-size: 14px;
+        margin: 15px 10px 5px 10px;
+        color: gold;
     }
 
     .parts-link{
@@ -255,7 +251,7 @@
         <span> Watch: <b id="count-products">0</b></span>
     </span>
     <button id="loginRegisterBtn" onclick="location.href='register.html'">
-        Create / Acoount
+        Create / Account
     </button>
     <button id="btnSellNow" style="display: none;" onclick="trajtoKlikiminSellNow()">Sell a watch</button>
     <a href="luxury.html">Luxury</a>
@@ -274,9 +270,6 @@
   </nav>
 </header>
 
-<!-- =========================================
-     1. TABELA PREZANTUESE ME SCROLL VERTIKAL
-========================================= -->
 <div style="padding: 10px;">
     <div style="
         background: #111;
@@ -302,9 +295,6 @@
     </div>
 </div>
 
-<!-- =========================================
-     2. KATEGORITË ME SCROLL HORIZONTAL (MAJTAS-DJAHTAS)
-========================================= -->
 <div style="
     display: flex;
     gap: 10px;
@@ -327,9 +317,6 @@
     </a>
 </div>
 
-<!-- =========================================
-     3. KUTIA E KËRKIMIT (SEARCH) E ULUR
-========================================= -->
 <div class="search-container" style="padding: 0 10px 15px 10px;">
     <div class="search-box" style="
         display:flex;
@@ -341,7 +328,6 @@
         padding:10px;
     ">
         <span>🔍</span>
-
         <input
             type="text"
             id="searchInput"
@@ -357,7 +343,6 @@
                 font-size:14px;
             "
         >
-
         <input
             type="file"
             id="photoSearchInput"
@@ -365,7 +350,6 @@
             capture="environment"
             hidden
         >
-
         <button
             type="button"
             id="photoSearchButton"
@@ -380,25 +364,16 @@
         >📷</button>
     </div>
 
-    <div id="photoSearchPreview"
-         style="display:none;margin-top:10px;">
-        <img id="photoSearchImage"
-             alt="Foto për kërkim"
-             style="
+    <div id="photoSearchPreview" style="display:none;margin-top:10px;">
+        <img id="photoSearchImage" alt="Foto për kërkim" style="
                 max-width:150px;
                 max-height:150px;
                 object-fit:contain;
                 border-radius:8px;
                 border:1px solid #333;
-             ">
-
-        <div id="photoSearchStatus"
-             style="color:#aaa;font-size:13px;margin-top:6px;">
-        </div>
-
-        <button type="button"
-                id="cancelPhotoSearch"
-                style="
+            ">
+        <div id="photoSearchStatus" style="color:#aaa;font-size:13px;margin-top:6px;"></div>
+        <button type="button" id="cancelPhotoSearch" style="
                     margin-top:8px;
                     background:#222;
                     color:white;
@@ -412,15 +387,11 @@
     </div>
 </div>
 
-<!-- =========================================
-     4. KUTIA E OFERTAVE SPECIALEN (OFFERS / DEALS)
-========================================= -->
 <div style="padding: 0 10px 20px 10px;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
         <h3 style="margin: 0; color: #fff; font-size: 15px;">🔥 Ofertat e Ditës / Special Deals</h3>
         <span style="font-size: 11px; color: gold;">Çmime me Ofertë</span>
     </div>
-    
     <div style="
         display: flex;
         gap: 12px;
@@ -444,7 +415,6 @@
 <h2>Parts Collection</h2>
 <div id="parts-container" class="grid">Loading...</div>  
 
-<!-- Menuja e re kompakte në anë të djathtë -->
 <div id="myOraSwissMenu">
     <div class="menu-item-row" onclick="location.href='buy.html'">
         <div class="menu-item-left"><span>🛒</span> Buy</div>
@@ -471,7 +441,7 @@
         <div class="menu-item-left"><span>🎧</span> Support</div>
         <span class="menu-arrow">&gt;</span>
     </div>
-        <div class="menu-item-row" onclick="location.href='support-thanks.html'">
+    <div class="menu-item-row" onclick="location.href='support-thanks.html'">
         <div class="menu-item-left">
             <span>✅</span> Support Thanks
         </div>
@@ -513,37 +483,19 @@
 
     async function kontrolloLogin() {
         const { data: { user } } = await supabase.auth.getUser();
-
         const btn = document.getElementById("loginRegisterBtn");
-
         if (btn) {
-            if (user) {
-                btn.style.display = "none";
-            } else {
-                btn.style.display = "block";
-            }
+            btn.style.display = user ? "none" : "block";
         }
     }
-
     kontrolloLogin();
   
-  async function loadCategory(cat, containerId) {
+  async function renderProductsData(data, containerId) {
     const container = document.getElementById(containerId);
-    if (!container) return;  
-    
-    const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .eq('category', cat);  
+    if (!container) return;
 
-    if (error) {
-        console.error("Gabim gjatë marrjes së të dhënave:", error);
-        container.innerHTML = "Error loading items.";
-        return;
-    }
-  
     if (!data || data.length === 0) {
-        container.innerHTML = "No items in this category.";
+        container.innerHTML = "<p style='grid-column: span 2; color:#aaa; font-size:13px;'>No items found.</p>";
         return;
     }
 
@@ -576,13 +528,22 @@
     }).join('');
   }
 
+  async function loadCategory(cat, containerId) {
+    const { data, error } = await supabase
+        .from('oras')
+        .select('*')
+        .eq('category', cat);  
+
+    if (error) {
+        console.error("Gabim:", error);
+        return;
+    }
+    renderProductsData(data, containerId);
+  }
+
   window.trajtoKlikiminSellNow = async function() {
     const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-        window.location.href = 'sellnow.html'; 
-    } else {
-        window.location.href = 'login.html'; 
-    }
+    window.location.href = session ? 'sellnow.html' : 'login.html'; 
   };
 
   async function kontrolloSesionin() {
@@ -607,7 +568,7 @@
         const element = document.getElementById('count-products');
         if (element) element.textContent = total;
     } catch (err) {
-        console.error("Gabim te loadProductCount:", err);
+        console.error(err);
     }
   }
 
@@ -617,7 +578,7 @@
         const element = document.getElementById('count-users');
         if (element) element.textContent = data || 0;
     } catch (err) {
-        console.error("Gabim te loadUserCount:", err);
+        console.error(err);
     }
   }
 
@@ -628,21 +589,16 @@
       const menu = document.getElementById('myOraSwissMenu');
       const menuBtn = document.getElementById('menuBtnText');
       menu.classList.toggle('active');
-      if (menu.classList.contains('active')) {
-          menuBtn.style.color = 'gold';
-      } else {
-          menuBtn.style.color = '#ffffff';
-      }
+      menuBtn.style.color = menu.classList.contains('active') ? 'gold' : '#ffffff';
   }
 
   document.getElementById("searchInput").addEventListener("input", async function(e) {
     const query = e.target.value.trim();
-    const luxuryContainer = document.getElementById("luxury-container");
-    const vintageContainer = document.getElementById("vintage-container");
-    const partsContainer = document.getElementById("parts-container");
   
     if (query.length === 0) {
-        location.reload(); 
+        loadCategory('luxury', 'luxury-container');
+        loadCategory('vintage', 'vintage-container');
+        loadCategory('parts', 'parts-container');
         return;
     }
 
@@ -654,36 +610,14 @@
 
         if (error) throw error;
 
-        if (luxuryContainer) {
-            luxuryContainer.innerHTML = "";
-            if (!data || data.length === 0) {
-                luxuryContainer.innerHTML = "<p>Nuk u gjet asnjë orë.</p>";
-                return;
-            }
+        // Ndaj kërkimin sipas kategorive që të shfaqen saktë në vendet e tyre
+        const luxuryList = data.filter(item => item.category === 'luxury');
+        const vintageList = data.filter(item => item.category === 'vintage');
+        const partsList = data.filter(item => item.category === 'parts');
 
-            data.forEach(product => {
-                let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-                let primaryImage = Array.isArray(product.image_url) ? product.image_url[0] : product.image_url;
-                if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
-                    imgUrl = primaryImage.startsWith('http') ? primaryImage : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
-                }
-
-                const item = document.createElement("div");
-                item.className = "card";
-                item.innerHTML = `
-                    <div>
-                        <img src="${imgUrl}" alt="${product.brand || ''}">
-                        <h3>${product.brand || ''}</h3>
-                        <p>${product.model || product.reference || ''}</p>
-                    </div>
-                    <button class="btn-view-details" onclick="event.stopPropagation(); openProduct('${product.id}')">View Details</button>
-                `;
-                luxuryContainer.appendChild(item);
-            });
-        }
-
-        if (vintageContainer) vintageContainer.innerHTML = "";
-        if (partsContainer) partsContainer.innerHTML = "";
+        renderProductsData(luxuryList, 'luxury-container');
+        renderProductsData(vintageList, 'vintage-container');
+        renderProductsData(partsList, 'parts-container');
 
     } catch (err) {
         console.error("Gabim në kërkim:", err);
@@ -719,39 +653,31 @@
         const { data: { user }, error } = await supabase.auth.getUser();
         if (error || !user) return;
 
-        const { data: userConvs, error: convError } = await supabase
+        const { data: userConvs } = await supabase
             .from("conversations")
             .select("id")
             .or(`user_one.eq.${user.id},user_two.eq.${user.id},buyer_id.eq.${user.id},seller_id.eq.${user.id}`);
 
-        if (convError || !userConvs || userConvs.length === 0) return;
-
+        if (!userConvs || userConvs.length === 0) return;
         const convIds = userConvs.map(c => c.id);
 
-        const { count: totalUnread, error: msgError } = await supabase
+        const { count: totalUnread } = await supabase
             .from("messages")
             .select("*", { count: "exact", head: true })
             .in("conversation_id", convIds)
             .eq("is_read", false)
             .neq("sender_id", user.id);
 
-        if (msgError) return;
-
         const count = totalUnread || 0;
-
-        const dashBadge = document.getElementById("dashboardMessageCount");
-        if (dashBadge) {
-            dashBadge.innerText = count;
-            dashBadge.style.display = count > 0 ? "inline-block" : "none";
-        }
-
-        const navBadge = document.getElementById("menuMessageCount");
-        if (navBadge) {
-            navBadge.innerText = count;
-            navBadge.style.display = count > 0 ? "inline-block" : "none";
-        }
+        ['dashboardMessageCount', 'menuMessageCount'].forEach(id => {
+            const badge = document.getElementById(id);
+            if (badge) {
+                badge.innerText = count;
+                badge.style.display = count > 0 ? "inline-block" : "none";
+            }
+        });
     } catch (err) {
-        console.error("Gabim tek mesazhet:", err);
+        console.error(err);
     }
   }
 
@@ -762,7 +688,6 @@
 
   window.addEventListener('scroll', function() {
       let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      
       if (scrollTop > lastScrollTop && scrollTop > 50) {
           if (bottomNavElement) bottomNavElement.classList.add('nav-hidden');
       } else {
@@ -778,31 +703,14 @@
   const photoStatus = document.getElementById('photoSearchStatus');
   const cancelPhoto = document.getElementById('cancelPhotoSearch');
 
-  photoButton.addEventListener('click', () => {
-      photoInput.click();
-  });
-
+  photoButton.addEventListener('click', () => photoInput.click());
   photoInput.addEventListener('change', () => {
       const file = photoInput.files?.[0];
       if (!file) return;
-
-      if (!file.type.startsWith('image/')) {
-          alert('Zgjidh një fotografi të vlefshme.');
-          photoInput.value = '';
-          return;
-      }
-
-      if (file.size > 10 * 1024 * 1024) {
-          alert('Fotografia duhet të jetë maksimumi 10 MB.');
-          photoInput.value = '';
-          return;
-      }
-
       photoImage.src = URL.createObjectURL(file);
       photoPreview.style.display = 'block';
       photoStatus.textContent = 'Fotoja u zgjodh me sukses.';
   });
-
   cancelPhoto.addEventListener('click', () => {
       photoInput.value = '';
       photoImage.removeAttribute('src');

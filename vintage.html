@@ -2,9 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vintage Watches - Ora Swiss</title>
-
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
     <script>
@@ -13,7 +10,6 @@
         gtag('js', new Date());
         gtag('config', 'G-KD2ZZ3MJYY');
     </script>
-
     <style>
         body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff; padding-bottom: 110px; }
         
@@ -49,21 +45,19 @@
         }
         .search-box:focus { outline: none; border-color: gold; }
 
-        /* KJO ËSHTË PJESA E RREGULLUAR E GRID-IT */
-        .grid {
+         .grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr) !important; 
-            gap: 12px !important; 
-            padding: 10px !important;
-            box-sizing: border-box;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 10px; 
+            padding: 10px;
         }
 
         @media (min-width: 768px) {
             .grid {
-                grid-template-columns: repeat(4, 1fr) !important; 
+                grid-template-columns: repeat(4, 1fr); 
             }
         }
-
+        
         .card {
             background: #111;
             padding: 15px;
@@ -81,29 +75,31 @@
             object-fit: cover;
             display: block;
             border-radius: 8px;
-            background: #181818;
         }
 
         .price { color: gold; font-weight: bold; margin: 8px 0; font-size: 1.1em; }
 
-        /* Butoni i thjeshtë në kartë */
-        .btn-card-action {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            padding: 8px;
-            margin-top: 8px;
-            background: #1a1a1a;
-            color: #fff;
-            font-size: 13px;
-            font-weight: bold;
-            border: 1px solid #333;
+        .btn-main {
+            padding: 10px;
+            border: none;
             border-radius: 6px;
+            font-weight: bold;
             cursor: pointer;
+            font-size: 14px;
+            text-align: center;
+            display: block;
             text-decoration: none;
         }
-        .btn-card-action:hover { background: #252525; border-color: gold; color: gold; }
+        .btn-buy { background: gold; color: #000; width: 100%; }
+        .btn-buy:hover { background: #e6c200; }
+
+        .btn-secondary {
+            background: #222;
+            color: #fff;
+            border: 1px solid #444;
+            margin-top: 5px;
+        }
+        .btn-secondary:hover { background: #333; }
 
         /* Bottom Nav bar i unifikuar */
         .bottom-nav {
@@ -122,7 +118,6 @@
             border: 1px solid #333 !important;
             box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
             z-index: 999999 !important;
-            transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
         .bottom-nav a, .bottom-nav button {
@@ -140,13 +135,16 @@
             align-items: center !important;
             gap: 3px !important;
         }
+ 
+        .bottom-nav {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
 
         .bottom-nav.nav-hidden {
             transform: translateY(120px);
             opacity: 0;
             pointer-events: none;
         }
-
         .bottom-nav a:hover { color: gold !important; }
 
         .back-btn {
@@ -159,9 +157,11 @@
             cursor: pointer;
             margin: 0 15px;
         }
-        .back-btn:hover { background: #222; }
-    </style>
 
+        .back-btn:hover {
+            background: #222;
+        }
+    </style>    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
     <script src="db-connect.js"></script>
     <script src="menu.js" defer></script>

@@ -49,16 +49,18 @@
         }
         .search-box:focus { outline: none; border-color: gold; }
 
+        /* KJO ËSHTË PJESA E RREGULLUAR E GRID-IT */
         .grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 10px; 
-            padding: 10px;
+            grid-template-columns: repeat(2, 1fr) !important; 
+            gap: 12px !important; 
+            padding: 10px !important;
+            box-sizing: border-box;
         }
 
         @media (min-width: 768px) {
             .grid {
-                grid-template-columns: repeat(4, 1fr); 
+                grid-template-columns: repeat(4, 1fr) !important; 
             }
         }
 

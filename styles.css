@@ -2293,15 +2293,16 @@ button, a, input, select, textarea { pointer-events: auto !important; }
 
 
 .grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    padding: 10px;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* 2 kolona */
+    gap: 10px !important;
+    padding: 10px !important;
+    box-sizing: border-box !important;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
     .grid {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(4, 1fr) !important; /* 4 kolona */
     }
 }
 

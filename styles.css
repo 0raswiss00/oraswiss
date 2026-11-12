@@ -2294,7 +2294,7 @@ button, a, input, select, textarea { pointer-events: auto !important; }
 /* 2. Grid-i: 2 kolona në celular, 4 në kompjuter */
 .grid {
     display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important; 
+    grid-template-columns: repeat(2, 1fr) !important; 
     gap: 15px; 
     padding: 10px !important;
     box-sizing: border-box !important;
@@ -2302,7 +2302,7 @@ button, a, input, select, textarea { pointer-events: auto !important; }
 
 @media (min-width: 768px) {
     .grid {
-        grid-template-columns: repeat(2, 1fr) !important; 
+        grid-template-columns: repeat(4, 1fr) !important; 
     }
 }
 

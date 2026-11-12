@@ -54,17 +54,15 @@
 
         /* 1. Në celular detyrohen gjithmonë 2 kolona */
         .grid {
-            display: grid !important;
-            grid-template-columns: repeat(2, 1fr) !important; 
-            gap: 10px !important; 
-            padding: 10px !important;
-            box-sizing: border-box !important;
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 15px; 
+            padding: 10px;
         }
 
-        /* 2. Vetëm kur ekrani është mbi 1024px (kompjuter i vërtetë), kalojnë në 4 kolona */
-        @media (min-width: 1024px) {
+        @media (min-width: 768px) {
             .grid {
-                grid-template-columns: repeat(4, 1fr) !important; 
+                grid-template-columns: repeat(4, 1fr); 
             }
         }
 

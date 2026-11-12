@@ -48,76 +48,31 @@
         }
         .search-box:focus { outline: none; border-color: gold; }
 
-        /* GRID - TELEFON: 2 KOLONA */
+        /* 1. Në celular detyrohen gjithmonë 2 kolona */
         .grid {
             display: grid !important;
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            gap: 10px !important;
+            grid-template-columns: repeat(2, 1fr) !important; 
+            gap: 10px !important; 
             padding: 10px !important;
             box-sizing: border-box !important;
-            width: 100%;
         }
 
-        /* KOMPJUTER: 4 KOLONA */
+        /* 2. Vetëm kur ekrani është mbi 1024px (kompjuter i vërtetë), kalojnë në 4 kolona */
         @media (min-width: 1024px) {
-              .grid {
-                grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-                gap: 18px !important;
-                padding: 18px !important;
-                max-width: 1400px;
-                margin: 0 auto;
-             }
+            .grid {
+                grid-template-columns: repeat(4, 1fr) !important; 
+            }
         }
 
-        /* KARTAT */
         .card {
             background: #111;
-            padding: 10px;
+            padding: 15px;
             border-radius: 10px;
             border: 1px solid #333;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-width: 0;
-            box-sizing: border-box;
-        }
-
-        /* FOTOT */
-        .card img {
-            width: 100%;
-            height: 160px;
-            object-fit: contain !important;
-            background: #181818;
-            display: block;
-            border-radius: 7px;
-        }
-
-        /* TELEFON */
-        @media (max-width: 600px) {
-            .grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 8px !important;
-                padding: 7px !important;
-            }
-
-            .card {
-                padding: 6px;
-            }
-
-            .card img {
-                height: 105px;
-                object-fit: contain !important;
-            }
-
-            .card h3 {
-                font-size: 13px !important;
-            }
-
-            .card div {
-                overflow-wrap: anywhere;
-            }
-        }
         }
 
         .card img {

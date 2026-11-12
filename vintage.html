@@ -45,23 +45,17 @@
         }
         .search-box:focus { outline: none; border-color: gold; }
 
-         /* 1. Në celular detyrohen gjithmonë 2 kolona */
+      /* 1. Në telefon (Mobile-First): 2 kolona të pastra */
         .grid {
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
-            gap: 15px; 
-            padding: 10px;
+            gap: 8px; 
+            padding: 8px;
         }
 
-        @media (min-width: 768px) {
-            .grid {
-                grid-template-columns: repeat(4, 1fr); 
-            }
-        }
-        
         .card {
             background: #111;
-            padding: 15px;
+            padding: 8px;
             border-radius: 10px;
             border: 1px solid #333;
             cursor: pointer;
@@ -72,10 +66,28 @@
 
         .card img {
             width: 100%;
-            height: 160px;
+            aspect-ratio: 1 / 1; /* E bën foton katrore që të mos pritet ora */
             object-fit: cover;
             display: block;
             border-radius: 8px;
+        }
+
+        /* 2. Në kompjuter (ekrane mbi 768px): 4 kolona me më shumë hapësirë */
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(4, 1fr); 
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            .card img {
+                aspect-ratio: auto;
+                height: 220px;
+            }
         }
 
         .price { color: gold; font-weight: bold; margin: 8px 0; font-size: 1.1em; }

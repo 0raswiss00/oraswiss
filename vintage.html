@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ora Swiss</title>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
     <script>
@@ -45,18 +47,31 @@
         }
         .search-box:focus { outline: none; border-color: gold; }
 
-      /* 1. Në telefon (Mobile-First): 2 kolona të pastra */
+        /* 1. Në telefon (Mobile-First): 2 kolona */
         .grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 kolona në celular */
+            grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             padding: 10px;
             box-sizing: border-box;
+            width: 100%;
         }
 
+        /* 2. Në kompjuter (ekrane mbi 768px): 4 kolona */
         @media (min-width: 768px) {
             .grid {
-                grid-template-columns: repeat(4, 1fr); /* 4 kolona në kompjuter */
+                grid-template-columns: repeat(4, 1fr);
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            .card img {
+                aspect-ratio: auto;
+                height: 220px;
             }
         }
 
@@ -77,24 +92,6 @@
             object-fit: cover;
             display: block;
             border-radius: 8px;
-        }
-
-        /* 2. Në kompjuter (ekrane mbi 768px): 4 kolona me më shumë hapësirë */
-        @media (min-width: 768px) {
-            .grid {
-                grid-template-columns: repeat(4, 1fr); 
-                gap: 15px;
-                padding: 15px;
-            }
-
-            .card {
-                padding: 15px;
-            }
-
-            .card img {
-                aspect-ratio: auto;
-                height: 220px;
-            }
         }
 
         .price { color: gold; font-weight: bold; margin: 8px 0; font-size: 1.1em; }

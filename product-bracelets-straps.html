@@ -100,14 +100,15 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 kolona për telefon (Mobile-first) */
-            gap: 10px;
+            grid-template-columns: repeat(2, 1fr); /* 2 në celular */
+            gap: 15px;
             padding: 10px;
+            box-sizing: border-box;
         }
 
         @media (min-width: 768px) {
             .grid {
-                grid-template-columns: repeat(4, 1fr); /* 4 kolona për tablet dhe kompjuter */
+                grid-template-columns: repeat(4, 1fr); /* 4 në kompjuter */
             }
         }
 

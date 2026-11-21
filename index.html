@@ -602,10 +602,13 @@
   function toggleMenu() {
       const menu = document.getElementById('myOraSwissMenu');
       const menuBtn = document.getElementById('menuBtnText');
+      if (!menu) return;
       menu.classList.toggle('active');
-      menuBtn.style.color = menu.classList.contains('active') ? 'gold' : '#ffffff';
+      if (menuBtn) {
+          menuBtn.style.color = menu.classList.contains('active') ? 'gold' : '#ffffff';
+      }
   }
-
+    
   document.getElementById("searchInput").addEventListener("input", async function(e) {
     const query = e.target.value.trim();
   

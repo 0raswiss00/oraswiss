@@ -155,8 +155,15 @@
     }
 
     @media (min-width: 1024px) {
-        .bottom-nav {
-            display: none !important;
+            .bottom-nav {
+                display: none !important;
+            }
+            .card img, .grid img {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: 140px !important;
+                object-fit: cover !important;
+            }
         }
         body img, .grid img, .card img, .product img, .mainimg, .product-main-image {
             max-width: 300px !important;

@@ -2293,11 +2293,11 @@ button, a, input, select, textarea { pointer-events: auto !important; }
 
 /* 2. Grid-i: 2 kolona në celular, 4 në kompjuter */
 .grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important; 
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px; 
-    padding: 10px !important;
-    box-sizing: border-box !important;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
@@ -2305,7 +2305,6 @@ button, a, input, select, textarea { pointer-events: auto !important; }
         grid-template-columns: repeat(4, 1fr) !important; 
     }
 }
-
 /* 3. Çmimi */
 .price { 
     color: gold !important; 

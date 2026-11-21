@@ -641,14 +641,17 @@
     }
   });
 
-  async function checkPage(event, page) {
-    event.preventDefault();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-        document.getElementById("loginModal").style.display = "flex";
-        return;
-    }
-    window.location.href = page;
+  function checkMenu(event) {
+      event.preventDefault();
+
+      supabase.auth.getSession().then(({ data: { session } }) => {
+          if (!session) {
+              document.getElementById("loginModal").style.display = "flex";
+              return;
+          }
+
+          toggleMenu();
+      });
   }
 
   async function checkMenu(event) {

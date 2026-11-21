@@ -50,15 +50,16 @@
 
         /* 1. Në celular detyrohen gjithmonë 2 kolona */
         .grid {
-            display: grid; 
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 15px; 
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 kolona në celular */
+            gap: 15px;
             padding: 10px;
+            box-sizing: border-box;
         }
 
         @media (min-width: 768px) {
             .grid {
-                grid-template-columns: repeat(2, 1fr); 
+                grid-template-columns: repeat(4, 1fr); /* 4 kolona në kompjuter */
             }
         }
 

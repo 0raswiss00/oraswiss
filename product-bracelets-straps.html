@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bracelet & Straps - Ora Swiss</title>
+    <link rel="icon" href="data:,">
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
@@ -14,43 +15,40 @@
         gtag('config', 'G-KD2ZZ3MJYY');
     </script>
     <script>
-      // Lexon ID nga URL (p.sh. ?id=168)
-      const urlParams = new URLSearchParams(window.location.search);
-      const productId = urlParams.get('id');
+      (function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentId = urlParams.get('id');
 
-      if (productId) {
-        const SUPABASE_URL = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9';
+        if (currentId) {
+          const SUPABASE_URL = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
+          const SUPABASE_ANON_KEY = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9';
+          const tableName = 'bracelets_straps';
 
-        // Tabela në Supabase për bracelets_straps
-        const tableName = 'bracelets_straps';
-
-        fetch(`${SUPABASE_URL}/rest/v1/${tableName}?id=eq.${productId}&select=brand,model,reference`, {
-          headers: {
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-          }
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data && data.length > 0) {
-            const p = data[0];
-            const productTitle = `${p.brand || ''} ${p.model || ''} - ${p.reference || ''} | Ora Swiss`;
-
-            // Ndryshon titullin e faqes
-            document.title = productTitle.trim();
-
-            // Përditëson ose krijon Open Graph tag për share (WhatsApp, etj.)
-            let ogTitle = document.querySelector('meta[property="og:title"]');
-            if (!ogTitle) {
-              ogTitle = document.createElement('meta');
-              ogTitle.setAttribute('property', 'og:title');
-              document.head.appendChild(ogTitle);
+          fetch(`${SUPABASE_URL}/rest/v1/${tableName}?id=eq.${encodeURIComponent(currentId)}&select=brand,model,reference`, {
+            headers: {
+              'apikey': SUPABASE_ANON_KEY,
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
             }
-            ogTitle.setAttribute('content', productTitle.trim());
-          }
-        }).catch(err => console.error("Gabim në marrjen e të dhënave:", err));
-      }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data && data.length > 0) {
+              const p = data[0];
+              const productTitle = `${p.brand || ''} ${p.model || ''} - ${p.reference || ''} | Ora Swiss`.replace(/\s+-\s+\|/, ' |').trim();
+              document.title = productTitle;
+
+              let ogTitle = document.querySelector('meta[property="og:title"]');
+              if (!ogTitle) {
+                ogTitle = document.createElement('meta');
+                ogTitle.setAttribute('property', 'og:title');
+                document.head.appendChild(ogTitle);
+              }
+              ogTitle.setAttribute('content', productTitle);
+            }
+          })
+          .catch(err => console.error("Gabim në marrjen e të dhënave:", err));
+        }
+      })();
     </script>
 
     <style>
@@ -97,7 +95,7 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 në celular */
+            grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             padding: 10px;
             box-sizing: border-box;
@@ -105,7 +103,7 @@
 
         @media (min-width: 768px) {
             .grid {
-                grid-template-columns: repeat(4, 1fr); /* 4 në kompjuter */
+                grid-template-columns: repeat(4, 1fr);
             }
         }
 
@@ -125,7 +123,6 @@
             border-radius: 8px;
         }
 
-        /* Galeria e fotove */
         .gallery-container {
             position: relative;
             width: 100%;
@@ -158,13 +155,8 @@
             z-index: 10;
         }
 
-        .gallery-btn.prev {
-            left: 10px;
-        }
-
-        .gallery-btn.next {
-            right: 10px;
-        }
+        .gallery-btn.prev { left: 10px; }
+        .gallery-btn.next { right: 10px; }
 
         .photo-counter {
             position: absolute;
@@ -187,14 +179,8 @@
             text-decoration: none;
         }
 
-        .btn-buy {
-            background: gold;
-            color: #000;
-        }
-
-        .btn-buy:hover {
-            background: #e6c200;
-        }
+        .btn-buy { background: gold; color: #000; }
+        .btn-buy:hover { background: #e6c200; }
 
         .btn-request {
             background: #222;
@@ -202,12 +188,8 @@
             border: 1px solid #555;
             margin-top: 10px;
         }
+        .btn-request:hover { background: #333; }
 
-        .btn-request:hover {
-            background: #333;
-        }
-
-        /* Specs */
         .specs-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -220,16 +202,9 @@
             font-size: 14px;
         }
 
-        .specs-grid div {
-            color: #aaa;
-        }
+        .specs-grid div { color: #aaa; }
+        .specs-grid span { color: #fff; font-weight: bold; }
 
-        .specs-grid span {
-            color: #fff;
-            font-weight: bold;
-        }
-
-        /* Bottom navigation */
         .bottom-nav {
             position: fixed !important;
             bottom: 20px !important;
@@ -272,13 +247,7 @@
             pointer-events: none;
         }
 
-        .bottom-nav a:hover {
-            color: gold !important;
-        }
-
-        /* =========================
-           SUGGEST PRICE MODAL
-        ========================= */
+        .bottom-nav a:hover { color: gold !important; }
 
         .modal-overlay {
             display: none;
@@ -304,17 +273,8 @@
             box-sizing: border-box;
         }
 
-        .modal-content h3 {
-            color: #fff;
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
-
-        .modal-content p {
-            color: #aaa;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
+        .modal-content h3 { color: #fff; margin-top: 0; margin-bottom: 10px; }
+        .modal-content p { color: #aaa; font-size: 14px; margin-bottom: 15px; }
 
         .modal-content input {
             width: 100%;
@@ -329,11 +289,7 @@
             text-align: center;
         }
 
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
+        .modal-buttons { display: flex; gap: 10px; }
         .modal-buttons button {
             flex: 1;
             padding: 10px;
@@ -343,15 +299,8 @@
             font-weight: bold;
         }
 
-        .modal-cancel {
-            background: #333;
-            color: #fff;
-        }
-
-        .modal-submit {
-            background: #2196F3;
-            color: #fff;
-        }
+        .modal-cancel { background: #333; color: #fff; }
+        .modal-submit { background: #2196F3; color: #fff; }
 
         #offer-error {
             font-size: 13px;
@@ -369,1138 +318,323 @@
 <header class="site-header">
     <nav class="nav-scroll">
         <span class="site-title">ORA<br>SWISS</span>
-
         <a href="javascript:history.back()">← Back</a>
         <a href="index.html">Home</a>
         <a href="luxury.html">Luxury</a>
         <a href="vintage.html">Vintage</a>
         <a href="parts.html">Parts</a>
-
-        <a href="product-bracelets-straps.html"
-           style="color: gold;">
-            Bracelet/Strap
-        </a>
-
+        <a href="product-bracelets-straps.html" style="color: gold;">Bracelet/Strap</a>
         <a href="service.html">Service</a>
         <a href="about.html">About</a>
     </nav>
 </header>
 
-
 <div id="content-container" style="padding: 10px;">
     Loading...
 </div>
 
-
-<!-- =========================================
-     SUGGEST PRICE MODAL
-========================================= -->
-
 <div id="offer-modal" class="modal-overlay">
-
     <div class="modal-content">
-
         <h3>Suggest a Price</h3>
-
-        <p>
-            Vendosni çmimin që dëshironi të ofroni për këtë produkt:
-        </p>
-
-        <input
-            type="number"
-            id="offer-price-input"
-            placeholder="p.sh. 45"
-            min="0"
-            step="0.01"
-        >
-
+        <p>Vendosni çmimin që dëshironi të ofroni për këtë produkt:</p>
+        <input type="number" id="offer-price-input" placeholder="p.sh. 45" min="0" step="0.01">
         <div id="offer-error"></div>
-
         <div class="modal-buttons">
-
-            <button
-                type="button"
-                class="modal-cancel"
-                onclick="closeOfferModal()">
-                Anullo
-            </button>
-
-            <button
-                type="button"
-                class="modal-submit"
-                onclick="submitOffer()">
-                Dërgo Ofertën
-            </button>
-
+            <button type="button" class="modal-cancel" onclick="closeOfferModal()">Anullo</button>
+            <button type="button" class="modal-submit" onclick="submitOffer()">Dërgo Ofertën</button>
         </div>
-
     </div>
-
 </div>
-
-
-<!-- =========================================
-     LOGIN MODAL
-========================================= -->
 
 <div id="login-modal" class="modal-overlay">
-
     <div class="modal-content">
-
         <h3>Kërkohet Identifikimi</h3>
-
-        <p>
-            Ju lutem hyni në llogarinë tuaj për të dërguar një ofertë.
-        </p>
-
+        <p>Ju lutem hyni në llogarinë tuaj për të dërguar një ofertë.</p>
         <div class="modal-buttons">
-
-            <button
-                type="button"
-                class="modal-cancel"
-                onclick="document.getElementById('login-modal').style.display='none'">
-                Anullo
-            </button>
-
-            <button
-                type="button"
-                class="modal-submit"
-                onclick="window.location.href='login.html'">
-                Hyr
-            </button>
-
+            <button type="button" class="modal-cancel" onclick="document.getElementById('login-modal').style.display='none'">Anullo</button>
+            <button type="button" class="modal-submit" onclick="window.location.href='login.html'">Hyr</button>
         </div>
-
     </div>
-
 </div>
 
-
 <script>
-
 let currentImages = [];
 let currentImgIndex = 0;
+let activeProductId = null;
 
-/* ID e produktit aktual */
-let productId = null;
-
-
-/* =========================================
-   LOAD PRODUCT
-========================================= */
+function changeImage(direction) {
+    if (!currentImages || currentImages.length === 0) return;
+    currentImgIndex = (currentImgIndex + direction + currentImages.length) % currentImages.length;
+    const imgEl = document.getElementById("main-photo");
+    const countEl = document.getElementById("photo-count");
+    if (imgEl) imgEl.src = currentImages[currentImgIndex];
+    if (countEl) countEl.textContent = `${currentImgIndex + 1} / ${currentImages.length}`;
+}
 
 document.addEventListener("DOMContentLoaded", async function() {
-
     if (!window.supabaseClient) {
         console.error("Supabase client nuk u gjet!");
         return;
     }
 
     const urlParams = new URLSearchParams(window.location.search);
+    activeProductId = urlParams.get("id");
+    const container = document.getElementById("content-container");
 
-    productId = urlParams.get("id");
-
-    const container =
-        document.getElementById("content-container");
-
-
-    /* =========================================
-       SINGLE PRODUCT
-    ========================================= */
-
-    if (productId) {
-
-        const { data, error } =
-            await window.supabaseClient
-                .from("bracelets_straps")
-                .select("*")
-                .eq("id", productId)
-                .single();
-
+    if (activeProductId) {
+        const { data, error } = await window.supabaseClient
+            .from("bracelets_straps")
+            .select("*")
+            .eq("id", activeProductId)
+            .single();
 
         if (error || !data) {
-
-            container.innerHTML =
-                "<h2 style='color:red;text-align:center;'>" +
-                "Produkti nuk u gjet ose ndodhi një gabim!" +
-                "</h2>";
-
+            container.innerHTML = "<h2 style='color:red;text-align:center;'>Produkti nuk u gjet ose ndodhi një gabim!</h2>";
             console.error(error);
-
             return;
         }
 
-
-        /* =========================================
-           SELLER ID
-        ========================================= */
-
         window.currentSellerId = data.user_id;
 
-
-        /* =========================================
-           IMAGES
-        ========================================= */
-
         let rawImages = data.image_url;
-
-
         if (typeof rawImages === "string") {
-
             try {
-
                 rawImages = JSON.parse(rawImages);
-
-            } catch(e) {
-
+            } catch (e) {
                 rawImages = [rawImages];
-
             }
-
         }
 
-
-        currentImages =
-            Array.isArray(rawImages)
-                ? rawImages.filter(
-                    img =>
-                        img &&
-                        img !== "null" &&
-                        img !== ""
-                  )
-                : [];
-
+        currentImages = Array.isArray(rawImages)
+            ? rawImages.filter(img => img && img !== "null" && img !== "")
+            : [];
 
         if (currentImages.length === 0) {
-
-            currentImages = [
-                "https://placeholder.co/600x400/222/fff?text=No+Image"
-            ];
-
+            currentImages = ["https://placeholder.co/600x400/222/fff?text=No+Image"];
         } else {
-
-            currentImages =
-                currentImages.map(img =>
-
-                    img.startsWith("http")
-                        ? img
-                        : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + img
-
-                );
-
+            currentImages = currentImages.map(img =>
+                img.startsWith("http")
+                    ? img
+                    : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + img
+            );
         }
-
 
         currentImgIndex = 0;
 
-
-        /* =========================================
-           PRODUCT HTML
-        ========================================= */
-
         container.innerHTML = `
-
-            <div style="
-                max-width:600px;
-                margin:0 auto;
-                background:#111;
-                padding:20px;
-                border-radius:10px;
-                border:1px solid #333;
-            ">
-
-                <!-- GALLERY -->
-
+            <div style="max-width:600px;margin:0 auto;background:#111;padding:20px;border-radius:10px;border:1px solid #333;">
                 <div class="gallery-container">
-
-                    <button
-                        class="gallery-btn prev"
-                        onclick="changeImage(-1)">
-                        ❮
-                    </button>
-
-                    <img
-                        id="main-photo"
-                        src="${currentImages[0]}"
-                        alt="${data.brand || "Strap"}"
-                    >
-
-                    <button
-                        class="gallery-btn next"
-                        onclick="changeImage(1)">
-                        ❯
-                    </button>
-
-                    <div
-                        class="photo-counter"
-                        id="photo-count">
-                        1 / ${currentImages.length}
-                    </div>
-
+                    <button type="button" class="gallery-btn prev" onclick="changeImage(-1)">❮</button>
+                    <img id="main-photo" src="${currentImages[0]}" alt="${data.brand || "Strap"}">
+                    <button type="button" class="gallery-btn next" onclick="changeImage(1)">❯</button>
+                    <div class="photo-counter" id="photo-count">1 / ${currentImages.length}</div>
                 </div>
 
+                <h2 style="margin-top:15px;">${data.brand || "Bracelet / Strap"} ${data.model || ""}</h2>
 
-                <!-- TITLE -->
-
-                <h2 style="margin-top:15px;">
-                    ${data.brand || "Bracelet / Strap"}
-                    ${data.model || ""}
-                </h2>
-
-
-                <!-- PRICE -->
-
-                <div
-                    class="price"
-                    style="
-                        font-weight:bold;
-                        color:gold;
-                        font-size:22px;
-                        margin:10px 0;
-                    "
-                >
-                    ${
-                        data.price
-                            ? data.price + " €"
-                            : "Contact for price"
-                    }
+                <div class="price" style="font-weight:bold;color:gold;font-size:22px;margin:10px 0;">
+                    ${data.price ? data.price + " €" : "Contact for price"}
                 </div>
-
-
-                <!-- SPECS -->
 
                 <div class="specs-grid">
-
-                    <div>
-                        Type:
-                        <span>${data.type || "/"}</span>
-                    </div>
-
-                    <div>
-                        Condition:
-                        <span>${data.condition || "/"}</span>
-                    </div>
-
-                    <div>
-                        Material:
-                        <span>${data.material || "/"}</span>
-                    </div>
-
-                    <div>
-                        Color:
-                        <span>${data.color || "/"}</span>
-                    </div>
-
-                    <div>
-                        Reference:
-                        <span>${data.reference || "/"}</span>
-                    </div>
-
-                    <div>
-                        Year:
-                        <span>${data.year || "/"}</span>
-                    </div>
-
-                    <div>
-                        Gold Purity:
-                        <span>${data.gold_purity || "/"}</span>
-                    </div>
-
-                    <div>
-                        Lug Width:
-                        <span>${data.lug_width || "/"}</span>
-                    </div>
-
-                    <div>
-                        Clasp Width:
-                        <span>${data.clasp_width || "/"}</span>
-                    </div>
-
-                    <div>
-                        Length:
-                        <span>${data.length || "/"}</span>
-                    </div>
-
-                    <div>
-                        Postal Service:
-                        <span>
-                            ${
-                                data.shipping_provider
-                                    ? data.shipping_provider
-                                    : "/"
-                            }
-                        </span>
-                    </div>
-
-                    <div>
-                        Delivery Time:
-                        <span>
-                            ${
-                                data.shipping_days
-                                    ? data.shipping_days
-                                    : "/"
-                            }
-                        </span>
-                    </div>
-
+                    <div>Type: <span>${data.type || "/"}</span></div>
+                    <div>Condition: <span>${data.condition || "/"}</span></div>
+                    <div>Material: <span>${data.material || "/"}</span></div>
+                    <div>Color: <span>${data.color || "/"}</span></div>
+                    <div>Reference: <span>${data.reference || "/"}</span></div>
+                    <div>Year: <span>${data.year || "/"}</span></div>
+                    <div>Gold Purity: <span>${data.gold_purity || "/"}</span></div>
+                    <div>Lug Width: <span>${data.lug_width || "/"}</span></div>
+                    <div>Clasp Width: <span>${data.clasp_width || "/"}</span></div>
+                    <div>Length: <span>${data.length || "/"}</span></div>
+                    <div>Postal Service: <span>${data.shipping_provider || "/"}</span></div>
+                    <div>Delivery Time: <span>${data.shipping_days || "/"}</span></div>
                 </div>
 
-
-                <!-- DESCRIPTION -->
-
-                <div style="
-                    background:#1a1a1a;
-                    padding:15px;
-                    border-radius:8px;
-                    margin:15px 0;
-                    border:1px solid #333;
-                ">
-
-                    <h4 style="
-                        margin:0 0 10px 0;
-                        color:#fff;
-                    ">
-                        Description
-                    </h4>
-
-                    <p style="
-                        color:#ccc;
-                        line-height:1.5;
-                        margin:0;
-                        white-space:pre-line;
-                    ">
-                        ${
-                            data.description ||
-                            "Nuk ka përshkrim shtesë për këtë produkt."
-                        }
+                <div style="background:#1a1a1a;padding:15px;border-radius:8px;margin:15px 0;border:1px solid #333;">
+                    <h4 style="margin:0 0 10px 0;color:#fff;">Description</h4>
+                    <p style="color:#ccc;line-height:1.5;margin:0;white-space:pre-line;">
+                        ${data.description || "Nuk ka përshkrim shtesë për këtë produkt."}
                     </p>
-
                 </div>
 
-
-                <!-- BUY -->
-
-                <button
-                    id="buy-bracelet-btn"
-                    class="btn-main btn-buy"
-                    style="width:100%;">
-                    Buy Now (PayPal)
-                </button>
-
-
-                <!-- SUGGEST PRICE -->
-
-                <button
-                    id="suggest-price-btn"
-                    class="btn-main"
-                    style="
-                        width:100%;
-                        margin-top:10px;
-                        background:#2196F3;
-                        color:#fff;
-                    ">
-                    Suggest Price
-                </button>
-
-
-                <!-- REQUEST -->
-
-                <button
-                    id="send-request-btn"
-                    class="btn-main btn-request"
-                    style="width:100%;">
-                    Send Request / Inquiry
-                </button>
-
+                <button id="buy-bracelet-btn" class="btn-main btn-buy" style="width:100%;">Buy Now (PayPal)</button>
+                <button id="suggest-price-btn" class="btn-main" style="width:100%;margin-top:10px;background:#2196F3;color:#fff;">Suggest Price</button>
+                <button id="send-request-btn" class="btn-main btn-request" style="width:100%;">Send Request / Inquiry</button>
             </div>
-
         `;
 
-
-        /* =========================================
-           SUGGEST PRICE BUTTON
-        ========================================= */
-
-        const suggestBtn =
-            document.getElementById("suggest-price-btn");
-
-
+        const suggestBtn = document.getElementById("suggest-price-btn");
         if (suggestBtn) {
-
             suggestBtn.onclick = async function(e) {
-
                 e.preventDefault();
-
-
-                const {
-                    data: { user },
-                    error: userError
-                } =
-                    await window.supabaseClient.auth.getUser();
-
-
-                /* NOT LOGGED IN */
-
+                const { data: { user }, error: userError } = await window.supabaseClient.auth.getUser();
                 if (userError || !user) {
-
-                    document.getElementById("login-modal")
-                        .style.display = "flex";
-
+                    document.getElementById("login-modal").style.display = "flex";
                     return;
                 }
-
-
-                /* SELLER */
-
                 if (user.id === window.currentSellerId) {
-
-                    alert(
-                        "Nuk mund t'i bësh ofertë produktit tënd!"
-                    );
-
+                    alert("Nuk mund t'i bësh ofertë produktit tënd!");
                     return;
                 }
-
-
-                /* CLEAR OLD INPUT */
-
-                document.getElementById(
-                    "offer-price-input"
-                ).value = "";
-
-                document.getElementById(
-                    "offer-error"
-                ).textContent = "";
-
-
-                /* OPEN MODAL */
-
-                document.getElementById(
-                    "offer-modal"
-                ).style.display = "flex";
-
+                document.getElementById("offer-price-input").value = "";
+                document.getElementById("offer-error").textContent = "";
+                document.getElementById("offer-modal").style.display = "flex";
             };
-
         }
 
-
-        /* =========================================
-           BUY PAYPAL
-        ========================================= */
-
-        const buyBtn =
-            document.getElementById("buy-bracelet-btn");
-
-
+        const buyBtn = document.getElementById("buy-bracelet-btn");
         if (buyBtn) {
-
             buyBtn.onclick = async function(e) {
-
                 e.preventDefault();
-
                 buyBtn.innerText = "Loading PayPal...";
-
-
                 try {
-
                     const response = await fetch(
                         "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
                         {
                             method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
+                            headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({
-
-                                product_id: productId,
-
+                                product_id: activeProductId,
                                 price: data.price,
-
-                                product_name:
-                                    (data.brand || "Strap") +
-                                    " " +
-                                    (data.model || "")
-
+                                product_name: (data.brand || "Strap") + " " + (data.model || "")
                             })
                         }
                     );
-
-
-                    const result =
-                        await response.json();
-
-
+                    const result = await response.json();
                     if (result.paypal_link) {
-
-                        window.location.href =
-                            result.paypal_link;
-
+                        window.location.href = result.paypal_link;
                     } else {
-
-                        alert(
-                            "PayPal link nuk u krijua"
-                        );
-
-                        buyBtn.innerText =
-                            "Buy Now (PayPal)";
+                        alert("PayPal link nuk u krijua");
+                        buyBtn.innerText = "Buy Now (PayPal)";
                     }
-
-
-                } catch(error) {
-
-                    console.error(error);
-
+                } catch (err) {
+                    console.error(err);
                     alert("Gabim me PayPal");
-
-                    buyBtn.innerText =
-                        "Buy Now (PayPal)";
+                    buyBtn.innerText = "Buy Now (PayPal)";
                 }
-
             };
-
         }
 
-
-        /* =========================================
-           REQUEST / INQUIRY
-        ========================================= */
-
-        const requestBtn =
-            document.getElementById("send-request-btn");
-
-
+        const requestBtn = document.getElementById("send-request-btn");
         if (requestBtn) {
-
             requestBtn.onclick = function() {
-
                 window.location.href =
-                    `messages.html?product_id=${productId}&title=` +
-                    encodeURIComponent(
-                        (data.brand || "Strap") +
-                        " " +
-                        (data.model || "")
-                    );
-
+                    `messages.html?product_id=${activeProductId}&title=` +
+                    encodeURIComponent((data.brand || "Strap") + " " + (data.model || ""));
             };
-
         }
+    } else {
+        container.innerHTML = `
+            <h2 style="padding-left:0;font-size:14px;">Bracelets & Straps Collection</h2>
+            <div id="straps-container" class="grid">Loading...</div>
+        `;
 
-    }
+        const gridContainer = document.getElementById("straps-container");
+        const { data, error } = await window.supabaseClient
+            .from("bracelets_straps")
+            .select("*");
 
-
-    /* =========================================
-       ALL BRACELETS / STRAPS
-    ========================================= */
-
-    else {
-
-        container.innerHTML =
-            `
-            <h2 style="
-                padding-left:0;
-                font-size:10px;
-            ">
-                Bracelets & Straps Collection
-            </h2>
-
-            <div
-                id="straps-container"
-                class="grid">
-                Loading...
-            </div>
-            `;
-
-
-        const gridContainer =
-            document.getElementById(
-                "straps-container"
-            );
-
-
-        const {
-            data,
-            error
-        } =
-            await window.supabaseClient
-                .from("bracelets_straps")
-                .select("*");
-
-
-        if (
-            error ||
-            !data ||
-            data.length === 0
-        ) {
-
-            gridContainer.innerHTML =
-                "No bracelets or straps available.";
-
+        if (error || !data || data.length === 0) {
+            gridContainer.innerHTML = "No bracelets or straps available.";
             return;
         }
 
+        gridContainer.innerHTML = data.map(item => {
+            let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
+            let primaryImage = "";
 
-        gridContainer.innerHTML =
-            data.map(item => {
-
-                let imgUrl =
-                    "https://placeholder.co/600x400/222/fff?text=No+Image";
-
-                let primaryImage = "";
-
-
-                if (item.image_url) {
-
-                    if (
-                        Array.isArray(item.image_url) &&
-                        item.image_url.length > 0
-                    ) {
-
-                        primaryImage =
-                            item.image_url[0];
-
+            if (item.image_url) {
+                if (Array.isArray(item.image_url) && item.image_url.length > 0) {
+                    primaryImage = item.image_url[0];
+                } else if (typeof item.image_url === "string") {
+                    try {
+                        const parsed = JSON.parse(item.image_url);
+                        primaryImage = Array.isArray(parsed) ? parsed[0] : item.image_url;
+                    } catch (e) {
+                        primaryImage = item.image_url;
                     }
-
-                    else if (
-                        typeof item.image_url === "string"
-                    ) {
-
-                        try {
-
-                            let parsed =
-                                JSON.parse(
-                                    item.image_url
-                                );
-
-                            primaryImage =
-                                Array.isArray(parsed)
-                                    ? parsed[0]
-                                    : item.image_url;
-
-                        } catch(e) {
-
-                            primaryImage =
-                                item.image_url;
-                        }
-
-                    }
-
                 }
+            }
 
+            if (primaryImage && primaryImage !== "null" && primaryImage !== "") {
+                imgUrl = primaryImage.startsWith("http")
+                    ? primaryImage
+                    : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
+            }
 
-                if (
-                    primaryImage &&
-                    primaryImage !== "null" &&
-                    primaryImage !== ""
-                ) {
-
-                    imgUrl =
-                        primaryImage.startsWith("http")
-                            ? primaryImage
-                            : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" +
-                              primaryImage;
-                }
-
-
-                return `
-
-                    <div
-                        class="card"
-                        onclick="
-                            window.location.href=
-                            'product-bracelets-straps.html?id=${item.id}'
-                        "
-                    >
-
-                        <img
-                            src="${imgUrl}"
-                            alt="${item.brand || "Strap"}"
-                        >
-
-                        <!-- Brand -->
-                        <h3 style="
-                            margin:10px 0 3px 0;
-                            font-size:16px;
-                            color: #fff;
-                        ">
-                            ${item.brand || "Bracelet / Strap"}
-                        </h3>
-
-                        <!-- Type & Reference -->
-                        <p style="
-                            color:#aaa;
-                            font-size:12px;
-                            margin:0 0 10px 0;
-                        ">
-                            ${item.type || ""} ${item.reference ? '• Ref. ' + item.reference : ''}
-                        </p>
-
-                        <!-- Price -->
-                        <div
-                            class="price"
-                            style="
-                                font-weight:bold;
-                                color:gold;
-                                font-size:15px;
-                                margin-bottom:10px;
-                            "
-                        >
-                            ${
-                                item.price
-                                    ? item.price + " €"
-                                    : "Contact for price"
-                            }
-                        </div>
-
-                        <button
-                            class="btn-main btn-buy"
-                            style="
-                                width:100%;
-                                padding:8px;
-                                font-size:13px;
-                            "
-                            onclick="
-                                event.stopPropagation();
-                                window.location.href=
-                                'product-bracelets-straps.html?id=${item.id}'
-                            "
-                        >
-                            View Details
-                        </button>
-
+            return `
+                <div class="card" onclick="window.location.href='product-bracelets-straps.html?id=${item.id}'">
+                    <img src="${imgUrl}" alt="${item.brand || "Strap"}">
+                    <h3 style="margin:10px 0 3px 0;font-size:16px;color:#fff;">${item.brand || "Bracelet / Strap"}</h3>
+                    <p style="color:#aaa;font-size:12px;margin:0 0 10px 0;">
+                        ${item.type || ""} ${item.reference ? '• Ref. ' + item.reference : ''}
+                    </p>
+                    <div class="price" style="font-weight:bold;color:gold;font-size:15px;margin-bottom:10px;">
+                        ${item.price ? item.price + " €" : "Contact for price"}
                     </div>
-
-                `;
-
-            }).join("");
-
+                    <button
+                        class="btn-main btn-buy"
+                        style="width:100%;padding:8px;font-size:13px;"
+                        onclick="event.stopPropagation(); window.location.href='product-bracelets-straps.html?id=${item.id}'"
+                    >
+                        View Details
+                    </button>
+                </div>
+            `;
+        }).join("");
     }
-
 });
 
-
-/* =========================================
-   CLOSE OFFER MODAL
-========================================= */
-
 function closeOfferModal() {
-
-    document.getElementById(
-        "offer-modal"
-    ).style.display = "none";
-
-
-    document.getElementById(
-        "offer-price-input"
-    ).value = "";
-
-
-    document.getElementById(
-        "offer-error"
-    ).textContent = "";
-
+    document.getElementById("offer-modal").style.display = "none";
+    document.getElementById("offer-price-input").value = "";
+    document.getElementById("offer-error").textContent = "";
 }
-
-
-/* =========================================
-   SUBMIT OFFER
-========================================= */
 
 async function submitOffer() {
+    const input = document.getElementById("offer-price-input");
+    const errorEl = document.getElementById("offer-error");
+    const offerPrice = parseFloat(input.value);
 
-    const input =
-        document.getElementById(
-            "offer-price-input"
-        );
-
-    const errorEl =
-        document.getElementById(
-            "offer-error"
-        );
-
-
-    const offerPrice =
-        parseFloat(input.value);
-
-
-    /* INVALID PRICE */
-
-    if (
-        !offerPrice ||
-        offerPrice <= 0
-    ) {
-
-        errorEl.style.color =
-            "#ff4444";
-
-        errorEl.textContent =
-            "Ju lutem vendosni një çmim të vlefshëm.";
-
+    if (!offerPrice || offerPrice <= 0) {
+        errorEl.style.color = "#ff4444";
+        errorEl.textContent = "Ju lutem vendosni një çmim të vlefshëm.";
         return;
     }
-
-
-    /* LOADING */
 
     errorEl.style.color = "#fff";
+    errorEl.textContent = "Duke dërguar ofertën...";
 
-    errorEl.textContent =
-        "Duke dërguar ofertën...";
-
-
-    /* GET USER */
-
-    const {
-        data: { user },
-        error: userError
-    } =
-        await window.supabaseClient.auth.getUser();
-
-
-    if (
-        userError ||
-        !user
-    ) {
-
-        errorEl.style.color =
-            "#ff4444";
-
-        errorEl.textContent =
-            "Duhet të jeni i loguar!";
-
+    const { data: { user }, error: userError } = await window.supabaseClient.auth.getUser();
+    if (userError || !user) {
+        errorEl.style.color = "#ff4444";
+        errorEl.textContent = "Duhet të jeni i identifikuar.";
         return;
     }
 
+    const { error: insertError } = await window.supabaseClient
+        .from("offers")
+        .insert({
+            product_id: activeProductId,
+            buyer_id: user.id,
+            seller_id: window.currentSellerId,
+            offered_price: offerPrice,
+            status: "pending"
+        });
 
-    /* SELLER CANNOT OFFER */
-
-    if (
-        user.id ===
-        window.currentSellerId
-    ) {
-
-        errorEl.style.color =
-            "#ff4444";
-
-        errorEl.textContent =
-            "Nuk mund t'i bësh ofertë produktit tënd!";
-
+    if (insertError) {
+        console.error(insertError);
+        errorEl.style.color = "#ff4444";
+        errorEl.textContent = "Gabim gjatë dërgimit të ofertës.";
         return;
     }
 
-
-    /* =========================================
-       INSERT OFFER
-    ========================================= */
-
-    const {
-        data,
-        error
-    } =
-        await window.supabaseClient
-            .from("offers")
-            .insert({
-
-                product_id:
-                    productId,
-
-                buyer_id:
-                    user.id,
-
-                seller_id:
-                    window.currentSellerId,
-
-                offered_price:
-                    offerPrice,
-
-                status:
-                    "pending"
-
-            })
-            .select()
-            .single();
-
-
-    /* ERROR */
-
-    if (error) {
-
-        console.error(
-            "OFFER INSERT ERROR:",
-            error
-        );
-
-        errorEl.style.color =
-            "#ff4444";
-
-        errorEl.textContent =
-            "Gabim gjatë dërgimit: " +
-            error.message;
-
-        return;
-    }
-
-
-    /* SUCCESS */
-
-    console.log(
-        "OFFER CREATED:",
-        data
-    );
-
-
-    errorEl.style.color =
-        "#25D366";
-
-    errorEl.textContent =
-        "Oferta u dërgua me sukses!";
-
-
-    /* CLOSE AFTER 1.5 SEC */
-
-    setTimeout(() => {
-
-        closeOfferModal();
-
-    }, 1500);
-
+    errorEl.style.color = "#4CAF50";
+    errorEl.textContent = "Oferta u dërgua me sukses!";
+    setTimeout(closeOfferModal, 1000);
 }
-
-
-/* =========================================
-   CHANGE IMAGE
-========================================= */
-
-function changeImage(direction) {
-
-    if (
-        currentImages.length <= 1
-    ) {
-        return;
-    }
-
-
-    currentImgIndex += direction;
-
-
-    if (
-        currentImgIndex >=
-        currentImages.length
-    ) {
-
-        currentImgIndex = 0;
-
-    }
-
-
-    if (
-        currentImgIndex < 0
-    ) {
-
-        currentImgIndex =
-            currentImages.length - 1;
-
-    }
-
-
-    document.getElementById(
-        "main-photo"
-    ).src =
-        currentImages[
-            currentImgIndex
-        ];
-
-
-    document.getElementById(
-        "photo-count"
-    ).innerText =
-        (
-            currentImgIndex + 1
-        ) +
-        " / " +
-        currentImages.length;
-
-}
-
-
-/* =========================================
-   MENU
-========================================= */
-
-function checkMenu(event) {
-
-    if (event) {
-        event.preventDefault();
-    }
-
-}
-
-
-/* =========================================
-   BOTTOM NAV HIDE ON SCROLL
-========================================= */
-
-let lastScrollTop = 0;
-
-const nav = document.querySelector(".bottom-nav");
-
-if (nav) {
-    window.addEventListener("scroll", () => {
-
-        const scrollTop =
-            window.pageYOffset ||
-            document.documentElement.scrollTop;
-
-        if (scrollTop > lastScrollTop && scrollTop > 50) {
-            nav.classList.add("nav-hidden");
-        } else {
-            nav.classList.remove("nav-hidden");
-        }
-
-        lastScrollTop =
-            scrollTop <= 0 ? 0 : scrollTop;
-    });
-}
-
 </script>
-
-
-<!-- =========================================
-     BOTTOM NAV
-========================================= -->
-
-<nav class="bottom-nav">
-
-    <a href="index.html">
-        Home
-    </a>
-
-    <a href="favorites.html">
-        Favs
-    </a>
-
-    <a href="messages.html">
-        Messages
-    </a>
-
-    <a href="mysales.html">
-        Sales
-    </a>
-
-    <a href="sellnow.html">
-        Sell
-    </a>
-
-    <button
-        type="button"
-        onclick="checkMenu(event)">
-        Menu
-    </button>
-
-</nav>
-
 
 </body>
 </html>

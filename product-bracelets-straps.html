@@ -21,25 +21,22 @@
       if (productId) {
         const SUPABASE_URL = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9';
-    
-        // ZGJIDHNI TABELËN SIPAS KATEGORISë: 
-        // Për shembull, nëse jeni te "parts", ndryshoni 'oras' në 'parts' ose emrin e saktë të tabelës suaj në Supabase:
-        const tableName = 'oras'; // Ose 'parts', 'bracelets_straps', etj.
 
-        fetch(${SUPABASE_URL}/rest/v1/${tableName}?id=eq.${productId}&select=brand,model,reference, {
+        // Tabela në Supabase për bracelets_straps
+        const tableName = 'bracelets_straps';
+
+        fetch(`${SUPABASE_URL}/rest/v1/${tableName}?id=eq.${productId}&select=brand,model,reference`, {
           headers: {
             'apikey': SUPABASE_ANON_KEY,
-            'Authorization': Bearer ${SUPABASE_ANON_KEY}
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
           }
         })
         .then(response => response.json())
         .then(data => {
           if (data && data.length > 0) {
             const p = data[0];
-            // Për pjesët (parts) ose rripat (straps) nëse nuk kanë model apo referencë, 
-            // mund të përshtatni fushat që shfaqen (p.sh. p.brand, p.name, etj.)
-            const productTitle = ${p.brand || ''} ${p.model || ''} - ${p.reference || ''} | Ora Swiss;
-        
+            const productTitle = `${p.brand || ''} ${p.model || ''} - ${p.reference || ''} | Ora Swiss`;
+
             // Ndryshon titullin e faqes
             document.title = productTitle.trim();
 

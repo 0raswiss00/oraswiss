@@ -125,9 +125,11 @@
     }
 
     .bottom-nav-item, .bottom-nav a, .bottom-nav button {
+        position: relative !important;
         color: #ffffff !important;
         text-decoration: none !important;
         font-size: 11px !important;
+        line-height: 1.2 !important;
         text-align: center !important;
         white-space: nowrap !important;
         flex: 1 1 0 !important;
@@ -458,15 +460,15 @@
 </div>
 
 <nav class="bottom-nav">
-    <a href="#" onclick="checkPage(event,'dashboard.html')">🏠<br>Home</a>
-    <a href="#" onclick="checkPage(event,'favorites.html')">⭐<br>Favs</a>
-    <a href="#" onclick="checkPage(event,'messages.html')" style="position: relative; display: inline-block; text-decoration: none; color: inherit;">
-        ✉️<br>messg
-        <span id="menuMessageCount" style="position: absolute; top: -5px; right: -10px; background: #ff3b30; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px; font-weight: bold; display: none;">0</span>
+    <a href="dashboard.html" onclick="checkPage(event,'dashboard.html')"><span>🏠</span><span>Home</span></a>
+    <a href="favorites.html" onclick="checkPage(event,'favorites.html')"><span>⭐</span><span>Favs</span></a>
+    <a href="messages.html" onclick="checkPage(event,'messages.html')">
+        <span>✉️</span><span>messg</span>
+        <span id="menuMessageCount" style="position: absolute; top: 2px; right: 8px; background: #ff3b30; color: white; padding: 1px 5px; border-radius: 10px; font-size: 9px; font-weight: bold; display: none;">0</span>
     </a>
-    <a href="#" onclick="checkPage(event,'mysales.html')">📦<br>Sales</a>
-    <a href="#" onclick="checkPage(event,'sellnow.html')">➕<br>Sell</a>
-    <button type="button" onclick="checkMenu(event)" id="menuBtnText">📂<br>My OraSwiss</button>  
+    <a href="mysales.html" onclick="checkPage(event,'mysales.html')"><span>📦</span><span>Sales</span></a>
+    <a href="sellnow.html" onclick="checkPage(event,'sellnow.html')"><span>➕</span><span>Sell</span></a>
+    <button type="button" onclick="checkMenu(event)" id="menuBtnText"><span>📂</span><span>My OraSwiss</span></button>  
 </nav>
 
 <div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center;z-index:99999;">
@@ -589,6 +591,18 @@
   loadUserCount();
   loadProductCount();
 
+  // Funksioni për butonat Home, Favs, messg, Sales, Sell
+  async function checkPage(event, pageUrl) {
+      event.preventDefault();
+      closeOraSwissMenu();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+          document.getElementById("loginModal").style.display = "flex";
+          return;
+      }
+      window.location.href = pageUrl;
+  }
+
   function closeOraSwissMenu() {
       const menu = document.getElementById('myOraSwissMenu');
       const menuBtn = document.getElementById('menuBtnText');
@@ -609,8 +623,8 @@
   async function checkMenu(event) {
       event.preventDefault();
       event.stopPropagation();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
           closeOraSwissMenu();
           document.getElementById("loginModal").style.display = "flex";
           return;

@@ -13,14 +13,14 @@
     gtag('config', 'G-KD2ZZ3MJYY');
   </script>
   <style>
-    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff;padding-bottom:110px !important;}
     .site-header{position:sticky;top:0;z-index:9999;background:#111}
     .nav-scroll{display:flex;gap:18px;align-items:center;overflow-x:auto;padding:6px 12px}
     .nav-scroll a {
         color: #fff;
         text-decoration: none;
         padding: 4px 8px;
-        font-size: 11px; /* ose 10px, 12px */
+        font-size: 11px;
     }
     .nav-scroll a:hover{color:gold}
     .site-title {
@@ -30,10 +30,9 @@
         font-size: 12px !important;
     }
 
-
     .grid {
         display: grid;
-        grid-template-columns: repeat(2, 1fr); /* 2 kolona në celular */
+        grid-template-columns: repeat(2, 1fr);
         gap: 15px;
         padding: 10px;
         box-sizing: border-box;
@@ -42,7 +41,7 @@
 
     @media (min-width: 768px) {
         .grid {
-            grid-template-columns: repeat(4, 1fr); /* 4 kolona në kompjuter */
+            grid-template-columns: repeat(4, 1fr);
         }
     }
 
@@ -155,36 +154,30 @@
     }
 
     @media (min-width: 1024px) {
-            .bottom-nav {
-                display: none !important;
-            }
-            .card img, .grid img {
-                width: 100% !important;
-                max-width: 100% !important;
-                height: 140px !important;
-                object-fit: cover !important;
-            }
+        .bottom-nav,
+        #myOraSwissMenu {
+            display: none !important;
         }
-        body img, .grid img, .card img, .product img, .mainimg, .product-main-image {
-            max-width: 300px !important;
-            height: auto !important;
-            display: block !important;
-            margin-left: auto !important;
-            margin-right: auto !important;
+        .card img, .grid img {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 140px !important;
+            object-fit: cover !important;
         }
     }
-    
+
+    /* Menuja del VETËM kur klikohet butoni My OraSwiss */
     #myOraSwissMenu {
         display: none;
         position: fixed;
-        bottom: 95px;
+        bottom: 85px;
         right: 15px;
-        width: 220px;
+        width: 230px;
         background: #1a1a1a;
         border-radius: 15px;
         border: 1px solid #333;
-        padding: 10px;
-        box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+        padding: 8px 10px;
+        box-shadow: 0 5px 25px rgba(0,0,0,0.8);
         z-index: 1000000;
     }
 
@@ -196,8 +189,8 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 12px 10px;
-        border-bottom: 1px solid #222;
+        padding: 11px 10px;
+        border-bottom: 1px solid #262626;
         cursor: pointer;
         color: #fff;
         text-decoration: none;
@@ -212,6 +205,7 @@
 
     .menu-item-row:hover {
         background: #282828;
+        border-radius: 8px;
     }
 
     .menu-item-left {
@@ -224,10 +218,6 @@
         color: #888;
         font-size: 14px;
         font-weight: bold;
-    }
-
-    body {
-        padding-bottom: 110px !important;
     }
 
     h2 {
@@ -271,7 +261,7 @@
     <a href="luxury.html">Luxury</a>
     <a href="vintage.html">Vintage</a>
     <a href="parts.html" class="parts-link">
-    <img src="movement-part.jpg" class="menu-icon" alt="">
+        <img src="movement-part.jpg" class="menu-icon" alt="">
         <span>Parts</span>
     </a>
     <a href="product-bracelets-straps.html">Bracelet/Strap</a>
@@ -304,7 +294,6 @@
             <span>✔️ <strong>100% Authentic Products</strong></span>
             <span>✈️ <strong>Worldwide Shipping</strong></span>
             <span>✉️ <strong>Contact us via email:</strong> <a href="mailto:oraswisssuport00gmail.com" style="color: gold; text-decoration: none;">info@oraswiss.com</a></span>
-        </div>
         </div>
     </div>
 </div>
@@ -429,6 +418,7 @@
 <h2>Parts Collection</h2>
 <div id="parts-container" class="grid">Loading...</div>  
 
+<!-- Menuja e fshehur që hapet VETËM nga butoni My OraSwiss -->
 <div id="myOraSwissMenu">
     <div class="menu-item-row" onclick="location.href='buy.html'">
         <div class="menu-item-left"><span>🛒</span> Buy</div>
@@ -495,15 +485,15 @@
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
   );
 
-    async function kontrolloLogin() {
-        const { data: { user } } = await supabase.auth.getUser();
-        const btn = document.getElementById("loginRegisterBtn");
-        if (btn) {
-            btn.style.display = user ? "none" : "block";
-        }
-    }
-    kontrolloLogin();
-  
+  async function kontrolloLogin() {
+      const { data: { user } } = await supabase.auth.getUser();
+      const btn = document.getElementById("loginRegisterBtn");
+      if (btn) {
+          btn.style.display = user ? "none" : "block";
+      }
+  }
+  kontrolloLogin();
+
   async function renderProductsData(data, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -599,6 +589,13 @@
   loadUserCount();
   loadProductCount();
 
+  function closeOraSwissMenu() {
+      const menu = document.getElementById('myOraSwissMenu');
+      const menuBtn = document.getElementById('menuBtnText');
+      if (menu) menu.classList.remove('active');
+      if (menuBtn) menuBtn.style.color = '#ffffff';
+  }
+
   function toggleMenu() {
       const menu = document.getElementById('myOraSwissMenu');
       const menuBtn = document.getElementById('menuBtnText');
@@ -608,7 +605,29 @@
           menuBtn.style.color = menu.classList.contains('active') ? 'gold' : '#ffffff';
       }
   }
-    
+
+  async function checkMenu(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+          closeOraSwissMenu();
+          document.getElementById("loginModal").style.display = "flex";
+          return;
+      }
+      toggleMenu();
+  }
+
+  // Mbyll menunë nëse klikon jashtë saj
+  document.addEventListener('click', function(e) {
+      const menu = document.getElementById('myOraSwissMenu');
+      const menuBtn = document.getElementById('menuBtnText');
+      if (!menu || !menu.classList.contains('active')) return;
+      if (!menu.contains(e.target) && (!menuBtn || !menuBtn.contains(e.target))) {
+          closeOraSwissMenu();
+      }
+  });
+
   document.getElementById("searchInput").addEventListener("input", async function(e) {
     const query = e.target.value.trim();
   
@@ -627,7 +646,6 @@
 
         if (error) throw error;
 
-        // Ndaj kërkimin sipas kategorive që të shfaqen saktë në vendet e tyre
         const luxuryList = data.filter(item => item.category === 'luxury');
         const vintageList = data.filter(item => item.category === 'vintage');
         const partsList = data.filter(item => item.category === 'parts');
@@ -640,29 +658,6 @@
         console.error("Gabim në kërkim:", err);
     }
   });
-
-  function checkMenu(event) {
-      event.preventDefault();
-
-      supabase.auth.getSession().then(({ data: { session } }) => {
-          if (!session) {
-              document.getElementById("loginModal").style.display = "flex";
-              return;
-          }
-
-          toggleMenu();
-      });
-  }
-
-  async function checkMenu(event) {
-    event.preventDefault();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-        document.getElementById("loginModal").style.display = "flex";
-        return;
-    }
-    toggleMenu();
-  }
 
   function openProduct(productId) {
     window.location.href = "product.html?id=" + productId;
@@ -707,6 +702,7 @@
   const bottomNavElement = document.querySelector('.bottom-nav');
 
   window.addEventListener('scroll', function() {
+      closeOraSwissMenu();
       let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       if (scrollTop > lastScrollTop && scrollTop > 50) {
           if (bottomNavElement) bottomNavElement.classList.add('nav-hidden');

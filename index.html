@@ -42,13 +42,24 @@
     @media (min-width: 768px) {
         .grid {
             grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            padding: 15px;
+        }
+
+        .card {
+            padding: 15px;
+        }
+
+        .card img {
+            aspect-ratio: auto;
+            height: 220px;
         }
     }
 
     .card {
         background: #111;
-        padding: 15px;
-        border-radius: 12px;
+        padding: 8px;
+        border-radius: 10px;
         border: 1px solid #333;
         display: flex;
         flex-direction: column;
@@ -57,11 +68,11 @@
 
     .card img {
         width: 100%;
-        height: 140px;
+        aspect-ratio: 1 / 1;
         object-fit: cover;
         display: block;
         border-radius: 8px;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
     }
 
     .card h3 {
@@ -159,12 +170,6 @@
         .bottom-nav,
         #myOraSwissMenu {
             display: none !important;
-        }
-        .card img, .grid img {
-            width: 100% !important;
-            max-width: 100% !important;
-            height: 140px !important;
-            object-fit: cover !important;
         }
     }
 

@@ -150,10 +150,27 @@
             }
         }
 
+        .badges-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 8px 0 6px 0;
+        }
+
+        .badge {
+            font-size: 11px;
+            padding: 3px 7px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .badge-qty { background: #1f2937; color: #60a5fa; border: 1px solid #374151; }
+        .badge-good { background: #064e3b; color: #34d399; border: 1px solid #065f46; }
+        .badge-damaged { background: #450a0a; color: #f87171; border: 1px solid #7f1d1d; }
+
         .price {
             color: gold;
             font-weight: bold;
-            margin: 8px 0;
+            margin: 8px 0 4px 0;
             font-size: 1.05em;
         }
 
@@ -177,6 +194,17 @@
             background: #282828;
             border-color: gold;
             color: gold;
+        }
+
+        .btn-edit {
+            background: #1a180d;
+            color: gold;
+            border: 1px solid #6b5916;
+            margin-top: 6px;
+        }
+
+        .btn-edit:hover {
+            background: #292512;
         }
 
         /* Menuja lundruese */
@@ -268,7 +296,7 @@
         <a href="index.html">Home</a>
         <a href="luxury.html">Luxury</a>
         <a href="vintage.html" style="color: gold;">Vintage</a>
-        <a href="parts.html">Parts</a>
+        <a href="parts.html">Movement Parts</a>
         <a href="product-bracelets-straps.html">Bracelet/Strap</a>
         <a href="service.html">Service</a>
         <a href="about.html">About</a>
@@ -334,6 +362,13 @@
 
 <script>
     let allOrasData = [];
+    let currentUserId = null;
+
+    async function checkAuthUser() {
+        if (!window.supabaseClient) return;
+        const { data } = await window.supabaseClient.auth.getSession();
+        currentUserId = data?.session?.user?.id || null;
+    }
 
     async function loadOras() {
         const container = document.getElementById("oras-container");
@@ -342,6 +377,8 @@
             container.innerHTML = "<p style='color:red;'>Gabim në lidhjen me databazën.</p>";
             return;
         }
+
+        await checkAuthUser();
 
         const { data, error } = await window.supabaseClient
             .from('oras')
@@ -398,19 +435,52 @@
                 }
             }
 
+            const qty = ora.quantity || 1;
+            const condAndWork = [
+                ora.condition || "",
+                ora.work_status || "",
+                ora.description || ""
+            ].join(" ").toLowerCase();
+
+            const isNotWorking =
+                condAndWork.includes("not working") ||
+                condAndWork.includes("not good") ||
+                condAndWork.includes("damaged") ||
+                condAndWork.includes("broken") ||
+                condAndWork.includes("repair");
+
+            const statusBadge = isNotWorking
+                ? `<span class="badge badge-damaged">Not Working / Repair</span>`
+                : `<span class="badge badge-good">Good / Working</span>`;
+
+            const canModify = Boolean(currentUserId && ora.user_id && ora.user_id === currentUserId);
+            const modifyButton = canModify
+                ? `<button type="button" class="btn-card-action btn-edit" onclick="event.stopPropagation(); window.location.href='edit.html?id=${ora.id}';">
+                       ✏️ Modify
+                   </button>`
+                : '';
+
             cardsHtml += `
             <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
                 <div>
                     <img src="${imgUrl}" alt="${ora.brand || 'Vintage Watch'}">
                     <h3 style="margin: 8px 0 2px 0; font-size: 15px; color: #fff;">${ora.brand || ''}</h3>
                     <div style="font-size: 13px; color: #ddd; font-weight: bold; margin-bottom: 2px;">${ora.model || ''}</div>
-                    <div style="font-size: 12px; color: #aaa; margin-bottom: 6px;">${ora.reference ? 'Ref. ' + ora.reference : ''}</div>
+                    <div style="font-size: 12px; color: #aaa; margin-bottom: 4px;">${ora.reference ? 'Ref. ' + ora.reference : ''}</div>
+
+                    <div class="badges-row">
+                        <span class="badge badge-qty">Qty: ${qty} pcs</span>
+                        ${statusBadge}
+                    </div>
+
                     <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
                 </div>
+
                 <div>
                     <button type="button" class="btn-card-action" onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}';">
                         View Details
                     </button>
+                    ${modifyButton}
                 </div>
             </div>`;
         });
@@ -420,7 +490,7 @@
 
     const searchInput = document.getElementById("searchInput");
     if (searchInput) {
-        searchInput.addEventListener("input", function(e) {
+        searchInput.addEventListener("input", function (e) {
             const query = e.target.value.toLowerCase().trim();
             const filtered = allOrasData.filter(ora => {
                 const brand = (ora.brand || "").toLowerCase();
@@ -430,6 +500,41 @@
                 return brand.includes(query) || model.includes(query) || reference.includes(query) || description.includes(query);
             });
             renderCards(filtered);
+        });
+    }
+
+    const photoSearchButton = document.getElementById("photoSearchButton");
+    const photoSearchInput = document.getElementById("photoSearchInput");
+    const photoSearchPreview = document.getElementById("photoSearchPreview");
+    const photoSearchImage = document.getElementById("photoSearchImage");
+    const photoSearchStatus = document.getElementById("photoSearchStatus");
+    const cancelPhotoSearch = document.getElementById("cancelPhotoSearch");
+
+    if (photoSearchButton && photoSearchInput) {
+        photoSearchButton.addEventListener("click", function (e) {
+            e.stopPropagation();
+            photoSearchInput.click();
+        });
+
+        photoSearchInput.addEventListener("change", function () {
+            const file = this.files && this.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                photoSearchImage.src = ev.target.result;
+                photoSearchPreview.style.display = "block";
+                photoSearchStatus.textContent = "Foto u ngarkua. Shkruani fjalë kyçe ose brendin në kutinë e kërkimit për të filtruar.";
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    if (cancelPhotoSearch) {
+        cancelPhotoSearch.addEventListener("click", function () {
+            if (photoSearchInput) photoSearchInput.value = "";
+            if (photoSearchPreview) photoSearchPreview.style.display = "none";
+            if (photoSearchStatus) photoSearchStatus.textContent = "";
+            renderCards(allOrasData);
         });
     }
 
@@ -443,7 +548,7 @@
         }
     }
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         const menu = document.getElementById('myOraSwissMenu');
         if (menu && menu.classList.contains('active') && !menu.contains(e.target)) {
             menu.classList.remove('active');

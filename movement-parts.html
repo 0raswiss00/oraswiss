@@ -219,6 +219,12 @@
             border: 1px solid #333;
             box-shadow: 0 5px 20px rgba(0,0,0,0.5);
             z-index: 999999;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .bottom-nav.nav-hidden {
+            transform: translateY(120px);
+            opacity: 0;
+            pointer-events: none;
         }
         .bottom-nav a, .bottom-nav button {
             color: #ffffff;
@@ -522,6 +528,18 @@
         if (menu && menu.classList.contains('active') && !menu.contains(e.target)) {
             menu.classList.remove('active');
         }
+    });
+
+    let lastScrollTop = 0;
+    const nav = document.querySelector(".bottom-nav");
+    window.addEventListener("scroll", () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTop > lastScrollTop && scrollTop > 50) {
+            nav.classList.add("nav-hidden");
+        } else {
+            nav.classList.remove("nav-hidden");
+        }
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
     });
 
     loadOras();

@@ -1,6 +1,9 @@
+<!doctype html>
+<html lang="sq">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury - Ora Swiss</title>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
     <script>
@@ -11,147 +14,213 @@
     </script>
 
     <style>
-        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff; padding-bottom: 110px; }
-        
-        .site-header { position: sticky; top: 0; z-index: 9999; background: #111; border-bottom: 1px solid #333; }
-        .nav-scroll { display: flex; gap: 18px; align-items: center; overflow-x: auto; padding: 6px 12px; }
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #000;
+            color: #fff;
+            padding-bottom: 110px;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+            background: #111;
+            border-bottom: 1px solid #333;
+        }
+
+        .nav-scroll {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            overflow-x: auto;
+            padding: 8px 12px;
+        }
+
         .nav-scroll a {
             color: #fff;
             text-decoration: none;
             padding: 4px 8px;
             font-size: 14px;
+            white-space: nowrap;
         }
+
         .nav-scroll a:hover { color: gold; }
+
         .site-title {
             font-weight: 700;
-            line-height: 1;
-            margin-right: 10px;
-            font-size: 7px !important;
+            line-height: 1.05;
+            margin-right: 6px;
+            font-size: 10px;
+            color: gold;
+            white-space: nowrap;
         }
 
-        .container-content { padding: 15px; max-width: 1200px; margin: 0 auto; }
-        
-        /* Kutia e Kërkimit */
+        .back-btn {
+            background: #1a1a1a;
+            color: #fff;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .back-btn:hover { background: #262626; }
+
+        .search-container {
+            padding: 12px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
         .search-box {
-            width: 100%;
-            padding: 12px 15px;
-            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             background: #111;
             border: 1px solid #333;
-            color: #fff;
             border-radius: 8px;
-            font-size: 15px;
-            box-sizing: border-box;
+            padding: 10px 12px;
         }
-        .search-box:focus { outline: none; border-color: gold; }
 
-        /* 1. Në telefon (Mobile-First): 2 kolona */
+        .search-box:focus-within { border-color: gold; }
+
+        .search-box input[type="text"] {
+            flex: 1;
+            min-width: 0;
+            background: transparent;
+            border: none;
+            color: #fff;
+            outline: none;
+            font-size: 14px;
+        }
+
+        /* Grid: 2 kolona në celular, 4 në kompjuter */
         .grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            padding: 10px;
-            box-sizing: border-box;
+            gap: 12px;
+            padding: 12px;
+            max-width: 1200px;
+            margin: 0 auto;
             width: 100%;
         }
 
-        /* 2. Në kompjuter (ekrane mbi 768px): 4 kolona */
-        @media (min-width: 768px) {
+        @media (min-width: 1024px) {
             .grid {
                 grid-template-columns: repeat(4, 1fr);
-                gap: 15px;
-                padding: 15px;
-            }
-
-            .card {
-                padding: 15px;
-            }
-
-            .card img {
-                aspect-ratio: auto;
-                height: 220px;
+                gap: 16px;
+                padding: 16px;
             }
         }
 
         .card {
             background: #111;
-            padding: 8px;
+            padding: 10px;
             border-radius: 10px;
             border: 1px solid #333;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            overflow: hidden;
         }
 
         .card img {
             width: 100%;
-            aspect-ratio: 1 / 1; /* E bën foton katrore që të mos pritet ora */
+            height: 150px;
             object-fit: cover;
             display: block;
             border-radius: 8px;
+            background: #181818;
         }
 
-        .price { color: gold; font-weight: bold; margin: 8px 0; font-size: 1.1em; }
+        @media (min-width: 1024px) {
+            .card img { height: 200px; }
+        }
 
-        .btn-main {
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
+        .price {
+            color: gold;
             font-weight: bold;
-            cursor: pointer;
-            font-size: 14px;
-            text-align: center;
-            display: block;
-            text-decoration: none;
+            margin: 8px 0;
+            font-size: 1.05em;
         }
-        .btn-buy { background: gold; color: #000; width: 100%; }
-        .btn-buy:hover { background: #e6c200; }
 
-        .btn-secondary {
-            background: #222;
+        .btn-card-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 8px;
+            margin-top: 6px;
+            background: #1c1c1c;
             color: #fff;
-            border: 1px solid #444;
-            margin-top: 5px;
-        }
-        .btn-secondary:hover { background: #333; }
-
-        /* Bottom Nav bar i unifikuar */
-        .bottom-nav {
-            position: fixed !important;
-            bottom: 20px !important;
-            left: 15px !important;
-            right: 15px !important;
-            width: auto !important;
-            height: 55px !important;
-            background-color: #1a1a1a !important;
-            display: flex !important;
-            justify-content: space-around !important;
-            align-items: center !important;
-            padding: 0 5px !important;
-            border-radius: 20px !important;
-            border: 1px solid #333 !important;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
-            z-index: 999999 !important;
+            font-size: 13px;
+            font-weight: bold;
+            border: 1px solid #383838;
+            border-radius: 6px;
+            cursor: pointer;
         }
 
-        .bottom-nav a, .bottom-nav button {
-            color: #ffffff !important;
-            text-decoration: none !important;
-            font-size: 10px !important;
-            text-align: center !important;
-            white-space: nowrap !important;
-            flex: 1 !important;
-            background: none !important;
-            border: none !important;
-            cursor: pointer !important;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            gap: 3px !important;
+        .btn-card-action:hover {
+            background: #282828;
+            border-color: gold;
+            color: gold;
         }
- 
+
+        /* Menuja lundruese */
+        #myOraSwissMenu {
+            display: none;
+            position: fixed;
+            bottom: 85px;
+            right: 15px;
+            width: 220px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            border: 1px solid #333;
+            padding: 8px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.6);
+            z-index: 1000000;
+        }
+
+        #myOraSwissMenu.active { display: block; }
+
+        .menu-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 11px 10px;
+            border-bottom: 1px solid #262626;
+            cursor: pointer;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .menu-item-row:last-child { border-bottom: none; }
+        .menu-item-row:hover { background: #282828; border-radius: 8px; }
+        .menu-arrow { color: #888; font-weight: bold; }
+
+        /* Bottom Nav */
         .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 15px;
+            right: 15px;
+            height: 55px;
+            background-color: #1a1a1a;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 5px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            z-index: 999999;
             transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
@@ -160,23 +229,26 @@
             opacity: 0;
             pointer-events: none;
         }
-        .bottom-nav a:hover { color: gold !important; }
 
-        .back-btn {
-            background: #111;
-            color: #fff;
-            border: 1px solid #333;
-            border-radius: 6px;
-            padding: 6px 12px;
-            font-size: 14px;
+        .bottom-nav a, .bottom-nav button {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 11px;
+            text-align: center;
+            white-space: nowrap;
+            flex: 1;
+            background: none;
+            border: none;
             cursor: pointer;
-            margin: 0 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        .back-btn:hover {
-            background: #222;
-        }
-    </style>    
+        .bottom-nav a:hover, .bottom-nav button:hover { color: gold; }
+    </style>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
     <script src="db-connect.js"></script>
     <script src="menu.js" defer></script>
@@ -186,8 +258,8 @@
 <header class="site-header">
     <nav class="nav-scroll">
         <span class="site-title">ORA<br>SWISS</span>
-        <button onclick="history.back()" class="back-btn">← Back</button>
-        <a href="index.html">Home</a> 
+        <button type="button" onclick="history.back()" class="back-btn">← Back</button>
+        <a href="index.html">Home</a>
         <a href="luxury.html" style="color: gold;">Luxury</a>
         <a href="vintage.html">Vintage</a>
         <a href="parts.html">Parts</a>
@@ -196,112 +268,79 @@
         <a href="about.html">About</a>
     </nav>
 </header>
-    
-    <!-- Kutia e Kërkimit -->
-    
 
-<div class="search-container" style="padding:10px;">
-    <div class="search-box" style="
-        display:flex;
-        align-items:center;
-        gap:8px;
-        background:#111;
-        border:1px solid #333;
-        border-radius:8px;
-        padding:10px;
-    ">
+<div class="search-container">
+    <div class="search-box">
         <span>🔍</span>
-
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Search on OraSwiss"
-            autocomplete="off"
-            style="
-                flex:1;
-                min-width:0;
-                background:transparent;
-                border:none;
-                color:#fff;
-                outline:none;
-                font-size:14px;
-            "
-        >
-
-        <input
-            type="file"
-            id="photoSearchInput"
-            accept="image/*"
-            capture="environment"
-            hidden
-        >
-
-        <button
-            type="button"
-            id="photoSearchButton"
-            aria-label="Search by photo"
-            title="Search by photo"
-            style="
-                background:none;
-                border:none;
-                cursor:pointer;
-                font-size:21px;
-            "
-        >📷</button>
+        <input type="text" id="searchInput" placeholder="Search on OraSwiss" autocomplete="off">
+        <input type="file" id="photoSearchInput" accept="image/*" capture="environment" hidden>
+        <button type="button" id="photoSearchButton" aria-label="Search by photo" title="Search by photo" style="background:none;border:none;cursor:pointer;font-size:20px;">📷</button>
     </div>
 
-    <div id="photoSearchPreview"
-         style="display:none;margin-top:10px;">
-        <img id="photoSearchImage"
-             alt="Foto për kërkim"
-             style="
-                max-width:150px;
-                max-height:150px;
-                object-fit:contain;
-                border-radius:8px;
-                border:1px solid #333;
-             ">
-
-        <div id="photoSearchStatus"
-             style="color:#aaa;font-size:13px;margin-top:6px;">
-        </div>
-
-        <button type="button"
-                id="cancelPhotoSearch"
-                style="
-                    margin-top:8px;
-                    background:#222;
-                    color:white;
-                    border:1px solid #444;
-                    padding:7px 12px;
-                    border-radius:6px;
-                    cursor:pointer;
-                ">
-            Anulo foton
-        </button>
+    <div id="photoSearchPreview" style="display:none;margin-top:10px;">
+        <img id="photoSearchImage" alt="Foto për kërkim" style="max-width:150px;max-height:150px;object-fit:contain;border-radius:8px;border:1px solid #333;">
+        <div id="photoSearchStatus" style="color:#aaa;font-size:13px;margin-top:6px;"></div>
+        <button type="button" id="cancelPhotoSearch" style="margin-top:8px;background:#222;color:white;border:1px solid #444;padding:7px 12px;border-radius:6px;cursor:pointer;">Anulo foton</button>
     </div>
 </div>
-<div id="oras-container" class="grid">
-    Duke ngarkuar koleksionin...
+
+<div id="oras-container" class="grid">Duke ngarkuar koleksionin Luxury...</div>
+
+<div id="myOraSwissMenu">
+    <div class="menu-item-row" onclick="location.href='buy.html'">
+        <span>Buy</span>
+        <span class="menu-arrow">&gt;</span>
+    </div>
+    <div class="menu-item-row" onclick="location.href='mysold.html'">
+        <span>My Sold</span>
+        <span class="menu-arrow">&gt;</span>
+    </div>
+    <div class="menu-item-row" onclick="location.href='messages.html'">
+        <span>Messages</span>
+        <span class="menu-arrow">&gt;</span>
+    </div>
+    <div class="menu-item-row" onclick="location.href='settings.html'">
+        <span>Account Settings</span>
+        <span class="menu-arrow">&gt;</span>
+    </div>
+    <div class="menu-item-row" onclick="location.href='support.html'">
+        <span>Support</span>
+        <span class="menu-arrow">&gt;</span>
+    </div>
+    <div class="menu-item-row" onclick="location.href='support-thanks.html'">
+        <span>Support Thanks</span>
+        <span class="menu-arrow">&gt;</span>
+    </div>
+    <div class="menu-item-row" onclick="location.href='info.html'">
+        <span>Info</span>
+        <span class="menu-arrow">&gt;</span>
+    </div>
 </div>
+
+<nav class="bottom-nav">
+    <a href="index.html">Home</a>
+    <a href="favorites.html">Favs</a>
+    <a href="messages.html">Messages</a>
+    <a href="mysales.html">Sales</a>
+    <a href="sellnow.html">Sell</a>
+    <button type="button" onclick="toggleLocalMenu(event)">Menu</button>
+</nav>
 
 <script>
     let allOrasData = [];
 
     async function loadOras() {
         const container = document.getElementById("oras-container");
-        
+
         if (!window.supabaseClient) {
             container.innerHTML = "<p style='color:red;'>Gabim në lidhjen me databazën.</p>";
             return;
         }
 
-        const category = 'luxury';  
-
         const { data, error } = await window.supabaseClient
             .from('oras')
             .select('*')
-            .eq('category', category);
+            .eq('category', 'luxury');
 
         if (error) {
             container.innerHTML = "<p style='color:red;'>Gabim gjatë ngarkimit: " + error.message + "</p>";
@@ -309,7 +348,7 @@
         }
 
         if (!data || data.length === 0) {
-            container.innerHTML = "<p>Nuk ka artikuj në këtë kategori.</p>";
+            container.innerHTML = "<p style='padding:10px; color:#aaa;'>Nuk ka artikuj në këtë kategori.</p>";
             return;
         }
 
@@ -319,9 +358,9 @@
 
     function renderCards(items) {
         const container = document.getElementById("oras-container");
-        
-        if (items.length === 0) {
-            container.innerHTML = "<p>Nuk u gjet asnjë orë që i përgjigjet kërkimit tuaj.</p>";
+
+        if (!items || items.length === 0) {
+            container.innerHTML = "<p style='padding:10px; color:#aaa;'>Nuk u gjet asnjë orë që i përgjigjet kërkimit tuaj.</p>";
             return;
         }
 
@@ -338,7 +377,7 @@
                     try {
                         let parsed = JSON.parse(ora.image_url);
                         primaryImage = Array.isArray(parsed) ? parsed[0] : ora.image_url;
-                    } catch(e) {
+                    } catch (e) {
                         primaryImage = ora.image_url;
                     }
                 }
@@ -357,142 +396,111 @@
             <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
                 <div>
                     <img src="${imgUrl}" alt="${ora.brand || 'Luxury Watch'}">
-                    
-                    <!-- Brand -->
-                    <h3 style="margin: 8px 0 2px 0; font-size: 16px; color: #fff;">
-                        ${ora.brand || ''}
-                    </h3>
-
-                    <!-- Model -->
-                    <div style="font-size: 14px; color: #fff; font-weight: bold; margin-bottom: 2px;">
-                        ${ora.model || ''}
-                    </div>
-
-                    <!-- Reference (Ref) -->
-                    <div style="font-size: 12px; color: #aaa; margin-bottom: 6px;">
-                        ${ora.reference ? 'Ref. ' + ora.reference : ''}
-                    </div>
-
-                    <!-- Price -->
-                    <div class="price">
-                        ${ora.price ? ora.price + ' €' : 'Contact for price'}
-                    </div>
+                    <h3 style="margin: 8px 0 2px 0; font-size: 15px; color: #fff;">${ora.brand || ''}</h3>
+                    <div style="font-size: 13px; color: #ddd; font-weight: bold; margin-bottom: 2px;">${ora.model || ''}</div>
+                    <div style="font-size: 12px; color: #aaa; margin-bottom: 6px;">${ora.reference ? 'Ref. ' + ora.reference : ''}</div>
+                    <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
                 </div>
-
                 <div>
-                    <button class="btn-card-action" 
-                        onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}';">
+                    <button type="button" class="btn-card-action" onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}';">
                         View Details
                     </button>
                 </div>
-            </div>
-            `;
+            </div>`;
         });
 
         container.innerHTML = cardsHtml;
     }
-   
-    // Funksionaliteti i kërkimit (Search live)
-    const searchInput = document.getElementById("searchInput");
 
+    const searchInput = document.getElementById("searchInput");
     if (searchInput) {
         searchInput.addEventListener("input", function(e) {
             const query = e.target.value.toLowerCase().trim();
-
             const filtered = allOrasData.filter(ora => {
                 const brand = (ora.brand || "").toLowerCase();
                 const model = (ora.model || "").toLowerCase();
+                const reference = (ora.reference || "").toLowerCase();
                 const description = (ora.description || "").toLowerCase();
-
-                return brand.includes(query) ||
-                       model.includes(query) ||
-                       description.includes(query);
+                return brand.includes(query) || model.includes(query) || reference.includes(query) || description.includes(query);
             });
-
             renderCards(filtered);
         });
     }
 
-    document.addEventListener("DOMContentLoaded", loadOras);
-
-    function checkMenu(event) {
-        event.stopPropagation();
-        if (typeof window.toggleMenu === 'function') {
+    function toggleLocalMenu(event) {
+        if (event) event.stopPropagation();
+        const menu = document.getElementById('myOraSwissMenu');
+        if (menu) {
+            menu.classList.toggle('active');
+        } else if (typeof window.toggleMenu === 'function') {
             window.toggleMenu();
-        } else {
-            alert('Menuja është duke u ngarkuar ose mungon skripta kryesore e menusë.');
         }
     }
+
+    document.addEventListener('click', function(e) {
+        const menu = document.getElementById('myOraSwissMenu');
+        if (menu && menu.classList.contains('active') && !menu.contains(e.target)) {
+            menu.classList.remove('active');
+        }
+    });
+
+    let lastScrollTop = 0;
+    const nav = document.querySelector(".bottom-nav");
+    window.addEventListener("scroll", () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTop > lastScrollTop && scrollTop > 50) {
+            nav.classList.add("nav-hidden");
+        } else {
+            nav.classList.remove("nav-hidden");
+        }
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    });
+
+    const photoInput = document.getElementById('photoSearchInput');
+    const photoButton = document.getElementById('photoSearchButton');
+    const photoPreview = document.getElementById('photoSearchPreview');
+    const photoImage = document.getElementById('photoSearchImage');
+    const photoStatus = document.getElementById('photoSearchStatus');
+    const cancelPhoto = document.getElementById('cancelPhotoSearch');
+
+    if (photoButton && photoInput) {
+        photoButton.addEventListener('click', () => {
+            photoInput.click();
+        });
+
+        photoInput.addEventListener('change', () => {
+            const file = photoInput.files?.[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                alert('Zgjidh një fotografi të vlefshme.');
+                photoInput.value = '';
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                alert('Fotografia duhet të jetë maksimumi 10 MB.');
+                photoInput.value = '';
+                return;
+            }
+
+            photoImage.src = URL.createObjectURL(file);
+            photoPreview.style.display = 'block';
+            photoStatus.textContent = 'Fotoja u zgjodh. Kërkimi vizual kërkon lidhjen me shërbimin AI.';
+        });
+    }
+
+    if (cancelPhoto) {
+        cancelPhoto.addEventListener('click', () => {
+            photoInput.value = '';
+            photoImage.removeAttribute('src');
+            photoPreview.style.display = 'none';
+            photoStatus.textContent = '';
+        });
+    }
+
+    loadOras();
 </script>
 
-<nav class="bottom-nav">
-    <a href="index.html">Home</a>
-    <a href="favorites.html">Favs</a>
-    <a href="messages.html">Messages</a>
-    <a href="mysales.html">Sales</a>
-    <a href="sellnow.html">Sell</a>
-    <button type="button" onclick="checkMenu(event)">Menu</button>
-</nav>
-<script>
-let lastScrollTop = 0;
-const nav = document.querySelector(".bottom-nav");
-
-window.addEventListener("scroll", () => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-    if (scrollTop > lastScrollTop && scrollTop > 50) {
-        // Kur zbret poshtë
-        nav.classList.add("nav-hidden");
-    } else {
-        // Kur ngjitet lart
-        nav.classList.remove("nav-hidden");
-    }
-
-    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-});
-
-
-
-const photoInput = document.getElementById('photoSearchInput');
-const photoButton = document.getElementById('photoSearchButton');
-const photoPreview = document.getElementById('photoSearchPreview');
-const photoImage = document.getElementById('photoSearchImage');
-const photoStatus = document.getElementById('photoSearchStatus');
-const cancelPhoto = document.getElementById('cancelPhotoSearch');
-
-photoButton.addEventListener('click', () => {
-    photoInput.click();
-});
-
-photoInput.addEventListener('change', () => {
-    const file = photoInput.files?.[0];
-    if (!file) return;
-
-    if (!file.type.startsWith('image/')) {
-        alert('Zgjidh një fotografi të vlefshme.');
-        photoInput.value = '';
-        return;
-    }
-
-    if (file.size > 10 * 1024 * 1024) {
-        alert('Fotografia duhet të jetë maksimumi 10 MB.');
-        photoInput.value = '';
-        return;
-    }
-
-    photoImage.src = URL.createObjectURL(file);
-    photoPreview.style.display = 'block';
-    photoStatus.textContent =
-        'Fotoja u zgjodh. Kërkimi vizual kërkon lidhjen me shërbimin AI.';
-});
-
-cancelPhoto.addEventListener('click', () => {
-    photoInput.value = '';
-    photoImage.removeAttribute('src');
-    photoPreview.style.display = 'none';
-    photoStatus.textContent = '';
-});
-    
-</script>    
 </body>
 </html>

@@ -2,53 +2,138 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>myOraSwiss - Dashboard</title>
     <style>
+        * { box-sizing: border-box; }
+
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; 
             background: #000; 
             color: #fff; 
             padding: 15px; 
             padding-top: 15px; 
-            padding-bottom: 120px; 
+            padding-bottom: 105px; 
             margin: 0;
         }
+
         .search-container {
-             margin-bottom: 20px;
-             width: 100%;
-         }
+            margin-bottom: 20px;
+            width: 100%;
+        }
 
-         .search-box {
-             display: flex;
-             align-items: center;
-             background: #111;
-             border: 1px solid #333;
-             border-radius: 15px;
-             padding: 3px 7px;
-             height: 25px;
-         }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 3px 10px;
+            height: 36px;
+        }
 
-         .search-box input {
-             background: transparent;
-             border: none;
-             color: #fff;
-             outline: none;
-             width: 100%;
-             font-size: 17px;
-             margin-left: 12px;
-         }
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            outline: none;
+            width: 100%;
+            font-size: 15px;
+            margin-left: 10px;
+        }
 
-         .search-icon {
-             font-size: 20px;
-         }
+        .search-icon {
+            font-size: 18px;
+        }
 
-         .camera-icon {
-             background: none;
-             border: none;
-             cursor: pointer;
-             font-size: 18px;
-         }
-    
+        .camera-icon {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* Rrjeta e artikujve: 2 në celular, 4 në kompjuter */
+        #myWatchesList {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            list-style: none !important;
+            width: 100% !important;
+        }
+
+        @media (min-width: 768px) {
+            #myWatchesList {
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 16px !important;
+            }
+        }
+
+        .watch-card {
+            background: #111 !important;
+            border: 1px solid #333 !important;
+            padding: 10px !important;
+            border-radius: 12px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            list-style: none !important;
+            min-height: 100% !important;
+        }
+
+        .watch-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .watch-card img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            height: auto;
+            object-fit: cover;
+            border-radius: 8px;
+            display: block;
+            background: #181818;
+            margin-bottom: 8px;
+        }
+
+        @media (min-width: 1024px) {
+            .watch-card {
+                padding: 12px !important;
+            }
+
+            .watch-card img {
+                aspect-ratio: auto;
+                height: 160px;
+            }
+        }
+
+        .watch-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .watch-ref {
+            font-size: 12px;
+            color: #bbb;
+            margin-bottom: 6px;
+        }
+
+        .watch-price {
+            font-size: 15px;
+            font-weight: bold;
+            color: gold;
+            margin-top: auto;
+        }
+
         .my-oraswiss-menu {
             display: none;
             position: fixed;
@@ -82,109 +167,59 @@
             border-bottom: none; 
         }
 
-        /* =========================
-           BOTTOM NAV - LART
-        ========================= */
         .bottom-nav {
             position: fixed !important;
             bottom: 20px !important;
             top: auto !important;
-
             left: 50% !important;
             right: auto !important;
-
             transform: translateX(-50%) !important;
-
             width: calc(100% - 20px) !important;
             max-width: 1200px !important;
-
             height: 65px !important;
-
             background-color: #1a1a1a !important;
-
             display: flex !important;
             justify-content: flex-start !important;
             align-items: center !important;
-
-            box-sizing: border-box !important;
             padding: 0 10px !important;
-
             border-radius: 20px !important;
             border: 1px solid #333 !important;
-
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5) !important;
-
             z-index: 999999 !important;
-
-            /* SCROLL MAJTAS-DJATHTAS */
             overflow-x: auto !important;
             overflow-y: hidden !important;
-
             white-space: nowrap !important;
-
             opacity: 1 !important;
-
-            transition:
-                transform 0.3s ease-in-out,
-                opacity 0.3s ease-in-out !important;
-
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
             scrollbar-width: none !important;
-
             -webkit-overflow-scrolling: touch !important;
         }
 
-        /* Fshi scrollbar-in në Chrome/Edge */
         .bottom-nav::-webkit-scrollbar {
             display: none !important;
         }
 
-
-        /* =========================
-           NAV ITEMS
-        ========================= */
-
         .bottom-nav-item,
         .bottom-nav a,
         .bottom-nav button {
-
             color: #ffffff !important;
-
             text-decoration: none !important;
-
             font-size: 14px !important;
-
             text-align: center !important;
-
             white-space: nowrap !important;
-
-            /* MOS I NGJIT / MOS I NGJESH */
             flex: 0 0 auto !important;
-
             min-width: max-content !important;
-
             background: none !important;
             border: none !important;
-
             cursor: pointer !important;
-
             display: flex !important;
             flex-direction: column !important;
-
             align-items: center !important;
             justify-content: center !important;
-
             gap: 2px !important;
-
-            /* Hapësirë mes butonave */
             padding: 0 18px !important;
-
             height: 100% !important;
         }
-
-
-        /* =========================
-           HOVER
-         ========================= */
 
         .bottom-nav a:hover,
         .bottom-nav button:hover,
@@ -192,93 +227,31 @@
             color: gold !important;
         }
 
-
-        /* =========================
-           WHEN HIDDEN
-        ========================= */
-
         .bottom-nav.nav-hidden {
-            transform:
-                translateX(-50%)
-                translateY(120px) !important;
-
+            transform: translateX(-50%) translateY(120px) !important;
             opacity: 0 !important;
-
             pointer-events: none !important;
         }
 
-
-        /* =========================
-           WATCH CARDS
-        ========================= */
-
-        .watch-card {
-
-            background: #111 !important;
-
-            margin-bottom: 20px !important;
-
-            padding: 20px !important;
-
-            border-radius: 12px !important;
-
-            display: flex !important;
-
-            align-items: center !important;
-
-            gap: 25px !important;
-
-            list-style: none !important;
-
-            min-height: 140px !important;
-        }
-
-
-        /* =========================
-           BODY
-        ========================= */
-
-        body {
-            padding-top: 0 !important;
-            padding-bottom: 105px !important;
-        }
-
-
-        /* =========================
-            DESKTOP
-        ========================= */
-
         @media (min-width: 1024px) {
-
             .bottom-nav {
-
                 bottom: 20px !important;
-
                 width: 95% !important;
                 max-width: 1200px !important;
-
                 height: 75px !important;
             }
-
 
             .bottom-nav-item,
             .bottom-nav a,
             .bottom-nav button {
-
                 font-size: 16px !important;
-
                 padding-left: 22px !important;
                 padding-right: 22px !important;
             }
 
-
             .bottom-nav.nav-hidden {
-
-                transform:
-                    translateX(-50%)
-                    translateY(120px) !important;
+                transform: translateX(-50%) translateY(120px) !important;
             }
-
 
             body {
                 padding-bottom: 115px !important;
@@ -286,20 +259,20 @@
         }
     </style>
 </head>
-<body style="margin: 0; padding-bottom: 90px; background-color: #0b0b0b; color: #fff;">
+<body style="margin: 0; padding-bottom: 90px; background-color: #000; color: #fff;">
 
     <div class="search-container">
         <div class="search-box">
             <span class="search-icon">🔍</span>
             <input type="text" id="searchInput" placeholder="Search on OraSwiss">
-            <button class="camera-icon" onclick="alert('Funksioni për foto së shpejti!')">📷</button>
+            <button type="button" class="camera-icon" onclick="alert('Funksioni për foto së shpejti!')">📷</button>
         </div>
     </div>
 
     <!-- Seksioni i artikujve të mi -->
     <div style="margin-bottom: 20px;">
-        <h2 style="font-size:16px;">Artikujt e mi</h2>
-        <ul id="myWatchesList" style="padding: 0; margin: 0;"></ul>
+        <h2 style="font-size:16px; color: gold; margin: 0 0 12px 0;">Artikujt e mi</h2>
+        <ul id="myWatchesList"></ul>
     </div>
     
     <!-- Menuja e My OraSwiss me butonin e saktë të mesazheve -->
@@ -351,15 +324,46 @@
     }
 
     protectPage();
-  
-   async function ngarkoArtikujt() {
+
+    function resolveImageUrl(imageField) {
+        let primaryImg = "";
+        if (imageField) {
+            if (Array.isArray(imageField) && imageField.length > 0) {
+                primaryImg = imageField[0];
+            } else if (typeof imageField === "string") {
+                try {
+                    const parsed = JSON.parse(imageField);
+                    primaryImg = Array.isArray(parsed) ? parsed[0] : imageField;
+                } catch (e) {
+                    primaryImg = imageField;
+                }
+            }
+        }
+
+        if (primaryImg && primaryImg !== "null" && primaryImg !== "") {
+            return primaryImg.startsWith("http")
+                ? primaryImg
+                : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImg;
+        }
+        return "https://placeholder.co/600x400/222/fff?text=No+Image";
+    }
+
+    function getRefLabel(item) {
+        const isMovementPart = ["parts", "movement parts", "part"].includes((item.category || "").toLowerCase());
+        if (isMovementPart) {
+            return item.caliber ? `Cal: ${item.caliber}` : (item.reference ? `Ref. ${item.reference}` : "Ref. /");
+        }
+        return item.reference ? `Ref. ${item.reference}` : "Ref. /";
+    }
+
+    async function ngarkoArtikujt() {
         const lista = document.getElementById("myWatchesList");
         if (!lista) return;
-        lista.innerHTML = "<li>Po ngarkojmë artikujt...</li>";
+        lista.innerHTML = "<li style='grid-column: 1 / -1; color:#aaa;'>Po ngarkojmë artikujt...</li>";
 
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
-            lista.innerHTML = "<li>Duhet të logoheni!</li>";
+            lista.innerHTML = "<li style='grid-column: 1 / -1; color:#aaa;'>Duhet të logoheni!</li>";
             return;
         }
 
@@ -374,39 +378,33 @@
             .eq('user_id', user.id);
 
         if (errorW || errorS) {
-            lista.innerHTML = "<li>Gabim gjatë lidhjes me databazën.</li>";
+            lista.innerHTML = "<li style='grid-column: 1 / -1; color:#f87171;'>Gabim gjatë lidhjes me databazën.</li>";
             return;
         }
 
-        const teGjitha = [...(watches || []), ...(straps || [])];
+        const teGjitha = [
+            ...(watches || []).map(item => ({ ...item, isStrap: false })),
+            ...(straps || []).map(item => ({ ...item, isStrap: true }))
+        ];
 
         lista.innerHTML = "";
         if (teGjitha.length === 0) {
-            lista.innerHTML = "<li>Nuk keni asnjë artikull në shitje.</li>";
+            lista.innerHTML = "<li style='grid-column: 1 / -1; color:#aaa;'>Nuk keni asnjë artikull në shitje.</li>";
         } else {
             teGjitha.forEach(item => {
-                const isStrap = straps && straps.some(s => s.id === item.id);
-                
-                // Këtu tani përdor product.html për orët
-                const detailPage = isStrap ? 'product-bracelets-straps.html' : 'product.html';
-                
-                let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-                if (item.image_url) {
-                    let primaryImg = Array.isArray(item.image_url) ? item.image_url[0] : item.image_url;
-                    if (primaryImg && primaryImg !== 'null' && primaryImg !== '') {
-                        imgUrl = primaryImg.startsWith('http') ? primaryImg : "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImg;
-                    }
-                }
+                const detailPage = item.isStrap ? 'product-bracelets-straps.html' : 'product.html';
+                const imgUrl = resolveImageUrl(item.image_url);
+                const refText = getRefLabel(item);
+                const priceText = item.price ? `${item.price} €` : "Contact for price";
 
                 const li = document.createElement("li");
                 li.className = "watch-card";
                 li.innerHTML = `
-                    <a href="${detailPage}?id=${item.id}" style="text-decoration:none; color:inherit; display:flex; align-items:center; width:100%;">
-                        <img src="${imgUrl}" alt="${item.brand || 'Artikull'}"
-                             style="width:120px; height:120px; margin-right:15px; object-fit:cover; border-radius:6px;">
-                        <div>
-                            <strong style="font-size:16px;">${item.brand || 'Artikull'}</strong> - <span style="color:gold;">${item.price || '0'} €</span>
-                        </div>
+                    <a href="${detailPage}?id=${item.id}" class="watch-card-link">
+                        <img src="${imgUrl}" alt="${item.brand || 'Artikull'}">
+                        <div class="watch-title">${item.brand || 'Artikull'} ${item.model || ''}</div>
+                        <div class="watch-ref">${refText}</div>
+                        <div class="watch-price">${priceText}</div>
                     </a>
                 `;
                 lista.appendChild(li);

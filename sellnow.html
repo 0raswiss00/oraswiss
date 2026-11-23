@@ -8,11 +8,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
-
 <title>Add New Watch</title>
-
-
 
 <style>
 
@@ -25,8 +21,6 @@ body {
     font-family:Arial, sans-serif;
 
 }
-
-
 
 form {
 
@@ -42,15 +36,11 @@ form {
 
 }
 
-
-
 h2 {
 
     text-align:center;
 
 }
-
-
 
 label {
 
@@ -63,8 +53,6 @@ label {
     color:#ccc;
 
 }
-
-
 
 input, select, textarea {
 
@@ -84,8 +72,6 @@ input, select, textarea {
 
 }
 
-
-
 .row {
 
     display:flex;
@@ -96,15 +82,11 @@ input, select, textarea {
 
 }
 
-
-
 .row > * {
 
     flex:1;
 
 }
-
-
 
 .radio-row {
 
@@ -116,8 +98,6 @@ input, select, textarea {
 
 }
 
-
-
 .radio-row label {
 
     display:flex;
@@ -128,15 +108,11 @@ input, select, textarea {
 
 }
 
-
-
 .radio-row input {
 
     width:auto;
 
 }
-
-
 
 .checkbox-row {
     display:flex;
@@ -145,15 +121,11 @@ input, select, textarea {
     margin-top:15px;
 }
 
-
-
 .checkbox-row label {
     display:flex;
     flex-direction:column;
     gap:5px;
 }
-    
-
 
 button {
 
@@ -177,15 +149,31 @@ button {
 
 }
 
-
-
 button:hover {
 
     opacity:.8;
 
 }
 
+.movement-preset-box {
+    background:#151515;
+    border:1px solid #c9a227;
+    border-radius:8px;
+    padding:14px;
+    margin-top:14px;
+}
 
+.btn-quick-mp {
+    width:auto;
+    margin-top:10px;
+    padding:8px 12px;
+    font-size:13px;
+    font-weight:bold;
+    background:#242424;
+    color:#ffd900;
+    border:1px solid #c9a227;
+    border-radius:6px;
+}
 
 @media(max-width:600px){
 
@@ -199,15 +187,9 @@ button:hover {
 
 </style>
 
-
-
 </head>
 
-
-
 <body>
-
-
 
 <div style="display: flex; align-items: center; justify-content: space-between; padding: 5px 0; margin-bottom: 15px;">
 
@@ -233,7 +215,7 @@ button:hover {
 
 </div>
 
-<div>       <!-- Titulli 'Add New Watch' shkon në qendër -->
+<div>
 
     <h2 style="margin: 0; font-size: 18px; color: #fff; text-align: center;">
 
@@ -241,1388 +223,664 @@ button:hover {
 
     </h2>
 
-
-
-    <!-- Ky element bosh balancon butonin për të siguruar që titulli të jetë fiks në qendër -->
-
     <div style="width: 80px;"></div>
 
 </div>
 
-
-
 <form id="sellForm">
 
+    <label>Category</label>
     <select id="category">
 
+        <option value="luxury">Luxury</option>
 
+        <option value="vintage">Vintage</option>
 
-<option value="luxury">Luxury</option>
+        <option value="parts">Part</option>
 
-<option value="vintage">Vintage</option>
+        <option value="bracelets_straps">Bracelets / Straps</option>
 
-<option value="parts">Part</option>
-
-<option value="bracelets_straps">Bracelets / Straps</option>
-
-
-
-</select>
-
-
-
-<div id="parts_category_box" style="display:none; margin-top:15px;">
-
-    <label>Part Type</label>
-
-    <select id="part_type">
-        <option value="">Select Part Type</option>
-        <option value="movement_part">1. Movement Part</option>
-        <option value="watch_case">2. Watch Case</option>
-        <option value="balance">3. Balance</option>
-        <option value="barrel">4. Barrel</option>
-        <option value="crown">5. Crown</option>
-        <option value="dial">6. Dial</option>
-        <option value="hands">7. Hands</option>
-        <option value="calendar_date">8. Calendar Date</option>
-        <option value="calendar_day_date">9. calendar_day_date</option>
-        <option value="monophase">10. Monophase</option>
-        <option value="bracelet">8. Bracelet</option>
-        <option value="crystal">9. Crystal</option>
-        <option value="push button">9. Push Button</option>
-        <option value="other">10. Other / Custom Part</option>
     </select>
 
-    <div id="custom_part_box" style="display:block; margin-top:15px;">
+    <!-- Buton i shpejtë për të kaluar direkt te Movement Parts -->
+    <button type="button" id="quickMovementPartBtn" class="btn-quick-mp" style="display:none;">
+        ⚙️ Quick Movement Part Setup (10 Calibers)
+    </button>
 
-        <label>Part Name</label>
+    <div id="parts_category_box" style="display:none; margin-top:15px;">
 
-        <input
-            id="custom_part_name"
-            type="text"
-            placeholder="Write the name of the part"
-        >
+        <label>Part Type</label>
+
+        <select id="part_type">
+            <option value="">Select Part Type</option>
+            <option value="movement_part">1. Movement Part</option>
+            <option value="watch_case">2. Watch Case</option>
+            <option value="balance">3. Balance</option>
+            <option value="barrel">4. Barrel</option>
+            <option value="crown">5. Crown</option>
+            <option value="dial">6. Dial</option>
+            <option value="hands">7. Hands</option>
+            <option value="calendar_date">8. Calendar Date</option>
+            <option value="calendar_day_date">9. Calendar Day Date</option>
+            <option value="monophase">10. Monophase</option>
+            <option value="bracelet">11. Bracelet</option>
+            <option value="crystal">12. Crystal</option>
+            <option value="push_button">13. Push Button</option>
+            <option value="other">14. Other / Custom Part</option>
+        </select>
+
+        <!-- Blloku i dedikuar për 10 kalibrat e gatshëm, pjesët, sasinë dhe gjendjen -->
+        <div id="movement_presets_box" class="movement-preset-box" style="display:none;">
+            <div style="font-weight:bold; color:#ffd900; margin-bottom:8px;">
+                Movement Caliber &amp; Part Presets
+            </div>
+
+            <label>Select Caliber (10 Ready Calibers)</label>
+            <select id="preset_caliber">
+                <option value="">-- Choose Caliber --</option>
+                <option value="Rolex 3135">Rolex 3135</option>
+                <option value="Valjoux 22">Valjoux 22</option>
+                <option value="Omega Cal. 801">Omega Cal. 801</option>
+                <option value="ETA 2892-A2">ETA 2892-A2</option>
+                <option value="Valjoux 7750">Valjoux 7750</option>
+                <option value="Omega Cal. 565">Omega Cal. 565</option>
+                <option value="Rolex 1570">Rolex 1570</option>
+                <option value="Longines 30L">Longines 30L</option>
+                <option value="Zenith 405">Zenith 405</option>
+                <option value="ETA 6497 / 6498">ETA 6497 / 6498</option>
+            </select>
+
+            <label>Select Movement Part Name</label>
+            <select id="preset_part_name">
+                <option value="">-- Choose Part Name --</option>
+                <option value="Complete Movement">Complete Movement</option>
+                <option value="Balance Staff">Balance Staff</option>
+                <option value="Balance Wheel">Balance Wheel</option>
+                <option value="Gear / Wheel">Gear / Wheel</option>
+                <option value="Mainspring">Mainspring</option>
+                <option value="Barrel">Barrel</option>
+                <option value="Winding Stem">Winding Stem</option>
+                <option value="Automatic Rotor">Automatic Rotor</option>
+                <option value="Bridge / Mainplate">Bridge / Mainplate</option>
+                <option value="Chronograph Lever / Bridge">Chronograph Lever / Bridge</option>
+            </select>
+
+            <div class="row">
+                <div>
+                    <label>Quantity (Qty)</label>
+                    <select id="preset_qty">
+                        <option value="1">1 pc</option>
+                        <option value="2">2 pcs</option>
+                        <option value="5">5 pcs</option>
+                        <option value="10">10 pcs</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Part Condition</label>
+                    <select id="preset_condition_state">
+                        <option value="Good / Working">Good / Working</option>
+                        <option value="Damaged / For Repair">Damaged / For Repair</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="custom_part_box" style="display:block; margin-top:15px;">
+
+            <label>Part Name</label>
+
+            <input
+                id="custom_part_name"
+                type="text"
+                placeholder="Write the name of the part (e.g. Balance Staff, Gear)"
+            >
+
+        </div>
 
     </div>
 
-</div>
-    
-    
+    <button id="goBracelets" type="button" style="display:none;">
+        Continue to Bracelets / Straps
+    </button>
 
-<button 
+    <div class="row">
 
-id="goBracelets"
+        <input id="brand" type="text" placeholder="Brand" required>
 
-type="button"
+        <input id="model" type="text" placeholder="Model / Part" required>
 
-style="display:none;">
+        <label>Price (€)</label>
+        <input id="price" type="number" min="0" step="1" placeholder="Price in EUR" required>
 
-Continue to Bracelets / Straps
+    </div>
 
-</button>
-
-
-
-    
-
-<div class="row">
-
-
-
-<input id="brand" type="text" placeholder="Brand" required>
-
-
-
-<input id="model" type="text" placeholder="Model" required>
-
-
-
-
-<label>Price (€)</label>
-<input id="price" type="number" min="0" step="1" placeholder="Price in EUR" required>
-    
-
-</div>
-
-
-
-
-
-<label>Condition</label>
-<select id="condition" name="condition">
-    <option value="">Select the state...</option>
-    <option value="Used">Used</option>
-    <option value="Used Good">Used Good</option>
-    <option value="Used Very Good">Used Very Good</option>
-    <option value="Used not Good">Used not Good</option>
-    <option value="Used For Repair & Spares">Used For Repair & Spares</option>
-</select>
-
-<label>Material</label>
-<input id="material" name="material" type="text" placeholder="Steel, Gold, Titanium...">
-
-
-
-    
-<label>Gender</label>
-<select id="gender">
-    <option value="">Select Gender</option>
-    <option>Men</option>
-    <option>Women</option>
-    <option>Boys</option>
-    <option>Girls</option>
-    <option>Unisex</option>
-</select>
-
-<label>Dial Color</label>
-<select id="dial_color">
-    <option value="">Select Dial Color</option>
-    <option>Black</option>
-    <option>White</option>
-    <option>Silver</option>
-    <option>Blue</option>
-    <option>Green</option>
-    <option>Red</option>
-    <option>Brown</option>
-    <option>Grey</option>
-    <option>Gold</option>
-    <option>Rose Gold</option>
-    <option>Champagne</option>
-    <option>Beige</option>
-    <option>Cream</option>
-    <option>Yellow</option>
-    <option>Orange</option>
-    <option>Purple</option>
-    <option>Pink</option>
-    <option>Turquoise</option>
-    <option>Ice Blue</option>
-    <option>Skeleton</option>
-    <option>Mother of Pearl</option>
-    <option>Meteorite</option>
-    <option>Salmon</option>
-    <option>Other</option>
-</select>
-
-
-
-
-    
-<label>Net Weight (g)</label>
-<input id="net_weight"
-       type="number"
-       step="0.01"
-       placeholder="Net weight of the item only, without packaging">
-    
-
-
-
-
-<label>
-
-Reference:
-
-</label>
-
-
-
-<input 
-
-id="reference"
-
-type="text"
-
-placeholder="Reference number">
-
-
-
-
-
-
-
-<label>
-
-Caliber:
-
-</label>
-
-
-
-<input 
-
-id="caliber"
-
-type="text"
-
-placeholder="Caliber number">
-
-
-
-
-
-
-
-<label>
-
-Frekuenz:
-
-</label>
-
-
-
-<input 
-
-id="frekuen"
-
-type="text"
-
-placeholder="Example: 28800 vph">    
-
-
-
-    
-
-
-
-<div id="case_size_box" style="display:none; margin-bottom:15px;">
-
-    <label style="display:block; margin-bottom:5px;">
-        Case Size:
-    </label>
-
-    <input 
-        id="case_size"
-        type="text"
-        placeholder="Example: 40mm or No Case"
-        style="width:100%; padding:10px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
-        
-</div>
-
-
-<div id="movement_size_box" style="display:none; margin-bottom:15px;">
-
-    <label style="display:block; margin-bottom:5px;">
-        Movement Size:
-    </label>
-
-    <input 
-        id="movement_size"
-        type="text"
-        placeholder="Example: 18mm"
-        style="width:100%; padding:10px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
-
-</div>
-
-
-
-
-
-<label>Water Resistance</label>
-
-<select id="water_resistance">
-    <option value="">Select Water Resistance</option>
-    <option>Not Water Resistant</option>
-    <option>10 m (1 ATM)</option>
-    <option>20 m (2 ATM)</option>
-    <option>30 m (3 ATM)</option>
-    <option>40 m (4 ATM)</option>
-    <option>50 m (5 ATM)</option>
-    <option>100 m (10 ATM)</option>
-    <option>150 m (15 ATM)</option>
-    <option>200 m (20 ATM)</option>
-    <option>300 m (30 ATM)</option>
-    <option>500 m (50 ATM)</option>
-    <option>1000 m (100 ATM)</option>
-    <option>Other</option>
-</select>
-
-
-
-    
-
-<label>Year</label>
-
-
-
-<input id="year" type="number">
-
-
-
-
-
-
-
-<label>Movement</label>
-
-
-
-<select id="movement">
-
-
-
-<option value="Automatic">Automatic</option>
-
-<option value="Manual">Manual</option>
-
-<option value="Quartz">Quartz</option>
-
-
-
-</select>
-
-
-
-
-
-
-
-<label>Function</label>
-
-
-
-<select id="function">
-
-
-
-<option>Date</option>
-
-<option>Chronometer</option>
-
-<option>Chronograph</option>
-
-<option>Chronograph Date</option>
-
-<option>Tourbillon</option>
-
-<option>Only time</option>
-
-<option>No Date</option>
-
-<option>Alarm</option>
-
-<option>Alarm Gmt</option>
-    
-<option>Gmt</option>
-
-    
-</select>
-
-
-
-
-
-
-
-
-
-
-
-<label style="display:flex; flex-direction:column; gap:5px;">
-    Crown
-    <select id="crown" style="width:100%; padding:8px; border-radius:6px;">
-        <option value="">Select Crown</option>
-        <option>Original</option>
-        <option>Not Original</option>
+    <label>Condition</label>
+    <select id="condition" name="condition">
+        <option value="">Select the state...</option>
+        <option value="Used">Used</option>
+        <option value="Used Good">Used Good</option>
+        <option value="Used Very Good">Used Very Good</option>
+        <option value="Used not Good">Used not Good</option>
+        <option value="Used For Repair & Spares">Used For Repair &amp; Spares</option>
     </select>
-</label>
 
-    
+    <label>Material</label>
+    <input id="material" name="material" type="text" placeholder="Steel, Gold, Titanium...">
 
-    
+    <label>Gender</label>
+    <select id="gender">
+        <option value="">Select Gender</option>
+        <option>Men</option>
+        <option>Women</option>
+        <option>Boys</option>
+        <option>Girls</option>
+        <option>Unisex</option>
+    </select>
 
-
-
-
-
-
-
-    <label style="display:flex; flex-direction:column; gap:5px;">
-    Jewels
-    <select id="jewels" style="width:100%; padding:8px; border-radius:6px;">
-        <option value="">Select Jewels</option>
-        <option>1 Jewels</option>
-        <option>2 Jewels</option>
-        <option>3 Jewels</option>
-        <option>4 Jewels</option> 
-        <option>5 Jewels</option>
-        <option>6 Jewels</option>
-        <option>7 Jewels</option>
-        <option>8 Jewels</option>
-        <option>9 Jewels</option>
-        <option>10 Jewels</option>
-        <option>11 Jewels</option>
-        <option>12 Jewels</option>
-        <option>13 Jewels</option>
-        <option>14 Jewels</option>
-        <option>15 Jewels</option>
-        <option>16 Jewels</option>
-        <option>17 Jewels</option>
-        <option>18 Jewels</option>
-        <option>19 Jewels</option>
-        <option>20 Jewels</option>
-        <option>21 Jewels</option>
-        <option>23 Jewels</option>
-        <option>24 Jewels</option>
-        <option>25 Jewels</option>
-        <option>26 Jewels</option>
-        <option>27 Jewels</option>
-        <option>28 Jewels</option>
-        <option>29 Jewels</option>
-        <option>30 Jewels</option>
-        <option>31 Jewels</option>
-        <option>32 Jewels</option>
-        <option>33 Jewels</option>
-        <option>34 Jewels</option>
-        <option>35 Jewels</option>
-        <option>36 Jewels</option>
-        <option>37 Jewels</option>
-        <option>38 Jewels</option>
-        <option>39 Jewels</option>
-        <option>40 Jewels</option>
-        <option>41 Jewels</option>
-        <option>42 Jewels</option>
-        <option>43 Jewels</option>
-        <option>44 Jewels</option>
-        <option>45 Jewels</option>
-        <option>46 Jewels</option>
-        <option>47 Jewels</option>
+    <label>Dial Color</label>
+    <select id="dial_color">
+        <option value="">Select Dial Color</option>
+        <option>Black</option>
+        <option>White</option>
+        <option>Silver</option>
+        <option>Blue</option>
+        <option>Green</option>
+        <option>Red</option>
+        <option>Brown</option>
+        <option>Grey</option>
+        <option>Gold</option>
+        <option>Rose Gold</option>
+        <option>Champagne</option>
+        <option>Beige</option>
+        <option>Cream</option>
+        <option>Yellow</option>
+        <option>Orange</option>
+        <option>Purple</option>
+        <option>Pink</option>
+        <option>Turquoise</option>
+        <option>Ice Blue</option>
+        <option>Skeleton</option>
+        <option>Mother of Pearl</option>
+        <option>Meteorite</option>
+        <option>Salmon</option>
         <option>Other</option>
     </select>
-</label>
 
+    <label>Net Weight (g)</label>
+    <input id="net_weight"
+           type="number"
+           step="0.01"
+           placeholder="Net weight of the item only, without packaging">
 
+    <label>Reference:</label>
+    <input id="reference" type="text" placeholder="Reference number">
 
+    <label>Caliber:</label>
+    <input id="caliber" type="text" placeholder="Caliber number">
 
+    <label>Frequency:</label>
+    <input id="frekuen" type="text" placeholder="Example: 28800 vph">
 
+    <div id="case_size_box" style="display:none; margin-bottom:15px;">
+        <label style="display:block; margin-bottom:5px;">Case Size:</label>
+        <input id="case_size" type="text" placeholder="Example: 40mm or No Case">
+    </div>
 
+    <div id="movement_size_box" style="display:none; margin-bottom:15px;">
+        <label style="display:block; margin-bottom:5px;">Movement Size:</label>
+        <input id="movement_size" type="text" placeholder="Example: 18mm">
+    </div>
 
+    <label>Water Resistance</label>
+    <select id="water_resistance">
+        <option value="">Select Water Resistance</option>
+        <option>Not Water Resistant</option>
+        <option>10 m (1 ATM)</option>
+        <option>20 m (2 ATM)</option>
+        <option>30 m (3 ATM)</option>
+        <option>40 m (4 ATM)</option>
+        <option>50 m (5 ATM)</option>
+        <option>100 m (10 ATM)</option>
+        <option>150 m (15 ATM)</option>
+        <option>200 m (20 ATM)</option>
+        <option>300 m (30 ATM)</option>
+        <option>500 m (50 ATM)</option>
+        <option>1000 m (100 ATM)</option>
+        <option>Other</option>
+    </select>
 
+    <label>Year</label>
+    <input id="year" type="number">
 
+    <label>Movement</label>
+    <select id="movement">
+        <option value="Automatic">Automatic</option>
+        <option value="Manual">Manual</option>
+        <option value="Quartz">Quartz</option>
+    </select>
 
-    
-<div class="checkbox-row" style="display:flex; flex-direction:column; gap:12px;">
+    <label>Function</label>
+    <select id="function">
+        <option>Date</option>
+        <option>Chronometer</option>
+        <option>Chronograph</option>
+        <option>Chronograph Date</option>
+        <option>Tourbillon</option>
+        <option>Only time</option>
+        <option>No Date</option>
+        <option>Alarm</option>
+        <option>Alarm Gmt</option>
+        <option>Gmt</option>
+    </select>
 
     <label style="display:flex; flex-direction:column; gap:5px;">
-        Service Status:
-        <select id="serviceStatus" style="width:100%; padding:8px; border-radius:6px;">
-            <option value="">Not Serviced / Unknown</option>
-            <option value="Completed">Service Completed</option>
-            <option value="Not Serviced">Not Serviced</option>
+        Crown
+        <select id="crown" style="width:100%; padding:8px; border-radius:6px;">
+            <option value="">Select Crown</option>
+            <option>Original</option>
+            <option>Not Original</option>
         </select>
     </label>
 
-
     <label style="display:flex; flex-direction:column; gap:5px;">
-        Service Date:
-        <input id="service_date" type="date" style="width:100%; padding:8px; border-radius:6px;">
-    </label>
-
-
-    <label style="display:flex; flex-direction:column; gap:5px;">
-        Box & Papers Status:
-        <select id="box_papers" style="width:100%; padding:8px; border-radius:6px;">
-            <option value="Box / Papers">Box / Papers</option>
-            <option value="Box only">Box only</option>
-            <option value="Papers only">Papers only</option>
-            <option value="No box, no papers">No box, no papers</option>
+        Jewels
+        <select id="jewels" style="width:100%; padding:8px; border-radius:6px;">
+            <option value="">Select Jewels</option>
+            <option>1 Jewels</option>
+            <option>2 Jewels</option>
+            <option>3 Jewels</option>
+            <option>4 Jewels</option>
+            <option>5 Jewels</option>
+            <option>6 Jewels</option>
+            <option>7 Jewels</option>
+            <option>8 Jewels</option>
+            <option>9 Jewels</option>
+            <option>10 Jewels</option>
+            <option>11 Jewels</option>
+            <option>12 Jewels</option>
+            <option>13 Jewels</option>
+            <option>14 Jewels</option>
+            <option>15 Jewels</option>
+            <option>16 Jewels</option>
+            <option>17 Jewels</option>
+            <option>18 Jewels</option>
+            <option>19 Jewels</option>
+            <option>20 Jewels</option>
+            <option>21 Jewels</option>
+            <option>23 Jewels</option>
+            <option>24 Jewels</option>
+            <option>25 Jewels</option>
+            <option>26 Jewels</option>
+            <option>27 Jewels</option>
+            <option>28 Jewels</option>
+            <option>29 Jewels</option>
+            <option>30 Jewels</option>
+            <option>31 Jewels</option>
+            <option>32 Jewels</option>
+            <option>33 Jewels</option>
+            <option>34 Jewels</option>
+            <option>35 Jewels</option>
+            <option>36 Jewels</option>
+            <option>37 Jewels</option>
+            <option>38 Jewels</option>
+            <option>39 Jewels</option>
+            <option>40 Jewels</option>
+            <option>41 Jewels</option>
+            <option>42 Jewels</option>
+            <option>43 Jewels</option>
+            <option>44 Jewels</option>
+            <option>45 Jewels</option>
+            <option>46 Jewels</option>
+            <option>47 Jewels</option>
+            <option>Other</option>
         </select>
     </label>
 
-</div>
-
-
-
-
-
-
-<label>Origin</label>
-
-
-
-<select id="origin">
-
-
-
-<option>Switzerland</option>
-
-<option>Other</option>
-
-
-
-</select>
-
-
-
-
-
-
-
-<label>Work Status</label>
-
-
-
-<select id="work_status">
-
-
-
-<option>Working</option>
-
-<option>Not Working</option>
-
-<option>Not Tested</option>
-
-
-
-</select>
-
-
-
-
-
-
-
-<div id="watch_fields" style="display:none;">
-
-<label>Bracelet</label>
-
-<select id="bracelet">
-
-<option>Bracelet</option>
-<option>Leather</option>
-<option>Rubber</option>
-<option>Nato</option>
-<option>only owatch</option>
-
-</select>
-
-
-<label>Glass</label>
-
-<select id="glass">
-
-<option value="">Select Glass</option>
-<option value="Sapphire">Sapphire</option>
-<option value="Mineral">Mineral</option>
-<option value="Acrylic / Hesalite">Acrylic / Hesalite</option>
-<option value="Hardlex">Hardlex</option>
-<option value="K1 Mineral">K1 Mineral</option>
-<option value="No Glass">No Glass</option>
-
-</select>
-
-</div>
-
-
-
-
-    
-
-
-
-<label>Warranty</label>
-
-
-
-<select id="warranty">
-
-
-
-<option>No Warranty</option>
-
-<option>Warranty</option>
-
-
-
-</select>
-
-
-
-
-
-<label>Warranty Months</label>
-
-<input id="warranty_months" type="number">
-
-
-
-<label style="display:flex; flex-direction:column; gap:5px;">
-Shipping Region:
-<select id="shipping_region" style="width:100%; padding:8px; border-radius:6px;">
-
-<option value="">Select Shipping Region</option>
-
-<option value="Europe">Europe</option>
-<option value="North America">North America</option>
-<option value="South America">South America</option>
-<option value="Asia">Asia</option>
-<option value="Africa">Africa</option>
-<option value="Oceania">Oceania</option>
-<option value="Antarctica">Antarctica</option>
-
-<option value="Worldwide">Worldwide Shipping</option>
-
-</select>
-</label>
-
-
-<label style="display:flex; flex-direction:column; gap:5px;">
-Shipping Time:
-<input id="shipping_time" 
-type="text" 
-placeholder="Example: Europe 3-7 days, USA 7-14 days">
-</label>
-    
-    
-
-<div class="shipping-config-group">
-
-    <!-- Select Shipping Service -->
-
-    <div class="field-wrapper">
-
-        <label for="shipping_provider">Shipping Service Type</label>
-
-        <select id="shipping_provider" name="shipping_provider">
-
-            <option value="">Select Shipping Service...</option>
-
-            <option value="Standard">Standard Shipping (Local)</option>
-
-            <option value="Express">Express Shipping</option>
-
-            <option value="DHL">DHL Express</option>
-
-            <option value="FedEx">FedEx</option>
-
-            <option value="Custom">Private Courier / Other</option>
-
-        </select>
+    <div class="checkbox-row" style="display:flex; flex-direction:column; gap:12px;">
+
+        <label style="display:flex; flex-direction:column; gap:5px;">
+            Service Status:
+            <select id="serviceStatus" style="width:100%; padding:8px; border-radius:6px;">
+                <option value="">Not Serviced / Unknown</option>
+                <option value="Completed">Service Completed</option>
+                <option value="Not Serviced">Not Serviced</option>
+            </select>
+        </label>
+
+        <label style="display:flex; flex-direction:column; gap:5px;">
+            Service Date:
+            <input id="service_date" type="date" style="width:100%; padding:8px; border-radius:6px;">
+        </label>
+
+        <label style="display:flex; flex-direction:column; gap:5px;">
+            Box &amp; Papers Status:
+            <select id="box_papers" style="width:100%; padding:8px; border-radius:6px;">
+                <option value="Box / Papers">Box / Papers</option>
+                <option value="Box only">Box only</option>
+                <option value="Papers only">Papers only</option>
+                <option value="No box, no papers">No box, no papers</option>
+            </select>
+        </label>
 
     </div>
 
+    <label>Origin</label>
+    <select id="origin">
+        <option>Switzerland</option>
+        <option>Other</option>
+    </select>
 
+    <label>Work Status</label>
+    <select id="work_status">
+        <option>Working</option>
+        <option>Not Working</option>
+        <option>Not Tested</option>
+    </select>
 
-    <!-- Shipping Time After Purchase (Free Text Input) -->
+    <div id="watch_fields" style="display:none;">
+        <label>Bracelet</label>
+        <select id="bracelet">
+            <option>Bracelet</option>
+            <option>Leather</option>
+            <option>Rubber</option>
+            <option>Nato</option>
+            <option>Only watch</option>
+        </select>
 
-    <div class="field-wrapper">
-
-        <label for="shipping_days">Shipping Time After Payment</label>
-
-        <input id="shipping_days" type="text" placeholder="Shipped within 1 to 5 days.">
-
+        <label>Glass</label>
+        <select id="glass">
+            <option value="">Select Glass</option>
+            <option value="Sapphire">Sapphire</option>
+            <option value="Mineral">Mineral</option>
+            <option value="Acrylic / Hesalite">Acrylic / Hesalite</option>
+            <option value="Hardlex">Hardlex</option>
+            <option value="K1 Mineral">K1 Mineral</option>
+            <option value="No Glass">No Glass</option>
+        </select>
     </div>
 
-</div>
+    <label>Warranty</label>
+    <select id="warranty">
+        <option>No Warranty</option>
+        <option>Warranty</option>
+    </select>
 
+    <label>Warranty Months</label>
+    <input id="warranty_months" type="number">
 
+    <label style="display:flex; flex-direction:column; gap:5px;">
+        Shipping Region:
+        <select id="shipping_region" style="width:100%; padding:8px; border-radius:6px;">
+            <option value="">Select Shipping Region</option>
+            <option value="Europe">Europe</option>
+            <option value="North America">North America</option>
+            <option value="South America">South America</option>
+            <option value="Asia">Asia</option>
+            <option value="Africa">Africa</option>
+            <option value="Oceania">Oceania</option>
+            <option value="Antarctica">Antarctica</option>
+            <option value="Worldwide">Worldwide Shipping</option>
+        </select>
+    </label>
 
-<label>Serial Number</label>
+    <label style="display:flex; flex-direction:column; gap:5px;">
+        Shipping Time:
+        <input id="shipping_time" type="text" placeholder="Example: Europe 3-7 days, USA 7-14 days">
+    </label>
 
-<input id="serial_number" type="text">
+    <div class="shipping-config-group">
+        <div class="field-wrapper">
+            <label for="shipping_provider">Shipping Service Type</label>
+            <select id="shipping_provider" name="shipping_provider">
+                <option value="">Select Shipping Service...</option>
+                <option value="Standard">Standard Shipping (Local)</option>
+                <option value="Express">Express Shipping</option>
+                <option value="DHL">DHL Express</option>
+                <option value="FedEx">FedEx</option>
+                <option value="Custom">Private Courier / Other</option>
+            </select>
+        </div>
 
+        <div class="field-wrapper">
+            <label for="shipping_days">Shipping Time After Payment</label>
+            <input id="shipping_days" type="text" placeholder="Shipped within 1 to 5 days.">
+        </div>
+    </div>
 
+    <label>Serial Number</label>
+    <input id="serial_number" type="text">
 
+    <label>PayPal Link</label>
+    <input id="paypal_link" type="text" placeholder="Generated automatically" readonly>
 
+    <label>Description</label>
+    <textarea id="description" rows="5" placeholder="Description"></textarea>
 
-<label>PayPal Link</label>
+    <label>Upload Photos</label>
+    <input id="fileInput" type="file" accept="image/*" multiple>
 
-<input id="paypal_link" type="text" placeholder="Generated automatically" readonly>
-
-    
-
-
-
-<label>Description</label>
-
-
-
-<textarea 
-
-id="description"
-
-rows="5"
-
-placeholder="Description">
-
-</textarea>
-
-
-
-
-
-
-
-<label>Upload Photos</label>
-
-
-
-<input 
-
-id="fileInput"
-
-type="file"
-
-accept="image/*"
-
-multiple>
-
-
-
-
-
-<button type="submit">
-
-Sell Now
-
-</button>
-
-
-
-
+    <button type="submit">Sell Now</button>
 
 </form>
 
-
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-
-<script src="db-connect.js"></script>    
+<script src="db-connect.js"></script>
 
 <script type="module">
 
-    
-
-import { createClient } 
-
-from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-
-
-
-
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
 const supabase = createClient(
-
-
-
-'https://gnwsrmelmeqduhhmfmoa.supabase.co',
-
-
-
-'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
-
-
-
+    'https://gnwsrmelmeqduhhmfmoa.supabase.co',
+    'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9'
 );
-
-
-
-
-
-
-
-/*
-
- Checks if the user is logged in.
-
-*/
-
-
 
 const { data: { user } } = await supabase.auth.getUser();
 
-
-
-
-
-if(!user){
-
-
-
+if (!user) {
     alert("You must be logged in!");
-
-
-
-    window.location.href="register.html";
-
-
-
+    window.location.href = "register.html";
 }
 
+function syncMovementPreset() {
+    const caliber = document.getElementById("preset_caliber")?.value || "";
+    const partName = document.getElementById("preset_part_name")?.value || "";
+    const qty = document.getElementById("preset_qty")?.value || "1";
+    const condState = document.getElementById("preset_condition_state")?.value || "Good / Working";
 
+    const caliberInput = document.getElementById("caliber");
+    const customPartInput = document.getElementById("custom_part_name");
+    const modelInput = document.getElementById("model");
+    const conditionSelect = document.getElementById("condition");
+    const descTextarea = document.getElementById("description");
 
+    if (caliber && caliberInput) caliberInput.value = caliber;
+    if (partName && customPartInput) customPartInput.value = partName;
+    if (partName && modelInput && !modelInput.value) modelInput.value = partName;
 
-
-document
-
-.getElementById("category")
-
-.addEventListener("change", function(){
-
-
-
-    const btn = document.getElementById("goBracelets");
-
-
-
-    if(this.value === "bracelets_straps"){
-
-
-
-        btn.style.display = "block";
-
-
-
-    } else {
-
-
-
-        btn.style.display = "none";
-
-
-
+    if (conditionSelect) {
+        conditionSelect.value = condState.includes("Damaged")
+            ? "Used For Repair & Spares"
+            : "Used Good";
     }
 
-
-
-});
-
-
-
-
-
-document
-
-.getElementById("goBracelets")
-
-.addEventListener("click", function(){
-
-
-
-    window.location.href = "bracelets-straps.html";
-
-
-
-});
-
-    
-
-
-
-/*
-
- Submit Form
-
-*/
-
-
-
-document
-
-.getElementById("sellForm")
-
-.addEventListener("submit", async function(e){
-
-
-
-
-
-e.preventDefault();
-
-
-
-
-
-
-
-const category = document.getElementById("category").value;
-
-
-
-if(category === "bracelets_straps"){
-
-
-
-    window.location.href = "bracelets-straps.html";
-
-
-
-    return;
-
-
-
-}
-
-
-
-
-
-    
-
-
-
-const files = document
-
-.getElementById("fileInput")
-
-.files;
-
-
-
-
-
-
-
-let imageUrls = [];
-
-
-
-
-
-
-
-/*
-
- Upload fotot në Storage
-
-*/
-
-
-
-
-
-for(let i=0; i<files.length; i++){
-
-
-
-
-
-    const file = files[i];
-
-
-
-
-
-    const fileName = 
-
-    Date.now() + "" + i + "" + file.name;
-
-
-
-
-
-
-
-    const { error: uploadError } = await supabase
-
-    .storage
-
-    .from("or-images")
-
-    .upload(fileName,file);
-
-
-
-
-
-
-
-    if(uploadError){
-
-
-
-        alert(
-            "Error uploading photo: "
-            + uploadError.message
-        );
-
-
-
-        return;
-
-
-
+    if (descTextarea && (caliber || partName)) {
+        const line = `Caliber: ${caliber || "-"} | Part: ${partName || "-"} | Qty: ${qty} pcs | Condition: ${condState}`;
+        const cleaned = descTextarea.value
+            .split("\n")
+            .filter(l => !l.startsWith("Caliber:"))
+            .join("\n")
+            .trim();
+        descTextarea.value = cleaned ? `${cleaned}\n${line}` : line;
     }
-
-
-
-
-
-
-
-    const { data:urlData } =
-
-    supabase
-
-    .storage
-
-    .from("or-images")
-
-    .getPublicUrl(fileName);
-
-
-
-
-
-
-
-    imageUrls.push(
-
-        urlData.publicUrl
-
-    );
-
-
-
-
-
 }
 
-
-
-
-
-
-
-console.log(
-
-"Fotot:",
-
-imageUrls
-
-);
-
-
-
-// Creating the watch object
-
-const price = parseInt(document.getElementById("price").value) || 0;
-
-
-
-const paypalLink =
-
-"https://www.paypal.com/paypalme/EMRI_YT/" + price;
-
-
-
-
-
-const oraData = {
-
-
-
-    user_id: user.id,
-
-
-
-    category: document.getElementById("category").value,
-
-
-
-    part_type: document.getElementById("part_type").value,
-
-
-
-    custom_part_name: document.getElementById("custom_part_name").value,
-    
-    
-    
-    brand: document.getElementById("brand").value, 
-
-
-
-    model: document.getElementById("model").value,
-
-
-
-    price: parseInt(document.getElementById("price").value) || null,
-
-
-
-    condition: document.getElementById("condition").value,
-    
-
-    
-    paypal_link: document.getElementById("paypal_link").value,
-
-    
-
-    reference: document.getElementById("reference").value,
-
-
-
-    caliber: document.getElementById("caliber").value,
-
-
-
-    gender: document.getElementById("gender").value,
-    dial_color: document.getElementById("dial_color").value,
-
-    
-    
-    frekuen: document.getElementById("frekuen").value,
-    net_weight: document.getElementById("net_weight").value
-    ? parseFloat(document.getElementById("net_weight").value)
-    : null,
-
-       
-
-    material: document.getElementById("material").value,
-
-
-
-    case_size: document.getElementById("case_size").value,
-
-
-
-    movement_size: document.getElementById("movement_size").value,
-
-
-
-    water_resistance: document.getElementById("water_resistance").value,
-
-
-    
-    year: parseInt(document.getElementById("year").value) || null,
-
-
-
-    movement: document.getElementById("movement").value,
-
-
-
-    function: document.getElementById("function").value,
-
-
-
-
-
-    crown: document.getElementById("crown").value,
-
-
-
-
-
-    jewels: document.getElementById("jewels").value,
-
-
-  
-
-    // Kthen true nëse është "Completed", përndryshe false (për shkak të tipit boolean në Supabase)
-    service: document.getElementById("serviceStatus")?.value === "Completed",
-
-
-
-    // Rreshti tjetër për datën e shërbimit
-
-    service_date: document.getElementById("service_date")?.value || null,
-
-    
-
-    box_papers: document.getElementById("box_papers")?.value || "",
-
-
-
-    origin: document.getElementById("origin").value,
-
-
-
-    work_status: document.getElementById("work_status").value,
-
-
-
-    bracelet: document.getElementById("bracelet").value,
-
-
-
-    glass: document.getElementById("glass").value,
-
-    
-
-    warranty: document.getElementById("warranty").value,
-
-
-
-    warranty_months: document.getElementById("warranty_months").value || null,
-
-
-
-    shipping_provider: document.getElementById("shipping_provider").value,
-
-    shipping_days: document.getElementById("shipping_days").value,
-
-    shipping_region: document.getElementById("shipping_region").value,
-
-    shipping_time: document.getElementById("shipping_time").value,
-    
-
-    serial_number: document.getElementById("serial_number").value,
-
-    
-
-    description: document.getElementById("description").value,
-
-
-
-    image_url: imageUrls
-
-
-
-};
-
-
-
-
-
-console.log(
-
-"Sending:",
-
-oraData
-
-);
-
-
-
-
-
-
-
-// Futja në databazën Supabase
-
-
-
-const { error } = await supabase
-
-
-
-.from("oras")
-
-
-
-.insert([oraData]);
-
-
-
-
-
-
-
-if(error){
-
-
-
-    alert(
-
-    "Error while publishing: "
-
-    + error.message
-
-    );
-
-
-
-    return;
-
-
-
-}
-
-
-
-
-
-
-
-alert(
-
-"🏆 Ora u publikua me sukses!"
-
-);
-
-
-
-
-
-window.location.href =
-
-"dashboard.html";
-
-
-
-
-
-
-
-});
-
-
-
-
-
-
-
-
-
-
-
- function updateCategoryFields() {
-
+function updateMovementPresetVisibility() {
     const category = document.getElementById("category").value;
+    const partType = document.getElementById("part_type").value;
+    const mpBox = document.getElementById("movement_presets_box");
 
+    if (category === "parts" && partType === "movement_part") {
+        mpBox.style.display = "block";
+    } else {
+        mpBox.style.display = "none";
+    }
+}
+
+function updateCategoryFields() {
+    const category = document.getElementById("category").value;
     const caseBox = document.getElementById("case_size_box");
     const movementBox = document.getElementById("movement_size_box");
     const watchFields = document.getElementById("watch_fields");
     const partsBox = document.getElementById("parts_category_box");
+    const goBraceletsBtn = document.getElementById("goBracelets");
+    const quickMpBtn = document.getElementById("quickMovementPartBtn");
 
-    // Fshiji të gjitha
     caseBox.style.display = "none";
     movementBox.style.display = "none";
     watchFields.style.display = "none";
     partsBox.style.display = "none";
+    goBraceletsBtn.style.display = "none";
+    quickMpBtn.style.display = "none";
 
-    // Luxury / Vintage
     if (category === "luxury" || category === "vintage") {
-
         caseBox.style.display = "block";
         watchFields.style.display = "block";
-
     }
 
-    // Parts
     if (category === "parts") {
-
         partsBox.style.display = "block";
         movementBox.style.display = "block";
-
+        quickMpBtn.style.display = "inline-block";
     }
 
-    console.log("CATEGORY:", category);
+    if (category === "bracelets_straps") {
+        goBraceletsBtn.style.display = "block";
+    }
+
+    updateMovementPresetVisibility();
 }
 
+document.getElementById("category").addEventListener("change", updateCategoryFields);
+document.getElementById("part_type").addEventListener("change", updateMovementPresetVisibility);
 
- document.getElementById("category")
- .addEventListener("change", updateCategoryFields);
+document.getElementById("quickMovementPartBtn").addEventListener("click", function() {
+    document.getElementById("category").value = "parts";
+    updateCategoryFields();
+    document.getElementById("part_type").value = "movement_part";
+    updateMovementPresetVisibility();
+    document.getElementById("movement_presets_box").scrollIntoView({ behavior: "smooth" });
+});
 
+["preset_caliber", "preset_part_name", "preset_qty", "preset_condition_state"].forEach(id => {
+    document.getElementById(id)?.addEventListener("change", syncMovementPreset);
+});
 
- updateCategoryFields();
+document.getElementById("goBracelets").addEventListener("click", function() {
+    window.location.href = "bracelets-straps.html";
+});
 
+document.getElementById("sellForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
 
+    const category = document.getElementById("category").value;
 
+    if (category === "bracelets_straps") {
+        window.location.href = "bracelets-straps.html";
+        return;
+    }
 
+    const files = document.getElementById("fileInput").files;
+    let imageUrls = [];
 
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileName = Date.now() + "" + i + "" + file.name;
 
+        const { error: uploadError } = await supabase
+            .storage
+            .from("or-images")
+            .upload(fileName, file);
 
+        if (uploadError) {
+            alert("Error uploading photo: " + uploadError.message);
+            return;
+        }
 
+        const { data: urlData } = supabase
+            .storage
+            .from("or-images")
+            .getPublicUrl(fileName);
 
+        imageUrls.push(urlData.publicUrl);
+    }
 
-    
+    const price = parseInt(document.getElementById("price").value) || 0;
+    const partType = document.getElementById("part_type").value;
+    const finalCategory = (category === "parts" && partType === "movement_part") ? "Movement Parts" : category;
+
+    const oraData = {
+        user_id: user.id,
+        category: finalCategory,
+        part_type: partType,
+        custom_part_name: document.getElementById("custom_part_name").value,
+        brand: document.getElementById("brand").value,
+        model: document.getElementById("model").value,
+        price: price || null,
+        condition: document.getElementById("condition").value,
+        paypal_link: document.getElementById("paypal_link").value,
+        reference: document.getElementById("reference").value,
+        caliber: document.getElementById("caliber").value,
+        gender: document.getElementById("gender").value,
+        dial_color: document.getElementById("dial_color").value,
+        frekuen: document.getElementById("frekuen").value,
+        net_weight: document.getElementById("net_weight").value
+            ? parseFloat(document.getElementById("net_weight").value)
+            : null,
+        material: document.getElementById("material").value,
+        case_size: document.getElementById("case_size").value,
+        movement_size: document.getElementById("movement_size").value,
+        water_resistance: document.getElementById("water_resistance").value,
+        year: parseInt(document.getElementById("year").value) || null,
+        movement: document.getElementById("movement").value,
+        function: document.getElementById("function").value,
+        crown: document.getElementById("crown").value,
+        jewels: document.getElementById("jewels").value,
+        service: document.getElementById("serviceStatus")?.value === "Completed",
+        service_date: document.getElementById("service_date")?.value || null,
+        box_papers: document.getElementById("box_papers")?.value || "",
+        origin: document.getElementById("origin").value,
+        work_status: document.getElementById("work_status").value,
+        bracelet: document.getElementById("bracelet").value,
+        glass: document.getElementById("glass").value,
+        warranty: document.getElementById("warranty").value,
+        warranty_months: document.getElementById("warranty_months").value || null,
+        shipping_provider: document.getElementById("shipping_provider").value,
+        shipping_days: document.getElementById("shipping_days").value,
+        shipping_region: document.getElementById("shipping_region").value,
+        shipping_time: document.getElementById("shipping_time").value,
+        serial_number: document.getElementById("serial_number").value,
+        description: document.getElementById("description").value,
+        image_url: imageUrls
+    };
+
+    const { error } = await supabase
+        .from("oras")
+        .insert([oraData]);
+
+    if (error) {
+        alert("Error while publishing: " + error.message);
+        return;
+    }
+
+    alert("Published successfully!");
+    window.location.href = "dashboard.html";
+});
+
+updateCategoryFields();
+
 </script>
 
-
-
-
-
 </body>
-
 </html>
-

@@ -50,14 +50,21 @@
             color: gold;
         }
 
-        /* Dyshe (2 kolona) në celular, 4 në kompjuter */
+        /* Rrjeta: 2 në celular, 4 horizontalisht në kompjuter */
         #salesList {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
+            gap: 12px;
             max-width: 1200px;
             margin: 0 auto;
             width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            #salesList {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
+            }
         }
 
         .sale-item {
@@ -69,6 +76,7 @@
             justify-content: space-between;
             border-radius: 10px;
             overflow: hidden;
+            position: relative;
         }
 
         .sale-item img {
@@ -83,11 +91,6 @@
         }
 
         @media (min-width: 1024px) {
-            #salesList {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 16px;
-            }
-
             .sale-item {
                 padding: 12px;
             }
@@ -98,8 +101,21 @@
             }
         }
 
-        .item-info {
+        .deal-badge {
+            display: inline-block;
+            background: gold;
+            color: #000;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 7px;
+            border-radius: 4px;
             margin-top: 8px;
+            margin-bottom: 2px;
+            width: fit-content;
+        }
+
+        .item-info {
+            margin-top: 6px;
         }
 
         .item-title {
@@ -170,6 +186,149 @@
             font-size: 14px;
             padding: 10px 0;
         }
+
+        /* Modal / Panel kur klikohet Modify */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.82);
+            z-index: 999999;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        .modal-backdrop.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 440px;
+            padding: 18px;
+            color: #fff;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 8px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: gold;
+            font-size: 16px;
+        }
+
+        .close-btn {
+            background: #222;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 6px;
+            padding: 4px 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: #ccc;
+            margin-bottom: 4px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .promo-box {
+            background: #161409;
+            border: 1px solid gold;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 14px 0;
+        }
+
+        .promo-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: gold;
+            margin-bottom: 4px;
+        }
+
+        .promo-desc {
+            font-size: 12px;
+            color: #ccc;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .btn-promo {
+            width: 100%;
+            padding: 9px 12px;
+            border-radius: 6px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 13px;
+            background: gold;
+            color: #000;
+        }
+
+        .btn-promo.active-deal {
+            background: #064e3b;
+            color: #34d399;
+            border: 1px solid #10b981;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .btn-save {
+            flex: 1;
+            background: gold;
+            color: #000;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-full-edit {
+            background: #222;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -182,11 +341,96 @@
 
 <div id="salesList"><div class="status-msg">Duke ngarkuar...</div></div>
 
+<!-- Modal për Modify + Butonin e Promovimit (pa pagesë tani, gati për pagesë në të ardhmen) -->
+<div id="modifyModal" class="modal-backdrop">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>✏️ Modifiko Artikullin</h3>
+            <button type="button" class="close-btn" onclick="closeModifyModal()">✕</button>
+        </div>
+
+        <form id="modifyForm">
+            <div class="form-group">
+                <label>Brand</label>
+                <input type="text" id="editBrand" required>
+            </div>
+
+            <div class="form-group">
+                <label>Model</label>
+                <input type="text" id="editModel">
+            </div>
+
+            <div class="form-group" id="refGroup">
+                <label id="refLabel">Reference (Ref.)</label>
+                <input type="text" id="editRefOrCal" placeholder="p.sh. 16013 ose Cal. 565">
+            </div>
+
+            <div class="form-group">
+                <label>Çmimi (€)</label>
+                <input type="number" step="0.01" id="editPrice">
+            </div>
+
+            <div class="form-group">
+                <label>Përshkrimi</label>
+                <textarea id="editDescription" rows="3"></textarea>
+            </div>
+
+            <!-- Blloku i Promovimit (falas tani, struktura gati për pagesë në të ardhmen) -->
+            <div class="promo-box">
+                <div class="promo-title">🔥 Promovo te Ofertat e Ditës / Special Deals</div>
+                <div class="promo-desc">
+                    Aktivizo ofertën që artikulli të dalë si me ofertë dhe në krye të listës te Ofertat e Ditës (pa pagesë për momentin).
+                </div>
+                <button type="button" id="togglePromoBtn" class="btn-promo" onclick="togglePromotion()">
+                    🚀 Promovo si Ofertë (Falas tani)
+                </button>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn-save">Ruaj Ndryshimet</button>
+                <button type="button" id="openEditPageBtn" class="btn-full-edit">Faqe e plotë edit.html</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
     const myOraSwissClient = window.supabase.createClient(
         "https://gnwsrmelmeqduhhmfmoa.supabase.co",
         "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
     );
+
+    const PROMO_STORAGE_KEY = "oraswiss_promoted_deals_v1";
+    let loadedItems = [];
+    let activeEditItem = null;
+    let draftIsDeal = false;
+
+    function getPromotedDeals() {
+        try {
+            return JSON.parse(localStorage.getItem(PROMO_STORAGE_KEY) || "{}");
+        } catch (e) {
+            return {};
+        }
+    }
+
+    function setPromotedDeal(itemKey, enabled, itemSnapshot = null) {
+        const current = getPromotedDeals();
+        if (enabled) {
+            current[itemKey] = {
+                promotedAt: Date.now(),
+                data: itemSnapshot
+            };
+        } else {
+            delete current[itemKey];
+        }
+        localStorage.setItem(PROMO_STORAGE_KEY, JSON.stringify(current));
+    }
+
+    // Hook i gatshëm për të aktivizuar pagesën (p.sh. PayPal) në të ardhmen
+    async function handlePaidPromotion(_item) {
+        // Kur ta bësh me pagesë në të ardhmen, thirr këtu funksionin/checkout-in e pagesës
+        return true;
+    }
 
     function resolveImageUrl(imageField) {
         let primaryImage = "";
@@ -213,13 +457,177 @@
         return "https://placeholder.co/600x600/222/fff?text=No+Image";
     }
 
+    function isMovementPartItem(item) {
+        return ["parts", "movement parts", "part"].includes((item.category || "").toLowerCase());
+    }
+
     function getItemCodeLine(item) {
-        const isMovementPart = ["parts", "movement parts", "part"].includes((item.category || "").toLowerCase());
-        if (isMovementPart) {
+        if (isMovementPartItem(item)) {
             return item.caliber ? `Cal: ${item.caliber}` : "";
         }
         return item.reference ? `Ref. ${item.reference}` : "";
     }
+
+    function renderSalesGrid() {
+        const salesList = document.getElementById("salesList");
+        const promos = getPromotedDeals();
+
+        // Artikujt e promovuar dalin në krye, të renditur sipas kohës së promovimit
+        const sortedItems = [...loadedItems].sort((a, b) => {
+            const keyA = `${a.type}_${a.id}`;
+            const keyB = `${b.type}_${b.id}`;
+            const promoA = promos[keyA]?.promotedAt || 0;
+            const promoB = promos[keyB]?.promotedAt || 0;
+            if (promoA && promoB) return promoB - promoA;
+            if (promoA) return -1;
+            if (promoB) return 1;
+            return 0;
+        });
+
+        salesList.innerHTML = sortedItems.map(item => {
+            const itemKey = `${item.type}_${item.id}`;
+            const isPromoted = Boolean(promos[itemKey] || item.is_deal);
+            const detailUrl = `${item.type === "bracelet" ? "product-bracelets-straps.html" : "product.html"}?id=${item.id}`;
+            const imgUrl = resolveImageUrl(item.image_url);
+            const codeLine = getItemCodeLine(item);
+
+            return `
+                <div class="sale-item">
+                    <div>
+                        <a href="${detailUrl}">
+                            <img src="${imgUrl}" alt="${item.brand || "Artikull"}">
+                        </a>
+                        ${isPromoted ? `<span class="deal-badge">🔥 ME OFERTË</span>` : ""}
+                        <div class="item-info">
+                            <a href="${detailUrl}" class="item-title">
+                                ${item.brand || ""} ${item.model || ""}
+                            </a>
+                            ${codeLine ? `<span class="item-code">${codeLine}</span>` : ""}
+                            <span class="item-price">${item.price ? item.price + " €" : "Contact for price"}</span>
+                        </div>
+                    </div>
+
+                    <div class="item-actions">
+                        <button type="button" class="action-btn" onclick="window.location.href='${detailUrl}'">
+                            View Details
+                        </button>
+                        <button type="button" class="action-btn modify-btn" onclick="openModifyModal('${itemKey}')">
+                            ✏️ Modify
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join("");
+    }
+
+    function updatePromoButtonUI() {
+        const btn = document.getElementById("togglePromoBtn");
+        if (!btn) return;
+        if (draftIsDeal) {
+            btn.className = "btn-promo active-deal";
+            btn.textContent = "✅ Aktiv si Ofertë (Kliko për ta hequr)";
+        } else {
+            btn.className = "btn-promo";
+            btn.textContent = "🚀 Promovo si Ofertë (Falas tani)";
+        }
+    }
+
+    async function togglePromotion() {
+        if (!activeEditItem) return;
+        if (!draftIsDeal) {
+            const paidOk = await handlePaidPromotion(activeEditItem);
+            if (!paidOk) return;
+        }
+        draftIsDeal = !draftIsDeal;
+        updatePromoButtonUI();
+    }
+
+    window.togglePromotion = togglePromotion;
+
+    function openModifyModal(itemKey) {
+        const item = loadedItems.find(i => `${i.type}_${i.id}` === itemKey);
+        if (!item) return;
+
+        activeEditItem = item;
+        const promos = getPromotedDeals();
+        draftIsDeal = Boolean(promos[itemKey] || item.is_deal);
+
+        const isPart = isMovementPartItem(item);
+        document.getElementById("refLabel").textContent = isPart ? "Caliber (Cal.)" : "Reference (Ref.)";
+        document.getElementById("editRefOrCal").value = isPart ? (item.caliber || "") : (item.reference || "");
+        document.getElementById("editBrand").value = item.brand || "";
+        document.getElementById("editModel").value = item.model || "";
+        document.getElementById("editPrice").value = item.price ?? "";
+        document.getElementById("editDescription").value = item.description || "";
+
+        document.getElementById("openEditPageBtn").onclick = function () {
+            window.location.href = `edit.html?id=${item.id}&type=${item.type}`;
+        };
+
+        updatePromoButtonUI();
+        document.getElementById("modifyModal").classList.add("open");
+    }
+
+    window.openModifyModal = openModifyModal;
+
+    function closeModifyModal() {
+        document.getElementById("modifyModal").classList.remove("open");
+        activeEditItem = null;
+    }
+
+    window.closeModifyModal = closeModifyModal;
+
+    document.getElementById("modifyForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        if (!activeEditItem) return;
+
+        const tableName = activeEditItem.type === "bracelet" ? "bracelets_straps" : "oras";
+        const isPart = isMovementPartItem(activeEditItem);
+        const refOrCalVal = document.getElementById("editRefOrCal").value.trim();
+
+        const updates = {
+            brand: document.getElementById("editBrand").value.trim(),
+            model: document.getElementById("editModel").value.trim(),
+            price: document.getElementById("editPrice").value ? parseFloat(document.getElementById("editPrice").value) : null,
+            description: document.getElementById("editDescription").value.trim()
+        };
+
+        if (activeEditItem.type !== "bracelet") {
+            if (isPart) {
+                updates.caliber = refOrCalVal || null;
+            } else {
+                updates.reference = refOrCalVal || null;
+            }
+        } else {
+            updates.reference = refOrCalVal || null;
+        }
+
+        const { error } = await myOraSwissClient
+            .from(tableName)
+            .update(updates)
+            .eq("id", activeEditItem.id);
+
+        if (error) {
+            alert("Gabim gjatë ruajtjes: " + error.message);
+            return;
+        }
+
+        Object.assign(activeEditItem, updates, { is_deal: draftIsDeal });
+        const itemKey = `${activeEditItem.type}_${activeEditItem.id}`;
+        setPromotedDeal(itemKey, draftIsDeal, {
+            id: activeEditItem.id,
+            type: activeEditItem.type,
+            brand: activeEditItem.brand,
+            model: activeEditItem.model,
+            price: activeEditItem.price,
+            image_url: activeEditItem.image_url,
+            reference: activeEditItem.reference,
+            caliber: activeEditItem.caliber
+        });
+
+        closeModifyModal();
+        renderSalesGrid();
+    });
 
     async function loadMySales() {
         const salesList = document.getElementById("salesList");
@@ -251,47 +659,26 @@
             return;
         }
 
-        const items = [
-            ...(watches || []).map(item => ({ ...item, type: "watch" })),
-            ...(bracelets || []).map(item => ({ ...item, type: "bracelet" }))
+        const promos = getPromotedDeals();
+        loadedItems = [
+            ...(watches || []).map(item => ({
+                ...item,
+                type: "watch",
+                is_deal: Boolean(promos[`watch_${item.id}`])
+            })),
+            ...(bracelets || []).map(item => ({
+                ...item,
+                type: "bracelet",
+                is_deal: Boolean(promos[`bracelet_${item.id}`])
+            }))
         ];
 
-        if (items.length === 0) {
+        if (loadedItems.length === 0) {
             salesList.innerHTML = "<div class='status-msg'>Nuk keni asnjë artikull në shitje.</div>";
             return;
         }
 
-        salesList.innerHTML = items.map(item => {
-            const detailUrl = `${item.type === "bracelet" ? "product-bracelets-straps.html" : "product.html"}?id=${item.id}`;
-            const imgUrl = resolveImageUrl(item.image_url);
-            const codeLine = getItemCodeLine(item);
-
-            return `
-                <div class="sale-item">
-                    <div>
-                        <a href="${detailUrl}">
-                            <img src="${imgUrl}" alt="${item.brand || "Artikull"}">
-                        </a>
-                        <div class="item-info">
-                            <a href="${detailUrl}" class="item-title">
-                                ${item.brand || ""} ${item.model || ""}
-                            </a>
-                            ${codeLine ? `<span class="item-code">${codeLine}</span>` : ""}
-                            <span class="item-price">${item.price ? item.price + " €" : "Contact for price"}</span>
-                        </div>
-                    </div>
-
-                    <div class="item-actions">
-                        <button type="button" class="action-btn" onclick="window.location.href='${detailUrl}'">
-                            View Details
-                        </button>
-                        <button type="button" class="action-btn modify-btn" onclick="window.location.href='edit.html?id=${item.id}&type=${item.type}'">
-                            ✏️ Modify
-                        </button>
-                    </div>
-                </div>
-            `;
-        }).join("");
+        renderSalesGrid();
     }
 
     loadMySales();

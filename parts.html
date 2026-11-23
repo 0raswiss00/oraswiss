@@ -336,7 +336,7 @@
         const { data, error } = await window.supabaseClient
             .from('oras')
             .select('*')
-            .eq('category', 'Movement Parts');
+            .in('category', ['Movement Parts', 'parts', 'Part', 'Parts']);
 
         if (error) {
             container.innerHTML = "<p style='color:red;'>Error loading items: " + error.message + "</p>";

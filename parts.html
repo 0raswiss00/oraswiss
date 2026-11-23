@@ -324,14 +324,23 @@
 <script>
     let allOrasData = [];
     let selectedCaliber = "all";
+    let currentUserId = null;
+
+    async function checkAuthUser() {
+        if (!window.supabaseClient) return;
+        const { data } = await window.supabaseClient.auth.getSession();
+        currentUserId = data?.session?.user?.id || null;
+    }
 
     async function loadOras() {
         const container = document.getElementById("oras-container");
-        
+
         if (!window.supabaseClient) {
             container.innerHTML = "<p style='color:red;'>Database connection error.</p>";
             return;
         }
+
+        await checkAuthUser();
 
         const { data, error } = await window.supabaseClient
             .from('oras')
@@ -387,7 +396,7 @@
 
     function renderCards(items) {
         const container = document.getElementById("oras-container");
-        
+
         if (items.length === 0) {
             container.innerHTML = "<p style='color:#aaa;'>No movement parts match your selected filters.</p>";
             return;
@@ -406,7 +415,7 @@
                     try {
                         let parsed = JSON.parse(ora.image_url);
                         primaryImage = Array.isArray(parsed) ? parsed[0] : ora.image_url;
-                    } catch(e) {
+                    } catch (e) {
                         primaryImage = ora.image_url;
                     }
                 }
@@ -429,11 +438,20 @@
                 ? `<span class="badge badge-damaged">Damaged / For Repair</span>`
                 : `<span class="badge badge-good">Good / Working</span>`;
 
-            const buyNowButton = ora.price 
+            const buyNowButton = ora.price
                 ? `<button type="button" class="btn-main btn-buy buy-paypal-btn" data-id="${ora.id}" data-price="${ora.price}" data-name="${encodeURIComponent((ora.brand || 'Part') + ' ' + (ora.model || ''))}" style="margin-top:6px;">
                        🛒 BUY NOW (PayPal)
-                   </button>` 
-                : ''; 
+                   </button>`
+                : '';
+
+            // Shfaqet vetëm kur përdoruesi është i loguar
+            const canModify = Boolean(currentUserId);
+            const modifyButton = canModify
+                ? `<button type="button" class="btn-main btn-edit" style="width:100%;"
+                       onclick="event.stopPropagation(); window.location.href='edit.html?id=${ora.id}';">
+                       ✏️ Modify
+                   </button>`
+                : '';
 
             cardsHtml += `
             <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
@@ -452,14 +470,11 @@
 
                 <div>
                     ${buyNowButton}
-                    <button type="button" class="btn-main btn-secondary" style="width:100%;" 
+                    <button type="button" class="btn-main btn-secondary" style="width:100%;"
                         onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}';">
                         View Details
                     </button>
-                    <button type="button" class="btn-main btn-edit" style="width:100%;" 
-                        onclick="event.stopPropagation(); window.location.href='edit.html?id=${ora.id}';">
-                        ✏️ Modify
-                    </button>
+                    ${modifyButton}
                 </div>
             </div>
             `;
@@ -468,12 +483,12 @@
         container.innerHTML = cardsHtml;
 
         document.querySelectorAll('.buy-paypal-btn').forEach(btn => {
-            btn.addEventListener('click', async function(e) {
+            btn.addEventListener('click', async function (e) {
                 e.stopPropagation();
                 const productId = this.getAttribute('data-id');
                 const price = this.getAttribute('data-price');
                 const productName = decodeURIComponent(this.getAttribute('data-name'));
-                
+
                 this.innerText = "Loading...";
                 try {
                     const response = await fetch(
@@ -495,7 +510,7 @@
                         alert("PayPal link could not be created.");
                         this.innerText = "🛒 BUY NOW (PayPal)";
                     }
-                } catch(err) {
+                } catch (err) {
                     console.error(err);
                     alert("PayPal error.");
                     this.innerText = "🛒 BUY NOW (PayPal)";
@@ -509,7 +524,7 @@
     document.getElementById("condition-filter").addEventListener("change", applyAllFilters);
 
     document.querySelectorAll(".filter-chip").forEach(chip => {
-        chip.addEventListener("click", function() {
+        chip.addEventListener("click", function () {
             document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
             this.classList.add("active");
             selectedCaliber = this.getAttribute("data-caliber");
@@ -523,7 +538,7 @@
         if (menu) menu.classList.toggle('active');
     }
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         const menu = document.getElementById('myOraSwissMenu');
         if (menu && menu.classList.contains('active') && !menu.contains(e.target)) {
             menu.classList.remove('active');
@@ -544,6 +559,5 @@
 
     loadOras();
 </script>
-
 </body>
 </html>

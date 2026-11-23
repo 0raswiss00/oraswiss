@@ -539,7 +539,7 @@
         <span>✉️</span><span>messg</span>
         <span id="menuMessageCount" style="position: absolute; top: 2px; right: 8px; background: #ff3b30; color: white; padding: 1px 5px; border-radius: 10px; font-size: 9px; font-weight: bold; display: none;">0</span>
     </a>
-    <a href="mysales.html" onclick="checkPage(event,'mysales.html')"><span>📦</span><span>Modify</span></a>
+    <a href="mysales.html" onclick="checkPage(event,'mysales.html')"><span>📦</span><span>Sales</span></a>
     <a href="sellnow.html" onclick="checkPage(event,'sellnow.html')"><span>➕</span><span>Sell</span></a>
     <button type="button" onclick="checkMenu(event)" id="menuBtnText"><span>📂</span><span>My OraSwiss</span></button>  
 </nav>
@@ -609,6 +609,11 @@
             }
         }
 
+        const isMovementPart = ['parts', 'movement parts', 'part'].includes((ora.category || '').toLowerCase());
+        const detailLine = isMovementPart
+            ? (ora.caliber ? `Cal: ${ora.caliber}` : (ora.model || ''))
+            : (ora.reference ? `Ref. ${ora.reference}` : (ora.model || ''));
+
         const qty = ora.quantity || 1;
         const condAndWork = [
             ora.condition || "",
@@ -646,7 +651,7 @@
                 <div>
                     <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
                     <h3>${ora.brand || ''}</h3>
-                    <p>${['parts', 'movement parts', 'part'].includes((ora.category || '').toLowerCase()) ? (ora.caliber ? 'Cal: ' + ora.caliber : (ora.model || '')) : (ora.reference ? 'Ref. ' + ora.reference : (ora.model || ''))}</p>
+                    <p>${detailLine}</p>
 
                     <div class="badges-row">
                         <span class="badge badge-qty">Qty: ${qty} pcs</span>
@@ -832,7 +837,7 @@
         const { data, error } = await supabase
             .from("oras")
             .select("*")
-            .or(`brand.ilike.%${query}%,model.ilike.%${query}%,reference.ilike.%${query}%`);
+            .or(`brand.ilike.%${query}%,model.ilike.%${query}%,reference.ilike.%${query}%,caliber.ilike.%${query}%`);
 
         if (error) throw error;
 

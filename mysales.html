@@ -2,143 +2,285 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Sales - Ora Swiss</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        * { box-sizing: border-box; }
+
         body {
-            background-color: #0056b3; /* Sfondi i faqes */
-            color: white;              /* Teksti kryesor i bardhë që të duket mbi blunë */
-            font-family: Arial, sans-serif;
-            padding: 20px;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 15px;
             margin: 0;
+            padding-bottom: 80px;
         }
 
-        .sale-item { 
-            background-color: #0056b3; /* Karta e produktit tani është e njëjtë me sfondin */
-            border: 2px solid #003d82; /* Një kornizë pak më e errët për ta ndarë produktin */
-            margin-bottom: 15px; 
-            padding: 15px; 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            border-radius: 8px; 
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            margin-bottom: 15px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .sale-item img { 
-            width: 100px; 
-            height: 100px; 
-            object-fit: cover; 
-            border-radius: 5px; 
-            cursor: pointer; 
-        }
-
-        /* Butonat mbeten të bardhë me shkronja të zeza */
-        button {
-            background-color: white;
-            color: black;
+        .back-btn {
+            background: #d4af37;
+            color: #000;
             border: none;
-            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        .back-btn:hover {
+            background: #e6c200;
+        }
+
+        .page-title {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: gold;
+        }
+
+        /* Dyshe (2 kolona) në celular, 4 në kompjuter */
+        #salesList {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        @media (min-width: 1024px) {
+            #salesList {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
+            }
+        }
+
+        .sale-item {
+            background-color: #111;
+            border: 1px solid #333;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .sale-item img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            height: auto;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            background: #181818;
+        }
+
+        @media (min-width: 1024px) {
+            .sale-item {
+                padding: 14px;
+            }
+
+            .sale-item img {
+                aspect-ratio: auto;
+                height: 210px;
+            }
+        }
+
+        .item-info {
+            margin-top: 8px;
+        }
+
+        .item-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #fff;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .item-price {
+            color: gold;
+            font-weight: bold;
+            font-size: 14px;
+            display: block;
+            margin: 6px 0 10px 0;
+        }
+
+        .item-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        button.action-btn {
+            background-color: #1c1c1c;
+            color: #fff;
+            border: 1px solid #383838;
+            padding: 8px 10px;
             cursor: pointer;
             font-weight: bold;
-            border-radius: 4px;
-            margin-right: 5px;
+            border-radius: 6px;
+            font-size: 13px;
+            width: 100%;
         }
 
-        button:hover {
-            background-color: #e0e0e0;
+        button.action-btn:hover {
+            background-color: #282828;
+            border-color: gold;
+            color: gold;
+        }
+
+        button.modify-btn {
+            background-color: #1a180d;
+            color: gold;
+            border: 1px solid #6b5916;
+        }
+
+        button.modify-btn:hover {
+            background-color: #292512;
         }
 
         a {
             text-decoration: none;
-            color: white; /* Teksti i linkut i bardhë */
+            color: #fff;
+        }
+
+        .status-msg {
+            grid-column: 1 / -1;
+            color: #ccc;
+            font-size: 14px;
+            padding: 10px 0;
         }
     </style>
 </head>
-   <div style="display: flex; align-items: center; padding: 10px 0; margin-bottom: 15px; position: relative;">
-    <button type="button" onclick="window.location.href='index.html'" style="background: #d4af37; color: #fff; border: none; font-size: 14px; font-weight: bold; cursor: pointer; padding: 6px 14px; border-radius: 6px;">Back</button>
-    <div style="margin: 0; font-size: 18px; font-weight: bold; position: absolute; left: 50%; transform: translateX(-50%);"></div>
+<body>
+
+<div class="top-bar">
+    <button type="button" class="back-btn" onclick="window.location.href='index.html'">← Back</button>
+    <h1 class="page-title">My Sales</h1>
+    <span style="width: 68px;"></span>
 </div>
 
-<div id="salesList">Duke ngarkuar...</div>
-    
-    <script>
-        // Inicializimi i Supabase
-        const myOraSwissClient = window.supabase.createClient(
-            "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
-            "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-        );
+<div id="salesList"><div class="status-msg">Duke ngarkuar...</div></div>
 
-        async function loadMySales() {
-            const salesList = document.getElementById("salesList");
+<script>
+    const myOraSwissClient = window.supabase.createClient(
+        "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+    );
 
-            const { data: { user } } = await myOraSwissClient.auth.getUser();
-
-            if (!user) {
-                salesList.innerHTML = "Ju lutem logohuni.";
-                return;
+    function resolveImageUrl(imageField) {
+        let primaryImage = "";
+        if (imageField) {
+            if (Array.isArray(imageField) && imageField.length > 0) {
+                primaryImage = imageField[0];
+            } else if (typeof imageField === "string") {
+                try {
+                    const parsed = JSON.parse(imageField);
+                    primaryImage = Array.isArray(parsed) ? parsed[0] : imageField;
+                } catch (e) {
+                    primaryImage = imageField;
+                }
             }
+        }
 
-            const [
-                { data: watches, error: watchesError },
-                { data: bracelets, error: braceletsError }
-            ] = await Promise.all([
-                myOraSwissClient
-                    .from("oras")
-                    .select("*")
-                    .eq("user_id", user.id),
-
-                myOraSwissClient
-                    .from("bracelets_straps")
-                    .select("*")
-                    .eq("user_id", user.id)
-            ]);
-
-            if (watchesError || braceletsError) {
-                salesList.innerHTML = "Gabim: " + (watchesError?.message || braceletsError?.message);
-                return;
+        if (primaryImage && primaryImage !== "null" && primaryImage !== "") {
+            if (primaryImage.startsWith("http")) {
+                return primaryImage;
             }
+            return "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
+        }
 
-            const items = [
-                ...(watches || []).map(item => ({ ...item, type: "watch" })),
-                ...(bracelets || []).map(item => ({ ...item, type: "bracelet" }))
-            ];
+        return "https://placeholder.co/600x600/222/fff?text=No+Image";
+    }
 
-            if (items.length === 0) {
-                salesList.innerHTML = "Nuk keni asnjë artikull në shitje.";
-                return;
-            }
+    async function loadMySales() {
+        const salesList = document.getElementById("salesList");
 
-          salesList.innerHTML = items.map(item => `
+        const { data: { user } } = await myOraSwissClient.auth.getUser();
+
+        if (!user) {
+            salesList.innerHTML = "<div class='status-msg'>Ju lutem logohuni.</div>";
+            return;
+        }
+
+        const [
+            { data: watches, error: watchesError },
+            { data: bracelets, error: braceletsError }
+        ] = await Promise.all([
+            myOraSwissClient
+                .from("oras")
+                .select("*")
+                .eq("user_id", user.id),
+
+            myOraSwissClient
+                .from("bracelets_straps")
+                .select("*")
+                .eq("user_id", user.id)
+        ]);
+
+        if (watchesError || braceletsError) {
+            salesList.innerHTML = "<div class='status-msg' style='color:#f87171;'>Gabim: " + (watchesError?.message || braceletsError?.message) + "</div>";
+            return;
+        }
+
+        const items = [
+            ...(watches || []).map(item => ({ ...item, type: "watch" })),
+            ...(bracelets || []).map(item => ({ ...item, type: "bracelet" }))
+        ];
+
+        if (items.length === 0) {
+            salesList.innerHTML = "<div class='status-msg'>Nuk keni asnjë artikull në shitje.</div>";
+            return;
+        }
+
+        salesList.innerHTML = items.map(item => {
+            const detailUrl = `${item.type === "bracelet" ? "product-bracelets-straps.html" : "product.html"}?id=${item.id}`;
+            const imgUrl = resolveImageUrl(item.image_url);
+
+            return `
                 <div class="sale-item">
-
-                    <a href="${item.type === 'bracelet' ? 'product-bracelets-straps.html' : 'product.html'}?id=${item.id}">
-                        <img src="${item.image_url?.[0] || 'placeholder.jpg'}">
-                    </a>
-
                     <div>
-                        <a href="${item.type === 'bracelet' ? 'product-bracelets-straps.html' : 'product.html'}?id=${item.id}">
-                            <strong>${item.brand} ${item.model}</strong>
+                        <a href="${detailUrl}">
+                            <img src="${imgUrl}" alt="${item.brand || "Artikull"}">
                         </a>
-                        <br>
-                        <small>Çmimi: ${item.price} €</small>
-
-                        <div style="margin-top:10px;">
-                            <button onclick="window.location.href='${item.type === 'bracelet' ? 'product-bracelets-straps.html' : 'product.html'}?id=${item.id}'">
-                               View Details
-                            </button>
-
-                            <button onclick="window.location.href='edit.html?id=${item.id}&type=${item.type}'">
-                               Modify
-                            </button>
+                        <div class="item-info">
+                            <a href="${detailUrl}" class="item-title">
+                                ${item.brand || ""} ${item.model || ""}
+                            </a>
+                            <span class="item-price">${item.price ? item.price + " €" : "Contact for price"}</span>
                         </div>
                     </div>
 
+                    <div class="item-actions">
+                        <button type="button" class="action-btn" onclick="window.location.href='${detailUrl}'">
+                            View Details
+                        </button>
+                        <button type="button" class="action-btn modify-btn" onclick="window.location.href='edit.html?id=${item.id}&type=${item.type}'">
+                            ✏️ Modify
+                        </button>
+                    </div>
                 </div>
-            `).join(""); 
-        }
-        // Thirrja e funksionit
-        loadMySales();
-    </script>
+            `;
+        }).join("");
+    }
+
+    loadMySales();
+</script>
 
 </body>
 </html>

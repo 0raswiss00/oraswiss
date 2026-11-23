@@ -109,6 +109,13 @@
             font-weight: bold;
             color: #fff;
             display: block;
+            margin-bottom: 3px;
+        }
+
+        .item-code {
+            color: #aaa;
+            font-size: 12px;
+            display: block;
             margin-bottom: 4px;
         }
 
@@ -208,6 +215,14 @@
         return "https://placeholder.co/600x600/222/fff?text=No+Image";
     }
 
+    function getItemCodeLine(item) {
+        const isMovementPart = ["parts", "movement parts", "part"].includes((item.category || "").toLowerCase());
+        if (isMovementPart) {
+            return item.caliber ? `Cal: ${item.caliber}` : "";
+        }
+        return item.reference ? `Ref. ${item.reference}` : "";
+    }
+
     async function loadMySales() {
         const salesList = document.getElementById("salesList");
 
@@ -251,6 +266,7 @@
         salesList.innerHTML = items.map(item => {
             const detailUrl = `${item.type === "bracelet" ? "product-bracelets-straps.html" : "product.html"}?id=${item.id}`;
             const imgUrl = resolveImageUrl(item.image_url);
+            const codeLine = getItemCodeLine(item);
 
             return `
                 <div class="sale-item">
@@ -262,6 +278,7 @@
                             <a href="${detailUrl}" class="item-title">
                                 ${item.brand || ""} ${item.model || ""}
                             </a>
+                            ${codeLine ? `<span class="item-code">${codeLine}</span>` : ""}
                             <span class="item-price">${item.price ? item.price + " €" : "Contact for price"}</span>
                         </div>
                     </div>

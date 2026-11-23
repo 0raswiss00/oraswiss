@@ -13,37 +13,90 @@
         gtag('config', 'G-KD2ZZ3MJYY');
     </script>
     <style>
+        * { box-sizing: border-box; }
         body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff; padding-bottom: 110px; }
         
         .site-header { position: sticky; top: 0; z-index: 9999; background: #111; border-bottom: 1px solid #333; }
-        .nav-scroll { display: flex; gap: 18px; align-items: center; overflow-x: auto; padding: 14px 16px; }
-        .nav-scroll a { color: #fff; text-decoration: none; padding: 6px 10px; font-weight: bold; white-space: nowrap; }
+        .nav-scroll { display: flex; gap: 16px; align-items: center; overflow-x: auto; padding: 10px 14px; }
+        .nav-scroll a { color: #fff; text-decoration: none; padding: 5px 8px; font-weight: bold; white-space: nowrap; font-size: 14px; }
         .nav-scroll a:hover { color: gold; }
-        .site-title { font-weight: 700; line-height: 1.05; margin-right: 10px; }
+        .site-title { font-weight: 700; line-height: 1.05; margin-right: 8px; font-size: 11px; color: gold; }
 
         .container-content { padding: 15px; max-width: 1200px; margin: 0 auto; }
-        
-        /* Search Box Stilimi */
+        h1 { font-size: 20px; margin: 5px 0 15px 0; color: gold; }
+
+        /* Search Box */
         .search-box {
             width: 100%;
             padding: 12px 15px;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
             background: #111;
             border: 1px solid #333;
             color: #fff;
             border-radius: 8px;
-            font-size: 15px;
-            box-sizing: border-box;
+            font-size: 14px;
         }
         .search-box:focus { outline: none; border-color: gold; }
 
+        /* Filtrat e Kalibrave (10 Mekanizmat) & Gjendjes */
+        .filter-section-label {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .caliber-bar {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .filter-chip {
+            background: #141414;
+            color: #ddd;
+            border: 1px solid #333;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .filter-chip:hover { border-color: gold; color: #fff; }
+        .filter-chip.active { background: gold; color: #000; font-weight: bold; border-color: gold; }
+
+        .sub-filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .filter-select {
+            background: #111;
+            color: #fff;
+            border: 1px solid #333;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            flex: 1;
+            min-width: 140px;
+        }
+        .filter-select:focus { outline: none; border-color: gold; }
+
+        /* Grid: 2 kolona në celular, 4 në kompjuter */
         .grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 15px;
         }
 
-        @media (min-width: 768px) {
+        @media (min-width: 1024px) {
             .grid {
                 grid-template-columns: repeat(4, 1fr);
                 gap: 15px;
@@ -52,7 +105,7 @@
 
         .card {
             background: #111;
-            padding: 15px;
+            padding: 10px;
             border-radius: 10px;
             border: 1px solid #333;
             cursor: pointer;
@@ -61,23 +114,49 @@
             justify-content: space-between;
         }
 
+        @media (min-width: 1024px) {
+            .card { padding: 15px; }
+        }
+
         .card img {
             width: 100%;
-            height: 160px;
+            aspect-ratio: 1 / 1;
             object-fit: cover;
             display: block;
             border-radius: 8px;
+            background: #181818;
         }
 
-        .price { color: gold; font-weight: bold; margin: 8px 0; font-size: 1.1em; }
+        @media (min-width: 1024px) {
+            .card img { aspect-ratio: auto; height: 210px; }
+        }
+
+        .badges-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 8px 0 4px 0;
+        }
+
+        .badge {
+            font-size: 11px;
+            padding: 3px 7px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .badge-qty { background: #1f2937; color: #60a5fa; border: 1px solid #374151; }
+        .badge-good { background: #064e3b; color: #34d399; border: 1px solid #065f46; }
+        .badge-damaged { background: #450a0a; color: #f87171; border: 1px solid #7f1d1d; }
+
+        .price { color: gold; font-weight: bold; margin: 6px 0; font-size: 1.1em; }
 
         .btn-main {
-            padding: 10px;
+            padding: 9px;
             border: none;
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             text-align: center;
             display: block;
             text-decoration: none;
@@ -93,41 +172,66 @@
         }
         .btn-secondary:hover { background: #333; }
 
-        /* Bottom Nav bar i unifikuar */
-        .bottom-nav {
-            position: fixed !important;
-            bottom: 20px !important;
-            left: 15px !important;
-            right: 15px !important;
-            width: auto !important;
-            height: 65px !important;
-            background-color: #1a1a1a !important;
-            display: flex !important;
-            justify-content: space-around !important;
-            align-items: center !important;
-            padding: 0 5px !important;
-            border-radius: 20px !important;
-            border: 1px solid #333 !important;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
-            z-index: 999999 !important;
+        /* Floating Menu */
+        #myOraSwissMenu {
+            display: none;
+            position: fixed;
+            bottom: 85px;
+            right: 15px;
+            width: 220px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            border: 1px solid #333;
+            padding: 8px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.6);
+            z-index: 1000000;
         }
+        #myOraSwissMenu.active { display: block; }
+        .menu-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 11px 10px;
+            border-bottom: 1px solid #262626;
+            cursor: pointer;
+            color: #fff;
+            font-size: 14px;
+        }
+        .menu-item-row:last-child { border-bottom: none; }
+        .menu-item-row:hover { background: #282828; border-radius: 8px; }
 
-        .bottom-nav a, .bottom-nav button {
-            color: #ffffff !important;
-            text-decoration: none !important;
-            font-size: 10px !important;
-            text-align: center !important;
-            white-space: nowrap !important;
-            flex: 1 !important;
-            background: none !important;
-            border: none !important;
-            cursor: pointer !important;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            gap: 3px !important;
+        /* Bottom Nav bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 15px;
+            right: 15px;
+            height: 55px;
+            background-color: #1a1a1a;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 5px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            z-index: 999999;
         }
-        .bottom-nav a:hover { color: gold !important; }
+        .bottom-nav a, .bottom-nav button {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 11px;
+            text-align: center;
+            white-space: nowrap;
+            flex: 1;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .bottom-nav a:hover, .bottom-nav button:hover { color: gold; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
     <script src="db-connect.js"></script>
@@ -144,56 +248,147 @@
         <a href="product-bracelets-straps.html">Bracelet/Strap</a>
         <a href="service.html">Service</a>
         <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
     </nav>
 </header>
 
 <div class="container-content">
     <h1>Movement Parts Collection</h1>
     
-    <!-- Kutia e Kërkimit -->
-    <input type="text" id="search-input" class="search-box" placeholder="Kërko sipas brendit, modelit ose materialit...">
+    <!-- Search Input -->
+    <input type="text" id="search-input" class="search-box" placeholder="Search by caliber (e.g. Rolex 3135, Valjoux 22) or part name (Balance Staff, Gear)...">
 
-    <div id="oras-container" class="grid">Duke ngarkuar koleksionin...</div>
+    <!-- 10 Pre-set Movement Calibers -->
+    <div class="filter-section-label">Filter by Movement Caliber:</div>
+    <div class="caliber-bar" id="caliber-filters">
+        <button type="button" class="filter-chip active" data-caliber="all">All Calibers</button>
+        <button type="button" class="filter-chip" data-caliber="3135">Rolex 3135</button>
+        <button type="button" class="filter-chip" data-caliber="valjoux 22">Valjoux 22</button>
+        <button type="button" class="filter-chip" data-caliber="801">Omega Cal. 801</button>
+        <button type="button" class="filter-chip" data-caliber="2892">ETA 2892-A2</button>
+        <button type="button" class="filter-chip" data-caliber="7750">Valjoux 7750</button>
+        <button type="button" class="filter-chip" data-caliber="565">Omega Cal. 565</button>
+        <button type="button" class="filter-chip" data-caliber="1570">Rolex 1570</button>
+        <button type="button" class="filter-chip" data-caliber="30l">Longines 30L</button>
+        <button type="button" class="filter-chip" data-caliber="405">Zenith 405</button>
+        <button type="button" class="filter-chip" data-caliber="6497">ETA 6497 / 6498</button>
+    </div>
+
+    <!-- Part Type & Condition Filter -->
+    <div class="sub-filters">
+        <select id="part-type-filter" class="filter-select">
+            <option value="all">All Part Types</option>
+            <option value="complete movement">Complete Movement</option>
+            <option value="balance">Balance Wheel / Balance Staff</option>
+            <option value="gear">Gears / Wheels (Train / Escape)</option>
+            <option value="mainspring">Mainspring / Barrel</option>
+            <option value="stem">Winding Stem / Crown</option>
+            <option value="bridge">Bridges / Mainplate</option>
+            <option value="automatic">Automatic Rotor / Module</option>
+            <option value="chronograph">Chronograph Parts / Levers</option>
+        </select>
+
+        <select id="condition-filter" class="filter-select">
+            <option value="all">All Conditions</option>
+            <option value="good">Good / Working Condition</option>
+            <option value="damaged">Damaged / For Repair</option>
+        </select>
+    </div>
+
+    <div id="oras-container" class="grid">Loading movement parts...</div>
 </div>
+
+<!-- Floating Menu -->
+<div id="myOraSwissMenu">
+    <div class="menu-item-row" onclick="location.href='buy.html'"><span>Buy</span><span>&gt;</span></div>
+    <div class="menu-item-row" onclick="location.href='mysold.html'"><span>My Sold</span><span>&gt;</span></div>
+    <div class="menu-item-row" onclick="location.href='messages.html'"><span>Messages</span><span>&gt;</span></div>
+    <div class="menu-item-row" onclick="location.href='settings.html'"><span>Account Settings</span><span>&gt;</span></div>
+    <div class="menu-item-row" onclick="location.href='support.html'"><span>Support</span><span>&gt;</span></div>
+    <div class="menu-item-row" onclick="location.href='info.html'"><span>Info</span><span>&gt;</span></div>
+</div>
+
+<nav class="bottom-nav">
+    <a href="index.html">Home</a>
+    <a href="favorites.html">Favs</a>
+    <a href="messages.html">Messages</a>
+    <a href="mysales.html">Sales</a>
+    <a href="sellnow.html">Sell</a>
+    <button type="button" onclick="toggleLocalMenu(event)">Menu</button>
+</nav>
 
 <script>
     let allOrasData = [];
+    let selectedCaliber = "all";
 
     async function loadOras() {
         const container = document.getElementById("oras-container");
         
         if (!window.supabaseClient) {
-            container.innerHTML = "<p style='color:red;'>Gabim në lidhjen me databazën.</p>";
+            container.innerHTML = "<p style='color:red;'>Database connection error.</p>";
             return;
         }
-
-        const category = 'Movement Parts';  
 
         const { data, error } = await window.supabaseClient
             .from('oras')
             .select('*')
-            .eq('category', category);
+            .in('category', ['Movement Parts', 'parts']);
 
         if (error) {
-            container.innerHTML = "<p style='color:red;'>Gabim gjatë ngarkimit: " + error.message + "</p>";
+            container.innerHTML = "<p style='color:red;'>Error loading items: " + error.message + "</p>";
             return;
         }
 
         if (!data || data.length === 0) {
-            container.innerHTML = "<p>Nuk ka pjesë mekanizmi.</p>";
+            container.innerHTML = "<p style='color:#aaa;'>No movement parts available yet.</p>";
             return;
         }
 
         allOrasData = data;
-        renderCards(allOrasData);
+        applyAllFilters();
+    }
+
+    function applyAllFilters() {
+        const searchQuery = document.getElementById("search-input").value.toLowerCase().trim();
+        const partType = document.getElementById("part-type-filter").value.toLowerCase();
+        const condition = document.getElementById("condition-filter").value.toLowerCase();
+
+        const filtered = allOrasData.filter(ora => {
+            const fullText = [
+                ora.brand || "",
+                ora.model || "",
+                ora.reference || "",
+                ora.description || "",
+                ora.condition || ""
+            ].join(" ").toLowerCase();
+
+            // 1. Search bar match
+            const matchesSearch = !searchQuery || fullText.includes(searchQuery);
+
+            // 2. Caliber match
+            const matchesCaliber = selectedCaliber === "all" || fullText.includes(selectedCaliber);
+
+            // 3. Part type match
+            const matchesPartType = partType === "all" || fullText.includes(partType);
+
+            // 4. Condition match
+            let matchesCondition = true;
+            if (condition === "damaged") {
+                matchesCondition = fullText.includes("damaged") || fullText.includes("broken") || fullText.includes("repair") || fullText.includes("demtuar");
+            } else if (condition === "good") {
+                matchesCondition = !fullText.includes("damaged") && !fullText.includes("broken") && !fullText.includes("demtuar");
+            }
+
+            return matchesSearch && matchesCaliber && matchesPartType && matchesCondition;
+        });
+
+        renderCards(filtered);
     }
 
     function renderCards(items) {
         const container = document.getElementById("oras-container");
         
         if (items.length === 0) {
-            container.innerHTML = "<p>Nuk u gjet asnjë artikull që i përgjigjet kërkimit tuaj.</p>";
+            container.innerHTML = "<p style='color:#aaa;'>No movement parts match your selected filters.</p>";
             return;
         }
 
@@ -225,8 +420,17 @@
                 }
             }
 
+            // Sasia dhe Gjendja (nëse janë në kolonat quantity/condition ose te përshkrimi)
+            const qty = ora.quantity || 1;
+            const descLower = ((ora.condition || "") + " " + (ora.description || "")).toLowerCase();
+            const isDamaged = descLower.includes("damaged") || descLower.includes("broken") || descLower.includes("demtuar");
+
+            const conditionBadge = isDamaged
+                ? `<span class="badge badge-damaged">Damaged / For Repair</span>`
+                : `<span class="badge badge-good">Good / Working</span>`;
+
             const buyNowButton = ora.price 
-                ? `<button class="btn-main btn-buy buy-paypal-btn" data-id="${ora.id}" data-price="${ora.price}" data-name="${encodeURIComponent((ora.brand || 'Part') + ' ' + (ora.model || ''))}" style="margin-top:5px;">
+                ? `<button type="button" class="btn-main btn-buy buy-paypal-btn" data-id="${ora.id}" data-price="${ora.price}" data-name="${encodeURIComponent((ora.brand || 'Part') + ' ' + (ora.model || ''))}" style="margin-top:6px;">
                        🛒 BUY NOW (PayPal)
                    </button>` 
                 : ''; 
@@ -234,30 +438,24 @@
             cardsHtml += `
             <div class="card" onclick="window.location.href='product.html?id=${ora.id}'">
                 <div>
-                    <h3 style="margin: 0 0 8px 0; font-size: 16px;">${ora.brand || ''} ${ora.model || ''}</h3>
                     <img src="${imgUrl}" alt="${ora.brand || 'Movement Part'}">
-                    <div class="price">${ora.price ? ora.price + ' €' : 'Contact'}</div>
+                    <h3 style="margin: 8px 0 3px 0; font-size: 15px; color: #fff;">${ora.brand || ''} ${ora.model || ''}</h3>
+                    <div style="font-size: 12px; color: #aaa;">${ora.reference ? 'Cal. / Ref: ' + ora.reference : ''}</div>
+                    
+                    <div class="badges-row">
+                        <span class="badge badge-qty">Qty: ${qty} pcs</span>
+                        ${conditionBadge}
+                    </div>
+
+                    <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
                 </div>
 
                 <div>
-                    <input type="email" id="email_parts_${ora.id}" placeholder="Emaili yt" class="search-box" style="margin:5px 0 8px 0; padding:8px; font-size:13px;" onclick="event.stopPropagation();">
-                    
-                    <button class="btn-main btn-secondary" style="width:100%; padding:8px; font-size:13px;" 
-                        onclick="event.stopPropagation(); const emailVal = document.getElementById('email_parts_${ora.id}').value; if(!emailVal){ alert('Ju lutem vendosni email-in!'); return; } alert('Kërkesa u dërgua me sukses!');">
-                        Send Request
-                    </button>
-
                     ${buyNowButton}
-
-                    <div style="display: flex; gap:5px; margin-top:8px;">
-                        <button class="btn-main btn-secondary" onclick="event.stopPropagation(); alert('U shtua te të preferuarat!')" style="flex:1; padding:6px; font-size:12px;">
-                            ❤️ Like
-                        </button>
-                        <button class="btn-main btn-secondary" style="flex:1; padding:6px; font-size:12px;" 
-                            onclick="event.stopPropagation(); const productUrl = window.location.origin + '/product.html?id=${ora.id}'; navigator.clipboard.writeText(productUrl).then(() => { alert('Linku u kopjua!'); });">
-                            🔗 Share
-                        </button>
-                    </div>
+                    <button type="button" class="btn-main btn-secondary" style="width:100%;" 
+                        onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}';">
+                        View Details
+                    </button>
                 </div>
             </div>
             `;
@@ -265,7 +463,6 @@
 
         container.innerHTML = cardsHtml;
 
-        // Lidhja e eventeve për PayPal direkt nga listimi
         document.querySelectorAll('.buy-paypal-btn').forEach(btn => {
             btn.addEventListener('click', async function(e) {
                 e.stopPropagation();
@@ -291,51 +488,47 @@
                     if (result.paypal_link) {
                         window.location.href = result.paypal_link;
                     } else {
-                        alert("PayPal link nuk u krijua");
+                        alert("PayPal link could not be created.");
                         this.innerText = "🛒 BUY NOW (PayPal)";
                     }
                 } catch(err) {
                     console.error(err);
-                    alert("Gabim me PayPal");
+                    alert("PayPal error.");
                     this.innerText = "🛒 BUY NOW (PayPal)";
                 }
             });
         });
     }
 
-    // Funksionaliteti i kërkimit (Search live)
-    document.getElementById("search-input").addEventListener("input", function(e) {
-        const query = e.target.value.toLowerCase().trim();
-        const filtered = allOrasData.filter(ora => {
-            const brand = (ora.brand || "").toLowerCase();
-            const model = (ora.model || "").toLowerCase();
-            const description = (ora.description || "").toLowerCase();
-            return brand.includes(query) || model.includes(query) || description.includes(query);
+    // Eventet për filtrat
+    document.getElementById("search-input").addEventListener("input", applyAllFilters);
+    document.getElementById("part-type-filter").addEventListener("change", applyAllFilters);
+    document.getElementById("condition-filter").addEventListener("change", applyAllFilters);
+
+    document.querySelectorAll(".filter-chip").forEach(chip => {
+        chip.addEventListener("click", function() {
+            document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+            this.classList.add("active");
+            selectedCaliber = this.getAttribute("data-caliber");
+            applyAllFilters();
         });
-        renderCards(filtered);
     });
 
-    document.addEventListener("DOMContentLoaded", loadOras);
-
-    // Funksioni checkMenu për butonin Menu në fund
-    function checkMenu(event) {
-        event.stopPropagation();
-        if (typeof window.toggleMenu === 'function') {
-            window.toggleMenu();
-        } else {
-            alert('Menuja është duke u ngarkuar ose mungon skripta kryesore e menusë.');
-        }
+    function toggleLocalMenu(event) {
+        if (event) event.stopPropagation();
+        const menu = document.getElementById('myOraSwissMenu');
+        if (menu) menu.classList.toggle('active');
     }
-</script>
 
-<nav class="bottom-nav">
-    <a href="index.html">Home</a>
-    <a href="favorites.html">Favs</a>
-    <a href="messages.html">Messages</a>
-    <a href="mysales.html">Sales</a>
-    <a href="sellnow.html">Sell</a>
-    <button type="button" onclick="checkMenu(event)">Menu</button>
-</nav>
+    document.addEventListener('click', function(e) {
+        const menu = document.getElementById('myOraSwissMenu');
+        if (menu && menu.classList.contains('active') && !menu.contains(e.target)) {
+            menu.classList.remove('active');
+        }
+    });
+
+    loadOras();
+</script>
 
 </body>
 </html>

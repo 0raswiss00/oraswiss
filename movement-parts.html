@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movement Parts Collection - Ora Swiss</title>
+    <title>Movement Parts - Ora Swiss</title>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
     <script>
@@ -25,7 +25,6 @@
         .container-content { padding: 15px; max-width: 1200px; margin: 0 auto; }
         h1 { font-size: 20px; margin: 5px 0 15px 0; color: gold; }
 
-        /* Search Box */
         .search-box {
             width: 100%;
             padding: 12px 15px;
@@ -38,7 +37,6 @@
         }
         .search-box:focus { outline: none; border-color: gold; }
 
-        /* Filtrat e Kalibrave (10 Mekanizmat) & Gjendjes */
         .filter-section-label {
             font-size: 12px;
             color: #aaa;
@@ -89,7 +87,6 @@
         }
         .filter-select:focus { outline: none; border-color: gold; }
 
-        /* Grid: 2 kolona në celular, 4 në kompjuter */
         .grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -172,7 +169,14 @@
         }
         .btn-secondary:hover { background: #333; }
 
-        /* Floating Menu */
+        .btn-edit {
+            background: #1a180d;
+            color: gold;
+            border: 1px solid #6b5916;
+            margin-top: 5px;
+        }
+        .btn-edit:hover { background: #292512; }
+
         #myOraSwissMenu {
             display: none;
             position: fixed;
@@ -200,7 +204,6 @@
         .menu-item-row:last-child { border-bottom: none; }
         .menu-item-row:hover { background: #282828; border-radius: 8px; }
 
-        /* Bottom Nav bar */
         .bottom-nav {
             position: fixed;
             bottom: 20px;
@@ -244,7 +247,7 @@
         <a href="index.html">Home</a>
         <a href="luxury.html">Luxury</a>
         <a href="vintage.html">Vintage</a>
-        <a href="parts.html" style="color: gold;">Parts</a>
+        <a href="movement-parts.html" style="color: gold;">Movement Parts</a>
         <a href="product-bracelets-straps.html">Bracelet/Strap</a>
         <a href="service.html">Service</a>
         <a href="about.html">About</a>
@@ -252,12 +255,10 @@
 </header>
 
 <div class="container-content">
-    <h1>Movement Parts Collection</h1>
+    <h1>Movement Parts</h1>
     
-    <!-- Search Input -->
     <input type="text" id="search-input" class="search-box" placeholder="Search by caliber (e.g. Rolex 3135, Valjoux 22) or part name (Balance Staff, Gear)...">
 
-    <!-- 10 Pre-set Movement Calibers -->
     <div class="filter-section-label">Filter by Movement Caliber:</div>
     <div class="caliber-bar" id="caliber-filters">
         <button type="button" class="filter-chip active" data-caliber="all">All Calibers</button>
@@ -273,7 +274,6 @@
         <button type="button" class="filter-chip" data-caliber="6497">ETA 6497 / 6498</button>
     </div>
 
-    <!-- Part Type & Condition Filter -->
     <div class="sub-filters">
         <select id="part-type-filter" class="filter-select">
             <option value="all">All Part Types</option>
@@ -297,7 +297,6 @@
     <div id="oras-container" class="grid">Loading movement parts...</div>
 </div>
 
-<!-- Floating Menu -->
 <div id="myOraSwissMenu">
     <div class="menu-item-row" onclick="location.href='buy.html'"><span>Buy</span><span>&gt;</span></div>
     <div class="menu-item-row" onclick="location.href='mysold.html'"><span>My Sold</span><span>&gt;</span></div>
@@ -331,7 +330,7 @@
         const { data, error } = await window.supabaseClient
             .from('oras')
             .select('*')
-            .in('category', ['Movement Parts', 'parts']);
+            .eq('category', 'Movement Parts');
 
         if (error) {
             container.innerHTML = "<p style='color:red;'>Error loading items: " + error.message + "</p>";
@@ -357,20 +356,16 @@
                 ora.brand || "",
                 ora.model || "",
                 ora.reference || "",
+                ora.caliber || "",
+                ora.custom_part_name || "",
                 ora.description || "",
                 ora.condition || ""
             ].join(" ").toLowerCase();
 
-            // 1. Search bar match
             const matchesSearch = !searchQuery || fullText.includes(searchQuery);
-
-            // 2. Caliber match
             const matchesCaliber = selectedCaliber === "all" || fullText.includes(selectedCaliber);
-
-            // 3. Part type match
             const matchesPartType = partType === "all" || fullText.includes(partType);
 
-            // 4. Condition match
             let matchesCondition = true;
             if (condition === "damaged") {
                 matchesCondition = fullText.includes("damaged") || fullText.includes("broken") || fullText.includes("repair") || fullText.includes("demtuar");
@@ -420,7 +415,6 @@
                 }
             }
 
-            // Sasia dhe Gjendja (nëse janë në kolonat quantity/condition ose te përshkrimi)
             const qty = ora.quantity || 1;
             const descLower = ((ora.condition || "") + " " + (ora.description || "")).toLowerCase();
             const isDamaged = descLower.includes("damaged") || descLower.includes("broken") || descLower.includes("demtuar");
@@ -440,7 +434,7 @@
                 <div>
                     <img src="${imgUrl}" alt="${ora.brand || 'Movement Part'}">
                     <h3 style="margin: 8px 0 3px 0; font-size: 15px; color: #fff;">${ora.brand || ''} ${ora.model || ''}</h3>
-                    <div style="font-size: 12px; color: #aaa;">${ora.reference ? 'Cal. / Ref: ' + ora.reference : ''}</div>
+                    <div style="font-size: 12px; color: #aaa;">${ora.caliber ? 'Cal: ' + ora.caliber : (ora.reference ? 'Ref: ' + ora.reference : '')}</div>
                     
                     <div class="badges-row">
                         <span class="badge badge-qty">Qty: ${qty} pcs</span>
@@ -455,6 +449,10 @@
                     <button type="button" class="btn-main btn-secondary" style="width:100%;" 
                         onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}';">
                         View Details
+                    </button>
+                    <button type="button" class="btn-main btn-edit" style="width:100%;" 
+                        onclick="event.stopPropagation(); window.location.href='edit.html?id=${ora.id}';">
+                        ✏️ Modify
                     </button>
                 </div>
             </div>
@@ -500,7 +498,6 @@
         });
     }
 
-    // Eventet për filtrat
     document.getElementById("search-input").addEventListener("input", applyAllFilters);
     document.getElementById("part-type-filter").addEventListener("change", applyAllFilters);
     document.getElementById("condition-filter").addEventListener("change", applyAllFilters);

@@ -60,13 +60,6 @@
             width: 100%;
         }
 
-        @media (min-width: 1024px) {
-            #salesList {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 16px;
-            }
-        }
-
         .sale-item {
             background-color: #111;
             border: 1px solid #333;
@@ -90,13 +83,18 @@
         }
 
         @media (min-width: 1024px) {
+            #salesList {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
+            }
+
             .sale-item {
-                padding: 14px;
+                padding: 12px;
             }
 
             .sale-item img {
                 aspect-ratio: auto;
-                height: 210px;
+                height: 160px;
             }
         }
 

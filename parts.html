@@ -445,7 +445,7 @@
                 : '';
 
             // Shfaqet vetëm kur përdoruesi është i loguar
-            const canModify = Boolean(currentUserId);
+            const canModify = Boolean(currentUserId && ora.user_id && ora.user_id === currentUserId);
             const modifyButton = canModify
                 ? `<button type="button" class="btn-main btn-edit" style="width:100%;"
                        onclick="event.stopPropagation(); window.location.href='edit.html?id=${ora.id}';">

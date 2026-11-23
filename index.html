@@ -13,14 +13,16 @@
     gtag('config', 'G-KD2ZZ3MJYY');
   </script>
   <style>
+    * { box-sizing: border-box; }
     body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff;padding-bottom:110px !important;}
-    .site-header{position:sticky;top:0;z-index:9999;background:#111}
+    .site-header{position:sticky;top:0;z-index:9999;background:#111;border-bottom:1px solid #333;}
     .nav-scroll{display:flex;gap:18px;align-items:center;overflow-x:auto;padding:6px 12px}
     .nav-scroll a {
         color: #fff;
         text-decoration: none;
         padding: 4px 8px;
         font-size: 11px;
+        white-space: nowrap;
     }
     .nav-scroll a:hover{color:gold}
     .site-title {
@@ -28,6 +30,8 @@
         line-height: 1;
         margin-right: 10px;
         font-size: 12px !important;
+        color: gold;
+        white-space: nowrap;
     }
 
     .grid {
@@ -58,12 +62,13 @@
 
     .card {
         background: #111;
-        padding: 8px;
+        padding: 10px;
         border-radius: 10px;
         border: 1px solid #333;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        cursor: pointer;
     }
 
     .card img {
@@ -73,10 +78,11 @@
         display: block;
         border-radius: 8px;
         margin-bottom: 10px;
+        background: #181818;
     }
 
     .card h3 {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: bold;
         margin: 5px 0 2px 0;
         color: #fff;
@@ -84,27 +90,87 @@
 
     .card p {
         color: #aaa;
-        font-size: 14px;
-        margin: 0 0 10px 0;
+        font-size: 13px;
+        margin: 0 0 6px 0;
+    }
+
+    .badges-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin: 6px 0;
+    }
+
+    .badge {
+        font-size: 11px;
+        padding: 3px 7px;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+    .badge-qty { background: #1f2937; color: #60a5fa; border: 1px solid #374151; }
+    .badge-good { background: #064e3b; color: #34d399; border: 1px solid #065f46; }
+    .badge-damaged { background: #450a0a; color: #f87171; border: 1px solid #7f1d1d; }
+
+    .price {
+        color: gold;
+        font-weight: bold;
+        margin: 8px 0 6px 0;
+        font-size: 1.05em;
+    }
+
+    .btn-main {
+        padding: 9px;
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 13px;
+        text-align: center;
+        display: block;
+        text-decoration: none;
+        width: 100%;
+    }
+
+    .btn-buy {
+        background: gold;
+        color: #000;
+        margin-top: 6px;
+    }
+
+    .btn-buy:hover {
+        background: #e6c200;
     }
 
     .btn-view-details {
         width: 100%;
-        padding: 12px;
+        padding: 9px;
         background: #222;
         color: #fff;
         border: 1px solid #444;
-        border-radius: 8px;
+        border-radius: 6px;
         font-weight: bold;
         cursor: pointer;
-        font-size: 14px;
+        font-size: 13px;
         text-align: center;
+        margin-top: 6px;
         transition: background 0.2s;
     }
 
     .btn-view-details:hover {
         background: #333;
-        border-color: #666;
+        border-color: gold;
+        color: gold;
+    }
+
+    .btn-edit {
+        background: #1a180d;
+        color: gold;
+        border: 1px solid #6b5916;
+        margin-top: 6px;
+    }
+
+    .btn-edit:hover {
+        background: #292512;
     }
 
     .bottom-nav {
@@ -228,8 +294,9 @@
     }
 
     h2 {
-        font-size: 12px;
-        margin: 10px;
+        font-size: 14px;
+        margin: 12px 10px 6px 10px;
+        color: gold;
     }
 
     .parts-link{
@@ -493,6 +560,13 @@
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
   );
 
+  let currentUserId = null;
+
+  async function checkAuthUser() {
+    const { data: { session } } = await supabase.auth.getSession();
+    currentUserId = session?.user?.id || null;
+  }
+
   async function kontrolloLogin() {
       const { data: { user } } = await supabase.auth.getUser();
       const btn = document.getElementById("loginRegisterBtn");
@@ -500,7 +574,6 @@
           btn.style.display = user ? "none" : "block";
       }
   }
-  kontrolloLogin();
 
   async function renderProductsData(data, containerId) {
     const container = document.getElementById(containerId);
@@ -515,8 +588,17 @@
         let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
         let primaryImage = "";
 
-        if (ora.image_url && ora.image_url.length > 0) {
-            primaryImage = Array.isArray(ora.image_url) ? ora.image_url[0] : ora.image_url;
+        if (ora.image_url) {
+            if (Array.isArray(ora.image_url) && ora.image_url.length > 0) {
+                primaryImage = ora.image_url[0];
+            } else if (typeof ora.image_url === 'string') {
+                try {
+                    const parsed = JSON.parse(ora.image_url);
+                    primaryImage = Array.isArray(parsed) ? parsed[0] : ora.image_url;
+                } catch (e) {
+                    primaryImage = ora.image_url;
+                }
+            }
         }
 
         if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
@@ -526,25 +608,108 @@
                 imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
             }
         }
-      
+
+        const qty = ora.quantity || 1;
+        const condAndWork = [
+            ora.condition || "",
+            ora.work_status || "",
+            ora.description || ""
+        ].join(" ").toLowerCase();
+
+        const isNotWorking =
+            condAndWork.includes("not working") ||
+            condAndWork.includes("not good") ||
+            condAndWork.includes("damaged") ||
+            condAndWork.includes("broken") ||
+            condAndWork.includes("repair") ||
+            condAndWork.includes("demtuar");
+
+        const statusBadge = isNotWorking
+            ? `<span class="badge badge-damaged">Damaged / Not Working</span>`
+            : `<span class="badge badge-good">Good / Working</span>`;
+
+        const buyNowButton = ora.price
+            ? `<button type="button" class="btn-main btn-buy buy-paypal-btn" data-id="${ora.id}" data-price="${ora.price}" data-name="${encodeURIComponent((ora.brand || 'Ora') + ' ' + (ora.model || ''))}">
+                   🛒 BUY NOW (PayPal)
+               </button>`
+            : '';
+
+        const canModify = Boolean(currentUserId && ora.user_id && ora.user_id === currentUserId);
+        const modifyButton = canModify
+            ? `<button type="button" class="btn-main btn-edit" onclick="event.stopPropagation(); window.location.href='edit.html?id=${ora.id}';">
+                   ✏️ Modify
+               </button>`
+            : '';
+
         return `
-            <div class="card" onclick="openProduct('${ora.id}')" style="cursor: pointer;">
+            <div class="card" onclick="openProduct('${ora.id}')">
                 <div>
                     <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
                     <h3>${ora.brand || ''}</h3>
                     <p>${ora.model || ora.reference || ''}</p>
+
+                    <div class="badges-row">
+                        <span class="badge badge-qty">Qty: ${qty} pcs</span>
+                        ${statusBadge}
+                    </div>
+
+                    <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
                 </div>
-                <button class="btn-view-details" onclick="event.stopPropagation(); openProduct('${ora.id}')">View Details</button>
+                <div>
+                    ${buyNowButton}
+                    <button type="button" class="btn-view-details" onclick="event.stopPropagation(); openProduct('${ora.id}')">View Details</button>
+                    ${modifyButton}
+                </div>
             </div>
         `;
     }).join('');
+
+    container.querySelectorAll('.buy-paypal-btn').forEach(btn => {
+        btn.addEventListener('click', async function (e) {
+            e.stopPropagation();
+            const productId = this.getAttribute('data-id');
+            const price = this.getAttribute('data-price');
+            const productName = decodeURIComponent(this.getAttribute('data-name'));
+
+            this.innerText = "Loading...";
+            try {
+                const response = await fetch(
+                    "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
+                    {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            product_id: productId,
+                            price: price,
+                            product_name: productName
+                        })
+                    }
+                );
+                const result = await response.json();
+                if (result.paypal_link) {
+                    window.location.href = result.paypal_link;
+                } else {
+                    alert("PayPal link could not be created.");
+                    this.innerText = "🛒 BUY NOW (PayPal)";
+                }
+            } catch (err) {
+                console.error(err);
+                alert("PayPal error.");
+                this.innerText = "🛒 BUY NOW (PayPal)";
+            }
+        });
+    });
   }
 
   async function loadCategory(cat, containerId) {
-    const { data, error } = await supabase
-        .from('oras')
-        .select('*')
-        .eq('category', cat);  
+    let query = supabase.from('oras').select('*');
+    if (cat === 'parts') {
+        query = query.in('category', ['parts', 'Movement Parts', 'Part', 'Parts']);
+    } else {
+        query = query.eq('category', cat);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
         console.error("Gabim:", error);
@@ -566,11 +731,16 @@
     }
   }
 
-  kontrolloSesionin();
-  
-  loadCategory('luxury', 'luxury-container');
-  loadCategory('vintage', 'vintage-container');
-  loadCategory('parts', 'parts-container');
+  async function initIndex() {
+    await checkAuthUser();
+    kontrolloLogin();
+    kontrolloSesionin();
+    loadCategory('luxury', 'luxury-container');
+    loadCategory('vintage', 'vintage-container');
+    loadCategory('parts', 'parts-container');
+  }
+
+  initIndex();
 
   async function loadProductCount() {
     try {
@@ -668,7 +838,7 @@
 
         const luxuryList = data.filter(item => item.category === 'luxury');
         const vintageList = data.filter(item => item.category === 'vintage');
-        const partsList = data.filter(item => item.category === 'parts');
+        const partsList = data.filter(item => ['parts', 'Movement Parts', 'Part', 'Parts'].includes(item.category));
 
         renderProductsData(luxuryList, 'luxury-container');
         renderProductsData(vintageList, 'vintage-container');

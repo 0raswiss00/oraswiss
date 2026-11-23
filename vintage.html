@@ -170,8 +170,31 @@
         .price {
             color: gold;
             font-weight: bold;
-            margin: 8px 0 4px 0;
-            font-size: 1.05em;
+            margin: 8px 0 6px 0;
+            font-size: 1.1em;
+        }
+
+        .btn-main {
+            padding: 9px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 13px;
+            text-align: center;
+            display: block;
+            text-decoration: none;
+            width: 100%;
+        }
+
+        .btn-buy {
+            background: gold;
+            color: #000;
+            margin-top: 6px;
+        }
+
+        .btn-buy:hover {
+            background: #e6c200;
         }
 
         .btn-card-action {
@@ -450,8 +473,14 @@
                 condAndWork.includes("repair");
 
             const statusBadge = isNotWorking
-                ? `<span class="badge badge-damaged">Not Working / Repair</span>`
+                ? `<span class="badge badge-damaged">Damaged / Not Working</span>`
                 : `<span class="badge badge-good">Good / Working</span>`;
+
+            const buyNowButton = ora.price
+                ? `<button type="button" class="btn-main btn-buy buy-paypal-btn" data-id="${ora.id}" data-price="${ora.price}" data-name="${encodeURIComponent((ora.brand || 'Watch') + ' ' + (ora.model || ''))}">
+                       🛒 BUY NOW (PayPal)
+                   </button>`
+                : '';
 
             const canModify = Boolean(currentUserId && ora.user_id && ora.user_id === currentUserId);
             const modifyButton = canModify
@@ -477,6 +506,7 @@
                 </div>
 
                 <div>
+                    ${buyNowButton}
                     <button type="button" class="btn-card-action" onclick="event.stopPropagation(); window.location.href='product.html?id=${ora.id}';">
                         View Details
                     </button>
@@ -486,6 +516,42 @@
         });
 
         container.innerHTML = cardsHtml;
+
+        document.querySelectorAll('.buy-paypal-btn').forEach(btn => {
+            btn.addEventListener('click', async function (e) {
+                e.stopPropagation();
+                const productId = this.getAttribute('data-id');
+                const price = this.getAttribute('data-price');
+                const productName = decodeURIComponent(this.getAttribute('data-name'));
+
+                this.innerText = "Loading...";
+                try {
+                    const response = await fetch(
+                        "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                product_id: productId,
+                                price: price,
+                                product_name: productName
+                            })
+                        }
+                    );
+                    const result = await response.json();
+                    if (result.paypal_link) {
+                        window.location.href = result.paypal_link;
+                    } else {
+                        alert("PayPal link could not be created.");
+                        this.innerText = "🛒 BUY NOW (PayPal)";
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert("PayPal error.");
+                    this.innerText = "🛒 BUY NOW (PayPal)";
+                }
+            });
+        });
     }
 
     const searchInput = document.getElementById("searchInput");

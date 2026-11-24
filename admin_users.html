@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ora Swiss - Menaxhimi i Përdoruesve</title>
-    
+
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
     <script>
@@ -13,7 +13,7 @@
       gtag('js', new Date());
       gtag('config', 'G-KD2ZZ3MJYY');
     </script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -31,89 +31,105 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 960px;
             margin: 0 auto;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.65);
             border: 2px solid #FFD700;
             border-radius: 10px;
             padding: 30px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
         }
 
+        .top-nav {
+            margin-bottom: 15px;
+        }
+
+        .back-link {
+            color: #FFD700;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
         h1 {
             color: #FFD700;
             text-align: center;
             margin-bottom: 10px;
-            font-size: 2.5em;
+            font-size: 2.3em;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
         }
 
         .stats {
-            display: flex;
-            justify-content: space-around;
-            margin: 30px 0;
-            flex-wrap: wrap;
-            gap: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            margin: 25px 0;
+            gap: 16px;
         }
 
         .stat-box {
-            background: rgba(255, 215, 0, 0.1);
+            background: rgba(255, 215, 0, 0.08);
             border: 2px solid #FFD700;
             border-radius: 8px;
-            padding: 20px;
+            padding: 18px;
             text-align: center;
-            flex: 1;
-            min-width: 200px;
         }
 
         .stat-box h3 {
             color: #FFD700;
-            font-size: 1.2em;
+            font-size: 1em;
             margin-bottom: 10px;
         }
 
         .stat-box .number {
-            font-size: 2.5em;
+            font-size: 2.2em;
             color: #FFD700;
             font-weight: bold;
         }
 
         .users-list {
-            margin-top: 40px;
+            margin-top: 30px;
         }
 
-        .users-list h2 {
+        .users-list h2,
+        .feedback-section h2 {
             color: #FFD700;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             border-bottom: 2px solid #FFD700;
             padding-bottom: 10px;
+            font-size: 1.3em;
         }
 
         .user-card {
             background: rgba(255, 255, 255, 0.05);
             border-left: 4px solid #FFD700;
-            padding: 20px;
-            margin-bottom: 15px;
+            padding: 18px;
+            margin-bottom: 14px;
             border-radius: 5px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
             transition: all 0.3s ease;
         }
 
         .user-card:hover {
             background: rgba(255, 215, 0, 0.1);
-            transform: translateX(5px);
+            transform: translateX(4px);
         }
 
         .user-info h3 {
             color: #FFD700;
             margin-bottom: 5px;
-            font-size: 1.2em;
+            font-size: 1.15em;
         }
 
         .user-info p {
-            color: #aaa;
+            color: #bbb;
             font-size: 0.9em;
             margin: 3px 0;
         }
@@ -121,10 +137,11 @@
         .user-actions {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .btn {
-            padding: 8px 15px;
+            padding: 8px 14px;
             border-radius: 5px;
             font-size: 0.9em;
             font-weight: bold;
@@ -155,18 +172,18 @@
         .loading {
             text-align: center;
             color: #FFD700;
-            font-size: 1.2em;
-            padding: 40px;
+            font-size: 1.1em;
+            padding: 35px;
         }
 
         .spinner {
             border: 4px solid rgba(255, 215, 0, 0.2);
             border-top: 4px solid #FFD700;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             animation: spin 1s linear infinite;
-            margin: 20px auto;
+            margin: 15px auto;
         }
 
         @keyframes spin {
@@ -178,50 +195,80 @@
             background: rgba(255, 0, 0, 0.2);
             border: 2px solid #ff0000;
             color: #ff6b6b;
-            padding: 20px;
+            padding: 18px;
             border-radius: 8px;
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
         .empty {
             text-align: center;
             color: #aaa;
-            padding: 40px;
-            font-size: 1.1em;
+            padding: 35px;
+            font-size: 1.05em;
         }
 
         .refresh-btn {
             background: #FFD700;
             color: #000;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 18px;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             transition: all 0.3s ease;
         }
 
         .refresh-btn:hover {
             background: #FFA500;
-            transform: scale(1.05);
+        }
+
+        .feedback-section {
+            margin-top: 36px;
+            background: rgba(255, 215, 0, 0.04);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .feedback-note {
+            color: #ccc;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+
+        #google-feedback-slot {
+            min-height: 48px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 6px;
+            border: 1px dashed rgba(255, 215, 0, 0.35);
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="top-nav">
+            <a href="index.html" class="back-link">← Kthehu te Ora Swiss</a>
+        </div>
+
         <h1>⌚ ORA SWISS</h1>
-        <p style="text-align: center; color: #aaa; margin-bottom: 30px;">Paneli i Administratorit - Përdoruesit dhe Artikujt</p>
+        <p style="text-align: center; color: #aaa; margin-bottom: 25px;">Paneli i Administratorit - Përdoruesit, Artikujt dhe Feedback</p>
 
         <!-- STATISTIKA -->
         <div class="stats">
             <div class="stat-box">
-                <h3>👥 Përdorues DB</h3>
+                <h3>👥 Përdorues</h3>
                 <div class="number" id="count-users">0</div>
             </div>
             <div class="stat-box">
-                <h3>⌚ Ora / Artikuj</h3>
+                <h3>⌚ Në Shitje</h3>
                 <div class="number" id="count-products">0</div>
+            </div>
+            <div class="stat-box">
+                <h3>👁️ Artikuj të Shikuar</h3>
+                <div class="number" id="count-views">0</div>
             </div>
             <div class="stat-box">
                 <h3>🛒 Porosi</h3>
@@ -231,11 +278,22 @@
 
         <!-- LISTA E PËRDORUESVE -->
         <div class="users-list">
-            <h2>📋 Lista e Përdoruesve (Të Gjithë Përdoruesit)</h2>
-            <button class="refresh-btn" onclick="loadAllData()">🔄 Përditëso Të Dhënat</button>
+            <h2>📋 Lista e Përdoruesve</h2>
+            <button type="button" class="refresh-btn" onclick="loadAllData()">🔄 Përditëso Të Dhënat</button>
             <div id="users-container" class="loading">
                 <div class="spinner"></div>
                 <p>Po ngarkohet...</p>
+            </div>
+        </div>
+
+        <!-- FEEDBACK BLERËSVE / GOOGLE SCRIPT -->
+        <div class="feedback-section">
+            <h2>⭐ Feedback i Blerësve (Google Customer Reviews)</h2>
+            <p class="feedback-note">
+                Këtu shfaqet/aktivizohet skripti i Google për vlerësimet e blerësve pas shitjes. Ngjit skriptin e Google brenda bllokut <code>#google-feedback-slot</code> ose te <code>&lt;head&gt;</code> sipas udhëzimit të Google.
+            </p>
+            <div id="google-feedback-slot">
+                <span style="color:#999; font-size:0.85em;">Gati për skriptin e Google Feedback / Customer Reviews.</span>
             </div>
         </div>
     </div>
@@ -253,49 +311,103 @@
         alert("Vendndodhja e përdoruesit: " + (locationName || "Nuk është vendosur"));
     }
 
+    async function fetchTotalUsersCount(usersArray, fallbackCount) {
+        try {
+            const { data: rpcCount, error: rpcError } = await supabase.rpc('get_users_count');
+            if (!rpcError && typeof rpcCount === 'number') {
+                return rpcCount;
+            }
+        } catch (e) {}
+        return fallbackCount || (usersArray ? usersArray.length : 0);
+    }
+
+    async function fetchForSaleCount() {
+        let total = 0;
+        const { count: countOras } = await supabase
+            .from('oras')
+            .select('*', { count: 'exact', head: true });
+        const { count: countStraps } = await supabase
+            .from('bracelets_straps')
+            .select('*', { count: 'exact', head: true });
+
+        total = (countOras || 0) + (countStraps || 0);
+
+        if (total === 0) {
+            const { count: countWatches } = await supabase
+                .from('watches')
+                .select('*', { count: 'exact', head: true });
+            total = countWatches || 0;
+        }
+        return total;
+    }
+
+    async function fetchViewedArticlesCount(orasData) {
+        let totalViews = 0;
+
+        if (Array.isArray(orasData)) {
+            for (const row of orasData) {
+                const v = Number(row.views ?? row.view_count ?? row.clicks ?? 0);
+                if (Number.isFinite(v) && v > 0) totalViews += v;
+            }
+        }
+
+        try {
+            const { count: viewRowsCount, error } = await supabase
+                .from('product_views')
+                .select('*', { count: 'exact', head: true });
+            if (!error && typeof viewRowsCount === 'number' && viewRowsCount > 0) {
+                totalViews = Math.max(totalViews, viewRowsCount);
+            }
+        } catch (e) {}
+
+        if (totalViews === 0) {
+            try {
+                const localViews = JSON.parse(localStorage.getItem('oraswiss_product_views') || '{}');
+                totalViews = Object.values(localViews).reduce((acc, n) => acc + (Number(n) || 0), 0);
+            } catch (e) {}
+        }
+
+        return totalViews;
+    }
+
     async function loadAllData() {
         try {
             const usersContainer = document.getElementById("users-container");
             usersContainer.innerHTML = '<div class="spinner"></div><p style="text-align:center; color:#FFD700;">Duke u lidhur me Supabase...</p>';
-            
-            // 1. Merr Përdoruesit nga tabela 'profiles' (ose 'users')
+
+            // 1. Merr Përdoruesit nga 'profiles' (ose 'users')
             let { data: users, count: userCount, error: userError } = await supabase
                 .from('profiles')
                 .select('*', { count: 'exact' });
 
-            // Nëse tabela 'profiles' nuk ekziston ose kthen gabim, provohet tabela 'users'
             if (userError) {
-                console.warn("Provova 'profiles' por dështova, po provoj tabelën 'users'...");
                 const resUsers = await supabase.from('users').select('*', { count: 'exact' });
                 users = resUsers.data;
                 userCount = resUsers.count;
                 if (resUsers.error) throw resUsers.error;
             }
 
-            document.getElementById("count-users").textContent = userCount || (users ? users.length : 0);
+            const totalUsers = await fetchTotalUsersCount(users, userCount);
+            document.getElementById("count-users").textContent = totalUsers;
 
-            // 2. Merr Artikujt / Orët nga tabela 'watches' (ose 'articles' / 'products')
-            let { count: watchCount, error: watchError } = await supabase
-                .from('watches')
-                .select('*', { count: 'exact' });
+            // 2. Merr Artikujt në shitje (`oras` + `bracelets_straps`) dhe shikimet
+            const forSaleCount = await fetchForSaleCount();
+            document.getElementById("count-products").textContent = forSaleCount;
 
-            if (watchError) {
-                const resWatches = await supabase.from('articles').select('*', { count: 'exact' });
-                watchCount = resWatches.count;
-            }
-            document.getElementById("count-products").textContent = watchCount || 0;
+            const { data: orasRows } = await supabase.from('oras').select('*');
+            const totalViews = await fetchViewedArticlesCount(orasRows);
+            document.getElementById("count-views").textContent = totalViews;
 
             // 3. Merr Porositë nga tabela 'orders'
             const { count: orderCount } = await supabase
                 .from('orders')
-                .select('*', { count: 'exact' });
+                .select('*', { count: 'exact', head: true });
 
             document.getElementById("count-orders").textContent = orderCount || 0;
 
             // 4. Shfaq listën e përdoruesve në UI
             if (users && users.length > 0) {
                 usersContainer.innerHTML = users.map(user => {
-                    // Përshtatje fleksibël për emrin, emailin dhe vendndodhjen sipas kolonave tuaj
                     const userName = user.full_name || user.username || user.name || user.emri || 'Përdorues Anonim';
                     const userEmail = user.email || user.mail || 'N/A';
                     const userLocation = user.location || user.city || user.qyteti || user.address || 'Nuk ka vendndodhje';
@@ -309,7 +421,7 @@
                                 <p>Vendndodhja: <strong>${userLocation}</strong></p>
                             </div>
                             <div class="user-actions">
-                                <button class="btn btn-location" onclick="showLocation('${userLocation}')">📍 Vendndodhja</button>
+                                <button type="button" class="btn btn-location" onclick="showLocation('${userLocation}')">📍 Vendndodhja</button>
                                 <a href="artikujt_e_perdoruesit.html?id=${userId}" class="btn btn-articles">📦 Artikujt e tij</a>
                             </div>
                         </div>

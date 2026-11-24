@@ -193,10 +193,7 @@
     <label for="caliber" id="label_caliber">Caliber (Cal.)</label>
     <input type="text" id="caliber" placeholder="Caliber (Cal.)">
 
-    <input type="text" id="serial_number" placeholder="Serial Number">
-
-    <input type="text" id="category" placeholder="Category">
-
+    <label for="condition" id="label_condition">Condition (Gjendja)</label>
     <select id="condition">
         <option value="">Zgjidh gjendjen...</option>
         <option value="Used">Used</option>
@@ -207,6 +204,10 @@
             Used For Repair & Spares
         </option>
     </select>
+
+    <input type="text" id="serial_number" placeholder="Serial Number">
+
+    <input type="text" id="category" placeholder="Category">
 
     <input type="text" id="material" placeholder="Material">
 
@@ -419,10 +420,10 @@
     <div class="promo-box">
         <div class="promo-title">👑 Promovo Lart te Artikujt e Promovuar (Featured)</div>
         <div class="promo-desc">
-            Shfaq artikullin lart në faqen kryesore si Featured (pa e hequr nga kategoria e vet). Falas tani, gati për pagesë në të ardhmen.
+            Shfaq artikullin lart në faqen kryesore si Featured për 30 ditë (pa e hequr nga kategoria e vet). Falas tani, gati për pagesë në të ardhmen.
         </div>
         <button type="button" id="promoToggleBtn" class="btn-promo">
-            🚀 Promovo Lart (Falas tani)
+            🚀 Promovo Lart (30 ditë)
         </button>
     </div>
 
@@ -507,6 +508,7 @@ window.produktData = {
 };
 
 const PROMO_STORAGE_KEY = "oraswiss_promoted_deals_v1";
+const PROMO_DURATION_MS = 30 * 24 * 60 * 60 * 1000;
 const promoKey = `${type}_${id}`;
 let isFeaturedDraft = false;
 
@@ -521,8 +523,11 @@ function getPromotedDeals() {
 function savePromotedDeal(enabled, itemSnapshot = null) {
     const current = getPromotedDeals();
     if (enabled) {
+        const promotedAt = Date.now();
+        const expiresAt = promotedAt + PROMO_DURATION_MS;
         current[promoKey] = {
-            promotedAt: current[promoKey]?.promotedAt || Date.now(),
+            promotedAt,
+            expiresAt,
             data: itemSnapshot
         };
     } else {
@@ -541,10 +546,10 @@ function updatePromoButtonUI() {
     if (!btn) return;
     if (isFeaturedDraft) {
         btn.className = "btn-promo active-featured";
-        btn.textContent = "✅ Aktiv si Featured (Kliko për ta hequr)";
+        btn.textContent = "✅ Aktiv si Featured - 30 ditë (Kliko për ta hequr)";
     } else {
         btn.className = "btn-promo";
-        btn.textContent = "🚀 Promovo Lart (Falas tani)";
+        btn.textContent = "🚀 Promovo Lart (30 ditë)";
     }
 }
 
@@ -611,7 +616,6 @@ function hideEmptyFields(product) {
     const fieldIds = [
         "serial_number",
         "category",
-        "condition",
         "material",
         "movement",
         "movement_size",
@@ -1371,7 +1375,9 @@ document
                 price: updateData.price,
                 image_url: imageUrls,
                 reference: updateData.reference,
-                caliber: updateData.caliber
+                caliber: updateData.caliber,
+                condition: updateData.condition,
+                quantity: window.produktData?.quantity || 1
             });
 
 

@@ -34,6 +34,60 @@
         white-space: nowrap;
     }
 
+    .featured-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    #special-deals-row {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        padding-bottom: 6px;
+        scrollbar-width: none;
+        width: 100%;
+    }
+
+    #special-deals-row::-webkit-scrollbar {
+        display: none;
+    }
+
+    .featured-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 5;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 1px solid gold;
+        background: rgba(17, 17, 17, 0.92);
+        color: gold;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+        transition: background 0.2s, transform 0.2s;
+    }
+
+    .featured-nav-btn:hover {
+        background: gold;
+        color: #000;
+    }
+
+    .featured-nav-btn.prev {
+        left: 6px;
+    }
+
+    .featured-nav-btn.next {
+        right: 6px;
+    }
+
     .grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -465,22 +519,16 @@
     </div>
 </div>
 
-<div style="padding: 0 10px 20px 10px;">
+<div id="featured-section" style="padding: 0 10px 20px 10px; display: none;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <h3 style="margin: 0; color: #fff; font-size: 15px;">🔥 Ofertat e Ditës / Special Deals</h3>
-        <span style="font-size: 11px; color: gold;">Çmime me Ofertë</span>
+        <h3 style="margin: 0; color: #fff; font-size: 15px;">👑 Artikuj të Promovuar / Featured</h3>
+        <span style="font-size: 11px; color: gold;">Selected Pieces</span>
     </div>
-    <div style="
-        display: flex;
-        gap: 12px;
-        overflow-x: auto;
-        padding-bottom: 5px;
-    ">
-        <div style="min-width: 180px; background: #111; border: 1px solid gold; border-radius: 8px; padding: 12px; flex: 0 0 auto;">
-            <span style="background: gold; color: #000; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px;">OFFER BOX</span>
-            <div style="margin-top: 8px; font-size: 13px; font-weight: bold; color: #fff;">Make an Offer</div>
-            <div style="font-size: 11px; color: #aaa; margin: 4px 0;">Dërgoni ofertën tuaj për çdo produkt</div>
-        </div>
+
+    <div class="featured-wrapper">
+        <button type="button" class="featured-nav-btn prev" aria-label="Scroll left" onclick="scrollFeaturedDeals(-1)">‹</button>
+        <div id="special-deals-row"></div>
+        <button type="button" class="featured-nav-btn next" aria-label="Scroll right" onclick="scrollFeaturedDeals(1)">›</button>
     </div>
 </div>
 
@@ -735,6 +783,68 @@
         btnSell.style.display = "inline-block";
     }
   }
+
+  window.scrollFeaturedDeals = function(direction) {
+    const row = document.getElementById('special-deals-row');
+    if (!row) return;
+    const step = Math.max(220, Math.round(row.clientWidth * 0.7));
+    row.scrollBy({
+      left: direction * step,
+      behavior: 'smooth'
+    });
+  };
+
+  (function renderPromotedDealsTop() {
+    const section = document.getElementById('featured-section');
+    const dealsRow = document.getElementById('special-deals-row');
+    if (!section || !dealsRow) return;
+
+    let promos = {};
+    try {
+      promos = JSON.parse(localStorage.getItem('oraswiss_promoted_deals_v1') || '{}');
+    } catch (e) {
+      promos = {};
+    }
+
+    const list = Object.values(promos)
+      .filter(entry => entry && entry.data)
+      .sort((a, b) => (b.promotedAt || 0) - (a.promotedAt || 0));
+
+    if (list.length === 0) {
+      section.style.display = 'none';
+      return;
+    }
+
+    section.style.display = 'block';
+    dealsRow.innerHTML = list.map(entry => {
+      const item = entry.data;
+      const url = item.type === 'bracelet'
+        ? `product-bracelets-straps.html?id=${item.id}`
+        : `product.html?id=${item.id}`;
+      const rawImg = Array.isArray(item.image_url) ? item.image_url[0] : item.image_url;
+      const imgSrc = rawImg
+        ? (String(rawImg).startsWith('http')
+          ? rawImg
+          : 'https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/' + rawImg)
+        : 'https://placeholder.co/200x120/222/fff?text=Featured';
+
+      const codeInfo = item.caliber
+        ? `Cal: ${item.caliber}`
+        : (item.reference ? `Ref. ${item.reference}` : '');
+
+      return `
+        <a href="${url}" style="min-width:185px;max-width:185px;background:#111;border:1px solid #d4af37;border-radius:10px;padding:10px;flex:0 0 auto;text-decoration:none;color:#fff;display:flex;flex-direction:column;justify-content:space-between;">
+          <div>
+            <span style="background:gold;color:#000;font-size:10px;font-weight:bold;padding:2px 6px;border-radius:4px;letter-spacing:0.4px;">FEATURED</span>
+            <img src="${imgSrc}" alt="${item.brand || ''}" style="width:100%;height:110px;object-fit:cover;border-radius:6px;margin-top:8px;display:block;background:#181818;">
+            <div style="margin-top:7px;font-size:13px;font-weight:bold;color:#fff;">${item.brand || ''} ${item.model || ''}</div>
+            ${codeInfo ? `<div style="font-size:11px;color:#aaa;margin-top:2px;">${codeInfo}</div>` : ''}
+          </div>
+          <div style="font-size:13px;color:gold;font-weight:bold;margin-top:6px;">${item.price ? item.price + ' €' : 'Contact for price'}</div>
+        </a>
+      `;
+    }).join('');
+  })();
 
   async function initIndex() {
     await checkAuthUser();

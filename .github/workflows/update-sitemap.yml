@@ -45,7 +45,7 @@ jobs:
           ]
 
           product_urls = []
-          for table in ("eras", "bracelets_straps"):
+          for table in ("oras", "bracelets_straps"):
               url = f"{supabase_url}/rest/v1/{table}?select=id"
               req = urllib.request.Request(
                   url,

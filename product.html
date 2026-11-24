@@ -59,186 +59,118 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <!-- SEO PRODUCT -->
+    <!-- SEO PRODUCT -->
     <script>
         (async function () {
+            const seoUrlParams = new URLSearchParams(window.location.search);
+            const seoProductId = seoUrlParams.get('id');
+            if (!seoProductId) return;
 
-            const seoUrlParams =
-                new URLSearchParams(window.location.search);
+            const SUPABASE_URL = 'https://gnwsrmelmeqduhhmfmoa.supabase.co';
+            const SUPABASE_ANON_KEY = 'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9';
 
-            const seoProductId =
-                seoUrlParams.get('id');
+            const endpoints = [
+                `${SUPABASE_URL}/rest/v1/oras?id=eq.${encodeURIComponent(seoProductId)}&select=brand,model,reference,caliber,price,description,image_url`,
+                `${SUPABASE_URL}/rest/v1/bracelets_straps?id=eq.${encodeURIComponent(seoProductId)}&select=brand,model,reference,price,description,image_url`
+            ];
 
-            if (!seoProductId) {
-                return;
-            }
+            let product = null;
 
-            const SUPABASE_URL =
-                'https://gnwsrmelmeqduhhmfmoa.supabase.co';
-
-            const SUPABASE_ANON_KEY =
-                'sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIyC9';
-
-            const url =
-                `${SUPABASE_URL}/rest/v1/products?id=eq.${encodeURIComponent(seoProductId)}&select=brand,model,reference`;
-
-            try {
-
-                const response = await fetch(url, {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+            for (const endpoint of endpoints) {
+                try {
+                    const response = await fetch(endpoint, {
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                        }
+                    });
+                    if (!response.ok) continue;
+                    const rows = await response.json();
+                    if (Array.isArray(rows) && rows.length > 0) {
+                        product = rows[0];
+                        break;
                     }
-                });
-
-                if (!response.ok) {
-                    return;
-                }
-
-                const products =
-                    await response.json();
-
-                if (!products || products.length === 0) {
-                    return;
-                }
-
-                const product =
-                    products[0];
-
-                const brand =
-                    product.brand || '';
-
-                const model =
-                    product.model || '';
-
-                const reference =
-                    product.reference || '';
-
-                const productName = [
-                    brand,
-                    model,
-                    reference ? `Ref. ${reference}` : ''
-                ]
-                .filter(Boolean)
-                .join(' ');
-
-                const pageTitle =
-                    `${productName} | Ora Swiss`;
-
-                const description =
-                    `${productName} - Luxury watch available at Ora Swiss.`;
-
-                const currentUrl =
-                    window.location.href;
-
-
-                /* TITLE */
-                document.title =
-                    pageTitle;
-
-
-                /* META DESCRIPTION */
-                const descriptionMeta =
-                    document.querySelector(
-                        'meta[name="description"]'
-                    );
-
-                if (descriptionMeta) {
-                    descriptionMeta.setAttribute(
-                        'content',
-                        description
-                    );
-                }
-
-
-                /* OG TITLE */
-                const ogTitle =
-                    document.getElementById('ogTitle');
-
-                if (ogTitle) {
-                    ogTitle.setAttribute(
-                        'content',
-                        pageTitle
-                    );
-                }
-
-
-                /* OG DESCRIPTION */
-                const ogDescription =
-                    document.getElementById('ogDescription');
-
-                if (ogDescription) {
-                    ogDescription.setAttribute(
-                        'content',
-                        description
-                    );
-                }
-
-
-                /* OG URL */
-                const ogUrl =
-                    document.getElementById('ogUrl');
-
-                if (ogUrl) {
-                    ogUrl.setAttribute(
-                        'content',
-                        currentUrl
-                    );
-                }
-
-
-                /* CANONICAL */
-                const canonical =
-                    document.getElementById('canonicalUrl');
-
-                if (canonical) {
-                    canonical.setAttribute(
-                        'href',
-                        currentUrl
-                    );
-                }
-
-
-                /* PRODUCT SCHEMA */
-                const schema = {
-                    "@context": "https://schema.org",
-                    "@type": "Product",
-                    "name": productName,
-                    "brand": {
-                        "@type": "Brand",
-                        "name": brand
-                    },
-                    "model": model,
-                    "sku": reference,
-                    "url": currentUrl,
-                    "description": description
-                };
-
-
-                const schemaScript =
-                    document.createElement('script');
-
-                schemaScript.type =
-                    'application/ld+json';
-
-                schemaScript.textContent =
-                    JSON.stringify(schema);
-
-                document.head.appendChild(
-                    schemaScript
-                );
-
-            } catch (error) {
-
-                console.error(
-                    'SEO product error:',
-                    error
-                );
-
+                } catch (e) {}
             }
 
+            if (!product) return;
+
+            const brand = product.brand || '';
+            const model = product.model || '';
+            const codePart = product.caliber
+                ? `Cal. ${product.caliber}`
+                : (product.reference ? `Ref. ${product.reference}` : '');
+
+            const productName = [brand, model, codePart].filter(Boolean).join(' ') || 'Ora Swiss Item';
+            const priceText = product.price ? `${product.price} EUR` : '';
+            const description = product.description
+                ? String(product.description).slice(0, 155)
+                : `${productName} - Luxury watch & horology available at Ora Swiss.${priceText ? ' Price: ' + priceText : ''}`;
+            const currentUrl = window.location.href;
+
+            let images = [];
+            if (Array.isArray(product.image_url)) {
+                images = product.image_url;
+            } else if (typeof product.image_url === 'string' && product.image_url.trim()) {
+                try {
+                    const parsed = JSON.parse(product.image_url);
+                    images = Array.isArray(parsed) ? parsed : [product.image_url];
+                } catch (e) {
+                    images = [product.image_url];
+                }
+            }
+
+            const resolvedImages = images.map(img =>
+                String(img).startsWith('http')
+                    ? img
+                    : `https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/${img}`
+            );
+
+            document.title = `${productName} | Ora Swiss`;
+
+            const descriptionMeta = document.querySelector('meta[name="description"]');
+            if (descriptionMeta) descriptionMeta.setAttribute('content', description);
+
+            const ogTitle = document.getElementById('ogTitle');
+            if (ogTitle) ogTitle.setAttribute('content', `${productName} | Ora Swiss`);
+
+            const ogDescription = document.getElementById('ogDescription');
+            if (ogDescription) ogDescription.setAttribute('content', description);
+
+            const ogUrl = document.getElementById('ogUrl');
+            if (ogUrl) ogUrl.setAttribute('content', currentUrl);
+
+            const canonical = document.getElementById('canonicalUrl');
+            if (canonical) canonical.setAttribute('href', currentUrl);
+
+            const schema = {
+                "@context": "https://schema.org",
+                "@type": "Product",
+                "name": productName,
+                "brand": {
+                    "@type": "Brand",
+                    "name": brand || "Ora Swiss"
+                },
+                "model": model,
+                "sku": product.reference || product.caliber || String(seoProductId),
+                "image": resolvedImages,
+                "url": currentUrl,
+                "description": description,
+                "offers": {
+                    "@type": "Offer",
+                    "priceCurrency": "EUR",
+                    "price": product.price || undefined,
+                    "availability": "https://schema.org/InStock",
+                    "url": currentUrl
+                }
+            };
+
+            const schemaScript = document.createElement('script');
+            schemaScript.type = 'application/ld+json';
+            schemaScript.textContent = JSON.stringify(schema);
+            document.head.appendChild(schemaScript);
         })();
     </script>
-
     <style>
         * {
             box-sizing: border-box;

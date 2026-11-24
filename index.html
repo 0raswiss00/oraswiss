@@ -610,6 +610,34 @@
 
   let currentUserId = null;
 
+  const PROMO_STORAGE_KEY = 'oraswiss_promoted_deals_v1';
+  const PROMO_DURATION_MS = 30 * 24 * 60 * 60 * 1000;
+
+  function savePromotedDeal(itemKey, enabled, itemSnapshot = null) {
+    let current = {};
+    try {
+      current = JSON.parse(localStorage.getItem(PROMO_STORAGE_KEY) || '{}');
+    } catch (e) {
+      current = {};
+    }
+
+    if (enabled) {
+      const promotedAt = Date.now();
+      const expiresAt = promotedAt + PROMO_DURATION_MS;
+      current[itemKey] = {
+        promotedAt,
+        expiresAt,
+        data: itemSnapshot
+      };
+    } else {
+      delete current[itemKey];
+    }
+
+    try {
+      localStorage.setItem(PROMO_STORAGE_KEY, JSON.stringify(current));
+    } catch (e) {}
+  }
+
   async function checkAuthUser() {
     const { data: { session } } = await supabase.auth.getSession();
     currentUserId = session?.user?.id || null;

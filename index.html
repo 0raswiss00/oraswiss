@@ -832,6 +832,23 @@
         ? `Cal: ${item.caliber}`
         : (item.reference ? `Ref. ${item.reference}` : '');
 
+      const qty = item.quantity || 1;
+      const condText = [item.condition || '', item.work_status || '', item.description || '']
+        .join(' ')
+        .toLowerCase();
+
+      const isDamaged =
+        condText.includes('not working') ||
+        condText.includes('not good') ||
+        condText.includes('damaged') ||
+        condText.includes('broken') ||
+        condText.includes('repair') ||
+        condText.includes('demtuar');
+
+      const conditionBadge = isDamaged
+        ? `<span style="padding:2px 6px;border-radius:5px;font-size:10px;font-weight:bold;background:#450a0a;color:#f87171;border:1px solid #7f1d1d;">Damaged / Not Working</span>`
+        : `<span style="padding:2px 6px;border-radius:5px;font-size:10px;font-weight:bold;background:#064e3b;color:#34d399;border:1px solid #065f46;">Good / Working</span>`;
+
       return `
         <a href="${url}" style="min-width:185px;max-width:185px;background:#111;border:1px solid #d4af37;border-radius:10px;padding:10px;flex:0 0 auto;text-decoration:none;color:#fff;display:flex;flex-direction:column;justify-content:space-between;">
           <div>
@@ -839,13 +856,17 @@
             <img src="${imgSrc}" alt="${item.brand || ''}" style="width:100%;height:110px;object-fit:cover;border-radius:6px;margin-top:8px;display:block;background:#181818;">
             <div style="margin-top:7px;font-size:13px;font-weight:bold;color:#fff;">${item.brand || ''} ${item.model || ''}</div>
             ${codeInfo ? `<div style="font-size:11px;color:#aaa;margin-top:2px;">${codeInfo}</div>` : ''}
+            <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">
+              <span style="padding:2px 6px;border-radius:5px;font-size:10px;font-weight:bold;background:#1f2937;color:#60a5fa;border:1px solid #374151;">Qty: ${qty} pcs</span>
+              ${conditionBadge}
+            </div>
           </div>
-          <div style="font-size:13px;color:gold;font-weight:bold;margin-top:6px;">${item.price ? item.price + ' €' : 'Contact for price'}</div>
+          <div style="font-size:13px;color:gold;font-weight:bold;margin-top:8px;">${item.price ? item.price + ' €' : 'Contact for price'}</div>
         </a>
       `;
     }).join('');
   })();
-
+  
   async function initIndex() {
     await checkAuthUser();
     kontrolloLogin();

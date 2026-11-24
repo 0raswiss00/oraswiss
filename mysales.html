@@ -252,6 +252,7 @@
         }
 
         .form-group input,
+        .form-group select,
         .form-group textarea {
             width: 100%;
             background: #000;
@@ -366,6 +367,18 @@
             </div>
 
             <div class="form-group">
+                <label>Condition (Gjendja)</label>
+                <select id="editCondition">
+                    <option value="">Zgjidh gjendjen...</option>
+                    <option value="Used Good">Used Good (Good / Working)</option>
+                    <option value="Used Very Good">Used Very Good (Good / Working)</option>
+                    <option value="Used">Used (Good / Working)</option>
+                    <option value="Used not Good">Used not Good (Damaged / Not Working)</option>
+                    <option value="Used For Repair & Spares">Used For Repair & Spares (Damaged / Not Working)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label>Çmimi (€)</label>
                 <input type="number" step="0.01" id="editPrice">
             </div>
@@ -375,14 +388,14 @@
                 <textarea id="editDescription" rows="3"></textarea>
             </div>
 
-            <!-- Blloku i Promovimit (falas tani, struktura gati për pagesë në të ardhmen) -->
+            <!-- Blloku i Promovimit (30 ditë nga dita e promovimit, gati për pagesë në të ardhmen) -->
             <div class="promo-box">
-                <div class="promo-title">🔥 Promovo te Ofertat e Ditës / Special Deals</div>
+                <div class="promo-title">👑 Promovo Lart te Artikujt e Promovuar (Featured)</div>
                 <div class="promo-desc">
-                    Aktivizo ofertën që artikulli të dalë si me ofertë dhe në krye të listës te Ofertat e Ditës (pa pagesë për momentin).
+                    Aktivizo promovimin për 30 ditë nga dita e sotme që artikulli të dalë lart te Featured (pa e hequr nga kategoria e vet).
                 </div>
                 <button type="button" id="togglePromoBtn" class="btn-promo" onclick="togglePromotion()">
-                    🚀 Promovo si Ofertë (Falas tani)
+                    🚀 Promovo Lart (30 ditë)
                 </button>
             </div>
 
@@ -401,6 +414,7 @@
     );
 
     const PROMO_STORAGE_KEY = "oraswiss_promoted_deals_v1";
+    const PROMO_DURATION_MS = 30 * 24 * 60 * 60 * 1000;
     let loadedItems = [];
     let activeEditItem = null;
     let draftIsDeal = false;
@@ -413,11 +427,14 @@
         }
     }
 
-    function setPromotedDeal(itemKey, enabled, itemSnapshot = null) {
+    function savePromotedDeal(itemKey, enabled, itemSnapshot = null) {
         const current = getPromotedDeals();
         if (enabled) {
+            const promotedAt = Date.now();
+            const expiresAt = promotedAt + PROMO_DURATION_MS;
             current[itemKey] = {
-                promotedAt: Date.now(),
+                promotedAt,
+                expiresAt,
                 data: itemSnapshot
             };
         } else {
@@ -428,7 +445,6 @@
 
     // Hook i gatshëm për të aktivizuar pagesën (p.sh. PayPal) në të ardhmen
     async function handlePaidPromotion(_item) {
-        // Kur ta bësh me pagesë në të ardhmen, thirr këtu funksionin/checkout-in e pagesës
         return true;
     }
 
@@ -497,7 +513,7 @@
                         <a href="${detailUrl}">
                             <img src="${imgUrl}" alt="${item.brand || "Artikull"}">
                         </a>
-                        ${isPromoted ? `<span class="deal-badge">🔥 ME OFERTË</span>` : ""}
+                        ${isPromoted ? `<span class="deal-badge">👑 FEATURED (30d)</span>` : ""}
                         <div class="item-info">
                             <a href="${detailUrl}" class="item-title">
                                 ${item.brand || ""} ${item.model || ""}
@@ -525,10 +541,10 @@
         if (!btn) return;
         if (draftIsDeal) {
             btn.className = "btn-promo active-deal";
-            btn.textContent = "✅ Aktiv si Ofertë (Kliko për ta hequr)";
+            btn.textContent = "✅ Aktiv si Featured - 30 ditë (Kliko për ta hequr)";
         } else {
             btn.className = "btn-promo";
-            btn.textContent = "🚀 Promovo si Ofertë (Falas tani)";
+            btn.textContent = "🚀 Promovo Lart (30 ditë)";
         }
     }
 
@@ -557,6 +573,7 @@
         document.getElementById("editRefOrCal").value = isPart ? (item.caliber || "") : (item.reference || "");
         document.getElementById("editBrand").value = item.brand || "";
         document.getElementById("editModel").value = item.model || "";
+        document.getElementById("editCondition").value = item.condition || "";
         document.getElementById("editPrice").value = item.price ?? "";
         document.getElementById("editDescription").value = item.description || "";
 
@@ -588,6 +605,7 @@
         const updates = {
             brand: document.getElementById("editBrand").value.trim(),
             model: document.getElementById("editModel").value.trim(),
+            condition: document.getElementById("editCondition").value.trim() || null,
             price: document.getElementById("editPrice").value ? parseFloat(document.getElementById("editPrice").value) : null,
             description: document.getElementById("editDescription").value.trim()
         };
@@ -614,7 +632,7 @@
 
         Object.assign(activeEditItem, updates, { is_deal: draftIsDeal });
         const itemKey = `${activeEditItem.type}_${activeEditItem.id}`;
-        setPromotedDeal(itemKey, draftIsDeal, {
+        savePromotedDeal(itemKey, draftIsDeal, {
             id: activeEditItem.id,
             type: activeEditItem.type,
             brand: activeEditItem.brand,
@@ -622,7 +640,9 @@
             price: activeEditItem.price,
             image_url: activeEditItem.image_url,
             reference: activeEditItem.reference,
-            caliber: activeEditItem.caliber
+            caliber: activeEditItem.caliber,
+            condition: activeEditItem.condition,
+            quantity: activeEditItem.quantity || 1
         });
 
         closeModifyModal();

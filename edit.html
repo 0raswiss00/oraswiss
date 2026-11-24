@@ -19,11 +19,13 @@
             background: #111;
             padding: 20px;
             border-radius: 10px;
+            border: 1px solid #333;
         }
 
         h2 {
             text-align: center;
             margin-bottom: 20px;
+            color: gold;
         }
 
         input,
@@ -48,6 +50,47 @@
             display: block;
             margin: 12px 0 6px;
             color: #ccc;
+            font-size: 13px;
+        }
+
+        .promo-box {
+            background: #161409;
+            border: 1px solid gold;
+            border-radius: 8px;
+            padding: 14px;
+            margin: 16px 0;
+        }
+
+        .promo-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: gold;
+            margin-bottom: 4px;
+        }
+
+        .promo-desc {
+            font-size: 12px;
+            color: #ccc;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .btn-promo {
+            width: 100%;
+            padding: 12px;
+            background: gold;
+            color: #000;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .btn-promo.active-featured {
+            background: #064e3b;
+            color: #34d399;
+            border: 1px solid #10b981;
         }
 
         button {
@@ -122,9 +165,9 @@
 
 <body>
 
-<a href="dashboard.html"
+<a href="mysales.html"
    style="color:#ccc;text-align:center;display:block;margin-top:10px;text-decoration:none;">
-    ← Back
+    ← Back to My Sales
 </a>
 
 <form id="editForm">
@@ -135,13 +178,20 @@
     <!-- BAZAT -->
     <!-- ========================= -->
 
+    <label for="brand">Brand</label>
     <input type="text" id="brand" placeholder="Brand" required>
 
+    <label for="model">Model</label>
     <input type="text" id="model" placeholder="Model" required>
 
+    <label for="price">Price (€)</label>
     <input type="number" id="price" placeholder="Price">
 
-    <input type="text" id="reference" placeholder="Reference">
+    <label for="reference" id="label_reference">Reference (Ref.)</label>
+    <input type="text" id="reference" placeholder="Reference (Ref.)">
+
+    <label for="caliber" id="label_caliber">Caliber (Cal.)</label>
+    <input type="text" id="caliber" placeholder="Caliber (Cal.)">
 
     <input type="text" id="serial_number" placeholder="Serial Number">
 
@@ -189,8 +239,6 @@
     >
 
 </div>
-    
-    <input type="text" id="caliber" placeholder="Caliber">
 
     <input type="text" id="movement_size" placeholder="Movement Size">
 
@@ -365,6 +413,20 @@
     ></textarea>
 
     <!-- ========================= -->
+    <!-- PROMOVIMI (FEATURED) -->
+    <!-- ========================= -->
+
+    <div class="promo-box">
+        <div class="promo-title">👑 Promovo Lart te Artikujt e Promovuar (Featured)</div>
+        <div class="promo-desc">
+            Shfaq artikullin lart në faqen kryesore si Featured (pa e hequr nga kategoria e vet). Falas tani, gati për pagesë në të ardhmen.
+        </div>
+        <button type="button" id="promoToggleBtn" class="btn-promo">
+            🚀 Promovo Lart (Falas tani)
+        </button>
+    </div>
+
+    <!-- ========================= -->
     <!-- IMAGES -->
     <!-- ========================= -->
 
@@ -444,6 +506,57 @@ window.produktData = {
     image_url: []
 };
 
+const PROMO_STORAGE_KEY = "oraswiss_promoted_deals_v1";
+const promoKey = `${type}_${id}`;
+let isFeaturedDraft = false;
+
+function getPromotedDeals() {
+    try {
+        return JSON.parse(localStorage.getItem(PROMO_STORAGE_KEY) || "{}");
+    } catch (e) {
+        return {};
+    }
+}
+
+function savePromotedDeal(enabled, itemSnapshot = null) {
+    const current = getPromotedDeals();
+    if (enabled) {
+        current[promoKey] = {
+            promotedAt: current[promoKey]?.promotedAt || Date.now(),
+            data: itemSnapshot
+        };
+    } else {
+        delete current[promoKey];
+    }
+    localStorage.setItem(PROMO_STORAGE_KEY, JSON.stringify(current));
+}
+
+// Hook i gatshëm për ta bërë me pagesë në të ardhmen
+async function handlePaidPromotion() {
+    return true;
+}
+
+function updatePromoButtonUI() {
+    const btn = document.getElementById("promoToggleBtn");
+    if (!btn) return;
+    if (isFeaturedDraft) {
+        btn.className = "btn-promo active-featured";
+        btn.textContent = "✅ Aktiv si Featured (Kliko për ta hequr)";
+    } else {
+        btn.className = "btn-promo";
+        btn.textContent = "🚀 Promovo Lart (Falas tani)";
+    }
+}
+
+document.getElementById("promoToggleBtn").addEventListener("click", async () => {
+    if (!isFeaturedDraft) {
+        const ok = await handlePaidPromotion();
+        if (!ok) return;
+    }
+    isFeaturedDraft = !isFeaturedDraft;
+    updatePromoButtonUI();
+});
+
 
 // =====================================
 // HELPER
@@ -496,13 +609,11 @@ function getNullableNumber(id) {
 function hideEmptyFields(product) {
 
     const fieldIds = [
-        "reference",
         "serial_number",
         "category",
         "condition",
         "material",
         "movement",
-        "caliber",
         "movement_size",
         "case_size",
         "size",
@@ -730,9 +841,17 @@ async function fetchProduct() {
         product.description
     );
 
-    if (product.category === "parts") {
+    const isMovementPart = ["parts", "movement parts", "part"].includes((product.category || "").toLowerCase());
+    if (isMovementPart) {
         document.getElementById("parts_edit_box").style.display = "block";
+        document.getElementById("label_caliber").style.color = "gold";
+    } else {
+        document.getElementById("label_reference").style.color = "gold";
     }
+
+    const existingPromos = getPromotedDeals();
+    isFeaturedDraft = Boolean(existingPromos[promoKey]);
+    updatePromoButtonUI();
 
     hideEmptyFields(product);
 
@@ -1244,6 +1363,17 @@ document
                 return;
             }
 
+            savePromotedDeal(isFeaturedDraft, {
+                id,
+                type,
+                brand: updateData.brand,
+                model: updateData.model,
+                price: updateData.price,
+                image_url: imageUrls,
+                reference: updateData.reference,
+                caliber: updateData.caliber
+            });
+
 
             alert(
                 "Ndryshimet u ruajtën me sukses!"
@@ -1317,6 +1447,8 @@ document
 
                 return;
             }
+
+            savePromotedDeal(false);
 
 
             alert(

@@ -28,20 +28,34 @@
 </div>
 
 <!-- Kodi i Google Customer Reviews -->
+<!-- Kodi i Google Customer Reviews -->
 <script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script>
 <script>
-  window.renderOptIn = function() {
-    window.gapi.load('surveyoptin', function() {
-      window.gapi.surveyoptin.render(
-        {
-          "merchant_id": 5689221528,
-          "order_id": "ID_I_POROSISE",          // Vendos ID-në reale të porosisë
-          "email": "emaili@klientit.com",      // Email-i i klientit
-          "delivery_country": "AL",            // Kodi i shtetit
-          "estimated_delivery_date": "2026-08-25", // Data e parashikuar
+  const params = new URLSearchParams(window.location.search);
 
-          "products": [{"gtin": "GTIN_I_ORES"}]
-        });
+  function getDeliveryDate(daysToAdd) {
+    const date = new Date();
+    date.setDate(date.getDate() + daysToAdd);
+    return date.toISOString().split('T')[0];
+  }
+
+  window.renderOptIn = function() {
+    const orderId = params.get("order_id");
+    const email = params.get("email");
+    const country = (params.get("country") || "US").toUpperCase();
+    const transitDays = parseInt(params.get("days") || "10", 10);
+
+    // Shfaq opt-in vetëm kur kemi order_id dhe email real
+    if (!orderId || !email) return;
+
+    window.gapi.load('surveyoptin', function() {
+      window.gapi.surveyoptin.render({
+        "merchant_id": 5689221528,
+        "order_id": orderId,
+        "email": email,
+        "delivery_country": country,
+        "estimated_delivery_date": getDeliveryDate(transitDays)
+      });
     });
   }
 </script>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="sq">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Përfundo Porosinë - Ora Swiss</title>
+    <title>Complete Order - Ora Swiss</title>
     <link rel="icon" href="data:,">
 
     <!-- Google tag (gtag.js) -->
@@ -65,12 +65,19 @@
             margin-bottom: 20px;
             font-size: 13px;
             color: #d8d8d8;
-            line-height: 1.6;
+            line-height: 1.65;
         }
         .order-meta strong {
             color: #ffd900;
         }
+        .order-meta a {
+            color: #ffd900;
+            word-break: break-all;
+        }
         .product-summary {
+            display: flex;
+            gap: 12px;
+            align-items: center;
             background: #141414;
             border: 1px solid #2b2b2b;
             border-radius: 8px;
@@ -79,6 +86,30 @@
             font-size: 14px;
             color: #e5e5e5;
             line-height: 1.45;
+        }
+        .product-thumb {
+            width: 72px;
+            height: 72px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #2f2f2f;
+            background: #0b0b0b;
+            flex-shrink: 0;
+        }
+        .product-info {
+            min-width: 0;
+            flex: 1;
+        }
+        .product-link {
+            display: inline-block;
+            margin-top: 6px;
+            font-size: 12px;
+            color: #ffd900;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .product-link:hover {
+            text-decoration: underline;
         }
         .field {
             margin-bottom: 12px;
@@ -151,61 +182,62 @@
 </head>
 <body>
 
-<!-- FORMA E POROSISË (SHFAQET E PARA) -->
+<!-- CHECKOUT FORM -->
 <div class="card" id="checkoutBox">
-    <h2>Përfundo Porosinë</h2>
-    <div class="product-summary" id="productSummary">Duke ngarkuar produktin...</div>
+    <h2>Complete Order</h2>
+    <div class="product-summary" id="productSummary">
+        <div class="product-info">Loading product...</div>
+    </div>
 
     <form id="orderForm">
         <div class="field">
-            <label for="buyerName">Emri dhe Mbiemri</label>
-            <input type="text" id="buyerName" required placeholder="Emri Mbiemri">
+            <label for="buyerName">Full Name</label>
+            <input type="text" id="buyerName" required placeholder="First and Last Name">
         </div>
 
         <div class="field">
             <label for="buyerEmail">Email</label>
-            <input type="email" id="buyerEmail" required placeholder="emri@shembull.com">
+            <input type="email" id="buyerEmail" required placeholder="name@example.com">
         </div>
 
         <div class="field">
-            <label for="buyerCountry">Shteti i dërgesës</label>
+            <label for="buyerCountry">Shipping Country</label>
             <select id="buyerCountry">
-                <option value="AL">Shqipëri (AL)</option>
-                <option value="CH">Zvicër (CH)</option>
-                <option value="IT">Itali (IT)</option>
-                <option value="DE">Gjermani (DE)</option>
-                <option value="GB">Mbretëria e Bashkuar (GB)</option>
-                <option value="US" selected>Shtetet e Bashkuara (US)</option>
+                <option value="AL">Albania (AL)</option>
+                <option value="CH">Switzerland (CH)</option>
+                <option value="IT">Italy (IT)</option>
+                <option value="DE">Germany (DE)</option>
+                <option value="GB">United Kingdom (GB)</option>
+                <option value="US" selected>United States (US)</option>
             </select>
         </div>
 
         <div class="field">
-            <label for="buyerAddress">Adresa e plotë</label>
-            <textarea id="buyerAddress" rows="2" required placeholder="Rruga, qyteti, kodi postar"></textarea>
+            <label for="buyerAddress">Full Shipping Address</label>
+            <textarea id="buyerAddress" rows="2" required placeholder="Street, city, postal code"></textarea>
         </div>
 
         <div class="form-status" id="formStatus"></div>
-        <button type="submit" class="submit-btn" id="submitBtn">Konfirmo Porosinë</button>
+        <button type="submit" class="submit-btn" id="submitBtn">Confirm Order</button>
     </form>
 </div>
 
-<!-- KARTA E SUKSESIT (E FSHEHUR DERISA TË KONFIRMOHET POROSIA) -->
+<!-- SUCCESS CARD -->
 <div class="card success-card" id="successCard" style="display: none;">
     <h2>Order Placed Successfully!</h2>
     <p>Thank you for choosing Ora Swiss. We will contact you shortly regarding shipping.</p>
     <div class="order-meta" id="orderMeta"></div>
     <div class="back-wrap">
-        <a href="index.html" id="backLink" class="back-link">← Kthehu</a>
+        <a href="index.html" id="backLink" class="back-link">← Back</a>
     </div>
 </div>
 
 <!-- Google Customer Reviews -->
 <script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script>
 <script>
-    const supabaseClient = window.supabase.createClient(
-        "https://gnwsrmelmeqduhhmfmoa.supabase.co",
-        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
-    );
+    const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const params = new URLSearchParams(window.location.search);
     const rawId = params.get("id") || "";
@@ -216,6 +248,31 @@
     let loadedProduct = null;
     let lastOrderData = null;
     let isSubmitting = false;
+
+    function getProductPageUrl() {
+        if (!productId) return `${window.location.origin}/index.html`;
+        const tableParam = tableName === "bracelets_straps" ? "&category=bracelets_straps" : "";
+        return `${window.location.origin}/product.html?id=${productId}${tableParam}`;
+    }
+
+    function resolveImageUrl(rawImageUrl) {
+        let list = [];
+        if (Array.isArray(rawImageUrl)) {
+            list = rawImageUrl;
+        } else if (typeof rawImageUrl === "string" && rawImageUrl.trim()) {
+            try {
+                const parsed = JSON.parse(rawImageUrl);
+                list = Array.isArray(parsed) ? parsed : [rawImageUrl];
+            } catch (e) {
+                list = [rawImageUrl];
+            }
+        }
+        const first = list.find(Boolean);
+        if (!first) return "";
+        return String(first).startsWith("http")
+            ? String(first)
+            : `${SUPABASE_URL}/storage/v1/object/public/or-images/${first}`;
+    }
 
     const backLink = document.getElementById("backLink");
     if (backLink) {
@@ -228,7 +285,7 @@
             document.referrer && document.referrer.startsWith(window.location.origin)
                 ? document.referrer
                 : null;
-        const productFallback = productId ? `product.html?id=${productId}` : "index.html";
+        const productFallback = productId ? getProductPageUrl() : "index.html";
 
         backLink.href = safeReturn || sameOriginRef || productFallback;
 
@@ -241,36 +298,60 @@
     }
 
     (async function loadCheckoutProduct() {
-    const summaryEl = document.getElementById("productSummary");
-    if (!productId) {
-        summaryEl.textContent = "Produkti i zgjedhur për porosi.";
-        return;
-    }
-    try {
-        const { data, error } = await supabaseClient
-            .from(tableName)
-            .select("*")
-            .eq("id", productId)
-            .maybeSingle();
+        const summaryEl = document.getElementById("productSummary");
+        const productLinkUrl = getProductPageUrl();
 
-        if (error) {
-            console.warn("Checkout product error:", error.message);
+        if (!productId) {
+            summaryEl.innerHTML = `<div class="product-info">Selected item for order.</div>`;
+            return;
         }
 
-        if (data) {
+        try {
+            const { data, error } = await supabaseClient
+                .from(tableName)
+                .select("*")
+                .eq("id", productId)
+                .maybeSingle();
+
+            if (error) {
+                console.warn("Checkout product error:", error.message);
+            }
+
+            if (data) {
                 loadedProduct = data;
                 const title = [data.brand, data.model, data.reference ? `Ref. ${data.reference}` : ""]
                     .filter(Boolean)
-                    .join(" ");
+                    .join(" ") || `Product #${productId}`;
+                const serialValue = data.serial_number || data.serial || "";
                 const rawPrice = data.price ?? data.price_eur ?? data.cmimi ?? "";
                 const priceText = rawPrice !== "" ? `${rawPrice} ${data.currency || "EUR"}` : "";
-                summaryEl.innerHTML = `<strong>${title || `Produkti #${productId}`}</strong>${priceText ? `<br>Çmimi: <strong>${priceText}</strong>` : ""}`;
+                const imgUrl = resolveImageUrl(data.image_url);
+
+                summaryEl.innerHTML = `
+                    ${imgUrl ? `<img src="${imgUrl}" alt="${title}" class="product-thumb">` : ""}
+                    <div class="product-info">
+                        <strong>${title}</strong>
+                        ${priceText ? `<br>Price: <strong>${priceText}</strong>` : ""}
+                        ${serialValue ? `<br>Serial No.: <strong>${serialValue}</strong>` : ""}
+                        <br><a href="${productLinkUrl}" class="product-link">View product link</a>
+                    </div>
+                `;
             } else {
-                summaryEl.textContent = `Produkti #${productId}`;
+                summaryEl.innerHTML = `
+                    <div class="product-info">
+                        <strong>Product #${productId}</strong>
+                        <br><a href="${productLinkUrl}" class="product-link">View product link</a>
+                    </div>
+                `;
             }
         } catch (err) {
             console.warn("Checkout product catch:", err);
-            summaryEl.textContent = `Produkti #${productId}`;
+            summaryEl.innerHTML = `
+                <div class="product-info">
+                    <strong>Product #${productId}</strong>
+                    <br><a href="${productLinkUrl}" class="product-link">View product link</a>
+                </div>
+            `;
         }
     })();
 
@@ -339,20 +420,22 @@
         const buyerAddress = document.getElementById("buyerAddress").value.trim();
 
         if (!buyerName || !buyerEmail || !buyerAddress) {
-            statusEl.textContent = "Ju lutem plotësoni të gjitha fushat e detyrueshme.";
+            statusEl.textContent = "Please fill in all required fields.";
             return;
         }
 
         isSubmitting = true;
         submitBtn.disabled = true;
-        submitBtn.textContent = "Duke dërguar...";
+        submitBtn.textContent = "Submitting...";
 
         const generatedOrderId = `OS-${Date.now()}`;
         const productTitle = loadedProduct
             ? [loadedProduct.brand, loadedProduct.model, loadedProduct.reference ? `Ref. ${loadedProduct.reference}` : ""]
                 .filter(Boolean)
-                .join(" ")
-            : `Produkti #${productId || "-"}`;
+                .join(" ") || `Product #${productId || "-"}`
+            : `Product #${productId || "-"}`;
+        const serialNumber = loadedProduct ? (loadedProduct.serial_number || loadedProduct.serial || "") : "";
+        const productUrl = getProductPageUrl();
 
         try {
             const { error: insertError } = await supabaseClient.from("orders").insert({
@@ -379,10 +462,12 @@
         };
 
         document.getElementById("orderMeta").innerHTML = `
-            <div><strong>Porosia:</strong> ${generatedOrderId}</div>
-            <div><strong>Artikulli:</strong> ${productTitle}</div>
+            <div><strong>Order ID:</strong> ${generatedOrderId}</div>
+            <div><strong>Item:</strong> ${productTitle}</div>
+            ${serialNumber ? `<div><strong>Serial No.:</strong> ${serialNumber}</div>` : ""}
+            <div><strong>Product Link:</strong> <a href="${productUrl}">${productUrl}</a></div>
             <div><strong>Email:</strong> ${buyerEmail}</div>
-            <div><strong>Dërgesa:</strong> ${buyerCountry} — ${buyerAddress}</div>
+            <div><strong>Shipping:</strong> ${buyerCountry} — ${buyerAddress}</div>
         `;
 
         document.getElementById("checkoutBox").style.display = "none";

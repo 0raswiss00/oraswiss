@@ -59,6 +59,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <!-- SEO PRODUCT -->
+    <!-- SEO PRODUCT -->
     <script>
         (function () {
             const seoUrlParams = new URLSearchParams(window.location.search);
@@ -116,6 +117,10 @@
                     ? String(product.description).slice(0, 155)
                     : `${productName} - Luxury watch & horology available at Ora Swiss.${priceText ? ' Price: ' + priceText : ''}`;
 
+                // Pastrimi i SKU-së që të mos ketë vlera të pavlefshme në Google Search Console
+                const rawSku = String(product.reference || product.caliber || `OS-${seoProductId}`).trim();
+                const cleanSku = rawSku.replace(/[^a-zA-Z0-9._-]/g, '-').replace(/-+/g, '-').slice(0, 50) || `OS-${seoProductId}`;
+
                 let images = [];
                 if (Array.isArray(product.image_url)) {
                     images = product.image_url;
@@ -154,7 +159,7 @@
                         "name": brand || "Ora Swiss"
                     },
                     "model": model,
-                    "sku": product.reference || product.caliber || String(seoProductId),
+                    "sku": cleanSku,
                     "image": resolvedImages,
                     "url": cleanCanonicalUrl,
                     "description": description
@@ -166,7 +171,41 @@
                         "priceCurrency": "EUR",
                         "price": Number(product.price),
                         "availability": "https://schema.org/InStock",
-                        "url": cleanCanonicalUrl
+                        "url": cleanCanonicalUrl,
+                        "hasMerchantReturnPolicy": {
+                            "@type": "MerchantReturnPolicy",
+                            "applicableCountry": ["CH", "US", "DE", "IT", "GB", "AL"],
+                            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                            "merchantReturnDays": 14,
+                            "returnMethod": "https://schema.org/ReturnByMail",
+                            "returnFees": "https://schema.org/ReturnShippingFeesByCustomer"
+                        },
+                        "shippingDetails": {
+                            "@type": "OfferShippingDetails",
+                            "shippingDestination": [
+                                { "@type": "DefinedRegion", "addressCountry": "CH" },
+                                { "@type": "DefinedRegion", "addressCountry": "US" },
+                                { "@type": "DefinedRegion", "addressCountry": "DE" },
+                                { "@type": "DefinedRegion", "addressCountry": "IT" },
+                                { "@type": "DefinedRegion", "addressCountry": "GB" },
+                                { "@type": "DefinedRegion", "addressCountry": "AL" }
+                            ],
+                            "deliveryTime": {
+                                "@type": "ShippingDeliveryTime",
+                                "handlingTime": {
+                                    "@type": "QuantitativeValue",
+                                    "minValue": 1,
+                                    "maxValue": 3,
+                                    "unitCode": "DAY"
+                                },
+                                "transitTime": {
+                                    "@type": "QuantitativeValue",
+                                    "minValue": 3,
+                                    "maxValue": 12,
+                                    "unitCode": "DAY"
+                                }
+                            }
+                        }
                     };
                 }
 

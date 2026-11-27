@@ -480,7 +480,7 @@
             const buyNowButton = ora.price
                 ? `<a href="checkout.html?id=${ora.id}&table=oras&return=${currentReturn}" class="btn-main btn-buy" onclick="event.stopPropagation();">
                        🛒 BUY
-                  </a>`
+                   </a>`
                 : '';
         
             const canModify = Boolean(currentUserId && ora.user_id && ora.user_id === currentUserId);

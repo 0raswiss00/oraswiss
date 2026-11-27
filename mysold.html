@@ -2,27 +2,41 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <title>My Sold - Ora Swiss</title>
 
     <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             background: #000;
             color: #fff;
             padding: 20px;
+            margin: 0;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 20px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
             background: #111;
+            min-width: 640px;
         }
 
         th, td {
             border: 1px solid #333;
             padding: 12px;
             text-align: left;
+            vertical-align: middle;
         }
 
         th {
@@ -31,157 +45,275 @@
         }
 
         button {
-            padding: 6px 12px;
+            padding: 7px 12px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .btn-track {
+            background: #1f6feb;
+            color: #fff;
         }
 
         .btn-cancel {
             background: #dc3545;
-            color: white;
+            color: #fff;
+        }
+
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        .modal-backdrop.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #111;
+            border: 1px solid #444;
+            border-radius: 10px;
+            padding: 20px;
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .modal-box h3 {
+            margin-top: 0;
+            color: gold;
+        }
+
+        .modal-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0 14px 0;
+            background: #000;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 6px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .btn-save {
+            background: gold;
+            color: #000;
+        }
+
+        .btn-close {
+            background: #333;
+            color: #fff;
         }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
+    <script src="db-connect.js"></script>
 </head>
 
 <body>
 
 <h1>Menaxhimi i Porosive (My Sold)</h1>
 
-<table>
-    <thead>
-        <tr>
-            <th>Ora</th>
-            <th>Statusi</th>
-            <th>Nr. Dërgimi</th>
-            <th>Veprime</th>
-        </tr>
-    </thead>
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Foto</th>
+                <th>Ora / Artikulli</th>
+                <th>ID Porosisë</th>
+                <th>Statusi</th>
+                <th>Nr. Dërgimi</th>
+                <th>Veprime</th>
+            </tr>
+        </thead>
 
-    <tbody id="sales-body">
-        <tr>
-            <td colspan="10">Duke ngarkuar...</td>
-        </tr>
-    </tbody>
-</table>
+        <tbody id="sales-body">
+            <tr>
+                <td colspan="6" style="text-align:center;">Duke ngarkuar...</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
-<script src="db-connect.js"></script>    
+<!-- Modal për Nr. Dërgimi -->
+<div id="trackingModal" class="modal-backdrop">
+    <div class="modal-box">
+        <h3>Nr. i Dërgimit (Tracking)</h3>
+        <input type="text" id="trackingInput" placeholder="Vendos numrin e gjurmimit...">
+        <div class="modal-actions">
+            <button type="button" class="btn-close" onclick="closeTrackingModal()">Anulo</button>
+            <button type="button" class="btn-save" onclick="saveTrackingNumber()">Ruaj</button>
+        </div>
+    </div>
+</div>
+
 <script>
+    let editingOrderId = null;
+    let soldOrdersCache = [];
 
-
-async function loadMySold() {
-
-    const soldBody = document.getElementById("sales-body");
-
-    const {
-        data: { user }
-    } = await window.supabaseClient.auth.getUser();
-
-    if (!user) {
-        soldBody.innerHTML =
-        "<tr><td colspan='10'>Duhet të jesh i loguar.</td></tr>";
-        return;
+    function escapeHtml(val) {
+        if (val === null || val === undefined) return "";
+        return String(val)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
     }
 
-    console.log("USER ID:", user.id);
-
-    
-    const { data, error } = await window.supabaseClient
-    .from("orders")
-    .select(`
-        *,
-        oras (
-            id,
-            brand,
-            model,
-            image_url
-        )
-    `)
-    .eq("seller_id", user.id);
-    console.log("ORDERS:", data);
-    console.log("ERROR:", error);
-    
-    if (error) {
-        console.error(error);
-
-        soldBody.innerHTML =
-        "<tr><td colspan='10'>Gabim gjatë marrjes së të dhënave.</td></tr>";
-
-        return;
+    function resolveWatchImage(imageField) {
+        let primary = "";
+        if (Array.isArray(imageField) && imageField.length > 0) {
+            primary = imageField[0];
+        } else if (typeof imageField === "string" && imageField.trim()) {
+            try {
+                const parsed = JSON.parse(imageField);
+                primary = Array.isArray(parsed) ? parsed[0] : imageField;
+            } catch (e) {
+                primary = imageField;
+            }
+        }
+        if (!primary) return "";
+        const clean = String(primary).trim();
+        if (clean.startsWith("http")) return clean;
+        return "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + clean;
     }
 
-
-    if (!data || data.length === 0) {
-
-        soldBody.innerHTML =
-        "<tr><td colspan='10'>Nuk ke asnjë shitje.</td></tr>";
-
-        return;
+    function openTrackingModalByIndex(idx) {
+        const order = soldOrdersCache[idx];
+        if (!order) return;
+        editingOrderId = order.id;
+        document.getElementById("trackingInput").value = order.tracing_number || order.tracking_number || "";
+        document.getElementById("trackingModal").classList.add("open");
     }
 
-
-// Gjej pjesën e 'map' në kodin tënd dhe zëvendësoje me këtë strukturë:
-
-soldBody.innerHTML = data.map(order => {
-    const ora = order.oras;
-    
-    // Sigurohu që po përdor emrin e saktë të kolonës që krijove (tracing_number ose tracking_number)
-    const trackingVal = order.tracing_number || ""; 
-
-    return `
-    <tr>
-        <td>${ora ? `<img src="${ora.image_url}" width="70">` : "Pa foto"}</td>
-        <td>${ora ? `${ora.brand} ${ora.model}` : `Ora #${order.product_id}`}</td>
-        <td>${order.id}</td>
-        <td>${order.status || "-"}</td>
-    
-        <td id="track-cell-${order.id}">
-            ${trackingVal || "Nuk ka"}
-        </td>
-
-        <td>
-            <button onclick="openTrackingModal('${order.id}', '${trackingVal}')">
-                Shto/Edito
-            </button>
-
-            <br>
-
-            <button class="btn-cancel" onclick="anulloPorosine('${order.id}')">
-                Anullo
-            </button>
-        </td>
-    </tr>
-    `;
-}).join("");
-}
-    
-async function anulloPorosine(orderId) {
-
-    if (!confirm("A dëshironi ta anuloni këtë porosi?")) {
-        return;
+    function closeTrackingModal() {
+        editingOrderId = null;
+        document.getElementById("trackingModal").classList.remove("open");
     }
 
-const { error } = await window.supabaseClient
-.from("orders")
-        .update({
-            status: "cancelled"
-        })
-        .eq("id", orderId);
+    async function saveTrackingNumber() {
+        if (!editingOrderId) return;
+        const val = document.getElementById("trackingInput").value.trim();
 
-    if (error) {
-        alert(error.message);
-        return;
+        const { error } = await window.supabaseClient
+            .from("orders")
+            .update({ tracing_number: val || null })
+            .eq("id", editingOrderId);
+
+        if (error) {
+            alert("Gabim gjatë ruajtjes së numrit të dërgimit: " + error.message);
+            return;
+        }
+
+        closeTrackingModal();
+        loadMySold();
     }
 
-    alert("Porosia u anulua me sukses.");
+    async function loadMySold() {
+        const soldBody = document.getElementById("sales-body");
+        if (!soldBody) return;
 
-    loadMySold();
-}
+        if (!window.supabaseClient) {
+            soldBody.innerHTML = "<tr><td colspan='6'>Mungon lidhja me bazën e të dhënave (db-connect.js).</td></tr>";
+            return;
+        }
 
-document.addEventListener("DOMContentLoaded", loadMySold);
+        const { data: { user } } = await window.supabaseClient.auth.getUser();
+
+        if (!user) {
+            soldBody.innerHTML = "<tr><td colspan='6'>Duhet të jesh i loguar.</td></tr>";
+            return;
+        }
+
+        const { data, error } = await window.supabaseClient
+            .from("orders")
+            .select(`
+                *,
+                oras (
+                    id,
+                    brand,
+                    model,
+                    image_url
+                )
+            `)
+            .eq("seller_id", user.id);
+
+        if (error) {
+            console.error(error);
+            soldBody.innerHTML = "<tr><td colspan='6'>Gabim gjatë marrjes së të dhënave.</td></tr>";
+            return;
+        }
+
+        soldOrdersCache = data || [];
+
+        if (soldOrdersCache.length === 0) {
+            soldBody.innerHTML = "<tr><td colspan='6'>Nuk ke asnjë shitje.</td></tr>";
+            return;
+        }
+
+        soldBody.innerHTML = soldOrdersCache.map((order, idx) => {
+            const ora = order.oras;
+            const trackingVal = order.tracing_number || order.tracking_number || "";
+            const imgUrl = ora ? resolveWatchImage(ora.image_url) : "";
+            const titleText = ora
+                ? `${escapeHtml(ora.brand || "")} ${escapeHtml(ora.model || "")}`.trim()
+                : `Ora #${escapeHtml(order.product_id)}`;
+
+            return `
+                <tr>
+                    <td>${imgUrl ? `<img src="${escapeHtml(imgUrl)}" alt="${titleText}" width="70" style="border-radius:6px;object-fit:cover;">` : "Pa foto"}</td>
+                    <td>${titleText}</td>
+                    <td>${escapeHtml(order.order_code || order.id)}</td>
+                    <td>${escapeHtml(order.status || "-")}</td>
+                    <td id="track-cell-${escapeHtml(order.id)}">${trackingVal ? escapeHtml(trackingVal) : "Nuk ka"}</td>
+                    <td>
+                        <button type="button" class="btn-track" onclick="openTrackingModalByIndex(${idx})">Shto/Edito</button>
+                        <br>
+                        <button type="button" class="btn-cancel" onclick="anulloPorosine('${escapeHtml(order.id)}')">Anullo</button>
+                    </td>
+                </tr>
+            `;
+        }).join("");
+    }
+
+    async function anulloPorosine(orderId) {
+        if (!confirm("A dëshironi ta anuloni këtë porosi?")) {
+            return;
+        }
+
+        const { error } = await window.supabaseClient
+            .from("orders")
+            .update({ status: "cancelled" })
+            .eq("id", orderId);
+
+        if (error) {
+            alert(error.message);
+            return;
+        }
+
+        alert("Porosia u anulua me sukses.");
+        loadMySold();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", loadMySold);
+    } else {
+        loadMySold();
+    }
 </script>
 
 </body>

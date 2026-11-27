@@ -710,8 +710,8 @@
             : `<span class="badge badge-good">Good / Working</span>`;
 
         const currentReturn = encodeURIComponent(window.location.pathname + window.location.search);
-        const buyNowButton = item.price
-            ? `<a href="checkout.html?id=${item.id}&table=bracelets_straps&return=${currentReturn}" class="btn-main btn-buy" onclick="event.stopPropagation();">
+        const buyNowButton = ora.price
+            ? `<a href="checkout.html?id=${ora.id}&table=oras&return=${currentReturn}" class="btn-main btn-buy" onclick="event.stopPropagation();">
                    🛒 BUY
                </a>`
             : '';

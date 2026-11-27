@@ -262,7 +262,7 @@
 
         .buy-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #090909; border-top: 1px solid #333; padding: 10px; display: flex; gap: 8px; z-index: 999; max-width: 900px; margin-left: 50%; transform: translateX(-50%); }
         .buy-btn { flex: 1; padding: 15px; border-radius: 10px; text-align: center; text-decoration: none; font-weight: bold; cursor: pointer; }
-        .whatsapp { background: #25D366; color: white; }
+        .email-btn { background: #1a73e8; color: white; }
         .buy { background: #ffd900; color: black; }
         .offer { background: #222; color: white; border: 1px solid #444; }
 
@@ -496,7 +496,7 @@
 </div>
 
 <div class="buy-bar">
-    <a class="buy-btn whatsapp" id="whatsapp">💬 WhatsApp</a>
+    <a class="buy-btn email-btn" id="email-contact" href="mailto:adicla899@gmail.com">✉️ adicla899@gmail.com</a>
     <a class="buy-btn offer" id="offer" onclick="openOfferModal()">💰 Suggest Price</a>
     <a class="buy-btn buy" id="buy">🛒 BUY</a>
 </div>
@@ -933,11 +933,11 @@ async function loadProduct() {
             `;
         }
 
-        const waBtn = document.getElementById("whatsapp");
-        if (waBtn) {
-            const waText = encodeURIComponent(`Hello Ora Swiss, I'm interested in: ${data.brand || ""} ${data.model || ""} (ID: ${productId}) - ${window.location.href}`);
-            waBtn.href = `https://wa.me/?text=${waText}`;
-            waBtn.target = "_blank";
+        const emailBtn = document.getElementById("email-contact");
+        if (emailBtn) {
+            const subject = encodeURIComponent(`Inquiry: ${data.brand || ""} ${data.model || ""} (ID: ${productId})`.trim());
+            const body = encodeURIComponent(`Hello Ora Swiss,\n\nI'm interested in: ${data.brand || ""} ${data.model || ""} (ID: ${productId})\nLink: ${window.location.href}`);
+            emailBtn.href = `mailto:adicla899@gmail.com?subject=${subject}&body=${body}`;
         }
 
         const buyBtn = document.getElementById("buy");

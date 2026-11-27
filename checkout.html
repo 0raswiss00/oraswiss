@@ -70,13 +70,39 @@
 <div class="success-card" id="successCard">
     <h2>Order Placed Successfully!</h2>
     <p>Thank you for choosing Ora Swiss. We will contact you shortly regarding shipping.</p>
-    <a href="vintage.html" class="back-link">← Kthehu te koleksioni</a>
+    <a href="index.html" id="backLink" class="back-link">← Kthehu</a>
 </div>
 
 <!-- Google Customer Reviews -->
 <script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script>
 <script>
     const params = new URLSearchParams(window.location.search);
+
+    const backLink = document.getElementById("backLink");
+    if (backLink) {
+        const returnParam = params.get("return");
+        const safeReturn =
+            returnParam &&
+            !returnParam.startsWith("http") &&
+            !returnParam.startsWith("//")
+                ? returnParam
+                : null;
+
+        const referrerUrl =
+            document.referrer && document.referrer.startsWith(window.location.origin)
+                ? document.referrer
+                : null;
+
+        const fallbackUrl = safeReturn || referrerUrl || "index.html";
+        backLink.href = fallbackUrl;
+
+        backLink.addEventListener("click", function (e) {
+            if (window.history.length > 1 && document.referrer && document.referrer.startsWith(window.location.origin)) {
+                e.preventDefault();
+                window.history.back();
+            }
+        });
+    }
 
     function getDeliveryDate(daysToAdd) {
         const safeDays = Number.isFinite(daysToAdd) && daysToAdd > 0 ? daysToAdd : 10;

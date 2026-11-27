@@ -241,29 +241,35 @@
     }
 
     (async function loadCheckoutProduct() {
-        const summaryEl = document.getElementById("productSummary");
-        if (!productId) {
-            summaryEl.textContent = "Produkti i zgjedhur për porosi.";
-            return;
-        }
-        try {
-            const { data } = await supabaseClient
-                .from(tableName)
-                .select("id, brand, model, reference, price, currency")
-                .eq("id", productId)
-                .maybeSingle();
+    const summaryEl = document.getElementById("productSummary");
+    if (!productId) {
+        summaryEl.textContent = "Produkti i zgjedhur për porosi.";
+        return;
+    }
+    try {
+        const { data, error } = await supabaseClient
+            .from(tableName)
+            .select("*")
+            .eq("id", productId)
+            .maybeSingle();
 
-            if (data) {
+        if (error) {
+            console.warn("Checkout product error:", error.message);
+        }
+
+        if (data) {
                 loadedProduct = data;
                 const title = [data.brand, data.model, data.reference ? `Ref. ${data.reference}` : ""]
                     .filter(Boolean)
                     .join(" ");
-                const price = data.price ? `${data.price} ${data.currency || "€"}` : "";
-                summaryEl.innerHTML = `<strong>${title || `Produkti #${productId}`}</strong>${price ? `<br>Çmimi: <strong>${price}</strong>` : ""}`;
+                const rawPrice = data.price ?? data.price_eur ?? data.cmimi ?? "";
+                const priceText = rawPrice !== "" ? `${rawPrice} ${data.currency || "EUR"}` : "";
+                summaryEl.innerHTML = `<strong>${title || `Produkti #${productId}`}</strong>${priceText ? `<br>Çmimi: <strong>${priceText}</strong>` : ""}`;
             } else {
                 summaryEl.textContent = `Produkti #${productId}`;
             }
         } catch (err) {
+            console.warn("Checkout product catch:", err);
             summaryEl.textContent = `Produkti #${productId}`;
         }
     })();

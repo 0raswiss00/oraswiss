@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <title>My Sales - Ora Swiss</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * { box-sizing: border-box; }
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
 
         body {
             background-color: #000;
@@ -342,7 +345,7 @@
 
 <div id="salesList"><div class="status-msg">Duke ngarkuar...</div></div>
 
-<!-- Modal për Modify + Butonin e Promovimit (pa pagesë tani, gati për pagesë në të ardhmen) -->
+<!-- Modal për Modify + Butonin e Promovimit -->
 <div id="modifyModal" class="modal-backdrop">
     <div class="modal-box">
         <div class="modal-header">
@@ -388,7 +391,7 @@
                 <textarea id="editDescription" rows="3"></textarea>
             </div>
 
-            <!-- Blloku i Promovimit (30 ditë nga dita e promovimit, gati për pagesë në të ardhmen) -->
+            <!-- Blloku i Promovimit -->
             <div class="promo-box">
                 <div class="promo-title">👑 Promovo Lart te Artikujt e Promovuar (Featured)</div>
                 <div class="promo-desc">
@@ -419,6 +422,16 @@
     let activeEditItem = null;
     let draftIsDeal = false;
 
+    function escapeHtml(value) {
+        if (value === null || value === undefined) return "";
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
     function getPromotedDeals() {
         try {
             return JSON.parse(localStorage.getItem(PROMO_STORAGE_KEY) || "{}");
@@ -443,7 +456,6 @@
         localStorage.setItem(PROMO_STORAGE_KEY, JSON.stringify(current));
     }
 
-    // Hook i gatshëm për të aktivizuar pagesën (p.sh. PayPal) në të ardhmen
     async function handlePaidPromotion(_item) {
         return true;
     }
@@ -464,10 +476,11 @@
         }
 
         if (primaryImage && primaryImage !== "null" && primaryImage !== "") {
-            if (primaryImage.startsWith("http")) {
-                return primaryImage;
+            const cleanImg = String(primaryImage).trim();
+            if (cleanImg.startsWith("http")) {
+                return cleanImg;
             }
-            return "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
+            return "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + cleanImg;
         }
 
         return "https://placeholder.co/600x600/222/fff?text=No+Image";
@@ -488,7 +501,6 @@
         const salesList = document.getElementById("salesList");
         const promos = getPromotedDeals();
 
-        // Artikujt e promovuar dalin në krye, të renditur sipas kohës së promovimit
         const sortedItems = [...loadedItems].sort((a, b) => {
             const keyA = `${a.type}_${a.id}`;
             const keyB = `${b.type}_${b.id}`;
@@ -501,25 +513,28 @@
         });
 
         salesList.innerHTML = sortedItems.map(item => {
-            const itemKey = `${item.type}_${item.id}`;
+            const safeId = Number(item.id) || 0;
+            const itemKey = `${item.type}_${safeId}`;
             const isPromoted = Boolean(promos[itemKey] || item.is_deal);
-            const detailUrl = `${item.type === "bracelet" ? "product-bracelets-straps.html" : "product.html"}?id=${item.id}`;
-            const imgUrl = resolveImageUrl(item.image_url);
-            const codeLine = getItemCodeLine(item);
+            const detailUrl = `${item.type === "bracelet" ? "product-bracelets-straps.html" : "product.html"}?id=${safeId}`;
+            const imgUrl = escapeHtml(resolveImageUrl(item.image_url));
+            const titleText = escapeHtml(`${item.brand || ""} ${item.model || ""}`.trim() || "Artikull");
+            const codeLine = escapeHtml(getItemCodeLine(item));
+            const priceText = item.price ? `${escapeHtml(item.price)} €` : "Contact for price";
 
             return `
                 <div class="sale-item">
                     <div>
                         <a href="${detailUrl}">
-                            <img src="${imgUrl}" alt="${item.brand || "Artikull"}">
+                            <img src="${imgUrl}" alt="${titleText}">
                         </a>
                         ${isPromoted ? `<span class="deal-badge">👑 FEATURED (30d)</span>` : ""}
                         <div class="item-info">
                             <a href="${detailUrl}" class="item-title">
-                                ${item.brand || ""} ${item.model || ""}
+                                ${titleText}
                             </a>
                             ${codeLine ? `<span class="item-code">${codeLine}</span>` : ""}
-                            <span class="item-price">${item.price ? item.price + " €" : "Contact for price"}</span>
+                            <span class="item-price">${priceText}</span>
                         </div>
                     </div>
 
@@ -527,7 +542,7 @@
                         <button type="button" class="action-btn" onclick="window.location.href='${detailUrl}'">
                             View Details
                         </button>
-                        <button type="button" class="action-btn modify-btn" onclick="openModifyModal('${itemKey}')">
+                        <button type="button" class="action-btn modify-btn" onclick="openModifyModal('${escapeHtml(itemKey)}')">
                             ✏️ Modify
                         </button>
                     </div>
@@ -561,7 +576,7 @@
     window.togglePromotion = togglePromotion;
 
     function openModifyModal(itemKey) {
-        const item = loadedItems.find(i => `${i.type}_${i.id}` === itemKey);
+        const item = loadedItems.find(i => `${i.type}_${Number(i.id) || 0}` === itemKey);
         if (!item) return;
 
         activeEditItem = item;
@@ -578,7 +593,7 @@
         document.getElementById("editDescription").value = item.description || "";
 
         document.getElementById("openEditPageBtn").onclick = function () {
-            window.location.href = `edit.html?id=${item.id}&type=${item.type}`;
+            window.location.href = `edit.html?id=${Number(item.id) || 0}&type=${encodeURIComponent(item.type)}`;
         };
 
         updatePromoButtonUI();
@@ -631,7 +646,7 @@
         }
 
         Object.assign(activeEditItem, updates, { is_deal: draftIsDeal });
-        const itemKey = `${activeEditItem.type}_${activeEditItem.id}`;
+        const itemKey = `${activeEditItem.type}_${Number(activeEditItem.id) || 0}`;
         savePromotedDeal(itemKey, draftIsDeal, {
             id: activeEditItem.id,
             type: activeEditItem.type,
@@ -675,7 +690,7 @@
         ]);
 
         if (watchesError || braceletsError) {
-            salesList.innerHTML = "<div class='status-msg' style='color:#f87171;'>Gabim: " + (watchesError?.message || braceletsError?.message) + "</div>";
+            salesList.innerHTML = "<div class='status-msg' style='color:#f87171;'>Gabim: " + escapeHtml(watchesError?.message || braceletsError?.message) + "</div>";
             return;
         }
 

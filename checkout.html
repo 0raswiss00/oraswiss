@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Përfundo Porosinë - Ora Swiss</title>
+    <link rel="icon" href="data:,">
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
@@ -37,7 +38,7 @@
             border: 1px solid #333333;
             padding: 28px;
             border-radius: 12px;
-            max-width: 440px;
+            max-width: 460px;
             width: 100%;
             margin: auto;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
@@ -54,7 +55,20 @@
             color: #dddddd;
             line-height: 1.5;
             text-align: center;
+            margin-bottom: 16px;
+        }
+        .order-meta {
+            background: #141414;
+            border: 1px solid #2b2b2b;
+            border-radius: 8px;
+            padding: 12px 14px;
             margin-bottom: 20px;
+            font-size: 13px;
+            color: #d8d8d8;
+            line-height: 1.6;
+        }
+        .order-meta strong {
+            color: #ffd900;
         }
         .product-summary {
             background: #141414;
@@ -64,6 +78,7 @@
             margin-bottom: 18px;
             font-size: 14px;
             color: #e5e5e5;
+            line-height: 1.45;
         }
         .field {
             margin-bottom: 12px;
@@ -85,6 +100,18 @@
             color: #ffffff;
             font-size: 14px;
         }
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            outline: none;
+            border-color: #ffd900;
+        }
+        .form-status {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-bottom: 10px;
+            min-height: 18px;
+        }
         .submit-btn {
             width: 100%;
             padding: 13px;
@@ -95,10 +122,14 @@
             font-weight: bold;
             font-size: 15px;
             cursor: pointer;
-            margin-top: 6px;
+            margin-top: 4px;
         }
-        .submit-btn:hover {
+        .submit-btn:hover:not(:disabled) {
             background: #ffe44d;
+        }
+        .submit-btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
         }
         .back-wrap {
             text-align: center;
@@ -153,7 +184,8 @@
             <textarea id="buyerAddress" rows="2" required placeholder="Rruga, qyteti, kodi postar"></textarea>
         </div>
 
-        <button type="submit" class="submit-btn">Konfirmo Porosinë</button>
+        <div class="form-status" id="formStatus"></div>
+        <button type="submit" class="submit-btn" id="submitBtn">Konfirmo Porosinë</button>
     </form>
 </div>
 
@@ -161,6 +193,7 @@
 <div class="card success-card" id="successCard" style="display: none;">
     <h2>Order Placed Successfully!</h2>
     <p>Thank you for choosing Ora Swiss. We will contact you shortly regarding shipping.</p>
+    <div class="order-meta" id="orderMeta"></div>
     <div class="back-wrap">
         <a href="index.html" id="backLink" class="back-link">← Kthehu</a>
     </div>
@@ -180,9 +213,10 @@
     const productId = idMatch ? Number(idMatch[0]) : null;
     const tableName = params.get("table") === "bracelets_straps" ? "bracelets_straps" : "oras";
 
+    let loadedProduct = null;
     let lastOrderData = null;
+    let isSubmitting = false;
 
-    // Konfiguro butonin "← Kthehu" që të kthehet aty ku ishte
     const backLink = document.getElementById("backLink");
     if (backLink) {
         const returnParam = params.get("return");
@@ -206,7 +240,6 @@
         });
     }
 
-    // Ngarko emrin dhe çmimin e produktit në përmbledhje
     (async function loadCheckoutProduct() {
         const summaryEl = document.getElementById("productSummary");
         if (!productId) {
@@ -216,16 +249,17 @@
         try {
             const { data } = await supabaseClient
                 .from(tableName)
-                .select("brand, model, reference, price, currency")
+                .select("id, brand, model, reference, price, currency")
                 .eq("id", productId)
                 .maybeSingle();
 
             if (data) {
+                loadedProduct = data;
                 const title = [data.brand, data.model, data.reference ? `Ref. ${data.reference}` : ""]
                     .filter(Boolean)
                     .join(" ");
                 const price = data.price ? `${data.price} ${data.currency || "€"}` : "";
-                summaryEl.textContent = `${title || "Produkt"} ${price ? "— " + price : ""}`;
+                summaryEl.innerHTML = `<strong>${title || `Produkti #${productId}`}</strong>${price ? `<br>Çmimi: <strong>${price}</strong>` : ""}`;
             } else {
                 summaryEl.textContent = `Produkti #${productId}`;
             }
@@ -257,24 +291,65 @@
         });
     }
 
+    function trackPurchaseEvent(orderInfo) {
+        if (typeof gtag !== "function") return;
+        const numericPrice = loadedProduct && Number(loadedProduct.price) ? Number(loadedProduct.price) : 0;
+        const itemTitle = loadedProduct
+            ? [loadedProduct.brand, loadedProduct.model].filter(Boolean).join(" ") || `Item #${productId}`
+            : `Item #${productId || "unknown"}`;
+
+        gtag("event", "purchase", {
+            transaction_id: orderInfo.orderId,
+            value: numericPrice,
+            currency: "EUR",
+            items: [
+                {
+                    item_id: String(productId || "unknown"),
+                    item_name: itemTitle,
+                    price: numericPrice,
+                    quantity: 1
+                }
+            ]
+        });
+    }
+
     window.renderOptIn = function () {
         if (lastOrderData) {
             triggerCustomerReviewOptIn(lastOrderData);
         }
     };
 
-    // Shfaq #successCard VETËM pasi dorëzohet forma
     document.getElementById("orderForm").addEventListener("submit", async function (e) {
         e.preventDefault();
+        if (isSubmitting) return;
+
+        const statusEl = document.getElementById("formStatus");
+        const submitBtn = document.getElementById("submitBtn");
+        statusEl.textContent = "";
 
         const buyerName = document.getElementById("buyerName").value.trim();
         const buyerEmail = document.getElementById("buyerEmail").value.trim();
         const buyerCountry = document.getElementById("buyerCountry").value;
         const buyerAddress = document.getElementById("buyerAddress").value.trim();
+
+        if (!buyerName || !buyerEmail || !buyerAddress) {
+            statusEl.textContent = "Ju lutem plotësoni të gjitha fushat e detyrueshme.";
+            return;
+        }
+
+        isSubmitting = true;
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Duke dërguar...";
+
         const generatedOrderId = `OS-${Date.now()}`;
+        const productTitle = loadedProduct
+            ? [loadedProduct.brand, loadedProduct.model, loadedProduct.reference ? `Ref. ${loadedProduct.reference}` : ""]
+                .filter(Boolean)
+                .join(" ")
+            : `Produkti #${productId || "-"}`;
 
         try {
-            await supabaseClient.from("orders").insert({
+            const { error: insertError } = await supabaseClient.from("orders").insert({
                 order_code: generatedOrderId,
                 product_id: productId,
                 table_name: tableName,
@@ -284,8 +359,11 @@
                 address: buyerAddress,
                 status: "pending"
             });
+            if (insertError) {
+                console.warn("Orders insert notice:", insertError.message);
+            }
         } catch (err) {
-            // Vazhdon shfaqja e konfirmimit edhe nëse tabela orders nuk ekziston ende
+            console.warn("Orders insert fallback:", err);
         }
 
         lastOrderData = {
@@ -294,8 +372,17 @@
             country: buyerCountry
         };
 
+        document.getElementById("orderMeta").innerHTML = `
+            <div><strong>Porosia:</strong> ${generatedOrderId}</div>
+            <div><strong>Artikulli:</strong> ${productTitle}</div>
+            <div><strong>Email:</strong> ${buyerEmail}</div>
+            <div><strong>Dërgesa:</strong> ${buyerCountry} — ${buyerAddress}</div>
+        `;
+
         document.getElementById("checkoutBox").style.display = "none";
         document.getElementById("successCard").style.display = "block";
+
+        trackPurchaseEvent(lastOrderData);
         triggerCustomerReviewOptIn(lastOrderData);
     });
 </script>

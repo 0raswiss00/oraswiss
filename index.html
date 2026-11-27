@@ -277,9 +277,12 @@
     }
 
     @media (min-width: 1024px) {
-      .bottom-nav,
+      .bottom-nav {
+        max-width: 620px !important;
+      }
+
       #myOraSwissMenu {
-        display: none !important;
+        right: calc(50% - 310px) !important;
       }
     }
 
@@ -337,10 +340,10 @@
       <span> User: <b id="count-users">0</b></span>
       <span> Watch: <b id="count-products">0</b></span>
     </span>
-    <button id="loginRegisterBtn" onclick="location.href='register.html'">
+    <button type="button" id="loginRegisterBtn" onclick="location.href='register.html'">
       Create / Account
     </button>
-    <button id="btnSellNow" style="display: none;" onclick="trajtoKlikiminSellNow()">Sell a watch</button>
+    <button type="button" id="btnSellNow" style="display: none;" onclick="trajtoKlikiminSellNow()">Sell a watch</button>
     <a href="luxury.html">Luxury</a>
     <a href="vintage.html">Vintage</a>
     <a href="parts.html" class="parts-link">
@@ -496,7 +499,7 @@
 <h2>Parts Collection</h2>
 <div id="parts-container" class="grid">Loading...</div>
 
-<!-- Menuja e fshehur që hapet VETËM nga butoni My OraSwiss -->
+<!-- Menuja e fshehur që hapet nga butoni My OraSwiss -->
 <div id="myOraSwissMenu">
   <div class="menu-item-row" onclick="location.href='buy.html'">
     <div class="menu-item-left"><span>🛒</span> Buy</div>
@@ -922,6 +925,39 @@
     }
     window.location.href = pageUrl;
   };
+
+  (function initBottomNavScroll() {
+    const bottomNav = document.querySelector(".bottom-nav");
+    if (!bottomNav) return;
+
+    let lastScrollY = window.scrollY || window.pageYOffset || 0;
+    let scrollTicking = false;
+
+    function handleNavScroll() {
+      const currentScrollY = window.scrollY || window.pageYOffset || 0;
+
+      if (currentScrollY <= 20) {
+        bottomNav.classList.remove("nav-hidden");
+      } else if (currentScrollY > lastScrollY + 6) {
+        bottomNav.classList.add("nav-hidden");
+        if (typeof window.closeOraSwissMenu === "function") {
+          window.closeOraSwissMenu();
+        }
+      } else if (currentScrollY < lastScrollY - 6) {
+        bottomNav.classList.remove("nav-hidden");
+      }
+
+      lastScrollY = Math.max(0, currentScrollY);
+      scrollTicking = false;
+    }
+
+    window.addEventListener("scroll", function () {
+      if (!scrollTicking) {
+        window.requestAnimationFrame(handleNavScroll);
+        scrollTicking = true;
+      }
+    }, { passive: true });
+  })();
 </script>
 
 </body>

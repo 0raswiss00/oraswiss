@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ora Swiss</title>
+  <title>Ora Swiss - Luxury, Vintage Watches & Movement Parts</title>
+  <meta name="description" content="Ora Swiss - Authentic luxury watches, vintage timepieces, bracelets, straps and original movement parts with worldwide shipping." />
+  <link rel="canonical" href="https://oraswiss.com/" />
+  <link rel="icon" href="data:," />
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
   <script>
@@ -12,365 +16,316 @@
     gtag('js', new Date());
     gtag('config', 'G-KD2ZZ3MJYY');
   </script>
+
   <style>
-    * { box-sizing: border-box; }
-    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff;padding-bottom:110px !important;}
-    .site-header{position:sticky;top:0;z-index:9999;background:#111;border-bottom:1px solid #333;}
-    .nav-scroll{display:flex;gap:18px;align-items:center;overflow-x:auto;padding:6px 12px}
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff; padding-bottom: 110px !important; }
+    .site-header { position: sticky; top: 0; z-index: 9999; background: #111; border-bottom: 1px solid #333; }
+    .nav-scroll { display: flex; gap: 18px; align-items: center; overflow-x: auto; padding: 6px 12px; }
     .nav-scroll a {
-        color: #fff;
-        text-decoration: none;
-        padding: 4px 8px;
-        font-size: 11px;
-        white-space: nowrap;
+      color: #fff;
+      text-decoration: none;
+      padding: 4px 8px;
+      font-size: 11px;
+      white-space: nowrap;
     }
-    .nav-scroll a:hover{color:gold}
+    .nav-scroll a:hover { color: gold; }
     .site-title {
-        font-weight: 700;
-        line-height: 1;
-        margin-right: 10px;
-        font-size: 12px !important;
-        color: gold;
-        white-space: nowrap;
+      font-weight: 700;
+      line-height: 1;
+      margin-right: 10px;
+      font-size: 12px !important;
+      color: gold;
+      white-space: nowrap;
     }
 
     .featured-wrapper {
-        position: relative;
-        display: flex;
-        align-items: center;
+      position: relative;
+      display: flex;
+      align-items: center;
     }
 
     #special-deals-row {
-        display: flex;
-        gap: 12px;
-        overflow-x: auto;
-        scroll-behavior: smooth;
-        padding-bottom: 6px;
-        scrollbar-width: none;
-        width: 100%;
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding-bottom: 6px;
+      scrollbar-width: none;
+      width: 100%;
     }
 
     #special-deals-row::-webkit-scrollbar {
-        display: none;
+      display: none;
     }
 
     .featured-nav-btn {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 5;
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        border: 1px solid gold;
-        background: rgba(17, 17, 17, 0.92);
-        color: gold;
-        font-size: 20px;
-        font-weight: bold;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
-        transition: background 0.2s, transform 0.2s;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 5;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid gold;
+      background: rgba(17, 17, 17, 0.92);
+      color: gold;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+      transition: background 0.2s, transform 0.2s;
     }
 
     .featured-nav-btn:hover {
-        background: gold;
-        color: #000;
+      background: gold;
+      color: #000;
     }
 
-    .featured-nav-btn.prev {
-        left: 6px;
-    }
-
-    .featured-nav-btn.next {
-        right: 6px;
-    }
+    .featured-nav-btn.prev { left: 6px; }
+    .featured-nav-btn.next { right: 6px; }
 
     .grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-        padding: 10px;
-        box-sizing: border-box;
-        width: 100%;
-    }
-
-    @media (min-width: 768px) {
-        .grid {
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            padding: 15px;
-        }
-
-        .card {
-            padding: 15px;
-        }
-
-        .card img {
-            aspect-ratio: auto;
-            height: 220px;
-        }
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      padding: 10px;
+      width: 100%;
     }
 
     .card {
-        background: #111;
-        padding: 10px;
-        border-radius: 10px;
-        border: 1px solid #333;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        cursor: pointer;
+      background: #111;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #333;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
     }
 
     .card img {
-        width: 100%;
-        aspect-ratio: 1 / 1;
-        object-fit: cover;
-        display: block;
-        border-radius: 8px;
-        margin-bottom: 10px;
-        background: #181818;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      background: #181818;
+    }
+
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        padding: 15px;
+      }
+
+      .card {
+        padding: 15px;
+      }
+
+      .card img {
+        aspect-ratio: auto;
+        height: 220px;
+      }
     }
 
     .card h3 {
-        font-size: 16px;
-        font-weight: bold;
-        margin: 5px 0 2px 0;
-        color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      margin: 5px 0 2px 0;
+      color: #fff;
     }
 
     .card p {
-        color: #aaa;
-        font-size: 13px;
-        margin: 0 0 6px 0;
+      color: #aaa;
+      font-size: 13px;
+      margin: 0 0 6px 0;
     }
 
     .badges-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
-        margin: 6px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin: 6px 0;
     }
 
     .badge {
-        font-size: 11px;
-        padding: 3px 7px;
-        border-radius: 5px;
-        font-weight: bold;
+      font-size: 11px;
+      padding: 3px 7px;
+      border-radius: 5px;
+      font-weight: bold;
     }
     .badge-qty { background: #1f2937; color: #60a5fa; border: 1px solid #374151; }
     .badge-good { background: #064e3b; color: #34d399; border: 1px solid #065f46; }
     .badge-damaged { background: #450a0a; color: #f87171; border: 1px solid #7f1d1d; }
 
     .price {
-        color: gold;
-        font-weight: bold;
-        margin: 8px 0 6px 0;
-        font-size: 1.05em;
+      color: gold;
+      font-weight: bold;
+      margin: 8px 0 6px 0;
+      font-size: 1.05em;
     }
 
     .btn-main {
-        padding: 9px;
-        border: none;
-        border-radius: 6px;
-        font-weight: bold;
-        cursor: pointer;
-        font-size: 13px;
-        text-align: center;
-        display: block;
-        text-decoration: none;
-        width: 100%;
+      padding: 9px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 13px;
+      text-align: center;
+      display: block;
+      text-decoration: none;
+      width: 100%;
     }
 
     .btn-buy {
-        background: gold;
-        color: #000;
-        margin-top: 6px;
+      background: gold;
+      color: #000;
+      margin-top: 6px;
     }
 
-    .btn-buy:hover {
-        background: #e6c200;
-    }
+    .btn-buy:hover { background: #e6c200; }
 
     .btn-view-details {
-        width: 100%;
-        padding: 9px;
-        background: #222;
-        color: #fff;
-        border: 1px solid #444;
-        border-radius: 6px;
-        font-weight: bold;
-        cursor: pointer;
-        font-size: 13px;
-        text-align: center;
-        margin-top: 6px;
-        transition: background 0.2s;
+      width: 100%;
+      padding: 9px;
+      background: #222;
+      color: #fff;
+      border: 1px solid #444;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 13px;
+      text-align: center;
+      margin-top: 6px;
+      transition: background 0.2s;
     }
 
     .btn-view-details:hover {
-        background: #333;
-        border-color: gold;
-        color: gold;
+      background: #333;
+      border-color: gold;
+      color: gold;
     }
 
     .btn-edit {
-        background: #1a180d;
-        color: gold;
-        border: 1px solid #6b5916;
-        margin-top: 6px;
+      background: #1a180d;
+      color: gold;
+      border: 1px solid #6b5916;
+      margin-top: 6px;
     }
 
-    .btn-edit:hover {
-        background: #292512;
-    }
+    .btn-edit:hover { background: #292512; }
 
     .bottom-nav {
-        position: fixed !important;
-        bottom: 20px !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        width: 100% !important;
-        max-width: 480px !important;
-        height: 55px !important;
-        background-color: #1a1a1a !important;
-        display: flex !important;
-        justify-content: space-around !important;
-        align-items: center !important;
-        box-sizing: border-box !important;
-        padding: 0 10px !important;
-        border-radius: 20px !important;
-        border: 1px solid #333 !important;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
-        z-index: 999999 !important;
-        overflow-x: hidden !important;
-        white-space: nowrap !important;
-        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
-        opacity: 1 !important;
+      position: fixed !important;
+      bottom: 20px !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      width: 100% !important;
+      max-width: 480px !important;
+      height: 55px !important;
+      background-color: #1a1a1a !important;
+      display: flex !important;
+      justify-content: space-around !important;
+      align-items: center !important;
+      padding: 0 10px !important;
+      border-radius: 20px !important;
+      border: 1px solid #333 !important;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
+      z-index: 999999 !important;
+      overflow-x: hidden !important;
+      white-space: nowrap !important;
+      transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
+      opacity: 1 !important;
     }
 
-    .bottom-nav::-webkit-scrollbar {
-        display: none !important;
-    }
+    .bottom-nav::-webkit-scrollbar { display: none !important; }
 
     .bottom-nav-item, .bottom-nav a, .bottom-nav button {
-        position: relative !important;
-        color: #ffffff !important;
-        text-decoration: none !important;
-        font-size: 11px !important;
-        line-height: 1.2 !important;
-        text-align: center !important;
-        white-space: nowrap !important;
-        flex: 1 1 0 !important;
-        min-width: 0 !important;
-        background: none !important;
-        border: none !important;
-        cursor: pointer !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 2px !important;
-        padding: 0 !important;
+      position: relative !important;
+      color: #ffffff !important;
+      text-decoration: none !important;
+      font-size: 11px !important;
+      line-height: 1.2 !important;
+      text-align: center !important;
+      white-space: nowrap !important;
+      flex: 1 1 0 !important;
+      min-width: 0 !important;
+      background: none !important;
+      border: none !important;
+      cursor: pointer !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 2px !important;
+      padding: 0 !important;
     }
 
-    .bottom-nav a:hover, .bottom-nav button:hover, .bottom-nav-item:hover {
-        color: gold !important;
-    }
+    .bottom-nav a:hover, .bottom-nav button:hover, .bottom-nav-item:hover { color: gold !important; }
 
     .bottom-nav.nav-hidden {
-        transform: translateX(-50%) translateY(120px) !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
+      transform: translateX(-50%) translateY(120px) !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
     }
 
     @media (min-width: 1024px) {
-        .bottom-nav,
-        #myOraSwissMenu {
-            display: none !important;
-        }
+      .bottom-nav,
+      #myOraSwissMenu {
+        display: none !important;
+      }
     }
 
-    /* Menuja del VETËM kur klikohet butoni My OraSwiss */
     #myOraSwissMenu {
-        display: none;
-        position: fixed;
-        bottom: 85px;
-        right: 15px;
-        width: 230px;
-        background: #1a1a1a;
-        border-radius: 15px;
-        border: 1px solid #333;
-        padding: 8px 10px;
-        box-shadow: 0 5px 25px rgba(0,0,0,0.8);
-        z-index: 1000000;
+      display: none;
+      position: fixed;
+      bottom: 85px;
+      right: 15px;
+      width: 230px;
+      background: #1a1a1a;
+      border-radius: 15px;
+      border: 1px solid #333;
+      padding: 8px 10px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.8);
+      z-index: 1000000;
     }
 
-    #myOraSwissMenu.active {
-        display: block;
-    }
+    #myOraSwissMenu.active { display: block; }
 
     .menu-item-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 11px 10px;
-        border-bottom: 1px solid #262626;
-        cursor: pointer;
-        color: #fff;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: 500;
-        transition: background 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 11px 10px;
+      border-bottom: 1px solid #262626;
+      cursor: pointer;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s;
     }
 
-    .menu-item-row:last-child {
-        border-bottom: none;
-    }
+    .menu-item-row:last-child { border-bottom: none; }
+    .menu-item-row:hover { background: #282828; border-radius: 8px; }
 
-    .menu-item-row:hover {
-        background: #282828;
-        border-radius: 8px;
-    }
+    .menu-item-left { display: flex; align-items: center; gap: 10px; }
+    .menu-arrow { color: #888; font-size: 14px; font-weight: bold; }
 
-    .menu-item-left {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
+    h2 { font-size: 14px; margin: 12px 10px 6px 10px; color: gold; }
 
-    .menu-arrow {
-        color: #888;
-        font-size: 14px;
-        font-weight: bold;
-    }
+    .parts-link { display: flex; align-items: center; gap: 4px; }
+    .parts-link span { font-size: 11px; }
 
-    h2 {
-        font-size: 14px;
-        margin: 12px 10px 6px 10px;
-        color: gold;
-    }
-
-    .parts-link{
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-
-    .parts-link span{
-        font-size: 11px;
-    }
-
-    .menu-icon{
-        width: 35px;
-        height: 35px;
-        object-fit: cover;
-        border-radius: 4px;
-        display: block;
-    }
-  </style>     
+    .menu-icon { width: 35px; height: 35px; object-fit: cover; border-radius: 4px; display: block; }
+  </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
 </head>
 <body>
@@ -379,18 +334,18 @@
   <nav class="nav-scroll">
     <span class="site-title">ORA<br>SWISS</span>
     <span style="color: white; margin-left: 20px; display: flex; align-items: center; gap: 15px;">
-        <span> User: <b id="count-users">0</b></span>
-        <span> Watch: <b id="count-products">0</b></span>
+      <span> User: <b id="count-users">0</b></span>
+      <span> Watch: <b id="count-products">0</b></span>
     </span>
     <button id="loginRegisterBtn" onclick="location.href='register.html'">
-        Create / Account
+      Create / Account
     </button>
     <button id="btnSellNow" style="display: none;" onclick="trajtoKlikiminSellNow()">Sell a watch</button>
     <a href="luxury.html">Luxury</a>
     <a href="vintage.html">Vintage</a>
     <a href="parts.html" class="parts-link">
-        <img src="movement-part.jpg" class="menu-icon" alt="">
-        <span>Movement Parts</span>
+      <img src="movement-part.jpg" class="menu-icon" alt="Movement Parts">
+      <span>Movement Parts</span>
     </a>
 
     <a href="product-bracelets-straps.html">Bracelet/Strap</a>
@@ -399,32 +354,32 @@
     <a href="policy.html">Policy</a>
     <a href="sell.html">Sell</a>
     <a href="home.html">Home</a>
-    <a href="admin_users.html"><button> Përdoruesit</button></a>
+    <a href="admin_users.html"><button type="button">Përdoruesit</button></a>
   </nav>
 </header>
 
 <div style="padding: 10px;">
-    <div style="
-        background: #111;
-        border: 1px solid #333;
-        border-radius: 12px;
-        padding: 15px;
-        max-height: 180px;
-        overflow-y: auto;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    ">
-        <h2 style="margin: 0 0 10px 0; color: gold; font-size: 16px; border-bottom: 1px solid #222; padding-bottom: 5px;">
-            OraSwiss – Your Horology Experts
-        </h2>
-        <p style="color: #ccc; font-size: 13px; line-height: 1.5; margin: 0 0 10px 0;">
-            We sell pre-owned and vintage watches fully verified for authenticity and thoroughly analyzed in detail, as well as original replacement parts. With us, you will find a wide range of components: <em>Cases, Bracelets, Straps, Dials, Crowns, Movements</em>, and many high-precision mechanical parts.
-        </p>
-        <div style="display: flex; flex-wrap: wrap; gap: 15px; font-size: 12px; color: #fff; margin-top: 10px; border-top: 1px solid #222; padding-top: 8px;">
-            <span>✔️ <strong>100% Authentic Products</strong></span>
-            <span>✈️ <strong>Worldwide Shipping</strong></span>
-            <span>✉️ <strong>Contact us via email:</strong> <a href="mailto:oraswisssuport00gmail.com" style="color: gold; text-decoration: none;">info@oraswiss.com</a></span>
-        </div>
+  <div style="
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 15px;
+      max-height: 180px;
+      overflow-y: auto;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  ">
+    <h2 style="margin: 0 0 10px 0; color: gold; font-size: 16px; border-bottom: 1px solid #222; padding-bottom: 5px;">
+      OraSwiss – Your Horology Experts
+    </h2>
+    <p style="color: #ccc; font-size: 13px; line-height: 1.5; margin: 0 0 10px 0;">
+      We sell pre-owned and vintage watches fully verified for authenticity and thoroughly analyzed in detail, as well as original replacement parts. With us, you will find a wide range of components: <em>Cases, Bracelets, Straps, Dials, Crowns, Movements</em>, and many high-precision mechanical parts.
+    </p>
+    <div style="display: flex; flex-wrap: wrap; gap: 15px; font-size: 12px; color: #fff; margin-top: 10px; border-top: 1px solid #222; padding-top: 8px;">
+      <span>✔️ <strong>100% Authentic Products</strong></span>
+      <span>✈️ <strong>Worldwide Shipping</strong></span>
+      <span>✉️ <strong>Contact us via email:</strong> <a href="mailto:info@oraswiss.com" style="color: gold; text-decoration: none;">info@oraswiss.com</a></span>
     </div>
+  </div>
 </div>
 
 <div style="
@@ -435,101 +390,101 @@
     scrollbar-width: thin;
     white-space: nowrap;
 ">
-    <a href="luxury.html" style="background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold; flex: 0 0 auto;">
-        ✨ Luxury Watches
-    </a>
-    <a href="vintage.html" style="background: #1a1a1a; border: 1px solid #333; color: gold; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold; flex: 0 0 auto;">
-        ⏳ Vintage Watches
-    </a>
-    <a href="parts.html" style="background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold; flex: 0 0 auto;">
-        ⚙️ Watch Parts
-    </a>
-    <a href="product-bracelets-straps.html" style="background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold; flex: 0 0 auto;">
-        🔗 Bracelets & Straps
-    </a>
+  <a href="luxury.html" style="background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold; flex: 0 0 auto;">
+    ✨ Luxury Watches
+  </a>
+  <a href="vintage.html" style="background: #1a1a1a; border: 1px solid #333; color: gold; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold; flex: 0 0 auto;">
+    ⏳ Vintage Watches
+  </a>
+  <a href="parts.html" style="background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold; flex: 0 0 auto;">
+    ⚙️ Watch Parts
+  </a>
+  <a href="product-bracelets-straps.html" style="background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold; flex: 0 0 auto;">
+    🔗 Bracelets & Straps
+  </a>
 </div>
 
 <div class="search-container" style="padding: 0 10px 15px 10px;">
-    <div class="search-box" style="
-        display:flex;
-        align-items:center;
-        gap:8px;
-        background:#111;
-        border:1px solid #333;
-        border-radius:8px;
-        padding:10px;
-    ">
-        <span>🔍</span>
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Search on OraSwiss"
-            autocomplete="off"
-            style="
-                flex:1;
-                min-width:0;
-                background:transparent;
-                border:none;
-                color:#fff;
-                outline:none;
-                font-size:14px;
-            "
-        >
-        <input
-            type="file"
-            id="photoSearchInput"
-            accept="image/*"
-            capture="environment"
-            hidden
-        >
-        <button
-            type="button"
-            id="photoSearchButton"
-            aria-label="Search by photo"
-            title="Search by photo"
-            style="
-                background:none;
-                border:none;
-                cursor:pointer;
-                font-size:21px;
-            "
-        >📷</button>
-    </div>
+  <div class="search-box" style="
+      display:flex;
+      align-items:center;
+      gap:8px;
+      background:#111;
+      border:1px solid #333;
+      border-radius:8px;
+      padding:10px;
+  ">
+    <span>🔍</span>
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Search on OraSwiss"
+      autocomplete="off"
+      style="
+        flex:1;
+        min-width:0;
+        background:transparent;
+        border:none;
+        color:#fff;
+        outline:none;
+        font-size:14px;
+      "
+    >
+    <input
+      type="file"
+      id="photoSearchInput"
+      accept="image/*"
+      capture="environment"
+      hidden
+    >
+    <button
+      type="button"
+      id="photoSearchButton"
+      aria-label="Search by photo"
+      title="Search by photo"
+      style="
+        background:none;
+        border:none;
+        cursor:pointer;
+        font-size:21px;
+      "
+    >📷</button>
+  </div>
 
-    <div id="photoSearchPreview" style="display:none;margin-top:10px;">
-        <img id="photoSearchImage" alt="Foto për kërkim" style="
-                max-width:150px;
-                max-height:150px;
-                object-fit:contain;
-                border-radius:8px;
-                border:1px solid #333;
-            ">
-        <div id="photoSearchStatus" style="color:#aaa;font-size:13px;margin-top:6px;"></div>
-        <button type="button" id="cancelPhotoSearch" style="
-                    margin-top:8px;
-                    background:#222;
-                    color:white;
-                    border:1px solid #444;
-                    padding:7px 12px;
-                    border-radius:6px;
-                    cursor:pointer;
-                ">
-            Anulo foton
-        </button>
-    </div>
+  <div id="photoSearchPreview" style="display:none;margin-top:10px;">
+    <img id="photoSearchImage" alt="Foto për kërkim" style="
+        max-width:150px;
+        max-height:150px;
+        object-fit:contain;
+        border-radius:8px;
+        border:1px solid #333;
+    ">
+    <div id="photoSearchStatus" style="color:#aaa;font-size:13px;margin-top:6px;"></div>
+    <button type="button" id="cancelPhotoSearch" style="
+        margin-top:8px;
+        background:#222;
+        color:white;
+        border:1px solid #444;
+        padding:7px 12px;
+        border-radius:6px;
+        cursor:pointer;
+    ">
+      Anulo foton
+    </button>
+  </div>
 </div>
 
 <div id="featured-section" style="padding: 0 10px 20px 10px; display: none;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <h3 style="margin: 0; color: #fff; font-size: 15px;">👑 Promoted Articles / Featured</h3>
-        <span style="font-size: 11px; color: gold;">Selected Pieces</span>
-    </div>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+    <h3 style="margin: 0; color: #fff; font-size: 15px;">👑 Promoted Articles / Featured</h3>
+    <span style="font-size: 11px; color: gold;">Selected Pieces</span>
+  </div>
 
-    <div class="featured-wrapper">
-        <button type="button" class="featured-nav-btn prev" aria-label="Scroll left" onclick="scrollFeaturedDeals(-1)">‹</button>
-        <div id="special-deals-row"></div>
-        <button type="button" class="featured-nav-btn next" aria-label="Scroll right" onclick="scrollFeaturedDeals(1)">›</button>
-    </div>
+  <div class="featured-wrapper">
+    <button type="button" class="featured-nav-btn prev" aria-label="Scroll left" onclick="scrollFeaturedDeals(-1)">‹</button>
+    <div id="special-deals-row"></div>
+    <button type="button" class="featured-nav-btn next" aria-label="Scroll right" onclick="scrollFeaturedDeals(1)">›</button>
+  </div>
 </div>
 
 <h2>Luxury Collection</h2>
@@ -539,104 +494,114 @@
 <div id="vintage-container" class="grid">Loading...</div>
 
 <h2>Parts Collection</h2>
-<div id="parts-container" class="grid">Loading...</div>  
+<div id="parts-container" class="grid">Loading...</div>
 
 <!-- Menuja e fshehur që hapet VETËM nga butoni My OraSwiss -->
 <div id="myOraSwissMenu">
-    <div class="menu-item-row" onclick="location.href='buy.html'">
-        <div class="menu-item-left"><span>🛒</span> Buy</div>
-        <span class="menu-arrow">&gt;</span>
+  <div class="menu-item-row" onclick="location.href='buy.html'">
+    <div class="menu-item-left"><span>🛒</span> Buy</div>
+    <span class="menu-arrow">&gt;</span>
+  </div>
+  <div class="menu-item-row" onclick="location.href='mysold.html'">
+    <div class="menu-item-left"><span>🛒</span> my sold</div>
+    <span class="menu-arrow">&gt;</span>
+  </div>
+  <div class="menu-item-row" onclick="location.href='messages.html'">
+    <div class="menu-item-left">
+      <span>✉️</span> Messages
     </div>
-    <div class="menu-item-row" onclick="location.href='mysold.html'">
-        <div class="menu-item-left"><span>🛒</span> my sold</div>
-        <span class="menu-arrow">&gt;</span>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span id="dashboardMessageCount" style="background: #ff3b30; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold; display: none;">0</span>
+      <span class="menu-arrow">&gt;</span>
     </div>
-    <div class="menu-item-row" onclick="location.href='messages.html'">
-        <div class="menu-item-left">
-            <span>✉️</span> Messages
-        </div>
-        <div style="display: flex; align-items: center; gap: 8px;">
-            <span id="dashboardMessageCount" style="background: #ff3b30; color: white; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: bold; display: none;">0</span>
-            <span class="menu-arrow">&gt;</span>
-        </div>
+  </div>
+  <div class="menu-item-row" onclick="location.href='settings.html'">
+    <div class="menu-item-left"><span>⚙️</span> Account Settings</div>
+    <span class="menu-arrow">&gt;</span>
+  </div>
+  <div class="menu-item-row" onclick="location.href='support.html'">
+    <div class="menu-item-left"><span>🎧</span> Support</div>
+    <span class="menu-arrow">&gt;</span>
+  </div>
+  <div class="menu-item-row" onclick="location.href='support-thanks.html'">
+    <div class="menu-item-left">
+      <span>✅</span> Support Thanks
     </div>
-    <div class="menu-item-row" onclick="location.href='settings.html'">
-        <div class="menu-item-left"><span>⚙️</span> Account Settings</div>
-        <span class="menu-arrow">&gt;</span>
-    </div>
-    <div class="menu-item-row" onclick="location.href='support.html'">
-        <div class="menu-item-left"><span>🎧</span> Support</div>
-        <span class="menu-arrow">&gt;</span>
-    </div>
-    <div class="menu-item-row" onclick="location.href='support-thanks.html'">
-        <div class="menu-item-left">
-            <span>✅</span> Support Thanks
-        </div>
-        <span class="menu-arrow">&gt;</span>
-    </div>
-    <div class="menu-item-row" onclick="location.href='info.html'">
-        <div class="menu-item-left"><span>ℹ️</span> Info</div>
-        <span class="menu-arrow">&gt;</span>
-    </div>
+    <span class="menu-arrow">&gt;</span>
+  </div>
+  <div class="menu-item-row" onclick="location.href='info.html'">
+    <div class="menu-item-left"><span>ℹ️</span> Info</div>
+    <span class="menu-arrow">&gt;</span>
+  </div>
 </div>
 
 <nav class="bottom-nav">
-    <a href="dashboard.html" onclick="checkPage(event,'dashboard.html')"><span>🏠</span><span>Home</span></a>
-    <a href="favorites.html" onclick="checkPage(event,'favorites.html')"><span>⭐</span><span>Favs</span></a>
-    <a href="messages.html" onclick="checkPage(event,'messages.html')">
-        <span>✉️</span><span>messg</span>
-        <span id="menuMessageCount" style="position: absolute; top: 2px; right: 8px; background: #ff3b30; color: white; padding: 1px 5px; border-radius: 10px; font-size: 9px; font-weight: bold; display: none;">0</span>
-    </a>
-    <a href="mysales.html" onclick="checkPage(event,'mysales.html')"><span>📦</span><span>Sales</span></a>
-    <a href="sellnow.html" onclick="checkPage(event,'sellnow.html')"><span>➕</span><span>Sell</span></a>
-    <button type="button" onclick="checkMenu(event)" id="menuBtnText"><span>📂</span><span>My OraSwiss</span></button>  
+  <a href="dashboard.html" onclick="checkPage(event,'dashboard.html')"><span>🏠</span><span>Home</span></a>
+  <a href="favorites.html" onclick="checkPage(event,'favorites.html')"><span>⭐</span><span>Favs</span></a>
+  <a href="messages.html" onclick="checkPage(event,'messages.html')">
+    <span>✉️</span><span>messg</span>
+    <span id="menuMessageCount" style="position: absolute; top: 2px; right: 8px; background: #ff3b30; color: white; padding: 1px 5px; border-radius: 10px; font-size: 9px; font-weight: bold; display: none;">0</span>
+  </a>
+  <a href="mysales.html" onclick="checkPage(event,'mysales.html')"><span>📦</span><span>Sales</span></a>
+  <a href="sellnow.html" onclick="checkPage(event,'sellnow.html')"><span>➕</span><span>Sell</span></a>
+  <button type="button" onclick="checkMenu(event)" id="menuBtnText"><span>📂</span><span>My OraSwiss</span></button>
 </nav>
 
 <div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center;z-index:99999;">
-    <div style="background:#1a1a1a;padding:25px;border-radius:12px;text-align:center;max-width:320px;width:90%;color:#fff;">
-        <h2>Login Required</h2>
-        <p>Please sign in or create an account to continue.</p>
-        <button onclick="location.href='register.html'" style="padding:10px 20px;background:#fff;color:#000;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">Login / Register</button>
-        <br><br>
-        <button onclick="document.getElementById('loginModal').style.display='none'" style="padding:8px 15px;background:#444;color:#fff;border:none;border-radius:6px;cursor:pointer;">Cancel</button>
-    </div>
+  <div style="background:#1a1a1a;padding:25px;border-radius:12px;text-align:center;max-width:320px;width:90%;color:#fff;">
+    <h2>Login Required</h2>
+    <p>Please sign in or create an account to continue.</p>
+    <button type="button" onclick="location.href='register.html'" style="padding:10px 20px;background:#fff;color:#000;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">Login / Register</button>
+    <br><br>
+    <button type="button" onclick="document.getElementById('loginModal').style.display='none'" style="padding:8px 15px;background:#444;color:#fff;border:none;border-radius:6px;cursor:pointer;">Cancel</button>
+  </div>
 </div>
 
 <script>
   const supabase = window.supabase.createClient(
-    "https://gnwsrmelmeqduhhmfmoa.supabase.co", 
+    "https://gnwsrmelmeqduhhmfmoa.supabase.co",
     "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
   );
 
   let currentUserId = null;
+  const categoryDataCache = {};
 
-  const PROMO_STORAGE_KEY = 'oraswiss_promoted_deals_v1';
-  const PROMO_DURATION_MS = 30 * 24 * 60 * 60 * 1000;
-
-  function savePromotedDeal(itemKey, enabled, itemSnapshot = null) {
-    let current = {};
-    try {
-      current = JSON.parse(localStorage.getItem(PROMO_STORAGE_KEY) || '{}');
-    } catch (e) {
-      current = {};
-    }
-
-    if (enabled) {
-      const promotedAt = Date.now();
-      const expiresAt = promotedAt + PROMO_DURATION_MS;
-      current[itemKey] = {
-        promotedAt,
-        expiresAt,
-        data: itemSnapshot
-      };
-    } else {
-      delete current[itemKey];
-    }
-
-    try {
-      localStorage.setItem(PROMO_STORAGE_KEY, JSON.stringify(current));
-    } catch (e) {}
+  function escapeHtml(val) {
+    if (val === null || val === undefined) return "";
+    return String(val)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   }
+
+  window.openProduct = function(id) {
+    const cleanId = Number(String(id || "").match(/\d+/)?.[0] || 0);
+    if (!cleanId) return;
+    window.location.href = `product.html?id=${cleanId}`;
+  };
+
+  window.closeOraSwissMenu = function() {
+    const menu = document.getElementById("myOraSwissMenu");
+    if (menu) menu.classList.remove("active");
+  };
+
+  window.checkMenu = function(event) {
+    if (event) event.stopPropagation();
+    const menu = document.getElementById("myOraSwissMenu");
+    if (menu) menu.classList.toggle("active");
+  };
+
+  document.addEventListener("click", function(e) {
+    const menu = document.getElementById("myOraSwissMenu");
+    const btn = document.getElementById("menuBtnText");
+    if (menu && menu.classList.contains("active")) {
+      if (!menu.contains(e.target) && (!btn || !btn.contains(e.target))) {
+        menu.classList.remove("active");
+      }
+    }
+  });
 
   async function checkAuthUser() {
     const { data: { session } } = await supabase.auth.getSession();
@@ -644,11 +609,33 @@
   }
 
   async function kontrolloLogin() {
-      const { data: { user } } = await supabase.auth.getUser();
-      const btn = document.getElementById("loginRegisterBtn");
-      if (btn) {
-          btn.style.display = user ? "none" : "block";
+    const { data: { user } } = await supabase.auth.getUser();
+    const btn = document.getElementById("loginRegisterBtn");
+    if (btn) {
+      btn.style.display = user ? "none" : "block";
+    }
+  }
+
+  function resolveItemImage(rawField) {
+    let primaryImage = "";
+    if (rawField) {
+      if (Array.isArray(rawField) && rawField.length > 0) {
+        primaryImage = rawField[0];
+      } else if (typeof rawField === "string") {
+        try {
+          const parsed = JSON.parse(rawField);
+          primaryImage = Array.isArray(parsed) ? parsed[0] : rawField;
+        } catch (e) {
+          primaryImage = rawField;
+        }
       }
+    }
+    if (primaryImage && primaryImage !== "null" && primaryImage !== "") {
+      const clean = String(primaryImage).trim();
+      if (clean.startsWith("http")) return clean;
+      return "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + clean;
+    }
+    return "https://placeholder.co/600x400/222/fff?text=No+Image";
   }
 
   async function renderProductsData(data, containerId) {
@@ -656,181 +643,176 @@
     if (!container) return;
 
     if (!data || data.length === 0) {
-        container.innerHTML = "<p style='grid-column: span 2; color:#aaa; font-size:13px;'>No items found.</p>";
-        return;
+      container.innerHTML = "<p style='grid-column: span 2; color:#aaa; font-size:13px;'>No items found.</p>";
+      return;
     }
 
     container.innerHTML = data.map(ora => {
-        let imgUrl = "https://placeholder.co/600x400/222/fff?text=No+Image";
-        let primaryImage = "";
+      const safeId = Number(ora.id) || 0;
+      const imgUrl = escapeHtml(resolveItemImage(ora.image_url));
+      const isMovementPart = ["parts", "movement parts", "part"].includes((ora.category || "").toLowerCase());
+      const rawDetail = isMovementPart
+        ? (ora.caliber ? `Cal: ${ora.caliber}` : (ora.model || ""))
+        : (ora.reference ? `Ref. ${ora.reference}` : (ora.model || ""));
 
-        if (ora.image_url) {
-            if (Array.isArray(ora.image_url) && ora.image_url.length > 0) {
-                primaryImage = ora.image_url[0];
-            } else if (typeof ora.image_url === 'string') {
-                try {
-                    const parsed = JSON.parse(ora.image_url);
-                    primaryImage = Array.isArray(parsed) ? parsed[0] : ora.image_url;
-                } catch (e) {
-                    primaryImage = ora.image_url;
-                }
-            }
-        }
+      const qty = Number(ora.quantity) || 1;
+      const condAndWork = [
+        ora.condition || "",
+        ora.work_status || "",
+        ora.description || ""
+      ].join(" ").toLowerCase();
 
-        if (primaryImage && primaryImage !== 'null' && primaryImage !== '') {
-            if (primaryImage.startsWith('http')) {
-                imgUrl = primaryImage;
-            } else {
-                imgUrl = "https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/" + primaryImage;
-            }
-        }
+      const isNotWorking =
+        condAndWork.includes("not working") ||
+        condAndWork.includes("not good") ||
+        condAndWork.includes("damaged") ||
+        condAndWork.includes("broken") ||
+        condAndWork.includes("repair") ||
+        condAndWork.includes("demtuar");
 
-        const isMovementPart = ['parts', 'movement parts', 'part'].includes((ora.category || '').toLowerCase());
-        const detailLine = isMovementPart
-            ? (ora.caliber ? `Cal: ${ora.caliber}` : (ora.model || ''))
-            : (ora.reference ? `Ref. ${ora.reference}` : (ora.model || ''));
+      const statusBadge = isNotWorking
+        ? `<span class="badge badge-damaged">Damaged / Not Working</span>`
+        : `<span class="badge badge-good">Good / Working</span>`;
 
-        const qty = ora.quantity || 1;
-        const condAndWork = [
-            ora.condition || "",
-            ora.work_status || "",
-            ora.description || ""
-        ].join(" ").toLowerCase();
+      const currentReturn = encodeURIComponent(window.location.pathname + window.location.search);
+      const buyNowButton = ora.price
+        ? `<a href="checkout.html?id=${safeId}&table=oras&return=${currentReturn}" class="btn-main btn-buy" onclick="event.stopPropagation();">
+             🛒 BUY
+           </a>`
+        : "";
 
-        const isNotWorking =
-            condAndWork.includes("not working") ||
-            condAndWork.includes("not good") ||
-            condAndWork.includes("damaged") ||
-            condAndWork.includes("broken") ||
-            condAndWork.includes("repair") ||
-            condAndWork.includes("demtuar");
+      const canModify = Boolean(currentUserId && ora.user_id && ora.user_id === currentUserId);
+      const modifyButton = canModify
+        ? `<button type="button" class="btn-main btn-edit" onclick="event.stopPropagation(); window.location.href='edit.html?id=${safeId}';">
+             ✏️ Modify
+           </button>`
+        : "";
 
-        const statusBadge = isNotWorking
-            ? `<span class="badge badge-damaged">Damaged / Not Working</span>`
-            : `<span class="badge badge-good">Good / Working</span>`;
+      return `
+        <div class="card" onclick="openProduct(${safeId})">
+          <div>
+            <img src="${imgUrl}" alt="${escapeHtml(ora.brand || "Ora")}">
+            <h3>${escapeHtml(ora.brand || "")}</h3>
+            <p>${escapeHtml(rawDetail)}</p>
 
-        const currentReturn = encodeURIComponent(window.location.pathname + window.location.search);
-        const buyNowButton = ora.price
-            ? `<a href="checkout.html?id=${ora.id}&table=oras&return=${currentReturn}" class="btn-main btn-buy" onclick="event.stopPropagation();">
-                   🛒 BUY
-               </a>`
-            : '';
-
-        const canModify = Boolean(currentUserId && ora.user_id && ora.user_id === currentUserId);
-        const modifyButton = canModify
-            ? `<button type="button" class="btn-main btn-edit" onclick="event.stopPropagation(); window.location.href='edit.html?id=${ora.id}';">
-                   ✏️ Modify
-               </button>`
-            : '';
-  
-        return `
-            <div class="card" onclick="openProduct('${ora.id}')">
-                <div>
-                    <img src="${imgUrl}" alt="${ora.brand || 'Ora'}">
-                    <h3>${ora.brand || ''}</h3>
-                    <p>${detailLine}</p>
-
-                    <div class="badges-row">
-                        <span class="badge badge-qty">Qty: ${qty} pcs</span>
-                        ${statusBadge}
-                    </div>
-
-                    <div class="price">${ora.price ? ora.price + ' €' : 'Contact for price'}</div>
-                </div>
-                <div>
-                    ${buyNowButton}
-                    <button type="button" class="btn-view-details" onclick="event.stopPropagation(); openProduct('${ora.id}')">View Details</button>
-                    ${modifyButton}
-                </div>
+            <div class="badges-row">
+              <span class="badge badge-qty">Qty: ${qty} pcs</span>
+              ${statusBadge}
             </div>
-        `;
-    }).join('');
 
-    container.querySelectorAll('.buy-paypal-btn').forEach(btn => {
-        btn.addEventListener('click', async function (e) {
-            e.stopPropagation();
-            const productId = this.getAttribute('data-id');
-            const price = this.getAttribute('data-price');
-            const productName = decodeURIComponent(this.getAttribute('data-name'));
+            <div class="price">${ora.price ? `${escapeHtml(ora.price)} €` : "Contact for price"}</div>
+          </div>
+          <div>
+            ${buyNowButton}
+            <button type="button" class="btn-view-details" onclick="event.stopPropagation(); openProduct(${safeId})">View Details</button>
+            ${modifyButton}
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
 
-            this.innerText = "Loading...";
-            try {
-                const response = await fetch(
-                    "https://gnwsrmelmeqduhhmfmoa.supabase.co/functions/v1/create-paypal-order",
-                    {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            product_id: productId,
-                            price: price,
-                            product_name: productName
-                        })
-                    }
-                );
-                const result = await response.json();
-                if (result.paypal_link) {
-                    window.location.href = result.paypal_link;
-                } else {
-                    alert("PayPal link could not be created.");
-                    this.innerText = "🛒 BUY NOW (PayPal)";
-                }
-            } catch (err) {
-                console.error(err);
-                alert("PayPal error.");
-                this.innerText = "🛒 BUY NOW (PayPal)";
-            }
-        });
+  function applySearchFilter(term) {
+    const q = (term || "").trim().toLowerCase();
+    const mapping = [
+      { key: "luxury", containerId: "luxury-container" },
+      { key: "vintage", containerId: "vintage-container" },
+      { key: "parts", containerId: "parts-container" }
+    ];
+
+    mapping.forEach(({ key, containerId }) => {
+      const fullList = categoryDataCache[key] || [];
+      if (!q) {
+        renderProductsData(fullList, containerId);
+        return;
+      }
+      const filtered = fullList.filter(item =>
+        [item.brand, item.model, item.reference, item.caliber, item.description]
+          .filter(Boolean)
+          .some(field => String(field).toLowerCase().includes(q))
+      );
+      renderProductsData(filtered, containerId);
     });
   }
 
+  document.getElementById("searchInput")?.addEventListener("input", (e) => {
+    applySearchFilter(e.target.value);
+  });
+
+  const photoBtn = document.getElementById("photoSearchButton");
+  const photoInput = document.getElementById("photoSearchInput");
+  const photoPreviewBox = document.getElementById("photoSearchPreview");
+  const photoPreviewImg = document.getElementById("photoSearchImage");
+  const photoStatusEl = document.getElementById("photoSearchStatus");
+  const cancelPhotoBtn = document.getElementById("cancelPhotoSearch");
+
+  photoBtn?.addEventListener("click", () => photoInput?.click());
+  photoInput?.addEventListener("change", (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (photoPreviewImg) photoPreviewImg.src = reader.result;
+      if (photoStatusEl) photoStatusEl.textContent = `Foto e zgjedhur: ${file.name}`;
+      if (photoPreviewBox) photoPreviewBox.style.display = "block";
+    };
+    reader.readAsDataURL(file);
+  });
+
+  cancelPhotoBtn?.addEventListener("click", () => {
+    if (photoInput) photoInput.value = "";
+    if (photoPreviewBox) photoPreviewBox.style.display = "none";
+  });
+
   async function loadCategory(cat, containerId) {
-    let query = supabase.from('oras').select('*');
-    if (cat === 'parts') {
-        query = query.in('category', ['parts', 'Movement Parts', 'Part', 'Parts']);
+    let query = supabase.from("oras").select("*");
+    if (cat === "parts") {
+      query = query.in("category", ["parts", "Movement Parts", "Part", "Parts"]);
     } else {
-        query = query.eq('category', cat);
+      query = query.eq("category", cat);
     }
 
     const { data, error } = await query;
 
     if (error) {
-        console.error("Gabim:", error);
-        return;
+      console.error("Gabim:", error);
+      return;
     }
+    categoryDataCache[cat] = data || [];
     renderProductsData(data, containerId);
   }
 
   window.trajtoKlikiminSellNow = async function() {
     const { data: { session } } = await supabase.auth.getSession();
-    window.location.href = session ? 'sellnow.html' : 'login.html'; 
+    window.location.href = session ? "sellnow.html" : "login.html";
   };
 
   async function kontrolloSesionin() {
     const { data: { session } } = await supabase.auth.getSession();
     const btnSell = document.getElementById("btnSellNow");
     if (session && btnSell) {
-        btnSell.style.display = "inline-block";
+      btnSell.style.display = "inline-block";
     }
   }
 
   window.scrollFeaturedDeals = function(direction) {
-    const row = document.getElementById('special-deals-row');
+    const row = document.getElementById("special-deals-row");
     if (!row) return;
     const step = Math.max(220, Math.round(row.clientWidth * 0.7));
     row.scrollBy({
       left: direction * step,
-      behavior: 'smooth'
+      behavior: "smooth"
     });
   };
 
   (function renderPromotedDealsTop() {
-    const section = document.getElementById('featured-section');
-    const dealsRow = document.getElementById('special-deals-row');
+    const section = document.getElementById("featured-section");
+    const dealsRow = document.getElementById("special-deals-row");
     if (!section || !dealsRow) return;
 
     let promos = {};
     try {
-      promos = JSON.parse(localStorage.getItem('oraswiss_promoted_deals_v1') || '{}');
+      promos = JSON.parse(localStorage.getItem("oraswiss_promoted_deals_v1") || "{}");
     } catch (e) {
       promos = {};
     }
@@ -840,39 +822,36 @@
       .sort((a, b) => (b.promotedAt || 0) - (a.promotedAt || 0));
 
     if (list.length === 0) {
-      section.style.display = 'none';
+      section.style.display = "none";
       return;
     }
 
-    section.style.display = 'block';
+    section.style.display = "block";
     dealsRow.innerHTML = list.map(entry => {
       const item = entry.data;
-      const url = item.type === 'bracelet'
-        ? `product-bracelets-straps.html?id=${item.id}`
-        : `product.html?id=${item.id}`;
+      const safeId = Number(item.id) || 0;
+      const url = item.type === "bracelet"
+        ? `product-bracelets-straps.html?id=${safeId}`
+        : `product.html?id=${safeId}`;
       const rawImg = Array.isArray(item.image_url) ? item.image_url[0] : item.image_url;
-      const imgSrc = rawImg
-        ? (String(rawImg).startsWith('http')
-          ? rawImg
-          : 'https://gnwsrmelmeqduhhmfmoa.supabase.co/storage/v1/object/public/or-images/' + rawImg)
-        : 'https://placeholder.co/200x120/222/fff?text=Featured';
+      const imgSrc = escapeHtml(resolveItemImage(rawImg));
 
       const codeInfo = item.caliber
         ? `Cal: ${item.caliber}`
-        : (item.reference ? `Ref. ${item.reference}` : '');
+        : (item.reference ? `Ref. ${item.reference}` : "");
 
-      const qty = item.quantity || 1;
-      const condText = [item.condition || '', item.work_status || '', item.description || '']
-        .join(' ')
+      const qty = Number(item.quantity) || 1;
+      const condText = [item.condition || "", item.work_status || "", item.description || ""]
+        .join(" ")
         .toLowerCase();
 
       const isDamaged =
-        condText.includes('not working') ||
-        condText.includes('not good') ||
-        condText.includes('damaged') ||
-        condText.includes('broken') ||
-        condText.includes('repair') ||
-        condText.includes('demtuar');
+        condText.includes("not working") ||
+        condText.includes("not good") ||
+        condText.includes("damaged") ||
+        condText.includes("broken") ||
+        condText.includes("repair") ||
+        condText.includes("demtuar");
 
       const conditionBadge = isDamaged
         ? `<span style="padding:2px 6px;border-radius:5px;font-size:10px;font-weight:bold;background:#450a0a;color:#f87171;border:1px solid #7f1d1d;">Damaged / Not Working</span>`
@@ -882,212 +861,67 @@
         <a href="${url}" style="min-width:185px;max-width:185px;background:#111;border:1px solid #d4af37;border-radius:10px;padding:10px;flex:0 0 auto;text-decoration:none;color:#fff;display:flex;flex-direction:column;justify-content:space-between;">
           <div>
             <span style="background:gold;color:#000;font-size:10px;font-weight:bold;padding:2px 6px;border-radius:4px;letter-spacing:0.4px;">FEATURED</span>
-            <img src="${imgSrc}" alt="${item.brand || ''}" style="width:100%;height:110px;object-fit:cover;border-radius:6px;margin-top:8px;display:block;background:#181818;">
-            <div style="margin-top:7px;font-size:13px;font-weight:bold;color:#fff;">${item.brand || ''} ${item.model || ''}</div>
-            ${codeInfo ? `<div style="font-size:11px;color:#aaa;margin-top:2px;">${codeInfo}</div>` : ''}
+            <img src="${imgSrc}" alt="${escapeHtml(item.brand || "")}" style="width:100%;height:110px;object-fit:cover;border-radius:6px;margin-top:8px;display:block;background:#181818;">
+            <div style="margin-top:7px;font-size:13px;font-weight:bold;color:#fff;">${escapeHtml(item.brand || "")} ${escapeHtml(item.model || "")}</div>
+            ${codeInfo ? `<div style="font-size:11px;color:#aaa;margin-top:2px;">${escapeHtml(codeInfo)}</div>` : ""}
             <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">
               <span style="padding:2px 6px;border-radius:5px;font-size:10px;font-weight:bold;background:#1f2937;color:#60a5fa;border:1px solid #374151;">Qty: ${qty} pcs</span>
               ${conditionBadge}
             </div>
           </div>
-          <div style="font-size:13px;color:gold;font-weight:bold;margin-top:8px;">${item.price ? item.price + ' €' : 'Contact for price'}</div>
+          <div style="font-size:13px;color:gold;font-weight:bold;margin-top:8px;">${item.price ? `${escapeHtml(item.price)} €` : "Contact for price"}</div>
         </a>
       `;
-    }).join('');
+    }).join("");
   })();
-  
+
   async function initIndex() {
     await checkAuthUser();
     kontrolloLogin();
     kontrolloSesionin();
-    loadCategory('luxury', 'luxury-container');
-    loadCategory('vintage', 'vintage-container');
-    loadCategory('parts', 'parts-container');
+    loadCategory("luxury", "luxury-container");
+    loadCategory("vintage", "vintage-container");
+    loadCategory("parts", "parts-container");
   }
 
   initIndex();
 
   async function loadProductCount() {
     try {
-        const { count: countOras } = await supabase.from('oras').select('*', { count: 'exact', head: true });
-        const { count: countStraps } = await supabase.from('bracelets_straps').select('*', { count: 'exact', head: true });
-        const total = (countOras || 0) + (countStraps || 0);
-        const element = document.getElementById('count-products');
-        if (element) element.textContent = total;
+      const { count: countOras } = await supabase.from("oras").select("*", { count: "exact", head: true });
+      const { count: countStraps } = await supabase.from("bracelets_straps").select("*", { count: "exact", head: true });
+      const total = (countOras || 0) + (countStraps || 0);
+      const element = document.getElementById("count-products");
+      if (element) element.textContent = total;
     } catch (err) {
-        console.error(err);
+      console.error(err);
     }
   }
 
   async function loadUserCount() {
     try {
-        const { data } = await supabase.rpc('get_users_count');
-        const element = document.getElementById('count-users');
-        if (element) element.textContent = data || 0;
+      const { data } = await supabase.rpc("get_users_count");
+      const element = document.getElementById("count-users");
+      if (element) element.textContent = data || 0;
     } catch (err) {
-        console.error(err);
+      console.error(err);
     }
   }
 
   loadUserCount();
   loadProductCount();
 
-  // Funksioni për butonat Home, Favs, messg, Sales, Sell
-  async function checkPage(event, pageUrl) {
-      event.preventDefault();
-      closeOraSwissMenu();
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-          document.getElementById("loginModal").style.display = "flex";
-          return;
-      }
-      window.location.href = pageUrl;
-  }
-
-  function closeOraSwissMenu() {
-      const menu = document.getElementById('myOraSwissMenu');
-      const menuBtn = document.getElementById('menuBtnText');
-      if (menu) menu.classList.remove('active');
-      if (menuBtn) menuBtn.style.color = '#ffffff';
-  }
-
-  function toggleMenu() {
-      const menu = document.getElementById('myOraSwissMenu');
-      const menuBtn = document.getElementById('menuBtnText');
-      if (!menu) return;
-      menu.classList.toggle('active');
-      if (menuBtn) {
-          menuBtn.style.color = menu.classList.contains('active') ? 'gold' : '#ffffff';
-      }
-  }
-
-  async function checkMenu(event) {
-      event.preventDefault();
-      event.stopPropagation();
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-          closeOraSwissMenu();
-          document.getElementById("loginModal").style.display = "flex";
-          return;
-      }
-      toggleMenu();
-  }
-
-  // Mbyll menunë nëse klikon jashtë saj
-  document.addEventListener('click', function(e) {
-      const menu = document.getElementById('myOraSwissMenu');
-      const menuBtn = document.getElementById('menuBtnText');
-      if (!menu || !menu.classList.contains('active')) return;
-      if (!menu.contains(e.target) && (!menuBtn || !menuBtn.contains(e.target))) {
-          closeOraSwissMenu();
-      }
-  });
-
-  document.getElementById("searchInput").addEventListener("input", async function(e) {
-    const query = e.target.value.trim();
-  
-    if (query.length === 0) {
-        loadCategory('luxury', 'luxury-container');
-        loadCategory('vintage', 'vintage-container');
-        loadCategory('parts', 'parts-container');
-        return;
+  window.checkPage = async function(event, pageUrl) {
+    if (event) event.preventDefault();
+    closeOraSwissMenu();
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      const modal = document.getElementById("loginModal");
+      if (modal) modal.style.display = "flex";
+      return;
     }
-
-    try {
-        const { data, error } = await supabase
-            .from("oras")
-            .select("*")
-            .or(`brand.ilike.%${query}%,model.ilike.%${query}%,reference.ilike.%${query}%,caliber.ilike.%${query}%`);
-
-        if (error) throw error;
-
-        const luxuryList = data.filter(item => item.category === 'luxury');
-        const vintageList = data.filter(item => item.category === 'vintage');
-        const partsList = data.filter(item => ['parts', 'Movement Parts', 'Part', 'Parts'].includes(item.category));
-
-        renderProductsData(luxuryList, 'luxury-container');
-        renderProductsData(vintageList, 'vintage-container');
-        renderProductsData(partsList, 'parts-container');
-
-    } catch (err) {
-        console.error("Gabim në kërkim:", err);
-    }
-  });
-
-  function openProduct(productId) {
-    window.location.href = "product.html?id=" + productId;
-  }
-
-  async function loadMessageCount() {
-    try {
-        const { data: { user }, error } = await supabase.auth.getUser();
-        if (error || !user) return;
-
-        const { data: userConvs } = await supabase
-            .from("conversations")
-            .select("id")
-            .or(`user_one.eq.${user.id},user_two.eq.${user.id},buyer_id.eq.${user.id},seller_id.eq.${user.id}`);
-
-        if (!userConvs || userConvs.length === 0) return;
-        const convIds = userConvs.map(c => c.id);
-
-        const { count: totalUnread } = await supabase
-            .from("messages")
-            .select("*", { count: "exact", head: true })
-            .in("conversation_id", convIds)
-            .eq("is_read", false)
-            .neq("sender_id", user.id);
-
-        const count = totalUnread || 0;
-        ['dashboardMessageCount', 'menuMessageCount'].forEach(id => {
-            const badge = document.getElementById(id);
-            if (badge) {
-                badge.innerText = count;
-                badge.style.display = count > 0 ? "inline-block" : "none";
-            }
-        });
-    } catch (err) {
-        console.error(err);
-    }
-  }
-
-  loadMessageCount();
-
-  let lastScrollTop = 0;
-  const bottomNavElement = document.querySelector('.bottom-nav');
-
-  window.addEventListener('scroll', function() {
-      closeOraSwissMenu();
-      let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      if (scrollTop > lastScrollTop && scrollTop > 50) {
-          if (bottomNavElement) bottomNavElement.classList.add('nav-hidden');
-      } else {
-          if (bottomNavElement) bottomNavElement.classList.remove('nav-hidden');
-      }
-      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-  }, false);
-
-  const photoInput = document.getElementById('photoSearchInput');
-  const photoButton = document.getElementById('photoSearchButton');
-  const photoPreview = document.getElementById('photoSearchPreview');
-  const photoImage = document.getElementById('photoSearchImage');
-  const photoStatus = document.getElementById('photoSearchStatus');
-  const cancelPhoto = document.getElementById('cancelPhotoSearch');
-
-  photoButton.addEventListener('click', () => photoInput.click());
-  photoInput.addEventListener('change', () => {
-      const file = photoInput.files?.[0];
-      if (!file) return;
-      photoImage.src = URL.createObjectURL(file);
-      photoPreview.style.display = 'block';
-      photoStatus.textContent = 'Fotoja u zgjodh me sukses.';
-  });
-  cancelPhoto.addEventListener('click', () => {
-      photoInput.value = '';
-      photoImage.removeAttribute('src');
-      photoPreview.style.display = 'none';
-      photoStatus.textContent = '';
-  });
+    window.location.href = pageUrl;
+  };
 </script>
 
 </body>

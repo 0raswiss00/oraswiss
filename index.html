@@ -709,17 +709,11 @@
             ? `<span class="badge badge-damaged">Damaged / Not Working</span>`
             : `<span class="badge badge-good">Good / Working</span>`;
 
-        const buyNowButton = ora.price
-            ? `<button type="button" class="btn-main btn-buy buy-paypal-btn" data-id="${ora.id}" data-price="${ora.price}" data-name="${encodeURIComponent((ora.brand || 'Ora') + ' ' + (ora.model || ''))}">
-                   🛒 BUY NOW (PayPal)
-               </button>`
-            : '';
-
-        const canModify = Boolean(currentUserId && ora.user_id && ora.user_id === currentUserId);
-        const modifyButton = canModify
-            ? `<button type="button" class="btn-main btn-edit" onclick="event.stopPropagation(); window.location.href='edit.html?id=${ora.id}';">
-                   ✏️ Modify
-               </button>`
+        const currentReturn = encodeURIComponent(window.location.pathname + window.location.search);
+        const buyNowButton = item.price
+            ? `<a href="checkout.html?id=${item.id}&table=bracelets_straps&return=${currentReturn}" class="btn-main btn-buy" onclick="event.stopPropagation();">
+                   🛒 BUY
+               </a>`
             : '';
 
         return `

@@ -2,62 +2,111 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Faleminderit për Porosinë - Ora Swiss</title>
-    
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-KD2ZZ3MJYY');
     </script>
 
     <style>
-        body { font-family: sans-serif; background: #121212; color: white; padding: 20px; text-align: center; }
-        .success-card { background: #1e1e1e; padding: 30px; border-radius: 10px; max-width: 400px; margin: auto; }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #121212;
+            color: #ffffff;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .success-card {
+            background: #1e1e1e;
+            border: 1px solid #333333;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 420px;
+            width: 100%;
+            margin: auto;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+        }
+        .success-card h2 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: #25D366;
+        }
+        .success-card p {
+            margin: 0 0 20px 0;
+            color: #dddddd;
+            line-height: 1.5;
+        }
+        .back-link {
+            display: inline-block;
+            color: #ffd900;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 16px;
+            border-radius: 8px;
+            background: #141414;
+            border: 1px solid #333333;
+        }
+        .back-link:hover {
+            background: #262626;
+        }
     </style>
 </head>
 <body>
 
-<div class="success-card">
+<div class="success-card" id="successCard">
     <h2>Order Placed Successfully!</h2>
     <p>Thank you for choosing Ora Swiss. We will contact you shortly regarding shipping.</p>
-    <br>
-    <a href="vintage.html" style="color: #007bff; text-decoration: none;">← Kthehu te koleksioni</a>
+    <a href="vintage.html" class="back-link">← Kthehu te koleksioni</a>
 </div>
 
-<!-- Kodi i Google Customer Reviews -->
-<!-- Kodi i Google Customer Reviews -->
+<!-- Google Customer Reviews -->
 <script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script>
 <script>
-  const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.location.search);
 
-  function getDeliveryDate(daysToAdd) {
-    const date = new Date();
-    date.setDate(date.getDate() + daysToAdd);
-    return date.toISOString().split('T')[0];
-  }
+    function getDeliveryDate(daysToAdd) {
+        const safeDays = Number.isFinite(daysToAdd) && daysToAdd > 0 ? daysToAdd : 10;
+        const date = new Date();
+        date.setDate(date.getDate() + safeDays);
+        return date.toISOString().split("T")[0];
+    }
 
-  window.renderOptIn = function() {
-    const orderId = params.get("order_id");
-    const email = params.get("email");
-    const country = (params.get("country") || "US").toUpperCase();
-    const transitDays = parseInt(params.get("days") || "10", 10);
+    window.renderOptIn = function () {
+        const orderId = params.get("order_id");
+        const email = params.get("email");
+        const country = (params.get("country") || "US").toUpperCase();
+        const transitDays = parseInt(params.get("days") || "10", 10);
 
-    // Shfaq opt-in vetëm kur kemi order_id dhe email real
-    if (!orderId || !email) return;
+        if (!orderId || !email) return;
 
-    window.gapi.load('surveyoptin', function() {
-      window.gapi.surveyoptin.render({
-        "merchant_id": 5689221528,
-        "order_id": orderId,
-        "email": email,
-        "delivery_country": country,
-        "estimated_delivery_date": getDeliveryDate(transitDays)
-      });
-    });
-  }
+        if (!window.gapi || typeof window.gapi.load !== "function") return;
+
+        window.gapi.load("surveyoptin", function () {
+            if (!window.gapi.surveyoptin || typeof window.gapi.surveyoptin.render !== "function") return;
+
+            window.gapi.surveyoptin.render({
+                "merchant_id": 5689221528,
+                "order_id": orderId,
+                "email": email,
+                "delivery_country": country,
+                "estimated_delivery_date": getDeliveryDate(transitDays)
+            });
+        });
+    };
 </script>
 
 </body>

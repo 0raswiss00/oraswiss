@@ -15,9 +15,7 @@
     </script>
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
         body {
             font-family: Arial, sans-serif;
             background: #121212;
@@ -38,20 +36,14 @@
             max-width: 420px;
             width: 100%;
             margin: auto;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
         }
         .success-card h2 {
             margin-top: 0;
-            margin-bottom: 12px;
             color: #25D366;
-        }
-        .success-card p {
-            margin: 0 0 20px 0;
-            color: #dddddd;
-            line-height: 1.5;
         }
         .back-link {
             display: inline-block;
+            margin-top: 16px;
             color: #ffd900;
             text-decoration: none;
             font-weight: bold;
@@ -59,9 +51,6 @@
             border-radius: 8px;
             background: #141414;
             border: 1px solid #333333;
-        }
-        .back-link:hover {
-            background: #262626;
         }
     </style>
 </head>
@@ -73,7 +62,6 @@
     <a href="index.html" id="backLink" class="back-link">← Kthehu</a>
 </div>
 
-<!-- Google Customer Reviews -->
 <script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script>
 <script>
     const params = new URLSearchParams(window.location.search);
@@ -82,22 +70,18 @@
     if (backLink) {
         const returnParam = params.get("return");
         const safeReturn =
-            returnParam &&
-            !returnParam.startsWith("http") &&
-            !returnParam.startsWith("//")
+            returnParam && !returnParam.startsWith("http") && !returnParam.startsWith("//")
                 ? returnParam
                 : null;
-
-        const referrerUrl =
+        const sameOriginRef =
             document.referrer && document.referrer.startsWith(window.location.origin)
                 ? document.referrer
                 : null;
 
-        const fallbackUrl = safeReturn || referrerUrl || "index.html";
-        backLink.href = fallbackUrl;
+        backLink.href = safeReturn || sameOriginRef || "index.html";
 
         backLink.addEventListener("click", function (e) {
-            if (window.history.length > 1 && document.referrer && document.referrer.startsWith(window.location.origin)) {
+            if (window.history.length > 1 && sameOriginRef) {
                 e.preventDefault();
                 window.history.back();
             }
@@ -118,12 +102,10 @@
         const transitDays = parseInt(params.get("days") || "10", 10);
 
         if (!orderId || !email) return;
-
-        if (!window.gapi || typeof window.gapi.load !== "function") return;
+        if (!window.gapi || !window.gapi.load) return;
 
         window.gapi.load("surveyoptin", function () {
-            if (!window.gapi.surveyoptin || typeof window.gapi.surveyoptin.render !== "function") return;
-
+            if (!window.gapi.surveyoptin || !window.gapi.surveyoptin.render) return;
             window.gapi.surveyoptin.render({
                 "merchant_id": 5689221528,
                 "order_id": orderId,

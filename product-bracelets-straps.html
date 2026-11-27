@@ -666,10 +666,11 @@ document.addEventListener("DOMContentLoaded", async function() {
                 ? `<span class="badge badge-damaged">Damaged / Not Working</span>`
                 : `<span class="badge badge-good">Good / Working</span>`;
 
-            const buyNowButton = item.price
-                ? `<button type="button" class="btn-main btn-buy buy-paypal-btn" data-id="${item.id}" data-price="${item.price}" data-name="${encodeURIComponent((item.brand || "Strap") + " " + (item.model || ""))}">
-                       🛒 BUY NOW (PayPal)
-                   </button>`
+            const currentReturn = encodeURIComponent(window.location.pathname + window.location.search);
+            const buyNowButton = ora.price
+                ? `<a href="checkout.html?id=${ora.id}&table=oras&return=${currentReturn}" class="btn-main btn-buy" onclick="event.stopPropagation();">
+                      🛒 BUY
+                   </a>`
                 : '';
 
             const canModify = Boolean(currentUserId && item.user_id && item.user_id === currentUserId);

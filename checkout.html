@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sq">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faleminderit për Porosinë - Ora Swiss</title>
+    <title>Përfundo Porosinë - Ora Swiss</title>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KD2ZZ3MJYY"></script>
@@ -14,8 +14,13 @@
         gtag('config', 'G-KD2ZZ3MJYY');
     </script>
 
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
-        * { box-sizing: border-box; }
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
         body {
             font-family: Arial, sans-serif;
             background: #121212;
@@ -26,24 +31,80 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
         }
-        .success-card {
+        .card {
             background: #1e1e1e;
             border: 1px solid #333333;
-            padding: 30px;
+            padding: 28px;
             border-radius: 12px;
-            max-width: 420px;
+            max-width: 440px;
             width: 100%;
             margin: auto;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+        }
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 12px;
         }
         .success-card h2 {
-            margin-top: 0;
             color: #25D366;
+            text-align: center;
+        }
+        .success-card p {
+            color: #dddddd;
+            line-height: 1.5;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .product-summary {
+            background: #141414;
+            border: 1px solid #2b2b2b;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 18px;
+            font-size: 14px;
+            color: #e5e5e5;
+        }
+        .field {
+            margin-bottom: 12px;
+        }
+        .field label {
+            display: block;
+            font-size: 13px;
+            color: #bbbbbb;
+            margin-bottom: 5px;
+        }
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #3a3a3a;
+            background: #121212;
+            color: #ffffff;
+            font-size: 14px;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #ffd900;
+            color: #000000;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 6px;
+        }
+        .submit-btn:hover {
+            background: #ffe44d;
+        }
+        .back-wrap {
+            text-align: center;
         }
         .back-link {
             display: inline-block;
-            margin-top: 16px;
             color: #ffd900;
             text-decoration: none;
             font-weight: bold;
@@ -52,20 +113,76 @@
             background: #141414;
             border: 1px solid #333333;
         }
+        .back-link:hover {
+            background: #262626;
+        }
     </style>
 </head>
 <body>
 
-<div class="success-card" id="successCard">
-    <h2>Order Placed Successfully!</h2>
-    <p>Thank you for choosing Ora Swiss. We will contact you shortly regarding shipping.</p>
-    <a href="index.html" id="backLink" class="back-link">← Kthehu</a>
+<!-- FORMA E POROSISË (SHFAQET E PARA) -->
+<div class="card" id="checkoutBox">
+    <h2>Përfundo Porosinë</h2>
+    <div class="product-summary" id="productSummary">Duke ngarkuar produktin...</div>
+
+    <form id="orderForm">
+        <div class="field">
+            <label for="buyerName">Emri dhe Mbiemri</label>
+            <input type="text" id="buyerName" required placeholder="Emri Mbiemri">
+        </div>
+
+        <div class="field">
+            <label for="buyerEmail">Email</label>
+            <input type="email" id="buyerEmail" required placeholder="emri@shembull.com">
+        </div>
+
+        <div class="field">
+            <label for="buyerCountry">Shteti i dërgesës</label>
+            <select id="buyerCountry">
+                <option value="AL">Shqipëri (AL)</option>
+                <option value="CH">Zvicër (CH)</option>
+                <option value="IT">Itali (IT)</option>
+                <option value="DE">Gjermani (DE)</option>
+                <option value="GB">Mbretëria e Bashkuar (GB)</option>
+                <option value="US" selected>Shtetet e Bashkuara (US)</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="buyerAddress">Adresa e plotë</label>
+            <textarea id="buyerAddress" rows="2" required placeholder="Rruga, qyteti, kodi postar"></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Konfirmo Porosinë</button>
+    </form>
 </div>
 
+<!-- KARTA E SUKSESIT (E FSHEHUR DERISA TË KONFIRMOHET POROSIA) -->
+<div class="card success-card" id="successCard" style="display: none;">
+    <h2>Order Placed Successfully!</h2>
+    <p>Thank you for choosing Ora Swiss. We will contact you shortly regarding shipping.</p>
+    <div class="back-wrap">
+        <a href="index.html" id="backLink" class="back-link">← Kthehu</a>
+    </div>
+</div>
+
+<!-- Google Customer Reviews -->
 <script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script>
 <script>
-    const params = new URLSearchParams(window.location.search);
+    const supabaseClient = window.supabase.createClient(
+        "https://gnwsrmelmeqduhhmfmoa.supabase.co",
+        "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9"
+    );
 
+    const params = new URLSearchParams(window.location.search);
+    const rawId = params.get("id") || "";
+    const idMatch = rawId.match(/\d+/);
+    const productId = idMatch ? Number(idMatch[0]) : null;
+    const tableName = params.get("table") === "bracelets_straps" ? "bracelets_straps" : "oras";
+
+    let lastOrderData = null;
+
+    // Konfiguro butonin "← Kthehu" që të kthehet aty ku ishte
     const backLink = document.getElementById("backLink");
     if (backLink) {
         const returnParam = params.get("return");
@@ -77,8 +194,9 @@
             document.referrer && document.referrer.startsWith(window.location.origin)
                 ? document.referrer
                 : null;
+        const productFallback = productId ? `product.html?id=${productId}` : "index.html";
 
-        backLink.href = safeReturn || sameOriginRef || "index.html";
+        backLink.href = safeReturn || sameOriginRef || productFallback;
 
         backLink.addEventListener("click", function (e) {
             if (window.history.length > 1 && sameOriginRef) {
@@ -88,6 +206,34 @@
         });
     }
 
+    // Ngarko emrin dhe çmimin e produktit në përmbledhje
+    (async function loadCheckoutProduct() {
+        const summaryEl = document.getElementById("productSummary");
+        if (!productId) {
+            summaryEl.textContent = "Produkti i zgjedhur për porosi.";
+            return;
+        }
+        try {
+            const { data } = await supabaseClient
+                .from(tableName)
+                .select("brand, model, reference, price, currency")
+                .eq("id", productId)
+                .maybeSingle();
+
+            if (data) {
+                const title = [data.brand, data.model, data.reference ? `Ref. ${data.reference}` : ""]
+                    .filter(Boolean)
+                    .join(" ");
+                const price = data.price ? `${data.price} ${data.currency || "€"}` : "";
+                summaryEl.textContent = `${title || "Produkt"} ${price ? "— " + price : ""}`;
+            } else {
+                summaryEl.textContent = `Produkti #${productId}`;
+            }
+        } catch (err) {
+            summaryEl.textContent = `Produkti #${productId}`;
+        }
+    })();
+
     function getDeliveryDate(daysToAdd) {
         const safeDays = Number.isFinite(daysToAdd) && daysToAdd > 0 ? daysToAdd : 10;
         const date = new Date();
@@ -95,26 +241,63 @@
         return date.toISOString().split("T")[0];
     }
 
-    window.renderOptIn = function () {
-        const orderId = params.get("order_id");
-        const email = params.get("email");
-        const country = (params.get("country") || "US").toUpperCase();
-        const transitDays = parseInt(params.get("days") || "10", 10);
-
-        if (!orderId || !email) return;
-        if (!window.gapi || !window.gapi.load) return;
+    function triggerCustomerReviewOptIn(orderInfo) {
+        if (!orderInfo || !orderInfo.orderId || !orderInfo.email) return;
+        if (!window.gapi || typeof window.gapi.load !== "function") return;
 
         window.gapi.load("surveyoptin", function () {
-            if (!window.gapi.surveyoptin || !window.gapi.surveyoptin.render) return;
+            if (!window.gapi.surveyoptin || typeof window.gapi.surveyoptin.render !== "function") return;
             window.gapi.surveyoptin.render({
                 "merchant_id": 5689221528,
-                "order_id": orderId,
-                "email": email,
-                "delivery_country": country,
-                "estimated_delivery_date": getDeliveryDate(transitDays)
+                "order_id": String(orderInfo.orderId),
+                "email": orderInfo.email,
+                "delivery_country": orderInfo.country || "US",
+                "estimated_delivery_date": getDeliveryDate(10)
             });
         });
+    }
+
+    window.renderOptIn = function () {
+        if (lastOrderData) {
+            triggerCustomerReviewOptIn(lastOrderData);
+        }
     };
+
+    // Shfaq #successCard VETËM pasi dorëzohet forma
+    document.getElementById("orderForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const buyerName = document.getElementById("buyerName").value.trim();
+        const buyerEmail = document.getElementById("buyerEmail").value.trim();
+        const buyerCountry = document.getElementById("buyerCountry").value;
+        const buyerAddress = document.getElementById("buyerAddress").value.trim();
+        const generatedOrderId = `OS-${Date.now()}`;
+
+        try {
+            await supabaseClient.from("orders").insert({
+                order_code: generatedOrderId,
+                product_id: productId,
+                table_name: tableName,
+                buyer_name: buyerName,
+                buyer_email: buyerEmail,
+                country: buyerCountry,
+                address: buyerAddress,
+                status: "pending"
+            });
+        } catch (err) {
+            // Vazhdon shfaqja e konfirmimit edhe nëse tabela orders nuk ekziston ende
+        }
+
+        lastOrderData = {
+            orderId: generatedOrderId,
+            email: buyerEmail,
+            country: buyerCountry
+        };
+
+        document.getElementById("checkoutBox").style.display = "none";
+        document.getElementById("successCard").style.display = "block";
+        triggerCustomerReviewOptIn(lastOrderData);
+    });
 </script>
 
 </body>

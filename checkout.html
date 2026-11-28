@@ -232,8 +232,6 @@
     </div>
 </div>
 
-<!-- Google Customer Reviews -->
-<script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script>
 <script>
     const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
@@ -246,7 +244,6 @@
     const tableName = params.get("table") === "bracelets_straps" ? "bracelets_straps" : "oras";
 
     let loadedProduct = null;
-    let lastOrderData = null;
     let isSubmitting = false;
 
     function getProductPageUrl() {
@@ -355,29 +352,6 @@
         }
     })();
 
-    function getDeliveryDate(daysToAdd) {
-        const safeDays = Number.isFinite(daysToAdd) && daysToAdd > 0 ? daysToAdd : 10;
-        const date = new Date();
-        date.setDate(date.getDate() + safeDays);
-        return date.toISOString().split("T")[0];
-    }
-
-    function triggerCustomerReviewOptIn(orderInfo) {
-        if (!orderInfo || !orderInfo.orderId || !orderInfo.email) return;
-        if (!window.gapi || typeof window.gapi.load !== "function") return;
-
-        window.gapi.load("surveyoptin", function () {
-            if (!window.gapi.surveyoptin || typeof window.gapi.surveyoptin.render !== "function") return;
-            window.gapi.surveyoptin.render({
-                "merchant_id": 5689221528,
-                "order_id": String(orderInfo.orderId),
-                "email": orderInfo.email,
-                "delivery_country": orderInfo.country || "US",
-                "estimated_delivery_date": getDeliveryDate(10)
-            });
-        });
-    }
-
     function trackPurchaseEvent(orderInfo) {
         if (typeof gtag !== "function") return;
         const numericPrice = loadedProduct && Number(loadedProduct.price) ? Number(loadedProduct.price) : 0;
@@ -399,12 +373,6 @@
             ]
         });
     }
-
-    window.renderOptIn = function () {
-        if (lastOrderData) {
-            triggerCustomerReviewOptIn(lastOrderData);
-        }
-    };
 
     document.getElementById("orderForm").addEventListener("submit", async function (e) {
         e.preventDefault();
@@ -441,6 +409,7 @@
             const { error: insertError } = await supabaseClient.from("orders").insert({
                 order_code: generatedOrderId,
                 product_id: productId,
+                product_name: productTitle,
                 table_name: tableName,
                 buyer_name: buyerName,
                 buyer_email: buyerEmail,
@@ -448,14 +417,25 @@
                 address: buyerAddress,
                 status: "pending"
             });
+
             if (insertError) {
-                console.warn("Orders insert notice:", insertError.message);
+                console.error("Orders insert error:", insertError.message);
+                statusEl.textContent = "Database error: " + insertError.message;
+                isSubmitting = false;
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Confirm Order";
+                return;
             }
         } catch (err) {
-            console.warn("Orders insert fallback:", err);
+            console.error("Orders insert exception:", err);
+            statusEl.textContent = "Network/request error while saving order.";
+            isSubmitting = false;
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Confirm Order";
+            return;
         }
 
-        lastOrderData = {
+        const orderInfo = {
             orderId: generatedOrderId,
             email: buyerEmail,
             country: buyerCountry
@@ -473,8 +453,7 @@
         document.getElementById("checkoutBox").style.display = "none";
         document.getElementById("successCard").style.display = "block";
 
-        trackPurchaseEvent(lastOrderData);
-        triggerCustomerReviewOptIn(lastOrderData);
+        trackPurchaseEvent(orderInfo);
     });
 </script>
 

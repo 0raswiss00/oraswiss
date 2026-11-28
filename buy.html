@@ -9,13 +9,31 @@
         *, *::before, *::after { box-sizing: border-box; }
         body { font-family: Arial, sans-serif; padding: 20px; background: #0a0a0a; color: #fff; margin: 0; }
         .table-wrap { width: 100%; overflow-x: auto; margin-top: 20px; border-radius: 8px; }
-        table { width: 100%; border-collapse: collapse; background: #141414; border-radius: 8px; overflow: hidden; min-width: 520px; }
+        table { width: 100%; border-collapse: collapse; background: #141414; border-radius: 8px; overflow: hidden; min-width: 560px; }
         th, td { padding: 12px; border: 1px solid #262626; text-align: left; }
         th { background-color: #1f1f1f; color: #d4af37; }
         button { padding: 8px 12px; background: #d4af37; color: #000; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-right: 4px; margin-bottom: 4px; }
         button:hover { background: #b3922f; }
         .btn-feedback { background: #25D366; color: #fff; }
         .btn-feedback:hover { background: #1ebd56; }
+        .btn-return { background: #ef4444; color: #fff; }
+        .btn-return:hover { background: #dc2626; }
+        .modal-backdrop {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+            z-index: 9999; justify-content: center; align-items: center; padding: 15px;
+        }
+        .modal-backdrop.open { display: flex; }
+        .modal-box {
+            background: #111; border: 1px solid #333; padding: 24px; border-radius: 14px;
+            width: 100%; max-width: 430px; color: #fff;
+        }
+        .modal-box h3 { margin-top: 0; color: #d4af37; }
+        .modal-box label { display: block; font-size: 0.85rem; color: #bbb; margin-bottom: 4px; }
+        .modal-box input, .modal-box select, .modal-box textarea {
+            width: 100%; padding: 10px; margin-bottom: 12px; background: #222;
+            color: #fff; border: 1px solid #444; border-radius: 8px; font-family: inherit;
+        }
+        .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 6px; }
     </style>
 </head>
 <body>
@@ -38,6 +56,35 @@
 
     <div id="myOraSwissMenu" style="margin-top:20px;">
         ✉️ Messages <span id="messageCount">0</span>
+    </div>
+
+    <!-- Modal për Kërkesën e Kthimit -->
+    <div id="return-modal" class="modal-backdrop">
+        <div class="modal-box">
+            <h3>Kërko Kthim / Rimbursim</h3>
+            <input type="hidden" id="ret-order-id">
+
+            <label for="ret-reason">Arsyeja e kthimit:</label>
+            <select id="ret-reason">
+                <option value="defective">Me defekt</option>
+                <option value="changed_mind">Nuk e do / Ktheu mendje</option>
+                <option value="not_as_described">Nuk përputhet me përshkrimin</option>
+                <option value="wrong_item">Artikull i gabuar</option>
+                <option value="other">Arsye tjetër</option>
+            </select>
+
+            <label for="ret-desc">Përshkrimi i arsyes së kthimit:</label>
+            <textarea id="ret-desc" rows="3" placeholder="Përshkruaj shkurtimisht defektin ose arsyen e kthimit..."></textarea>
+
+            <label for="ret-tracking">Nr. i dërgimit të kthimit (Tracking):</label>
+            <input type="text" id="ret-tracking" placeholder="Vendos nr. e gjurmimit të pakos së kthyer...">
+
+            <div class="modal-actions">
+                <button type="button" onclick="closeReturnModal()" style="background:#333; color:#fff;">Anulo</button>
+                <button type="button" onclick="submitReturnRequest()" class="btn-return">Dërgo Kërkesën</button>
+            </div>
+            <p id="retMsg" style="font-size:0.85rem; margin-top:10px; text-align:center;"></p>
+        </div>
     </div>
 
     <!-- Modal për dërgimin e Feedback-ut -->
@@ -114,7 +161,9 @@
         }
 
         ordersBody.innerHTML = ordersCache.map((order, idx) => {
-            const isCompleted = ["completed", "sold", "delivered"].includes(String(order.status || "").toLowerCase());
+            const st = String(order.status || "").toLowerCase();
+            const isCompleted = ["completed", "sold", "delivered"].includes(st);
+            const canReturn = ["completed", "sold", "delivered", "shipped"].includes(st);
             const prodLabel = order.order_code
                 ? `${escapeHtml(order.order_code)} (#${escapeHtml(order.product_id)})`
                 : `Prod ID: #${escapeHtml(order.product_id)}`;
@@ -127,6 +176,7 @@
                     <td>${escapeHtml(tracking)}</td>
                     <td>
                         <button type="button" onclick="showOrderDetails(${idx})">Detaje</button>
+                        ${canReturn ? `<button type="button" class="btn-return" onclick="openReturnByIndex(${idx})">Kërko Kthim</button>` : ""}
                         ${isCompleted ? `<button type="button" class="btn-feedback" onclick="openFeedbackByIndex(${idx})">Lër Vlerësim</button>` : ""}
                     </td>
                 </tr>
@@ -142,9 +192,67 @@
             `Produkti ID: ${order.product_id || "-"}`,
             `Statusi: ${order.status || "-"}`,
             `Nr. Dërgimi: ${order.tracking_number || order.tracing_number || "N/A"}`,
-            order.address ? `Adresa: ${order.address}` : ""
+            order.address ? `Adresa: ${order.address}` : "",
+            order.return_reason ? `Arsyeja e kthimit: ${order.return_reason}` : "",
+            order.return_tracking_number ? `Nr. kthimit: ${order.return_tracking_number}` : "",
+            order.refund_type ? `Rimbursimi: ${order.refund_type}${order.refund_amount ? " (" + order.refund_amount + ")" : ""}` : ""
         ].filter(Boolean);
         alert(lines.join("\n"));
+    };
+
+    window.openReturnByIndex = function(idx) {
+        const order = ordersCache[idx];
+        if (!order) return;
+        document.getElementById("ret-order-id").value = order.id;
+        document.getElementById("ret-reason").value = order.return_reason || "defective";
+        document.getElementById("ret-desc").value = order.return_description || "";
+        document.getElementById("ret-tracking").value = order.return_tracking_number || "";
+        document.getElementById("retMsg").textContent = "";
+        document.getElementById("return-modal").classList.add("open");
+    };
+
+    window.closeReturnModal = function() {
+        document.getElementById("return-modal").classList.remove("open");
+    };
+
+    window.submitReturnRequest = async function() {
+        const orderId = document.getElementById("ret-order-id").value;
+        const reason = document.getElementById("ret-reason").value;
+        const desc = document.getElementById("ret-desc").value.trim();
+        const retTracking = document.getElementById("ret-tracking").value.trim();
+        const msg = document.getElementById("retMsg");
+
+        if (!desc) {
+            msg.style.color = "#ef4444";
+            msg.textContent = "Shkruaj një përshkrim të shkurtër për kthimin.";
+            return;
+        }
+
+        msg.style.color = "#fff";
+        msg.textContent = "Duke dërguar kërkesën...";
+
+        const { error } = await supabase
+            .from("orders")
+            .update({
+                status: "return_requested",
+                return_reason: reason,
+                return_description: desc,
+                return_tracking_number: retTracking || null
+            })
+            .eq("id", orderId);
+
+        if (error) {
+            msg.style.color = "#ef4444";
+            msg.textContent = "Gabim: " + error.message;
+            return;
+        }
+
+        msg.style.color = "#22c55e";
+        msg.textContent = "Kërkesa për kthim u regjistrua!";
+        setTimeout(() => {
+            closeReturnModal();
+            loadOrders();
+        }, 1000);
     };
 
     window.openFeedbackByIndex = function(idx) {

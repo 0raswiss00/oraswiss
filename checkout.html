@@ -201,6 +201,11 @@
         </div>
 
         <div class="field">
+            <label for="buyerPhone">Phone Number</label>
+            <input type="tel" id="buyerPhone" required placeholder="+355 69 000 0000">
+        </div>
+
+        <div class="field">
             <label for="buyerCountry">Shipping Country</label>
             <select id="buyerCountry">
                 <option value="AL">Albania (AL)</option>
@@ -391,10 +396,11 @@
 
         const buyerName = document.getElementById("buyerName").value.trim();
         const buyerEmail = document.getElementById("buyerEmail").value.trim();
+        const buyerPhone = document.getElementById("buyerPhone").value.trim();
         const buyerCountry = document.getElementById("buyerCountry").value;
         const buyerAddress = document.getElementById("buyerAddress").value.trim();
 
-        if (!buyerName || !buyerEmail || !buyerAddress) {
+        if (!buyerName || !buyerEmail || !buyerPhone || !buyerAddress) {
             statusEl.textContent = "Please fill in all required fields.";
             return;
         }
@@ -425,6 +431,7 @@
                 table_name: tableName,
                 buyer_name: buyerName,
                 buyer_email: buyerEmail,
+                buyer_phone: buyerPhone,
                 country: buyerCountry,
                 address: buyerAddress,
                 status: "pending"
@@ -457,6 +464,7 @@
                 order_code: generatedOrderId,
                 buyer_name: buyerName,
                 buyer_email: buyerEmail,
+                buyer_phone: buyerPhone,
                 country: buyerCountry,
                 address: buyerAddress
             });
@@ -475,6 +483,7 @@
             ${serialNumber ? `<div><strong>Serial No.:</strong> ${serialNumber}</div>` : ""}
             <div><strong>Product Link:</strong> <a href="${productUrl}">${productUrl}</a></div>
             <div><strong>Email:</strong> ${buyerEmail}</div>
+            <div><strong>Phone:</strong> ${buyerPhone}</div>
             <div><strong>Shipping:</strong> ${buyerCountry} — ${buyerAddress}</div>
         `;
         document.getElementById("checkoutBox").style.display = "none";

@@ -29,7 +29,7 @@
             width: 100%;
             border-collapse: collapse;
             background: #111;
-            min-width: 640px;
+            min-width: 680px;
         }
 
         th, td {
@@ -58,6 +58,11 @@
             color: #fff;
         }
 
+        .btn-return-review {
+            background: #25D366;
+            color: #000;
+        }
+
         .btn-cancel {
             background: #dc3545;
             color: #fff;
@@ -84,7 +89,7 @@
             border-radius: 10px;
             padding: 20px;
             width: 100%;
-            max-width: 380px;
+            max-width: 430px;
         }
 
         .modal-box h3 {
@@ -92,14 +97,32 @@
             color: gold;
         }
 
-        .modal-box input {
+        .modal-box label {
+            display: block;
+            font-size: 0.85rem;
+            color: #ccc;
+            margin-bottom: 4px;
+        }
+
+        .modal-box input, .modal-box select, .modal-box textarea {
             width: 100%;
             padding: 10px;
-            margin: 10px 0 14px 0;
+            margin: 0 0 12px 0;
             background: #000;
             border: 1px solid #444;
             color: #fff;
             border-radius: 6px;
+            font-family: inherit;
+        }
+
+        .return-info {
+            background: #181818;
+            border: 1px solid #2e2e2e;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 0.85rem;
+            margin-bottom: 14px;
+            line-height: 1.5;
         }
 
         .modal-actions {
@@ -156,6 +179,40 @@
         <div class="modal-actions">
             <button type="button" class="btn-close" onclick="closeTrackingModal()">Anulo</button>
             <button type="button" class="btn-save" onclick="saveTrackingNumber()">Ruaj</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal për Konfirmimin e Kthimit dhe Rimbursimin -->
+<div id="returnReviewModal" class="modal-backdrop">
+    <div class="modal-box">
+        <h3>Konfirmo Kthimin &amp; Rimbursimin</h3>
+        <input type="hidden" id="rev-order-id">
+        <div class="return-info" id="rev-buyer-info"></div>
+
+        <label for="rev-condition">Gjendja e kthimit:</label>
+        <select id="rev-condition">
+            <option value="ok_as_sent">Konfirmimi OK (Kthyer siç u dërgua)</option>
+            <option value="not_returned">Nuk është kthyer ende / Pakon nuk e ka kthyer</option>
+            <option value="different_from_sent">Nuk është kthyer siç e dërguam (i dëmtuar / ndryshe)</option>
+            <option value="missing_parts">Mungojnë pjesë ose aksesorë</option>
+        </select>
+
+        <label for="rev-refund-type">Lloji i rimbursimit:</label>
+        <select id="rev-refund-type" onchange="togglePartialAmount()">
+            <option value="full">Rimbursim i plotë (100%)</option>
+            <option value="partial">Rimbursim i pjesshëm</option>
+            <option value="none">Pa rimbursim</option>
+        </select>
+
+        <div id="partial-wrap" style="display:none;">
+            <label for="rev-refund-amount">Shuma e rimbursimit të pjesshëm (EUR):</label>
+            <input type="number" step="0.01" id="rev-refund-amount" placeholder="p.sh. 150.00">
+        </div>
+
+        <div class="modal-actions">
+            <button type="button" class="btn-close" onclick="closeReturnReviewModal()">Anulo</button>
+            <button type="button" class="btn-save" onclick="saveReturnReview()">Ruaj &amp; Konfirmo</button>
         </div>
     </div>
 </div>
@@ -223,6 +280,66 @@
         loadMySold();
     }
 
+    function togglePartialAmount() {
+        const type = document.getElementById("rev-refund-type").value;
+        document.getElementById("partial-wrap").style.display = type === "partial" ? "block" : "none";
+    }
+
+    function openReturnReviewByIndex(idx) {
+        const order = soldOrdersCache[idx];
+        if (!order) return;
+        document.getElementById("rev-order-id").value = order.id;
+        document.getElementById("rev-buyer-info").innerHTML = `
+            <div><strong>Arsyeja:</strong> ${escapeHtml(order.return_reason || "Nuk është specifikuar")}</div>
+            <div><strong>Përshkrimi:</strong> ${escapeHtml(order.return_description || "-")}</div>
+            <div><strong>Nr. kthimit:</strong> ${escapeHtml(order.return_tracking_number || "Nuk ka")}</div>
+        `;
+        document.getElementById("rev-condition").value = order.return_condition || "ok_as_sent";
+        document.getElementById("rev-refund-type").value = order.refund_type || "full";
+        document.getElementById("rev-refund-amount").value = order.refund_amount ?? "";
+        togglePartialAmount();
+        document.getElementById("returnReviewModal").classList.add("open");
+    }
+
+    function closeReturnReviewModal() {
+        document.getElementById("returnReviewModal").classList.remove("open");
+    }
+
+    async function saveReturnReview() {
+        const orderId = document.getElementById("rev-order-id").value;
+        const condition = document.getElementById("rev-condition").value;
+        const refundType = document.getElementById("rev-refund-type").value;
+        const partialRaw = document.getElementById("rev-refund-amount").value.trim();
+        const refundAmount = refundType === "partial" ? (Number(partialRaw) || 0) : null;
+
+        if (refundType === "partial" && (!partialRaw || refundAmount <= 0)) {
+            alert("Vendos një vlerë të vlefshme për rimbursimin e pjesshëm.");
+            return;
+        }
+
+        const nextStatus = condition === "not_returned"
+            ? "return_not_received"
+            : (refundType === "full" ? "refunded_full" : (refundType === "partial" ? "refunded_partial" : "return_reviewed"));
+
+        const { error } = await window.supabaseClient
+            .from("orders")
+            .update({
+                status: nextStatus,
+                return_condition: condition,
+                refund_type: refundType,
+                refund_amount: refundAmount
+            })
+            .eq("id", orderId);
+
+        if (error) {
+            alert("Gabim gjatë përditësimit të kthimit: " + error.message);
+            return;
+        }
+
+        closeReturnReviewModal();
+        loadMySold();
+    }
+
     async function loadMySold() {
         const soldBody = document.getElementById("sales-body");
         if (!soldBody) return;
@@ -268,6 +385,7 @@
         soldBody.innerHTML = soldOrdersCache.map((order, idx) => {
             const ora = order.oras;
             const trackingVal = order.tracing_number || order.tracking_number || "";
+            const hasReturn = Boolean(order.return_reason || order.return_tracking_number || String(order.status || "").includes("return") || String(order.status || "").includes("refund"));
             const imgUrl = ora ? resolveWatchImage(ora.image_url) : "";
             const titleText = ora
                 ? `${escapeHtml(ora.brand || "")} ${escapeHtml(ora.model || "")}`.trim()
@@ -283,6 +401,7 @@
                     <td>
                         <button type="button" class="btn-track" onclick="openTrackingModalByIndex(${idx})">Shto/Edito</button>
                         <br>
+                        ${hasReturn ? `<button type="button" class="btn-return-review" onclick="openReturnReviewByIndex(${idx})">Menaxho Kthimin</button><br>` : ""}
                         <button type="button" class="btn-cancel" onclick="anulloPorosine('${escapeHtml(order.id)}')">Anullo</button>
                     </td>
                 </tr>

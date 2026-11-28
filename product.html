@@ -116,7 +116,6 @@
                     ? String(product.description).slice(0, 155)
                     : `${productName} - Luxury watch & horology available at Ora Swiss.${priceText ? ' Price: ' + priceText : ''}`;
 
-                // Pastrimi i SKU-së që të mos ketë vlera të pavlefshme në Google Search Console
                 const rawSku = String(product.reference || product.caliber || `OS-${seoProductId}`).trim();
                 const cleanSku = rawSku.replace(/[^a-zA-Z0-9._-]/g, '-').replace(/-+/g, '-').slice(0, 50) || `OS-${seoProductId}`;
 
@@ -177,10 +176,15 @@
                             "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
                             "merchantReturnDays": 14,
                             "returnMethod": "https://schema.org/ReturnByMail",
-                            "returnFees": "https://schema.org/ReturnShippingFeesByCustomer"
+                            "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
                         },
                         "shippingDetails": {
                             "@type": "OfferShippingDetails",
+                            "shippingRate": {
+                                "@type": "MonetaryAmount",
+                                "value": 0,
+                                "currency": "EUR"
+                            },
                             "shippingDestination": [
                                 { "@type": "DefinedRegion", "addressCountry": "CH" },
                                 { "@type": "DefinedRegion", "addressCountry": "US" },
@@ -217,7 +221,7 @@
     </script>
 
     <style>
-        * {
+        *, *::before, *::after {
             box-sizing: border-box;
         }
         body { margin: 0; background: #050505; color: white; font-family: Arial, sans-serif; padding-bottom: 90px; }
@@ -238,6 +242,7 @@
 
         .info-box { background: #111; border-radius: 15px; padding: 15px; margin-top: 15px; max-width: 900px; margin-left: auto; margin-right: auto; }
         .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
+        .info-row:last-child { border-bottom: none; }
 
         .top-actions {
             display: flex;
@@ -273,7 +278,6 @@
             max-width: 900px;
             width: 100%;
             padding: 0 20px;
-            box-sizing: border-box;
         }
         .oraswiss-seller-card {
             background-color: #111111 !important;
@@ -282,7 +286,6 @@
             border-radius: 16px !important;
             padding: 24px !important;
             box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
-            box-sizing: border-box !important;
         }
         .oraswiss-header {
             display: flex !important;
@@ -348,7 +351,6 @@
             font-weight: 600 !important;
             cursor: pointer !important;
             text-align: center !important;
-            box-sizing: border-box !important;
         }
         .oraswiss-btn-blue {
             background: #0066cc !important;
@@ -384,6 +386,7 @@
             text-decoration: none;
             padding: 4px 8px;
             font-size: 14px;
+            white-space: nowrap;
         }
 
         .nav-scroll a:hover {
@@ -394,50 +397,9 @@
             font-weight: 700;
             line-height: 1;
             margin-right: 10px;
-            font-size: 7px !important;
+            font-size: 11px !important;
+            color: gold;
         }
-
-        .bottom-nav {
-            position: fixed !important;
-            bottom: 20px !important;
-            left: 15px !important;
-            right: 15px !important;
-            width: auto !important;
-            height: 55px !important;
-            background-color: #1a1a1a !important;
-            display: flex !important;
-            justify-content: space-around !important;
-            align-items: center !important;
-            padding: 0 5px !important;
-            border-radius: 20px !important;
-            border: 1px solid #333 !important;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
-            z-index: 999999 !important;
-        }
-
-        .bottom-nav a,
-        .bottom-nav button {
-            color:white !important;
-            text-decoration:none !important;
-            font-size:10px !important;
-            background:none !important;
-            border:none !important;
-            cursor:pointer;
-            display:flex !important;
-            flex-direction:column;
-            align-items:center;
-        }
-
-        .bottom-nav {
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-
-        .bottom-nav.nav-hidden {
-            transform: translateY(120px);
-            opacity: 0;
-            pointer-events: none;
-        }
-        .bottom-nav a:hover { color: gold !important; }
     </style>
 </head>
 <body>
@@ -459,9 +421,9 @@
 
 <div class="product-page">
     <div class="gallery">
-        <button class="photo-btn photo-left" onclick="changeImage(-1)">❮</button>
+        <button type="button" class="photo-btn photo-left" onclick="changeImage(-1)">❮</button>
         <img id="main-photo" src="" alt="Ora Swiss product">
-        <button class="photo-btn photo-right" onclick="changeImage(1)">❯</button>
+        <button type="button" class="photo-btn photo-right" onclick="changeImage(1)">❯</button>
         <div class="photo-counter" id="photo-count">1 / 1</div>
     </div>
 
@@ -485,9 +447,7 @@
         </div>
     </div>
 
-    <div class="info-box" id="specs">
-        <!-- The data will be generated automatically. -->
-    </div>
+    <div class="info-box" id="specs"></div>
 
     <div class="info-box">
         <h3>Description</h3>
@@ -516,10 +476,10 @@
         </div>
         <div class="oraswiss-joined" id="os-joined">Member since</div>
         <div class="oraswiss-actions">
-            <button class="oraswiss-btn-blue" id="os-items">
+            <button type="button" class="oraswiss-btn-blue" id="os-items">
                 Seller's other items (<span id="os-count">0</span>)
             </button>
-            <button class="oraswiss-btn-white" id="os-contact">
+            <button type="button" class="oraswiss-btn-white" id="os-contact">
                 Contact seller
             </button>
         </div>
@@ -529,17 +489,17 @@
 <!-- TABELA E LOGIMIT / REGJISTRIMIT (POPUP) -->
 <div id="login-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center;">
     <div style="background:#111; border:1px solid #333; padding:30px; border-radius:16px; width:90%; max-width:400px; text-align:center; position:relative;">
-        <button onclick="closeLoginModal()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✕</button>
+        <button type="button" onclick="closeLoginModal()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✕</button>
 
         <h2 id="modal-title" style="color:#fff; margin-bottom:10px;">Identifikohu</h2>
         <p id="modal-desc" style="color:#aaa; font-size:14px; margin-bottom:20px;">Duhet të jesh i loguar për të kontaktuar shitësin.</p>
 
-        <input type="text" id="modal-name" placeholder="Emri Mbiemri" style="display:none; width:100%; padding:12px; margin-bottom:10px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
-        <input type="email" id="modal-email" placeholder="Email" style="width:100%; padding:12px; margin-bottom:10px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
-        <input type="password" id="modal-password" placeholder="Fjalëkalimi" style="width:100%; padding:12px; margin-bottom:15px; background:#222; border:1px solid #444; color:#fff; border-radius:8px; box-sizing:border-box;">
+        <input type="text" id="modal-name" placeholder="Emri Mbiemri" style="display:none; width:100%; padding:12px; margin-bottom:10px; background:#222; border:1px solid #444; color:#fff; border-radius:8px;">
+        <input type="email" id="modal-email" placeholder="Email" style="width:100%; padding:12px; margin-bottom:10px; background:#222; border:1px solid #444; color:#fff; border-radius:8px;">
+        <input type="password" id="modal-password" placeholder="Fjalëkalimi" style="width:100%; padding:12px; margin-bottom:15px; background:#222; border:1px solid #444; color:#fff; border-radius:8px;">
 
-        <button id="modal-submit-btn" onclick="handleModalAuth()" style="width:100%; padding:12px; background:#0066cc; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-bottom:10px;">Hyr</button>
-        <button onclick="closeLoginModal()" style="width:100%; padding:10px; background:transparent; color:#888; border:1px solid #333; border-radius:8px; cursor:pointer; margin-bottom:15px;">Cancel</button>
+        <button type="button" id="modal-submit-btn" onclick="handleModalAuth()" style="width:100%; padding:12px; background:#0066cc; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-bottom:10px;">Hyr</button>
+        <button type="button" onclick="closeLoginModal()" style="width:100%; padding:10px; background:transparent; color:#888; border:1px solid #333; border-radius:8px; cursor:pointer; margin-bottom:15px;">Cancel</button>
 
         <div style="color:#666; font-size:13px; border-top:1px solid #222; padding-top:15px;">
             <span id="modal-toggle-text">Nuk ke llogari?</span>
@@ -566,6 +526,16 @@ const rawProductId = urlParams.get("id") || "";
 const cleanIdMatch = rawProductId.match(/\d+/);
 const productId = cleanIdMatch ? Number(cleanIdMatch[0]) : null;
 const category = urlParams.get("category");
+
+function escapeHtml(val) {
+    if (val === null || val === undefined) return "";
+    return String(val)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
 
 function resolveProductImages(rawImageUrl) {
     let list = [];
@@ -713,8 +683,42 @@ async function loadProduct() {
         if (error) throw error;
         currentProductData = data;
 
-        const sellerUserId = data.user_id;
+        currentImages = resolveProductImages(data.image_url);
+        currentImgIndex = 0;
+        renderGallery();
 
+        document.getElementById("brand").textContent = data.brand || "-";
+        document.getElementById("model").textContent = data.model || data.reference || "-";
+        document.getElementById("top-price").textContent = data.price ? `${data.price} €` : "Contact for price";
+
+        const specsEl = document.getElementById("specs");
+        const specRows = [
+            ["Brand", data.brand],
+            ["Model", data.model],
+            ["Reference", data.reference],
+            ["Caliber", data.caliber],
+            ["Serial No.", data.serial_number || data.serial],
+            ["Condition", data.condition],
+            ["Year", data.year],
+            ["Case Material", data.case_material],
+            ["Movement", data.movement],
+            ["Quantity", data.quantity ? `${data.quantity} pcs` : "1 pcs"]
+        ].filter(([, val]) => val !== null && val !== undefined && String(val).trim() !== "");
+
+        specsEl.innerHTML = specRows.map(([label, val]) => `
+            <div class="info-row">
+                <span style="color:#aaa;">${escapeHtml(label)}</span>
+                <strong>${escapeHtml(val)}</strong>
+            </div>
+        `).join("");
+
+        const buyBtn = document.getElementById("buy");
+        if (buyBtn) {
+            const tableQuery = tableName === "bracelets_straps" ? "&table=bracelets_straps" : "&table=oras";
+            buyBtn.href = `checkout.html?id=${productId}${tableQuery}`;
+        }
+
+        const sellerUserId = data.user_id;
         let sellerName = data.seller_name || "Seller";
         let sellerCountryCode = data.seller_country || "";
         let sellerAvatarUrl = "";
@@ -735,8 +739,13 @@ async function loadProduct() {
             }
         }
 
+        const countryEl = document.getElementById("seller-country");
+        if (countryEl) {
+            countryEl.textContent = sellerCountryCode ? `🌍 ${sellerCountryCode}` : "🌍 CH / Worldwide";
+        }
+
         const osNameEl = document.getElementById("os-name");
-        osNameEl.innerHTML = sellerName + "-oraswiss <span>(Pro)</span>";
+        osNameEl.innerHTML = `${escapeHtml(sellerName)}-oraswiss <span>(Pro)</span>`;
         const sellerProfileUrl = "profile.html?id=" + encodeURIComponent(sellerUserId || "");
         osNameEl.onclick = () => { window.location.href = sellerProfileUrl; };
 
@@ -745,7 +754,7 @@ async function loadProduct() {
         document.getElementById("description").innerText = data.description || "N/A";
 
         if (sellerAvatarUrl) {
-            document.getElementById("os-avatar-box").innerHTML = `<img src="${sellerAvatarUrl}" alt="Avatar">`;
+            document.getElementById("os-avatar-box").innerHTML = `<img src="${escapeHtml(sellerAvatarUrl)}" alt="Avatar">`;
         }
 
         if (sellerUserId) {
@@ -788,171 +797,26 @@ async function loadProduct() {
             window.location.href = sellerProfileUrl;
         };
 
+        document.getElementById("os-contact").onclick = async () => {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                document.getElementById("login-modal").style.display = "flex";
+                return;
+            }
+            window.location.href = `chat.html?seller=${encodeURIComponent(sellerUserId || "")}&listing=${productId}`;
+        };
+
         const joined = new Date(sellerJoinedDate || Date.now());
         const formattedJoined = joined.toLocaleDateString("sq-AL", { month: "long", year: "numeric" });
-        document.getElementById("os-joined").textContent = "Anëtar që nga " + formattedJoined;
-
-        const contactBtn = document.getElementById("os-contact");
-        if (contactBtn) {
-            contactBtn.onclick = async () => {
-                const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
-
-                if (userError || !user) {
-                    document.getElementById("login-modal").style.display = "flex";
-                    return;
-                }
-
-                if (user.id === sellerUserId) {
-                    alert("Ky është produkti yt!");
-                    return;
-                }
-
-                const { data: existingChat } = await supabaseClient
-                    .from("conversations")
-                    .select("id")
-                    .eq("listing_id", data.id)
-                    .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
-                    .maybeSingle();
-
-                if (existingChat) {
-                    window.location.href = "chat.html?conversation=" + existingChat.id;
-                    return;
-                }
-
-                const { data: newConversation, error: createError } = await supabaseClient
-                    .from("conversations")
-                    .insert({
-                        listing_id: data.id,
-                        buyer_id: user.id,
-                        seller_id: sellerUserId,
-                        last_message: "Bisedë e re"
-                    })
-                    .select()
-                    .single();
-
-                if (createError) {
-                    alert("Gabim: " + createError.message);
-                    return;
-                }
-
-                window.location.href = "chat.html?conversation=" + newConversation.id;
-            };
-        }
-
-        const countries = {
-            "Albania": "🇦🇱 Shqipëri",
-            "Switzerland": "🇨🇭 Zvicër",
-            "Italy": "🇮🇹 Itali",
-            "Germany": "🇩🇪 Gjermani",
-            "AL": "🇦🇱 Shqipëri",
-            "CH": "🇨🇭 Zvicër",
-            "IT": "🇮🇹 Itali",
-            "DE": "🇩🇪 Gjermani"
-        };
-        document.getElementById("seller-country").innerText = "🌍 " + (countries[sellerCountryCode] || sellerCountryCode || "International");
-
-        currentImages = resolveProductImages(data.image_url);
-        currentImgIndex = 0;
-        renderGallery();
-
-        document.getElementById("brand").textContent = data.brand || "N/A";
-        document.getElementById("model").textContent = data.model || "N/A";
-
-        const currencySymbol = data.currency || "€";
-        document.getElementById("top-price").textContent = (data.price || 0) + " " + currencySymbol;
-
-        const specsContainer = document.getElementById("specs");
-        specsContainer.innerHTML = "";
-
-        if (category === "bracelets_straps") {
-            specsContainer.innerHTML = `
-                <div class="info-row"><span>Type</span><span>${data.type || "N/A"}</span></div>
-                <div class="info-row"><span>Reference</span><span>${data.reference || "N/A"}</span></div>
-                <div class="info-row"><span>Condition</span><span>${data.condition || "N/A"}</span></div>
-                <div class="info-row"><span>Material</span><span>${data.material || "N/A"}</span></div>
-                <div class="info-row"><span>Net Weight</span><span>${data.net_weight ? data.net_weight + " g" : "N/A"}</span></div>
-                <div class="info-row"><span>Gold Purity</span><span>${data.gold_purity || "N/A"}</span></div>
-                <div class="info-row"><span>Color</span><span>${data.color || "N/A"}</span></div>
-                <div class="info-row"><span>Lug Width</span><span>${data.lug_width || "N/A"}</span></div>
-                <div class="info-row"><span>Clasp Width</span><span>${data.clasp_width || "N/A"}</span></div>
-                <div class="info-row"><span>Length</span><span>${data.length || "N/A"}</span></div>
-                <div class="info-row"><span>Thickness</span><span>${data.thickness || "N/A"}</span></div>
-                <div class="info-row"><span>Year</span><span>${data.year || "N/A"}</span></div>
-            `;
-        } else {
-            const serial = data.serial_number || "";
-            const maskedSerial =
-                serial.length > 3
-                    ? serial.substring(0, 3) + "X".repeat(serial.length - 3)
-                    : serial;
-
-            function specRow(label, value) {
-                if (value === null || value === undefined) return "";
-                if (String(value).trim() === "") return "";
-                if (value === "N/A" || value === "-") return "";
-
-                return `
-                    <div class="info-row">
-                        <span>${label}</span>
-                        <span>${value}</span>
-                    </div>
-                `;
-            }
-
-            const isPart = data.category === "parts";
-
-            specsContainer.innerHTML = `
-                ${specRow("Condition", data.condition)}
-                ${specRow("Reference", data.reference)}
-                ${specRow("Serial Number", maskedSerial)}
-                ${specRow("Movement", data.movement)}
-                ${isPart ? specRow("Part Type", data.part_type) : ""}
-                ${isPart ? specRow("Part Name", data.custom_part_name) : ""}
-                ${specRow("Caliber", data.caliber)}
-                ${specRow("Gender", data.gender)}
-                ${specRow("Dial Color", data.dial_color)}
-                ${specRow("Frequency", data.frekuen)}
-                ${specRow("Material", data.material)}
-                ${specRow("Net Weight", data.net_weight ? data.net_weight + " g" : "")}
-                ${specRow("Case Size", data.case_size)}
-                ${specRow("Movement Size", data.movement_size)}
-                ${specRow("Water Resistance", data.water_resistance)}
-                ${specRow("Year", data.year)}
-                ${specRow("Box & Papers", data.box_papers)}
-                ${specRow("Function", data.function)}
-                ${specRow("Crown", data.crown)}
-                ${specRow("Jewels", data.jewels)}
-                ${specRow("Service", data.service ? "Yes (Serviced)" : "")}
-                ${specRow("Service Date", data.service_date)}
-                ${specRow("Origin", data.origin)}
-                ${specRow("Work Status", data.work_status)}
-                ${isPart ? "" : specRow("Bracelet", data.bracelet)}
-                ${specRow("Glass", data.glass)}
-                ${specRow("Warranty", data.warranty)}
-                ${specRow("Warranty Months", data.warranty_months)}
-            `;
-        }
-
-        const emailBtn = document.getElementById("email-contact");
-        if (emailBtn) {
-            const subject = encodeURIComponent(`Inquiry: ${data.brand || ""} ${data.model || ""} (ID: ${productId})`.trim());
-            const body = encodeURIComponent(`Hello Ora Swiss,\n\nI'm interested in: ${data.brand || ""} ${data.model || ""} (ID: ${productId})\nLink: ${window.location.href}`);
-            emailBtn.href = `mailto:adicla899@gmail.com?subject=${subject}&body=${body}`;
-        }
-
-        const buyBtn = document.getElementById("buy");
-        if (buyBtn) {
-            buyBtn.onclick = function (e) {
-                e.preventDefault();
-                window.location.href = `checkout.html?id=${productId}&table=${encodeURIComponent(tableName)}`;
-            };
-        }
+        document.getElementById("os-joined").textContent = `Member since ${formattedJoined}`;
     } catch (err) {
-        container.innerHTML = `<div class="details"><p>Gabim gjatë ngarkimit të produktit: ${err.message || err}</p></div>`;
+        console.error("Load product error:", err);
+        document.getElementById("description").innerText = "Nuk u arrit të ngarkohej produkti.";
     }
 }
 
 loadProduct();
 </script>
+
 </body>
 </html>

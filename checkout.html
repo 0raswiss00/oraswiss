@@ -218,14 +218,14 @@
         </div>
 
         <div class="form-status" id="formStatus"></div>
-        <button type="submit" class="submit-btn" id="submitBtn">Confirm Order</button>
+        <button type="submit" class="submit-btn" id="submitBtn">Confirm Order &amp; Pay with PayPal</button>
     </form>
 </div>
 
-<!-- SUCCESS CARD -->
+<!-- SUCCESS CARD (fallback if PayPal link is unavailable) -->
 <div class="card success-card" id="successCard" style="display: none;">
-    <h2>Order Placed Successfully!</h2>
-    <p>Thank you for choosing Ora Swiss. We will contact you shortly regarding shipping.</p>
+    <h2>Order Saved!</h2>
+    <p>Your order was saved. If PayPal did not open automatically, please contact us or retry.</p>
     <div class="order-meta" id="orderMeta"></div>
     <div class="back-wrap">
         <a href="index.html" id="backLink" class="back-link">← Back</a>
@@ -235,6 +235,7 @@
 <script>
     const SUPABASE_URL = "https://gnwsrmelmeqduhhmfmoa.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable__AkK_Z7lhtkvukN6Fy1cAQ_KBTXIcY9";
+    const PAYPAL_FN_URL = `${SUPABASE_URL}/functions/v1/create-paypal-order`;
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const params = new URLSearchParams(window.location.search);
@@ -352,12 +353,8 @@
         }
     })();
 
-    function trackPurchaseEvent(orderInfo) {
+    function trackPurchaseEvent(orderInfo, numericPrice, itemTitle) {
         if (typeof gtag !== "function") return;
-        const numericPrice = loadedProduct && Number(loadedProduct.price) ? Number(loadedProduct.price) : 0;
-        const itemTitle = loadedProduct
-            ? [loadedProduct.brand, loadedProduct.model].filter(Boolean).join(" ") || `Item #${productId}`
-            : `Item #${productId || "unknown"}`;
 
         gtag("event", "purchase", {
             transaction_id: orderInfo.orderId,
@@ -372,6 +369,16 @@
                 }
             ]
         });
+    }
+
+    async function createPayPalLink(payload) {
+        const response = await fetch(PAYPAL_FN_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        return data && data.paypal_link ? data.paypal_link : null;
     }
 
     document.getElementById("orderForm").addEventListener("submit", async function (e) {
@@ -394,7 +401,7 @@
 
         isSubmitting = true;
         submitBtn.disabled = true;
-        submitBtn.textContent = "Submitting...";
+        submitBtn.textContent = "Loading PayPal...";
 
         const generatedOrderId = `OS-${Date.now()}`;
         const productTitle = loadedProduct
@@ -402,7 +409,12 @@
                 .filter(Boolean)
                 .join(" ") || `Product #${productId || "-"}`
             : `Product #${productId || "-"}`;
+        const itemShortTitle = loadedProduct
+            ? [loadedProduct.brand, loadedProduct.model].filter(Boolean).join(" ") || `Item #${productId || "unknown"}`
+            : `Item #${productId || "unknown"}`;
         const serialNumber = loadedProduct ? (loadedProduct.serial_number || loadedProduct.serial || "") : "";
+        const rawPrice = loadedProduct ? (loadedProduct.price ?? loadedProduct.price_eur ?? loadedProduct.cmimi ?? 0) : 0;
+        const numericPrice = Number(rawPrice) || 0;
         const productUrl = getProductPageUrl();
 
         try {
@@ -423,7 +435,7 @@
                 statusEl.textContent = "Database error: " + insertError.message;
                 isSubmitting = false;
                 submitBtn.disabled = false;
-                submitBtn.textContent = "Confirm Order";
+                submitBtn.textContent = "Confirm Order & Pay with PayPal";
                 return;
             }
         } catch (err) {
@@ -431,15 +443,31 @@
             statusEl.textContent = "Network/request error while saving order.";
             isSubmitting = false;
             submitBtn.disabled = false;
-            submitBtn.textContent = "Confirm Order";
+            submitBtn.textContent = "Confirm Order & Pay with PayPal";
             return;
         }
 
-        const orderInfo = {
-            orderId: generatedOrderId,
-            email: buyerEmail,
-            country: buyerCountry
-        };
+        trackPurchaseEvent({ orderId: generatedOrderId }, numericPrice, itemShortTitle);
+
+        try {
+            const paypalLink = await createPayPalLink({
+                product_id: productId,
+                price: numericPrice,
+                product_name: productTitle,
+                order_code: generatedOrderId,
+                buyer_name: buyerName,
+                buyer_email: buyerEmail,
+                country: buyerCountry,
+                address: buyerAddress
+            });
+
+            if (paypalLink) {
+                window.location.href = paypalLink;
+                return;
+            }
+        } catch (err) {
+            console.error("PayPal link error:", err);
+        }
 
         document.getElementById("orderMeta").innerHTML = `
             <div><strong>Order ID:</strong> ${generatedOrderId}</div>
@@ -449,11 +477,9 @@
             <div><strong>Email:</strong> ${buyerEmail}</div>
             <div><strong>Shipping:</strong> ${buyerCountry} — ${buyerAddress}</div>
         `;
-
         document.getElementById("checkoutBox").style.display = "none";
         document.getElementById("successCard").style.display = "block";
-
-        trackPurchaseEvent(orderInfo);
+        isSubmitting = false;
     });
 </script>
 
